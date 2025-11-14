@@ -1,18 +1,81 @@
 <!-- Teacher-Shirley/study-tools/index.html -->
-...（結構同上，內容如下）
-<div class="section">
-  <h2 class="section-title">Vocab Wonderland · 單字大樂園</h2>
-  <div class="tools">
-    <div class="item"><a href="https://ducj-creator.github.io/iVocab-Self-Practice/">Vocab Self-Practice</a></div>
-    <div class="item"><a href="https://ducj-creator.github.io/hungry%20snake.html">Hungry Snake (Every 5 Units)</a></div>
-    <div class="item"><a href="https://ducj-creator.github.io/shirley-secret-tools/ivocab-challenge/">iVocab Challenge (Every 10 Units)</a></div>
-    <div class="item"><a href="https://ducj-creator.github.io/Spelling%20Contest%20Dictation.html">Misspelt Words (Dictation)</a></div>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Tools/Resources for Students · Teacher Shirley</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf9f6;
+      --surface: #fff;
+      --text: #1a1a1a;
+      --text-light: #555;
+      --border: #e0e0e0;
+      --hover: #d4c8b5;
+    }
+    .dark {
+      --bg: #121212;
+      --surface: #1e1e1e;
+      --text: #f0f0f0;
+      --text-light: #aaa;
+      --border: #333;
+      --hover: #8a7c6a;
+    }
 
-<div class="section">
-  <h2 class="section-title">Wonders of AI · AI大奇蹟</h2>
-  <div class="tools">
-    <div class="item"><a href="https://ducj-creator.github.io/Shirley-AI-Sentence-Practice/">Shirley's AI Speaking Coach</a></div>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      background-image: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    header { padding:1.5rem 2.5rem; max-width:900px; margin:0 auto; display:flex; }
+    .back { text-decoration:none; color:var(--text); font-size:1.1rem; }
+    .title-wrapper { width:100%; text-align:center; margin:2.5rem auto 2rem; max-width:900px; }
+    .title { font-family:'Cormorant Garamond',serif; font-size:2rem; }
+    .section { max-width:900px; margin:0 auto 2.5rem; padding:0 2rem; }
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; margin-bottom:1.2rem; }
+    .tools { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem; }
+    .item { background:var(--surface); border:1px solid var(--border); padding:1.3rem; border-radius:4px; }
+    .item:hover { border-color:var(--hover); transform:translateY(-2px); }
+    .item a { text-decoration:none; color:inherit; font-weight:500; display:block; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/Teacher-Shirley/" class="back">← Back to Home</a>
+  </header>
+
+  <div class="title-wrapper">
+    <h1 class="title">Study Tools/Resources for Students · 學習智趣閣</h1>
   </div>
-</div>
+
+  <div class="section">
+    <h2 class="section-title">Vocab Wonderland · 單字大樂園</h2>
+    <div class="tools">
+      <div class="item"><a href="https://ducj-creator.github.io/iVocab-Self-Practice/">Vocab Self-Practice</a></div>
+      <div class="item"><a href="https://ducj-creator.github.io/hungry%20snake.html">Hungry Snake (Every 5 Units)</a></div>
+      <div class="item"><a href="https://ducj-creator.github.io/shirley-secret-tools/ivocab-challenge/">iVocab Challenge (Every 10 Units)</a></div>
+      <div class="item"><a href="https://ducj-creator.github.io/Spelling%20Contest%20Dictation.html">Misspelt Words (Dictation)</a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Wonders of AI · AI大奇蹟</h2>
+    <div class="tools">
+      <div class="item"><a href="https://ducj-creator.github.io/Shirley-AI-Sentence-Practice/">Shirley's AI Speaking Coach</a></div>
+    </div>
+  </div>
+
+  <script>
+    const html = document.getElementById('htmlRoot');
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') html.classList.add('dark');
+  </script>
+</body>
+</html>
