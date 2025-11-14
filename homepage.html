@@ -92,29 +92,51 @@
       color: #ff6f91;
     }
 
-    /* Letter Animation */
-    .letter-wrapper {
+    /* Envelope Animation */
+    .envelope {
       position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto 3rem;
-      padding: 0 2rem;
-      text-align: center;
-    }
-    .letter-icon {
-      font-size: 2.5rem;
-      color: var(--accent);
+      width: 120px;
+      height: 80px;
+      margin: 2rem auto;
       cursor: pointer;
-      transition: transform 0.5s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+    .envelope-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 1;
+    }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-bottom: none;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      z-index: 2;
+    }
+    .heart-seal {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      color: #ff2d75;
+      z-index: 3;
       animation: pulse 2s infinite alternate;
     }
-    .letter-icon:hover {
-      transform: scale(1.1);
+    .envelope:hover {
+      transform: scale(1.05);
     }
-    @keyframes pulse {
-      0% { opacity: 0.7; }
-      100% { opacity: 1; }
-    }
+
     .letter-content {
       position: fixed;
       top: 50%;
@@ -134,7 +156,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
     }
     .letter-content.show {
       opacity: 1;
@@ -187,11 +208,6 @@
       right: 10px;
       font-size: 1.2rem;
       color: #ff6f91;
-      animation: heartFloat 3s ease-in-out infinite;
-    }
-    @keyframes heartFloat {
-      0%, 100% { transform: translateY(0); opacity: 0.7; }
-      50% { transform: translateY(-10px); opacity: 1; }
     }
 
     /* Categories */
@@ -250,28 +266,25 @@
       display: block;
     }
     .category-card:hover .icon {
-      animation: float 1.8s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-14px) rotate(6deg); }
+      animation: floatIcon 1.8s ease-in-out infinite;
     }
 
-    .category-card h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.7rem;
-      margin-bottom: 0.6rem;
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
     }
-    .category-card .subtitle {
-      font-size: 1.05rem;
-      color: var(--text-light, #555);
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-14px) rotate(6deg); }
     }
 
     @media (max-width: 768px) {
       .categories { grid-template-columns: 1fr; padding: 0 1.5rem 3rem; }
       .title { font-size: 2.1rem; }
-      .letter-wrapper { padding: 0 1rem; }
-      .letter-content { max-width: 90%; }
     }
   </style>
 </head>
@@ -281,25 +294,29 @@
     <button id="themeToggle" aria-label="Toggle theme">💖</button>
   </header>
 
-  <!-- ✉️ 信件動畫 -->
-  <div class="letter-wrapper">
-    <div class="letter-icon" id="openLetter">✉️</div>
-    <div class="letter-content" id="letterContent">
-      <div class="letter-header">
-        <div class="letter-title">A Note from Shirley</div>
-        <button class="close-btn" id="closeLetter">×</button>
-      </div>
-      <div class="heart-deco">💖</div>
-      <div class="letter-body">
-        <p>Hi there! 👋</p>
-        <p>I’m Shirley — an English teacher who believes learning should be interactive, joyful, and full of “aha!” moments.</p>
-        <p>This is not just a website — it’s your personal teaching toolkit, carefully crafted from years of classroom experience and student feedback.</p>
-        <p>Whether you’re a teacher looking for ready-to-use activities, or a student eager to practice anytime, anywhere — you’re in the right place.</p>
-        <p>Everything here is free, ad-free, and designed with care — because great teaching deserves great tools.</p>
-        <p>Let’s make language learning lively, meaningful, and yes — a little bit magical. 💫</p>
-      </div>
-      <div class="letter-footer">— Shirley</div>
+  <!-- ✉️ 信封動畫 -->
+  <div class="envelope" id="openLetter">
+    <div class="envelope-body"></div>
+    <div class="envelope-flap"></div>
+    <div class="heart-seal">❤️</div>
+  </div>
+
+  <!-- 信箋內容 -->
+  <div class="letter-content" id="letterContent">
+    <div class="letter-header">
+      <div class="letter-title">A Note from Shirley</div>
+      <button class="close-btn" id="closeLetter">×</button>
     </div>
+    <div class="heart-deco">💖</div>
+    <div class="letter-body">
+      <p>Hi there! 👋</p>
+      <p>I’m Shirley — an English teacher who believes learning should be interactive, joyful, and full of “aha!” moments.</p>
+      <p>This is not just a website — it’s your personal teaching toolkit, carefully crafted from years of classroom experience and student feedback.</p>
+      <p>Whether you’re a teacher looking for ready-to-use activities, or a student eager to practice anytime, anywhere — you’re in the right place.</p>
+      <p>Everything here is free, ad-free, and designed with care — because great teaching deserves great tools.</p>
+      <p>Let’s make language learning lively, meaningful, and yes — a little bit magical. 💫</p>
+    </div>
+    <div class="letter-footer">— Shirley</div>
   </div>
 
   <div class="categories">
@@ -351,13 +368,8 @@
       letterContent.classList.remove('show');
     });
 
-    // 點擊背景關閉信件
-    letterContent.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-
     document.addEventListener('click', (e) => {
-      if (!letterContent.contains(e.target) && letterContent.classList.contains('show')) {
+      if (!letterContent.contains(e.target) && !openLetter.contains(e.target) && letterContent.classList.contains('show')) {
         letterContent.classList.remove('show');
       }
     });
