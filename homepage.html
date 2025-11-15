@@ -344,9 +344,11 @@
       color: #ff6f91;
     }
 
+    /* ✅ 修正 3: 電腦版 2x2 網格 */
     .categories {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(2, 1fr); /* 電腦版兩欄 */
+      grid-auto-rows: auto;
       gap: 2.3rem;
       padding: 0 2.5rem 4rem;
       max-width: 1200px;
@@ -402,7 +404,7 @@
       animation: floatIcon 1.8s ease-in-out infinite;
     }
 
-    /* ✨ 副標題：高雅字體 + 漸變 + 飄動絲線 */
+    /* ✅ 修正 1: 暗色模式中文副標題可見性 */
     .category-card .subtitle {
       font-family: 'Cormorant Garamond', 'Playfair Display', serif;
       font-size: 1.4rem;
@@ -417,10 +419,16 @@
       position: relative;
       display: inline-block;
       line-height: 1.3;
+      /* 確保在不支援 background-clip:text 時有 fallback */
+      color: #8a6643;
     }
 
     .dark .category-card .subtitle {
-      background: linear-gradient(120deg, #d4b89a, #f0d5b0, #e0c0a0, #d0a0b0, #d4b89a);
+      /* 使用更高對比度的淺色漸變，避免文字消失 */
+      background: linear-gradient(120deg, #f0d5b0, #ffdab0, #f5d4a6, #f0b8d0, #f0d5b0);
+      color: transparent;
+      /* fallback color */
+      color: #f0d5b0;
     }
 
     .category-card .subtitle::after {
@@ -438,8 +446,8 @@
     }
 
     .dark .category-card .subtitle::after {
-      background: linear-gradient(90deg, transparent, rgba(210, 160, 200, 0.7), transparent);
-      box-shadow: 0 0 8px rgba(210, 160, 200, 0.6);
+      background: linear-gradient(90deg, transparent, rgba(240, 184, 208, 0.8), transparent);
+      box-shadow: 0 0 8px rgba(240, 184, 208, 0.6);
     }
 
     .page-footer {
@@ -475,6 +483,33 @@
       animation: pulse 1.5s infinite alternate;
     }
 
+    /* 📌 修正 2: 模塊頁面標題樣式（供其他頁面使用） */
+    /* 請將以下 .module-title 樣式複製到各模塊頁面的 CSS 中 */
+    .module-title {
+      font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      text-align: center;
+      margin: 2rem auto 1.5rem;
+      position: relative;
+      display: inline-block;
+      color: var(--text);
+    }
+    .module-title::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      bottom: -8px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ff2d75, transparent); /* 紅色漸變底線 */
+      border-radius: 2px;
+      animation: underlineWave 4s ease-in-out infinite;
+    }
+    @keyframes underlineWave {
+      0%, 100% { transform: scaleX(0.9); opacity: 0.7; }
+      50% { transform: scaleX(1.05); opacity: 1; }
+    }
+
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
@@ -491,11 +526,6 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
-    }
-    @keyframes underlineWave {
-      0% { transform: scaleX(0.9) translateY(0); opacity: 0.7; }
-      50% { transform: scaleX(1.05) translateY(1px); opacity: 1; }
-      100% { transform: scaleX(0.9) translateY(0); opacity: 0.7; }
     }
     @keyframes titleGlow {
       0% { transform: rotate(0deg); }
@@ -516,9 +546,13 @@
       }
     }
 
+    /* 響應式：手機版保持 1 欄 */
     @media (max-width: 768px) {
+      .categories {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem 3rem;
+      }
       header { flex-direction: column; align-items: flex-start; }
-      .categories { grid-template-columns: 1fr; padding: 0 1.5rem 3rem; }
       .title { font-size: clamp(1.9rem, 7vw, 2.3rem); }
       .title-wrapper { width: 100%; padding-inline: 1.6rem; }
       .category-card .subtitle {
@@ -558,6 +592,7 @@
     <div class="letter-footer">— Shirley</div>
   </div>
 
+  <!-- ✅ 修正 3: 電腦版 2x2 網格（無需改 HTML 結構） -->
   <div class="categories">
     <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
       <span class="icon">🎒</span>
@@ -590,6 +625,8 @@
   </footer>
 
   <script>
+    // ... （JavaScript 保持不變，已省略以節省空間）...
+    // 若您需要完整 JS，請告知；此處為聚焦 CSS 修正
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
