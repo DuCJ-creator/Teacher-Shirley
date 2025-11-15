@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ELA Vocab 王者</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #e6e9f0, #f8f6f2);
+      margin: 0;
+      padding: 15px;
+      text-align: center;
+      color: #2c3e50;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 8px 24px rgba(44, 62, 80, 0.12);
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .unicorn {
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: #5d6d7e;
+    }
+    .screen { 
+      display: none; 
+    }
+    .active { 
+      display: block; 
+    }
+    button {
+      background: #e0e5ec;
+      border: 1px solid #cbd2d9;
+      border-radius: 50px;
+      padding: 12px 24px;
+      margin: 8px;
+      font-size: 17px;
+      font-weight: 500;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+    button:hover {
+      background: #d1d8e0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .word-display {
+      font-size: 26px;
+      margin: 22px 0;
+      font-weight: 700;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    .pos {
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .source {
+      font-size: 14px;
+      color: #95a5a6;
+      margin-top: -4px;
+      font-weight: 500;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 22px 0;
+    }
+    .option-btn {
+      background: #f8f9fa;
+      color: #34495e;
+      text-align: center;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #eaecee;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-btn:hover:not(:disabled) {
+      background: #edf2f7;
+      transform: translateY(-1px);
+    }
+    .option-btn:disabled {
+      opacity: 0.85;
+      cursor: not-allowed;
+    }
+    .option-btn.correct {
+      background: #d4edda;
+      color: #155724;
+      border-color: #c3e6cb;
+    }
+    .option-btn.wrong {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f1b0b7;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e9ecef;
+      border-radius: 6px;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #2c7d6d, #34988e);
+      transition: width 0.1s linear;
+    }
+    .score, .timer {
+      font-size: 19px;
+      margin: 12px 0;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .explosion {
+      font-size: 50px;
+      animation: explode 0.8s ease-out forwards;
+      margin: 20px 0;
+      opacity: 0;
+    }
+    @keyframes explode {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    .result {
+      font-size: 20px;
+      margin: 18px 0;
+      min-height: 28px;
+      color: #e74c3c;
+    }
+    .final-score {
+      font-size: 28px;
+      color: #2c3e50;
+      margin: 15px 0;
+      font-weight: 700;
+    }
+    .stats {
+      text-align: left;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .wrong-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 10px 0;
+      font-family: monospace;
+    }
+
+    /* 魔法金粉動畫 */
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1000;
+      font-size: 16px;
+      color: gold;
+      animation: sparkle-fade 1.5s ease-out forwards;
+    }
+    @keyframes sparkle-fade {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2) rotate(45deg); }
+    }
+
+    /* 獨角獸飛舞動畫 */
+    .floating-unicorn {
+      position: fixed;
+      top: 10vh;
+      right: 5vw;
+      font-size: 24px;
+      animation: float 3s ease-in-out infinite;
+      z-index: 999;
+      pointer-events: none;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="sparkles"></div>
+  <div class="floating-unicorn">🦄</div>
+
+  <div class="container">
+    <!-- 選擇畫面 -->
+    <div id="select-screen" class="screen active">
+      <div class="unicorn">🦄✨👸</div>
+      <h1>FRP ELA Vocab Challenge 單字冒險王挑戰</h1>
+      <p>請選擇學期與單元：</p>
+
+      <div style="margin: 15px 0;">
+        <strong>學期：</strong><br/>
+        <label><input type="radio" name="semester" value="SI" checked> SI</label>
+        <label><input type="radio" name="semester" value="SII"> SII</label>
+        <label><input type="radio" name="semester" value="SIII"> SIII</label>
+        <label><input type="radio" name="semester" value="SIV"> SIV</label>
+      </div>
+
+      <div style="margin: 15px 0;">
+        <strong>單元（可複選）：</strong><br/>
+        <label><input type="checkbox" value="1"> 1</label>
+        <label><input type="checkbox" value="2"> 2</label>
+        <label><input type="checkbox" value="3"> 3</label>
+        <label><input type="checkbox" value="4"> 4</label>
+        <label><input type="checkbox" value="5"> 5</label>
+        <label><input type="checkbox" value="6"> 6</label>
+        <label><input type="checkbox" value="7"> 7</label>
+        <label><input type="checkbox" value="8"> 8</label>
+      </div>
+
+      <button onclick="loadAndStart()">開始遊戲</button>
+    </div>
+
+    <!-- 開始畫面 -->
+    <div id="start-screen" class="screen">
+      <div class="unicorn">🦄✨👸</div>
+      <h1>準備好就開始吧！</h1>
+      <p>選擇你的冒險時間！</p>
+      <button onclick="initAndStart(60)">1 分鐘</button>
+      <button onclick="initAndStart(180)">3 分鐘</button>
+      <button onclick="initAndStart(300)">5 分鐘</button>
+      <button onclick="initAndStart(600)">10 分鐘</button>
+    </div>
+
+    <!-- 遊戲畫面 -->
+    <div id="game-screen" class="screen">
+      <div class="score">得分：<span id="score">0</span></div>
+      <div class="timer">剩餘時間：<span id="time-left">0</span> 秒</div>
+      <div class="word-display" id="word">Loading...</div>
+      <div class="pos" id="pos"></div>
+      <div class="source" id="source"></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div class="options" id="options"></div>
+      <div class="result" id="result"></div>
+    </div>
+
+    <!-- 結束畫面 -->
+    <div id="end-screen" class="screen">
+      <div class="unicorn">🎉👑🦄</div>
+      <h1>冒險結束！</h1>
+      <div class="final-score">你的總分：<span id="final-score">0</span></div>
+      
+      <div class="stats">
+        <div>答對題數：<span id="correct-count">0</span></div>
+        <div>答錯題數：<span id="wrong-count">0</span></div>
+        <div>正確率：<span id="accuracy">0</span>%</div>
+      </div>
+
+      <div id="wrong-words-section" style="display:none;">
+        <h3>答錯的單字：</h3>
+        <div class="wrong-list" id="wrong-words-list"></div>
+      </div>
+
+      <button onclick="restartGame()">再玩一次</button>
+    </div>
+  </div>
+
+  <script>
+    // ====== 全域變數 ======
+    let audioContext = null;
+    let isAudioReady = false;
+    let selectedSemester = "SI";
+    let selectedUnits = [];
+    let wordList = [];
+    let filteredWords = [];
+    let originalFilteredWords = [];
+    let remainingWords = [];
+    let wrongWords = [];
+    let score = 0;
+    let streak = 0;
+    let totalGameTime = 0;
+    let timeLeft = 0;
+    let gameTimer = null;
+    let progressInterval = null;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    // ====== 語音朗讀 ======
+    function speakWord(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    // ====== 音效系統 ======
+    function initAudio() {
+      if (audioContext) return;
+      try {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioContext();
+        isAudioReady = true;
+      } catch (e) {
+        console.warn("Audio not supported");
+        isAudioReady = false;
+      }
+    }
+
+    function playTone(frequency, duration, type = 'sine', gain = 0.2) {
+      if (!isAudioReady) return;
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
+      gainNode.gain.value = gain;
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + duration);
+    }
+
+    function playCorrectSound() {
+      playTone(880, 0.2, 'sine', 0.15);
+      setTimeout(() => playTone(1320, 0.2, 'sine', 0.15), 100);
+    }
+
+    function playWrongSound() {
+      playTone(220, 0.3, 'sawtooth', 0.1);
+      setTimeout(() => playTone(165, 0.3, 'sawtooth', 0.1), 150);
+    }
+
+    function playExplosionSound() {
+      playTone(80, 0.4, 'square', 0.2);
+      setTimeout(() => {
+        if (!isAudioReady) return;
+        const noise = audioContext.createBufferSource();
+        const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.3, audioContext.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        noise.buffer = buffer;
+        const noiseGain = audioContext.createGain();
+        noiseGain.gain.value = 0.1;
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+        noise.connect(noiseGain);
+        noiseGain.connect(audioContext.destination);
+        noise.start();
+      }, 100);
+    }
+
+    // ====== 魔法金粉 ======
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.textContent = '✨';
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      document.getElementById('sparkles').appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1500);
+    }
+
+    // ====== CSV 載入與解析 ======
+    async function loadCSV() {
+      const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/FRP%20ELA%20Vocab.csv';
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        parseCSV(text);
+      } catch (error) {
+        alert('無法從 GitHub 載入單字資料。\n請確認網路連線，或稍後再試。');
+        console.error('CSV Load Error:', error);
+      }
+    }
+
+    function parseCSV(text) {
+      const lines = text.split('\n').filter(line => line.trim() !== '');
+      const headers = lines[0].split(',').map(h => h.trim());
+      wordList = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const row = {};
+        headers.forEach((header, idx) => {
+          row[header] = values[idx] || '';
+        });
+        wordList.push({
+          semester: row['Semester'],
+          unit: row['Unit'],
+          no: row['No.'],
+          word: row['Word'],
+          pos: row['POS'],
+          meaning: row['Chinese Meaning'],
+          source: `${row['Semester']}-${row['Unit']}-${row['No.']}`
+        });
+      }
+    }
+
+    function filterWords() {
+      filteredWords = wordList.filter(word => {
+        return word.semester === selectedSemester && selectedUnits.includes(word.unit);
+      });
+
+      // 去重：以 word + meaning 為唯一鍵
+      const seen = new Set();
+      filteredWords = filteredWords.filter(item => {
+        const key = item.word + '|' + item.meaning;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      if (filteredWords.length === 0) {
+        alert('沒有符合條件的單字！請重新選擇學期與單元。');
+        return false;
+      }
+      return true;
+    }
+
+    // ====== 遊戲核心邏輯 ======
+    function getRandomMeanings(correct, count = 3) {
+      let options = [correct];
+      let pool = [...new Set(wordList.map(w => w.meaning))].filter(m => m !== correct);
+      for (let i = 0; i < count && pool.length > 0; i++) {
+        let idx = Math.floor(Math.random() * pool.length);
+        options.push(pool[idx]);
+        pool.splice(idx, 1);
+      }
+      return options.sort(() => Math.random() - 0.5);
+    }
+
+    function showQuestion() {
+      let wordObj = null;
+
+      if (wrongWords.length > 0) {
+        let idx = Math.floor(Math.random() * wrongWords.length);
+        wordObj = wrongWords[idx];
+      } else if (remainingWords.length > 0) {
+        let idx = Math.floor(Math.random() * remainingWords.length);
+        wordObj = remainingWords[idx];
+        remainingWords.splice(idx, 1);
+      } else {
+        // 所有題目已出過 → 重置（但保留錯題優先）
+        remainingWords = [...originalFilteredWords];
+        if (remainingWords.length > 0) {
+          let idx = Math.floor(Math.random() * remainingWords.length);
+          wordObj = remainingWords[idx];
+          remainingWords.splice(idx, 1);
+        } else {
+          wordObj = originalFilteredWords[0];
+        }
+      }
+
+      document.getElementById('word').textContent = wordObj.word;
+      document.getElementById('pos').textContent = wordObj.pos;
+      document.getElementById('source').textContent = `來源：${wordObj.source}`;
+
+      // 點擊朗讀
+      document.getElementById('word').onclick = () => speakWord(wordObj.word);
+
+      const options = getRandomMeanings(wordObj.meaning);
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt, wordObj.meaning, wordObj);
+        optionsDiv.appendChild(btn);
+      });
+
+      // 進度條
+      let time = 8;
+      const progressBar = document.getElementById('progress');
+      progressBar.style.width = '100%';
+      clearInterval(progressInterval);
+      progressInterval = setInterval(() => {
+        time -= 0.1;
+        const percent = (time / 8) * 100;
+        progressBar.style.width = percent + '%';
+        if (time <= 0) {
+          clearInterval(progressInterval);
+          timeUp(wordObj.meaning, wordObj);
+        }
+      }, 100);
+    }
+
+    function checkAnswer(selected, correct, wordObj) {
+      clearInterval(progressInterval);
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        } else if (btn.textContent === selected) {
+          btn.classList.add('wrong');
+        }
+        btn.disabled = true;
+      });
+
+      if (selected === correct) {
+        playCorrectSound();
+        createSparkle(window.innerWidth * 0.5, window.innerHeight * 0.3);
+        streak++;
+        const points = streak * 5;
+        score += points;
+        correctCount++;
+        // 移除錯題（如果存在）
+        wrongWords = wrongWords.filter(w => !(w.word === wordObj.word && w.meaning === wordObj.meaning));
+        document.getElementById('score').textContent = score;
+        document.getElementById('result').innerHTML = `✅ 答對！+${points} 分`;
+        setTimeout(() => {
+          if (timeLeft > 0) nextQuestion();
+        }, 1200);
+      } else {
+        playWrongSound();
+        const exists = wrongWords.some(w => w.word === wordObj.word && w.meaning === wordObj.meaning);
+        if (!exists) {
+          wrongWords.push({ ...wordObj, correctMeaning: correct });
+        }
+        wrongCount++;
+        streak = 0;
+        document.getElementById('result').innerHTML = `❌ 答錯！正確答案：${correct}`;
+        setTimeout(() => {
+          if (timeLeft > 0) nextQuestion();
+        }, 1500);
+      }
+    }
+
+    function timeUp(correct, wordObj) {
+      playExplosionSound();
+      document.getElementById('result').innerHTML = `<div class="explosion">💥</div>時間到！正確答案：${correct}`;
+      const exists = wrongWords.some(w => w.word === wordObj.word && w.meaning === wordObj.meaning);
+      if (!exists) {
+        wrongWords.push({ ...wordObj, correctMeaning: correct });
+      }
+      wrongCount++;
+      streak = 0;
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        }
+        btn.disabled = true;
+      });
+      setTimeout(() => {
+        if (timeLeft > 0) nextQuestion();
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      document.getElementById('result').textContent = '';
+      document.querySelectorAll('.option-btn').forEach(btn => btn.remove());
+      if (timeLeft > 0) showQuestion();
+    }
+
+    function initAndStart(duration) {
+      initAudio();
+      startGame(duration);
+    }
+
+    function startGame(duration) {
+      totalGameTime = duration;
+      timeLeft = duration;
+      score = 0;
+      streak = 0;
+      correctCount = 0;
+      wrongCount = 0;
+
+      originalFilteredWords = [...filteredWords];
+      remainingWords = [...filteredWords];
+      wrongWords = [];
+
+      document.getElementById('score').textContent = '0';
+      document.getElementById('time-left').textContent = timeLeft;
+
+      document.getElementById('select-screen').classList.remove('active');
+      document.getElementById('start-screen').classList.remove('active');
+      document.getElementById('game-screen').classList.add('active');
+      document.getElementById('end-screen').classList.remove('active');
+
+      clearInterval(gameTimer);
+      gameTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('time-left').textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+
+      showQuestion();
+    }
+
+    function endGame() {
+      clearInterval(gameTimer);
+      clearInterval(progressInterval);
+
+      const totalAnswered = correctCount + wrongCount;
+      const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('correct-count').textContent = correctCount;
+      document.getElementById('wrong-count').textContent = wrongCount;
+      document.getElementById('accuracy').textContent = accuracy;
+
+      const wrongListEl = document.getElementById('wrong-words-list');
+      const sectionEl = document.getElementById('wrong-words-section');
+      if (wrongWords.length > 0) {
+        sectionEl.style.display = 'block';
+        wrongListEl.innerHTML = wrongWords.map(w => 
+          `<div><strong>${w.word}</strong> (${w.pos})【${w.source}】：${w.correctMeaning}</div>`
+        ).join('');
+      } else {
+        sectionEl.style.display = 'none';
+      }
+
+      document.getElementById('game-screen').classList.remove('active');
+      document.getElementById('end-screen').classList.add('active');
+    }
+
+    function restartGame() {
+      document.getElementById('end-screen').classList.remove('active');
+      document.getElementById('select-screen').classList.add('active');
+      clearInterval(gameTimer);
+      clearInterval(progressInterval);
+    }
+
+    // ====== 選擇與載入 ======
+    async function loadAndStart() {
+      selectedSemester = document.querySelector('input[name="semester"]:checked').value;
+      selectedUnits = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      
+      if (selectedUnits.length === 0) {
+        alert('請至少選擇一個單元！');
+        return;
+      }
+
+      if (wordList.length === 0) {
+        await loadCSV();
+      }
+
+      if (filterWords()) {
+        document.getElementById('select-screen').classList.remove('active');
+        document.getElementById('start-screen').classList.add('active');
+      }
+    }
+
+    // 預載 CSV（加快後續啟動）
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCSV();
+    });
+  </script>
+</body>
+</html>
