@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TOEFL Junior Vocab Champion</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #e6e9f0, #f8f6f2);
+      margin: 0;
+      padding: 15px;
+      text-align: center;
+      color: #2c3e50;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 8px 24px rgba(44, 62, 80, 0.12);
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .lang-switch {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 10px;
+    }
+    .zh { color: #2c3e50; font-weight: 500; }
+    .en { color: #7f8c8d; font-size: 0.9em; }
+    .separator { margin: 0 4px; color: #bdc3c7; }
+
+    .screen { display: none; }
+    .active { display: block; }
+
+    button {
+      background: #e0e5ec;
+      border: 1px solid #cbd2d9;
+      border-radius: 50px;
+      padding: 12px 20px;
+      margin: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+    button:hover {
+      background: #d1d8e0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .word-display {
+      font-size: 26px;
+      margin: 22px 0;
+      font-weight: 700;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    .pos {
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    /* 移除 source */
+    .source { display: none; }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 22px 0;
+    }
+    .option-btn {
+      background: #f8f9fa;
+      color: #34495e;
+      text-align: center;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #eaecee;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-btn:hover:not(:disabled) {
+      background: #edf2f7;
+      transform: translateY(-1px);
+    }
+    .option-btn:disabled {
+      opacity: 0.85;
+      cursor: not-allowed;
+    }
+    .option-btn.correct {
+      background: #d4edda;
+      color: #155724;
+      border-color: #c3e6cb;
+    }
+    .option-btn.wrong {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f1b0b7;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e9ecef;
+      border-radius: 6px;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #2c7d6d, #34988e);
+      transition: width 0.1s linear;
+    }
+
+    .score, .timer {
+      font-size: 19px;
+      margin: 12px 0;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .explosion {
+      font-size: 50px;
+      animation: explode 0.8s ease-out forwards;
+      margin: 20px 0;
+      opacity: 0;
+    }
+    @keyframes explode {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .result {
+      font-size: 20px;
+      margin: 18px 0;
+      min-height: 28px;
+      color: #e74c3c;
+    }
+    .final-score {
+      font-size: 28px;
+      color: #2c3e50;
+      margin: 15px 0;
+      font-weight: 700;
+    }
+    .stats {
+      text-align: left;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .wrong-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 10px 0;
+      font-family: monospace;
+    }
+
+    /* === 飄動絲帶 === */
+    .ribbon {
+      position: absolute;
+      top: -20px;
+      font-size: 24px;
+      opacity: 0.8;
+      animation: floatDown 8s infinite ease-in;
+      z-index: 998;
+      pointer-events: none;
+    }
+    @keyframes floatDown {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* === 煙火特效 === */
+    .firework {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1000;
+      font-size: 28px;
+      animation: fireworkBurst 1.2s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes fireworkBurst {
+      0% { transform: scale(0.2); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* 飛舞獨角獸 */
+    .floating-unicorn {
+      position: fixed;
+      top: 12vh;
+      right: 6vw;
+      font-size: 24px;
+      animation: float 3s ease-in-out infinite;
+      z-index: 999;
+      pointer-events: none;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 飛舞獨角獸 -->
+  <div class="floating-unicorn">🦄</div>
+
+  <!-- 飄動絲帶 -->
+  <div id="ribbons"></div>
+  <!-- 煙火容器 -->
+  <div id="fireworks"></div>
+
+  <div class="container">
+    <!-- 類別選擇畫面 -->
+    <div id="category-screen" class="screen active">
+      <div class="unicorn">🦄✨👸</div>
+      <h1>
+        <div class="zh">TOEFL Junior 單字冒險王</div>
+        <div class="en">TOEFL Junior Vocab Challenge</div>
+      </h1>
+      <p>
+        <span class="zh">請選擇學習類別：</span>
+        <span class="separator">/</span>
+        <span class="en">Select Category:</span>
+      </p>
+
+      <div style="margin: 15px 0;">
+        <label><input type="radio" name="category" value="Language Form & Meaning" checked> 
+          <span class="zh">第一類：語言形式與意義</span>
+          <span class="separator">/</span>
+          <span class="en">Language Form & Meaning</span>
+        </label><br/>
+        <label><input type="radio" name="category" value="Reading Strategies"> 
+          <span class="zh">第二類：閱讀策略</span>
+          <span class="separator">/</span>
+          <span class="en">Reading Strategies</span>
+        </label><br/>
+        <label><input type="radio" name="category" value="Reading Comprehension"> 
+          <span class="zh">第三類：閱讀理解</span>
+          <span class="separator">/</span>
+          <span class="en">Reading Comprehension</span>
+        </label><br/>
+        <label><input type="radio" name="category" value="Listening Comprehension"> 
+          <span class="zh">第四類：聽力理解</span>
+          <span class="separator">/</span>
+          <span class="en">Listening Comprehension</span>
+        </label>
+      </div>
+
+      <button onclick="loadAndStart()">
+        <span class="zh">開始遊戲</span>
+        <span class="separator">/</span>
+        <span class="en">Start Game</span>
+      </button>
+    </div>
+
+    <!-- 開始畫面 -->
+    <div id="start-screen" class="screen">
+      <div class="unicorn">🦄✨👸</div>
+      <h1>
+        <div class="zh">準備好就開始吧！</div>
+        <div class="en">Ready to Play!</div>
+      </h1>
+      <p>
+        <span class="zh">選擇你的冒險時間：</span>
+        <span class="separator">/</span>
+        <span class="en">Choose your time:</span>
+      </p>
+      <button onclick="initAndStart(60)">1 分鐘 / 1 min</button>
+      <button onclick="initAndStart(180)">3 分鐘 / 3 min</button>
+      <button onclick="initAndStart(300)">5 分鐘 / 5 min</button>
+      <button onclick="initAndStart(600)">10 分鐘 / 10 min</button>
+    </div>
+
+    <!-- 遊戲畫面 -->
+    <div id="game-screen" class="screen">
+      <div class="score">
+        <span class="zh">得分：</span>
+        <span class="en">Score: </span>
+        <span id="score">0</span>
+      </div>
+      <div class="timer">
+        <span class="zh">剩餘時間：</span>
+        <span class="en">Time Left: </span>
+        <span id="time-left">0</span>
+        <span class="zh">秒</span>
+        <span class="en">seconds</span>
+      </div>
+      <div class="word-display" id="word">Loading...</div>
+      <div class="pos" id="pos"></div>
+      <!-- 不再顯示 source -->
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div class="options" id="options"></div>
+      <div class="result" id="result"></div>
+    </div>
+
+    <!-- 結束畫面 -->
+    <div id="end-screen" class="screen">
+      <div class="unicorn">🎉👑🦄</div>
+      <h1>
+        <div class="zh">冒險結束！</div>
+        <div class="en">Game Over!</div>
+      </h1>
+      <div class="final-score">
+        <span class="zh">你的總分：</span>
+        <span class="en">Your Score: </span>
+        <span id="final-score">0</span>
+      </div>
+      
+      <div class="stats">
+        <div>
+          <span class="zh">答對題數：</span>
+          <span class="en">Correct: </span>
+          <span id="correct-count">0</span>
+        </div>
+        <div>
+          <span class="zh">答錯題數：</span>
+          <span class="en">Wrong: </span>
+          <span id="wrong-count">0</span>
+        </div>
+        <div>
+          <span class="zh">正確率：</span>
+          <span class="en">Accuracy: </span>
+          <span id="accuracy">0</span>%
+        </div>
+      </div>
+
+      <div id="wrong-words-section" style="display:none;">
+        <h3>
+          <span class="zh">答錯的單字：</span>
+          <span class="en">Words You Missed:</span>
+        </h3>
+        <div class="wrong-list" id="wrong-words-list"></div>
+      </div>
+
+      <button onclick="restartGame()">
+        <span class="zh">再玩一次</span>
+        <span class="separator">/</span>
+        <span class="en">Play Again</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ====== 全域變數 ======
+    let audioContext = null;
+    let isAudioReady = false;
+    let selectedCategory = "Language Form & Meaning";
+    let wordList = []; // 從 TXT 載入的完整單字列表
+    let filteredWords = [];
+    let originalFilteredWords = [];
+    let remainingWords = [];
+    let wrongWords = [];
+    let score = 0;
+    let streak = 0;
+    let totalGameTime = 0;
+    let timeLeft = 0;
+    let gameTimer = null;
+    let progressInterval = null;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    // ====== 語音朗讀 ======
+    function speakWord(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    // ====== 音效系統 ======
+    function initAudio() {
+      if (audioContext) return;
+      try {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioContext();
+        isAudioReady = true;
+      } catch (e) {
+        console.warn("Audio not supported");
+        isAudioReady = false;
+      }
+    }
+
+    function playTone(frequency, duration, type = 'sine', gain = 0.2) {
+      if (!isAudioReady) return;
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
+      gainNode.gain.value = gain;
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + duration);
+    }
+
+    function playCorrectSound() {
+      playTone(880, 0.2, 'sine', 0.15);
+      setTimeout(() => playTone(1320, 0.2, 'sine', 0.15), 100);
+    }
+
+    function playWrongSound() {
+      playTone(220, 0.3, 'sawtooth', 0.1);
+      setTimeout(() => playTone(165, 0.3, 'sawtooth', 0.1), 150);
+    }
+
+    function playExplosionSound() {
+      playTone(80, 0.4, 'square', 0.2);
+      setTimeout(() => {
+        if (!isAudioReady) return;
+        const noise = audioContext.createBufferSource();
+        const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.3, audioContext.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        noise.buffer = buffer;
+        const noiseGain = audioContext.createGain();
+        noiseGain.gain.value = 0.1;
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+        noise.connect(noiseGain);
+        noiseGain.connect(audioContext.destination);
+        noise.start();
+      }, 100);
+    }
+
+    // ====== 喜慶視覺特效 ======
+    function createFirework(x, y) {
+      const emoji = ['🎉', '🎊', '🎆', '🎇', '✨'][Math.floor(Math.random() * 5)];
+      const firework = document.createElement('div');
+      firework.className = 'firework';
+      firework.textContent = emoji;
+      firework.style.left = `${x}px`;
+      firework.style.top = `${y}px`;
+      document.getElementById('fireworks').appendChild(firework);
+      setTimeout(() => firework.remove(), 1200);
+    }
+
+    function createRibbon() {
+      const emoji = ['🎀', '🎁', '🎈', '🎊'][Math.floor(Math.random() * 4)];
+      const ribbon = document.createElement('div');
+      ribbon.className = 'ribbon';
+      ribbon.textContent = emoji;
+      ribbon.style.left = `${Math.random() * 90 + 5}%`;
+      ribbon.style.animationDelay = `${Math.random() * 2}s`;
+      document.getElementById('ribbons').appendChild(ribbon);
+      setTimeout(() => ribbon.remove(), 8500);
+    }
+
+    setInterval(() => {
+      if (document.getElementById('game-screen').classList.contains('active')) {
+        createRibbon();
+      }
+    }, 2500);
+
+    // ====== TXT 載入與解析 ======
+    async function loadTXT() {
+      const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Word%20List.txt';
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        parseTXT(text);
+      } catch (error) {
+        alert('無法載入單字資料。\n請確認網路連線或稍後再試。');
+        console.error('TXT Load Error:', error);
+      }
+    }
+
+    function parseTXT(text) {
+      const lines = text.split('\n');
+      let currentCategory = '';
+      wordList = [];
+
+      for (let line of lines) {
+        line = line.trim();
+        if (line.startsWith('第一類：') || line.startsWith('第二類：') || line.startsWith('第三類：') || line.startsWith('第四類：')) {
+          currentCategory = line.replace(/^(第一類|第二類|第三類|第四類)：/, '').trim();
+        } else if (line.startsWith('{') && line.endsWith('},')) {
+          try {
+            // 移除末尾逗號，轉成合法 JSON
+            const jsonStr = line.slice(0, -1);
+            const obj = JSON.parse(jsonStr);
+            if (obj.word && obj.pos && obj.meaning) {
+              obj.category = currentCategory;
+              wordList.push(obj);
+            }
+          } catch (e) {
+            console.warn('Parse error on line:', line);
+          }
+        }
+      }
+    }
+
+    function filterWords() {
+      filteredWords = wordList.filter(word => word.category === selectedCategory);
+      if (filteredWords.length === 0) {
+        alert(`沒有找到「${selectedCategory}」的單字！\nNo words found for this category.`);
+        return false;
+      }
+      return true;
+    }
+
+    // ====== 遊戲核心邏輯 ======
+    function getRandomMeanings(correct, count = 3) {
+      let options = [correct];
+      let pool = [...new Set(wordList.map(w => w.meaning))].filter(m => m !== correct);
+      for (let i = 0; i < count && pool.length > 0; i++) {
+        let idx = Math.floor(Math.random() * pool.length);
+        options.push(pool[idx]);
+        pool.splice(idx, 1);
+      }
+      return options.sort(() => Math.random() - 0.5);
+    }
+
+    function showQuestion() {
+      let wordObj = null;
+
+      if (wrongWords.length > 0) {
+        let idx = Math.floor(Math.random() * wrongWords.length);
+        wordObj = wrongWords[idx];
+      } else if (remainingWords.length > 0) {
+        let idx = Math.floor(Math.random() * remainingWords.length);
+        wordObj = remainingWords[idx];
+        remainingWords.splice(idx, 1);
+      } else {
+        remainingWords = [...originalFilteredWords];
+        if (remainingWords.length > 0) {
+          let idx = Math.floor(Math.random() * remainingWords.length);
+          wordObj = remainingWords[idx];
+          remainingWords.splice(idx, 1);
+        } else {
+          wordObj = originalFilteredWords[0];
+        }
+      }
+
+      document.getElementById('word').textContent = wordObj.word;
+      document.getElementById('pos').textContent = wordObj.pos;
+      // 不再顯示 source
+
+      document.getElementById('word').onclick = () => speakWord(wordObj.word);
+
+      const options = getRandomMeanings(wordObj.meaning);
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt, wordObj.meaning, wordObj);
+        optionsDiv.appendChild(btn);
+      });
+
+      let time = 8;
+      const progressBar = document.getElementById('progress');
+      progressBar.style.width = '100%';
+      clearInterval(progressInterval);
+      progressInterval = setInterval(() => {
+        time -= 0.1;
+        const percent = (time / 8) * 100;
+        progressBar.style.width = percent + '%';
+        if (time <= 0) {
+          clearInterval(progressInterval);
+          timeUp(wordObj.meaning, wordObj);
+        }
+      }, 100);
+    }
+
+    function checkAnswer(selected, correct, wordObj) {
+      clearInterval(progressInterval);
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        } else if (btn.textContent === selected) {
+          btn.classList.add('wrong');
+        }
+        btn.disabled = true;
+      });
+
+      if (selected === correct) {
+        playCorrectSound();
+        createFirework(window.innerWidth * 0.5, window.innerHeight * 0.3);
+        streak++;
+        const points = streak * 5;
+        score += points;
+        correctCount++;
+        wrongWords = wrongWords.filter(w => !(w.word === wordObj.word && w.meaning === wordObj.meaning));
+        document.getElementById('score').textContent = score;
+        document.getElementById('result').innerHTML = 
+          `<span class="zh">✅ 答對！+${points} 分</span><br/>` +
+          `<span class="en">✅ Correct! +${points} pts</span>`;
+        setTimeout(() => {
+          if (timeLeft > 0) nextQuestion();
+        }, 1200);
+      } else {
+        playWrongSound();
+        const exists = wrongWords.some(w => w.word === wordObj.word && w.meaning === wordObj.meaning);
+        if (!exists) {
+          wrongWords.push({ ...wordObj, correctMeaning: correct });
+        }
+        wrongCount++;
+        streak = 0;
+        document.getElementById('result').innerHTML = 
+          `<span class="zh">❌ 答錯！正確答案：${correct}</span><br/>` +
+          `<span class="en">❌ Wrong! Correct: ${correct}</span>`;
+        setTimeout(() => {
+          if (timeLeft > 0) nextQuestion();
+        }, 1500);
+      }
+    }
+
+    function timeUp(correct, wordObj) {
+      playExplosionSound();
+      document.getElementById('result').innerHTML = 
+        `<div class="explosion">💥</div>` +
+        `<span class="zh">時間到！正確答案：${correct}</span><br/>` +
+        `<span class="en">Time's up! Correct: ${correct}</span>`;
+      const exists = wrongWords.some(w => w.word === wordObj.word && w.meaning === wordObj.meaning);
+      if (!exists) {
+        wrongWords.push({ ...wordObj, correctMeaning: correct });
+      }
+      wrongCount++;
+      streak = 0;
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        }
+        btn.disabled = true;
+      });
+      setTimeout(() => {
+        if (timeLeft > 0) nextQuestion();
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      document.getElementById('result').textContent = '';
+      document.querySelectorAll('.option-btn').forEach(btn => btn.remove());
+      if (timeLeft > 0) showQuestion();
+    }
+
+    function initAndStart(duration) {
+      initAudio();
+      startGame(duration);
+    }
+
+    function startGame(duration) {
+      totalGameTime = duration;
+      timeLeft = duration;
+      score = 0;
+      streak = 0;
+      correctCount = 0;
+      wrongCount = 0;
+
+      originalFilteredWords = [...filteredWords];
+      remainingWords = [...filteredWords];
+      wrongWords = [];
+
+      document.getElementById('score').textContent = '0';
+      document.getElementById('time-left').textContent = timeLeft;
+
+      document.getElementById('category-screen').classList.remove('active');
+      document.getElementById('start-screen').classList.remove('active');
+      document.getElementById('game-screen').classList.add('active');
+      document.getElementById('end-screen').classList.remove('active');
+
+      clearInterval(gameTimer);
+      gameTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('time-left').textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+
+      showQuestion();
+    }
+
+    function endGame() {
+      clearInterval(gameTimer);
+      clearInterval(progressInterval);
+
+      const totalAnswered = correctCount + wrongCount;
+      const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('correct-count').textContent = correctCount;
+      document.getElementById('wrong-count').textContent = wrongCount;
+      document.getElementById('accuracy').textContent = accuracy;
+
+      const wrongListEl = document.getElementById('wrong-words-list');
+      const sectionEl = document.getElementById('wrong-words-section');
+      if (wrongWords.length > 0) {
+        sectionEl.style.display = 'block';
+        wrongListEl.innerHTML = wrongWords.map(w => 
+          `<div><strong>${w.word}</strong> (${w.pos})：${w.correctMeaning}</div>`
+        ).join('');
+      } else {
+        sectionEl.style.display = 'none';
+      }
+
+      document.getElementById('game-screen').classList.remove('active');
+      document.getElementById('end-screen').classList.add('active');
+    }
+
+    function restartGame() {
+      document.getElementById('end-screen').classList.remove('active');
+      document.getElementById('category-screen').classList.add('active');
+      clearInterval(gameTimer);
+      clearInterval(progressInterval);
+    }
+
+    async function loadAndStart() {
+      selectedCategory = document.querySelector('input[name="category"]:checked').value;
+      
+      if (wordList.length === 0) {
+        await loadTXT();
+      }
+
+      if (filterWords()) {
+        document.getElementById('category-screen').classList.remove('active');
+        document.getElementById('start-screen').classList.add('active');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTXT();
+    });
+  </script>
+</body>
+</html>
