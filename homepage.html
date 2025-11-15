@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
-  <link rel="icon" href="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23faf9f6'/%3E%3Ctext x='16' y='20' font-family='Cormorant Garamond, serif' font-size='18' text-anchor='middle' fill='%231a1a1a'%3ES%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23faf9f6'/%3E%3Ctext x='16' y='20' font-family='Cormorant Garamond, serif' font-size='18' text-anchor='middle' fill='%231a1a1a'%3ES%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   <style id="themeStyles">
     :root {
       --bg: #faf9f6;
@@ -35,11 +35,10 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       line-height: 1.7;
       transition: background-color 0.3s, color 0.3s;
-      background-image: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
       background-size: 200px;
       position: relative;
     }
-    /* 信箋打開時鎖住背景捲動 */
     body.modal-open {
       overflow: hidden;
     }
@@ -67,7 +66,6 @@
       flex-wrap: wrap;
     }
 
-    /* 曲線文本框 + 漸變標題 */
     .title-wrapper {
       position: relative;
       padding: 0.9rem 2.2rem;
@@ -101,7 +99,7 @@
     .title {
       position: relative;
       font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-      font-size: clamp(2.1rem, 4vw, 2.7rem); /* 比區塊大，但不會太誇張 */
+      font-size: clamp(2.1rem, 4vw, 2.7rem);
       font-weight: 600;
       letter-spacing: 0.03em;
       background: linear-gradient(120deg, #8a6643, #e1a15a, #f5d4a6, #c18fb9, #8a6643);
@@ -111,7 +109,7 @@
       color: transparent;
       animation: gradientShift 12s ease-in-out infinite;
       text-shadow: 0 2px 12px rgba(255,255,255,0.45);
-      white-space: normal;       /* 允許換行，不再只顯示 Webp */
+      white-space: normal;
     }
     .dark .title {
       text-shadow: 0 2px 14px rgba(0,0,0,0.8);
@@ -154,7 +152,6 @@
       color: #ff6f91;
     }
 
-    /* Envelope Animation */
     .envelope {
       position: relative;
       width: 120px;
@@ -178,7 +175,7 @@
       content: "";
       position: absolute;
       inset: -10px;
-      background-image: url("Shirley.png");
+      background-image: url("https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png");
       background-size: cover;
       background-position: center;
       filter: blur(4px) brightness(1.05) saturate(1.02);
@@ -237,14 +234,14 @@
       flex-direction: column;
       align-items: center;
       overflow: hidden;
-      max-height: 80vh;          /* 信箋自身可以捲動 */
+      max-height: 80vh;
       overflow-y: auto;
     }
     .letter-content::before {
       content: "";
       position: absolute;
       inset: -20px;
-      background-image: url("Shirley.png");
+      background-image: url("https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png");
       background-size: cover;
       background-position: center;
       filter: blur(10px) brightness(1.08);
@@ -252,9 +249,33 @@
       opacity: 0.8;
       z-index: -1;
     }
+    /* ✨ 星星月亮背景 */
+    .letter-content::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        radial-gradient(circle at 20% 30%, #ffffff50 1px, transparent 2px),
+        radial-gradient(circle at 80% 70%, #ffffff60 1.2px, transparent 2px),
+        radial-gradient(circle at 50% 20%, #e0f7ff40 2px, transparent 3px),
+        radial-gradient(circle at 90% 10%, #ffd1dc30 1.5px, transparent 2.5px),
+        radial-gradient(circle at 10% 85%, #ffffff40 1px, transparent 2px);
+      pointer-events: none;
+      z-index: -1;
+      mix-blend-mode: overlay;
+    }
     .dark .letter-content {
       background: rgba(18,18,18,0.92);
       box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    }
+    .dark .letter-content::after {
+      background-image:
+        radial-gradient(circle at 20% 30%, #ffeb3b20 1px, transparent 2px),
+        radial-gradient(circle at 80% 70%, #90caf920 1.2px, transparent 2px),
+        radial-gradient(circle at 50% 20%, #f0629220 2px, transparent 3px),
+        radial-gradient(circle at 90% 10%, #ba68c820 1.5px, transparent 2.5px),
+        radial-gradient(circle at 10% 85%, #4fc3f720 1px, transparent 2px);
     }
 
     .letter-content.show {
@@ -300,6 +321,13 @@
     }
     .letter-body p {
       margin: 0.8rem 0;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .letter-body p.show {
+      opacity: 1;
+      transform: translateY(0);
     }
     .letter-footer {
       font-style: italic;
@@ -393,6 +421,21 @@
       color: var(--hover);
     }
 
+    .music-toggle {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: color 0.2s;
+    }
+    .music-toggle:hover {
+      color: var(--accent);
+    }
+    .music-toggle.playing {
+      color: #ff2d75;
+      animation: pulse 1.5s infinite alternate;
+    }
+
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
@@ -434,7 +477,10 @@
       <div class="title">Teacher Shirley’s Teaching Webpage</div>
       <div class="title-underline"></div>
     </div>
-    <button id="themeToggle" aria-label="Toggle theme">💖</button>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <button id="themeToggle" aria-label="Toggle theme">💖</button>
+      <div class="music-toggle" id="musicToggle">🔊</div>
+    </div>
   </header>
 
   <div class="envelope" id="openLetter">
@@ -443,7 +489,9 @@
     <div class="heart-seal">💗</div>
   </div>
 
-  <audio id="chimeSound" src="chime.mp3" preload="auto"></audio>
+  <!-- ✅ 使用完整 GitHub URL -->
+  <audio id="chimeSound" src="https://ducj-creator.github.io/Teacher-Shirley/assets/windchime.mp3" preload="auto"></audio>
+  <audio id="themeSong" src="https://ducj-creator.github.io/Teacher-Shirley/assets/theme%20song.mp3" preload="auto"></audio>
 
   <div class="letter-content" id="letterContent">
     <div class="letter-header">
@@ -451,14 +499,7 @@
       <button class="close-btn" id="closeLetter">×</button>
     </div>
     <div class="heart-deco">💖</div>
-    <div class="letter-body">
-      <p>Hi there! 👋</p>
-      <p>I’m Shirley — an English teacher who believes learning should be interactive, joyful, and full of “aha!” moments.</p>
-      <p>This is not just a website — it’s your personal teaching toolkit, carefully crafted from years of classroom experience and student feedback.</p>
-      <p>Whether you’re a teacher looking for ready-to-use activities, or a student eager to practice anytime, anywhere — you’re in the right place.</p>
-      <p>Everything here is free, ad-free, and designed with care — because great teaching deserves great tools.</p>
-      <p>Let’s make language learning lively, meaningful, and yes — a little bit magical. 💫</p>
-    </div>
+    <div class="letter-body" id="letterBody"></div>
     <div class="letter-footer">— Shirley</div>
   </div>
 
@@ -494,6 +535,7 @@
   </footer>
 
   <script>
+    // Theme toggle
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -506,33 +548,86 @@
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
+    // Letter content paragraphs
+    const paragraphs = [
+      "Hi there! 👋",
+      "I’m Shirley — an English teacher who believes learning should be interactive, joyful, and full of “aha!” moments.",
+      "This is not just a website — it’s your personal teaching toolkit, carefully crafted from years of classroom experience and student feedback.",
+      "Whether you’re a teacher looking for ready-to-use activities, or a student eager to practice anytime, anywhere — you’re in the right place.",
+      "Everything here is free, ad-free, and designed with care — because great teaching deserves great tools.",
+      "Let’s make language learning lively, meaningful, and yes — a little bit magical. 💫"
+    ];
+
+    const letterBody = document.getElementById('letterBody');
+    paragraphs.forEach(text => {
+      const p = document.createElement('p');
+      p.textContent = text;
+      letterBody.appendChild(p);
+    });
+
+    // Audio and modal
     const openLetter = document.getElementById('openLetter');
     const letterContent = document.getElementById('letterContent');
     const closeLetter = document.getElementById('closeLetter');
     const chimeSound = document.getElementById('chimeSound');
 
     openLetter.addEventListener('click', () => {
-      if (chimeSound) {
-        try {
-          chimeSound.currentTime = 0;
-          chimeSound.play();
-        } catch (e) {}
-      }
+      chimeSound.currentTime = 0;
+      chimeSound.play().catch(e => console.warn("Windchime play failed:", e));
       letterContent.classList.add('show');
-      document.body.classList.add('modal-open');  // 鎖住主頁捲動
+      document.body.classList.add('modal-open');
+
+      // Trigger paragraph animation with delay
+      setTimeout(() => {
+        const allP = letterBody.querySelectorAll('p');
+        allP.forEach((p, i) => {
+          setTimeout(() => p.classList.add('show'), i * 400);
+        });
+      }, 300);
     });
 
     function closeLetterModal() {
       letterContent.classList.remove('show');
       document.body.classList.remove('modal-open');
+      letterBody.querySelectorAll('p').forEach(p => p.classList.remove('show'));
     }
 
     closeLetter.addEventListener('click', closeLetterModal);
-
     document.addEventListener('click', (e) => {
       if (!letterContent.contains(e.target) && !openLetter.contains(e.target) && letterContent.classList.contains('show')) {
         closeLetterModal();
       }
+    });
+
+    // Theme music toggle
+    const musicToggle = document.getElementById('musicToggle');
+    const themeSong = document.getElementById('themeSong');
+    let isPlaying = false;
+
+    musicToggle.addEventListener('click', () => {
+      if (isPlaying) {
+        themeSong.pause();
+        musicToggle.textContent = '🔊';
+        musicToggle.classList.remove('playing');
+      } else {
+        themeSong.currentTime = 0;
+        const playPromise = themeSong.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            musicToggle.textContent = '🔉';
+            musicToggle.classList.add('playing');
+          }).catch(e => {
+            console.warn("Theme song play blocked:", e);
+            musicToggle.textContent = '🔇';
+          });
+        }
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // Pause theme song on page unload
+    window.addEventListener('beforeunload', () => {
+      if (!themeSong.paused) themeSong.pause();
     });
   </script>
 </body>
