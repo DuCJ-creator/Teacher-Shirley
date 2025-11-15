@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ELA Vocab 王者</title>
+  <title>ELA Vocab Champion / 單字冒險王</title>
   <style>
     body {
-      font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
       background: linear-gradient(135deg, #e6e9f0, #f8f6f2);
       margin: 0;
       padding: 15px;
       text-align: center;
       color: #2c3e50;
       overflow-x: hidden;
+      position: relative;
     }
     .container {
       max-width: 600px;
@@ -29,25 +30,27 @@
       font-size: 24px;
       margin-bottom: 12px;
       font-weight: 600;
+      line-height: 1.4;
     }
-    .unicorn {
-      font-size: 36px;
-      margin-bottom: 12px;
-      color: #5d6d7e;
+    .lang-switch {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 10px;
     }
-    .screen { 
-      display: none; 
-    }
-    .active { 
-      display: block; 
-    }
+    .zh { color: #2c3e50; font-weight: 500; }
+    .en { color: #7f8c8d; font-size: 0.9em; }
+    .separator { margin: 0 4px; color: #bdc3c7; }
+
+    .screen { display: none; }
+    .active { display: block; }
+
     button {
       background: #e0e5ec;
       border: 1px solid #cbd2d9;
       border-radius: 50px;
-      padding: 12px 24px;
+      padding: 12px 20px;
       margin: 8px;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 500;
       color: #2c3e50;
       cursor: pointer;
@@ -59,6 +62,7 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
+
     .word-display {
       font-size: 26px;
       margin: 22px 0;
@@ -78,6 +82,7 @@
       margin-top: -4px;
       font-weight: 500;
     }
+
     .options {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -113,6 +118,7 @@
       color: #721c24;
       border-color: #f1b0b7;
     }
+
     .progress-bar {
       width: 100%;
       height: 12px;
@@ -126,12 +132,14 @@
       background: linear-gradient(to right, #2c7d6d, #34988e);
       transition: width 0.1s linear;
     }
+
     .score, .timer {
       font-size: 19px;
       margin: 12px 0;
       font-weight: 600;
       color: #2c3e50;
     }
+
     .explosion {
       font-size: 50px;
       animation: explode 0.8s ease-out forwards;
@@ -143,6 +151,7 @@
       50% { transform: scale(1.2); opacity: 1; }
       100% { transform: scale(0); opacity: 0; }
     }
+
     .result {
       font-size: 20px;
       margin: 18px 0;
@@ -171,25 +180,43 @@
       font-family: monospace;
     }
 
-    /* 魔法金粉動畫 */
-    .sparkle {
+    /* === 飄動絲帶 === */
+    .ribbon {
+      position: absolute;
+      top: -20px;
+      font-size: 24px;
+      opacity: 0.8;
+      animation: floatDown 8s infinite ease-in;
+      z-index: 998;
+      pointer-events: none;
+    }
+    @keyframes floatDown {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* === 煙火特效 === */
+    .firework {
       position: absolute;
       pointer-events: none;
       z-index: 1000;
-      font-size: 16px;
-      color: gold;
-      animation: sparkle-fade 1.5s ease-out forwards;
+      font-size: 28px;
+      animation: fireworkBurst 1.2s ease-out forwards;
+      opacity: 0;
     }
-    @keyframes sparkle-fade {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(2) rotate(45deg); }
+    @keyframes fireworkBurst {
+      0% { transform: scale(0.2); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
     }
 
-    /* 獨角獸飛舞動畫 */
+    /* 飛舞獨角獸 */
     .floating-unicorn {
       position: fixed;
-      top: 10vh;
-      right: 5vw;
+      top: 12vh;
+      right: 6vw;
       font-size: 24px;
       animation: float 3s ease-in-out infinite;
       z-index: 999;
@@ -197,24 +224,36 @@
     }
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
       100% { transform: translateY(0px); }
     }
   </style>
 </head>
 <body>
-  <div id="sparkles"></div>
+  <!-- 飛舞獨角獸 -->
   <div class="floating-unicorn">🦄</div>
+
+  <!-- 飄動絲帶（動態生成） -->
+  <div id="ribbons"></div>
+  <!-- 煙火容器 -->
+  <div id="fireworks"></div>
 
   <div class="container">
     <!-- 選擇畫面 -->
     <div id="select-screen" class="screen active">
       <div class="unicorn">🦄✨👸</div>
-      <h1>FRP ELA Vocab Challenge 單字冒險王挑戰</h1>
-      <p>請選擇學期與單元：</p>
+      <h1>
+        <div class="zh">FRP ELA 單字冒險王挑戰</div>
+        <div class="en">FRP ELA Vocab Challenge</div>
+      </h1>
+      <p>
+        <span class="zh">請選擇學期與單元：</span>
+        <span class="separator">/</span>
+        <span class="en">Select Semester & Units:</span>
+      </p>
 
       <div style="margin: 15px 0;">
-        <strong>學期：</strong><br/>
+        <strong class="zh">學期：</strong><strong class="en">Semester:</strong><br/>
         <label><input type="radio" name="semester" value="SI" checked> SI</label>
         <label><input type="radio" name="semester" value="SII"> SII</label>
         <label><input type="radio" name="semester" value="SIII"> SIII</label>
@@ -222,7 +261,7 @@
       </div>
 
       <div style="margin: 15px 0;">
-        <strong>單元（可複選）：</strong><br/>
+        <strong class="zh">單元（可複選）：</strong><strong class="en">Units (multi-select):</strong><br/>
         <label><input type="checkbox" value="1"> 1</label>
         <label><input type="checkbox" value="2"> 2</label>
         <label><input type="checkbox" value="3"> 3</label>
@@ -233,24 +272,45 @@
         <label><input type="checkbox" value="8"> 8</label>
       </div>
 
-      <button onclick="loadAndStart()">開始遊戲</button>
+      <button onclick="loadAndStart()">
+        <span class="zh">開始遊戲</span>
+        <span class="separator">/</span>
+        <span class="en">Start Game</span>
+      </button>
     </div>
 
     <!-- 開始畫面 -->
     <div id="start-screen" class="screen">
       <div class="unicorn">🦄✨👸</div>
-      <h1>準備好就開始吧！</h1>
-      <p>選擇你的冒險時間！</p>
-      <button onclick="initAndStart(60)">1 分鐘</button>
-      <button onclick="initAndStart(180)">3 分鐘</button>
-      <button onclick="initAndStart(300)">5 分鐘</button>
-      <button onclick="initAndStart(600)">10 分鐘</button>
+      <h1>
+        <div class="zh">準備好就開始吧！</div>
+        <div class="en">Ready to Play!</div>
+      </h1>
+      <p>
+        <span class="zh">選擇你的冒險時間：</span>
+        <span class="separator">/</span>
+        <span class="en">Choose your time:</span>
+      </p>
+      <button onclick="initAndStart(60)">1 分鐘 / 1 min</button>
+      <button onclick="initAndStart(180)">3 分鐘 / 3 min</button>
+      <button onclick="initAndStart(300)">5 分鐘 / 5 min</button>
+      <button onclick="initAndStart(600)">10 分鐘 / 10 min</button>
     </div>
 
     <!-- 遊戲畫面 -->
     <div id="game-screen" class="screen">
-      <div class="score">得分：<span id="score">0</span></div>
-      <div class="timer">剩餘時間：<span id="time-left">0</span> 秒</div>
+      <div class="score">
+        <span class="zh">得分：</span>
+        <span class="en">Score: </span>
+        <span id="score">0</span>
+      </div>
+      <div class="timer">
+        <span class="zh">剩餘時間：</span>
+        <span class="en">Time Left: </span>
+        <span id="time-left">0</span>
+        <span class="zh">秒</span>
+        <span class="en">seconds</span>
+      </div>
       <div class="word-display" id="word">Loading...</div>
       <div class="pos" id="pos"></div>
       <div class="source" id="source"></div>
@@ -262,21 +322,47 @@
     <!-- 結束畫面 -->
     <div id="end-screen" class="screen">
       <div class="unicorn">🎉👑🦄</div>
-      <h1>冒險結束！</h1>
-      <div class="final-score">你的總分：<span id="final-score">0</span></div>
+      <h1>
+        <div class="zh">冒險結束！</div>
+        <div class="en">Game Over!</div>
+      </h1>
+      <div class="final-score">
+        <span class="zh">你的總分：</span>
+        <span class="en">Your Score: </span>
+        <span id="final-score">0</span>
+      </div>
       
       <div class="stats">
-        <div>答對題數：<span id="correct-count">0</span></div>
-        <div>答錯題數：<span id="wrong-count">0</span></div>
-        <div>正確率：<span id="accuracy">0</span>%</div>
+        <div>
+          <span class="zh">答對題數：</span>
+          <span class="en">Correct: </span>
+          <span id="correct-count">0</span>
+        </div>
+        <div>
+          <span class="zh">答錯題數：</span>
+          <span class="en">Wrong: </span>
+          <span id="wrong-count">0</span>
+        </div>
+        <div>
+          <span class="zh">正確率：</span>
+          <span class="en">Accuracy: </span>
+          <span id="accuracy">0</span>%
+        </div>
       </div>
 
       <div id="wrong-words-section" style="display:none;">
-        <h3>答錯的單字：</h3>
+        <h3>
+          <span class="zh">答錯的單字：</span>
+          <span class="en">Words You Missed:</span>
+        </h3>
         <div class="wrong-list" id="wrong-words-list"></div>
       </div>
 
-      <button onclick="restartGame()">再玩一次</button>
+      <button onclick="restartGame()">
+        <span class="zh">再玩一次</span>
+        <span class="separator">/</span>
+        <span class="en">Play Again</span>
+      </button>
     </div>
   </div>
 
@@ -312,7 +398,7 @@
       }
     }
 
-    // ====== 音效系統 ======
+    // ====== 音效系統（保持不變）======
     function initAudio() {
       if (audioContext) return;
       try {
@@ -369,18 +455,37 @@
       }, 100);
     }
 
-    // ====== 魔法金粉 ======
-    function createSparkle(x, y) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.textContent = '✨';
-      sparkle.style.left = `${x}px`;
-      sparkle.style.top = `${y}px`;
-      document.getElementById('sparkles').appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 1500);
+    // ====== 喜慶視覺特效 ======
+    function createFirework(x, y) {
+      const emoji = ['🎉', '🎊', '🎆', '🎇', '✨'][Math.floor(Math.random() * 5)];
+      const firework = document.createElement('div');
+      firework.className = 'firework';
+      firework.textContent = emoji;
+      firework.style.left = `${x}px`;
+      firework.style.top = `${y}px`;
+      document.getElementById('fireworks').appendChild(firework);
+      setTimeout(() => firework.remove(), 1200);
     }
 
-    // ====== CSV 載入與解析 ======
+    function createRibbon() {
+      const emoji = ['🎀', '🎁', '🎈', '🎊'][Math.floor(Math.random() * 4)];
+      const ribbon = document.createElement('div');
+      ribbon.className = 'ribbon';
+      ribbon.textContent = emoji;
+      ribbon.style.left = `${Math.random() * 90 + 5}%`;
+      ribbon.style.animationDelay = `${Math.random() * 2}s`;
+      document.getElementById('ribbons').appendChild(ribbon);
+      setTimeout(() => ribbon.remove(), 8500);
+    }
+
+    // 自動生成飄動絲帶
+    setInterval(() => {
+      if (document.getElementById('game-screen').classList.contains('active')) {
+        createRibbon();
+      }
+    }, 2500);
+
+    // ====== CSV 載入（不變）======
     async function loadCSV() {
       const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/FRP%20ELA%20Vocab.csv';
       try {
@@ -388,7 +493,7 @@
         const text = await response.text();
         parseCSV(text);
       } catch (error) {
-        alert('無法從 GitHub 載入單字資料。\n請確認網路連線，或稍後再試。');
+        alert('無法從 GitHub 載入單字資料。\nPlease check your internet connection.');
         console.error('CSV Load Error:', error);
       }
     }
@@ -420,7 +525,6 @@
         return word.semester === selectedSemester && selectedUnits.includes(word.unit);
       });
 
-      // 去重：以 word + meaning 為唯一鍵
       const seen = new Set();
       filteredWords = filteredWords.filter(item => {
         const key = item.word + '|' + item.meaning;
@@ -430,13 +534,13 @@
       });
 
       if (filteredWords.length === 0) {
-        alert('沒有符合條件的單字！請重新選擇學期與單元。');
+        alert('沒有符合條件的單字！\nNo words match your selection.');
         return false;
       }
       return true;
     }
 
-    // ====== 遊戲核心邏輯 ======
+    // ====== 遊戲邏輯（更新：加入煙火）======
     function getRandomMeanings(correct, count = 3) {
       let options = [correct];
       let pool = [...new Set(wordList.map(w => w.meaning))].filter(m => m !== correct);
@@ -459,7 +563,6 @@
         wordObj = remainingWords[idx];
         remainingWords.splice(idx, 1);
       } else {
-        // 所有題目已出過 → 重置（但保留錯題優先）
         remainingWords = [...originalFilteredWords];
         if (remainingWords.length > 0) {
           let idx = Math.floor(Math.random() * remainingWords.length);
@@ -472,9 +575,8 @@
 
       document.getElementById('word').textContent = wordObj.word;
       document.getElementById('pos').textContent = wordObj.pos;
-      document.getElementById('source').textContent = `來源：${wordObj.source}`;
+      document.getElementById('source').textContent = `Source: ${wordObj.source}`;
 
-      // 點擊朗讀
       document.getElementById('word').onclick = () => speakWord(wordObj.word);
 
       const options = getRandomMeanings(wordObj.meaning);
@@ -488,7 +590,6 @@
         optionsDiv.appendChild(btn);
       });
 
-      // 進度條
       let time = 8;
       const progressBar = document.getElementById('progress');
       progressBar.style.width = '100%';
@@ -518,15 +619,16 @@
 
       if (selected === correct) {
         playCorrectSound();
-        createSparkle(window.innerWidth * 0.5, window.innerHeight * 0.3);
+        createFirework(window.innerWidth * 0.5, window.innerHeight * 0.3);
         streak++;
         const points = streak * 5;
         score += points;
         correctCount++;
-        // 移除錯題（如果存在）
         wrongWords = wrongWords.filter(w => !(w.word === wordObj.word && w.meaning === wordObj.meaning));
         document.getElementById('score').textContent = score;
-        document.getElementById('result').innerHTML = `✅ 答對！+${points} 分`;
+        document.getElementById('result').innerHTML = 
+          `<span class="zh">✅ 答對！+${points} 分</span><br/>` +
+          `<span class="en">✅ Correct! +${points} pts</span>`;
         setTimeout(() => {
           if (timeLeft > 0) nextQuestion();
         }, 1200);
@@ -538,7 +640,9 @@
         }
         wrongCount++;
         streak = 0;
-        document.getElementById('result').innerHTML = `❌ 答錯！正確答案：${correct}`;
+        document.getElementById('result').innerHTML = 
+          `<span class="zh">❌ 答錯！正確答案：${correct}</span><br/>` +
+          `<span class="en">❌ Wrong! Correct: ${correct}</span>`;
         setTimeout(() => {
           if (timeLeft > 0) nextQuestion();
         }, 1500);
@@ -547,7 +651,10 @@
 
     function timeUp(correct, wordObj) {
       playExplosionSound();
-      document.getElementById('result').innerHTML = `<div class="explosion">💥</div>時間到！正確答案：${correct}`;
+      document.getElementById('result').innerHTML = 
+        `<div class="explosion">💥</div>` +
+        `<span class="zh">時間到！正確答案：${correct}</span><br/>` +
+        `<span class="en">Time's up! Correct: ${correct}</span>`;
       const exists = wrongWords.some(w => w.word === wordObj.word && w.meaning === wordObj.meaning);
       if (!exists) {
         wrongWords.push({ ...wordObj, correctMeaning: correct });
@@ -626,7 +733,7 @@
       if (wrongWords.length > 0) {
         sectionEl.style.display = 'block';
         wrongListEl.innerHTML = wrongWords.map(w => 
-          `<div><strong>${w.word}</strong> (${w.pos})【${w.source}】：${w.correctMeaning}</div>`
+          `<div><strong>${w.word}</strong> (${w.pos}) 【${w.source}】：${w.correctMeaning}</div>`
         ).join('');
       } else {
         sectionEl.style.display = 'none';
@@ -643,13 +750,12 @@
       clearInterval(progressInterval);
     }
 
-    // ====== 選擇與載入 ======
     async function loadAndStart() {
       selectedSemester = document.querySelector('input[name="semester"]:checked').value;
       selectedUnits = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
       
       if (selectedUnits.length === 0) {
-        alert('請至少選擇一個單元！');
+        alert('請至少選擇一個單元！\nPlease select at least one unit.');
         return;
       }
 
@@ -663,7 +769,6 @@
       }
     }
 
-    // 預載 CSV（加快後續啟動）
     document.addEventListener('DOMContentLoaded', () => {
       loadCSV();
     });
