@@ -32,11 +32,6 @@
       font-weight: 600;
       line-height: 1.4;
     }
-    .lang-switch {
-      font-size: 14px;
-      color: #7f8c8d;
-      margin-bottom: 10px;
-    }
     .zh { color: #2c3e50; font-weight: 500; }
     .en { color: #7f8c8d; font-size: 0.9em; }
     .separator { margin: 0 4px; color: #bdc3c7; }
@@ -76,8 +71,6 @@
       margin-bottom: 8px;
       font-style: italic;
     }
-    /* 移除 source */
-    .source { display: none; }
 
     .options {
       display: grid;
@@ -176,7 +169,7 @@
       font-family: monospace;
     }
 
-    /* === 飄動絲帶 === */
+    /* 飄動絲帶 */
     .ribbon {
       position: absolute;
       top: -20px;
@@ -193,7 +186,7 @@
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
-    /* === 煙火特效 === */
+    /* 煙火 */
     .firework {
       position: absolute;
       pointer-events: none;
@@ -208,7 +201,6 @@
       100% { transform: scale(1.5); opacity: 0; }
     }
 
-    /* 飛舞獨角獸 */
     .floating-unicorn {
       position: fixed;
       top: 12vh;
@@ -223,15 +215,18 @@
       50% { transform: translateY(-12px); }
       100% { transform: translateY(0px); }
     }
+
+    /* 載入狀態 */
+    #loading-status {
+      color: #e67e22;
+      font-size: 14px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- 飛舞獨角獸 -->
   <div class="floating-unicorn">🦄</div>
-
-  <!-- 飄動絲帶 -->
   <div id="ribbons"></div>
-  <!-- 煙火容器 -->
   <div id="fireworks"></div>
 
   <div class="container">
@@ -276,6 +271,7 @@
         <span class="separator">/</span>
         <span class="en">Start Game</span>
       </button>
+      <div id="loading-status">Loading word list...</div>
     </div>
 
     <!-- 開始畫面 -->
@@ -312,7 +308,6 @@
       </div>
       <div class="word-display" id="word">Loading...</div>
       <div class="pos" id="pos"></div>
-      <!-- 不再顯示 source -->
       <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
       <div class="options" id="options"></div>
       <div class="result" id="result"></div>
@@ -366,11 +361,52 @@
   </div>
 
   <script>
+    // ====== 內建備用單字（四類完整）======
+    const fallbackWordList = [
+      // Language Form & Meaning
+      { category: "Language Form & Meaning", word: "analyze", pos: "v.", meaning: "分析" },
+      { category: "Language Form & Meaning", word: "compare", pos: "v.", meaning: "比較" },
+      { category: "Language Form & Meaning", word: "contrast", pos: "v.", meaning: "對比" },
+      { category: "Language Form & Meaning", word: "define", pos: "v.", meaning: "定義" },
+      { category: "Language Form & Meaning", word: "describe", pos: "v.", meaning: "描述" },
+      { category: "Language Form & Meaning", word: "identify", pos: "v.", meaning: "識別" },
+      { category: "Language Form & Meaning", word: "support", pos: "v.", meaning: "支持" },
+      { category: "Language Form & Meaning", word: "conclude", pos: "v.", meaning: "得出結論" },
+      { category: "Language Form & Meaning", word: "determine", pos: "v.", meaning: "決定" },
+      { category: "Language Form & Meaning", word: "illustrate", pos: "v.", meaning: "闡明" },
+
+      // Reading Strategies
+      { category: "Reading Strategies", word: "infer", pos: "v.", meaning: "推斷" },
+      { category: "Reading Strategies", word: "predict", pos: "v.", meaning: "預測" },
+      { category: "Reading Strategies", word: "summarize", pos: "v.", meaning: "摘要" },
+      { category: "Reading Strategies", word: "locate", pos: "v.", meaning: "定位" },
+      { category: "Reading Strategies", word: "clarify", pos: "v.", meaning: "澄清" },
+      { category: "Reading Strategies", word: "skim", pos: "v.", meaning: "略讀" },
+      { category: "Reading Strategies", word: "scan", pos: "v.", meaning: "掃讀" },
+
+      // Reading Comprehension
+      { category: "Reading Comprehension", word: "main idea", pos: "n.", meaning: "主旨" },
+      { category: "Reading Comprehension", word: "detail", pos: "n.", meaning: "細節" },
+      { category: "Reading Comprehension", word: "purpose", pos: "n.", meaning: "目的" },
+      { category: "Reading Comprehension", word: "attitude", pos: "n.", meaning: "態度" },
+      { category: "Reading Comprehension", word: "tone", pos: "n.", meaning: "語氣" },
+      { category: "Reading Comprehension", word: "inference", pos: "n.", meaning: "推論" },
+      { category: "Reading Comprehension", word: "sequence", pos: "n.", meaning: "順序" },
+
+      // Listening Comprehension
+      { category: "Listening Comprehension", word: "gist", pos: "n.", meaning: "大意" },
+      { category: "Listening Comprehension", word: "specific information", pos: "n.", meaning: "特定資訊" },
+      { category: "Listening Comprehension", word: "speaker's opinion", pos: "n.", meaning: "說話者觀點" },
+      { category: "Listening Comprehension", word: "function", pos: "n.", meaning: "功能" },
+      { category: "Listening Comprehension", word: "attitude", pos: "n.", meaning: "態度" },
+      { category: "Listening Comprehension", word: "purpose", pos: "n.", meaning: "目的" }
+    ];
+
     // ====== 全域變數 ======
     let audioContext = null;
     let isAudioReady = false;
     let selectedCategory = "Language Form & Meaning";
-    let wordList = []; // 從 TXT 載入的完整單字列表
+    let wordList = [];
     let filteredWords = [];
     let originalFilteredWords = [];
     let remainingWords = [];
@@ -384,19 +420,17 @@
     let correctCount = 0;
     let wrongCount = 0;
 
-    // ====== 語音朗讀 ======
+    // ====== 語音與音效 ======
     function speakWord(text) {
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
         utterance.rate = 1.0;
-        utterance.pitch = 1.0;
         speechSynthesis.cancel();
         speechSynthesis.speak(utterance);
       }
     }
 
-    // ====== 音效系統 ======
     function initAudio() {
       if (audioContext) return;
       try {
@@ -404,7 +438,6 @@
         audioContext = new AudioContext();
         isAudioReady = true;
       } catch (e) {
-        console.warn("Audio not supported");
         isAudioReady = false;
       }
     }
@@ -453,9 +486,9 @@
       }, 100);
     }
 
-    // ====== 喜慶視覺特效 ======
+    // ====== 視覺特效 ======
     function createFirework(x, y) {
-      const emoji = ['🎉', '🎊', '🎆', '🎇', '✨'][Math.floor(Math.random() * 5)];
+      const emoji = ['🎉', '🎊', '🎆', '🎇'][Math.floor(Math.random() * 4)];
       const firework = document.createElement('div');
       firework.className = 'firework';
       firework.textContent = emoji;
@@ -466,12 +499,11 @@
     }
 
     function createRibbon() {
-      const emoji = ['🎀', '🎁', '🎈', '🎊'][Math.floor(Math.random() * 4)];
+      const emoji = ['🎀', '🎁', '🎈'][Math.floor(Math.random() * 3)];
       const ribbon = document.createElement('div');
       ribbon.className = 'ribbon';
       ribbon.textContent = emoji;
       ribbon.style.left = `${Math.random() * 90 + 5}%`;
-      ribbon.style.animationDelay = `${Math.random() * 2}s`;
       document.getElementById('ribbons').appendChild(ribbon);
       setTimeout(() => ribbon.remove(), 8500);
     }
@@ -482,54 +514,84 @@
       }
     }, 2500);
 
-    // ====== TXT 載入與解析 ======
+    // ====== TXT 載入（支援每行結尾有逗號）======
     async function loadTXT() {
       const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Word%20List.txt';
-      try {
-        const response = await fetch(url);
-        const text = await response.text();
-        parseTXT(text);
-      } catch (error) {
-        alert('無法載入單字資料。\n請確認網路連線或稍後再試。');
-        console.error('TXT Load Error:', error);
-      }
-    }
-
-    function parseTXT(text) {
-      const lines = text.split('\n');
-      let currentCategory = '';
+      let loaded = false;
       wordList = [];
 
-      for (let line of lines) {
-        line = line.trim();
-        if (line.startsWith('第一類：') || line.startsWith('第二類：') || line.startsWith('第三類：') || line.startsWith('第四類：')) {
-          currentCategory = line.replace(/^(第一類|第二類|第三類|第四類)：/, '').trim();
-        } else if (line.startsWith('{') && line.endsWith('},')) {
-          try {
-            // 移除末尾逗號，轉成合法 JSON
-            const jsonStr = line.slice(0, -1);
-            const obj = JSON.parse(jsonStr);
-            if (obj.word && obj.pos && obj.meaning) {
-              obj.category = currentCategory;
-              wordList.push(obj);
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const text = await response.text();
+
+        const cleanText = text.startsWith('\ufeff') ? text.slice(1) : text;
+        const lines = cleanText.split('\n');
+        let currentCategory = '';
+
+        for (let line of lines) {
+          line = line.trim();
+          if (!line) continue;
+
+          // 檢測類別標題（支援中英文混合）
+          if (line.includes("Language Form & Meaning") || line.includes("第一類")) {
+            currentCategory = "Language Form & Meaning";
+          } else if (line.includes("Reading Strategies") || line.includes("第二類")) {
+            currentCategory = "Reading Strategies";
+          } else if (line.includes("Reading Comprehension") || line.includes("第三類")) {
+            currentCategory = "Reading Comprehension";
+          } else if (line.includes("Listening Comprehension") || line.includes("第四類")) {
+            currentCategory = "Listening Comprehension";
+          }
+          // 處理 JSON 行，允許結尾逗號
+          else if (line.startsWith('{') && (line.endsWith('}') || line.endsWith('},') || line.endsWith('} '))) {
+            let jsonStr = line;
+            // 移除可能的結尾逗號或空格+逗號
+            if (jsonStr.endsWith(',')) {
+              jsonStr = jsonStr.slice(0, -1).trim();
             }
-          } catch (e) {
-            console.warn('Parse error on line:', line);
+            if (jsonStr.endsWith(' ')) {
+              jsonStr = jsonStr.trim();
+            }
+            try {
+              const obj = JSON.parse(jsonStr);
+              if (obj.word && obj.pos && obj.meaning && currentCategory) {
+                obj.category = currentCategory;
+                wordList.push(obj);
+              }
+            } catch (e) {
+              console.warn('JSON parse error:', line);
+            }
           }
         }
+
+        if (wordList.length > 0) {
+          loaded = true;
+          document.getElementById('loading-status').textContent = '✅ 單字載入成功！';
+          document.getElementById('loading-status').style.color = '#27ae60';
+        }
+      } catch (error) {
+        console.error('TXT Load Error:', error);
+        document.getElementById('loading-status').textContent = '⚠️ 無法載入線上單字';
+      }
+
+      if (!loaded) {
+        wordList = [...fallbackWordList];
+        document.getElementById('loading-status').textContent += '（使用內建資料）';
+        document.getElementById('loading-status').style.color = '#e67e22';
       }
     }
 
     function filterWords() {
       filteredWords = wordList.filter(word => word.category === selectedCategory);
       if (filteredWords.length === 0) {
-        alert(`沒有找到「${selectedCategory}」的單字！\nNo words found for this category.`);
+        alert(`「${selectedCategory}」沒有可用單字！`);
         return false;
       }
       return true;
     }
 
-    // ====== 遊戲核心邏輯 ======
+    // ====== 遊戲邏輯（錯題優先 + 雙語反饋）======
     function getRandomMeanings(correct, count = 3) {
       let options = [correct];
       let pool = [...new Set(wordList.map(w => w.meaning))].filter(m => m !== correct);
@@ -543,7 +605,6 @@
 
     function showQuestion() {
       let wordObj = null;
-
       if (wrongWords.length > 0) {
         let idx = Math.floor(Math.random() * wrongWords.length);
         wordObj = wrongWords[idx];
@@ -564,8 +625,6 @@
 
       document.getElementById('word').textContent = wordObj.word;
       document.getElementById('pos').textContent = wordObj.pos;
-      // 不再顯示 source
-
       document.getElementById('word').onclick = () => speakWord(wordObj.word);
 
       const options = getRandomMeanings(wordObj.meaning);
@@ -741,11 +800,7 @@
 
     async function loadAndStart() {
       selectedCategory = document.querySelector('input[name="category"]:checked').value;
-      
-      if (wordList.length === 0) {
-        await loadTXT();
-      }
-
+      await loadTXT();
       if (filterWords()) {
         document.getElementById('category-screen').classList.remove('active');
         document.getElementById('start-screen').classList.add('active');
@@ -753,7 +808,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      loadTXT();
+      // 預先載入狀態提示
     });
   </script>
 </body>
