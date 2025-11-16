@@ -514,73 +514,94 @@
       }
     }, 2500);
 
-    // ====== TXT 載入（支援每行結尾有逗號）======
-    async function loadTXT() {
-      const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Word%20List.txt';
-      let loaded = false;
-      wordList = [];
+  // ====== TXT 載入（支援每行結尾有逗號、前後雜訊、不改原檔格式）======
+async function loadTXT() {
+  const url = 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Word%20List.txt';
+  let loaded = false;
+  wordList = [];
 
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const text = await response.text();
+  try {
+    const response = await fetch(url + '?t=' + Date.now()); // 加隨機參數避免快取
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
 
-        const cleanText = text.startsWith('\ufeff') ? text.slice(1) : text;
-        const lines = cleanText.split('\n');
-        let currentCategory = '';
+    // 移除 BOM，切行
+    const cleanText = text.replace('\ufeff', '');
+    const lines = cleanText.split(/\r?\n/);
 
-        for (let line of lines) {
-          line = line.trim();
-          if (!line) continue;
+    let currentCategory = '';
 
-          // 檢測類別標題（支援中英文混合）
-          if (line.includes("Language Form & Meaning") || line.includes("第一類")) {
-            currentCategory = "Language Form & Meaning";
-          } else if (line.includes("Reading Strategies") || line.includes("第二類")) {
-            currentCategory = "Reading Strategies";
-          } else if (line.includes("Reading Comprehension") || line.includes("第三類")) {
-            currentCategory = "Reading Comprehension";
-          } else if (line.includes("Listening Comprehension") || line.includes("第四類")) {
-            currentCategory = "Listening Comprehension";
-          }
-          // 處理 JSON 行，允許結尾逗號
-          else if (line.startsWith('{') && (line.endsWith('}') || line.endsWith('},') || line.endsWith('} '))) {
-            let jsonStr = line;
-            // 移除可能的結尾逗號或空格+逗號
+    for (let rawLine of lines) {
+      let line = rawLine.trim();
+      if (!line) continue;
+
+      // 類別偵測（保留你原本的寫法）
+      if (line.includes("Language Form & Meaning") || line.includes("第一類")) {
+        currentCategory = "Language Form & Meaning";
+        continue;
+      } else if (line.includes("Reading Strategies") || line.includes("第二類")) {
+        currentCategory = "Reading Strategies";
+        continue;
+      } else if (line.includes("Reading Comprehension") || line.includes("第三類")) {
+        currentCategory = "Reading Comprehension";
+        continue;
+      } else if (line.includes("Listening Comprehension") || line.includes("第四類")) {
+        currentCategory = "Listening Comprehension";
+        continue;
+      }
+
+      // 從這一行裡抓出所有 { ... } 片段，不限制一定要從行首開始
+      if (currentCategory && line.includes('{') && line.includes('}')) {
+        const matches = line.match(/\{[^}]*\}/g);  // 單行多個物件也能抓出來
+        if (matches) {
+          for (let jsonStr of matches) {
+            jsonStr = jsonStr.trim();
+            // 保險：如果後面還有逗號（某些格式會有）
             if (jsonStr.endsWith(',')) {
               jsonStr = jsonStr.slice(0, -1).trim();
             }
-            if (jsonStr.endsWith(' ')) {
-              jsonStr = jsonStr.trim();
-            }
             try {
               const obj = JSON.parse(jsonStr);
-              if (obj.word && obj.pos && obj.meaning && currentCategory) {
+              if (obj.word && obj.pos && obj.meaning) {
                 obj.category = currentCategory;
                 wordList.push(obj);
               }
             } catch (e) {
-              console.warn('JSON parse error:', line);
+              console.warn('JSON parse error:', jsonStr);
             }
           }
         }
-
-        if (wordList.length > 0) {
-          loaded = true;
-          document.getElementById('loading-status').textContent = '✅ 單字載入成功！';
-          document.getElementById('loading-status').style.color = '#27ae60';
-        }
-      } catch (error) {
-        console.error('TXT Load Error:', error);
-        document.getElementById('loading-status').textContent = '⚠️ 無法載入線上單字';
-      }
-
-      if (!loaded) {
-        wordList = [...fallbackWordList];
-        document.getElementById('loading-status').textContent += '（使用內建資料）';
-        document.getElementById('loading-status').style.color = '#e67e22';
       }
     }
+
+    if (wordList.length > 0) {
+      loaded = true;
+      const loadingEl = document.getElementById('loading-status');
+      loadingEl.textContent = `✅ 單字載入成功，共 ${wordList.length} 筆`;
+      loadingEl.style.color = '#27ae60';
+
+      // 小幫手：在 console 看每類有幾個單字
+      const stats = wordList.reduce((acc, w) => {
+        acc[w.category] = (acc[w.category] || 0) + 1;
+        return acc;
+      }, {});
+      console.log('Word list loaded:', stats);
+    }
+  } catch (error) {
+    console.error('TXT Load Error:', error);
+    const loadingEl = document.getElementById('loading-status');
+    loadingEl.textContent = '⚠️ 無法載入線上單字';
+    loadingEl.style.color = '#e67e22';
+  }
+
+  // 如果還是沒載到，就用內建備援
+  if (!loaded) {
+    wordList = [...fallbackWordList];
+    const loadingEl = document.getElementById('loading-status');
+    loadingEl.textContent += '（使用內建資料）';
+    loadingEl.style.color = '#e67e22';
+  }
+}
 
     function filterWords() {
       filteredWords = wordList.filter(word => word.category === selectedCategory);
