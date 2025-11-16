@@ -603,55 +603,60 @@
       return options.sort(() => Math.random() - 0.5);
     }
 
-    function showQuestion() {
-      let wordObj = null;
-      if (wrongWords.length > 0) {
-        let idx = Math.floor(Math.random() * wrongWords.length);
-        wordObj = wrongWords[idx];
-      } else if (remainingWords.length > 0) {
-        let idx = Math.floor(Math.random() * remainingWords.length);
-        wordObj = remainingWords[idx];
-        remainingWords.splice(idx, 1);
-      } else {
-        remainingWords = [...originalFilteredWords];
-        if (remainingWords.length > 0) {
-          let idx = Math.floor(Math.random() * remainingWords.length);
-          wordObj = remainingWords[idx];
-          remainingWords.splice(idx, 1);
-        } else {
-          wordObj = originalFilteredWords[0];
-        }
-      }
+   function showQuestion() {
+  let wordObj = null;
 
-      document.getElementById('word').textContent = wordObj.word;
-      document.getElementById('pos').textContent = wordObj.pos;
-      document.getElementById('word').onclick = () => speakWord(wordObj.word);
+  // 1. 優先出「尚未出過的題目」
+  if (remainingWords.length > 0) {
+    const idx = Math.floor(Math.random() * remainingWords.length);
+    wordObj = remainingWords[idx];
+    // 這題出過就從 remainingWords 移除
+    remainingWords.splice(idx, 1);
+  }
+  // 2. 範圍內的單字都出過了 → 優先複習「曾經答錯的單字」
+  else if (wrongWords.length > 0) {
+    const idx = Math.floor(Math.random() * wrongWords.length);
+    wordObj = wrongWords[idx];
+  }
+  // 3. 全部單字出過，錯題也複習完或很少 → 才從整包裡隨機抽
+  else if (originalFilteredWords.length > 0) {
+    const idx = Math.floor(Math.random() * originalFilteredWords.length);
+    wordObj = originalFilteredWords[idx];
+  } else {
+    // 理論上不會發生，防呆
+    return;
+  }
 
-      const options = getRandomMeanings(wordObj.meaning);
-      const optionsDiv = document.getElementById('options');
-      optionsDiv.innerHTML = '';
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = opt;
-        btn.onclick = () => checkAnswer(opt, wordObj.meaning, wordObj);
-        optionsDiv.appendChild(btn);
-      });
+  // ===== 以下維持你原本的 UI 與計時邏輯 =====
+  document.getElementById('word').textContent = wordObj.word;
+  document.getElementById('pos').textContent = wordObj.pos;
+  document.getElementById('word').onclick = () => speakWord(wordObj.word);
 
-      let time = 8;
-      const progressBar = document.getElementById('progress');
-      progressBar.style.width = '100%';
+  const options = getRandomMeanings(wordObj.meaning);
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt, wordObj.meaning, wordObj);
+    optionsDiv.appendChild(btn);
+  });
+
+  let time = 8;
+  const progressBar = document.getElementById('progress');
+  progressBar.style.width = '100%';
+  clearInterval(progressInterval);
+  progressInterval = setInterval(() => {
+    time -= 0.1;
+    const percent = (time / 8) * 100;
+    progressBar.style.width = percent + '%';
+    if (time <= 0) {
       clearInterval(progressInterval);
-      progressInterval = setInterval(() => {
-        time -= 0.1;
-        const percent = (time / 8) * 100;
-        progressBar.style.width = percent + '%';
-        if (time <= 0) {
-          clearInterval(progressInterval);
-          timeUp(wordObj.meaning, wordObj);
-        }
-      }, 100);
+      timeUp(wordObj.meaning, wordObj);
     }
+  }, 100);
+}
 
     function checkAnswer(selected, correct, wordObj) {
       clearInterval(progressInterval);
