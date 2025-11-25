@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Word: PORT - Masterclass</title>
+    <style>
+        /* --- 1. 基礎設定 --- */
+        :root {
+            --bg-sky: #E3F2FD;
+            --bg-sea: #81D4FA;
+            --bg-ground: #455A64;
+            --accent: #FF6F00;
+            --text-dark: #263238;
+            --text-light: #ECEFF1;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #121212;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- 2. 影院容器 --- */
+        #cinema-container {
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16/9;
+            background-color: var(--bg-sky);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        /* 遮幅 */
+        .letterbox {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 12%; 
+            background-color: #000;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        .letterbox.top { top: 0; }
+        .letterbox.bottom { bottom: 0; }
+
+        /* --- 3. 場景元素 --- */
+        
+        /* 背景 */
+        .sea {
+            position: absolute;
+            bottom: 12%; 
+            left: 0;
+            width: 100%;
+            height: 35%;
+            background-color: var(--bg-sea);
+            z-index: 1;
+        }
+        .ground {
+            position: absolute;
+            bottom: 12%;
+            right: 0;
+            width: 60%;
+            height: 20%;
+            background-color: var(--bg-ground);
+            z-index: 2;
+            border-left: 10px solid #37474F;
+        }
+
+        /* 交通工具 */
+        .ship {
+            position: absolute;
+            bottom: 25%;
+            left: -300px;
+            width: 250px;
+            height: 70px;
+            background: #D32F2F;
+            border-radius: 0 0 50px 50px;
+            z-index: 5;
+            transition: left 2s ease-out;
+        }
+        .ship::before { content:''; position:absolute; bottom:70px; left:40px; width:80px; height:50px; background:#fff; }
+        .ship::after { content:''; position:absolute; bottom:120px; left:60px; width:20px; height:30px; background:#333; }
+
+        .truck {
+            position: absolute;
+            bottom: 32%;
+            left: -300px;
+            width: 180px;
+            height: 80px;
+            z-index: 6;
+        }
+        .truck-body { position:absolute; right:0; bottom:15px; width:120px; height:60px; background:#1976D2; }
+        .truck-cab { position:absolute; left:0; bottom:15px; width:50px; height:50px; background:#1565C0; border-radius:4px 0 0 0; }
+        .wheel { position:absolute; bottom:0; width:22px; height:22px; background:#333; border-radius:50%; border:2px solid #999; }
+
+        .plane {
+            position: absolute;
+            top: 20%;
+            right: -300px;
+            width: 150px;
+            height: 40px;
+            background: #fff;
+            border-radius: 0 50% 50% 0;
+            z-index: 20;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .plane::before { content:''; position:absolute; top:20px; left:60px; width:40px; height:30px; background:#CFD8DC; transform:skewX(-30deg); }
+
+        /* 物品/角色 */
+        .cargo-box {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border: 3px solid #E65100;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            opacity: 0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .person {
+            position: absolute;
+            bottom: 32%;
+            left: 50%;
+            width: 20px;
+            height: 50px;
+            background: #FFEB3B;
+            border-radius: 10px 10px 0 0;
+            z-index: 7;
+            opacity: 0;
+        }
+        .person::before { content:''; position:absolute; top:-15px; left:0; width:20px; height:20px; background:#FFEB3B; border-radius:50%; }
+
+        .document {
+            position: absolute;
+            top: 40%;
+            right: -50px;
+            width: 40px;
+            height: 50px;
+            background: #fff;
+            border: 1px solid #ccc;
+            z-index: 15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            opacity: 0;
+        }
+        .document::after { content:'📄'; }
+
+        .pillar {
+            position: absolute;
+            bottom: 12%;
+            left: 48%;
+            width: 4%;
+            height: 0;
+            background: #5D4037;
+            z-index: 8;
+            transition: height 1s ease;
+        }
+
+        .portfolio-folder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 90px;
+            background: #795548;
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 5px;
+            z-index: 30;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #D7CCC8;
+            font-size: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.5s ease;
+        }
+        .portfolio-folder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #8D6E63;
+            border-radius: 5px;
+            transform-origin: left;
+            transition: transform 1s ease;
+        }
+
+        /* --- 4. UI 文字與字幕 --- */
+        .overlay-btn {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            flex-direction: column;
+        }
+        .play-icon {
+            font-size: 60px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .play-text {
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .word-display {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .main-word {
+            font-size: 70px;
+            font-weight: 900;
+            color: var(--text-dark);
+            background: rgba(255,255,255,0.95);
+            padding: 10px 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+        .root-analysis {
+            font-size: 22px;
+            color: #D84315;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 15px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .subtitle-en {
+            font-size: 22px;
+            color: #FFD54F;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-shadow: 1px 1px 2px #000;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .subtitle-cn {
+            font-size: 18px;
+            color: #E0E0E0;
+            font-weight: normal;
+            text-align: center;
+        }
+        
+        /* 動畫輔助 */
+        .highlight { color: #D84315; }
+        .prefix { color: #546E7A; }
+
+    </style>
+</head>
+<body>
+
+    <div id="cinema-container">
+        <!-- 點擊開始遮罩 -->
+        <div class="overlay-btn" id="start-btn" onclick="startExperience()">
+            <div class="play-icon">▶</div>
+            <div class="play-text">Click to Start / 點擊開始</div>
+        </div>
+
+        <div class="letterbox top"></div>
+
+        <!-- 場景 -->
+        <div class="sea"></div>
+        <div class="ground"></div>
+
+        <!-- 演員 -->
+        <div class="ship" id="ship"></div>
+        <div class="truck" id="truck">
+            <div class="truck-body"></div>
+            <div class="truck-cab"></div>
+            <div class="wheel" style="left:10px"></div>
+            <div class="wheel" style="right:40px"></div>
+            <div class="wheel" style="right:10px"></div>
+        </div>
+        <div class="plane" id="plane"></div>
+
+        <div class="pillar" id="pillar"></div>
+        
+        <div class="cargo-box" id="box">PORT</div>
+        <div class="person" id="person"></div>
+        <div class="document" id="doc"></div>
+        
+        <div class="portfolio-folder" id="portfolio">
+            <span style="z-index: 2; color: white; font-weight: bold;">WORKS</span>
+        </div>
+
+        <!-- 文字展示 -->
+        <div class="word-display" id="word-card">
+            <div class="main-word" id="word-text">PORT</div>
+            <div class="root-analysis" id="word-root">Latin: portare</div>
+        </div>
+
+        <div class="letterbox bottom">
+            <div class="subtitle-en" id="sub-en"></div>
+            <div class="subtitle-cn" id="sub-cn"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 變量與 DOM ---
+        const els = {
+            btn: document.getElementById('start-btn'),
+            ship: document.getElementById('ship'),
+            truck: document.getElementById('truck'),
+            plane: document.getElementById('plane'),
+            box: document.getElementById('box'),
+            person: document.getElementById('person'),
+            doc: document.getElementById('doc'),
+            pillar: document.getElementById('pillar'),
+            portfolio: document.getElementById('portfolio'),
+            wordCard: document.getElementById('word-card'),
+            wordText: document.getElementById('word-text'),
+            wordRoot: document.getElementById('word-root'),
+            subEn: document.getElementById('sub-en'),
+            subCn: document.getElementById('sub-cn')
+        };
+
+        // --- 語音合成 ---
+        const synth = window.speechSynthesis;
+        let voice = null;
+
+        function initVoice() {
+            const voices = synth.getVoices();
+            // 優先選擇英文女聲或 Google US English
+            voice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || 
+                    voices.find(v => v.lang.startsWith('en')) || 
+                    voices[0];
+        }
+        // 確保語音列表加載
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = initVoice;
+        }
+
+        function speak(text) {
+            if (synth.speaking) synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 0.95; // 語速稍慢以便學習
+            if (voice) utter.voice = voice;
+            synth.speak(utter);
+        }
+
+        // --- 工具函數 ---
+        const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+        function setContent(enSub, cnSub, wordHTML, rootHTML, speakText) {
+            els.subEn.innerText = enSub;
+            els.subCn.innerText = cnSub;
+            
+            if (wordHTML) {
+                els.wordText.innerHTML = wordHTML;
+                els.wordRoot.innerHTML = rootHTML;
+                els.wordCard.style.opacity = 1;
+            } else {
+                els.wordCard.style.opacity = 0;
+            }
+
+            if (speakText) speak(speakText);
+        }
+
+        // --- 核心動畫流程 ---
+        async function startExperience() {
+            els.btn.style.opacity = 0;
+            setTimeout(() => els.btn.style.display = 'none', 500);
+            initVoice(); // 再次嘗試獲取語音
+
+            // 1. Intro
+            setContent(
+                "The root 'PORT' comes from Latin.", 
+                "詞根 'PORT' 源自拉丁語。", 
+                "PORT", 
+                "Latin: <i>portare</i> (Carry) / <i>portus</i> (Harbor)",
+                "The root PORT comes from Latin. It relates to carrying or a harbor."
+            );
+            await wait(4500);
+
+            // --- Category 1: Transport & Carry ---
+            setContent(
+                "Part 1: Transport & Carry",
+                "第一部分：運輸與攜帶",
+                "CARRY",
+                "Physical Movement",
+                "Part one. Words related to transport and carrying."
+            );
+            await wait(3000);
+
+            // IMPORT
+            // 船進場
+            els.ship.style.left = "-200px";
+            els.box.style.opacity = 1;
+            els.box.style.left = "10%"; // 在船上
+            els.box.style.bottom = "28%"; 
+            
+            els.ship.style.transition = "left 3s ease-out";
+            els.box.style.transition = "left 3s ease-out";
+            
+            // 執行移動
+            setTimeout(() => {
+                els.ship.style.left = "10%";
+                els.box.style.left = "30%"; // 隨著船移動到港口位置
+            }, 100);
+
+            setContent(
+                "Import: To carry something IN.",
+                "Import (進口)：攜入某地。",
+                "<span class='prefix'>IM-</span>PORT",
+                "Im- (In) + Port (Carry)",
+                "Import. To carry something in."
+            );
+            await wait(3500);
+
+            // EXPORT
+            setContent(
+                "Export: To carry something OUT.",
+                "Export (出口)：攜出某地。",
+                "<span class='prefix'>EX-</span>PORT",
+                "Ex- (Out) + Port (Carry)",
+                "Export. To carry something out."
+            );
+            
+            // 船離開
+            els.ship.style.transition = "left 3s ease-in";
+            els.box.style.transition = "left 3s ease-in";
+            els.ship.style.left = "-100%";
+            els.box.style.left = "-80%";
+            await wait(3500);
+
+            // 重置場景
+            els.box.style.opacity = 0;
+            els.box.style.transition = "none";
+            
+            // TRANSPORT
+            setContent(
+                "Transport: To carry across from place to place.",
+                "Transport (運輸)：從一處運至另一處。",
+                "<span class='prefix'>TRANS-</span>PORT",
+                "Trans- (Across) + Port (Carry)",
+                "Transport. To carry across from one place to another."
+            );
+
+            // 卡車動畫
+            els.truck.style.transition = "left 4s linear";
+            els.truck.style.left = "120%";
+            // 箱子跟隨卡車
+            els.box.style.opacity = 1;
+            els.box.style.bottom = "38%";
+            els.box.style.left = "-250px"; // 初始在卡車上
+            els.box.style.transition = "left 4s linear";
+            setTimeout(() => els.box.style.left = "125%", 50);
+            
+            await wait(4500);
+
+            // DEPORT
+            els.wordCard.style.opacity = 0;
+            // 顯示小人
+            els.person.style.opacity = 1;
+            els.person.style.left = "60%";
+            els.person.style.transition = "all 0.5s";
+            
+            setContent(
+                "Deport: To force someone to leave.",
+                "Deport (驅逐出境)：強迫帶離某地。",
+                "<span class='prefix'>DE-</span>PORT",
+                "De- (Away/Remove) + Port (Carry)",
+                "Deport. To force someone to leave a country."
+            );
+            await wait(1000);
+            
+            // 被驅逐動畫
+            els.person.style.transition = "left 1s ease-in, opacity 1s";
+            els.person.style.left = "110%";
+            els.person.style.opacity = 0;
+            await wait(3000);
+
+
+            // --- Category 2: Info & Support ---
+            setContent(
+                "Part 2: Information & Support",
+                "第二部分：信息傳遞與支撐",
+                "ABSTRACT",
+                "Bring & Hold",
+                "Part two. Information and Support."
+            );
+            await wait(3000);
+
+            // REPORT
+            // 文件飛入
+            els.doc.style.opacity = 1;
+            els.doc.style.right = "-50px";
+            els.doc.style.transition = "right 2s ease-out";
+            setTimeout(() => els.doc.style.right = "50%", 100);
+
+            setContent(
+                "Report: To carry back news or information.",
+                "Report (報告)：帶回信息或消息。",
+                "<span class='prefix'>RE-</span>PORT",
+                "Re- (Back) + Port (Carry)",
+                "Report. To carry back information."
+            );
+            await wait(3500);
+            els.doc.style.opacity = 0;
+
+            // SUPPORT
+            // 箱子出現，柱子升起
+            els.box.style.transition = "none";
+            els.box.style.left = "50%";
+            els.box.style.bottom = "35%"; // 懸空
+            els.box.style.transform = "translateX(-50%)";
+            els.box.style.opacity = 1;
+
+            // 讓箱子看起來需要支撐（晃動）
+            els.box.style.animation = "shake 0.5s infinite";
+
+            setContent(
+                "Support: To carry from below; to help.",
+                "Support (支持)：提供支撐或幫助。",
+                "<span class='prefix'>SUP-</span>PORT",
+                "Sub- (Under) + Port (Carry)",
+                "Support. To carry from below, or to help."
+            );
+            await wait(1500);
+            
+            // 柱子升起
+            els.pillar.style.height = "25%"; // 頂住箱子
+            await wait(500);
+            els.box.style.animation = "none"; // 停止晃動
+            els.box.style.bottom = "37%"; // 被頂高一點
+            await wait(3000);
+            
+            // 清理
+            els.pillar.style.height = "0";
+            els.box.style.opacity = 0;
+
+
+            // --- Category 3: Harbor & Hubs ---
+            setContent(
+                "Part 3: Ports & Hubs",
+                "第三部分：港口與樞紐",
+                "HARBOR",
+                "Places of entry",
+                "Part three. Ports and Hubs."
+            );
+            await wait(3000);
+
+            // AIRPORT
+            els.plane.style.right = "-300px";
+            els.plane.style.transition = "right 4s linear";
+            setTimeout(() => els.plane.style.right = "120%", 100);
+
+            setContent(
+                "Airport: A port for air travel.",
+                "Airport (機場)：飛機進出的地方。",
+                "<span class='prefix'>AIR</span>PORT",
+                "Air + Port (Harbor)",
+                "Airport. A harbor for airplanes."
+            );
+            await wait(3500);
+
+            // SEAPORT / PORT
+            els.ship.style.transition = "left 2s ease-out";
+            els.ship.style.left = "40%"; // 停在碼頭
+            
+            setContent(
+                "Seaport: A port for ships.",
+                "Seaport (海港)：船隻停靠的地方。",
+                "<span class='prefix'>SEA</span>PORT",
+                "Sea + Port (Harbor)",
+                "Seaport. A place for ships to dock."
+            );
+            await wait(3500);
+            els.ship.style.transition = "opacity 1s";
+            els.ship.style.opacity = 0;
+
+
+            // --- Category 4: Suffix / Objects ---
+            setContent(
+                "Part 4: Useful Objects",
+                "第四部分：作為字首或相關詞",
+                "OBJECTS",
+                "Things we carry",
+                "Part four. Useful objects."
+            );
+            await wait(3000);
+
+            // PORTABLE
+            els.box.style.transition = "none";
+            els.box.style.opacity = 1;
+            els.box.style.width = "80px";
+            els.box.style.height = "80px";
+            els.box.style.bottom = "30%";
+            els.box.style.left = "50%";
+            els.box.innerText = "TV";
+            
+            setContent(
+                "Portable: Able to be carried easily.",
+                "Portable (可攜帶的)：易於攜帶的。",
+                "PORT<span class='prefix'>ABLE</span>",
+                "Port + -able (Able to be)",
+                "Portable. Something that is easy to carry."
+            );
+            await wait(2000);
+
+            // 變小變輕
+            els.box.style.transition = "all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+            els.box.style.width = "40px";
+            els.box.style.height = "40px";
+            els.box.style.fontSize = "10px";
+            els.box.innerText = "Phone";
+            els.box.style.bottom = "40%"; // 浮起來
+            await wait(2500);
+            els.box.style.opacity = 0;
+
+            // PORTFOLIO
+            els.portfolio.style.transform = "translate(-50%, -50%) scale(1)";
+            
+            setContent(
+                "Portfolio: A case for carrying papers.",
+                "Portfolio (文件夾/作品集)：攜帶文件或作品的夾子。",
+                "PORT<span class='prefix'>FOLIO</span>",
+                "Port + Folio (Leaf/Sheet)",
+                "Portfolio. A case for carrying papers or artwork."
+            );
+            await wait(1000);
+            
+            // 打開文件夾動畫
+            const cover = document.querySelector('.portfolio-folder::before');
+            // CSS 偽元素無法直接通過 style 修改，這裡使用 class 切換或簡單的縮放模擬打開
+            // 由於偽元素限制，我們讓整個文件夾旋轉一下
+            els.portfolio.style.transform = "translate(-50%, -50%) scale(1.1) rotate(-5deg)";
+            await wait(3000);
+
+            // --- ENDING ---
+            els.portfolio.style.opacity = 0;
+            setContent(
+                "Review: Import, Export, Transport, Report, Support...",
+                "複習：Import, Export, Transport, Report, Support...",
+                "THANK YOU",
+                "Keep Learning!",
+                "Thank you for watching. Keep learning!"
+            );
+            await wait(4000);
+            
+            // End state
+            els.subEn.innerText = "";
+            els.subCn.innerText = "";
+        }
+
+        // 添加CSS動畫
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes shake {
+                0% { transform: translateX(-52%); }
+                50% { transform: translateX(-48%); }
+                100% { transform: translateX(-52%); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+    </script>
+</body>
+</html>
