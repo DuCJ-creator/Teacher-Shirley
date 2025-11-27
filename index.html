@@ -11,48 +11,51 @@
   <style id="themeStyles">
     :root {
       --bg: #faf9f6;
-      --surface: #ffffff;
+      --surface: rgba(255, 255, 255, 0.85); /* 增加透明度讓粒子透出來 */
       --text: #1a1a1a;
       --text-light: #555;
       --border: #e0e0e0;
       --hover: #d4c8b5;
       --accent: #c2b290;
+      --particle-color: rgba(26, 26, 26, 0.5); /* 淺色模式粒子顏色 */
     }
     .dark {
-      --bg: #121212;
-      --surface: #1e1e1e;
+      --bg: #0a0a0a; /* 更深邃的背景 */
+      --surface: rgba(30, 30, 30, 0.85);
       --text: #f0f0f0;
       --text-light: #aaa;
       --border: #333;
       --hover: #8a7c6a;
       --accent: #b0a080;
+      --particle-color: rgba(255, 255, 255, 0.6); /* 深色模式粒子顏色 */
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       background-color: var(--bg);
       color: var(--text, #1a1a1a);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       line-height: 1.7;
-      transition: background-color 0.3s, color 0.3s;
-      background-image: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2%M12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
-      background-size: 200px;
+      transition: background-color 0.5s ease, color 0.3s;
       position: relative;
-    }
-    body.modal-open {
-      overflow: hidden;
+      overflow-x: hidden;
+      /* 移除舊的背景圖，改用純色配合 Canvas */
     }
 
-    body::before {
-      content: "";
+    /* ✨ 粒子特效 Canvas */
+    #particle-canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(255,45,117,0.01) 2px, transparent 3px),
-        radial-gradient(circle at 90% 80%, rgba(74, 108, 247,0.01) 2px, transparent 3px);
-      pointer-events: none;
-      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* 置於最底層 */
+      pointer-events: none; /* 讓點擊事件穿透 */
+    }
+
+    body.modal-open {
+      overflow: hidden;
     }
 
     header {
@@ -64,33 +67,35 @@
       margin: 0 auto;
       gap: 1.5rem;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
     }
 
     .title-wrapper {
       position: relative;
       padding: 0.9rem 2.2rem;
       border-radius: 999px;
-      background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.9), rgba(255,240,230,0.95));
+      /* 增加玻璃擬態感 */
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(222, 197, 166, 0.7);
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.08),
-        0 0 0 6px rgba(255, 255, 255, 0.7);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
       overflow: hidden;
       max-width: 100%;
+      transition: all 0.3s ease;
     }
     .dark .title-wrapper {
-      background: radial-gradient(circle at 0% 0%, rgba(36,36,36,0.9), rgba(30,24,20,0.98));
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.7),
-        0 0 0 6px rgba(0,0,0,0.4);
-      border-color: rgba(151, 132, 104, 0.8);
+      background: rgba(30, 30, 30, 0.4);
+      border-color: rgba(151, 132, 104, 0.5);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     }
 
     .title-wrapper::before {
       content: "";
       position: absolute;
       inset: -40%;
-      background: conic-gradient(from 120deg, rgba(255,255,255,0.15), rgba(255,196,160,0.23), rgba(216,174,255,0.2), rgba(255,255,255,0.15));
+      background: conic-gradient(from 120deg, rgba(255,255,255,0.1), rgba(255,196,160,0.2), rgba(216,174,255,0.15), rgba(255,255,255,0.1));
       opacity: 0.8;
       animation: titleGlow 18s linear infinite;
       pointer-events: none;
@@ -108,11 +113,11 @@
       background-clip: text;
       color: transparent;
       animation: gradientShift 12s ease-in-out infinite;
-      text-shadow: 0 2px 12px rgba(255,255,255,0.45);
+      text-shadow: 0 2px 12px rgba(255,255,255,0.2);
       white-space: normal;
     }
     .dark .title {
-      text-shadow: 0 2px 14px rgba(0,0,0,0.8);
+      text-shadow: 0 2px 14px rgba(0,0,0,0.5);
     }
 
     .title-underline {
@@ -129,7 +134,8 @@
     }
 
     #themeToggle {
-      background: transparent;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
       border: 1px solid var(--border);
       width: 42px;
       height: 42px;
@@ -143,13 +149,14 @@
       transition: all 0.3s, transform 0.2s;
       flex-shrink: 0;
     }
+    .dark #themeToggle {
+      background: rgba(50,50,50,0.5);
+      color: #ff6f91;
+    }
     #themeToggle:hover {
       background: var(--hover);
       color: white;
-      transform: scale(1.15);
-    }
-    .dark #themeToggle {
-      color: #ff6f91;
+      transform: scale(1.15) rotate(15deg);
     }
 
     .envelope {
@@ -159,6 +166,7 @@
       margin: 2rem auto;
       cursor: pointer;
       animation: float 3s ease-in-out infinite;
+      z-index: 5;
     }
     .envelope-body {
       position: absolute;
@@ -219,13 +227,15 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.9);
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 2rem;
       max-width: 600px;
       width: 90%;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
@@ -244,37 +254,14 @@
       background-image: url("https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png");
       background-size: cover;
       background-position: center;
-      filter: blur(10px) brightness(1.08);
+      filter: blur(12px) brightness(1.1);
       transform: scale(1.1);
-      opacity: 0.8;
+      opacity: 0.6;
       z-index: -1;
-    }
-    .letter-content::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        radial-gradient(circle at 20% 30%, #ffffff50 1px, transparent 2px),
-        radial-gradient(circle at 80% 70%, #ffffff60 1.2px, transparent 2px),
-        radial-gradient(circle at 50% 20%, #e0f7ff40 2px, transparent 3px),
-        radial-gradient(circle at 90% 10%, #ffd1dc30 1.5px, transparent 2.5px),
-        radial-gradient(circle at 10% 85%, #ffffff40 1px, transparent 2px);
-      pointer-events: none;
-      z-index: -1;
-      mix-blend-mode: overlay;
     }
     .dark .letter-content {
-      background: rgba(18,18,18,0.92);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-    }
-    .dark .letter-content::after {
-      background-image:
-        radial-gradient(circle at 20% 30%, #ffeb3b20 1px, transparent 2px),
-        radial-gradient(circle at 80% 70%, #90caf920 1.2px, transparent 2px),
-        radial-gradient(circle at 50% 20%, #f0629220 2px, transparent 3px),
-        radial-gradient(circle at 90% 10%, #ba68c820 1.5px, transparent 2.5px),
-        radial-gradient(circle at 10% 85%, #4fc3f720 1px, transparent 2px);
+      background: rgba(18,18,18,0.85);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
     .letter-content.show {
@@ -311,12 +298,12 @@
       font-size: 1.05rem;
       color: var(--text, #1a1a1a);
       width: 100%;
-      background: radial-gradient(circle at top, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      background: radial-gradient(circle at top, rgba(255,255,255,0.7), rgba(255,255,255,0.4));
       padding: 0.75rem 1rem;
       border-radius: 10px;
     }
     .dark .letter-body {
-      background: radial-gradient(circle at top, rgba(30,30,30,0.9), rgba(30,30,30,0.7));
+      background: radial-gradient(circle at top, rgba(30,30,30,0.7), rgba(30,30,30,0.4));
     }
     .letter-body p {
       margin: 0.8rem 0;
@@ -344,40 +331,45 @@
       color: #ff6f91;
     }
 
-    /* ✅ 修正 3: 電腦版 2x2 網格 */
     .categories {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 電腦版兩欄 */
+      grid-template-columns: repeat(2, 1fr);
       grid-auto-rows: auto;
       gap: 2.3rem;
       padding: 0 2.5rem 4rem;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 5;
     }
 
     .category-card {
       background: var(--surface);
+      /* 增加卡片的玻璃質感 */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px; /* 更加圓潤 */
       padding: 2.2rem;
       text-align: center;
       text-decoration: none;
       display: block;
       color: inherit;
-      transition: all 0.35s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
       position: relative;
       overflow: hidden;
     }
     .dark .category-card {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      background: rgba(30, 30, 30, 0.6); /* 深色模式更透一點 */
     }
     .category-card::after {
       content: "";
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: linear-gradient(120deg, transparent, rgba(255,45,117,0.05), transparent);
+      background: linear-gradient(120deg, transparent, rgba(255,45,117,0.08), transparent);
       transform: translateX(-100%);
       transition: transform 0.6s;
       z-index: 0;
@@ -390,21 +382,26 @@
       z-index: 1;
     }
     .category-card:hover {
-      transform: translateY(-6px) scale(1.02);
+      transform: translateY(-8px) scale(1.02);
       border-color: var(--hover);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     }
 
     .icon {
       font-size: 2.5rem;
       margin-bottom: 1.2rem;
       display: block;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
     .category-card:hover .icon {
       animation: floatIcon 1.8s ease-in-out infinite;
     }
 
-    /* ✅ 修正 1: 暗色模式中文副標題可見性 */
+    .category-card h2 {
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
     .category-card .subtitle {
       font-family: 'Cormorant Garamond', 'Playfair Display', serif;
       font-size: 1.4rem;
@@ -419,15 +416,12 @@
       position: relative;
       display: inline-block;
       line-height: 1.3;
-      /* 確保在不支援 background-clip:text 時有 fallback */
       color: #8a6643;
     }
 
     .dark .category-card .subtitle {
-      /* 使用更高對比度的淺色漸變，避免文字消失 */
       background: linear-gradient(120deg, #f0d5b0, #ffdab0, #f5d4a6, #f0b8d0, #f0d5b0);
       color: transparent;
-      /* fallback color */
       color: #f0d5b0;
     }
 
@@ -456,7 +450,9 @@
       text-align: center;
       font-size: 0.9rem;
       color: var(--text-light);
-      background: linear-gradient(to top, rgba(0,0,0,0.015), transparent);
+      background: linear-gradient(to top, rgba(0,0,0,0.02), transparent);
+      position: relative;
+      z-index: 5;
     }
     .page-footer a {
       color: var(--accent);
@@ -483,33 +479,6 @@
       animation: pulse 1.5s infinite alternate;
     }
 
-    /* 📌 修正 2: 模塊頁面標題樣式（供其他頁面使用） */
-    /* 請將以下 .module-title 樣式複製到各模塊頁面的 CSS 中 */
-    .module-title {
-      font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-      font-size: 2.2rem;
-      font-weight: 600;
-      text-align: center;
-      margin: 2rem auto 1.5rem;
-      position: relative;
-      display: inline-block;
-      color: var(--text);
-    }
-    .module-title::after {
-      content: "";
-      position: absolute;
-      left: 0; right: 0;
-      bottom: -8px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #ff2d75, transparent); /* 紅色漸變底線 */
-      border-radius: 2px;
-      animation: underlineWave 4s ease-in-out infinite;
-    }
-    @keyframes underlineWave {
-      0%, 100% { transform: scaleX(0.9); opacity: 0.7; }
-      50% { transform: scaleX(1.05); opacity: 1; }
-    }
-
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
@@ -532,21 +501,12 @@
       100% { transform: rotate(360deg); }
     }
     @keyframes silkSway {
-      0%, 100% {
-        transform: scaleX(1) translateY(0);
-      }
-      25% {
-        transform: scaleX(1.05) translateY(-2px);
-      }
-      50% {
-        transform: scaleX(0.95) translateY(2px);
-      }
-      75% {
-        transform: scaleX(1.03) translateY(-1px);
-      }
+      0%, 100% { transform: scaleX(1) translateY(0); }
+      25% { transform: scaleX(1.05) translateY(-2px); }
+      50% { transform: scaleX(0.95) translateY(2px); }
+      75% { transform: scaleX(1.03) translateY(-1px); }
     }
 
-    /* 響應式：手機版保持 1 欄 */
     @media (max-width: 768px) {
       .categories {
         grid-template-columns: 1fr;
@@ -555,13 +515,14 @@
       header { flex-direction: column; align-items: flex-start; }
       .title { font-size: clamp(1.9rem, 7vw, 2.3rem); }
       .title-wrapper { width: 100%; padding-inline: 1.6rem; }
-      .category-card .subtitle {
-        font-size: 1.25rem;
-      }
+      .category-card .subtitle { font-size: 1.25rem; }
     }
   </style>
 </head>
 <body>
+
+  <canvas id="particle-canvas"></canvas>
+
   <header>
     <div class="title-wrapper">
       <div class="title">Teacher Shirley’s Webpage</div>
@@ -592,33 +553,31 @@
     <div class="letter-footer">— Shirley</div>
   </div>
 
-  <!-- ✅ 修正 3: 電腦版 2x2 網格（無需改 HTML 結構） -->
-<div class="categories">
-  <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
-    <span class="icon">🎒</span>
-    <h2>Teaching Tools for Teachers</h2>
-    <div class="subtitle">師師百寶箱</div>
-  </a>
-  
-  <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card">
-    <span class="icon">📚</span>
-    <h2>Study Tools/Resources for Students</h2>
-    <div class="subtitle">學學智趣閣</div>
-  </a>
-  
-  <!-- 修正這裡：補上 <a> 開頭標籤和 href -->
-  <a href="/Teacher-Shirley/amusement-park/" class="category-card">
-    <span class="icon">🎲</span>
-    <h2>Amusement Park</h2>
-    <div class="subtitle">樂樂嬉遊谷</div>
-  </a>
-  
-  <a href="/Teacher-Shirley/external-resources/" class="category-card">
-    <span class="icon">🌐</span>
-    <h2>External Resources</h2>
-    <div class="subtitle">源源連結庫</div>
-  </a>
-</div>
+  <div class="categories">
+    <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
+      <span class="icon">🎒</span>
+      <h2>Teaching Tools for Teachers</h2>
+      <div class="subtitle">師師百寶箱</div>
+    </a>
+    
+    <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card">
+      <span class="icon">📚</span>
+      <h2>Study Tools/Resources for Students</h2>
+      <div class="subtitle">學學智趣閣</div>
+    </a>
+    
+    <a href="/Teacher-Shirley/amusement-park/" class="category-card">
+      <span class="icon">🎲</span>
+      <h2>Amusement Park</h2>
+      <div class="subtitle">樂樂嬉遊谷</div>
+    </a>
+    
+    <a href="/Teacher-Shirley/external-resources/" class="category-card">
+      <span class="icon">🌐</span>
+      <h2>External Resources</h2>
+      <div class="subtitle">源源連結庫</div>
+    </a>
+  </div>
 
   <footer class="page-footer">
     <div>©️ Shirley‘s Language Teaching; Since 2025; All Rights Reserved</div>
@@ -629,8 +588,117 @@
   </footer>
 
   <script>
-    // ... （JavaScript 保持不變，已省略以節省空間）...
-    // 若您需要完整 JS，請告知；此處為聚焦 CSS 修正
+    // ----------------------------------------
+    // ✨ 高大上粒子特效腳本 (High-End Particle Logic)
+    // ----------------------------------------
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+
+    // 隨視窗大小調整
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    // 滑鼠互動
+    const mouse = { x: null, y: null, radius: 150 };
+
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
+
+    // 粒子類別
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5; // 粒子大小
+        this.speedX = (Math.random() * 1 - 0.5); // 緩慢漂浮
+        this.speedY = (Math.random() * 1 - 0.5);
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // 邊界檢查 (讓粒子在畫面內反彈)
+        if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+        if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+
+        // 滑鼠互動：如果滑鼠靠近，粒子會稍微閃避或連結
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx*dx + dy*dy);
+        if (distance < mouse.radius) {
+            // 輕微推開效果
+            if(mouse.x < this.x && this.x < canvas.width - 10) this.x += 1;
+            if(mouse.x > this.x && this.x > 10) this.x -= 1;
+            if(mouse.y < this.y && this.y < canvas.height - 10) this.y += 1;
+            if(mouse.y > this.y && this.y > 10) this.y -= 1;
+        }
+      }
+      draw(color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      let numberOfParticles = (canvas.width * canvas.height) / 12000; // 根據螢幕面積決定數量
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      requestAnimationFrame(animateParticles);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 取得當前主題顏色
+      const isDark = document.getElementById('htmlRoot').classList.contains('dark');
+      // 淺色模式：淡金色/灰色 | 深色模式：星光白
+      const particleColor = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(138, 102, 67, 0.4)'; 
+      const lineColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(138, 102, 67, 0.1)';
+
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw(particleColor);
+
+        // 畫連結線
+        for (let j = i; j < particlesArray.length; j++) {
+            let dx = particlesArray[i].x - particlesArray[j].x;
+            let dy = particlesArray[i].y - particlesArray[j].y;
+            let distance = Math.sqrt(dx*dx + dy*dy);
+
+            if (distance < 110) { // 連線距離閾值
+                ctx.beginPath();
+                ctx.strokeStyle = lineColor;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+      }
+    }
+
+    // 初始化粒子
+    initParticles();
+    animateParticles();
+
+
+    // ----------------------------------------
+    // 原有的功能邏輯 (Theme, Music, Letter)
+    // ----------------------------------------
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
