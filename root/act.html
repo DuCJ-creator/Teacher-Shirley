@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACT Root Word Master Class</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --player-bg: #ffffff;
+            --primary: #6c5ce7;
+            --secondary: #00b894;
+            --accent: #e17055;
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans TC', sans-serif;
+            background: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 播放器外殼：16:9 */
+        .player-wrapper {
+            width: 95vw;
+            max-width: 1280px;
+            aspect-ratio: 16/9;
+            background: var(--player-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 進度條 */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            position: absolute;
+            top: 0;
+            z-index: 100;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.2s linear;
+        }
+
+        /* 主舞台 */
+        .stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 80px; /* 為字幕留空間 */
+        }
+
+        /* 詞根標籤 */
+        .root-badge {
+            background: #dfe6e9;
+            color: var(--text-gray);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* 單詞顯示區 */
+        .word-display {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* 響應式字體大小調整 */
+        @media (max-width: 800px) { .word-display { font-size: 3rem; } }
+
+        .part {
+            transition: all 0.5s ease;
+            display: inline-block;
+        }
+        .prefix { color: var(--secondary); }
+        .root { color: var(--primary); }
+        .suffix { color: var(--accent); }
+        
+        .ipa {
+            font-family: 'Lucida Sans Unicode', sans-serif;
+            font-size: 1.2rem;
+            color: #b2bec3;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        /* 圖標動畫區 */
+        .icon-area {
+            height: 100px;
+            width: 100px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: var(--text-dark);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 字幕區 */
+        .subtitle-box {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 40px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .sub-en {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .sub-cn {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        /* 控制按鈕 */
+        .controls-layer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .player-wrapper:hover .controls-layer { opacity: 1; }
+
+        .btn-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn-circle:hover { transform: scale(1.1); background: var(--primary); color: white; }
+
+        /* 遮罩層 (開始/結束) */
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            transition: opacity 0.5s;
+        }
+        
+        .big-play-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 8px;
+        }
+        .big-play-btn:hover { transform: scale(1.1); }
+
+        /* 背景裝飾 */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.05;
+        }
+        .c1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; }
+        .c2 { width: 300px; height: 300px; background: var(--secondary); bottom: -50px; right: -50px; }
+
+        /* 動畫類 */
+        .fade-in-up { animation: fadeInUp 0.6s forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="player-wrapper">
+        <!-- 背景裝飾 -->
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+
+        <!-- 進度條 -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- 懸浮控制 -->
+        <div class="controls-layer">
+            <button class="btn-circle" id="pauseBtn" title="Pause/Play"><i class="fas fa-pause"></i></button>
+            <button class="btn-circle" id="replayBtn" title="Replay"><i class="fas fa-redo"></i></button>
+        </div>
+
+        <!-- 主內容 -->
+        <div class="stage">
+            <div class="root-badge">Root: ACT = TO DO / TO DRIVE</div>
+            
+            <div class="word-display" id="wordContainer">
+                <span class="part prefix" id="pPrefix"></span>
+                <span class="part root" id="pRoot">ACT</span>
+                <span class="part suffix" id="pSuffix"></span>
+            </div>
+            <div class="ipa" id="pIpa"></div>
+
+            <div class="icon-area" id="iconArea">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+
+        <!-- 字幕 -->
+        <div class="subtitle-box">
+            <div class="sub-en" id="subEn">The root word ACT means "to do".</div>
+            <div class="sub-cn" id="subCn">詞根 ACT 的意思是「做」。</div>
+        </div>
+
+        <!-- 遮罩 -->
+        <div class="overlay" id="overlay">
+            <button class="big-play-btn" id="startBtn"><i class="fas fa-play"></i></button>
+            <h2 style="margin-top: 20px; color: #2d3436;">ACT Root Word Vocabulary</h2>
+            <p style="color: #636e72; margin-top: 5px;">Click to Start Learning</p>
+        </div>
+    </div>
+
+    <script>
+        // 數據庫：根據用戶提供的單詞列表整理
+        const scenes = [
+            {
+                word: "ACT",
+                parts: { p: "", r: "ACT", s: "" },
+                ipa: "/ækt/",
+                en: "Act: To 'do'; to perform an action.",
+                cn: "Act：做；採取行動；表演。",
+                narrative: "Act. To do. To perform an action.",
+                icon: "fa-clapperboard",
+                color: "#2d3436"
+            },
+            {
+                word: "ACTION",
+                parts: { p: "", r: "ACT", s: "ION" },
+                ipa: "/ˈækʃən/",
+                en: "Action: The state of 'doing'.",
+                cn: "Action：行動；做的狀態。",
+                narrative: "Action. The state of doing.",
+                icon: "fa-person-running",
+                color: "#00b894"
+            },
+            {
+                word: "ACTOR",
+                parts: { p: "", r: "ACT", s: "OR" },
+                ipa: "/ˈæktər/",
+                en: "Actor: One who 'does' his/her part in a play.",
+                cn: "Actor：演員；在戲劇中扮演角色的人。",
+                narrative: "Actor. One who does his or her part in a play.",
+                icon: "fa-masks-theater",
+                color: "#e17055"
+            },
+            {
+                word: "ACTRESS",
+                parts: { p: "", r: "ACT", s: "RESS" },
+                ipa: "/ˈæktrɪs/",
+                en: "Actress: A female actor.",
+                cn: "Actress：女演員。",
+                narrative: "Actress. A female actor.",
+                icon: "fa-venus",
+                color: "#fd79a8"
+            },
+            {
+                word: "ACTIVITY",
+                parts: { p: "", r: "ACT", s: "IVITY" },
+                ipa: "/ækˈtɪvəti/",
+                en: "Activity: A 'doing'; any specific behavior.",
+                cn: "Activity：活動；特定的行為。",
+                narrative: "Activity. A doing. Any specific behavior.",
+                icon: "fa-basketball",
+                color: "#fdcb6e"
+            },
+            {
+                word: "ACTIVE",
+                parts: { p: "", r: "ACT", s: "IVE" },
+                ipa: "/ˈæktɪv/",
+                en: "Active: Of 'doing' things; energetic.",
+                cn: "Active：活躍的；精力充沛的。",
+                narrative: "Active. Of doing things. An active person has lots of energy.",
+                icon: "fa-bolt",
+                color: "#ffeaa7"
+            },
+            {
+                word: "INACTIVE",
+                parts: { p: "IN", r: "ACT", s: "IVE" },
+                ipa: "/ɪnˈæktɪv/",
+                en: "Inactive: Of not 'doing' things.",
+                cn: "Inactive：不活躍的；怠惰的。",
+                narrative: "Inactive. Of not doing things.",
+                icon: "fa-bed",
+                color: "#636e72"
+            },
+            {
+                word: "INACTION",
+                parts: { p: "IN", r: "ACT", s: "ION" },
+                ipa: "/ɪnˈækʃən/",
+                en: "Inaction: The state of not 'doing'.",
+                cn: "Inaction：不作為；無行動的狀態。",
+                narrative: "Inaction. The state of not doing.",
+                icon: "fa-pause",
+                color: "#b2bec3"
+            },
+            {
+                word: "ACTUAL",
+                parts: { p: "", r: "ACT", s: "UAL" },
+                ipa: "/ˈæktʃuəl/",
+                en: "Actual: Of that which was 'done'; existing in fact.",
+                cn: "Actual：實際的；事實上存在的。",
+                narrative: "Actual. Of that which was done. Presently existing in fact.",
+                icon: "fa-check-double",
+                color: "#0984e3"
+            },
+            {
+                word: "EXACT",
+                parts: { p: "EX", r: "ACT", s: "" },
+                ipa: "/ɪgˈzækt/",
+                en: "Exact: A very accurate 'doing'; thoroughly done.",
+                cn: "Exact：精確的；做得徹底的。",
+                narrative: "Exact. A very accurate doing. An exact figure is correct.",
+                icon: "fa-bullseye",
+                color: "#d63031"
+            },
+            {
+                word: "EXACTING",
+                parts: { p: "EX", r: "ACT", s: "ING" },
+                ipa: "/ɪgˈzæktɪŋ/",
+                en: "Exacting: Thoroughly 'doing'; demanding.",
+                cn: "Exacting：嚴格的；苛求的。",
+                narrative: "Exacting. Thoroughly doing. Very demanding.",
+                icon: "fa-ruler-combined",
+                color: "#e84393"
+            },
+            {
+                word: "REACT",
+                parts: { p: "RE", r: "ACT", s: "" },
+                ipa: "/riˈækt/",
+                en: "React: To 'do' back; show a response.",
+                cn: "React：反應；作出回應。",
+                narrative: "React. To do back. To show a response to something.",
+                icon: "fa-rotate-left",
+                color: "#6c5ce7"
+            },
+            {
+                word: "REACTION",
+                parts: { p: "RE", r: "ACT", s: "ION" },
+                ipa: "/riˈækʃən/",
+                en: "Reaction: A 'doing' back; a response.",
+                cn: "Reaction：反應；回應。",
+                narrative: "Reaction. A doing back. How a person acts when something happens.",
+                icon: "fa-face-surprise",
+                color: "#a29bfe"
+            },
+            {
+                word: "REACTIVE",
+                parts: { p: "RE", r: "ACT", s: "IVE" },
+                ipa: "/riˈæktɪv/",
+                en: "Reactive: Participating readily in reactions.",
+                cn: "Reactive：反應性的；易起反應的。",
+                narrative: "Reactive. Participating readily in reactions.",
+                icon: "fa-flask",
+                color: "#00cec9"
+            },
+            {
+                word: "PROACTIVE",
+                parts: { p: "PRO", r: "ACT", s: "IVE" },
+                ipa: "/proʊˈæktɪv/",
+                en: "Proactive: Of 'doing' beforehand.",
+                cn: "Proactive：積極主動的；先發制人的。",
+                narrative: "Proactive. Of doing beforehand.",
+                icon: "fa-chess-knight",
+                color: "#fdcb6e"
+            },
+            {
+                word: "TRANSACTION",
+                parts: { p: "TRANS", r: "ACT", s: "ION" },
+                ipa: "/trænˈzækʃən/",
+                en: "Transaction: A 'doing' across from a seller to a buyer.",
+                cn: "Transaction：交易；辦理。",
+                narrative: "Transaction. A doing across. Conducting business.",
+                icon: "fa-hand-holding-dollar",
+                color: "#2d3436"
+            },
+            {
+                word: "INTERACTION",
+                parts: { p: "INTER", r: "ACT", s: "ION" },
+                ipa: "/ˌɪntərˈækʃən/",
+                en: "Interaction: A mutual or reciprocal action.",
+                cn: "Interaction：互動；相互作用。",
+                narrative: "Interaction. A mutual action between two or more things.",
+                icon: "fa-users",
+                color: "#0984e3"
+            },
+            {
+                word: "ACTIVATE",
+                parts: { p: "", r: "ACT", s: "IVATE" },
+                ipa: "/ˈæktɪˌveɪt/",
+                en: "Activate: To start something 'doing'; put in motion.",
+                cn: "Activate：啟動；使活動。",
+                narrative: "Activate. To start something doing. To put in motion.",
+                icon: "fa-power-off",
+                color: "#00b894"
+            },
+            {
+                word: "DEACTIVATE",
+                parts: { p: "DE", r: "ACT", s: "IVATE" },
+                ipa: "/diˈæktɪˌveɪt/",
+                en: "Deactivate: Remove from active status.",
+                cn: "Deactivate：停用；使無效。",
+                narrative: "Deactivate. To remove from active status.",
+                icon: "fa-toggle-off",
+                color: "#636e72"
+            },
+            {
+                word: "COUNTERACT",
+                parts: { p: "COUNTER", r: "ACT", s: "" },
+                ipa: "/ˌkaʊntərˈækt/",
+                en: "Counteract: To act in opposition to.",
+                cn: "Counteract：抵消；對抗。",
+                narrative: "Counteract. To act in opposition to something.",
+                icon: "fa-shield-halved",
+                color: "#d63031"
+            },
+            {
+                word: "ENACT",
+                parts: { p: "EN", r: "ACT", s: "" },
+                ipa: "/ɪˈnækt/",
+                en: "Enact: Order by virtue of superior authority.",
+                cn: "Enact：制定（法律）；頒布。",
+                narrative: "Enact. To order by authority, like making a law.",
+                icon: "fa-gavel",
+                color: "#2d3436"
+            },
+            {
+                word: "RADIOACTIVE",
+                parts: { p: "RADIO", r: "ACT", s: "IVE" },
+                ipa: "/ˌreɪdioʊˈæktɪv/",
+                en: "Radioactive: Exhibiting or caused by radioactivity.",
+                cn: "Radioactive：放射性的。",
+                narrative: "Radioactive. Exhibiting radioactivity.",
+                icon: "fa-radiation",
+                color: "#fab1a0"
+            },
+            {
+                word: "REDACT",
+                parts: { p: "RED", r: "ACT", s: "" },
+                ipa: "/rɪˈdækt/",
+                en: "Redact: To formulate; often to censor/edit text.",
+                cn: "Redact：編寫；（對機密文件）進行刪減修訂。",
+                narrative: "Redact. To formulate or edit text in a particular style.",
+                icon: "fa-file-pen",
+                color: "#2d3436"
+            },
+            {
+                word: "REENACTMENT",
+                parts: { p: "RE-EN", r: "ACT", s: "MENT" },
+                ipa: "/ˌriːɪˈnæktmənt/",
+                en: "Reenactment: Performing a role in an event again.",
+                cn: "Reenactment：重演；再現。",
+                narrative: "Reenactment. Performing a role in an event that occurred earlier.",
+                icon: "fa-clock-rotate-left",
+                color: "#6c5ce7"
+            },
+            {
+                word: "RETROACTIVE",
+                parts: { p: "RETRO", r: "ACT", s: "IVE" },
+                ipa: "/ˌrɛtroʊˈæktɪv/",
+                en: "Retroactive: Having effect on past events.",
+                cn: "Retroactive：有追溯力的；涉及以往的。",
+                narrative: "Retroactive. Having an effect on events that occurred previously.",
+                icon: "fa-history",
+                color: "#e17055"
+            }
+        ];
+
+        // 狀態變量
+        let currentIndex = 0;
+        let isPlaying = false;
+        let timer = null;
+        const synth = window.speechSynthesis;
+        
+        // DOM 元素
+        const els = {
+            pPrefix: document.getElementById('pPrefix'),
+            pRoot: document.getElementById('pRoot'),
+            pSuffix: document.getElementById('pSuffix'),
+            pIpa: document.getElementById('pIpa'),
+            iconArea: document.getElementById('iconArea'),
+            subEn: document.getElementById('subEn'),
+            subCn: document.getElementById('subCn'),
+            progressBar: document.getElementById('progressBar'),
+            overlay: document.getElementById('overlay'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            replayBtn: document.getElementById('replayBtn')
+        };
+
+        // 播放邏輯
+        function playScene(index) {
+            if (index >= scenes.length) {
+                finish();
+                return;
+            }
+
+            const data = scenes[index];
+            
+            // 1. 更新 UI
+            updateVisuals(data);
+            
+            // 2. 朗讀
+            speak(data.narrative, () => {
+                // 朗讀結束後的回調
+                if(isPlaying) {
+                    // 額外停留 1.5 秒讓用戶消化
+                    timer = setTimeout(() => {
+                        currentIndex++;
+                        playScene(currentIndex);
+                    }, 1500);
+                }
+            });
+
+            // 3. 進度條
+            const progress = ((index) / (scenes.length - 1)) * 100;
+            els.progressBar.style.width = `${progress}%`;
+        }
+
+        function updateVisuals(data) {
+            // 設置文本
+            els.pPrefix.textContent = data.parts.p;
+            els.pRoot.textContent = data.parts.r;
+            els.pSuffix.textContent = data.parts.s;
+            els.pIpa.textContent = data.ipa;
+            els.subEn.textContent = data.en;
+            els.subCn.textContent = data.cn;
+
+            // 設置圖標
+            els.iconArea.innerHTML = `<i class="fas ${data.icon}"></i>`;
+            els.iconArea.style.color = data.color;
+            
+            // 觸發動畫
+            els.iconArea.classList.remove('fade-in-up');
+            void els.iconArea.offsetWidth; // Reflow
+            els.iconArea.classList.add('fade-in-up');
+            els.iconArea.style.opacity = 1;
+            els.iconArea.style.transform = 'scale(1)';
+
+            // 文字字號調整 (針對長單詞)
+            const totalLength = data.word.length;
+            if (totalLength > 12) {
+                document.getElementById('wordContainer').style.fontSize = '2.5rem';
+            } else if (totalLength > 8) {
+                document.getElementById('wordContainer').style.fontSize = '3.5rem';
+            } else {
+                document.getElementById('wordContainer').style.fontSize = '4.5rem';
+            }
+        }
+
+        function speak(text, onEndCallback) {
+            if (synth.speaking) synth.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            
+            // 選擇較好的語音
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.name.includes("Google US English") || v.name.includes("Samantha"));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onend = () => {
+                if (onEndCallback) onEndCallback();
+            };
+
+            synth.speak(utterance);
+        }
+
+        // 控制功能
+        function start() {
+            els.overlay.style.opacity = 0;
+            setTimeout(() => els.overlay.style.display = 'none', 500);
+            isPlaying = true;
+            currentIndex = 0;
+            playScene(0);
+            updateBtnIcon();
+        }
+
+        function togglePause() {
+            if (isPlaying) {
+                isPlaying = false;
+                synth.pause();
+                clearTimeout(timer);
+            } else {
+                isPlaying = true;
+                synth.resume();
+                // 如果暫停時沒在說話（在間隔期），則手動繼續
+                if (!synth.speaking) {
+                     timer = setTimeout(() => {
+                        currentIndex++;
+                        playScene(currentIndex);
+                    }, 500);
+                }
+            }
+            updateBtnIcon();
+        }
+
+        function replay() {
+            synth.cancel();
+            clearTimeout(timer);
+            currentIndex = 0;
+            isPlaying = true;
+            playScene(0);
+            updateBtnIcon();
+        }
+
+        function finish() {
+            isPlaying = false;
+            els.overlay.style.display = 'flex';
+            setTimeout(() => els.overlay.style.opacity = 1, 10);
+            els.startBtn.innerHTML = '<i class="fas fa-redo"></i>';
+            document.querySelector('#overlay h2').textContent = "Lesson Complete!";
+            document.querySelector('#overlay p').textContent = "Great job mastering ACT words.";
+        }
+
+        function updateBtnIcon() {
+            const icon = els.pauseBtn.querySelector('i');
+            icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+        }
+
+        // 監聽
+        els.startBtn.addEventListener('click', () => {
+            // 如果是結束狀態的重播
+            if (currentIndex >= scenes.length) {
+                replay();
+                els.overlay.style.opacity = 0;
+                setTimeout(() => els.overlay.style.display = 'none', 500);
+            } else {
+                start();
+            }
+        });
+        
+        els.pauseBtn.addEventListener('click', togglePause);
+        els.replayBtn.addEventListener('click', replay);
+
+        // 確保語音加載
+        window.speechSynthesis.onvoiceschanged = () => {};
+
+    </script>
+</body>
+</html>
