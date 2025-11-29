@@ -66,7 +66,8 @@
       z-index: 10;
     }
 
-    .back-btn {
+    /* 頂部按鈕樣式 */
+    .nav-btn {
       text-decoration: none;
       color: var(--text);
       font-size: 0.95rem;
@@ -80,8 +81,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      cursor: pointer;
     }
-    .back-btn:hover {
+    .nav-btn:hover {
       background: var(--text);
       color: var(--bg);
       transform: translateX(-4px);
@@ -149,10 +151,24 @@
       border-radius: 2px;
       opacity: 0.7;
     }
+    
+    .subtitle {
+      color: var(--text-light); 
+      margin-top: 0.5rem; 
+      letter-spacing: 1px;
+      font-size: 1.1rem;
+      min-height: 1.6em; /* Prevent jump when text changes */
+      transition: opacity 0.3s;
+    }
 
     .section {
       padding: 0 2rem;
       animation: fadeInUp 0.8s ease backwards;
+    }
+
+    /* 隱藏區塊 */
+    .hidden {
+      display: none !important;
     }
 
     .tools-grid {
@@ -161,6 +177,30 @@
       gap: 1.5rem;
     }
 
+    /* 內頁上方的返回按鈕容器 */
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .section-back-btn {
+      font-size: 0.9rem;
+      color: var(--accent);
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      transition: 0.3s;
+    }
+    .section-back-btn:hover {
+      color: var(--text);
+      transform: translateX(-5px);
+    }
+
+    /* 卡片樣式 */
     .vocab-card {
       background: var(--surface);
       backdrop-filter: blur(10px);
@@ -176,6 +216,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      cursor: pointer; /* 讓分類卡片也顯示手型 */
     }
 
     .vocab-card:hover {
@@ -196,7 +237,7 @@
 
     .card-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 600;
       line-height: 1.3;
     }
@@ -234,7 +275,7 @@
 
     @media (max-width: 600px) {
       .tools-grid { grid-template-columns: 1fr; }
-      .header { padding: 1rem 1.5rem; }
+      header { padding: 1rem 1.5rem; }
     }
   </style>
 </head>
@@ -243,7 +284,7 @@
   <canvas id="particle-canvas"></canvas>
 
   <header>
-    <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/" class="back-btn">
+    <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/" class="nav-btn">
       <span>←</span> Back to Tools
     </a>
     <button id="themeToggle" aria-label="Toggle theme">💖</button>
@@ -252,83 +293,226 @@
   <div class="container">
     <div class="title-wrapper">
       <h1 class="title">Vocab Wonderland</h1>
-      <p style="color: var(--text-light); margin-top: 0.5rem; letter-spacing: 1px;">單字大樂園</p>
+      <p id="page-subtitle" class="subtitle">單字大樂園</p>
     </div>
 
-    <div class="section">
+    <div id="category-view" class="section">
       <div class="tools-grid">
         
+        <div class="vocab-card" onclick="openCategory('cat-1', 'Self-Practice 自主練習專區')">
+          <div class="card-icon">🧩</div>
+          <div class="card-title">Self-Practice</div>
+          <div class="card-desc">自主練習專區</div>
+        </div>
+
+        <div class="vocab-card" onclick="openCategory('cat-2', 'iVocab 6 Levels 六級單字專區')">
+          <div class="card-icon">🏔️</div>
+          <div class="card-title">iVocab 6 Levels</div>
+          <div class="card-desc">六級單字專區</div>
+        </div>
+
+        <div class="vocab-card" onclick="openCategory('cat-3', 'CAP 2000 會考專區')">
+          <div class="card-icon">🎓</div>
+          <div class="card-title">CAP 2000</div>
+          <div class="card-desc">會考單字專區</div>
+        </div>
+
+        <div class="vocab-card" onclick="openCategory('cat-4', 'CHHS FRP 忠信雙語專區')">
+          <div class="card-icon">🏫</div>
+          <div class="card-title">CHHS FRP</div>
+          <div class="card-desc">忠信雙語課程專區</div>
+        </div>
+
+        <div class="vocab-card" onclick="openCategory('cat-5', 'General English 綜合英語專區')">
+          <div class="card-icon">📚</div>
+          <div class="card-title">General English</div>
+          <div class="card-desc">綜合英語專區</div>
+        </div>
+
+        <div class="vocab-card" onclick="openCategory('cat-6', 'International Tests 國際考試專區')">
+          <div class="card-icon">🌏</div>
+          <div class="card-title">International Tests</div>
+          <div class="card-desc">國際考試專區</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="cat-1" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
         <a href="https://ducj-creator.github.io/iVocab-Self-Practice/" class="vocab-card">
           <div class="card-icon">📖</div>
           <div class="card-title">Vocab Self-Practice</div>
           <div class="card-desc">單字自主練習庫 (含1-6級)</div>
         </a>
+      </div>
+    </div>
 
+    <div id="cat-2" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
         <a href="https://ducj-creator.github.io/iVocab-Self-Practice/Vocab%20crush.html" class="vocab-card">
           <div class="card-icon">💥</div>
           <div class="card-title">iVocab Crush</div>
-          <div class="card-desc">1-6級單字大爆險 (Every 5 Units)</div>
+          <div class="card-desc">1-6級單字大爆險</div>
         </a>
-
         <a href="https://ducj-creator.github.io/hungry%20snake.html" class="vocab-card">
           <div class="card-icon">🐍</div>
           <div class="card-title">iVocab Hungry Snake</div>
-          <div class="card-desc">1-6級單字貪吃蛇 (Every 5 Units)</div>
+          <div class="card-desc">1-6級單字貪吃蛇</div>
         </a>
-
         <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/iVocab%20Challenge.html" class="vocab-card">
           <div class="card-icon">🏆</div>
-          <div class="card-title">iVocab Challenge</div>
-          <div class="card-desc">1-6級單字大挑戰 (Every 10 Units)</div>
+          <div class="card-title">iVocab Challenge (Senior)</div>
+          <div class="card-desc">1-6級單字大挑戰</div>
         </a>
+      </div>
+    </div>
 
+    <div id="cat-3" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/iVocab%20Challenge.html" class="vocab-card">
+          <div class="card-icon">🎓</div>
+          <div class="card-title">Junior CAP 2000</div>
+          <div class="card-desc">會考單字挑戰</div>
+        </a>
+      </div>
+    </div>
+
+    <div id="cat-4" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
         <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/FRP%20ELA.html" class="vocab-card">
           <div class="card-icon">🏫</div>
-          <div class="card-title">FRP ELA (SI-SIV) Challenge</div>
-          <div class="card-desc">忠信FRP雙語課程單字挑戰</div>
+          <div class="card-title">FRP ELA Challenge</div>
+          <div class="card-desc">SI-SIV 雙語課程挑戰</div>
         </a>
-
         <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Vocab.html" class="vocab-card">
           <div class="card-icon">🦅</div>
           <div class="card-title">TOEFL Junior Vocab</div>
           <div class="card-desc">初級托福單字挑戰</div>
         </a>
+      </div>
+    </div>
 
+    <div id="cat-5" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
+        <a href="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/" class="vocab-card">
+          <div class="card-icon">🔢</div>
+          <div class="card-title">Irregular Noun Plural</div>
+          <div class="card-desc">不規則名詞複數練習</div>
+        </a>
+        <a href="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/" class="vocab-card">
+          <div class="card-icon">⚡️</div>
+          <div class="card-title">Irregular Verbs</div>
+          <div class="card-desc">不規則動詞練習</div>
+        </a>
+        <a href="https://ducj-creator.github.io/Shirley-Grammar/phrases" class="vocab-card">
+          <div class="card-icon">🗣️</div>
+          <div class="card-title">Common Phrases</div>
+          <div class="card-desc">常用片語練習</div>
+        </a>
+        <a href="https://ducj-creator.github.io/Spelling%20Contest%20Dictation.html" class="vocab-card">
+          <div class="card-icon">✍️</div>
+          <div class="card-title">Misspelt Words</div>
+          <div class="card-desc">易拼錯字聽寫練習</div>
+        </a>
+      </div>
+    </div>
+
+    <div id="cat-6" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="goHome()">
+          <span>←</span> Back to Categories
+        </button>
+      </div>
+      <div class="tools-grid">
         <a href="https://ducj-creator.github.io/Shirley-Grammar/TOEIC%20vocab" class="vocab-card">
           <div class="card-icon">💼</div>
           <div class="card-title">TOEIC Vocab Challenge</div>
           <div class="card-desc">多益單字練習平台</div>
         </a>
-
-        <a href="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/" class="vocab-card">
-          <div class="card-icon">🔢</div>
-          <div class="card-title">Irregular Noun Plural</div>
-          <div class="card-desc">不規則名詞複數練習平台</div>
-        </a>
-
-        <a href="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/" class="vocab-card">
-          <div class="card-icon">⚡️</div>
-          <div class="card-title">Irregular Verbs</div>
-          <div class="card-desc">不規則動詞練習平台</div>
-        </a>
-
-        <a href="https://ducj-creator.github.io/Shirley-Grammar/phrases" class="vocab-card">
-          <div class="card-icon">🗣️</div>
-          <div class="card-title">Common Phrases</div>
-          <div class="card-desc">常用片語練習平台</div>
-        </a>
-
-        <a href="https://ducj-creator.github.io/Spelling%20Contest%20Dictation.html" class="vocab-card">
-          <div class="card-icon">✍️</div>
-          <div class="card-title">Misspelt Words (Dictation)</div>
-          <div class="card-desc">易拼錯字拼寫練習</div>
-        </a>
-
       </div>
     </div>
+
   </div>
 
   <script>
+    // ----------------------------------------
+    // 頁面切換邏輯 (Page Navigation Logic)
+    // ----------------------------------------
+    const categoryView = document.getElementById('category-view');
+    const pageSubtitle = document.getElementById('page-subtitle');
+    const allDetailSections = document.querySelectorAll('.section.hidden'); // 選取所有預設隱藏的內頁
+
+    function openCategory(id, subtitleText) {
+      // 1. 隱藏主選單
+      categoryView.classList.add('hidden');
+      
+      // 2. 顯示選中的區塊
+      const targetSection = document.getElementById(id);
+      if(targetSection) {
+        targetSection.classList.remove('hidden');
+        // 觸發動畫重播
+        targetSection.style.animation = 'none';
+        targetSection.offsetHeight; /* trigger reflow */
+        targetSection.style.animation = 'fadeInUp 0.6s ease backwards';
+      }
+
+      // 3. 更新副標題
+      if (subtitleText) {
+        pageSubtitle.style.opacity = 0;
+        setTimeout(() => {
+            pageSubtitle.innerText = subtitleText;
+            pageSubtitle.style.opacity = 1;
+        }, 200);
+      }
+      
+      // 4. 滾動到頂部
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goHome() {
+      // 1. 隱藏所有內頁
+      allDetailSections.forEach(sec => sec.classList.add('hidden'));
+
+      // 2. 顯示主選單
+      categoryView.classList.remove('hidden');
+      categoryView.style.animation = 'none';
+      categoryView.offsetHeight; 
+      categoryView.style.animation = 'fadeInUp 0.6s ease backwards';
+
+      // 3. 還原副標題
+      pageSubtitle.style.opacity = 0;
+      setTimeout(() => {
+          pageSubtitle.innerText = "單字大樂園";
+          pageSubtitle.style.opacity = 1;
+      }, 200);
+    }
+
     // ----------------------------------------
     // ✨ 粒子特效與主題邏輯 (Particle & Theme)
     // ----------------------------------------
