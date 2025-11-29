@@ -83,7 +83,6 @@
       z-index: 50;
     }
 
-    /* 按鈕共用樣式 */
     .control-btn {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -112,14 +111,11 @@
         border-color: #e74c3c !important;
     }
 
-    /* 信件圖標：飄動效果 */
     .letter-trigger {
         font-size: 1.4rem;
         animation: floatLetter 3s ease-in-out infinite;
         position: relative;
-        background: var(--surface); /* 確保背景一致 */
     }
-    /* 讓信件圖標有一個小的提示紅點 */
     .letter-trigger::after {
         content: '';
         position: absolute;
@@ -136,7 +132,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* 減少 padding 讓下面卡片更緊湊 */
       padding: 4rem 1rem 1rem; 
       position: relative;
       z-index: 10;
@@ -145,79 +140,62 @@
 
     .title-container {
         position: relative;
-        /* 確保天體不會跑出這個容器太遠 */
         width: 100%;
         max-width: 800px;
-        height: 180px; /* 固定高度給軌道 */
+        height: 180px; 
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-bottom: 0; /* 移除底部 margin */
+        margin-bottom: 0;
     }
 
-    /* --- Celestial Orbits (Sun, Moon, Planets) --- */
+    /* --- Celestial Orbits --- */
     .orbit-system {
         position: absolute;
-        top: 50%;
-        left: 50%;
+        top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%;
-        height: 100%;
-        pointer-events: none; /* 確保不擋住文字點擊 */
+        width: 100%; height: 100%;
+        pointer-events: none; 
         z-index: -1;
     }
-
-    /* 軌道定義 */
     .orbit-ring {
         position: absolute;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 50%;
-        border: 1px dashed rgba(255,255,255,0.05); /* 極淡的軌道線 */
+        border: 1px dashed rgba(255,255,255,0.05); 
     }
-
     .orbit-1 { width: 320px; height: 100px; animation: rotateOrbit 12s linear infinite; }
     .orbit-2 { width: 450px; height: 160px; animation: rotateOrbit 20s linear infinite reverse; }
     .orbit-3 { width: 220px; height: 220px; animation: rotateOrbit 8s linear infinite; }
 
-    /* 星體 */
     .celestial-body {
         position: absolute;
         border-radius: 50%;
         box-shadow: 0 0 10px var(--accent-glow);
     }
-
-    /* 太陽 */
     .sun {
-        top: 0; left: 50%;
-        width: 20px; height: 20px;
-        background: var(--sun-color);
-        box-shadow: 0 0 20px var(--sun-color);
+        top: 0; left: 50%; width: 20px; height: 20px;
+        background: var(--sun-color); box-shadow: 0 0 20px var(--sun-color);
         transform: translate(-50%, -50%);
     }
-
-    /* 月亮 */
     .moon {
-        top: 50%; right: 0;
-        width: 15px; height: 15px;
-        background: var(--moon-color);
-        box-shadow: 0 0 15px var(--moon-color);
+        top: 50%; right: 0; width: 15px; height: 15px;
+        background: var(--moon-color); box-shadow: 0 0 15px var(--moon-color);
         transform: translate(50%, -50%);
     }
-
-    /* 行星 */
     .planet {
-        bottom: 0; left: 20%;
-        width: 10px; height: 10px;
+        bottom: 0; left: 20%; width: 10px; height: 10px;
         background: var(--planet-color);
         transform: translate(-50%, 50%);
     }
 
-    /* --- Jumping Title Characters --- */
+    /* --- Title Styles --- */
     .main-title {
       font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(2.5rem, 6vw, 4rem);
+      /* 調整字體大小：手機版從 1.8rem 起跳，避免太寬 */
+      font-size: clamp(1.7rem, 5.5vw, 4rem);
       font-weight: 700;
       color: var(--text);
       line-height: 1.1;
@@ -225,9 +203,10 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.1);
       position: relative;
       cursor: default;
+      /* 關鍵：強制單字內不換行，避免 's 掉下去 */
+      word-break: keep-all; 
     }
 
-    /* 每個字母的樣式 (由 JS 生成) */
     .char {
         display: inline-block;
         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s;
@@ -239,7 +218,6 @@
         text-shadow: 0 0 15px var(--accent-glow);
     }
 
-    /* 底線 - 與文字有點距離 */
     .title-underline {
         width: 60%;
         height: 2px;
@@ -284,12 +262,7 @@
       max-height: 85vh;
       overflow-y: auto;
     }
-    
-    .dark .letter-content {
-        background: #151922; 
-        border: 1px solid rgba(241, 196, 15, 0.3);
-    }
-
+    .dark .letter-content { background: #151922; border: 1px solid rgba(241, 196, 15, 0.3); }
     .letter-content.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
     .letter-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
     .letter-title { font-family: 'Cinzel Decorative', cursive; font-size: 1.6rem; color: var(--accent); }
@@ -297,23 +270,22 @@
     .letter-body p { margin-bottom: 1.2rem; opacity: 0; transform: translateY(10px); transition: all 0.5s ease; }
     .letter-body p.show { opacity: 1; transform: translateY(0); }
 
-    /* --- Categories (Compact Layout) --- */
+    /* --- Categories --- */
     .categories {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem; /* 縮小間距 */
-      padding: 1rem 2rem 4rem; /* 減少上方 padding，緊貼標題 */
+      gap: 1.5rem;
+      padding: 1rem 2rem 4rem; 
       max-width: 1000px;
       margin: 0 auto;
       position: relative;
       z-index: 5;
     }
-
     .category-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px; /* 稍微縮小圓角 */
-      padding: 2rem; /* 稍微縮小內距 */
+      border-radius: 12px;
+      padding: 2rem;
       text-align: center;
       text-decoration: none;
       color: var(--text);
@@ -325,69 +297,37 @@
       align-items: center;
       box-shadow: var(--card-shadow);
     }
-    
-    .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--card-hover-shadow);
-        border-color: var(--accent);
-    }
-
+    .category-card:hover { transform: translateY(-5px); box-shadow: var(--card-hover-shadow); border-color: var(--accent); }
     .icon {
-      font-size: 2.5rem; /* 稍微縮小圖標 */
-      margin-bottom: 0.5rem;
-      display: block;
-      transition: transform 0.3s;
-      filter: sepia(20%) hue-rotate(180deg) saturate(80%);
+      font-size: 2.5rem; margin-bottom: 0.5rem; display: block;
+      transition: transform 0.3s; filter: sepia(20%) hue-rotate(180deg) saturate(80%);
     }
     .dark .icon { filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
     .category-card:hover .icon { transform: scale(1.15) rotate(5deg); }
-
-    .category-card h2 {
-      font-family: 'Exo 2', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .category-card .subtitle {
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--subtitle-color);
-      transition: color 0.3s;
-    }
+    .category-card h2 { font-family: 'Exo 2', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .category-card .subtitle { font-family: 'Noto Sans TC', sans-serif; font-size: 1rem; font-weight: 500; color: var(--subtitle-color); transition: color 0.3s; }
     .category-card:hover .subtitle { color: var(--accent); }
 
-    /* --- Footer --- */
     .page-footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--text-light);
+      border-top: 1px solid var(--border); padding: 2rem;
+      text-align: center; font-size: 0.9rem; color: var(--text-light);
       background: rgba(0,0,0,0.02);
     }
     .page-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
     .page-footer a:hover { text-decoration: underline; }
 
-    /* --- Keyframes --- */
     @keyframes flowLine { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     @keyframes floatLetter { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    
-    /* 軌道旋轉動畫 */
-    @keyframes rotateOrbit {
-        from { transform: translate(-50%, -50%) rotate(0deg); }
-        to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
+    @keyframes rotateOrbit { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
     @media (max-width: 768px) {
       .categories { grid-template-columns: 1fr; }
-      header { padding-top: 5rem; } /* 讓手機版標題不被按鈕擋住 */
+      /* 增加頂部距離，防止按鈕遮擋標題 */
+      header { padding-top: 6rem; } 
       .top-bar { top: 1rem; right: 1rem; gap: 0.5rem; }
-      .orbit-1 { width: 250px; } /* 手機版縮小軌道 */
+      .orbit-1 { width: 250px; }
       .orbit-2 { width: 300px; }
-      .main-title { font-size: 2rem; }
     }
   </style>
 </head>
@@ -404,15 +344,9 @@
   <header>
     <div class="title-container">
         <div class="orbit-system">
-            <div class="orbit-ring orbit-1">
-                <div class="celestial-body sun"></div>
-            </div>
-            <div class="orbit-ring orbit-2">
-                <div class="celestial-body moon"></div>
-            </div>
-            <div class="orbit-ring orbit-3">
-                <div class="celestial-body planet"></div>
-            </div>
+            <div class="orbit-ring orbit-1"><div class="celestial-body sun"></div></div>
+            <div class="orbit-ring orbit-2"><div class="celestial-body moon"></div></div>
+            <div class="orbit-ring orbit-3"><div class="celestial-body planet"></div></div>
         </div>
 
         <h1 class="main-title" id="animatedTitle">Teacher Shirley’s<br>ET Platform</h1>
@@ -469,30 +403,37 @@
 
   <script>
     // ----------------------------------------
-    // ✨ 文字跳動效果 (把標題拆成單個字母)
+    // ✨ 修復後的文字跳動邏輯 (Word Grouping Fix)
     // ----------------------------------------
     const titleElement = document.getElementById('animatedTitle');
-    const textContent = titleElement.innerHTML; // 保留 <br>
+    const textContent = titleElement.innerHTML; 
     
-    // 簡單的拆解邏輯：將文字拆開，遇到 <br> 保留
     const lines = textContent.split('<br>');
     let newHtml = '';
     
     lines.forEach((line, index) => {
-        // 將每個字符包裹在 span 中，空格也處理
-        const wrappedChars = line.split('').map(char => {
-            if (char === ' ') return '<span class="char" style="width: 0.5em;">&nbsp;</span>';
-            return `<span class="char">${char}</span>`;
-        }).join('');
+        // 1. 先按空格分詞 (Split by words)
+        const words = line.split(' ');
         
-        newHtml += wrappedChars;
+        // 2. 將每個單詞處理為一個不可分割的 span (nowrap)
+        const wrappedWords = words.map(word => {
+            // 將單詞內的字母拆分
+            const wrappedChars = word.split('').map(char => 
+                `<span class="char">${char}</span>`
+            ).join('');
+            
+            // 包裹在 word span 中，強制單詞不換行
+            return `<span class="word" style="display: inline-block; white-space: nowrap;">${wrappedChars}</span>`; 
+        }).join(' '); // 單詞之間恢復空格 (空格處允許換行)
+
+        newHtml += wrappedWords;
         if (index < lines.length - 1) newHtml += '<br>';
     });
     
     titleElement.innerHTML = newHtml;
 
     // ----------------------------------------
-    // ✨ 星際粒子系統
+    // ✨ 星際粒子特效
     // ----------------------------------------
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -526,12 +467,10 @@
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-
         if (this.x > canvas.width) this.x = 0;
         if (this.x < 0) this.x = canvas.width;
         if (this.y > canvas.height) this.y = 0;
         if (this.y < 0) this.y = canvas.height;
-
         this.opacity += this.pulseSpeed;
         if (this.opacity > 1 || this.opacity < 0.2) this.pulseSpeed = -this.pulseSpeed;
 
@@ -547,7 +486,6 @@
       draw(isDark) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Dark Mode: 金色, Light Mode: 深藍色
         let color = isDark ? `rgba(241, 196, 15, ${this.opacity})` : `rgba(44, 62, 80, ${this.opacity * 0.3})`;
         ctx.fillStyle = color;
         ctx.fill();
@@ -557,30 +495,24 @@
     function initParticles() {
       particlesArray = [];
       let numberOfParticles = (canvas.width * canvas.height) / 12000; 
-      for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
-      }
+      for (let i = 0; i < numberOfParticles; i++) { particlesArray.push(new Particle()); }
     }
 
     function animateParticles() {
       requestAnimationFrame(animateParticles);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
       const isDark = document.getElementById('htmlRoot').classList.contains('dark');
       const lineColor = isDark ? 'rgba(241, 196, 15, 0.1)' : 'rgba(44, 62, 80, 0.05)';
 
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
         particlesArray[i].draw(isDark);
-
         for (let j = i; j < particlesArray.length; j++) {
             let dx = particlesArray[i].x - particlesArray[j].x;
             let dy = particlesArray[i].y - particlesArray[j].y;
             let distance = Math.sqrt(dx*dx + dy*dy);
             if (distance < 100) {
-                ctx.beginPath();
-                ctx.strokeStyle = lineColor;
-                ctx.lineWidth = 0.5;
+                ctx.beginPath(); ctx.strokeStyle = lineColor; ctx.lineWidth = 0.5;
                 ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
                 ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
                 ctx.stroke();
@@ -588,7 +520,6 @@
         }
       }
     }
-
     initParticles();
     animateParticles();
 
@@ -597,13 +528,8 @@
     // ----------------------------------------
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
-    
     const savedTheme = localStorage.getItem('theme') || 'dark';
-    if (savedTheme === 'light') {
-      html.classList.remove('dark');
-    } else {
-      html.classList.add('dark');
-    }
+    if (savedTheme === 'light') { html.classList.remove('dark'); } else { html.classList.add('dark'); }
 
     toggleBtn.addEventListener('click', () => {
       html.classList.toggle('dark');
@@ -637,12 +563,9 @@
       chimeSound.play().catch(e => console.warn("Sound blocked:", e));
       letterContent.classList.add('show');
       document.body.classList.add('modal-open');
-
       setTimeout(() => {
         const allP = letterBody.querySelectorAll('p');
-        allP.forEach((p, i) => {
-          setTimeout(() => p.classList.add('show'), i * 300);
-        });
+        allP.forEach((p, i) => { setTimeout(() => p.classList.add('show'), i * 300); });
       }, 300);
     });
 
@@ -654,9 +577,7 @@
 
     closeLetter.addEventListener('click', closeLetterModal);
     document.addEventListener('click', (e) => {
-        if (letterContent.classList.contains('show') && 
-            !letterContent.contains(e.target) && 
-            !openLetter.contains(e.target)) {
+        if (letterContent.classList.contains('show') && !letterContent.contains(e.target) && !openLetter.contains(e.target)) {
             closeLetterModal();
         }
     });
