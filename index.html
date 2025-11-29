@@ -1,58 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" id="htmlRoot" class="dark"> <head>
+<html lang="en" id="htmlRoot" class="dark">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Teacher Shirley's ET Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Exo+2:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" href="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%236e8efb'/%3E%3Ctext x='16' y='22' font-family='serif' font-size='18' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   
   <style id="themeStyles">
     :root {
-      /* --- Light Mode (Silver Dawn / 晨曦銀灰 - 高雅風格) --- */
-      /* 放棄原本的米黃色，改用高級的冷調灰白漸變 */
-      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      --surface: rgba(255, 255, 255, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.9);
-      --text: #2d3436; /* 深灰，比純黑更柔和 */
-      --text-light: #636e72;
-      --accent: #0984e3; /* 科技藍 */
-      --accent-glow: rgba(9, 132, 227, 0.2);
-      --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      --card-hover-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      --particle-color: rgba(45, 52, 54, 0.5);
+      /* --- Light Mode (Aurora White / 極光白 - 高雅科幻) --- */
+      /* 背景：極淡的冰藍與紫羅蘭暈染，模擬白天的高科技實驗室 */
+      --bg-gradient: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+      --surface: rgba(255, 255, 255, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.8);
       
-      /* 亮模式下的中文字幕顏色 */
-      --subtitle-color: #2c3e50;
-      --subtitle-gradient: linear-gradient(120deg, #2c3e50, #4ca1af);
+      --text: #2d3436; 
+      --text-light: #636e72;
+      --accent: #6c5ce7; /* 亮模式的主色調：高雅的星雲紫 */
+      --accent-glow: rgba(108, 92, 231, 0.2);
+      
+      --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --card-hover-shadow: 0 20px 40px rgba(108, 92, 231, 0.15);
+      
+      /* 標題流光色：液態金屬銀+紫 */
+      --title-gradient: linear-gradient(to right, #2d3436 20%, #6c5ce7 40%, #a29bfe 60%, #2d3436 80%);
+      
+      /* 中文字幕：深邃的星空藍漸變 */
+      --subtitle-gradient: linear-gradient(120deg, #0984e3, #6c5ce7);
     }
 
     .dark {
-      /* --- Dark Mode (Cosmic Night / 星際月夜 - 科幻風格) --- */
-      --bg-gradient: radial-gradient(circle at 50% -20%, #1b2735 0%, #090a0f 100%);
-      --surface: rgba(20, 25, 40, 0.65); /* 深藍色玻璃 */
-      --glass-border: rgba(100, 200, 255, 0.2); /* 青色邊框 */
-      --text: #dfe6e9;
-      --text-light: #b2bec3;
-      --accent: #74b9ff; /* 月光藍 */
-      --accent-glow: rgba(116, 185, 255, 0.4);
-      --card-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      --card-hover-shadow: 0 0 25px rgba(116, 185, 255, 0.2);
-      --particle-color: rgba(255, 255, 255, 0.8); /* 星星 */
-
-      /* 暗模式下的中文字幕 - 螢光金/月光白漸變，解決看不清的問題 */
-      --subtitle-color: #fff;
-      --subtitle-gradient: linear-gradient(120deg, #ffeaa7, #81ecec);
+      /* --- Dark Mode (Cosmic Void / 深空幻境) --- */
+      --bg-gradient: radial-gradient(circle at 50% -20%, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      --surface: rgba(20, 20, 35, 0.6);
+      --glass-border: rgba(100, 200, 255, 0.15);
+      
+      --text: #e0e6ed;
+      --text-light: #a0aab5;
+      --accent: #00d2ff; /* 暗模式主色：賽博青 */
+      --accent-glow: rgba(0, 210, 255, 0.3);
+      
+      --card-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      --card-hover-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
+      
+      /* 標題流光色：霓虹極光 */
+      --title-gradient: linear-gradient(to right, #00d2ff 0%, #3a7bd5 30%, #ff00cc 60%, #00d2ff 100%);
+      
+      /* 中文字幕：亮眼的螢光青金 */
+      --subtitle-gradient: linear-gradient(120deg, #81ecec, #ffeaa7);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       background: var(--bg-gradient);
-      background-attachment: fixed; /* 視差滾動效果 */
+      background-attachment: fixed;
       color: var(--text);
-      font-family: 'Exo 2', 'Noto Sans TC', sans-serif; /* 改用更具現代/科幻感的字體 */
+      font-family: 'Exo 2', 'Noto Sans TC', sans-serif;
       line-height: 1.7;
       transition: color 0.3s;
       position: relative;
@@ -63,124 +70,130 @@
     /* ✨ 星塵 Canvas */
     #particle-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; pointer-events: none;
     }
 
     body.modal-open { overflow: hidden; }
 
-    /* --- Header & Title --- */
+    /* --- Header & Title Area --- */
     header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      padding: 2rem 2.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      padding: 3rem 1.5rem;
       position: relative;
       z-index: 10;
+      text-align: center;
     }
 
     .title-container {
         position: relative;
-        display: flex;
-        align-items: center;
+        margin-bottom: 2rem;
     }
 
-    /* 守護月球 (裝飾) */
+    /* 守護月球 - 增加光暈層次 */
     .moon-orb {
         position: absolute;
-        top: -25px;
-        right: -25px;
-        width: 50px;
-        height: 50px;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, #fff, #dfe6e9);
-        box-shadow: 0 0 20px rgba(255,255,255,0.4);
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 70%);
         z-index: -1;
-        opacity: 0.9;
-        animation: moonFloat 6s ease-in-out infinite;
+        opacity: 0.6;
+        animation: moonPulse 8s infinite ease-in-out;
+        pointer-events: none;
     }
     .dark .moon-orb {
-        background: radial-gradient(circle at 30% 30%, #f6f6f6, #f1c40f, #e67e22 150%); /* 暗模式下的金月 */
-        box-shadow: 0 0 40px rgba(253, 203, 110, 0.4);
+        box-shadow: 0 0 80px rgba(0, 210, 255, 0.15);
     }
 
     .title-wrapper {
       position: relative;
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      /* 全息玻璃效果 */
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      padding: 0.5rem;
     }
 
-    /* 標題上的光掃描效果 */
-    .title-wrapper::before {
-      content: "";
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      animation: holoScan 6s infinite;
-      pointer-events: none;
-    }
-
-    .title {
-      font-family: 'Cinzel', serif; /* 科幻/史詩感襯線體 */
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--text);
-      text-transform: uppercase;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .dark .title {
-      background: linear-gradient(120deg, #fff, #74b9ff, #fff); /* 星光銀藍 */
-      -webkit-background-clip: text;
+    /* 主標題：藝術字 + 流光特效 */
+    .main-title {
+      font-family: 'Cinzel Decorative', cursive; /* 藝術裝飾字體 */
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      
+      /* 流光核心代碼 */
+      background: var(--title-gradient);
+      background-size: 200% auto;
       background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 20px rgba(116, 185, 255, 0.6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
+      
+      /* 微微的濾鏡光暈 */
+      filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
     }
 
-    .et-explanation {
-        font-family: 'Exo 2', sans-serif;
-        font-size: 0.8rem;
+    /* 暗模式下的標題光暈增強 */
+    .dark .main-title {
+        filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.4));
+    }
+
+    /* 副標題：數據感 */
+    .sub-title {
+        font-family: 'Orbitron', sans-serif; /* 科幻字體 */
+        font-size: clamp(0.8rem, 2vw, 1.1rem);
         color: var(--text-light);
-        letter-spacing: 1px;
-        margin-top: 0.2rem;
-        font-weight: 500;
+        letter-spacing: 0.3em;
+        margin-top: 10px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        padding: 5px 15px;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        transition: all 0.5s;
     }
-    .dark .et-explanation {
+    
+    .dark .sub-title {
         color: var(--accent);
-        opacity: 0.8;
+        text-shadow: 0 0 5px var(--accent-glow);
+        border-color: rgba(0, 210, 255, 0.2);
+        background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.05), transparent);
     }
+
+    /* 左右兩側的裝飾線 (Hud Lines) */
+    .sub-title::before, .sub-title::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 30px;
+        height: 2px;
+        background: var(--accent);
+        opacity: 0.5;
+    }
+    .sub-title::before { left: -40px; }
+    .sub-title::after { right: -40px; }
+
 
     .controls {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
         display: flex;
         gap: 1rem;
-        align-items: center;
     }
 
-    /* 按鈕樣式：懸浮球體 */
+    /* 按鈕樣式：全息按鈕 */
     .control-btn {
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
       border: 1px solid var(--glass-border);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px; /* 改為圓角方塊，更有科技感 */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -192,10 +205,10 @@
     }
     .control-btn:hover {
         background: var(--surface);
-        transform: translateY(-2px) scale(1.1);
         border-color: var(--accent);
         color: var(--accent);
         box-shadow: 0 0 15px var(--accent-glow);
+        transform: translateY(-2px);
     }
     .playing {
         animation: pulse 1.5s infinite;
@@ -203,49 +216,55 @@
         border-color: #ff7675 !important;
     }
 
-    /* --- Envelope (Re-styled for Sci-Fi but same function) --- */
+    /* --- Envelope (Holo-Data Block) --- */
     .envelope {
       position: relative;
-      width: 120px;
-      height: 80px;
-      margin: 2rem auto;
+      width: 140px;
+      height: 50px;
+      margin: 1rem auto 3rem;
       cursor: pointer;
-      animation: float 4s ease-in-out infinite;
       z-index: 5;
-      perspective: 1000px;
     }
     
     .envelope-body {
         width: 100%;
         height: 100%;
-        background: var(--surface);
-        border: 1px solid var(--glass-border);
-        border-radius: 8px;
-        box-shadow: var(--card-shadow);
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--accent);
+        border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
         overflow: hidden;
-        transition: transform 0.3s;
-        backdrop-filter: blur(5px);
-    }
-    
-    /* 讓信封在暗模式下看起來像數據卡 */
-    .dark .envelope-body {
-        background: rgba(116, 185, 255, 0.05);
-        border: 1px solid var(--accent);
-        box-shadow: 0 0 15px var(--accent-glow);
+        transition: all 0.3s;
+        box-shadow: 0 0 10px var(--accent-glow);
+        /* 斜角切邊效果 (Sci-Fi Cut) */
+        clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
     }
 
-    .envelope-icon {
-        font-size: 2rem;
-        color: var(--accent);
-        filter: drop-shadow(0 0 5px var(--accent-glow));
+    .envelope-text {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.75rem;
+        color: var(--text);
+        letter-spacing: 1px;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    /* 掃描線動畫 */
+    .envelope-scan {
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: holoScan 3s infinite;
+        transform: skewX(-20deg);
     }
 
     .envelope:hover .envelope-body {
-        transform: rotateX(10deg) scale(1.05);
+        background: var(--accent-glow);
+        transform: scale(1.05);
     }
 
     /* --- Modal (Letter) --- */
@@ -255,11 +274,11 @@
       transform: translate(-50%, -50%) scale(0.9);
       background: var(--bg-gradient); 
       border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      max-width: 650px;
+      border-radius: 12px;
+      padding: 3rem;
+      max-width: 700px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.6);
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
@@ -269,9 +288,9 @@
       overflow-y: auto;
     }
     .dark .letter-content {
-        background: #0f1219; /* 深色實底避免文字看不清 */
-        box-shadow: 0 0 50px var(--accent-glow);
+        background: #13131f; /* 確保文字可讀的深底 */
         border: 1px solid var(--accent);
+        box-shadow: 0 0 60px var(--accent-glow);
     }
 
     .letter-content.show {
@@ -286,37 +305,32 @@
       align-items: center;
       border-bottom: 1px solid var(--glass-border);
       padding-bottom: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
     
     .letter-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 1.8rem;
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .letter-body {
-        font-family: 'Exo 2', sans-serif;
-    }
+    .letter-body { font-family: 'Exo 2', sans-serif; font-size: 1.05rem; }
     .letter-body p {
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateX(-20px);
       transition: all 0.5s ease;
     }
-    .letter-body p.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .letter-body p.show { opacity: 1; transform: translateX(0); }
 
     /* --- Categories (Portals) --- */
     .categories {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
-      padding: 2rem 2.5rem 5rem;
-      max-width: 1200px;
+      padding: 0 2rem 5rem;
+      max-width: 1100px;
       margin: 0 auto;
       position: relative;
       z-index: 5;
@@ -324,10 +338,10 @@
 
     .category-card {
       background: var(--surface);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2.5rem;
       text-align: center;
       text-decoration: none;
@@ -341,67 +355,62 @@
       box-shadow: var(--card-shadow);
     }
 
-    /* 卡片懸浮光效 - 模擬力場護盾 */
-    .category-card::before {
-        content: "";
+    /* 邊框流光動畫 - 懸浮時觸發 */
+    .category-card::after {
+        content: '';
         position: absolute;
-        inset: 0;
-        border-radius: 16px;
-        padding: 2px;
-        background: linear-gradient(135deg, transparent, rgba(255,255,255,0.5), transparent);
+        top: 0; left: 0; right: 0; bottom: 0;
+        border-radius: 20px;
+        padding: 1.5px;
+        background: linear-gradient(45deg, transparent, var(--accent), transparent);
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        opacity: 0.5;
+        opacity: 0;
         transition: opacity 0.3s;
     }
     
-    .dark .category-card:hover {
-        background: rgba(30, 40, 60, 0.6);
-        box-shadow: var(--card-hover-shadow);
-        border-color: var(--accent);
-    }
     .category-card:hover {
-        transform: translateY(-8px);
+        transform: translateY(-8px) scale(1.01);
         box-shadow: var(--card-hover-shadow);
+        background: rgba(255,255,255,0.05); /* 暗模式下的卡片變亮 */
+    }
+    .category-card:hover::after {
+        opacity: 1;
+    }
+    .dark .category-card {
+        background: rgba(30, 30, 50, 0.5);
     }
 
     .icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      font-size: 3.5rem;
+      margin-bottom: 1.2rem;
       display: block;
-      transition: transform 0.3s;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
     }
     .category-card:hover .icon {
-        transform: scale(1.1);
-        animation: floatIcon 2s ease-in-out infinite;
+        transform: scale(1.2) rotate(5deg);
     }
 
     .category-card h2 {
       font-family: 'Exo 2', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.5px;
     }
 
     .category-card .subtitle {
       font-family: 'Noto Sans TC', sans-serif;
       font-size: 1.15rem;
-      font-weight: 500;
-      /* 套用優化過的漸變色，確保在暗模式下發光清晰 */
+      font-weight: 700;
       background: var(--subtitle-gradient);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      /* Fallback for browsers */
       text-fill-color: transparent; 
-      
-      position: relative;
-      display: inline-block;
-      margin-top: 0.3rem;
-      text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      margin-top: 0.5rem;
     }
 
     /* --- Footer --- */
@@ -411,38 +420,29 @@
       text-align: center;
       font-size: 0.9rem;
       color: var(--text-light);
-      background: rgba(0,0,0,0.05);
-      backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
     }
     .page-footer a {
       color: var(--accent);
       text-decoration: none;
       position: relative;
       font-weight: 600;
+      transition: color 0.3s;
     }
-    .page-footer a::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        bottom: -2px;
-        left: 0;
-        background-color: var(--accent);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-    .page-footer a:hover::after {
-        transform: scaleX(1);
+    .page-footer a:hover {
+        color: #fff;
+        text-shadow: 0 0 5px var(--accent);
     }
 
     /* --- Keyframes --- */
-    @keyframes moonFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+    @keyframes shine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
     }
-    @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-15px) rotate(2deg); }
+    @keyframes moonPulse {
+        0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
+        50% { transform: translateX(-50%) scale(1.1); opacity: 0.8; }
     }
     @keyframes pulse {
         0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.7); }
@@ -450,20 +450,16 @@
         100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
     }
     @keyframes holoScan {
-        0% { left: -100%; }
-        20% { left: 100%; }
-        100% { left: 100%; }
-    }
-    @keyframes floatIcon {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-10px) rotate(-5deg); }
+        0% { left: -100%; opacity: 0; }
+        50% { opacity: 1; }
+        100% { left: 100%; opacity: 0; }
     }
 
     @media (max-width: 768px) {
       .categories { grid-template-columns: 1fr; }
-      header { flex-direction: column; gap: 1.5rem; align-items: center;}
-      .title-wrapper { width: 100%; text-align: center; align-items: center; }
-      .moon-orb { right: 10px; width: 40px; height: 40px; }
+      header { padding-top: 4rem; }
+      .controls { top: 1rem; right: 1rem; }
+      .sub-title::before, .sub-title::after { width: 15px; } /* 手機版縮短裝飾線 */
     }
   </style>
 </head>
@@ -472,23 +468,25 @@
   <canvas id="particle-canvas"></canvas>
 
   <header>
-    <div class="title-container">
-        <div class="moon-orb"></div>
-        <div class="title-wrapper">
-            <div class="title">Teacher Shirley’s ET Platform</div>
-            <div class="et-explanation">(ET means English Teaching)</div>
-        </div>
-    </div>
-    
     <div class="controls">
       <div id="themeToggle" class="control-btn" aria-label="Toggle theme" title="Switch Light/Dark Mode">🌓</div>
       <div id="musicToggle" class="control-btn" title="Play Theme Song">🎵</div>
+    </div>
+
+    <div class="title-container">
+        <div class="moon-orb"></div>
+        
+        <div class="title-wrapper">
+            <h1 class="main-title">Teacher Shirley’s<br>ET Platform</h1>
+            <div class="sub-title">ET means English Teaching</div>
+        </div>
     </div>
   </header>
 
   <div class="envelope" id="openLetter">
     <div class="envelope-body">
-        <span class="envelope-icon">📩</span>
+        <div class="envelope-scan"></div>
+        <span class="envelope-text">READ MESSAGE_</span>
     </div>
   </div>
 
@@ -497,11 +495,11 @@
 
   <div class="letter-content" id="letterContent">
     <div class="letter-header">
-      <div class="letter-title">A Note from Shirley</div>
+      <div class="letter-title">Incoming Transmission</div>
       <button class="control-btn" style="width:30px; height:30px; font-size:1rem;" id="closeLetter">×</button>
     </div>
     <div class="letter-body" id="letterBody"></div>
-    <div style="text-align: right; margin-top: 1rem; font-style: italic; color: var(--accent);">— Shirley</div>
+    <div style="text-align: right; margin-top: 1rem; font-style: italic; color: var(--accent);">— Teacher Shirley</div>
   </div>
 
   <div class="categories">
@@ -540,7 +538,7 @@
 
   <script>
     // ----------------------------------------
-    // ✨ 星際粒子系統 (Starfield System)
+    // ✨ 星際粒子系統 (優化版：亮模式更優雅)
     // ----------------------------------------
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -566,27 +564,24 @@
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2; // 星星大小
-        this.speedX = (Math.random() * 0.5 - 0.25); // 極慢速漂浮
-        this.speedY = (Math.random() * 0.5 - 0.25);
+        this.size = Math.random() * 2; 
+        this.speedX = (Math.random() * 0.4 - 0.2); 
+        this.speedY = (Math.random() * 0.4 - 0.2);
         this.opacity = Math.random();
-        this.pulseSpeed = 0.02; 
+        this.pulseSpeed = 0.015; 
       }
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // 邊界無限循環 (Space wrap effect)
         if (this.x > canvas.width) this.x = 0;
         if (this.x < 0) this.x = canvas.width;
         if (this.y > canvas.height) this.y = 0;
         if (this.y < 0) this.y = canvas.height;
 
-        // 閃爍效果
         this.opacity += this.pulseSpeed;
         if (this.opacity > 1 || this.opacity < 0.2) this.pulseSpeed = -this.pulseSpeed;
 
-        // 滑鼠互動
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx*dx + dy*dy);
@@ -599,8 +594,8 @@
       draw(isDark) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // 暗模式是白星星，亮模式是深灰塵埃
-        let color = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(45, 52, 54, ${this.opacity * 0.4})`;
+        // 亮模式粒子改為極淡的紫灰色，更高雅
+        let color = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(108, 92, 231, ${this.opacity * 0.3})`;
         ctx.fillStyle = color;
         ctx.shadowBlur = isDark ? 8 : 0;
         ctx.shadowColor = "white";
@@ -610,7 +605,7 @@
 
     function initParticles() {
       particlesArray = [];
-      let numberOfParticles = (canvas.width * canvas.height) / 9000; 
+      let numberOfParticles = (canvas.width * canvas.height) / 10000; 
       for (let i = 0; i < numberOfParticles; i++) {
         particlesArray.push(new Particle());
       }
@@ -621,13 +616,12 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       const isDark = document.getElementById('htmlRoot').classList.contains('dark');
-      const lineColor = isDark ? 'rgba(116, 185, 255, 0.15)' : 'rgba(45, 52, 54, 0.05)';
+      const lineColor = isDark ? 'rgba(116, 185, 255, 0.12)' : 'rgba(108, 92, 231, 0.05)';
 
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
         particlesArray[i].draw(isDark);
 
-        // 星座連線
         for (let j = i; j < particlesArray.length; j++) {
             let dx = particlesArray[i].x - particlesArray[j].x;
             let dy = particlesArray[i].y - particlesArray[j].y;
@@ -649,12 +643,11 @@
     animateParticles();
 
     // ----------------------------------------
-    // 邏輯控制 (Theme, Music, Letter)
+    // 邏輯控制 (保持不變)
     // ----------------------------------------
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
     
-    // 預設為 Dark Mode (因為是 Space theme)
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
       html.classList.remove('dark');
@@ -668,7 +661,7 @@
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
-    // 保留原始的信件內容，不修改一個字
+    // 原始信件內容
     const paragraphs = [
       "Hi there! 👋",
       "I’m Shirley — an English teacher who believes learning should be interactive, joyful, and full of “aha!” moments.",
@@ -712,7 +705,6 @@
 
     closeLetter.addEventListener('click', closeLetterModal);
     
-    // 點擊模態框外部關閉
     document.addEventListener('click', (e) => {
         if (letterContent.classList.contains('show') && 
             !letterContent.contains(e.target) && 
