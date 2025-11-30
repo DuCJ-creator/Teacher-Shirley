@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
-  
+   
   <style>
     :root {
       --bg: #faf9f6;
@@ -273,7 +273,7 @@
       <div class="section-header">
         <h2 class="section-title">Games Area</h2>
       </div>
-      
+       
       <div class="tools-grid">
         <a href="https://ducj-creator.github.io/shirley%20sudoku.html" class="game-card">
           <div class="game-icon">🔢</div>
@@ -283,6 +283,11 @@
         <a href="https://ducj-creator.github.io/Shirley%20Wordoku.html" class="game-card">
           <div class="game-icon">🔠</div>
           <div class="game-name">Shirley’s Wordoku<br>單字獨</div>
+        </a>
+
+        <a href="https://ducj-creator.github.io/shirleywordsearch/xmas.html" class="game-card">
+          <div class="game-icon">🔎</div>
+          <div class="game-name">Shirley's Word Search<br>單字搜尋</div>
         </a>
 
         <a href="https://ducj-creator.github.io/Shirley%20Dice.html" class="game-card">
@@ -409,7 +414,7 @@
     // ----------------------------------------
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
-    
+     
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       html.classList.add('dark');
