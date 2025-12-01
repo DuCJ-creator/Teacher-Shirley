@@ -107,6 +107,109 @@
         .timer-bar { transition: width 1s linear; }
         .fade-in { animation: fadeIn 0.6s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* --- Print Styles (Optimized for Result List) --- */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                animation: none !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Hide decorative and interactive elements */
+            #tsparticles, 
+            .no-print, 
+            button {
+                display: none !important;
+            }
+
+            /* Reset container for print */
+            #app-container {
+                position: static !important;
+                transform: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                background: white !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                min-height: auto !important;
+            }
+
+            /* Result header adjustments */
+            #results-screen .text-center {
+                margin-bottom: 20px !important;
+                color: black !important;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+            #results-screen h2, 
+            #score-display, 
+            .text-blue-200,
+            .text-white {
+                color: black !important;
+                text-shadow: none !important;
+            }
+
+            /* Expand the feedback list */
+            #feedback-list {
+                max-height: none !important;
+                overflow: visible !important;
+                padding-right: 0 !important;
+                display: block !important;
+            }
+
+            /* Style individual question items for print */
+            #feedback-list > div {
+                break-inside: avoid; /* Prevent splitting a question across pages */
+                background: white !important;
+                border: 1px solid #ccc !important;
+                color: black !important;
+                margin-bottom: 15px !important;
+                box-shadow: none !important;
+                padding: 10px !important;
+            }
+
+            /* Text colors force black */
+            #feedback-list p, 
+            #feedback-list span,
+            #feedback-list div {
+                color: black !important;
+            }
+
+            /* Highlighting logic for print */
+            .bg-emerald-500 {
+                border: 1px solid #000;
+                color: #000 !important;
+                background: transparent !important;
+                font-weight: bold;
+                box-shadow: none !important;
+            }
+            .bg-rose-500 {
+                border: 1px solid #000;
+                color: #000 !important;
+                background: transparent !important;
+                font-weight: bold;
+                text-decoration: line-through;
+                box-shadow: none !important;
+            }
+            
+            /* Hide audio buttons in print */
+            #feedback-list button {
+                display: none !important;
+            }
+            
+            /* Highlight the answer word clearly */
+            .text-emerald-300 {
+                color: black !important;
+                text-decoration: underline;
+                font-weight: bold;
+                border: none !important;
+            }
+        }
     </style>
 </head>
 <body class="flex items-center justify-center p-4 relative">
@@ -115,12 +218,12 @@
 
     <div id="app-container" class="w-full max-w-3xl glass-card rounded-3xl p-8 md:p-10 relative min-h-[550px] flex flex-col justify-center border-t-white/40">
         
-        <div id="loading-screen" class="text-center">
+        <div id="loading-screen" class="text-center no-print">
             <div class="animate-spin rounded-full h-14 w-14 border-b-4 border-cyan-400 mx-auto mb-6"></div>
             <p class="text-xl tracking-widest text-cyan-200 font-light uppercase">Initializing System...</p>
         </div>
 
-        <div id="start-screen" class="text-center hidden fade-in">
+        <div id="start-screen" class="text-center hidden fade-in no-print">
             <div class="mb-6 inline-block p-3 rounded-full bg-white/10 backdrop-blur-md shadow-inner-white">
                 <i class="fas fa-brain text-4xl accent-text"></i>
             </div>
@@ -146,7 +249,7 @@
             </button>
         </div>
 
-        <div id="quiz-screen" class="hidden fade-in w-full">
+        <div id="quiz-screen" class="hidden fade-in w-full no-print">
             <div class="flex justify-between items-end mb-4">
                 <div>
                      <span class="text-xs font-mono text-blue-300 tracking-widest uppercase mb-1 block opacity-70">Progress</span>
@@ -173,7 +276,7 @@
 
         <div id="results-screen" class="hidden fade-in w-full">
              <div class="text-center mb-8">
-                <div class="inline-block p-3 rounded-full bg-white/10 backdrop-blur-md shadow-inner-white mb-4">
+                <div class="inline-block p-3 rounded-full bg-white/10 backdrop-blur-md shadow-inner-white mb-4 no-print">
                     <i class="fas fa-clipboard-check text-4xl accent-text"></i>
                 </div>
                 <h2 class="text-3xl font-bold mb-2 text-white">Session Analysis</h2>
@@ -191,10 +294,15 @@
             <div id="feedback-list" class="space-y-4 mb-8 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar">
                 </div>
 
-            <div class="flex flex-col md:flex-row gap-4 justify-center mt-8">
+            <div class="flex flex-col md:flex-row gap-4 justify-center mt-8 no-print">
                 <button onclick="startQuiz(true)" class="px-8 py-4 rounded-2xl accent-gradient text-blue-950 font-extrabold shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-1 hover:shadow-cyan-500/40 flex items-center justify-center">
                     <i class="fas fa-redo-alt mr-3"></i> Next Challenge
                 </button>
+                
+                <button onclick="window.print()" class="px-8 py-4 rounded-2xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 font-bold transition-all border border-blue-400/30 flex items-center justify-center backdrop-blur-md">
+                    <i class="fas fa-print mr-3"></i> Print Results
+                </button>
+
                 <button onclick="exitApp()" class="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold transition-colors border border-white/20 flex items-center justify-center backdrop-blur-md">
                     <i class="fas fa-power-off mr-3 text-red-400"></i> Exit
                 </button>
