@@ -52,7 +52,7 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
-   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    /* [已修復] 移除此處錯誤的 script 標籤 */
     
     body {
       background: var(--bg-gradient);
@@ -207,6 +207,12 @@
       cursor: default;
       /* 關鍵：強制單字內不換行，避免 's 掉下去 */
       word-break: keep-all; 
+    }
+
+    /* [已修復] 新增 Dark Mode 專用標題樣式：更亮、帶有金色光暈 */
+    .dark .main-title {
+      color: #ffffff; /* 純白文字，提高對比度 */
+      text-shadow: 0 0 15px rgba(241, 196, 15, 0.5), 0 0 30px rgba(241, 196, 15, 0.2); /* 金色光暈 */
     }
 
     .char {
@@ -399,12 +405,14 @@
     <div>©️ Shirley‘s ET Platform; Since 2025; All Rights Reserved</div>
     <span id="busuanzi_container_site_pv">
     Total Visits <span id="busuanzi_value_site_pv"></span> 
-</span>
+    </span>
     <div style="margin-top: 0.4rem;">
       Signal Frequency: 
       <a href="https://forms.gle/EW62xKbBjHaLpBUy9" target="_blank" rel="noopener noreferrer">Contact Teacher Shirley</a>
     </div>
   </footer>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   <script>
     // ----------------------------------------
