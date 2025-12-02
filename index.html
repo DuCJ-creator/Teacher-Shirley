@@ -11,30 +11,38 @@
   
   <style id="themeStyles">
     :root {
-      /* --- Light Mode (Clean & Elegant) --- */
-      --bg-gradient: radial-gradient(circle at center, #fdfbfb 0%, #ebedee 100%);
-      --surface: rgba(255, 255, 255, 0.9);
-      --border: rgba(0, 0, 0, 0.1);
+      /* --- Light Mode (Morning Mist - High Contrast) --- */
+      /* Radial gradient: Warm center -> Cool greyish blue edges for depth */
+      --bg-gradient: radial-gradient(circle at center, #ffffff 0%, #eef2f3 60%, #e0e5ec 100%);
+      
+      --surface: rgba(255, 255, 255, 0.95);
+      /* Darker border for cards to stand out against light bg */
+      --border: rgba(44, 62, 80, 0.15); 
+      
       --text: #2c3e50; 
-      --text-light: #607d8b;
+      --text-light: #546e7a;
       --accent: #d4af37; 
-      --orbit-color: rgba(44, 62, 80, 0.15);
+      
+      /* Darker orbits for visibility */
+      --orbit-color: rgba(44, 62, 80, 0.25); 
       --orbit-glow: 0 0 0 transparent;
-      --info-bg: rgba(255, 255, 255, 0.85);
+      
+      /* Stronger shadows for "floating" effect */
+      --card-shadow: 0 15px 40px rgba(44, 62, 80, 0.15);
+      --info-bg: rgba(255, 255, 255, 0.9);
     }
 
     .dark {
       /* --- Dark Mode (Deep Galaxy) --- */
-      /* Richer, deeper background simulating a nebula */
       --bg-gradient: radial-gradient(circle at 50% 50%, #1b2735 0%, #090a0f 100%);
       --surface: rgba(30, 40, 55, 0.85);
       --border: rgba(255, 255, 255, 0.2);
       --text: #ecf0f1;
       --text-light: #bdc3c7;
       --accent: #f1c40f; 
-      /* Brighter Orbits for visibility */
       --orbit-color: rgba(255, 255, 255, 0.25); 
       --orbit-glow: 0 0 15px rgba(255, 255, 255, 0.1);
+      --card-shadow: 0 15px 40px rgba(0,0,0,0.6);
       --info-bg: rgba(20, 30, 45, 0.8);
     }
 
@@ -81,117 +89,53 @@
         transform: scale(1);
     }
 
-    /* --- ORBITS (Defined Visuals) --- */
+    /* --- ORBITS --- */
     .orbit { 
         position: absolute; 
         border: 1px dashed var(--orbit-color); 
-        box-shadow: var(--orbit-glow); /* Glow effect in dark mode */
+        box-shadow: var(--orbit-glow); 
         border-radius: 50%; 
         top: 50%; left: 50%; 
         pointer-events: none; 
         transition: border-color 0.5s, box-shadow 0.5s;
     }
     
-    /* 1. Inner Orbit (Mars) */
-    .orbit-1 { 
-        width: 320px; height: 320px; 
-        margin-top: -160px; margin-left: -160px;
-        animation: spinOrbit 50s linear infinite; 
-    }
-    
-    /* 2. Middle Orbit (Mercury) */
-    .orbit-2 { 
-        width: 520px; height: 520px; 
-        margin-top: -260px; margin-left: -260px;
-        animation: spinOrbit 90s linear infinite reverse; /* Slight counter spin for visual depth */
-        border-style: dotted; /* Distinct style */
-    }
+    .orbit-1 { width: 320px; height: 320px; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; }
+    .orbit-2 { width: 520px; height: 520px; margin-top: -260px; margin-left: -260px; animation: spinOrbit 90s linear infinite reverse; border-style: dotted; }
+    .orbit-3 { width: 780px; height: 780px; margin-top: -390px; margin-left: -390px; animation: spinOrbit 140s linear infinite; }
 
-    /* 3. Outer Orbit (Jupiter & Saturn) */
-    .orbit-3 {
-        width: 780px; height: 780px;
-        margin-top: -390px; margin-left: -390px;
-        animation: spinOrbit 140s linear infinite;
-    }
+    /* --- PLANETS --- */
+    .mars-container { position: absolute; width: 320px; height: 320px; top: 50%; left: 50%; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; pointer-events: none; z-index: 5; }
+    .mars-wrapper { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; margin-left: -30px; animation: spinCounter 50s linear infinite; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
 
-    /* --- PLANET WRAPPERS --- */
-    
-    /* Dynamic: Mars (Orbits in Inner Ring) */
-    .mars-container {
-        position: absolute; width: 320px; height: 320px;
-        top: 50%; left: 50%; margin-top: -160px; margin-left: -160px;
-        animation: spinOrbit 50s linear infinite; 
-        pointer-events: none; z-index: 5;
-    }
-    .mars-wrapper {
-        position: absolute; width: 60px; height: 60px;
-        top: -30px; left: 50%; margin-left: -30px; 
-        animation: spinCounter 50s linear infinite; 
-        pointer-events: auto; cursor: pointer;
-        display: flex; flex-direction: column; align-items: center;
-    }
-
-    /* Static Planets (Fixed on screen but aligned with orbits) */
-    .static-planet-wrapper {
-        position: absolute; z-index: 6;
-        display: flex; flex-direction: column; align-items: center;
-        cursor: pointer; transition: transform 0.3s;
-    }
+    .static-planet-wrapper { position: absolute; z-index: 6; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; }
     .static-planet-wrapper:hover { transform: scale(1.15); z-index: 50; }
 
-    /* Positions aligned with orbit sizes */
-    /* Mercury: Bottom of Orbit 2 */
-    .pos-mercury { 
-        top: 50%; left: 50%; 
-        transform: translate(-50%, 260px) translate(-50%, -50%); /* 260px = radius of orbit 2 */
-        margin-top: 25px; /* Fine tune */
-    }
-    
-    /* Saturn: Left of Orbit 3 */
-    .pos-saturn { 
-        top: 50%; left: 50%;
-        transform: translate(-390px, 0) translate(-50%, -50%); /* 390px = radius of orbit 3 */
-        margin-left: 20px; /* Fine tune */
-    }
+    .pos-mercury { top: 50%; left: 50%; transform: translate(-50%, 260px) translate(-50%, -50%); margin-top: 25px; }
+    .pos-saturn { top: 50%; left: 50%; transform: translate(-390px, 0) translate(-50%, -50%); margin-left: 20px; }
+    .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
 
-    /* Jupiter: Right of Orbit 3 */
-    .pos-jupiter { 
-        top: 50%; left: 50%;
-        transform: translate(390px, 0) translate(-50%, -50%); 
-        margin-left: -20px; /* Fine tune */
-    }
+    .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+    .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
 
-    /* --- MOON (Center) --- */
-    .moon-wrapper {
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        z-index: 10; cursor: pointer;
-        display: flex; flex-direction: column; align-items: center;
-    }
-    .planet-moon {
-        width: 100px; height: 100px; border-radius: 50%;
-        background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7);
-        box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255,255,255,0.4);
-        animation: bounce 2s ease-in-out infinite; 
-    }
-
-    /* --- VISUALS --- */
+    /* Visuals */
     .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
-    /* Planet Glows */
     .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
     .p-saturn { width: 75px; height: 75px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4); }
     .p-mercury { width: 55px; height: 55px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); box-shadow: 0 0 25px rgba(189, 195, 199, 0.7); }
 
-    /* --- INFO CARDS --- */
+    /* Info Cards (Contrast Improved) */
     .planet-info {
         position: absolute; width: 220px; 
         background: var(--info-bg);
         backdrop-filter: blur(12px);
         padding: 10px 14px; border-radius: 12px;
-        border: 1px solid var(--border);
+        /* Stronger border in light mode */
+        border: 1px solid var(--border); 
         text-align: center; pointer-events: none;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        /* Stronger shadow in light mode */
+        box-shadow: var(--card-shadow); 
         bottom: 120%; left: 50%; transform: translateX(-50%);
     }
     .moon-info { width: 240px; bottom: 130%; }
@@ -200,36 +144,23 @@
     .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
     .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
     
-    .checkin-tag { 
-        display: block; margin-top: 8px; 
-        background: linear-gradient(90deg, var(--accent), #f39c12); color: white; 
-        font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.2); 
-    }
+    .checkin-tag { display: block; margin-top: 8px; background: linear-gradient(90deg, var(--accent), #f39c12); color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
 
-    /* --- ANIMATIONS --- */
     @keyframes spinOrbit { 100% { transform: rotate(360deg); } }
     @keyframes spinCounter { 100% { transform: rotate(-360deg); } }
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-    /* RESPONSIVE SCALING */
-    @media (max-width: 1024px) {
-        .solar-system { transform: scale(0.75); }
-    }
-    @media (max-width: 768px) {
-        .solar-system { transform: scale(0.55); }
+    @media (max-width: 1024px) { .solar-system { transform: scale(0.75); } }
+    @media (max-width: 768px) { 
+        .solar-system { transform: scale(0.55); } 
         .planet-info { width: 190px; padding: 8px; font-size: 0.9em; }
-        /* Pull outer planets slightly inward for narrow screens */
         .pos-saturn { transform: translate(-340px, 0) translate(-50%, -50%); }
         .pos-jupiter { transform: translate(340px, 0) translate(-50%, -50%); }
         .orbit-3 { width: 680px; height: 680px; margin-top: -340px; margin-left: -340px; }
     }
-    @media (max-width: 420px) {
-        .solar-system { transform: scale(0.42); }
-        .pos-mercury { margin-top: 60px; } /* Push text up slightly */
-    }
+    @media (max-width: 420px) { .solar-system { transform: scale(0.42); } .pos-mercury { margin-top: 60px; } }
 
-    /* ==================== REST OF THE SITE ==================== */
+    /* ==================== REST OF SITE ==================== */
     #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease; }
     .envelope-container { position: relative; cursor: pointer; width: 320px; height: 210px; transition: transform 0.5s ease; animation: floatEnv 4s ease-in-out infinite; }
     .envelope-container:hover { transform: scale(1.05); }
@@ -322,108 +253,40 @@
   <div id="intro-overlay">
       <div class="envelope-container" onclick="openLetter()">
           <div class="envelope-body"></div>
-          
           <div class="envelope-txt">
               <div class="env-title">Welcome Message</div>
               <div class="env-subtitle">from Teacher Shirley</div>
-              <div class="env-highlight">
-                  Welcome to my ET Platform<br>
-                  Ready for launch! 🚀
-              </div>
-              <div class="env-cn">
-                  歡迎來到我的 ET 月台，準備出發囉！
-              </div>
+              <div class="env-highlight">Welcome to my ET Platform<br>Ready for launch! 🚀</div>
+              <div class="env-cn">歡迎來到我的 ET 月台，準備出發囉！</div>
           </div>
-
           <div class="envelope-pocket"></div>
-          <div class="envelope-flap">
-               <div class="heart-seal">💗</div>
-          </div>
+          <div class="envelope-flap"><div class="heart-seal">💗</div></div>
       </div>
 
       <div class="letter-paper" id="letter-view">
           <div class="sparkle-overlay">
               <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
           </div>
-
           <div class="letter-content">
-              <div class="letter-p">
-                  <strong>Hi there! 👋</strong> I’m Shirley—an English teacher who believes learning should be joyful, interactive, and full of “aha!” moments.
-                  <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span>
-              </div>
-              <div class="letter-p">
-                  This teaching-and-learning platform is your free, ad-free toolkit—carefully crafted from years of real classroom experience and student feedback.
-                  <span class="cn-text">這個教與學平台是您免費、無廣告的學習工具箱——源自多年真實課堂經驗與學生回饋。</span>
-              </div>
-              <div class="letter-p">
-                  Whether you’re a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you’re welcome to explore all tools and content freely as a visitor.
-                  <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span>
-              </div>
-              <div class="letter-p" style="background:rgba(212, 175, 55, 0.1); padding:8px; border-radius:6px;">
-                  If you log in, each day you’ll receive: ✨“Word of the Day”, “Bilingual Quote”, and unlock your <span class="moon-base-txt">Moon Base Card</span> to track daily check-ins, build streaks, and map your journey.
-                  <span class="cn-text" style="color:#5d4037;">若您選擇登入，每天能獲得✨「每日單字」與「每日佳句」，更可啟用專屬<span class="moon-base-txt">「月球基地卡」</span>——記錄打卡、累積天數與探索軌跡。</span>
-              </div>
-              <div class="letter-p">
-                  I highly encourage you to check in every day—consistency turns small efforts into big results, and learning is a journey of steady persistence and joyful discovery.
-                  <span class="cn-text">我誠摯鼓勵您每日打卡——持之以恆，微小的努力終將開花結果；學習是一場需要堅持，也充滿樂趣與驚喜的旅程。</span>
-              </div>
-
+              <div class="letter-p"><strong>Hi there! 👋</strong> I’m Shirley—an English teacher who believes learning should be joyful, interactive, and full of “aha!” moments. <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span></div>
+              <div class="letter-p">This teaching-and-learning platform is your free, ad-free toolkit—carefully crafted from years of real classroom experience and student feedback. <span class="cn-text">這個教與學平台是您免費、無廣告的學習工具箱——源自多年真實課堂經驗與學生回饋。</span></div>
+              <div class="letter-p">Whether you’re a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you’re welcome to explore all tools and content freely as a visitor. <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span></div>
+              <div class="letter-p" style="background:rgba(212, 175, 55, 0.1); padding:8px; border-radius:6px;">If you log in, each day you’ll receive: ✨“Word of the Day”, “Bilingual Quote”, and unlock your <span class="moon-base-txt">Moon Base Card</span> to track daily check-ins, build streaks, and map your journey. <span class="cn-text" style="color:#5d4037;">若您選擇登入，每天能獲得✨「每日單字」與「每日佳句」，更可啟用專屬<span class="moon-base-txt">「月球基地卡」</span>——記錄打卡、累積天數與探索軌跡。</span></div>
+              <div class="letter-p">I highly encourage you to check in every day—consistency turns small efforts into big results, and learning is a journey of steady persistence and joyful discovery. <span class="cn-text">我誠摯鼓勵您每日打卡——持之以恆，微小的努力終將開花結果；學習是一場需要堅持，也充滿樂趣與驚喜的旅程。</span></div>
               <div class="signature">— Teacher Shirley</div>
-
               <div class="choice-area" id="choice-buttons">
-                  <button class="btn-letter btn-visitor" onclick="enterVisitorMode()">
-                      <span>🛸 Visitor Mode</span>
-                      <span style="font-size:0.7rem; font-weight:normal;">訪客參觀 (無紀錄)</span>
-                  </button>
-                  <button class="btn-letter btn-login" onclick="showAuthForm()">
-                      <span>🚀 Log In</span>
-                      <span style="font-size:0.7rem; font-weight:normal;">登入 / 註冊</span>
-                  </button>
+                  <button class="btn-letter btn-visitor" onclick="enterVisitorMode()"><span>🛸 Visitor Mode</span><span style="font-size:0.7rem; font-weight:normal;">訪客參觀 (無紀錄)</span></button>
+                  <button class="btn-letter btn-login" onclick="showAuthForm()"><span>🚀 Log In</span><span style="font-size:0.7rem; font-weight:normal;">登入 / 註冊</span></button>
               </div>
-
               <div id="auth-form-container">
                   <h4 style="margin-bottom:10px; text-align:center; color:var(--text);">Log In / 登入</h4>
-                  <button id="google-login-btn" class="google-btn">
-                      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.715H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.159 6.656 3.58 9 3.58z"/></svg>
-                      Google Login
-                  </button>
+                  <button id="google-login-btn" class="google-btn"><svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.715H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.159 6.656 3.58 9 3.58z"/></svg> Google Login</button>
                   <div style="text-align:center; font-size:0.8rem; margin:5px 0;">— OR —</div>
-                  <div class="input-group">
-                      <input type="email" id="email-input" placeholder="Email">
-                      <input type="password" id="pass-input" placeholder="Password">
-                  </div>
+                  <div class="input-group"><input type="email" id="email-input" placeholder="Email"><input type="password" id="pass-input" placeholder="Password"></div>
                   <button class="email-btn" id="email-login-btn">Log In</button>
                   <div style="margin-top:8px; text-align:center; font-size:0.8rem; cursor:pointer; text-decoration:underline;" onclick="hideAuthForm()">Cancel</div>
               </div>
           </div>
-      </div>
-  </div>
-
-  <div id="visitor-view">
-      <div style="text-align:center; margin-bottom:2rem; color:var(--text-light);">
-          Currently in <strong>Visitor Mode</strong>. <span style="cursor:pointer; color:var(--accent); text-decoration:underline;" onclick="location.reload()">Return to Welcome Letter</span>
-      </div>
-      <div class="categories">
-        <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
-          <span class="icon">🍎</span>
-          <h2>Teaching Tools</h2>
-          <div class="subtitle">師師百寶箱</div>
-        </a>
-        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card">
-          <span class="icon">🪐</span>
-          <h2>Study Tools</h2>
-          <div class="subtitle">學學智趣閣</div>
-        </a>
-        <a href="/Teacher-Shirley/amusement-park/" class="category-card">
-          <span class="icon">🎪</span>
-          <h2>Amusement Park</h2>
-          <div class="subtitle">樂樂嬉遊谷</div>
-        </a>
-        <a href="/Teacher-Shirley/external-resources/" class="category-card">
-          <span class="icon">🔗</span>
-          <h2>External Resources</h2>
-          <div class="subtitle">源源連結庫</div>
-        </a>
       </div>
   </div>
 
@@ -434,59 +297,18 @@
           <div class="orbit orbit-2"></div>
           <div class="orbit orbit-3"></div>
 
-          <div class="mars-container">
-              <div class="mars-wrapper" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')">
-                  <div class="planet-visual p-mars"></div>
-                  <div class="planet-info">
-                      <span class="p-name">Mars 🔴</span>
-                      <div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div>
-                      <div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div>
-                  </div>
-              </div>
-          </div>
+          <div class="mars-container"><div class="mars-wrapper" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')"><div class="planet-visual p-mars"></div><div class="planet-info"><span class="p-name">Mars 🔴</span><div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div><div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div></div></div></div>
 
-          <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')">
-              <div class="planet-visual p-mercury"></div>
-              <div class="planet-info">
-                  <span class="p-name">Mercury ⚪</span>
-                  <div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div>
-                  <div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div>
-              </div>
-          </div>
+          <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')"><div class="planet-visual p-mercury"></div><div class="planet-info"><span class="p-name">Mercury ⚪</span><div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div><div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div></div></div>
 
-          <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')">
-              <div class="planet-visual p-jupiter"></div>
-              <div class="planet-info">
-                  <span class="p-name">Jupiter 🟡</span>
-                  <div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div>
-                  <div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div>
-              </div>
-          </div>
+          <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')"><div class="planet-visual p-jupiter"></div><div class="planet-info"><span class="p-name">Jupiter 🟡</span><div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div><div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div></div></div>
 
-          <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')">
-              <div class="planet-visual p-saturn"></div>
-              <div class="planet-info">
-                  <span class="p-name">Saturn 🟠</span>
-                  <div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div>
-                  <div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div>
-              </div>
-          </div>
+          <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')"><div class="planet-visual p-saturn"></div><div class="planet-info"><span class="p-name">Saturn 🟠</span><div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div><div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div></div></div>
 
-          <div class="moon-wrapper" onclick="openMemberTerminal()">
-              <div class="planet-moon"></div>
-              <div class="planet-info moon-info">
-                  <span class="p-name">Moon 🌕</span>
-                  <div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div>
-                  <div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div>
-                  <span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span>
-              </div>
-          </div>
+          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
 
       </div>
-      
-      <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">
-          Explore the galaxy to find your learning path.
-      </div>
+      <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
   <div id="member-terminal">
@@ -494,10 +316,7 @@
       <h3 id="greeting-name" style="font-family:'Cinzel Decorative'; color:var(--accent); text-align:center; margin-bottom:1rem;">Welcome to Moon Base</h3>
       <div class="member-dashboard">
           <div class="profile-panel">
-              <div class="streak-ring">
-                  <div class="streak-num" id="streak-days">0</div>
-                  <div style="font-size:0.7rem;">Days Streak</div>
-              </div>
+              <div class="streak-ring"><div class="streak-num" id="streak-days">0</div><div style="font-size:0.7rem;">Days Streak</div></div>
               <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
               <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
@@ -506,16 +325,10 @@
           <div class="content-panel">
               <div class="data-card word-card">
                   <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Word of the Day <span id="word-date"></span></span>
-                  <div style="display:flex; gap:10px; align-items:baseline; margin-top:5px;">
-                      <span class="the-word" id="wotd-word">Wait...</span>
-                      <span style="background:var(--accent); color:white; padding:1px 6px; border-radius:4px; font-size:0.75rem;" id="wotd-pos"></span>
-                  </div>
+                  <div style="display:flex; gap:10px; align-items:baseline; margin-top:5px;"><span class="the-word" id="wotd-word">Wait...</span><span style="background:var(--accent); color:white; padding:1px 6px; border-radius:4px; font-size:0.75rem;" id="wotd-pos"></span></div>
                   <div style="font-family:'Noto Sans TC'; font-weight:bold; color:var(--accent); margin:5px 0; font-size:1.1rem;" id="wotd-meaning"></div>
                   <div style="font-style:italic; color:var(--text-light); font-size:0.9rem; margin-bottom:10px;" id="wotd-ipa"></div>
-                  <div style="background:rgba(0,0,0,0.03); padding:10px; border-radius:8px;">
-                      <div id="wotd-sentence-e" style="font-style:italic; margin-bottom:4px;"></div>
-                      <div id="wotd-sentence-c" style="font-size:0.9rem; color:var(--text-light);"></div>
-                  </div>
+                  <div style="background:rgba(0,0,0,0.03); padding:10px; border-radius:8px;"><div id="wotd-sentence-e" style="font-style:italic; margin-bottom:4px;"></div><div id="wotd-sentence-c" style="font-size:0.9rem; color:var(--text-light);"></div></div>
               </div>
               <div class="data-card quote-card">
                   <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Daily Quote</span>
@@ -532,10 +345,7 @@
           <h1>My Learning Journey</h1>
           <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
       </div>
-      <table id="print-table">
-          <thead><tr><th>Date</th><th>Word / Topic</th><th>Activity Details</th></tr></thead>
-          <tbody id="print-body"></tbody>
-      </table>
+      <table id="print-table"><thead><tr><th>Date</th><th>Word / Topic</th><th>Activity Details</th></tr></thead><tbody id="print-body"></tbody></table>
   </div>
 
   <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
@@ -575,20 +385,14 @@
         const windchime = document.getElementById('windchime');
         windchime.volume = 0.5;
         windchime.play().catch(e => console.log("Audio play failed"));
-
         const container = document.querySelector('.envelope-container');
         container.classList.add('open');
-
         setTimeout(() => {
             const letterView = document.getElementById('letter-view');
             letterView.classList.add('show');
             const paragraphs = document.querySelectorAll('.letter-p');
-            paragraphs.forEach((p, index) => {
-                setTimeout(() => { p.classList.add('visible'); }, index * 800);
-            });
-            setTimeout(() => {
-                document.getElementById('choice-buttons').classList.add('visible');
-            }, paragraphs.length * 800 + 400);
+            paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); });
+            setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400);
         }, 800);
     };
 
@@ -599,24 +403,13 @@
         document.getElementById('visitor-view').classList.add('active');
     };
 
-    window.showAuthForm = () => {
-        document.getElementById('choice-buttons').style.display = 'none';
-        document.getElementById('auth-form-container').style.display = 'block';
-    };
-
-    window.hideAuthForm = () => {
-        document.getElementById('choice-buttons').style.display = 'flex';
-        document.getElementById('auth-form-container').style.display = 'none';
-    };
-
+    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
+    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
     window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
     window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
 
     // --- Auth & Data ---
-    document.getElementById('google-login-btn').addEventListener('click', () => {
-        signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message));
-    });
-
+    document.getElementById('google-login-btn').addEventListener('click', () => { signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); });
     document.getElementById('email-login-btn').addEventListener('click', () => {
         const email = document.getElementById('email-input').value;
         const pass = document.getElementById('pass-input').value;
@@ -627,10 +420,7 @@
             } else alert(error.message);
         });
     });
-
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        signOut(auth).then(() => location.reload());
-    });
+    document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -640,7 +430,6 @@
             document.getElementById('universe-view').classList.add('active');
             document.getElementById('logoutBtn').style.display = 'flex';
             document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
-            
             await loadCSVData();
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
@@ -656,9 +445,7 @@
     async function trackActivity(type, detail) {
         if (!currentUser) return;
         const userRef = doc(db, "users", currentUser.uid);
-        try {
-            await updateDoc(userRef, { activityLogs: arrayUnion({ date: new Date().toISOString(), type, detail }) });
-        } catch (e) { console.log(e); }
+        try { await updateDoc(userRef, { activityLogs: arrayUnion({ date: new Date().toISOString(), type, detail }) }); } catch (e) { console.log(e); }
     }
 
     async function loadUserData(uid) {
@@ -684,20 +471,16 @@
         btn.disabled = true; btn.innerText = "Signing in...";
         const fullDate = new Date().toISOString().split('T')[0];
         const userRef = doc(db, "users", currentUser.uid);
-        
         const docSnap = await getDoc(userRef);
         let currentStreak = docSnap.data().streak || 0;
         const lastCheckIn = docSnap.data().history?.slice(-1)[0];
         const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toISOString().split('T')[0];
-        
         if (lastCheckIn === yesterdayStr) currentStreak++;
         else if (lastCheckIn !== fullDate) currentStreak = 1;
-
         const newHistory = checkinHistory.includes(fullDate) ? checkinHistory : [...checkinHistory, fullDate];
         await setDoc(userRef, { streak: currentStreak, history: newHistory }, { merge: true });
         await trackActivity("Check-in", "Daily Check-in");
-        
         checkinHistory = newHistory;
         document.getElementById('streak-days').innerText = currentStreak;
         document.getElementById('total-days').innerText = checkinHistory.length;
@@ -723,19 +506,13 @@
             const row = {}; 
             const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
             const matches = []; let match;
-            while ((match = regex.exec(line)) !== null) {
-                 if (match.index === regex.lastIndex) regex.lastIndex++; 
-                 if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g, '').replace(/""/g, '"'));
-            }
+            while ((match = regex.exec(line)) !== null) { if (match.index === regex.lastIndex) regex.lastIndex++; if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g, '').replace(/""/g, '"')); }
             headers.forEach((h, i) => row[h] = matches[i] ? matches[i].trim() : '');
             return row;
         });
     }
 
-    function getTodayMMDD() {
-        const now = new Date();
-        return String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-    }
+    function getTodayMMDD() { const now = new Date(); return String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0'); }
 
     function renderDailyContent(dateStr) {
         const wordObj = csvData.words.find(r => r.date === dateStr);
@@ -766,9 +543,7 @@
             const dayEl = document.createElement('div');
             dayEl.innerText = i;
             dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px;";
-            if (checkinHistory.includes(`${currentYearMonth}-${String(i).padStart(2, '0')}`)) {
-                dayEl.style.background = "var(--accent)"; dayEl.style.color="white"; dayEl.style.borderRadius="50%";
-            }
+            if (checkinHistory.includes(`${currentYearMonth}-${String(i).padStart(2, '0')}`)) { dayEl.style.background = "var(--accent)"; dayEl.style.color="white"; dayEl.style.borderRadius="50%"; }
             grid.appendChild(dayEl);
         }
     }
@@ -794,14 +569,14 @@
     window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
     resizeCanvas();
     class Particle {
-        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2.5; this.speedX = (Math.random() * 0.15 - 0.075); this.speedY = (Math.random() * 0.15 - 0.075); this.opacity = Math.random() * 0.8; }
-        update() { this.x += this.speedX; this.y += this.speedY; if(this.x>canvas.width)this.x=0; if(this.x<0)this.x=canvas.width; if(this.y>canvas.height)this.y=0; if(this.y<0)this.y=canvas.height; 
-                   // Twinkle effect
-                   if(Math.random() > 0.98) this.opacity = Math.random() * 0.8;
-        }
-        draw(isDark) { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(44, 62, 80, ${this.opacity * 0.4})`; ctx.fill(); }
+        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2; this.speedX = (Math.random() * 0.2 - 0.1); this.speedY = (Math.random() * 0.2 - 0.1); this.opacity = Math.random() * 0.5; }
+        update() { this.x += this.speedX; this.y += this.speedY; if(this.x>canvas.width)this.x=0; if(this.x<0)this.x=canvas.width; if(this.y>canvas.height)this.y=0; if(this.y<0)this.y=canvas.height; }
+        draw(isDark) { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+        // V12 Fix: Visible particles in light mode (grey) vs dark mode (white)
+        ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(100, 100, 100, 0.3)`; 
+        ctx.fill(); }
     }
-    function initParticles() { particlesArray = []; for (let i = 0; i < 160; i++) particlesArray.push(new Particle()); }
+    function initParticles() { particlesArray = []; for (let i = 0; i < 120; i++) particlesArray.push(new Particle()); }
     function animateParticles() { requestAnimationFrame(animateParticles); ctx.clearRect(0, 0, canvas.width, canvas.height); const isDark = document.getElementById('htmlRoot').classList.contains('dark'); particlesArray.forEach(p => { p.update(); p.draw(isDark); }); }
     initParticles(); animateParticles();
 
