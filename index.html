@@ -121,7 +121,7 @@
     /* Dynamic Mars */
     .mars-container { position: absolute; width: 320px; height: 320px; top: 50%; left: 50%; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; pointer-events: none; z-index: 5; }
     
-    /* FIX: Pause Mars orbit on hover so it's clickable */
+    /* (修改 4) 讓火星滑鼠移上去時暫停旋轉，方便點擊 */
     .mars-container:hover { animation-play-state: paused; }
 
     .mars-wrapper { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; margin-left: -30px; animation: spinCounter 50s linear infinite; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
@@ -129,9 +129,11 @@
     /* Static Planets */
     .static-planet-wrapper { position: absolute; z-index: 6; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; }
     
-    /* FIX: Only scale the visual part, NOT the wrapper, to prevent position jumping */
-    .static-planet-wrapper:hover { z-index: 50; } 
-    .static-planet-wrapper:hover .planet-visual { transform: scale(1.15); box-shadow: 0 0 20px rgba(255,255,255,0.6); }
+    /* (修改 4) 修復行星亂跳：滑鼠 hover 時，不要縮放外層 wrapper，改為提高 z-index 確保可點擊 */
+    .static-planet-wrapper:hover { z-index: 100; }
+    
+    /* (修改 4) 新增：滑鼠 hover 時，只縮放內部的星球圖片，這樣就不會影響位置了 */
+    .static-planet-wrapper:hover .planet-visual { transform: scale(1.15); transition: transform 0.3s; }
 
     .pos-mercury { top: 50%; left: 50%; transform: translate(-50%, 260px) translate(-50%, -50%); margin-top: 30px; }
     .pos-saturn { top: 50%; left: 50%; transform: translate(-390px, 0) translate(-50%, -50%); margin-left: 20px; }
@@ -142,7 +144,7 @@
     .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
 
     /* Visuals */
-    .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
+    .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
     .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
     .p-saturn { width: 75px; height: 75px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4); }
@@ -253,28 +255,30 @@
 
     .print-only { display: none; }
     @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } .print-only { display: block; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #333; padding: 8px; } }
-  
-    /* --- NEW STYLES: Highlight Box --- */
+
+    /* (修改 1) 新增：重點文字的波浪框樣式 */
     .highlight-box {
         display: inline-block;
-        font-weight: 900; /* Bold */
-        font-style: italic; /* Italic */
+        font-weight: 900; /* 黑體 */
+        font-style: italic; /* 斜體 */
         color: #5d4037;
-        border: 2px solid var(--accent);
-        border-radius: 8px;
-        padding: 5px 12px;
+        border: 2px solid var(--accent); /* 框線顏色 */
+        border-radius: 8px; /* 圓角 */
+        padding: 8px 12px;
         margin: 5px 0;
         background: rgba(255, 255, 255, 0.6);
         box-shadow: 3px 3px 0px rgba(184, 134, 11, 0.2);
-        text-decoration: underline;
-        text-decoration-style: wavy;
+        text-decoration: underline; /* 關鍵字底線 */
+        text-decoration-style: wavy; /* 波浪線 */
         text-decoration-thickness: 1.5px;
         line-height: 1.6;
     }
+
+    /* 針對框內的關鍵字特別強化 */
     .highlight-box .key-term {
-        color: #c0392b;
-        text-decoration: none;
-        border-bottom: 2px solid #c0392b;
+        color: #c0392b; /* 強調色 */
+        text-decoration: none; 
+        border-bottom: 2px solid #c0392b; /* 關鍵字專屬底線 */
     }
   </style>
 </head>
@@ -335,6 +339,7 @@
                     ——<span style="border-bottom:1px solid #5d4037;">記錄打卡</span>、<span style="border-bottom:1px solid #5d4037;">累積天數</span>與<span style="border-bottom:1px solid #5d4037;">探索軌跡</span>。
                 </div>
               </div>
+
               <div class="letter-p">I highly encourage you to check in every day—consistency turns small efforts into big results, and learning is a journey of steady persistence and joyful discovery. <span class="cn-text">我誠摯鼓勵您每日打卡——持之以恆，微小的努力終將開花結果；學習是一場需要堅持，也充滿樂趣與驚喜的旅程。</span></div>
               <div class="signature">— Teacher Shirley</div>
               <div class="choice-area" id="choice-buttons">
@@ -360,6 +365,7 @@
               Log in? 🚀
           </button>
       </div>
+
       <div class="categories">
         <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
           <span class="icon">🍎</span>
@@ -498,19 +504,23 @@
         document.getElementById('visitor-view').classList.add('active');
     };
 
-    // --- NEW FUNC: Reopen Auth ---
+    // (修改 2) 新增：重新開啟登入視窗的函數 (給按鈕呼叫用)
     window.reopenAuth = () => {
         document.getElementById('visitor-view').classList.remove('active');
         const overlay = document.getElementById('intro-overlay');
         overlay.style.display = 'flex';
-        setTimeout(() => { overlay.style.opacity = '1'; }, 100);
-        
-        // Ensure letter is open visually
+        // 確保信件呈現「打開」狀態
         const container = document.querySelector('.envelope-container');
-        if(!container.classList.contains('open')) {
-            window.openLetter();
-        }
+        const letterView = document.getElementById('letter-view');
         
+        // 強制重繪以觸發 transition
+        void overlay.offsetWidth; 
+        overlay.style.opacity = '1';
+        
+        if(!container.classList.contains('open')) {
+             container.classList.add('open');
+             letterView.classList.add('show');
+        }
         showAuthForm();
     };
 
