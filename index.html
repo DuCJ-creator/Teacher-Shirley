@@ -19,7 +19,7 @@
       --text-light: #607d8b;
       --accent: #d4af37; 
       --card-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      --info-bg: rgba(255, 255, 255, 0.8);
+      --info-bg: rgba(255, 255, 255, 0.85); /* Whiter background for readability */
     }
 
     .dark {
@@ -31,7 +31,7 @@
       --text-light: #bdc3c7;
       --accent: #f1c40f; 
       --card-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      --info-bg: rgba(20, 30, 40, 0.7);
+      --info-bg: rgba(20, 30, 40, 0.8);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,35 +67,86 @@
     .dark .main-title { color: #ffffff; text-shadow: 0 0 20px rgba(241, 196, 15, 0.6); }
     .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
 
-    /* ==================== UNIVERSE VIEW (Fixed Layout) ==================== */
+    /* ==================== UNIVERSE VIEW (Dynamic Orbit Engine) ==================== */
     #universe-view { display: none; opacity: 0; transition: opacity 0.8s ease; height: 80vh; width:100%; position: relative; perspective: 1000px; overflow: hidden; }
     #universe-view.active { display: block; opacity: 1; }
 
     .solar-system { 
         position: relative; width: 100%; height: 100%; 
         display: flex; justify-content: center; align-items: center; 
-        transform-style: preserve-3d;
+        /* Base Scale */
+        transform: scale(1);
     }
 
-    /* Orbits - purely visual now, planets are NOT inside them */
+    /* ORBITS: These rotate clockwise */
     .orbit { 
-        position: absolute; border: 1px dashed rgba(127, 140, 141, 0.2); border-radius: 50%; 
-        top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; 
+        position: absolute; 
+        border: 1px dashed rgba(127, 140, 141, 0.2); 
+        border-radius: 50%; 
+        top: 50%; left: 50%; 
+        /* Centering adjustment handled by transform in animation */
+        pointer-events: none; 
     }
     .dark .orbit { border-color: rgba(255,255,255,0.08); }
     
-    .orbit-1 { width: 340px; height: 340px; animation: spinRight 60s linear infinite; }
-    .orbit-2 { width: 620px; height: 620px; animation: spinLeft 100s linear infinite; }
-
-    /* Planets - Absolute Positioning (Diamond Layout) */
-    .floating-planet { 
-        position: absolute; border-radius: 50%; cursor: pointer; 
-        display: flex; flex-direction: column; align-items: center; 
-        pointer-events: auto; transition: transform 0.3s; z-index: 20;
+    /* INNER ORBIT (Mars) */
+    .orbit-1 { 
+        width: 320px; height: 320px; 
+        margin-top: -160px; margin-left: -160px; /* Precise centering */
+        animation: spinRight 40s linear infinite; 
+        z-index: 5;
     }
-    .floating-planet:hover { transform: scale(1.15) !important; z-index: 50; }
+    /* OUTER ORBIT (Jupiter, Saturn, Mercury) */
+    .orbit-2 { 
+        width: 650px; height: 650px; 
+        margin-top: -325px; margin-left: -325px; 
+        animation: spinRight 120s linear infinite; 
+        z-index: 4;
+    }
 
-    /* Info Cards (Poetry) - Glassmorphism */
+    /* PLANET CONTAINERS: These rotate COUNTER-clockwise to keep text upright */
+    .planet-wrapper {
+        position: absolute;
+        width: 60px; height: 60px;
+        /* Default position is top-center of the orbit ring */
+        top: -30px; left: 50%; margin-left: -30px;
+        pointer-events: auto;
+        display: flex; justify-content: center; align-items: center;
+    }
+
+    /* Inner Planet Counter-Rotation */
+    .counter-spin-inner { animation: spinLeft 40s linear infinite; }
+    /* Outer Planet Counter-Rotation */
+    .counter-spin-outer { animation: spinLeft 120s linear infinite; }
+
+    /* Positioning Outer Planets on the ring (Triangle Formation 120deg) */
+    /* Child 1 (Mercury): Top (Default) */
+    .pos-1 { top: -25px; left: 50%; }
+    /* Child 2 (Jupiter): Bottom Right (~120 deg) */
+    .pos-2 { top: 62%; left: 91%; } 
+    /* Child 3 (Saturn): Bottom Left (~240 deg) */
+    .pos-3 { top: 62%; left: 9%; }
+
+    /* The Visual Planet Sphere */
+    .planet-visual {
+        width: 100%; height: 100%; border-radius: 50%;
+        transition: transform 0.3s; cursor: pointer;
+        position: relative; z-index: 10;
+    }
+    .planet-visual:hover { transform: scale(1.2); z-index: 20; }
+
+    /* MOON (Static Center) - Reduced Size */
+    .planet-moon {
+        width: 100px; height: 100px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7);
+        box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1);
+        position: absolute; z-index: 10; cursor: pointer;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; animation: floatMoon 4s ease-in-out infinite; 
+        border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    /* INFO CARDS (Glassmorphism) */
     .planet-info {
         position: absolute; width: 220px; 
         background: var(--info-bg);
@@ -105,27 +156,11 @@
         text-align: center; pointer-events: none;
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         transition: opacity 0.3s;
+        /* Text is centered above the planet */
+        bottom: 120%; left: 50%; transform: translateX(-50%);
     }
     
-    /* Force all info to be ABOVE the planet to avoid bottom cutoff */
-    .info-top { bottom: 115%; left: 50%; transform: translateX(-50%); }
-    
-    /* Typography */
-    .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 5px; display:block; }
-    .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
-    .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
-
-    /* --- PLANET POSITIONS (The Diamond Layout) --- */
-    
-    /* Moon (Center) */
-    .planet-moon {
-        width: 140px; height: 140px; border-radius: 50%;
-        background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7);
-        box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 40px rgba(0,0,0,0.1);
-        z-index: 10; animation: floatMoon 6s ease-in-out infinite; 
-        border: 1px solid rgba(255,255,255,0.4);
-    }
-    .moon-info { width: 260px; padding-bottom: 5px; } /* Wider for check-in button */
+    .moon-info { bottom: 125%; width: 240px; }
     .checkin-tag { 
         display: block; margin-top: 8px; 
         background: linear-gradient(90deg, var(--accent), #f39c12); color: white; 
@@ -133,43 +168,28 @@
         box-shadow: 0 3px 8px rgba(0,0,0,0.2); cursor: pointer; pointer-events: auto;
     }
 
-    /* Mars (Top) - Inner Orbit radius approx */
-    .p-mars { width: 60px; height: 60px; background: radial-gradient(#e74c3c, #c0392b); top: 18%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 25px rgba(231, 76, 60, 0.5); }
-    
-    /* Mercury (Bottom) - Outer Orbit radius vertical approx */
-    .p-mercury { width: 50px; height: 50px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); bottom: 15%; left: 50%; transform: translate(-50%, 50%); box-shadow: 0 0 25px rgba(189, 195, 199, 0.6); }
-    
-    /* Saturn (Left) - Outer Orbit radius horizontal */
-    .p-saturn { width: 80px; height: 80px; background: radial-gradient(#f39c12, #e67e22); top: 50%; left: 10%; transform: translate(-50%, -50%); border: 4px double rgba(255,255,255,0.3); }
-    
-    /* Jupiter (Right) - Outer Orbit radius horizontal */
-    .p-jupiter { width: 90px; height: 90px; background: radial-gradient(#f1c40f, #d35400); top: 50%; right: 10%; transform: translate(50%, -50%); box-shadow: 0 0 35px rgba(241, 196, 15, 0.5); }
+    /* Styles for Planets */
+    .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 20px rgba(231, 76, 60, 0.5); }
+    .p-mercury { background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); box-shadow: 0 0 20px rgba(189, 195, 199, 0.6); }
+    .p-jupiter { width: 80px; height: 80px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 30px rgba(241, 196, 15, 0.5); }
+    .p-saturn { width: 70px; height: 70px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); }
 
-    /* Animation Keyframes */
-    @keyframes floatMoon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @keyframes spinRight { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-    @keyframes spinLeft { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
+    /* Typography */
+    .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 5px; display:block; }
+    .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.8rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
+    .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
+
+    /* Animations */
+    @keyframes spinRight { 100% { transform: rotate(360deg); } }
+    @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+    @keyframes floatMoon { 0%, 100% { transform: translate(-50%, -50%) translateY(0); } 50% { transform: translate(-50%, -50%) translateY(-10px); } }
 
     /* RESPONSIVE SCALING */
-    @media (max-width: 1024px) {
-        .solar-system { transform: scale(0.85); }
-        .p-saturn { left: 12%; } .p-jupiter { right: 12%; }
-    }
-    @media (max-width: 768px) {
-        .solar-system { transform: scale(0.65); }
-        .planet-info { width: 200px; padding: 10px; }
-        .moon-info { width: 240px; }
-        /* Pull them closer for mobile */
-        .p-mars { top: 12%; }
-        .p-mercury { bottom: 12%; }
-        .p-saturn { left: 5%; }
-        .p-jupiter { right: 5%; }
-    }
-    @media (max-width: 400px) {
-        .solar-system { transform: scale(0.55); }
-    }
+    @media (max-width: 1024px) { .solar-system { transform: scale(0.8); } }
+    @media (max-width: 768px) { .solar-system { transform: scale(0.6); } .planet-info { width: 200px; padding: 10px; } }
+    @media (max-width: 450px) { .solar-system { transform: scale(0.48); } }
 
-    /* ==================== ENVELOPE, LETTERS & DASHBOARD (Kept Same) ==================== */
+    /* ==================== ENVELOPE & OTHERS (Preserved) ==================== */
     #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease; }
     .envelope-container { position: relative; cursor: pointer; width: 320px; height: 210px; transition: transform 0.5s ease; animation: floatEnv 4s ease-in-out infinite; }
     .envelope-container:hover { transform: scale(1.05); }
@@ -369,42 +389,47 @@
 
   <div id="universe-view">
       <div class="solar-system">
-          <div class="orbit orbit-1"></div>
-          <div class="orbit orbit-2"></div>
-
-          <div class="floating-planet p-mars" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')">
-              <div class="planet-info info-top">
-                  <span class="p-name">Mars 🔴</span>
-                  <div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div>
-                  <div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div>
+          <div class="orbit orbit-1">
+              <div class="planet-wrapper counter-spin-inner" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')">
+                  <div class="planet-visual p-mars"></div>
+                  <div class="planet-info info-top">
+                      <span class="p-name">Mars 🔴</span>
+                      <div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div>
+                      <div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div>
+                  </div>
               </div>
           </div>
 
-          <div class="floating-planet p-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')">
-               <div class="planet-info info-top">
-                  <span class="p-name">Jupiter 🟡</span>
-                  <div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div>
-                  <div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div>
+          <div class="orbit orbit-2">
+              <div class="planet-wrapper pos-1 counter-spin-outer" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')">
+                  <div class="planet-visual p-mercury"></div>
+                  <div class="planet-info info-top">
+                      <span class="p-name">Mercury ⚪</span>
+                      <div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div>
+                      <div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div>
+                  </div>
               </div>
-          </div>
-          
-          <div class="floating-planet p-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')">
-              <div class="planet-info info-top">
-                  <span class="p-name">Saturn 🟠</span>
-                  <div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div>
-                  <div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div>
+              
+              <div class="planet-wrapper pos-2 counter-spin-outer" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')">
+                  <div class="planet-visual p-jupiter"></div>
+                  <div class="planet-info info-top">
+                      <span class="p-name">Jupiter 🟡</span>
+                      <div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div>
+                      <div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div>
+                  </div>
+              </div>
+
+              <div class="planet-wrapper pos-3 counter-spin-outer" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')">
+                  <div class="planet-visual p-saturn"></div>
+                  <div class="planet-info info-top">
+                      <span class="p-name">Saturn 🟠</span>
+                      <div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div>
+                      <div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div>
+                  </div>
               </div>
           </div>
 
-          <div class="floating-planet p-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')">
-              <div class="planet-info info-top">
-                  <span class="p-name">Mercury ⚪</span>
-                  <div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div>
-                  <div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div>
-              </div>
-          </div>
-
-          <div class="planet-moon" onclick="openMemberTerminal()">
+          <div class="planet-moon" onclick="openMemberTerminal()" style="top:50%; left:50%; transform:translate(-50%,-50%);">
               <div class="planet-info moon-info info-top">
                   <span class="p-name">Moon 🌕</span>
                   <div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div>
