@@ -201,7 +201,7 @@
     .checkin-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     .checkin-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-    /* New Print Selection Modal Styles */
+    /* Print Modal Styles */
     #print-selection-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
     .print-modal-content { background: white; width: 90%; max-width: 700px; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; max-height: 90vh; color: #333; }
     .print-modal-header { font-family: 'Cinzel Decorative'; font-size: 1.5rem; color: #2c3e50; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
@@ -243,9 +243,38 @@
     .highlight-box .key-term {
         color: #c0392b; text-decoration: none; border-bottom: 2px solid #c0392b;
     }
+
+    /* --- In-App Browser Warning Overlay --- */
+    #in-app-browser-warning {
+        display: none; /* Default hidden */
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.95); z-index: 9999;
+        flex-direction: column; justify-content: center; align-items: center;
+        text-align: center; color: white; padding: 30px;
+    }
+    .warning-icon { font-size: 4rem; margin-bottom: 20px; }
+    .warning-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; font-family: 'Exo 2', sans-serif; }
+    .warning-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; color: #ddd; max-width: 500px; }
+    .arrow-hint { position: absolute; top: 20px; right: 20px; font-size: 3rem; animation: bounceRight 1.5s infinite; color: var(--accent); }
+    @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
   </style>
 </head>
 <body>
+
+  <div id="in-app-browser-warning">
+      <div class="arrow-hint">↗</div>
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-title">Open in System Browser</div>
+      <div class="warning-text">
+          Google Login is restricted inside apps like Line, WeChat, or Facebook.
+          <br><br>
+          Please tap the <strong>Menu (⋮ or ⋯)</strong> at the top right corner and select <strong>"Open in Browser"</strong> (Chrome/Safari) to continue.
+      </div>
+      <div class="warning-text" style="font-size:0.9rem; color:#aaa;">
+          Google 登入無法在 Line/FB/微信 等應用程式內直接使用。
+          <br>請點擊右上角選單，選擇「在瀏覽器中開啟」以進行登入。
+      </div>
+  </div>
 
   <canvas id="particle-canvas"></canvas>
 
@@ -386,8 +415,7 @@
             <button onclick="toggleAllLogs(true)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold;">☑ Select All</button>
             <button onclick="toggleAllLogs(false)" style="background:none; border:none; cursor:pointer; color:#7f8c8d; font-weight:bold;">☐ Clear All</button>
         </div>
-        <div class="selection-list" id="log-selection-list">
-            </div>
+        <div class="selection-list" id="log-selection-list"></div>
         <div class="print-actions">
             <button class="action-btn btn-cancel" onclick="closePrintSelection()">Cancel</button>
             <button class="action-btn btn-confirm" onclick="confirmPrint()">🖨️ Print / Save PDF</button>
@@ -401,18 +429,10 @@
           <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
       </div>
       <table id="print-table">
-          <thead>
-              <tr>
-                  <th style="width:25%">Time / Duration</th>
-                  <th style="width:20%">Activity Type</th>
-                  <th>Details</th>
-              </tr>
-          </thead>
+          <thead><tr><th style="width:25%">Time / Duration</th><th style="width:20%">Activity Type</th><th>Details</th></tr></thead>
           <tbody id="print-body"></tbody>
       </table>
-      <div style="margin-top:20px; font-size:0.8rem; text-align:center;">
-          Generated from Teacher Shirley's ET Platform
-      </div>
+      <div style="margin-top:20px; font-size:0.8rem; text-align:center;">Generated from Teacher Shirley's ET Platform</div>
   </div>
 
   <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
@@ -421,6 +441,18 @@
   </footer>
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <script>
+    (function() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
+        
+        if (isInApp) {
+            document.getElementById('in-app-browser-warning').style.display = 'flex';
+            document.getElementById('intro-overlay').style.display = 'none';
+        }
+    })();
+  </script>
 
  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
@@ -446,6 +478,15 @@
     let csvData = { words: [], quotes: [] };
     let checkinHistory = [];
     let activityLog = [];
+
+    // --- HELPER: GET LOCAL DATE STRING (Fixes Timezone Issue) ---
+    function getLocalISODate() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
 
     // --- ENVELOPE LOGIC ---
     window.openLetter = () => {
@@ -531,7 +572,9 @@
     async function loadUserData(uid) {
         const userRef = doc(db, "users", uid);
         const docSnap = await getDoc(userRef);
-        const fullDate = new Date().toISOString().split('T')[0];
+        // FIX: Use local date
+        const fullDate = getLocalISODate();
+        
         if (docSnap.exists()) {
             const data = docSnap.data();
             checkinHistory = data.history || [];
@@ -549,15 +592,24 @@
         if (!currentUser) return;
         const btn = document.getElementById('checkin-btn');
         btn.disabled = true; btn.innerText = "Signing in...";
-        const fullDate = new Date().toISOString().split('T')[0];
+        
+        // FIX: Use local date instead of UTC
+        const fullDate = getLocalISODate();
+        
         const userRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(userRef);
         let currentStreak = docSnap.data().streak || 0;
         const lastCheckIn = docSnap.data().history?.slice(-1)[0];
+        
         if (lastCheckIn === fullDate) { /* already checked in */ }
         else {
             const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            // Ensure yesterday string is also local
+            const yYear = yesterday.getFullYear();
+            const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
+            const yDay = String(yesterday.getDate()).padStart(2, '0');
+            const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
+            
             if (lastCheckIn === yesterdayStr) currentStreak++;
             else currentStreak = 1;
         }
@@ -622,7 +674,9 @@
         grid.innerHTML = '';
         const now = new Date();
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        const currentYearMonth = now.toISOString().slice(0, 7); 
+        // FIX: Use Local Year-Month
+        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
+        
         for (let i = 1; i <= daysInMonth; i++) {
             const dayEl = document.createElement('div');
             dayEl.innerText = i;
@@ -632,106 +686,58 @@
         }
     }
 
-    // --- NEW: LOG PROCESSING & PRINTING LOGIC ---
-
     let processedLogs = [];
 
-    // 1. Logic to merge consecutive similar logs and calculate duration
     function processActivityLogs(logs) {
         if (!logs || logs.length === 0) return [];
-        
-        // Sort by date just in case
         const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
         const grouped = [];
-
         for (let i = 0; i < sortedLogs.length; i++) {
             const current = sortedLogs[i];
             const next = sortedLogs[i+1];
-            
-            // Start a new group
             const startTime = new Date(current.date);
-            let endTime = next ? new Date(next.date) : new Date(); // If last item, end time is "now"
-            
-            // Check if next item is "similar" (same detail = same location)
-            // If similar, we skip the next iteration logic but extend the duration of this one
-            // NOTE: The user wants "Stay in one place -> one record".
-            // So we look ahead until the location changes.
-            
+            let endTime = next ? new Date(next.date) : new Date();
             let j = i + 1;
             while(j < sortedLogs.length && sortedLogs[j].detail === current.detail) {
-                // It's the same activity/location, just extend the end time
                 endTime = (j + 1 < sortedLogs.length) ? new Date(sortedLogs[j+1].date) : new Date();
                 j++;
             }
-            
-            // Calculate duration
             const durationMs = endTime - startTime;
             const minutes = Math.floor(durationMs / 60000);
             const durationStr = minutes < 1 ? "< 1 min" : `${minutes} mins`;
-            
-            grouped.push({
-                start: startTime,
-                end: endTime,
-                type: current.type,
-                detail: current.detail,
-                durationStr: durationStr,
-                originalIndex: i
-            });
-            
-            // Jump i to the last processed index
+            grouped.push({ start: startTime, end: endTime, type: current.type, detail: current.detail, durationStr: durationStr });
             i = j - 1;
         }
-        return grouped.reverse(); // Show newest first
+        return grouped.reverse();
     }
 
-    // 2. Open Modal and Render List
     window.openPrintSelection = () => {
         if (!currentUser) return;
         processedLogs = processActivityLogs(activityLog);
         const listContainer = document.getElementById('log-selection-list');
         listContainer.innerHTML = '';
-
         if(processedLogs.length === 0) {
             listContainer.innerHTML = '<div style="padding:20px; text-align:center;">No records found.</div>';
             return;
         }
-
         processedLogs.forEach((log, index) => {
             const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
-            
             const row = document.createElement('div');
             row.className = 'log-item-row';
-            // Default unchecked (checked = false)
-            row.innerHTML = `
-                <input type="checkbox" id="log-check-${index}" class="log-checkbox">
-                <div class="log-details">
-                    <span class="log-action">${log.type}: ${log.detail}</span>
-                    <span class="log-time">${dateStr} (${log.durationStr})</span>
-                </div>
-            `;
+            row.innerHTML = `<input type="checkbox" id="log-check-${index}" class="log-checkbox"><div class="log-details"><span class="log-action">${log.type}: ${log.detail}</span><span class="log-time">${dateStr} (${log.durationStr})</span></div>`;
             listContainer.appendChild(row);
         });
-
         document.getElementById('print-selection-modal').style.display = 'flex';
     };
 
-    window.closePrintSelection = () => {
-        document.getElementById('print-selection-modal').style.display = 'none';
-    };
+    window.closePrintSelection = () => { document.getElementById('print-selection-modal').style.display = 'none'; };
+    window.toggleAllLogs = (checkStatus) => { document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = checkStatus); };
 
-    window.toggleAllLogs = (checkStatus) => {
-        const checkboxes = document.querySelectorAll('.log-checkbox');
-        checkboxes.forEach(cb => cb.checked = checkStatus);
-    };
-
-    // 3. Confirm and Print
     window.confirmPrint = () => {
         const printBody = document.getElementById('print-body');
         printBody.innerHTML = '';
-        
         document.getElementById('print-name').innerText = currentUser.displayName || currentUser.email;
         document.getElementById('print-date').innerText = new Date().toLocaleDateString();
-
         let hasSelection = false;
         processedLogs.forEach((log, index) => {
             const checkbox = document.getElementById(`log-check-${index}`);
@@ -739,26 +745,14 @@
                 hasSelection = true;
                 const tr = document.createElement('tr');
                 const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
-                
-                tr.innerHTML = `
-                    <td>${dateStr}<br><span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span></td>
-                    <td>${log.type}</td>
-                    <td>${log.detail}</td>
-                `;
+                tr.innerHTML = `<td>${dateStr}<br><span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span></td><td>${log.type}</td><td>${log.detail}</td>`;
                 printBody.appendChild(tr);
             }
         });
-
-        if(!hasSelection) {
-            alert("Please select at least one record to print.");
-            return;
-        }
-
+        if(!hasSelection) return alert("Please select at least one record to print.");
         document.getElementById('print-selection-modal').style.display = 'none';
         setTimeout(() => window.print(), 500);
     };
-
-    // --- END NEW LOGIC ---
 
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
