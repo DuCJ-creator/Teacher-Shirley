@@ -11,17 +11,15 @@
   
   <style id="themeStyles">
     :root {
-      /* --- Light Mode (Default) --- */
+      /* --- Light Mode --- */
       --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
       --surface: rgba(255, 255, 255, 0.95);
       --border: rgba(0, 0, 0, 0.08);
       --text: #2c3e50; 
       --text-light: #607d8b;
       --accent: #d4af37; 
-      --accent-hover: #b89628;
       --card-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      /* Planet Info Card Bg */
-      --info-bg: rgba(255, 255, 255, 0.7);
+      --info-bg: rgba(255, 255, 255, 0.8);
     }
 
     .dark {
@@ -32,9 +30,8 @@
       --text: #ecf0f1;
       --text-light: #bdc3c7;
       --accent: #f1c40f; 
-      --accent-hover: #d4ac0d;
       --card-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      --info-bg: rgba(20, 30, 40, 0.6);
+      --info-bg: rgba(20, 30, 40, 0.7);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -64,13 +61,13 @@
     }
     .control-btn:hover { transform: scale(1.1); color: var(--accent); border-color: var(--accent); }
 
-    /* --- Header (Compact) --- */
+    /* --- Header --- */
     header { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 0; position: relative; z-index: 10; text-align: center; }
     .main-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; color: var(--text); line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .dark .main-title { color: #ffffff; text-shadow: 0 0 20px rgba(241, 196, 15, 0.6); }
     .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
 
-    /* ==================== UNIVERSE VIEW (Compact & High-End) ==================== */
+    /* ==================== UNIVERSE VIEW (Fixed Layout) ==================== */
     #universe-view { display: none; opacity: 0; transition: opacity 0.8s ease; height: 80vh; width:100%; position: relative; perspective: 1000px; overflow: hidden; }
     #universe-view.active { display: block; opacity: 1; }
 
@@ -78,24 +75,19 @@
         position: relative; width: 100%; height: 100%; 
         display: flex; justify-content: center; align-items: center; 
         transform-style: preserve-3d;
-        /* Default scale for desktop */
-        transform: scale(1);
     }
 
-    /* Base Orbits (Tightened for single screen view) */
+    /* Orbits - purely visual now, planets are NOT inside them */
     .orbit { 
         position: absolute; border: 1px dashed rgba(127, 140, 141, 0.2); border-radius: 50%; 
         top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; 
-        transition: all 0.5s ease;
     }
     .dark .orbit { border-color: rgba(255,255,255,0.08); }
     
-    /* Orbit 1: Mars (Inner) */
-    .orbit-1 { width: 340px; height: 340px; animation: spinRight 50s linear infinite; }
-    /* Orbit 2: Jupiter, Saturn, Mercury (Outer) */
-    .orbit-2 { width: 620px; height: 620px; animation: spinLeft 80s linear infinite; }
+    .orbit-1 { width: 340px; height: 340px; animation: spinRight 60s linear infinite; }
+    .orbit-2 { width: 620px; height: 620px; animation: spinLeft 100s linear infinite; }
 
-    /* Planets */
+    /* Planets - Absolute Positioning (Diamond Layout) */
     .floating-planet { 
         position: absolute; border-radius: 50%; cursor: pointer; 
         display: flex; flex-direction: column; align-items: center; 
@@ -103,95 +95,89 @@
     }
     .floating-planet:hover { transform: scale(1.15) !important; z-index: 50; }
 
-    /* Planet Info Card (Poetry) */
+    /* Info Cards (Poetry) - Glassmorphism */
     .planet-info {
         position: absolute; width: 220px; 
         background: var(--info-bg);
-        backdrop-filter: blur(8px);
-        padding: 10px 12px; border-radius: 8px;
+        backdrop-filter: blur(12px);
+        padding: 12px 15px; border-radius: 12px;
         border: 1px solid var(--border);
         text-align: center; pointer-events: none;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         transition: opacity 0.3s;
     }
     
-    /* Positioning text relative to planet */
-    .info-top { bottom: 120%; left: 50%; transform: translateX(-50%); }
-    .info-bottom { top: 120%; left: 50%; transform: translateX(-50%); }
+    /* Force all info to be ABOVE the planet to avoid bottom cutoff */
+    .info-top { bottom: 115%; left: 50%; transform: translateX(-50%); }
     
-    /* Typography for Poetry */
-    .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 4px; display:block; }
-    .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.8rem; color: var(--text); line-height: 1.3; margin-bottom: 2px; font-weight: 600; }
+    /* Typography */
+    .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 5px; display:block; }
+    .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
     .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
 
-    /* Specific Planet Styles & Positions */
+    /* --- PLANET POSITIONS (The Diamond Layout) --- */
+    
     /* Moon (Center) */
     .planet-moon {
-        width: 130px; height: 130px; border-radius: 50%;
+        width: 140px; height: 140px; border-radius: 50%;
         background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7);
-        box-shadow: 0 0 40px rgba(255,255,255,0.5), inset -10px -10px 40px rgba(0,0,0,0.1);
-        position: absolute; z-index: 10; cursor: pointer;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-align: center; animation: floatMoon 6s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.4);
+        box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 40px rgba(0,0,0,0.1);
+        z-index: 10; animation: floatMoon 6s ease-in-out infinite; 
+        border: 1px solid rgba(255,255,255,0.4);
     }
-    .moon-info { margin-top: 150px; width: 240px; } /* Specific for Moon text */
+    .moon-info { width: 260px; padding-bottom: 5px; } /* Wider for check-in button */
     .checkin-tag { 
         display: block; margin-top: 8px; 
-        background: var(--accent); color: white; 
-        font-size: 0.7rem; padding: 3px 8px; border-radius: 12px; font-weight: bold;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        background: linear-gradient(90deg, var(--accent), #f39c12); color: white; 
+        font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2); cursor: pointer; pointer-events: auto;
     }
 
-    /* Mars (Inner Orbit Top) */
-    .p-mars { width: 55px; height: 55px; background: radial-gradient(#e74c3c, #c0392b); top: 12%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
+    /* Mars (Top) - Inner Orbit radius approx */
+    .p-mars { width: 60px; height: 60px; background: radial-gradient(#e74c3c, #c0392b); top: 18%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 25px rgba(231, 76, 60, 0.5); }
     
-    /* Jupiter (Outer Orbit Bottom Right) */
-    .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); bottom: 12%; right: 12%; box-shadow: 0 0 30px rgba(241, 196, 15, 0.4); }
+    /* Mercury (Bottom) - Outer Orbit radius vertical approx */
+    .p-mercury { width: 50px; height: 50px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); bottom: 15%; left: 50%; transform: translate(-50%, 50%); box-shadow: 0 0 25px rgba(189, 195, 199, 0.6); }
     
-    /* Saturn (Outer Orbit Left) */
-    .p-saturn { width: 70px; height: 70px; background: radial-gradient(#f39c12, #e67e22); top: 50%; left: 10%; transform: translate(-50%, -50%); border: 3px double rgba(255,255,255,0.3); }
+    /* Saturn (Left) - Outer Orbit radius horizontal */
+    .p-saturn { width: 80px; height: 80px; background: radial-gradient(#f39c12, #e67e22); top: 50%; left: 10%; transform: translate(-50%, -50%); border: 4px double rgba(255,255,255,0.3); }
     
-    /* Mercury (Outer Orbit Bottom Left - Replaces Neptune) */
-    .p-mercury { width: 45px; height: 45px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); bottom: 12%; left: 12%; box-shadow: 0 0 20px rgba(189, 195, 199, 0.5); }
+    /* Jupiter (Right) - Outer Orbit radius horizontal */
+    .p-jupiter { width: 90px; height: 90px; background: radial-gradient(#f1c40f, #d35400); top: 50%; right: 10%; transform: translate(50%, -50%); box-shadow: 0 0 35px rgba(241, 196, 15, 0.5); }
 
-    /* Animations */
-    @keyframes floatMoon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    /* Animation Keyframes */
+    @keyframes floatMoon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     @keyframes spinRight { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
     @keyframes spinLeft { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
 
-    /* RESPONSIVE SCALING FOR UNIVERSE */
-    /* This ensures it fits on iPad and Mobile screens */
+    /* RESPONSIVE SCALING */
     @media (max-width: 1024px) {
         .solar-system { transform: scale(0.85); }
+        .p-saturn { left: 12%; } .p-jupiter { right: 12%; }
     }
     @media (max-width: 768px) {
         .solar-system { transform: scale(0.65); }
-        .planet-info { width: 180px; padding: 8px; }
-        .p-name { font-size: 0.9rem; }
-        .p-poem-cn { font-size: 0.75rem; }
-        .p-poem-en { font-size: 0.7rem; }
-        
-        /* Adjust Mars position slightly for mobile vertical space */
-        .p-mars { top: 15%; }
+        .planet-info { width: 200px; padding: 10px; }
+        .moon-info { width: 240px; }
+        /* Pull them closer for mobile */
+        .p-mars { top: 12%; }
+        .p-mercury { bottom: 12%; }
         .p-saturn { left: 5%; }
-        .p-jupiter { right: 5%; bottom: 15%; }
-        .p-mercury { left: 5%; bottom: 15%; }
+        .p-jupiter { right: 5%; }
     }
     @media (max-width: 400px) {
         .solar-system { transform: scale(0.55); }
     }
 
-    /* ==================== REST OF THE SITE (Letters, Visitor, Dashboard) ==================== */
-    
-    /* Envelope & Letter */
+    /* ==================== ENVELOPE, LETTERS & DASHBOARD (Kept Same) ==================== */
     #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease; }
     .envelope-container { position: relative; cursor: pointer; width: 320px; height: 210px; transition: transform 0.5s ease; animation: floatEnv 4s ease-in-out infinite; }
     .envelope-container:hover { transform: scale(1.05); }
     .envelope-body { position: absolute; bottom: 0; width: 100%; height: 100%; background: #e6dac8; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-radius: 5px; overflow: hidden; z-index: 2; }
     .envelope-txt { position: absolute; z-index: 10; text-align: center; width: 100%; top: 55%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; padding: 0 10px; }
-    .env-title { font-family: 'Cinzel Decorative', cursive; font-size: 1.1rem; color: #5d4037; margin-bottom: 5px; line-height: 1.2; }
-    .env-subtitle { font-family: 'Dancing Script', cursive; font-size: 1.2rem; color: #8d6e63; margin-bottom: 15px; }
-    .env-highlight { font-family: 'Exo 2'; font-weight: 700; color: #c0392b; font-size: 0.85rem; margin-bottom: 2px; letter-spacing: 0.5px; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
+    .env-title { font-family: 'Cinzel Decorative'; font-size: 1.1rem; color: #5d4037; margin-bottom: 5px; }
+    .env-subtitle { font-family: 'Dancing Script', font-size: 1.2rem; color: #8d6e63; margin-bottom: 15px; }
+    .env-highlight { font-family: 'Exo 2'; font-weight: 700; color: #c0392b; font-size: 0.85rem; margin-bottom: 2px; }
     .env-cn { font-family: 'Noto Sans TC'; font-size: 0.75rem; color: #6d4c41; font-weight: 500; }
     .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-top: 130px solid #dccbb1; transform-origin: top; transition: transform 0.8s ease 0.2s, z-index 0.2s; z-index: 3; }
     .envelope-pocket { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f0e6d6; border-right: 160px solid #ece0cd; border-bottom: 110px solid #f8f1e5; border-top: 110px solid transparent; z-index: 4; }
@@ -201,7 +187,6 @@
     @keyframes floatEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
-    /* Letter Paper */
     .letter-paper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); width: 95%; max-width: 750px; height: auto; max-height: 95vh; background: radial-gradient(circle at 50% 0%, #ffffff 10%, #f7f4e9 80%); box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 0 40px rgba(255,255,255,0.8), inset 0 0 10px rgba(212, 175, 55, 0.1); padding: 2.5rem 3rem; opacity: 0; pointer-events: none; transition: all 0.8s ease 0.8s; overflow-y: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.8); display: flex; flex-direction: column; }
     .letter-paper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png'); background-size: cover; background-position: center; filter: blur(6px) grayscale(20%); opacity: 0.1; z-index: 0; pointer-events: none; }
     .sparkle-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
@@ -224,13 +209,11 @@
     .btn-login { background: var(--accent); color: white; border: 1px solid var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
     .btn-login:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
-    /* Auth Form */
     #auth-form-container { display: none; margin-top: 10px; background: rgba(255,255,255,0.95); padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
     .google-btn { width: 100%; padding: 10px; background: white; color: #555; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .input-group input { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Exo 2'; }
     .email-btn { width: 100%; padding: 8px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
 
-    /* Visitor View */
     #visitor-view { display: none; opacity: 0; transition: opacity 0.5s ease; padding-bottom: 5rem; }
     #visitor-view.active { display: block; opacity: 1; }
     .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 2rem; max-width: 1000px; margin: 0 auto; position: relative; z-index: 5; }
@@ -238,7 +221,6 @@
     .category-card:hover { transform: translateY(-8px); border-color: var(--accent); }
     .icon { font-size: 3rem; margin-bottom: 1rem; }
 
-    /* Dashboard */
     #member-terminal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; z-index: 200; box-shadow: 0 25px 80px rgba(0,0,0,0.4); display: none; opacity: 0; transition: all 0.3s; backdrop-filter: blur(10px); }
     #member-terminal.show { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
     .close-terminal { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; cursor: pointer; }
@@ -387,21 +369,19 @@
 
   <div id="universe-view">
       <div class="solar-system">
-          <div class="orbit orbit-1">
-              <div class="floating-planet p-mars" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')">
-                  <div class="planet-info info-top">
-                      <span class="p-name">Mars 🔴</span>
-                      <div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div>
-                      <div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div>
-                  </div>
+          <div class="orbit orbit-1"></div>
+          <div class="orbit orbit-2"></div>
+
+          <div class="floating-planet p-mars" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')">
+              <div class="planet-info info-top">
+                  <span class="p-name">Mars 🔴</span>
+                  <div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div>
+                  <div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div>
               </div>
           </div>
 
-          <div class="orbit orbit-2">
-              </div>
-
           <div class="floating-planet p-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')">
-               <div class="planet-info info-bottom">
+               <div class="planet-info info-top">
                   <span class="p-name">Jupiter 🟡</span>
                   <div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div>
                   <div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div>
@@ -417,7 +397,7 @@
           </div>
 
           <div class="floating-planet p-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')">
-              <div class="planet-info info-bottom">
+              <div class="planet-info info-top">
                   <span class="p-name">Mercury ⚪</span>
                   <div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div>
                   <div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div>
@@ -532,17 +512,13 @@
         setTimeout(() => {
             const letterView = document.getElementById('letter-view');
             letterView.classList.add('show');
-            
-            // Sequence
             const paragraphs = document.querySelectorAll('.letter-p');
             paragraphs.forEach((p, index) => {
                 setTimeout(() => { p.classList.add('visible'); }, index * 800);
             });
-
             setTimeout(() => {
                 document.getElementById('choice-buttons').classList.add('visible');
             }, paragraphs.length * 800 + 400);
-
         }, 800);
     };
 
@@ -678,6 +654,7 @@
             const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
             const matches = []; let match;
             while ((match = regex.exec(line)) !== null) {
+                 if (match.index === regex.lastIndex) regex.lastIndex++; 
                  if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g, '').replace(/""/g, '"'));
             }
             headers.forEach((h, i) => row[h] = matches[i] ? matches[i].trim() : '');
