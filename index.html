@@ -401,7 +401,31 @@
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-  <script type="module" src="/main.js"></script>
+ <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+      authDomain: "teacher-shirley.firebaseapp.com",
+      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+      projectId: "teacher-shirley",
+      storageBucket: "teacher-shirley.firebasestorage.app",
+      messagingSenderId: "534843195436",
+      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    let currentUser = null;
+    let csvData = { words: [], quotes: [] };
+    let checkinHistory = [];
+    let activityLog = [];
+
   
     // --- ENVELOPE LOGIC ---
     window.openLetter = () => {
