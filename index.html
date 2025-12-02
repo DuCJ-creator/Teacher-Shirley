@@ -246,17 +246,22 @@
 
     /* --- In-App Browser Warning Overlay --- */
     #in-app-browser-warning {
-        display: none; /* Default hidden */
+        display: none; /* Default hidden, triggered via JS */
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.95); z-index: 9999;
         flex-direction: column; justify-content: center; align-items: center;
         text-align: center; color: white; padding: 30px;
     }
-    .warning-icon { font-size: 4rem; margin-bottom: 20px; }
-    .warning-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; font-family: 'Exo 2', sans-serif; }
-    .warning-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; color: #ddd; max-width: 500px; }
-    .arrow-hint { position: absolute; top: 20px; right: 20px; font-size: 3rem; animation: bounceRight 1.5s infinite; color: var(--accent); }
+    .warning-icon { font-size: 3rem; margin-bottom: 15px; }
+    .warning-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 15px; font-family: 'Exo 2', sans-serif; }
+    .warning-text { font-size: 1rem; line-height: 1.6; margin-bottom: 25px; color: #ddd; max-width: 500px; }
+    .arrow-hint { position: absolute; top: 10px; right: 20px; font-size: 3rem; animation: bounceRight 1.5s infinite; color: var(--accent); }
     @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
+    
+    .warning-actions { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
+    .btn-warning { padding: 12px; border: none; border-radius: 25px; font-weight: bold; font-family: 'Exo 2'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-copy { background: #3498db; color: white; }
+    .btn-close-warning { background: transparent; border: 1px solid #7f8c8d; color: #bdc3c7; }
   </style>
 </head>
 <body>
@@ -264,15 +269,22 @@
   <div id="in-app-browser-warning">
       <div class="arrow-hint">↗</div>
       <div class="warning-icon">⚠️</div>
-      <div class="warning-title">Open in System Browser</div>
+      <div class="warning-title">Sign-in Restricted<br>登入受限</div>
       <div class="warning-text">
-          Google Login is restricted inside apps like Line, WeChat, or Facebook.
+          Google Login is blocked inside Line/WeChat/FB.<br>
+          Please open this page in <strong>Chrome</strong> or <strong>Safari</strong> to log in.
           <br><br>
-          Please tap the <strong>Menu (⋮ or ⋯)</strong> at the top right corner and select <strong>"Open in Browser"</strong> (Chrome/Safari) to continue.
+          此應用程式不支援 Google 登入。<br>
+          請點擊右上角選單，選擇<strong>「在瀏覽器中開啟」</strong>，或複製連結至 Chrome/Safari 開啟。
       </div>
-      <div class="warning-text" style="font-size:0.9rem; color:#aaa;">
-          Google 登入無法在 Line/FB/微信 等應用程式內直接使用。
-          <br>請點擊右上角選單，選擇「在瀏覽器中開啟」以進行登入。
+      
+      <div class="warning-actions">
+          <button class="btn-warning btn-copy" onclick="copyCurrentUrl()">
+              📋 Copy Link / 複製連結
+          </button>
+          <button class="btn-warning btn-close-warning" onclick="closeWarning()">
+              Cancel & Stay as Visitor<br>暫不登入，繼續參觀
+          </button>
       </div>
   </div>
 
@@ -442,18 +454,6 @@
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-  <script>
-    (function() {
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
-        
-        if (isInApp) {
-            document.getElementById('in-app-browser-warning').style.display = 'flex';
-            document.getElementById('intro-overlay').style.display = 'none';
-        }
-    })();
-  </script>
-
  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
@@ -478,6 +478,22 @@
     let csvData = { words: [], quotes: [] };
     let checkinHistory = [];
     let activityLog = [];
+
+    // --- In-App Browser Detection Helpers ---
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
+
+    window.closeWarning = () => {
+        document.getElementById('in-app-browser-warning').style.display = 'none';
+    };
+
+    window.copyCurrentUrl = () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert("Link copied! Open Chrome/Safari and paste it.");
+        }).catch(() => {
+            alert("Failed to copy. Please copy the URL manually.");
+        });
+    };
 
     // --- HELPER: GET LOCAL DATE STRING (Fixes Timezone Issue) ---
     function getLocalISODate() {
@@ -530,7 +546,15 @@
     window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
     window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
 
-    document.getElementById('google-login-btn').addEventListener('click', () => { signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); });
+    // --- UPDATED GOOGLE LOGIN LOGIC ---
+    document.getElementById('google-login-btn').addEventListener('click', () => { 
+        if(isInApp) {
+            document.getElementById('in-app-browser-warning').style.display = 'flex';
+            return;
+        }
+        signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); 
+    });
+
     document.getElementById('email-login-btn').addEventListener('click', () => {
         const email = document.getElementById('email-input').value;
         const pass = document.getElementById('pass-input').value;
