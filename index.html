@@ -105,7 +105,7 @@
 
     /* Planet Info Card (Poetry) */
     .planet-info {
-        position: absolute; width: 200px; 
+        position: absolute; width: 220px; 
         background: var(--info-bg);
         backdrop-filter: blur(8px);
         padding: 10px 12px; border-radius: 8px;
@@ -143,20 +143,19 @@
     }
 
     /* Mars (Inner Orbit Top) */
-    .p-mars { width: 55px; height: 55px; background: radial-gradient(#e74c3c, #c0392b); top: 0; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
+    .p-mars { width: 55px; height: 55px; background: radial-gradient(#e74c3c, #c0392b); top: 12%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
     
     /* Jupiter (Outer Orbit Bottom Right) */
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); bottom: 12%; right: 12%; box-shadow: 0 0 30px rgba(241, 196, 15, 0.4); }
     
     /* Saturn (Outer Orbit Left) */
-    .p-saturn { width: 70px; height: 70px; background: radial-gradient(#f39c12, #e67e22); top: 50%; left: 0; transform: translate(-50%, -50%); border: 3px double rgba(255,255,255,0.3); }
+    .p-saturn { width: 70px; height: 70px; background: radial-gradient(#f39c12, #e67e22); top: 50%; left: 10%; transform: translate(-50%, -50%); border: 3px double rgba(255,255,255,0.3); }
     
     /* Mercury (Outer Orbit Bottom Left - Replaces Neptune) */
     .p-mercury { width: 45px; height: 45px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); bottom: 12%; left: 12%; box-shadow: 0 0 20px rgba(189, 195, 199, 0.5); }
 
     /* Animations */
     @keyframes floatMoon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    /* Counter-rotations to keep planets upright (simplified approach: just simple spin for dots, planets don't rotate internally here) */
     @keyframes spinRight { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
     @keyframes spinLeft { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
 
@@ -171,6 +170,12 @@
         .p-name { font-size: 0.9rem; }
         .p-poem-cn { font-size: 0.75rem; }
         .p-poem-en { font-size: 0.7rem; }
+        
+        /* Adjust Mars position slightly for mobile vertical space */
+        .p-mars { top: 15%; }
+        .p-saturn { left: 5%; }
+        .p-jupiter { right: 5%; bottom: 15%; }
+        .p-mercury { left: 5%; bottom: 15%; }
     }
     @media (max-width: 400px) {
         .solar-system { transform: scale(0.55); }
