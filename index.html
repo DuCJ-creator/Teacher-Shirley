@@ -12,21 +12,14 @@
   <style id="themeStyles">
     :root {
       /* --- Light Mode (Morning Mist) --- */
-      /* A soft blue-grey gradient, much better than pure white */
       --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      
       --surface: rgba(255, 255, 255, 0.9);
-      /* Darker border for visibility */
       --border: rgba(20, 30, 48, 0.15);
-      
       --text: #1a2a3a; 
       --text-light: #485563;
-      --accent: #b8860b; /* Darker Gold */
-      
-      /* Dark visible orbits */
+      --accent: #b8860b; 
       --orbit-color: rgba(20, 30, 48, 0.2); 
       --orbit-glow: none;
-      
       --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
       --info-bg: rgba(255, 255, 255, 0.95);
     }
@@ -39,10 +32,8 @@
       --text: #ecf0f1;
       --text-light: #bdc3c7;
       --accent: #f1c40f; 
-      
       --orbit-color: rgba(255, 255, 255, 0.2); 
       --orbit-glow: 0 0 10px rgba(255, 255, 255, 0.05);
-      
       --card-shadow: 0 15px 40px rgba(0,0,0,0.5);
       --info-bg: rgba(25, 35, 50, 0.85);
     }
@@ -80,108 +71,66 @@
     .dark .main-title { color: #ffffff; text-shadow: 0 0 25px rgba(241, 196, 15, 0.5); }
     .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
 
-    /* ==================== UNIVERSE VIEW (Fixed Layout V13) ==================== */
-    /* Ensure min-height so it doesn't collapse */
+    /* ==================== UNIVERSE VIEW ==================== */
     #universe-view { 
-        display: none; 
-        opacity: 0; 
-        transition: opacity 0.8s ease; 
-        min-height: 85vh; /* Fix for collapsed layout */
-        width: 100%; 
-        position: relative; 
-        overflow: hidden; 
+        display: none; opacity: 0; transition: opacity 0.8s ease; 
+        min-height: 85vh; width: 100%; position: relative; overflow: hidden; 
     }
     #universe-view.active { display: block; opacity: 1; }
 
     .solar-system { 
-        position: relative; width: 100%; height: 85vh; /* Fill the view */
+        position: relative; width: 100%; height: 85vh; 
         display: flex; justify-content: center; align-items: center; 
         transform: scale(1);
     }
 
-    /* --- ORBITS --- */
     .orbit { 
-        position: absolute; 
-        border: 1px dashed var(--orbit-color); 
-        box-shadow: var(--orbit-glow); 
-        border-radius: 50%; 
-        top: 50%; left: 50%; 
-        pointer-events: none; 
-        transition: border-color 0.5s;
+        position: absolute; border: 1px dashed var(--orbit-color); box-shadow: var(--orbit-glow); 
+        border-radius: 50%; top: 50%; left: 50%; pointer-events: none; transition: border-color 0.5s;
     }
-    
-    /* 1. Inner Orbit (Mars) */
     .orbit-1 { width: 320px; height: 320px; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; }
-    /* 2. Middle Orbit (Mercury) */
     .orbit-2 { width: 520px; height: 520px; margin-top: -260px; margin-left: -260px; animation: spinOrbit 90s linear infinite reverse; border-style: dotted; }
-    /* 3. Outer Orbit (Jupiter & Saturn) */
     .orbit-3 { width: 780px; height: 780px; margin-top: -390px; margin-left: -390px; animation: spinOrbit 140s linear infinite; }
 
-    /* --- PLANETS --- */
-    /* Dynamic Mars */
     .mars-container { position: absolute; width: 320px; height: 320px; top: 50%; left: 50%; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; pointer-events: none; z-index: 5; }
-    
-    /* (修改 4) 讓火星滑鼠移上去時暫停旋轉，方便點擊 */
     .mars-container:hover { animation-play-state: paused; }
-
     .mars-wrapper { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; margin-left: -30px; animation: spinCounter 50s linear infinite; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
 
-    /* Static Planets */
     .static-planet-wrapper { position: absolute; z-index: 6; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; }
-    
-    /* (修改 4) 修復行星亂跳：滑鼠 hover 時，不要縮放外層 wrapper，改為提高 z-index 確保可點擊 */
     .static-planet-wrapper:hover { z-index: 100; }
-    
-    /* (修改 4) 新增：滑鼠 hover 時，只縮放內部的星球圖片，這樣就不會影響位置了 */
     .static-planet-wrapper:hover .planet-visual { transform: scale(1.15); transition: transform 0.3s; }
 
     .pos-mercury { top: 50%; left: 50%; transform: translate(-50%, 260px) translate(-50%, -50%); margin-top: 30px; }
     .pos-saturn { top: 50%; left: 50%; transform: translate(-390px, 0) translate(-50%, -50%); margin-left: 20px; }
     .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
 
-    /* Moon Base */
     .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
     .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
 
-    /* Visuals */
     .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
     .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
     .p-saturn { width: 75px; height: 75px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4); }
     .p-mercury { width: 55px; height: 55px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); box-shadow: 0 0 25px rgba(189, 195, 199, 0.7); }
 
-    /* Info Cards (Improved Visibility) */
     .planet-info {
-        position: absolute; width: 220px; 
-        background: var(--info-bg);
-        backdrop-filter: blur(15px);
-        padding: 12px 15px; border-radius: 12px;
-        border: 1px solid var(--border);
-        text-align: center; pointer-events: none;
-        box-shadow: var(--card-shadow);
+        position: absolute; width: 220px; background: var(--info-bg); backdrop-filter: blur(15px);
+        padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border);
+        text-align: center; pointer-events: none; box-shadow: var(--card-shadow);
         bottom: 120%; left: 50%; transform: translateX(-50%);
     }
     .moon-info { width: 240px; bottom: 130%; }
-    
     .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 4px; display:block; }
     .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
     .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
-    
     .checkin-tag { display: block; margin-top: 8px; background: linear-gradient(90deg, var(--accent), #f39c12); color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
 
     @keyframes spinOrbit { 100% { transform: rotate(360deg); } }
     @keyframes spinCounter { 100% { transform: rotate(-360deg); } }
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-    /* Responsive */
     @media (max-width: 1024px) { .solar-system { transform: scale(0.75); } }
-    @media (max-width: 768px) { 
-        .solar-system { transform: scale(0.55); height: 70vh; } 
-        .planet-info { width: 190px; padding: 8px; font-size: 0.9em; }
-        .pos-saturn { transform: translate(-340px, 0) translate(-50%, -50%); }
-        .pos-jupiter { transform: translate(340px, 0) translate(-50%, -50%); }
-        .orbit-3 { width: 680px; height: 680px; margin-top: -340px; margin-left: -340px; }
-    }
+    @media (max-width: 768px) { .solar-system { transform: scale(0.55); height: 70vh; } }
     @media (max-width: 420px) { .solar-system { transform: scale(0.42); } .pos-mercury { margin-top: 60px; } }
 
     /* ==================== REST OF THE SITE ==================== */
@@ -215,7 +164,6 @@
     .letter-p { margin-bottom: 0.8rem; font-size: 1.05rem; line-height: 1.5; opacity: 0; transform: translateY(10px); transition: all 0.6s ease; text-align: justify; }
     .letter-p.visible { opacity: 1; transform: translateY(0); }
     .cn-text { display: block; font-family: 'Noto Sans TC'; font-size: 0.95rem; color: #7f8c8d; margin-top: 2px; line-height: 1.4; }
-    .moon-base-txt { color: var(--accent); font-weight: bold; }
     .signature { text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.5rem; margin: 1rem 0; color: var(--accent); }
 
     .choice-area { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; opacity: 0; transition: opacity 1s ease 0.5s; }
@@ -253,32 +201,47 @@
     .checkin-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     .checkin-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-    .print-only { display: none; }
-    @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } .print-only { display: block; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #333; padding: 8px; } }
+    /* New Print Selection Modal Styles */
+    #print-selection-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    .print-modal-content { background: white; width: 90%; max-width: 700px; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; max-height: 90vh; color: #333; }
+    .print-modal-header { font-family: 'Cinzel Decorative'; font-size: 1.5rem; color: #2c3e50; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+    .print-controls { display: flex; justify-content: space-between; margin-bottom: 10px; background: #f8f9fa; padding: 10px; border-radius: 8px; }
+    .selection-list { flex-grow: 1; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 10px; margin-bottom: 20px; max-height: 400px; }
+    .log-item-row { display: flex; align-items: center; padding: 8px 5px; border-bottom: 1px solid #eee; transition: background 0.2s; }
+    .log-item-row:hover { background: #f1f2f6; }
+    .log-item-row input[type="checkbox"] { margin-right: 15px; transform: scale(1.2); cursor: pointer; }
+    .log-details { display: flex; flex-direction: column; font-size: 0.9rem; }
+    .log-time { font-size: 0.8rem; color: #666; font-family: 'Exo 2'; }
+    .log-action { font-weight: 600; color: #2c3e50; }
+    .print-actions { display: flex; gap: 15px; justify-content: center; }
+    .action-btn { padding: 10px 25px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; font-family: 'Exo 2'; transition: all 0.2s; }
+    .btn-cancel { background: #95a5a6; color: white; }
+    .btn-confirm { background: var(--accent); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .btn-confirm:hover { transform: scale(1.05); }
 
-    /* (修改 1) 新增：重點文字的波浪框樣式 */
-    .highlight-box {
-        display: inline-block;
-        font-weight: 900; /* 黑體 */
-        font-style: italic; /* 斜體 */
-        color: #5d4037;
-        border: 2px solid var(--accent); /* 框線顏色 */
-        border-radius: 8px; /* 圓角 */
-        padding: 8px 12px;
-        margin: 5px 0;
-        background: rgba(255, 255, 255, 0.6);
-        box-shadow: 3px 3px 0px rgba(184, 134, 11, 0.2);
-        text-decoration: underline; /* 關鍵字底線 */
-        text-decoration-style: wavy; /* 波浪線 */
-        text-decoration-thickness: 1.5px;
-        line-height: 1.6;
+    .print-only { display: none; }
+    @media print { 
+        body * { visibility: hidden; } 
+        #print-area, #print-area * { visibility: visible; } 
+        #print-area { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; padding: 20px; } 
+        .print-only { display: block; } 
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; } 
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; } 
+        th { background: #f0f0f0; }
     }
 
-    /* 針對框內的關鍵字特別強化 */
+    .highlight-box {
+        display: inline-block;
+        font-weight: 900; font-style: italic; color: #5d4037;
+        border: 2px solid var(--accent); border-radius: 8px;
+        padding: 5px 12px; margin: 5px 0;
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 3px 3px 0px rgba(184, 134, 11, 0.2);
+        text-decoration: underline; text-decoration-style: wavy;
+        text-decoration-thickness: 1.5px; line-height: 1.6;
+    }
     .highlight-box .key-term {
-        color: #c0392b; /* 強調色 */
-        text-decoration: none; 
-        border-bottom: 2px solid #c0392b; /* 關鍵字專屬底線 */
+        color: #c0392b; text-decoration: none; border-bottom: 2px solid #c0392b;
     }
   </style>
 </head>
@@ -365,48 +328,24 @@
               Log in? 🚀
           </button>
       </div>
-
       <div class="categories">
-        <a href="/Teacher-Shirley/teaching-tools/" class="category-card">
-          <span class="icon">🍎</span>
-          <h2>Teaching Tools</h2>
-          <div class="subtitle">師師百寶箱</div>
-        </a>
-        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card">
-          <span class="icon">🪐</span>
-          <h2>Study Tools</h2>
-          <div class="subtitle">學學智趣閣</div>
-        </a>
-        <a href="/Teacher-Shirley/amusement-park/" class="category-card">
-          <span class="icon">🎪</span>
-          <h2>Amusement Park</h2>
-          <div class="subtitle">樂樂嬉遊谷</div>
-        </a>
-        <a href="/Teacher-Shirley/external-resources/" class="category-card">
-          <span class="icon">🔗</span>
-          <h2>External Resources</h2>
-          <div class="subtitle">源源連結庫</div>
-        </a>
+        <a href="/Teacher-Shirley/teaching-tools/" class="category-card"><span class="icon">🍎</span><h2>Teaching Tools</h2><div class="subtitle">師師百寶箱</div></a>
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card"><span class="icon">🪐</span><h2>Study Tools</h2><div class="subtitle">學學智趣閣</div></a>
+        <a href="/Teacher-Shirley/amusement-park/" class="category-card"><span class="icon">🎪</span><h2>Amusement Park</h2><div class="subtitle">樂樂嬉遊谷</div></a>
+        <a href="/Teacher-Shirley/external-resources/" class="category-card"><span class="icon">🔗</span><h2>External Resources</h2><div class="subtitle">源源連結庫</div></a>
       </div>
   </div>
 
   <div id="universe-view">
       <div class="solar-system">
-          
           <div class="orbit orbit-1"></div>
           <div class="orbit orbit-2"></div>
           <div class="orbit orbit-3"></div>
-
           <div class="mars-container"><div class="mars-wrapper" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')"><div class="planet-visual p-mars"></div><div class="planet-info"><span class="p-name">Mars 🔴</span><div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div><div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div></div></div></div>
-
           <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')"><div class="planet-visual p-mercury"></div><div class="planet-info"><span class="p-name">Mercury ⚪</span><div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div><div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div></div></div>
-
           <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')"><div class="planet-visual p-jupiter"></div><div class="planet-info"><span class="p-name">Jupiter 🟡</span><div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div><div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div></div></div>
-
           <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')"><div class="planet-visual p-saturn"></div><div class="planet-info"><span class="p-name">Saturn 🟠</span><div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div><div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div></div></div>
-
           <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
-
       </div>
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
@@ -420,7 +359,7 @@
               <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
               <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
-              <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="printRecords()">🖨️ Print Learning Log</div>
+              <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
           <div class="content-panel">
               <div class="data-card word-card">
@@ -440,12 +379,40 @@
       </div>
   </div>
 
+  <div id="print-selection-modal">
+    <div class="print-modal-content">
+        <div class="print-modal-header">Select Records to Print</div>
+        <div class="print-controls">
+            <button onclick="toggleAllLogs(true)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold;">☑ Select All</button>
+            <button onclick="toggleAllLogs(false)" style="background:none; border:none; cursor:pointer; color:#7f8c8d; font-weight:bold;">☐ Clear All</button>
+        </div>
+        <div class="selection-list" id="log-selection-list">
+            </div>
+        <div class="print-actions">
+            <button class="action-btn btn-cancel" onclick="closePrintSelection()">Cancel</button>
+            <button class="action-btn btn-confirm" onclick="confirmPrint()">🖨️ Print / Save PDF</button>
+        </div>
+    </div>
+  </div>
+
   <div id="print-area" class="print-only">
       <div class="print-header" style="text-align:center; border-bottom:2px solid black; margin-bottom:20px; padding-bottom:10px;">
           <h1>My Learning Journey</h1>
           <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
       </div>
-      <table id="print-table"><thead><tr><th>Date</th><th>Word / Topic</th><th>Activity Details</th></tr></thead><tbody id="print-body"></tbody></table>
+      <table id="print-table">
+          <thead>
+              <tr>
+                  <th style="width:25%">Time / Duration</th>
+                  <th style="width:20%">Activity Type</th>
+                  <th>Details</th>
+              </tr>
+          </thead>
+          <tbody id="print-body"></tbody>
+      </table>
+      <div style="margin-top:20px; font-size:0.8rem; text-align:center;">
+          Generated from Teacher Shirley's ET Platform
+      </div>
   </div>
 
   <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
@@ -480,7 +447,6 @@
     let checkinHistory = [];
     let activityLog = [];
 
-  
     // --- ENVELOPE LOGIC ---
     window.openLetter = () => {
         const windchime = document.getElementById('windchime');
@@ -497,26 +463,20 @@
         }, 800);
     };
 
-    // --- UI State ---
     window.enterVisitorMode = () => {
         document.getElementById('intro-overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
         document.getElementById('visitor-view').classList.add('active');
     };
 
-    // (修改 2) 新增：重新開啟登入視窗的函數 (給按鈕呼叫用)
     window.reopenAuth = () => {
         document.getElementById('visitor-view').classList.remove('active');
         const overlay = document.getElementById('intro-overlay');
         overlay.style.display = 'flex';
-        // 確保信件呈現「打開」狀態
-        const container = document.querySelector('.envelope-container');
-        const letterView = document.getElementById('letter-view');
-        
-        // 強制重繪以觸發 transition
         void overlay.offsetWidth; 
         overlay.style.opacity = '1';
-        
+        const container = document.querySelector('.envelope-container');
+        const letterView = document.getElementById('letter-view');
         if(!container.classList.contains('open')) {
              container.classList.add('open');
              letterView.classList.add('show');
@@ -529,7 +489,6 @@
     window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
     window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
 
-    // --- Auth & Data ---
     document.getElementById('google-login-btn').addEventListener('click', () => { signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); });
     document.getElementById('email-login-btn').addEventListener('click', () => {
         const email = document.getElementById('email-input').value;
@@ -595,10 +554,14 @@
         const docSnap = await getDoc(userRef);
         let currentStreak = docSnap.data().streak || 0;
         const lastCheckIn = docSnap.data().history?.slice(-1)[0];
-        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
-        if (lastCheckIn === yesterdayStr) currentStreak++;
-        else if (lastCheckIn !== fullDate) currentStreak = 1;
+        if (lastCheckIn === fullDate) { /* already checked in */ }
+        else {
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            if (lastCheckIn === yesterdayStr) currentStreak++;
+            else currentStreak = 1;
+        }
+        
         const newHistory = checkinHistory.includes(fullDate) ? checkinHistory : [...checkinHistory, fullDate];
         await setDoc(userRef, { streak: currentStreak, history: newHistory }, { merge: true });
         await trackActivity("Check-in", "Daily Check-in");
@@ -669,19 +632,133 @@
         }
     }
 
-    window.printRecords = () => {
+    // --- NEW: LOG PROCESSING & PRINTING LOGIC ---
+
+    let processedLogs = [];
+
+    // 1. Logic to merge consecutive similar logs and calculate duration
+    function processActivityLogs(logs) {
+        if (!logs || logs.length === 0) return [];
+        
+        // Sort by date just in case
+        const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
+        const grouped = [];
+
+        for (let i = 0; i < sortedLogs.length; i++) {
+            const current = sortedLogs[i];
+            const next = sortedLogs[i+1];
+            
+            // Start a new group
+            const startTime = new Date(current.date);
+            let endTime = next ? new Date(next.date) : new Date(); // If last item, end time is "now"
+            
+            // Check if next item is "similar" (same detail = same location)
+            // If similar, we skip the next iteration logic but extend the duration of this one
+            // NOTE: The user wants "Stay in one place -> one record".
+            // So we look ahead until the location changes.
+            
+            let j = i + 1;
+            while(j < sortedLogs.length && sortedLogs[j].detail === current.detail) {
+                // It's the same activity/location, just extend the end time
+                endTime = (j + 1 < sortedLogs.length) ? new Date(sortedLogs[j+1].date) : new Date();
+                j++;
+            }
+            
+            // Calculate duration
+            const durationMs = endTime - startTime;
+            const minutes = Math.floor(durationMs / 60000);
+            const durationStr = minutes < 1 ? "< 1 min" : `${minutes} mins`;
+            
+            grouped.push({
+                start: startTime,
+                end: endTime,
+                type: current.type,
+                detail: current.detail,
+                durationStr: durationStr,
+                originalIndex: i
+            });
+            
+            // Jump i to the last processed index
+            i = j - 1;
+        }
+        return grouped.reverse(); // Show newest first
+    }
+
+    // 2. Open Modal and Render List
+    window.openPrintSelection = () => {
         if (!currentUser) return;
+        processedLogs = processActivityLogs(activityLog);
+        const listContainer = document.getElementById('log-selection-list');
+        listContainer.innerHTML = '';
+
+        if(processedLogs.length === 0) {
+            listContainer.innerHTML = '<div style="padding:20px; text-align:center;">No records found.</div>';
+            return;
+        }
+
+        processedLogs.forEach((log, index) => {
+            const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
+            
+            const row = document.createElement('div');
+            row.className = 'log-item-row';
+            // Default unchecked (checked = false)
+            row.innerHTML = `
+                <input type="checkbox" id="log-check-${index}" class="log-checkbox">
+                <div class="log-details">
+                    <span class="log-action">${log.type}: ${log.detail}</span>
+                    <span class="log-time">${dateStr} (${log.durationStr})</span>
+                </div>
+            `;
+            listContainer.appendChild(row);
+        });
+
+        document.getElementById('print-selection-modal').style.display = 'flex';
+    };
+
+    window.closePrintSelection = () => {
+        document.getElementById('print-selection-modal').style.display = 'none';
+    };
+
+    window.toggleAllLogs = (checkStatus) => {
+        const checkboxes = document.querySelectorAll('.log-checkbox');
+        checkboxes.forEach(cb => cb.checked = checkStatus);
+    };
+
+    // 3. Confirm and Print
+    window.confirmPrint = () => {
         const printBody = document.getElementById('print-body');
         printBody.innerHTML = '';
+        
         document.getElementById('print-name').innerText = currentUser.displayName || currentUser.email;
         document.getElementById('print-date').innerText = new Date().toLocaleDateString();
-        [...activityLog].reverse().forEach(log => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${new Date(log.date).toLocaleString()}</td><td>-</td><td>${log.type}: ${log.detail}</td>`;
-            printBody.appendChild(tr);
+
+        let hasSelection = false;
+        processedLogs.forEach((log, index) => {
+            const checkbox = document.getElementById(`log-check-${index}`);
+            if(checkbox && checkbox.checked) {
+                hasSelection = true;
+                const tr = document.createElement('tr');
+                const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
+                
+                tr.innerHTML = `
+                    <td>${dateStr}<br><span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span></td>
+                    <td>${log.type}</td>
+                    <td>${log.detail}</td>
+                `;
+                printBody.appendChild(tr);
+            }
         });
-        window.print();
+
+        if(!hasSelection) {
+            alert("Please select at least one record to print.");
+            return;
+        }
+
+        document.getElementById('print-selection-modal').style.display = 'none';
+        setTimeout(() => window.print(), 500);
     };
+
+    // --- END NEW LOGIC ---
 
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
