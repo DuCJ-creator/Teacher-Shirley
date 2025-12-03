@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style id="themeStyles">
     :root {
@@ -262,6 +263,108 @@
     .btn-warning { padding: 12px; border: none; border-radius: 25px; font-weight: bold; font-family: 'Exo 2'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-copy { background: #3498db; color: white; }
     .btn-close-warning { background: transparent; border: 1px solid #7f8c8d; color: #bdc3c7; }
+
+    /* ==================== NEW MOON CARD STYLES ==================== */
+    /* 卡片模態框容器 */
+    #card-modal {
+        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 6000; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.4s ease;
+    }
+    #card-modal.active { display: flex; opacity: 1; }
+    
+    .card-overlay-bg { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+    
+    .card-display-container { 
+        position: relative; z-index: 2; display: flex; flex-direction: column; 
+        align-items: center; gap: 20px; transform: scale(0.9); 
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    }
+    #card-modal.active .card-display-container { transform: scale(1); }
+
+    /* --- 核心卡片結構 (黃金比例設計) --- */
+    .moon-card {
+        width: 360px; min-height: 580px;
+        background: var(--card-bg, #1a1a2e);
+        border: 2px solid var(--card-border, #4a4e69);
+        border-radius: 20px;
+        padding: 30px 25px;
+        color: var(--card-text, #e0e1dd);
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.2);
+        font-family: 'Exo 2', sans-serif;
+        overflow: hidden;
+        display: flex; flex-direction: column;
+    }
+
+    /* 卡片內部元素 */
+    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); padding-bottom: 15px; margin-bottom: 20px; }
+    .card-title { font-family: 'Cinzel Decorative'; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; color: var(--card-accent, #c9d1d9); text-transform: uppercase; }
+    .card-serial { font-family: 'Exo 2'; font-size: 0.7rem; color: var(--card-text-dim, #778ca3); letter-spacing: 1px; }
+
+    .card-greeting { font-family: 'Playfair Display'; font-size: 1.5rem; font-weight: 700; color: var(--card-highlight, #fff); line-height: 1.2; margin-bottom: 5px; }
+    .card-subtitle { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #a0a0a0); font-style: italic; margin-bottom: 15px; }
+
+    .card-divider { text-align: center; color: var(--card-accent, #ffd700); font-size: 1.2rem; margin: 15px 0; opacity: 0.7; }
+
+    .card-content-box { text-align: center; margin-bottom: 20px; }
+    .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--card-accent, #ffd700); margin-bottom: 5px; opacity: 0.8; }
+    .card-wotd { font-family: 'Playfair Display'; font-size: 2.2rem; font-weight: 700; color: var(--card-highlight, #fff); text-shadow: 0 2px 10px rgba(255,255,255,0.2); line-height: 1; margin-bottom: 5px; }
+    .card-pos { font-family: 'Exo 2'; font-size: 0.8rem; background: var(--card-accent-dim, rgba(255,255,255,0.1)); display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
+    .card-def { font-family: 'Noto Serif TC'; font-size: 1rem; color: var(--card-text, #ddd); line-height: 1.4; font-weight: 600; }
+
+    .card-quote-box { position: relative; padding: 15px; border-left: 3px solid var(--card-accent, #ffd700); background: linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent); margin-top: auto; }
+    .card-quote-text { font-family: 'Playfair Display'; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--card-text, #eee); }
+    .card-quote-author { text-align: right; font-size: 0.8rem; font-weight: bold; margin-top: 8px; color: var(--card-accent, #ffd700); }
+
+    .card-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); display: flex; justify-content: space-between; align-items: center; }
+    .card-streak-badge { background: var(--card-accent, #ffd700); color: var(--card-bg, #000); padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 0 10px var(--card-accent-dim, rgba(255,215,0,0.4)); display: flex; align-items: center; gap: 5px; }
+    .card-signature { font-family: 'Dancing Script'; font-size: 1.5rem; color: var(--card-text-dim, #aaa); transform: rotate(-5deg); }
+
+    .card-watermark { position: absolute; bottom: 10px; right: 20px; font-size: 4rem; font-weight: 900; color: rgba(255,255,255,0.03); pointer-events: none; z-index: 0; font-family: 'Cinzel Decorative'; white-space: nowrap; }
+    .card-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.05) 45%, transparent 50%); pointer-events: none; }
+
+    /* 按鈕樣式 */
+    .card-actions { display: flex; gap: 15px; margin-top: 15px; }
+    .btn-card-action { padding: 10px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: transform 0.2s; font-family: 'Exo 2'; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .btn-download { background: linear-gradient(90deg, #b8860b, #f1c40f); color: #2c3e50; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3); }
+    .btn-close { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .btn-card-action:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+    /* === 11 種高雅模板樣式 (深邃、月亮、星空風格) === */
+    /* 1. Midnight Gold (經典黑金) */
+    .theme-1 { --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364); --card-border: #b8860b; --card-accent: #ffd700; --card-highlight: #fff; --card-text: #e0e0e0; --card-text-dim: #8fa1b3; --card-accent-dim: rgba(184, 134, 11, 0.2); }
+    /* 2. Silver Mist (冷銀月霧) */
+    .theme-2 { --card-bg: linear-gradient(135deg, #2c3e50, #4ca1af); --card-border: #bdc3c7; --card-accent: #ecf0f1; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #bdc3c7; --card-accent-dim: rgba(255,255,255,0.2); }
+    /* 3. Deep Nebula (深邃星雲 - 紫) */
+    .theme-3 { --card-bg: radial-gradient(circle at 10% 20%, #240b36, #c31432); --card-border: #ffafbd; --card-accent: #ffc3a0; --card-highlight: #fff0f5; --card-text: #ffe4e1; --card-text-dim: #d8bfd8; --card-accent-dim: rgba(255,175,189,0.2); }
+    /* 4. Obsidian (黑曜石) */
+    .theme-4 { --card-bg: #121212; --card-border: #333; --card-accent: #fff; --card-highlight: #fff; --card-text: #ccc; --card-text-dim: #666; --card-accent-dim: rgba(255,255,255,0.1); }
+    /* 5. Royal Blue (皇家夜藍) */
+    .theme-5 { --card-bg: linear-gradient(to bottom, #141e30, #243b55); --card-border: #f1c40f; --card-accent: #f39c12; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #95a5a6; --card-accent-dim: rgba(241, 196, 15, 0.15); }
+    /* 6. Lunar Ash (月塵灰) */
+    .theme-6 { --card-bg: linear-gradient(to top, #304352, #d7d2cc); --card-border: #7f8c8d; --card-accent: #2c3e50; --card-highlight: #2c3e50; --card-text: #1a252f; --card-text-dim: #546e7a; --card-accent-dim: rgba(0,0,0,0.1); }
+    /* 7. Crimson Eclipse (血月) */
+    .theme-7 { --card-bg: linear-gradient(160deg, #4b134f, #190a05); --card-border: #c0392b; --card-accent: #e74c3c; --card-highlight: #fff; --card-text: #fdcb6e; --card-text-dim: #fab1a0; --card-accent-dim: rgba(231, 76, 60, 0.2); }
+    /* 8. Aurora (極光) */
+    .theme-8 { --card-bg: linear-gradient(to right, #00416a, #799f0c, #ffe000); --card-border: #a8ff78; --card-accent: #78ffd6; --card-highlight: #fff; --card-text: #f0f0f0; --card-text-dim: #a8e063; --card-accent-dim: rgba(120, 255, 214, 0.2); }
+    /* 9. Vintage Parchment (古老羊皮卷) */
+    .theme-9 { --card-bg: linear-gradient(to bottom, #3e2b14, #2c1e0e); --card-border: #d4af37; --card-accent: #c5a059; --card-highlight: #f3e5ab; --card-text: #e6d2b5; --card-text-dim: #8b7355; --card-accent-dim: rgba(212, 175, 55, 0.2); }
+    /* 10. Starry Night (梵谷星空) */
+    .theme-10 { --card-bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); --card-border: rgba(255,255,255,0.4); --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: rgba(255,255,255,0.6); --card-accent-dim: rgba(255,255,255,0.1); }
+    /* 11. Cyber Moon (賽博龐克) */
+    .theme-11 { --card-bg: linear-gradient(45deg, #111, #222); --card-border: #0ff; --card-accent: #0ff; --card-highlight: #fff; --card-text: #eee; --card-text-dim: #0aa; --card-accent-dim: rgba(0, 255, 255, 0.2); border-width: 1px; box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+
+    /* 日曆互動增強 (加入卡袋提示) */
+    .calendar-day-checked {
+        cursor: pointer; position: relative; overflow: hidden;
+    }
+    .calendar-day-checked:hover::after {
+        content: '🃏'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem;
+    }
+
   </style>
 </head>
 <body>
@@ -419,7 +522,62 @@
           </div>
       </div>
   </div>
+<div id="card-modal">
+      <div class="card-overlay-bg" onclick="closeCardModal()"></div>
+      <div class="card-display-container">
+          <div id="collectible-card" class="moon-card">
+              <div class="card-decoration-top"></div>
+              
+              <div class="card-header">
+                  <div class="card-title">MOON BASE CLEARANCE</div>
+                  <div class="card-serial">NO. <span id="card-date-serial"></span></div>
+              </div>
 
+              <div class="card-body">
+                  <div class="card-greeting">
+                      Welcome, <span id="card-user-name">Traveler</span>
+                  </div>
+                  <div class="card-subtitle">
+                      This is your Shirley's Moon Base Card for <span id="card-display-date"></span>.
+                  </div>
+
+                  <div class="card-divider">✦ ✦ ✦</div>
+
+                  <div class="card-content-box">
+                      <div class="card-label">Word of the Day</div>
+                      <div class="card-wotd" id="card-wotd"></div>
+                      <div class="card-pos" id="card-pos"></div>
+                      <div class="card-def" id="card-def"></div>
+                  </div>
+
+                  <div class="card-quote-box">
+                      <div class="card-quote-text" id="card-quote"></div>
+                      <div class="card-quote-author" id="card-author"></div>
+                  </div>
+              </div>
+
+              <div class="card-footer">
+                  <div class="card-streak-badge">
+                      <span class="badge-icon">🔥</span> Streak: <span id="card-streak"></span>
+                  </div>
+                  <div class="card-signature">Teacher Shirley</div>
+              </div>
+              
+              <div class="card-watermark">MOON BASE</div>
+              <div class="card-shine"></div>
+          </div>
+
+          <div class="card-actions">
+              <button class="btn-card-action btn-download" onclick="downloadCardImage()">
+                  📥 Download Image (收藏)
+              </button>
+              <button class="btn-card-action btn-close" onclick="closeCardModal()">
+                  ✕ Close (放入卡袋)
+              </button>
+          </div>
+      </div>
+  </div>
+  
   <div id="print-selection-modal">
     <div class="print-modal-content">
         <div class="print-modal-header">Select Records to Print</div>
@@ -667,7 +825,11 @@
             document.getElementById('total-days').innerText = checkinHistory.length;
             btn.innerText = "Moon Check-in Success! 🌕";
             renderCalendar();
-
+        
+          setTimeout(() => {
+                openCard(fullDate);
+            }, 800);
+          
         } catch (e) {
             console.error("Check-in error:", e);
             btn.innerText = "Check-in Failed";
@@ -729,10 +891,18 @@
         const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
         
         for (let i = 1; i <= daysInMonth; i++) {
-            const dayEl = document.createElement('div');
-            dayEl.innerText = i;
-            dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px;";
-            if (checkinHistory.includes(`${currentYearMonth}-${String(i).padStart(2, '0')}`)) { dayEl.style.background = "var(--accent)"; dayEl.style.color="white"; dayEl.style.borderRadius="50%"; }
+           const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, '0')}`;
+            
+            if (checkinHistory.includes(thisDateStr)) { 
+                dayEl.style.background = "var(--accent)"; 
+                dayEl.style.color="white"; 
+                dayEl.style.borderRadius="50%"; 
+                
+                // ★★★ 新增這段：加入點擊事件與樣式 ★★★
+                dayEl.classList.add('calendar-day-checked');
+                dayEl.title = "Click to open Card Pocket";
+                dayEl.onclick = () => openCard(thisDateStr);
+            }
             grid.appendChild(dayEl);
         }
     }
@@ -830,6 +1000,90 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
+   // --- CARD SYSTEM LOGIC (卡片系統) ---
+
+    // 隨機模板選擇器：根據日期產生固定的 1-11 數字 (確保同一天開卡片樣式不變，但不同天樣式不同)
+    function getTemplateIdByDate(dateStr) {
+        const parts = dateStr.split('-');
+        const y = parseInt(parts[0]);
+        const m = parseInt(parts[1]);
+        const d = parseInt(parts[2]);
+        // 使用數學公式產生偽隨機數
+        const val = (y * 13 + m * 29 + d * 7);
+        // 取餘數 11，加 1 變為 1-11
+        return (val % 11) + 1;
+    }
+
+    // 打開卡片
+    window.openCard = (dateStr) => {
+        if (!currentUser) return;
+        
+        // 1. 查找該日期的數據 (修正日期格式對應 CSV)
+        // 假設 CSV 裡的 date 是 "MM-DD" 格式，而 dateStr 是 "YYYY-MM-DD"
+        const queryDate = dateStr.slice(5); 
+        const wordObj = csvData.words.find(r => r.date === queryDate);
+        const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+        
+        // 如果那天沒有數據，提供預設值
+        const wotd = wordObj ? wordObj.word : "Discovery";
+        const wotdPos = wordObj ? wordObj.pos : "n.";
+        const wotdDef = wordObj ? wordObj.meaning : "A new finding in the universe.";
+        const quote = quoteObj ? quoteObj['quote e'] : "Stars can't shine without darkness.";
+        const author = quoteObj ? quoteObj.author : "Universe";
+
+        // 2. 獲取 Streak (若為歷史卡片，顯示目前的 Streak 即可)
+        const streakDisplay = document.getElementById('streak-days').innerText;
+
+        // 3. 填充 DOM 資料
+        document.getElementById('card-user-name').innerText = currentUser.displayName || "Moon Walker";
+        document.getElementById('card-display-date').innerText = dateStr;
+        document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, ''); // 序號 ex: 20251203
+        document.getElementById('card-wotd').innerText = wotd;
+        document.getElementById('card-pos').innerText = wotdPos;
+        document.getElementById('card-def').innerText = wotdDef;
+        document.getElementById('card-quote').innerText = `“${quote}”`;
+        document.getElementById('card-author').innerText = author;
+        document.getElementById('card-streak').innerText = streakDisplay;
+
+        // 4. 應用隨機模板
+        const cardEl = document.getElementById('collectible-card');
+        // 清除舊樣式
+        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
+        // 加入新樣式
+        const themeId = getTemplateIdByDate(dateStr);
+        cardEl.classList.add(`theme-${themeId}`);
+
+        // 5. 顯示模態框
+        document.getElementById('card-modal').classList.add('active');
+    };
+
+    window.closeCardModal = () => {
+        document.getElementById('card-modal').classList.remove('active');
+    };
+
+    // 下載圖片邏輯
+    window.downloadCardImage = () => {
+        const cardElement = document.getElementById('collectible-card');
+        const btn = document.querySelector('.btn-download');
+        const originalText = btn.innerText;
+        btn.innerText = "Capturing... 📸";
+        
+        html2canvas(cardElement, {
+            scale: 2, // 高解析度
+            backgroundColor: null,
+            useCORS: true 
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Shirley_MoonBase_Card_${document.getElementById('card-display-date').innerText}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            btn.innerText = originalText;
+        }).catch(err => {
+            console.error(err);
+            alert("Image capture failed.");
+            btn.innerText = originalText;
+        });
+    };
   </script>
 </body>
 </html>
