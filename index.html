@@ -315,14 +315,15 @@
     .card-pos { font-family: 'Exo 2'; font-size: 0.8rem; background: var(--card-accent-dim, rgba(255,255,255,0.1)); display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
     .card-def { font-family: 'Noto Serif TC'; font-size: 1rem; color: var(--card-text, #ddd); line-height: 1.4; font-weight: 600; }
     
-    /* 例句樣式 (New) */
+    /* 例句樣式 */
     .card-sentence-container { margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--card-accent-dim, rgba(255,255,255,0.1)); }
     .card-sent-en { font-family: 'Exo 2'; font-style: italic; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-bottom: 5px; line-height: 1.3; font-weight:500; }
     .card-sent-cn { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #888); opacity: 0.8; }
 
-
+    /* 佳句與翻譯樣式 */
     .card-quote-box { position: relative; padding: 15px; border-left: 3px solid var(--card-accent, #ffd700); background: linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent); margin-top: auto; }
     .card-quote-text { font-family: 'Playfair Display'; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--card-text, #eee); }
+    .card-quote-trans { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-top: 8px; font-style: normal; line-height: 1.4; opacity: 0.9; }
     .card-quote-author { text-align: right; font-size: 0.8rem; font-weight: bold; margin-top: 8px; color: var(--card-accent, #ffd700); }
 
     .card-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); display: flex; justify-content: space-between; align-items: center; }
@@ -564,6 +565,7 @@
 
                   <div class="card-quote-box">
                       <div class="card-quote-text" id="card-quote"></div>
+                      <div class="card-quote-trans" id="card-quote-trans"></div>
                       <div class="card-quote-author" id="card-author"></div>
                   </div>
               </div>
@@ -794,7 +796,7 @@
         return (val % 11) + 1;
     }
 
-    // 顯示卡片 (加入例句)
+    // 顯示卡片 (加入例句與佳句翻譯)
     window.openCard = (dateStr) => {
         const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
         
@@ -803,6 +805,7 @@
         let quote = "The stars are calling.", author = "Universe";
         let sentEn = "Keep looking up."; 
         let sentCn = "保持仰望星空。";
+        let quoteTrans = "群星在召喚。";
 
         if (csvData && csvData.words) {
             const queryDate = dateStr.slice(5); // remove YYYY-
@@ -813,12 +816,12 @@
                 wotd = wordObj.word || wotd;
                 wotdPos = wordObj.pos || wotdPos;
                 wotdDef = wordObj.meaning || wotdDef;
-                // 獲取例句
                 sentEn = wordObj['sentence e'] || sentEn;
                 sentCn = wordObj['sentence c'] || sentCn;
             }
             if (quoteObj) {
                 quote = quoteObj['quote e'] || quote;
+                quoteTrans = quoteObj['quote c'] || quoteTrans;
                 author = quoteObj.author || author;
             }
         }
@@ -835,8 +838,9 @@
         // 填充例句
         document.getElementById('card-sent-en').innerText = sentEn;
         document.getElementById('card-sent-cn').innerText = sentCn;
-
+        // 填充佳句
         document.getElementById('card-quote').innerText = `“${quote}”`;
+        document.getElementById('card-quote-trans').innerText = quoteTrans;
         document.getElementById('card-author').innerText = author;
         document.getElementById('card-streak').innerText = streakDisplay;
 
