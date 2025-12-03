@@ -455,7 +455,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
     // -----------------------------------------------------------------------------------------
     // 請在此處填入您的 Firebase Config
@@ -558,26 +558,23 @@
     }
 
     // =========================================================================
-    //  CRITICAL OPTIMIZATION: ZERO-READ CHECK-IN
-    //  優化後的打卡功能：不讀取資料庫，直接寫入，省錢且快速
+    //  CRITICAL UPDATE: Optimized HandleCheckIn (0 Reads, 1 Write)
+    //  優化後的打卡功能：直接使用本地變數 + setDoc合併寫入
     // =========================================================================
     window.handleCheckIn = async () => {
         if (!currentUser) return;
         const btn = document.getElementById('checkin-btn');
         if(btn.disabled) return;
         
-        // 1. UI 立即反饋 (防止連點)
         btn.disabled = true;
         btn.innerText = "Signing in...";
 
         const fullDate = getLocalISODate();
         const userRef = doc(db, "users", currentUser.uid);
 
-        // 2. 本地計算 (節省 1 次 Read)
-        // 直接從畫面讀取當前 streak，因為 loadUserData 已經確保它是最新的
+        // 1. 使用本地變數計算 Streak (不呼叫 getDoc)
+        // streak-days 的值來自 loadUserData，是可信的
         let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
-        
-        // 檢查歷史紀錄 (本地變數)
         const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
 
         if (lastCheckIn === fullDate) {
@@ -585,7 +582,6 @@
              return;
         }
 
-        // 計算 Streak
         const yesterday = new Date(); 
         yesterday.setDate(yesterday.getDate() - 1);
         const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
@@ -593,7 +589,6 @@
         if (lastCheckIn === yStr) currentStreak++;
         else currentStreak = 1;
 
-        // 準備新資料
         const newHistory = [...checkinHistory, fullDate];
         const newLogEntry = { 
             date: new Date().toISOString(), 
@@ -603,15 +598,14 @@
         const newLogs = [...activityLog, newLogEntry];
 
         try {
-            // 3. 單次寫入 (節省 2 次 Write)
-            // 將所有更新合併成一次操作
+            // 2. 合併寫入 (一次操作完成所有更新)
             await setDoc(userRef, { 
                 streak: currentStreak, 
                 history: newHistory,
                 activityLogs: newLogs
             }, { merge: true });
 
-            // 4. 更新本地狀態
+            // 3. 更新本地狀態
             checkinHistory = newHistory;
             activityLog = newLogs;
             
@@ -628,34 +622,25 @@
         }
     };
 
-    // --- ACTIVITY TRACKER (Optimized to not create extra writes for page jumps) ---
-    // 保留這個函數供其他功能使用，但移除 Check-in 裡面的調用
     async function trackActivity(type, detail) {
         if(!currentUser) return;
         const entry = { date: new Date().toISOString(), type, detail };
         activityLog.push(entry);
-        // 如果是頁面跳轉 (visitPlanet)，我們接受這一次寫入成本，因為它不頻繁
         try {
              const userRef = doc(db, "users", currentUser.uid);
-             // 這裡我們只更新 Logs，不讀取
-             // 注意：為了安全起見，這裡使用簡單的 setDoc merge，雖然 technically 是 overwrite array
-             // 但因為我們有 activityLog 本地變數，所以是安全的
-             await setDoc(userRef, { activityLogs: activityLog }, { merge: true });
+             await updateDoc(userRef, { activityLogs: arrayUnion(entry) });
         } catch(e) { console.log("Track error", e); }
     }
 
-    // --- PLANET JUMP ---
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
         setTimeout(() => { window.location.href = url; }, 300);
     };
 
-    // --- CONTENT FETCHING (Simulated for Demo) ---
+    // --- CONTENT FETCHING ---
     async function fetchDailyContent() {
-        // 這裡保留您原本的 CSV 邏輯，或模擬資料
         const today = new Date();
         const dateStr = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`;
-        // 範例資料填充，避免空白
         document.getElementById('word-date').innerText = `(${dateStr})`;
         document.getElementById('wotd-word').innerText = "Serendipity";
         document.getElementById('wotd-pos').innerText = "n.";
@@ -692,9 +677,6 @@
     window.showPrintModal = () => {
         const list = document.getElementById('log-selection-list');
         list.innerHTML = '';
-        // Process logs to calculate duration if needed, or just list them
-        // 這裡簡單列出所有 Log
-        // Reverse to show newest first
         const sortedLogs = [...activityLog].reverse(); 
         sortedLogs.forEach((log, index) => {
             const row = document.createElement('div');
