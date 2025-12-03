@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL Junior Writing - Professional Practice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- 專業配色系統 (Professional Color System) --- */
+            --primary-dark: #1e293b;    /* 深藍黑 (文字/標題) */
+            --primary-blue: #3b82f6;    /* 科技藍 (主色調) */
+            --primary-light: #eff6ff;   /* 淺藍 (背景/選中態) */
+            --success: #10b981;         /* 成功綠 */
+            --error: #ef4444;           /* 錯誤紅 */
+            --surface: #ffffff;         /* 卡片白 */
+            --bg: #f3f4f6;              /* 整體背景灰 */
+            --border: #e2e8f0;          /* 邊框色 */
+            --text-sub: #64748b;        /* 次要文字 */
+            
+            /* --- 陰影系統 --- */
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--primary-dark);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Header --- */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .description {
+            color: #cbd5e1;
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+
+        .difficulty-tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* --- Tabs --- */
+        .tabs-wrapper {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 10; /* 確保選單在滾動時置頂 */
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 15px 0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            color: var(--text-sub);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background-color: var(--bg);
+            color: var(--primary-dark);
+        }
+
+        .tab.active {
+            background-color: var(--primary-dark);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* --- Main Content Layout (Split View) --- */
+        .passage-container {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .passage-container.active {
+            display: grid;
+            grid-template-columns: 45% 55%; /* 左文右題 */
+            gap: 40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Reading Section (Left) --- */
+        .reading-panel {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .passage-card {
+            background: #f8fafc; /* 極淺藍灰 */
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-family: 'Lora', serif; /* 襯線體優化閱讀 */
+            font-size: 19px;
+            line-height: 2;
+            color: #334155;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 2px solid #94a3b8;
+            margin: 0 5px;
+            text-align: center;
+            color: var(--primary-blue);
+            font-weight: 700;
+            padding: 0 5px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .blank.filled {
+            border-bottom-color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .blank-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: var(--text-sub);
+            vertical-align: super;
+            margin-right: 2px;
+            font-weight: bold;
+        }
+
+        /* --- Questions Section (Right) --- */
+        .questions-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .question-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: var(--shadow-card);
+        }
+
+        .q-header {
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .q-number {
+            background: var(--primary-dark);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--surface);
+            text-align: left;
+            font-size: 15px;
+            color: var(--primary-dark);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .option-btn:hover {
+            background-color: var(--bg);
+            border-color: #cbd5e1;
+        }
+
+        .option-btn.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary-blue);
+            color: #1d4ed8;
+            font-weight: 500;
+            box-shadow: 0 0 0 1px var(--primary-blue);
+        }
+
+        /* --- Action & Results --- */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .results-area {
+            display: none;
+            margin-top: 30px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .score-banner {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: #15803d;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #bbf7d0;
+        }
+
+        .explanation-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .explanation-item.wrong {
+            border-left-color: var(--error);
+            background: #fef2f2;
+        }
+
+        .exp-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .exp-text {
+            color: var(--text-sub);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 900px) {
+            .passage-container.active {
+                grid-template-columns: 1fr; /* Mobile: Stack layout */
+            }
+            .reading-panel {
+                position: static;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>TOEFL Junior Writing Task 1</h1>
+            <p class="description">Text Editing Practice: Identify grammatical errors and select the correct word forms to complete the academic passages.</p>
+            <div class="difficulty-tags">
+                <span class="tag">Grammar Focus</span>
+                <span class="tag">Vocabulary</span>
+                <span class="tag">Structure</span>
+            </div>
+        </header>
+
+        <div class="tabs-wrapper">
+            <div class="tabs">
+                <div class="tab active" onclick="switchPassage(1)">Passage 1 (Easy)</div>
+                <div class="tab" onclick="switchPassage(2)">Passage 2 (Easy)</div>
+                <div class="tab" onclick="switchPassage(3)">Passage 3 (Medium)</div>
+                <div class="tab" onclick="switchPassage(4)">Passage 4 (Medium)</div>
+                <div class="tab" onclick="switchPassage(5)">Passage 5 (Hard)</div>
+            </div>
+        </div>
+
+        <div id="passage-1" class="passage-container active">
+            <div class="reading-panel">
+                <div class="passage-card">
+                    <p>Last weekend, my family and I <sup class="blank-number">1</sup><span class="blank" id="p1-b1">___</span> to the zoo. It was a beautiful day, and the sun <sup class="blank-number">2</sup><span class="blank" id="p1-b2">___</span> brightly. We <sup class="blank-number">3</sup><span class="blank" id="p1-b3">___</span> many interesting animals, including lions, elephants, and monkeys. The monkeys <sup class="blank-number">4</sup><span class="blank" id="p1-b4">___</span> especially funny as they swung from tree to tree. Before we left, we <sup class="blank-number">5</sup><span class="blank" id="p1-b5">___</span> ice cream at the zoo cafeteria.</p>
+                </div>
+            </div>
+
+            <div class="questions-panel">
+                <div class="question-card" data-qid="1">
+                    <div class="q-header"><span class="q-number">1</span> Choose the correct verb form:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(1, 1, 'A', 'go')">A. go</button>
+                        <button class="option-btn" onclick="selectOption(1, 1, 'B', 'went')">B. went</button>
+                        <button class="option-btn" onclick="selectOption(1, 1, 'C', 'goes')">C. goes</button>
+                        <button class="option-btn" onclick="selectOption(1, 1, 'D', 'going')">D. going</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="2">
+                    <div class="q-header"><span class="q-number">2</span> Choose the correct verb form:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(1, 2, 'A', 'shine')">A. shine</button>
+                        <button class="option-btn" onclick="selectOption(1, 2, 'B', 'shone')">B. shone</button>
+                        <button class="option-btn" onclick="selectOption(1, 2, 'C', 'shining')">C. shining</button>
+                        <button class="option-btn" onclick="selectOption(1, 2, 'D', 'shines')">D. shines</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="3">
+                    <div class="q-header"><span class="q-number">3</span> Choose the correct verb:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(1, 3, 'A', 'see')">A. see</button>
+                        <button class="option-btn" onclick="selectOption(1, 3, 'B', 'saw')">B. saw</button>
+                        <button class="option-btn" onclick="selectOption(1, 3, 'C', 'seen')">C. seen</button>
+                        <button class="option-btn" onclick="selectOption(1, 3, 'D', 'seeing')">D. seeing</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="4">
+                    <div class="q-header"><span class="q-number">4</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(1, 4, 'A', 'was')">A. was</button>
+                        <button class="option-btn" onclick="selectOption(1, 4, 'B', 'were')">B. were</button>
+                        <button class="option-btn" onclick="selectOption(1, 4, 'C', 'is')">C. is</button>
+                        <button class="option-btn" onclick="selectOption(1, 4, 'D', 'are')">D. are</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="5">
+                    <div class="q-header"><span class="q-number">5</span> Choose the correct verb:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(1, 5, 'A', 'buy')">A. buy</button>
+                        <button class="option-btn" onclick="selectOption(1, 5, 'B', 'bought')">B. bought</button>
+                        <button class="option-btn" onclick="selectOption(1, 5, 'C', 'buying')">C. buying</button>
+                        <button class="option-btn" onclick="selectOption(1, 5, 'D', 'buys')">D. buys</button>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="checkAnswers(1)">Submit Passage 1</button>
+                <div id="results-1" class="results-area"></div>
+            </div>
+        </div>
+
+        <div id="passage-2" class="passage-container">
+            <div class="reading-panel">
+                <div class="passage-card">
+                    <p>My favorite season is autumn. The weather <sup class="blank-number">1</sup><span class="blank" id="p2-b1">___</span> cooler, and the leaves on the trees <sup class="blank-number">2</sup><span class="blank" id="p2-b2">___</span> beautiful colors. I enjoy <sup class="blank-number">3</sup><span class="blank" id="p2-b3">___</span> walks in the park and <sup class="blank-number">4</sup><span class="blank" id="p2-b4">___</span> the crunching sound of leaves under my feet. Autumn also means that Thanksgiving is <sup class="blank-number">5</sup><span class="blank" id="p2-b5">___</span>, which is my favorite holiday.</p>
+                </div>
+            </div>
+            <div class="questions-panel">
+                <div class="question-card" data-qid="1">
+                    <div class="q-header"><span class="q-number">1</span> Choose the correct verb form:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(2, 1, 'A', 'get')">A. get</button>
+                        <button class="option-btn" onclick="selectOption(2, 1, 'B', 'gets')">B. gets</button>
+                        <button class="option-btn" onclick="selectOption(2, 1, 'C', 'getting')">C. getting</button>
+                        <button class="option-btn" onclick="selectOption(2, 1, 'D', 'got')">D. got</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="2">
+                    <div class="q-header"><span class="q-number">2</span> Choose the correct verb:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(2, 2, 'A', 'change')">A. change</button>
+                        <button class="option-btn" onclick="selectOption(2, 2, 'B', 'changes')">B. changes</button>
+                        <button class="option-btn" onclick="selectOption(2, 2, 'C', 'changing')">C. changing</button>
+                        <button class="option-btn" onclick="selectOption(2, 2, 'D', 'changed')">D. changed</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="3">
+                    <div class="q-header"><span class="q-number">3</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(2, 3, 'A', 'take')">A. take</button>
+                        <button class="option-btn" onclick="selectOption(2, 3, 'B', 'took')">B. took</button>
+                        <button class="option-btn" onclick="selectOption(2, 3, 'C', 'taking')">C. taking</button>
+                        <button class="option-btn" onclick="selectOption(2, 3, 'D', 'takes')">D. takes</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="4">
+                    <div class="q-header"><span class="q-number">4</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(2, 4, 'A', 'hear')">A. hear</button>
+                        <button class="option-btn" onclick="selectOption(2, 4, 'B', 'hearing')">B. hearing</button>
+                        <button class="option-btn" onclick="selectOption(2, 4, 'C', 'hears')">C. hears</button>
+                        <button class="option-btn" onclick="selectOption(2, 4, 'D', 'heard')">D. heard</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="5">
+                    <div class="q-header"><span class="q-number">5</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(2, 5, 'A', 'approach')">A. approach</button>
+                        <button class="option-btn" onclick="selectOption(2, 5, 'B', 'approaching')">B. approaching</button>
+                        <button class="option-btn" onclick="selectOption(2, 5, 'C', 'approached')">C. approached</button>
+                        <button class="option-btn" onclick="selectOption(2, 5, 'D', 'approaches')">D. approaches</button>
+                    </div>
+                </div>
+                <button class="submit-btn" onclick="checkAnswers(2)">Submit Passage 2</button>
+                <div id="results-2" class="results-area"></div>
+            </div>
+        </div>
+
+        <div id="passage-3" class="passage-container">
+            <div class="reading-panel">
+                <div class="passage-card">
+                    <p>Many people <sup class="blank-number">1</sup><span class="blank" id="p3-b1">___</span> that breakfast is the most important meal of the day. Studies have shown that those who eat breakfast tend to <sup class="blank-number">2</sup><span class="blank" id="p3-b2">___</span> better concentration throughout the morning. However, despite this knowledge, a significant number of individuals still <sup class="blank-number">3</sup><span class="blank" id="p3-b3">___</span> to skip this meal regularly. Nutritionists recommend <sup class="blank-number">4</sup><span class="blank" id="p3-b4">___</span> at least a light breakfast, such as yogurt or whole grain cereal. Making time for breakfast can <sup class="blank-number">5</sup><span class="blank" id="p3-b5">___</span> a positive impact on your overall health.</p>
+                </div>
+            </div>
+            <div class="questions-panel">
+                <div class="question-card" data-qid="1">
+                    <div class="q-header"><span class="q-number">1</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(3, 1, 'A', 'believe')">A. believe</button>
+                        <button class="option-btn" onclick="selectOption(3, 1, 'B', 'believes')">B. believes</button>
+                        <button class="option-btn" onclick="selectOption(3, 1, 'C', 'believed')">C. believed</button>
+                        <button class="option-btn" onclick="selectOption(3, 1, 'D', 'believing')">D. believing</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="2">
+                    <div class="q-header"><span class="q-number">2</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(3, 2, 'A', 'have')">A. have</button>
+                        <button class="option-btn" onclick="selectOption(3, 2, 'B', 'had')">B. had</button>
+                        <button class="option-btn" onclick="selectOption(3, 2, 'C', 'having')">C. having</button>
+                        <button class="option-btn" onclick="selectOption(3, 2, 'D', 'has')">D. has</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="3">
+                    <div class="q-header"><span class="q-number">3</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(3, 3, 'A', 'choose')">A. choose</button>
+                        <button class="option-btn" onclick="selectOption(3, 3, 'B', 'chooses')">B. chooses</button>
+                        <button class="option-btn" onclick="selectOption(3, 3, 'C', 'chose')">C. chose</button>
+                        <button class="option-btn" onclick="selectOption(3, 3, 'D', 'chosen')">D. chosen</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="4">
+                    <div class="q-header"><span class="q-number">4</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(3, 4, 'A', 'consume')">A. consume</button>
+                        <button class="option-btn" onclick="selectOption(3, 4, 'B', 'consumes')">B. consumes</button>
+                        <button class="option-btn" onclick="selectOption(3, 4, 'C', 'consuming')">C. consuming</button>
+                        <button class="option-btn" onclick="selectOption(3, 4, 'D', 'consumed')">D. consumed</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="5">
+                    <div class="q-header"><span class="q-number">5</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(3, 5, 'A', 'have')">A. have</button>
+                        <button class="option-btn" onclick="selectOption(3, 5, 'B', 'had')">B. had</button>
+                        <button class="option-btn" onclick="selectOption(3, 5, 'C', 'having')">C. having</button>
+                        <button class="option-btn" onclick="selectOption(3, 5, 'D', 'has')">D. has</button>
+                    </div>
+                </div>
+                <button class="submit-btn" onclick="checkAnswers(3)">Submit Passage 3</button>
+                <div id="results-3" class="results-area"></div>
+            </div>
+        </div>
+
+        <div id="passage-4" class="passage-container">
+            <div class="reading-panel">
+                <div class="passage-card">
+                    <p>Climate change <sup class="blank-number">1</sup><span class="blank" id="p4-b1">___</span> one of the most pressing issues of our time. Scientists around the world <sup class="blank-number">2</sup><span class="blank" id="p4-b2">___</span> evidence that human activities are significantly contributing to global warming. If we <sup class="blank-number">3</sup><span class="blank" id="p4-b3">___</span> immediate action, the consequences could be devastating. Many countries <sup class="blank-number">4</sup><span class="blank" id="p4-b4">___</span> already implementing policies to reduce carbon emissions. However, individual efforts, such as reducing energy consumption and using public transportation, also <sup class="blank-number">5</sup><span class="blank" id="p4-b5">___</span> a crucial role in addressing this problem.</p>
+                </div>
+            </div>
+            <div class="questions-panel">
+                <div class="question-card" data-qid="1">
+                    <div class="q-header"><span class="q-number">1</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(4, 1, 'A', 'is')">A. is</button>
+                        <button class="option-btn" onclick="selectOption(4, 1, 'B', 'are')">B. are</button>
+                        <button class="option-btn" onclick="selectOption(4, 1, 'C', 'was')">C. was</button>
+                        <button class="option-btn" onclick="selectOption(4, 1, 'D', 'were')">D. were</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="2">
+                    <div class="q-header"><span class="q-number">2</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(4, 2, 'A', 'collect')">A. collect</button>
+                        <button class="option-btn" onclick="selectOption(4, 2, 'B', 'collects')">B. collects</button>
+                        <button class="option-btn" onclick="selectOption(4, 2, 'C', 'collecting')">C. collecting</button>
+                        <button class="option-btn" onclick="selectOption(4, 2, 'D', 'collected')">D. collected</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="3">
+                    <div class="q-header"><span class="q-number">3</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(4, 3, 'A', 'not take')">A. not take</button>
+                        <button class="option-btn" onclick="selectOption(4, 3, 'B', 'does not take')">B. does not take</button>
+                        <button class="option-btn" onclick="selectOption(4, 3, 'C', 'do not take')">C. do not take</button>
+                        <button class="option-btn" onclick="selectOption(4, 3, 'D', 'did not take')">D. did not take</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="4">
+                    <div class="q-header"><span class="q-number">4</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(4, 4, 'A', 'is')">A. is</button>
+                        <button class="option-btn" onclick="selectOption(4, 4, 'B', 'are')">B. are</button>
+                        <button class="option-btn" onclick="selectOption(4, 4, 'C', 'was')">C. was</button>
+                        <button class="option-btn" onclick="selectOption(4, 4, 'D', 'were')">D. were</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="5">
+                    <div class="q-header"><span class="q-number">5</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(4, 5, 'A', 'play')">A. play</button>
+                        <button class="option-btn" onclick="selectOption(4, 5, 'B', 'plays')">B. plays</button>
+                        <button class="option-btn" onclick="selectOption(4, 5, 'C', 'played')">C. played</button>
+                        <button class="option-btn" onclick="selectOption(4, 5, 'D', 'playing')">D. playing</button>
+                    </div>
+                </div>
+                <button class="submit-btn" onclick="checkAnswers(4)">Submit Passage 4</button>
+                <div id="results-4" class="results-area"></div>
+            </div>
+        </div>
+
+        <div id="passage-5" class="passage-container">
+            <div class="reading-panel">
+                <div class="passage-card">
+                    <p>The concept of artificial intelligence, which <sup class="blank-number">1</sup><span class="blank" id="p5-b1">___</span> to the development of machines that can perform tasks typically requiring human intelligence, <sup class="blank-number">2</sup><span class="blank" id="p5-b2">___</span> rapidly evolving. While some experts <sup class="blank-number">3</sup><span class="blank" id="p5-b3">___</span> that AI will bring about unprecedented advancements in various fields, others express concern about potential ethical implications. It is essential that regulations <sup class="blank-number">4</sup><span class="blank" id="p5-b4">___</span> implemented to ensure that these technologies <sup class="blank-number">5</sup><span class="blank" id="p5-b5">___</span> used responsibly and for the benefit of humanity.</p>
+                </div>
+            </div>
+            <div class="questions-panel">
+                <div class="question-card" data-qid="1">
+                    <div class="q-header"><span class="q-number">1</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(5, 1, 'A', 'refer')">A. refer</button>
+                        <button class="option-btn" onclick="selectOption(5, 1, 'B', 'refers')">B. refers</button>
+                        <button class="option-btn" onclick="selectOption(5, 1, 'C', 'referring')">C. referring</button>
+                        <button class="option-btn" onclick="selectOption(5, 1, 'D', 'referred')">D. referred</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="2">
+                    <div class="q-header"><span class="q-number">2</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(5, 2, 'A', 'is')">A. is</button>
+                        <button class="option-btn" onclick="selectOption(5, 2, 'B', 'are')">B. are</button>
+                        <button class="option-btn" onclick="selectOption(5, 2, 'C', 'was')">C. was</button>
+                        <button class="option-btn" onclick="selectOption(5, 2, 'D', 'were')">D. were</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="3">
+                    <div class="q-header"><span class="q-number">3</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(5, 3, 'A', 'believe')">A. believe</button>
+                        <button class="option-btn" onclick="selectOption(5, 3, 'B', 'believes')">B. believes</button>
+                        <button class="option-btn" onclick="selectOption(5, 3, 'C', 'believed')">C. believed</button>
+                        <button class="option-btn" onclick="selectOption(5, 3, 'D', 'believing')">D. believing</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="4">
+                    <div class="q-header"><span class="q-number">4</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(5, 4, 'A', 'be')">A. be</button>
+                        <button class="option-btn" onclick="selectOption(5, 4, 'B', 'are')">B. are</button>
+                        <button class="option-btn" onclick="selectOption(5, 4, 'C', 'is')">C. is</button>
+                        <button class="option-btn" onclick="selectOption(5, 4, 'D', 'were')">D. were</button>
+                    </div>
+                </div>
+                <div class="question-card" data-qid="5">
+                    <div class="q-header"><span class="q-number">5</span> Choose the correct word:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectOption(5, 5, 'A', 'is')">A. is</button>
+                        <button class="option-btn" onclick="selectOption(5, 5, 'B', 'are')">B. are</button>
+                        <button class="option-btn" onclick="selectOption(5, 5, 'C', 'be')">C. be</button>
+                        <button class="option-btn" onclick="selectOption(5, 5, 'D', 'being')">D. being</button>
+                    </div>
+                </div>
+                <button class="submit-btn" onclick="checkAnswers(5)">Submit Passage 5</button>
+                <div id="results-5" class="results-area"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Store user selections: { passageId: { questionId: optionKey } }
+        const userState = {
+            1: {}, 2: {}, 3: {}, 4: {}, 5: {}
+        };
+
+        // Correct Answers Database
+        const answerKey = {
+            1: { 1: 'B', 2: 'B', 3: 'B', 4: 'B', 5: 'B' },
+            2: { 1: 'B', 2: 'A', 3: 'C', 4: 'B', 5: 'B' },
+            3: { 1: 'A', 2: 'A', 3: 'A', 4: 'C', 5: 'A' },
+            4: { 1: 'A', 2: 'A', 3: 'C', 4: 'B', 5: 'A' },
+            5: { 1: 'B', 2: 'A', 3: 'A', 4: 'A', 5: 'B' }
+        };
+
+        // Explanations Database
+        const explanations = {
+            1: {
+                1: "We use the past simple tense 'went' for completed actions in the past.",
+                2: "'Shone' is the past simple form of 'shine'.",
+                3: "'Saw' is the past simple form of 'see'.",
+                4: "'Monkeys' is a plural noun, so we need the plural past form 'were'.",
+                5: "We use the past simple 'bought' for completed actions."
+            },
+            2: {
+                1: "Use present simple 'gets' for general facts about weather.",
+                2: "Plural subject 'leaves' requires base form 'change'.",
+                3: "After 'enjoy', we use the gerund form 'taking'.",
+                4: "Parallel structure with 'taking' requires another gerund 'hearing'.",
+                5: "Present continuous 'is approaching' describes an event coming soon."
+            },
+            3: {
+                1: "Plural subject 'people' requires base form 'believe'.",
+                2: "After 'tend to', use the base form 'have'.",
+                3: "Plural subject 'number' (meaning many) requires base form 'choose'.",
+                4: "After 'recommend', use the gerund 'consuming'.",
+                5: "After modal verb 'can', use base form 'have'."
+            },
+            4: {
+                1: "Singular subject 'Climate change' requires 'is'.",
+                2: "Plural subject 'Scientists' requires base form 'collect'.",
+                3: "In First Conditional if-clause, use present simple 'do not take'.",
+                4: "Plural subject 'countries' requires plural 'are'.",
+                5: "Plural subject 'efforts' requires base form 'play'."
+            },
+            5: {
+                1: "Relative clause refers to singular 'concept', so use 'refers'.",
+                2: "Main subject 'The concept... is' requires singular 'is'.",
+                3: "Plural 'experts' requires base form 'believe'.",
+                4: "Subjunctive mood after 'essential that' requires base form 'be'.",
+                5: "Passive voice 'are used' fits the plural subject 'technologies'."
+            }
+        };
+
+        // Switch Tabs Function
+        function switchPassage(id) {
+            // Update Tab Styles
+            document.querySelectorAll('.tab').forEach((t, idx) => {
+                if(idx + 1 === id) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+
+            // Show selected container
+            document.querySelectorAll('.passage-container').forEach(c => c.classList.remove('active'));
+            document.getElementById(`passage-${id}`).classList.add('active');
+        }
+
+        // Handle Option Selection
+        function selectOption(passageId, questionId, optionKey, optionText) {
+            // 1. Save state
+            userState[passageId][questionId] = optionKey;
+
+            // 2. Update Blank in Text (Interactive Effect)
+            const blankEl = document.getElementById(`p${passageId}-b${questionId}`);
+            if(blankEl) {
+                blankEl.textContent = optionText;
+                blankEl.classList.add('filled');
+            }
+
+            // 3. Update Button Visuals
+            const card = document.querySelector(`#passage-${passageId} .question-card[data-qid="${questionId}"]`);
+            const buttons = card.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                if(btn.textContent.startsWith(optionKey)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        // Check Answers & Generate Report
+        function checkAnswers(passageId) {
+            const currentAnswers = userState[passageId];
+            const correctKey = answerKey[passageId];
+            const explanationKey = explanations[passageId];
+            const resultDiv = document.getElementById(`results-${passageId}`);
+            
+            let score = 0;
+            let reportHTML = '';
+
+            // Loop through all 5 questions
+            for(let i=1; i<=5; i++) {
+                const userAns = currentAnswers[i];
+                const correctAns = correctKey[i];
+                const isCorrect = userAns === correctAns;
+
+                if(isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const icon = isCorrect ? '✅' : '❌';
+                const feedbackText = isCorrect 
+                    ? `<span style="color:#15803d; font-weight:bold;">Correct!</span>` 
+                    : `<span style="color:#b91c1c; font-weight:bold;">Incorrect.</span> Correct answer: ${correctAns}`;
+
+                reportHTML += `
+                    <div class="explanation-item ${statusClass}">
+                        <div class="exp-title">
+                            <span>${icon} Question ${i}</span>
+                            ${feedbackText}
+                        </div>
+                        <div class="exp-text">${explanationKey[i]}</div>
+                    </div>
+                `;
+            }
+
+            // Render Final Score Board
+            resultDiv.innerHTML = `
+                <div class="score-banner">Score: ${score} / 5</div>
+                ${reportHTML}
+            `;
+            resultDiv.style.display = 'block';
+            
+            // Smooth scroll to results
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
