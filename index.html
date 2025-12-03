@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Teacher Shirley's ET Platform</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style id="themeStyles">
     :root {
@@ -282,7 +284,7 @@
     }
     #card-modal.active .card-display-container { transform: scale(1); }
 
-    /* --- 核心卡片結構 (黃金比例設計) --- */
+    /* --- 核心卡片結構 (360x580) --- */
     .moon-card {
         width: 360px; min-height: 580px;
         background: var(--card-bg, #1a1a2e);
@@ -331,7 +333,7 @@
     .btn-close { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
     .btn-card-action:hover { transform: translateY(-3px); filter: brightness(1.1); }
 
-    /* === 11 種高雅模板樣式 (深邃、月亮、星空風格) === */
+    /* === 11 種高雅模板樣式 === */
     /* 1. Midnight Gold (經典黑金) */
     .theme-1 { --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364); --card-border: #b8860b; --card-accent: #ffd700; --card-highlight: #fff; --card-text: #e0e0e0; --card-text-dim: #8fa1b3; --card-accent-dim: rgba(184, 134, 11, 0.2); }
     /* 2. Silver Mist (冷銀月霧) */
@@ -364,7 +366,6 @@
         background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
         font-size: 1.2rem;
     }
-
   </style>
 </head>
 <body>
@@ -522,7 +523,8 @@
           </div>
       </div>
   </div>
-<div id="card-modal">
+
+  <div id="card-modal">
       <div class="card-overlay-bg" onclick="closeCardModal()"></div>
       <div class="card-display-container">
           <div id="collectible-card" class="moon-card">
@@ -538,7 +540,7 @@
                       Welcome, <span id="card-user-name">Traveler</span>
                   </div>
                   <div class="card-subtitle">
-                      This is your Shirley's Moon Base Card for <span id="card-display-date"></span>.
+                      This is your Shirley's Moon Base Card for <span id="card-display-date"></span>
                   </div>
 
                   <div class="card-divider">✦ ✦ ✦</div>
@@ -577,7 +579,7 @@
           </div>
       </div>
   </div>
-  
+
   <div id="print-selection-modal">
     <div class="print-modal-content">
         <div class="print-modal-header">Select Records to Print</div>
@@ -653,7 +655,7 @@
         });
     };
 
-    // --- HELPER: GET LOCAL DATE STRING (Fixes Timezone Issue) ---
+    // --- HELPER: GET LOCAL DATE STRING ---
     function getLocalISODate() {
         const now = new Date();
         const y = now.getFullYear();
@@ -754,7 +756,6 @@
     async function loadUserData(uid) {
         const userRef = doc(db, "users", uid);
         const docSnap = await getDoc(userRef);
-        // FIX: Use local date
         const fullDate = getLocalISODate();
         
         if (docSnap.exists()) {
@@ -770,26 +771,113 @@
         renderCalendar();
     }
 
+    // --- REWRITTEN CHECK-IN & CALENDAR LOGIC WITH CARDS ---
+
+    // 隨機模板選擇器：根據日期產生固定的 1-11 數字 (確保同一天開卡片樣式不變，但不同天樣式不同)
+    function getTemplateIdByDate(dateStr) {
+        if(!dateStr) return 1;
+        const parts = dateStr.split('-');
+        const y = parseInt(parts[0]);
+        const m = parseInt(parts[1]);
+        const d = parseInt(parts[2]);
+        const val = (y * 13 + m * 29 + d * 7);
+        return (val % 11) + 1;
+    }
+
+    // 顯示卡片 (這部分是新的)
+    window.openCard = (dateStr) => {
+        const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+        
+        // 假設 CSV date 是 "MM-DD"
+        let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
+        let quote = "The stars are calling.", author = "Universe";
+
+        if (csvData && csvData.words) {
+            const queryDate = dateStr.slice(5); // remove YYYY-
+            const wordObj = csvData.words.find(r => r.date === queryDate);
+            const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+
+            if (wordObj) {
+                wotd = wordObj.word || wotd;
+                wotdPos = wordObj.pos || wotdPos;
+                wotdDef = wordObj.meaning || wotdDef;
+            }
+            if (quoteObj) {
+                quote = quoteObj['quote e'] || quote;
+                author = quoteObj.author || author;
+            }
+        }
+
+        const streakDisplay = document.getElementById('streak-days') ? document.getElementById('streak-days').innerText : "0";
+
+        // 填充資料
+        document.getElementById('card-user-name').innerText = userName;
+        document.getElementById('card-display-date').innerText = dateStr;
+        document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, '');
+        document.getElementById('card-wotd').innerText = wotd;
+        document.getElementById('card-pos').innerText = wotdPos;
+        document.getElementById('card-def').innerText = wotdDef;
+        document.getElementById('card-quote').innerText = `“${quote}”`;
+        document.getElementById('card-author').innerText = author;
+        document.getElementById('card-streak').innerText = streakDisplay;
+
+        // 設定模板
+        const cardEl = document.getElementById('collectible-card');
+        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
+        const themeId = getTemplateIdByDate(dateStr);
+        cardEl.classList.add(`theme-${themeId}`);
+
+        document.getElementById('card-modal').classList.add('active');
+    };
+
+    window.closeCardModal = () => {
+        document.getElementById('card-modal').classList.remove('active');
+    };
+
+    window.downloadCardImage = () => {
+        const cardElement = document.getElementById('collectible-card');
+        const btn = document.querySelector('.btn-download');
+        const originalText = btn.innerText;
+        btn.innerText = "Capturing... 📸";
+        
+        if (typeof html2canvas === 'undefined') {
+            alert("Snapshot library not loaded.");
+            btn.innerText = originalText;
+            return;
+        }
+
+        html2canvas(cardElement, {
+            scale: 2,
+            backgroundColor: null,
+            useCORS: true
+        }).then(canvas => {
+            const link = document.createElement('a');
+            const dateText = document.getElementById('card-display-date').innerText;
+            link.download = `Shirley_MoonBase_Card_${dateText}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            btn.innerText = originalText;
+        }).catch(err => {
+            console.error(err);
+            alert("Image capture failed.");
+            btn.innerText = originalText;
+        });
+    };
+
+    // 重新定義 handleCheckIn，加入開卡片邏輯
     window.handleCheckIn = async () => {
         if (!currentUser) return;
-        
         const fullDate = getLocalISODate();
-        
-        // 【0讀優化】直接檢查本地記憶體中的紀錄，如果今天已打卡則直接阻擋，連寫入都省下
         if (checkinHistory.includes(fullDate)) return;
 
         const btn = document.getElementById('checkin-btn');
         btn.disabled = true; 
-        btn.innerText = "Signing in...";
+        btn.innerText = "Transmitting...";
         
         try {
-            // 【0讀優化】透過本地記憶體計算 Streak，不需讀取資料庫
-            // 取得目前畫面上的連勝數字
             let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
-            // 取得最後一次打卡日期 (從本地變數)
             const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
             
-            // 計算「昨天」的日期字串
             const yesterday = new Date(); 
             yesterday.setDate(yesterday.getDate() - 1);
             const yYear = yesterday.getFullYear();
@@ -797,45 +885,70 @@
             const yDay = String(yesterday.getDate()).padStart(2, '0');
             const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
             
-            // 判斷連勝邏輯
-            if (lastCheckIn === yesterdayStr) {
-                currentStreak++;
-            } else {
-                currentStreak = 1;
-            }
+            if (lastCheckIn === yesterdayStr) { currentStreak++; } else { currentStreak = 1; }
 
             const userRef = doc(db, "users", currentUser.uid);
-            
-            // 準備 Log 物件
             const logEntry = { date: new Date().toISOString(), type: "Check-in", detail: "Daily Check-in" };
 
-            // 【1寫優化】使用 updateDoc + arrayUnion 同時更新 History、Streak 和 ActivityLogs
-            // 這樣可以省下原本呼叫 trackActivity 所產生的第二次寫入費用
             await updateDoc(userRef, { 
                 streak: currentStreak, 
                 history: arrayUnion(fullDate),
                 activityLogs: arrayUnion(logEntry)
             });
 
-            // 更新本地記憶體與 UI
             checkinHistory.push(fullDate);
-            activityLog.push(logEntry); // 同步更新本地日誌變數，確保列印功能正常
+            activityLog.push(logEntry);
             
             document.getElementById('streak-days').innerText = currentStreak;
             document.getElementById('total-days').innerText = checkinHistory.length;
             btn.innerText = "Moon Check-in Success! 🌕";
+            
+            // 重新渲染日曆 (以便更新點擊事件)
             renderCalendar();
-        
-          setTimeout(() => {
-                openCard(fullDate);
+
+            // ★★★ 自動彈出卡片 ★★★
+            setTimeout(() => {
+                window.openCard(fullDate);
             }, 800);
-          
+
         } catch (e) {
             console.error("Check-in error:", e);
             btn.innerText = "Check-in Failed";
             btn.disabled = false;
         }
     };
+
+    // 重新定義 renderCalendar，加入卡袋點擊功能
+    window.renderCalendar = function() {
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        const now = new Date();
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
+        
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayEl = document.createElement('div');
+            dayEl.innerText = i;
+            dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
+            
+            const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, '0')}`;
+            
+            if (checkinHistory.includes(thisDateStr)) { 
+                dayEl.style.background = "var(--accent)"; 
+                dayEl.style.color="white"; 
+                dayEl.style.borderRadius="50%"; 
+                dayEl.style.fontWeight = "bold";
+
+                // ★ 加入可點擊開卡的提示
+                dayEl.classList.add('calendar-day-checked');
+                dayEl.title = "Tap to open Card Pocket";
+                dayEl.onclick = () => window.openCard(thisDateStr);
+            }
+            grid.appendChild(dayEl);
+        }
+    };
+
+    // --- End of new logic ---
 
     async function loadCSVData() {
         try {
@@ -882,30 +995,7 @@
         }
     }
 
-    function renderCalendar() {
-        const grid = document.getElementById('calendar-grid');
-        grid.innerHTML = '';
-        const now = new Date();
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        // FIX: Use Local Year-Month
-        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
-        
-        for (let i = 1; i <= daysInMonth; i++) {
-           const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, '0')}`;
-            
-            if (checkinHistory.includes(thisDateStr)) { 
-                dayEl.style.background = "var(--accent)"; 
-                dayEl.style.color="white"; 
-                dayEl.style.borderRadius="50%"; 
-                
-                // ★★★ 新增這段：加入點擊事件與樣式 ★★★
-                dayEl.classList.add('calendar-day-checked');
-                dayEl.title = "Click to open Card Pocket";
-                dayEl.onclick = () => openCard(thisDateStr);
-            }
-            grid.appendChild(dayEl);
-        }
-    }
+    // renderCalendar is overwritten above, so we don't need the old one here.
 
     let processedLogs = [];
 
@@ -1000,90 +1090,6 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
-   // --- CARD SYSTEM LOGIC (卡片系統) ---
-
-    // 隨機模板選擇器：根據日期產生固定的 1-11 數字 (確保同一天開卡片樣式不變，但不同天樣式不同)
-    function getTemplateIdByDate(dateStr) {
-        const parts = dateStr.split('-');
-        const y = parseInt(parts[0]);
-        const m = parseInt(parts[1]);
-        const d = parseInt(parts[2]);
-        // 使用數學公式產生偽隨機數
-        const val = (y * 13 + m * 29 + d * 7);
-        // 取餘數 11，加 1 變為 1-11
-        return (val % 11) + 1;
-    }
-
-    // 打開卡片
-    window.openCard = (dateStr) => {
-        if (!currentUser) return;
-        
-        // 1. 查找該日期的數據 (修正日期格式對應 CSV)
-        // 假設 CSV 裡的 date 是 "MM-DD" 格式，而 dateStr 是 "YYYY-MM-DD"
-        const queryDate = dateStr.slice(5); 
-        const wordObj = csvData.words.find(r => r.date === queryDate);
-        const quoteObj = csvData.quotes.find(r => r.date === queryDate);
-        
-        // 如果那天沒有數據，提供預設值
-        const wotd = wordObj ? wordObj.word : "Discovery";
-        const wotdPos = wordObj ? wordObj.pos : "n.";
-        const wotdDef = wordObj ? wordObj.meaning : "A new finding in the universe.";
-        const quote = quoteObj ? quoteObj['quote e'] : "Stars can't shine without darkness.";
-        const author = quoteObj ? quoteObj.author : "Universe";
-
-        // 2. 獲取 Streak (若為歷史卡片，顯示目前的 Streak 即可)
-        const streakDisplay = document.getElementById('streak-days').innerText;
-
-        // 3. 填充 DOM 資料
-        document.getElementById('card-user-name').innerText = currentUser.displayName || "Moon Walker";
-        document.getElementById('card-display-date').innerText = dateStr;
-        document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, ''); // 序號 ex: 20251203
-        document.getElementById('card-wotd').innerText = wotd;
-        document.getElementById('card-pos').innerText = wotdPos;
-        document.getElementById('card-def').innerText = wotdDef;
-        document.getElementById('card-quote').innerText = `“${quote}”`;
-        document.getElementById('card-author').innerText = author;
-        document.getElementById('card-streak').innerText = streakDisplay;
-
-        // 4. 應用隨機模板
-        const cardEl = document.getElementById('collectible-card');
-        // 清除舊樣式
-        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
-        // 加入新樣式
-        const themeId = getTemplateIdByDate(dateStr);
-        cardEl.classList.add(`theme-${themeId}`);
-
-        // 5. 顯示模態框
-        document.getElementById('card-modal').classList.add('active');
-    };
-
-    window.closeCardModal = () => {
-        document.getElementById('card-modal').classList.remove('active');
-    };
-
-    // 下載圖片邏輯
-    window.downloadCardImage = () => {
-        const cardElement = document.getElementById('collectible-card');
-        const btn = document.querySelector('.btn-download');
-        const originalText = btn.innerText;
-        btn.innerText = "Capturing... 📸";
-        
-        html2canvas(cardElement, {
-            scale: 2, // 高解析度
-            backgroundColor: null,
-            useCORS: true 
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `Shirley_MoonBase_Card_${document.getElementById('card-display-date').innerText}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            btn.innerText = originalText;
-        }).catch(err => {
-            console.error(err);
-            alert("Image capture failed.");
-            btn.innerText = originalText;
-        });
-    };
   </script>
 </body>
 </html>
