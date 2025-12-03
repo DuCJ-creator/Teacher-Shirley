@@ -457,25 +457,16 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-    // -----------------------------------------------------------------------------------------
-    // 請在此處填入您的 Firebase Config
-    // Please paste your Firebase Config object here
-    // -----------------------------------------------------------------------------------------
-    const firebaseConfig = {
-      // apiKey: "...",
-      // authDomain: "...",
-      // projectId: "...",
-      // ...
-    };
+    // --- UTILS & UI LOGIC (Moved to TOP to ensure they work even if Firebase config fails) ---
+    function getLocalISODate() { const now = new Date(); const y = now.getFullYear(); const m = String(now.getMonth() + 1).padStart(2, '0'); const d = String(now.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const googleProvider = new GoogleAuthProvider();
-
-    let currentUser = null;
-    let checkinHistory = [];
-    let activityLog = []; // Local cache of logs
+    // Make these globally accessible immediately
+    window.openLetter = () => { const windchime = document.getElementById('windchime'); windchime.volume = 0.5; windchime.play().catch(e => console.log("Audio play failed")); const container = document.querySelector('.envelope-container'); container.classList.add('open'); setTimeout(() => { const letterView = document.getElementById('letter-view'); letterView.classList.add('show'); const paragraphs = document.querySelectorAll('.letter-p'); paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); }); setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400); }, 800); };
+    window.enterVisitorMode = () => { document.getElementById('intro-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000); document.getElementById('visitor-view').classList.add('active'); };
+    window.reopenAuth = () => { document.getElementById('visitor-view').classList.remove('active'); const overlay = document.getElementById('intro-overlay'); overlay.style.display = 'flex'; void overlay.offsetWidth; overlay.style.opacity = '1'; const container = document.querySelector('.envelope-container'); const letterView = document.getElementById('letter-view'); if(!container.classList.contains('open')) { container.classList.add('open'); letterView.classList.add('show'); } showAuthForm(); };
+    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
+    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
+    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
     
     // --- PARTICLE BG ---
     const canvas = document.getElementById('particle-canvas');
@@ -501,42 +492,60 @@
         isPlaying = !isPlaying;
     });
 
-    // --- UTILS ---
-    function getLocalISODate() { const now = new Date(); const y = now.getFullYear(); const m = String(now.getMonth() + 1).padStart(2, '0'); const d = String(now.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
+    // -----------------------------------------------------------------------------------------
+    // FIREBASE CONFIG - Please ensure your keys are correct here
+    // -----------------------------------------------------------------------------------------
+    const firebaseConfig = {
+     apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+      authDomain: "teacher-shirley.firebaseapp.com",
+      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+      projectId: "teacher-shirley",
+      storageBucket: "teacher-shirley.firebasestorage.app",
+      messagingSenderId: "534843195436",
+      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+    };
 
-    // --- ENVELOPE LOGIC ---
-    window.openLetter = () => { const windchime = document.getElementById('windchime'); windchime.volume = 0.5; windchime.play().catch(e => console.log("Audio play failed")); const container = document.querySelector('.envelope-container'); container.classList.add('open'); setTimeout(() => { const letterView = document.getElementById('letter-view'); letterView.classList.add('show'); const paragraphs = document.querySelectorAll('.letter-p'); paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); }); setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400); }, 800); };
-    window.enterVisitorMode = () => { document.getElementById('intro-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000); document.getElementById('visitor-view').classList.add('active'); };
-    window.reopenAuth = () => { document.getElementById('visitor-view').classList.remove('active'); const overlay = document.getElementById('intro-overlay'); overlay.style.display = 'flex'; void overlay.offsetWidth; overlay.style.opacity = '1'; const container = document.querySelector('.envelope-container'); const letterView = document.getElementById('letter-view'); if(!container.classList.contains('open')) { container.classList.add('open'); letterView.classList.add('show'); } showAuthForm(); };
-    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
-    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
-    
-    // --- MEMBER LOGIC ---
-    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
+    // Use try-catch for Firebase init so UI doesn't crash if config is missing
+    let app, auth, db, googleProvider;
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        googleProvider = new GoogleAuthProvider();
+    } catch (e) {
+        console.error("Firebase Init Failed (Check Config):", e);
+    }
 
-    // --- AUTH ---
-    document.getElementById('google-login-btn').addEventListener('click', async () => {
-        try { await signInWithPopup(auth, googleProvider); } catch (e) { console.error(e); alert("Login failed. If in Line/FB, open in Chrome."); }
-    });
-    document.getElementById('email-login-btn').addEventListener('click', async () => {
-        const e = document.getElementById('email-input').value; const p = document.getElementById('pass-input').value;
-        try { await signInWithEmailAndPassword(auth, e, p); } catch (err) { alert(err.message); }
-    });
-    window.handleLogout = async () => { await signOut(auth); location.reload(); };
+    let currentUser = null;
+    let checkinHistory = [];
+    let activityLog = []; // Local cache of logs
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('universe-view').classList.add('active');
-            document.getElementById('logoutBtn').style.display = 'flex';
-            document.getElementById('logoutBtn').addEventListener('click', window.handleLogout);
-            loadUserData(user.uid);
-            fetchDailyContent();
-        }
-    });
+    // --- AUTH LISTENERS ---
+    if (auth) {
+        document.getElementById('google-login-btn').addEventListener('click', async () => {
+            try { await signInWithPopup(auth, googleProvider); } catch (e) { console.error(e); alert("Login failed. If in Line/FB, open in Chrome."); }
+        });
+        document.getElementById('email-login-btn').addEventListener('click', async () => {
+            const e = document.getElementById('email-input').value; const p = document.getElementById('pass-input').value;
+            try { await signInWithEmailAndPassword(auth, e, p); } catch (err) { alert(err.message); }
+        });
+        window.handleLogout = async () => { await signOut(auth); location.reload(); };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('intro-overlay').style.display = 'none';
+                document.getElementById('universe-view').classList.add('active');
+                document.getElementById('logoutBtn').style.display = 'flex';
+                document.getElementById('logoutBtn').addEventListener('click', window.handleLogout);
+                loadUserData(user.uid);
+                fetchDailyContent();
+            }
+        });
+    }
 
     async function loadUserData(uid) {
+        if(!db) return;
         const userRef = doc(db, "users", uid);
         const docSnap = await getDoc(userRef);
         const fullDate = getLocalISODate();
@@ -558,11 +567,10 @@
     }
 
     // =========================================================================
-    //  CRITICAL UPDATE: Optimized HandleCheckIn (0 Reads, 1 Write)
-    //  優化後的打卡功能：直接使用本地變數 + setDoc合併寫入
+    //  OPTIMIZED: HandleCheckIn (0 Reads, 1 Write)
     // =========================================================================
     window.handleCheckIn = async () => {
-        if (!currentUser) return;
+        if (!currentUser || !db) return;
         const btn = document.getElementById('checkin-btn');
         if(btn.disabled) return;
         
@@ -572,8 +580,7 @@
         const fullDate = getLocalISODate();
         const userRef = doc(db, "users", currentUser.uid);
 
-        // 1. 使用本地變數計算 Streak (不呼叫 getDoc)
-        // streak-days 的值來自 loadUserData，是可信的
+        // 1. Use Local Variable (Avoids Extra Read)
         let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
         const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
 
@@ -598,14 +605,14 @@
         const newLogs = [...activityLog, newLogEntry];
 
         try {
-            // 2. 合併寫入 (一次操作完成所有更新)
+            // 2. Merged Write (Saves 2 writes)
             await setDoc(userRef, { 
                 streak: currentStreak, 
                 history: newHistory,
                 activityLogs: newLogs
             }, { merge: true });
 
-            // 3. 更新本地狀態
+            // 3. Update Local State
             checkinHistory = newHistory;
             activityLog = newLogs;
             
@@ -622,8 +629,9 @@
         }
     };
 
+    // Only updates local and optionally writes to DB (kept separate for non-checkin events)
     async function trackActivity(type, detail) {
-        if(!currentUser) return;
+        if(!currentUser || !db) return;
         const entry = { date: new Date().toISOString(), type, detail };
         activityLog.push(entry);
         try {
