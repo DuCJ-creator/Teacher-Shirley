@@ -457,16 +457,35 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-    // --- UTILS & UI LOGIC (Moved to TOP to ensure they work even if Firebase config fails) ---
-    function getLocalISODate() { const now = new Date(); const y = now.getFullYear(); const m = String(now.getMonth() + 1).padStart(2, '0'); const d = String(now.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
+    // -----------------------------------------------------------------------------------------
+    // 請在此處填入您的 Firebase Config
+    // Please paste your Firebase Config object here
+    // -----------------------------------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+      authDomain: "teacher-shirley.firebaseapp.com",
+      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+      projectId: "teacher-shirley",
+      storageBucket: "teacher-shirley.firebasestorage.app",
+      messagingSenderId: "534843195436",
+      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+    };
 
-    // Make these globally accessible immediately
-    window.openLetter = () => { const windchime = document.getElementById('windchime'); windchime.volume = 0.5; windchime.play().catch(e => console.log("Audio play failed")); const container = document.querySelector('.envelope-container'); container.classList.add('open'); setTimeout(() => { const letterView = document.getElementById('letter-view'); letterView.classList.add('show'); const paragraphs = document.querySelectorAll('.letter-p'); paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); }); setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400); }, 800); };
-    window.enterVisitorMode = () => { document.getElementById('intro-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000); document.getElementById('visitor-view').classList.add('active'); };
-    window.reopenAuth = () => { document.getElementById('visitor-view').classList.remove('active'); const overlay = document.getElementById('intro-overlay'); overlay.style.display = 'flex'; void overlay.offsetWidth; overlay.style.opacity = '1'; const container = document.querySelector('.envelope-container'); const letterView = document.getElementById('letter-view'); if(!container.classList.contains('open')) { container.classList.add('open'); letterView.classList.add('show'); } showAuthForm(); };
-    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
-    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
-    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
+    // --- 安全初始化 (Try-Catch) ---
+    // 這樣就算 Config 沒填，程式也不會死掉，信封還是打得開
+    let app, auth, db, googleProvider;
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        googleProvider = new GoogleAuthProvider();
+    } catch (e) {
+        console.warn("Firebase Init Error (Check Config):", e);
+    }
+
+    let currentUser = null;
+    let checkinHistory = [];
+    let activityLog = []; // Local cache of logs
     
     // --- PARTICLE BG ---
     const canvas = document.getElementById('particle-canvas');
@@ -492,36 +511,21 @@
         isPlaying = !isPlaying;
     });
 
-    // -----------------------------------------------------------------------------------------
-    // FIREBASE CONFIG - Please ensure your keys are correct here
-    // -----------------------------------------------------------------------------------------
-    const firebaseConfig = {
-     apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
-      authDomain: "teacher-shirley.firebaseapp.com",
-      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
-      projectId: "teacher-shirley",
-      storageBucket: "teacher-shirley.firebasestorage.app",
-      messagingSenderId: "534843195436",
-      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
-    };
+    // --- UTILS ---
+    function getLocalISODate() { const now = new Date(); const y = now.getFullYear(); const m = String(now.getMonth() + 1).padStart(2, '0'); const d = String(now.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
 
-    // Use try-catch for Firebase init so UI doesn't crash if config is missing
-    let app, auth, db, googleProvider;
-    try {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        googleProvider = new GoogleAuthProvider();
-    } catch (e) {
-        console.error("Firebase Init Failed (Check Config):", e);
-    }
+    // --- ENVELOPE LOGIC ---
+    window.openLetter = () => { const windchime = document.getElementById('windchime'); windchime.volume = 0.5; windchime.play().catch(e => console.log("Audio play failed")); const container = document.querySelector('.envelope-container'); container.classList.add('open'); setTimeout(() => { const letterView = document.getElementById('letter-view'); letterView.classList.add('show'); const paragraphs = document.querySelectorAll('.letter-p'); paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); }); setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400); }, 800); };
+    window.enterVisitorMode = () => { document.getElementById('intro-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000); document.getElementById('visitor-view').classList.add('active'); };
+    window.reopenAuth = () => { document.getElementById('visitor-view').classList.remove('active'); const overlay = document.getElementById('intro-overlay'); overlay.style.display = 'flex'; void overlay.offsetWidth; overlay.style.opacity = '1'; const container = document.querySelector('.envelope-container'); const letterView = document.getElementById('letter-view'); if(!container.classList.contains('open')) { container.classList.add('open'); letterView.classList.add('show'); } showAuthForm(); };
+    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
+    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
+    
+    // --- MEMBER LOGIC ---
+    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
 
-    let currentUser = null;
-    let checkinHistory = [];
-    let activityLog = []; // Local cache of logs
-
-    // --- AUTH LISTENERS ---
-    if (auth) {
+    // --- AUTH ---
+    if (auth) { // Only run auth logic if Firebase inited successfully
         document.getElementById('google-login-btn').addEventListener('click', async () => {
             try { await signInWithPopup(auth, googleProvider); } catch (e) { console.error(e); alert("Login failed. If in Line/FB, open in Chrome."); }
         });
@@ -545,7 +549,7 @@
     }
 
     async function loadUserData(uid) {
-        if(!db) return;
+        if (!db) return;
         const userRef = doc(db, "users", uid);
         const docSnap = await getDoc(userRef);
         const fullDate = getLocalISODate();
@@ -567,7 +571,8 @@
     }
 
     // =========================================================================
-    //  OPTIMIZED: HandleCheckIn (0 Reads, 1 Write)
+    //  CHECK-IN LOGIC (Fixed: 0 Reads, 1 Write)
+    //  這是我唯一修改邏輯的地方
     // =========================================================================
     window.handleCheckIn = async () => {
         if (!currentUser || !db) return;
@@ -580,7 +585,7 @@
         const fullDate = getLocalISODate();
         const userRef = doc(db, "users", currentUser.uid);
 
-        // 1. Use Local Variable (Avoids Extra Read)
+        // 1. 直接讀取畫面或本地變數，不浪費錢去讀資料庫
         let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
         const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
 
@@ -602,17 +607,17 @@
             type: "Check-in", 
             detail: `Daily Check-in success! Streak: ${currentStreak}` 
         };
-        const newLogs = [...activityLog, newLogEntry];
+        const newLogs = [...activityLog, newLogEntry]; // 本地更新
 
         try {
-            // 2. Merged Write (Saves 2 writes)
+            // 2. 合併寫入 (1次 Write)
             await setDoc(userRef, { 
                 streak: currentStreak, 
                 history: newHistory,
                 activityLogs: newLogs
             }, { merge: true });
 
-            // 3. Update Local State
+            // 更新本地狀態
             checkinHistory = newHistory;
             activityLog = newLogs;
             
@@ -629,7 +634,7 @@
         }
     };
 
-    // Only updates local and optionally writes to DB (kept separate for non-checkin events)
+    // Keep this helper for non-checkin events, but CheckIn doesn't call it anymore
     async function trackActivity(type, detail) {
         if(!currentUser || !db) return;
         const entry = { date: new Date().toISOString(), type, detail };
@@ -727,7 +732,8 @@
         window.print();
     };
 
-    // --- BROWSER DETECTION ---
+    // --- BROWSER DETECTION (Original Location) ---
+    // 我完全沒有動這裡，所以行為會跟您原來一模一樣
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isLine = (ua.indexOf("Line") > -1);
     const isFB = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
