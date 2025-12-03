@@ -314,6 +314,12 @@
     .card-wotd { font-family: 'Playfair Display'; font-size: 2.2rem; font-weight: 700; color: var(--card-highlight, #fff); text-shadow: 0 2px 10px rgba(255,255,255,0.2); line-height: 1; margin-bottom: 5px; }
     .card-pos { font-family: 'Exo 2'; font-size: 0.8rem; background: var(--card-accent-dim, rgba(255,255,255,0.1)); display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
     .card-def { font-family: 'Noto Serif TC'; font-size: 1rem; color: var(--card-text, #ddd); line-height: 1.4; font-weight: 600; }
+    
+    /* 例句樣式 (New) */
+    .card-sentence-container { margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--card-accent-dim, rgba(255,255,255,0.1)); }
+    .card-sent-en { font-family: 'Exo 2'; font-style: italic; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-bottom: 5px; line-height: 1.3; font-weight:500; }
+    .card-sent-cn { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #888); opacity: 0.8; }
+
 
     .card-quote-box { position: relative; padding: 15px; border-left: 3px solid var(--card-accent, #ffd700); background: linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent); margin-top: auto; }
     .card-quote-text { font-family: 'Playfair Display'; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--card-text, #eee); }
@@ -550,6 +556,10 @@
                       <div class="card-wotd" id="card-wotd"></div>
                       <div class="card-pos" id="card-pos"></div>
                       <div class="card-def" id="card-def"></div>
+                      <div class="card-sentence-container">
+                          <div id="card-sent-en" class="card-sent-en"></div>
+                          <div id="card-sent-cn" class="card-sent-cn"></div>
+                      </div>
                   </div>
 
                   <div class="card-quote-box">
@@ -784,13 +794,15 @@
         return (val % 11) + 1;
     }
 
-    // 顯示卡片 (這部分是新的)
+    // 顯示卡片 (加入例句)
     window.openCard = (dateStr) => {
         const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
         
         // 假設 CSV date 是 "MM-DD"
         let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
         let quote = "The stars are calling.", author = "Universe";
+        let sentEn = "Keep looking up."; 
+        let sentCn = "保持仰望星空。";
 
         if (csvData && csvData.words) {
             const queryDate = dateStr.slice(5); // remove YYYY-
@@ -801,6 +813,9 @@
                 wotd = wordObj.word || wotd;
                 wotdPos = wordObj.pos || wotdPos;
                 wotdDef = wordObj.meaning || wotdDef;
+                // 獲取例句
+                sentEn = wordObj['sentence e'] || sentEn;
+                sentCn = wordObj['sentence c'] || sentCn;
             }
             if (quoteObj) {
                 quote = quoteObj['quote e'] || quote;
@@ -817,6 +832,10 @@
         document.getElementById('card-wotd').innerText = wotd;
         document.getElementById('card-pos').innerText = wotdPos;
         document.getElementById('card-def').innerText = wotdDef;
+        // 填充例句
+        document.getElementById('card-sent-en').innerText = sentEn;
+        document.getElementById('card-sent-cn').innerText = sentCn;
+
         document.getElementById('card-quote').innerText = `“${quote}”`;
         document.getElementById('card-author').innerText = author;
         document.getElementById('card-streak').innerText = streakDisplay;
