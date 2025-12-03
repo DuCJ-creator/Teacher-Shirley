@@ -386,25 +386,21 @@
           <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')"><div class="planet-visual p-mercury"></div><div class="planet-info"><span class="p-name">Mercury ⚪</span><div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div><div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div></div></div>
           <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')"><div class="planet-visual p-jupiter"></div><div class="planet-info"><span class="p-name">Jupiter 🟡</span><div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div><div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div></div></div>
           <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')"><div class="planet-visual p-saturn"></div><div class="planet-info"><span class="p-name">Saturn 🟠</span><div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div><div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div></div></div>
-          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s dark side, contemplate; on the bright side, grow.</div></div></div>
+          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
       </div>
+      <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
   <div id="member-terminal">
-      <div class="close-terminal" onclick="document.getElementById('member-terminal').classList.remove('show')">×</div>
-      <h2 style="font-family:'Cinzel Decorative'; color:var(--text); border-bottom:1px solid var(--border); padding-bottom:10px;">Moon Base Terminal 🌙</h2>
+      <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
+      <h3 id="greeting-name" style="font-family:'Cinzel Decorative'; color:var(--accent); text-align:center; margin-bottom:1rem;">Welcome to Moon Base</h3>
       <div class="member-dashboard">
           <div class="profile-panel">
-              <div class="streak-ring">
-                  <span style="font-size:0.8rem; color:var(--text-light);">Streak</span>
-                  <span class="streak-num" id="streak-days">0</span>
-                  <span style="font-size:0.7rem; color:var(--text-light);">Days</span>
-              </div>
-              <div style="font-family:'Exo 2'; margin-bottom:5px;">Total Check-ins: <strong id="total-days">0</strong></div>
-              <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in 📍</button>
-              <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:5px; margin-top:20px; font-size:0.8rem; color:var(--text-light);"></div>
-              <button onclick="showPrintModal()" style="margin-top:20px; background:none; border:1px solid var(--accent); color:var(--accent); padding:8px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">🖨️ Print Learning Log</button>
-              <button onclick="handleLogout()" style="margin-top:10px; width:100%; background:#7f8c8d; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Logout</button>
+              <div class="streak-ring"><div class="streak-num" id="streak-days">0</div><div style="font-size:0.7rem;">Days Streak</div></div>
+              <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
+              <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
+              <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
+              <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
           <div class="content-panel">
               <div class="data-card word-card">
@@ -433,34 +429,36 @@
         </div>
         <div class="selection-list" id="log-selection-list"></div>
         <div class="print-actions">
-            <button class="action-btn btn-cancel" onclick="document.getElementById('print-selection-modal').style.display='none'">Cancel</button>
-            <button class="action-btn btn-confirm" onclick="confirmPrint()">Print Selected</button>
+            <button class="action-btn btn-cancel" onclick="closePrintSelection()">Cancel</button>
+            <button class="action-btn btn-confirm" onclick="confirmPrint()">🖨️ Print / Save PDF</button>
         </div>
     </div>
   </div>
 
   <div id="print-area" class="print-only">
-      <h1 style="text-align:center; font-family:'Cinzel Decorative'; margin-bottom:10px;">Teacher Shirley's ET Platform</h1>
-      <h2 style="text-align:center; font-family:'Exo 2'; margin-bottom:20px;">Learning Log / 學習歷程紀錄</h2>
-      <div style="margin-bottom:15px; border-bottom:2px solid black; padding-bottom:10px;">
-          <strong>Learner:</strong> <span id="print-name"></span> &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Date:</strong> <span id="print-date"></span>
+      <div class="print-header" style="text-align:center; border-bottom:2px solid black; margin-bottom:20px; padding-bottom:10px;">
+          <h1>My Learning Journey</h1>
+          <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
       </div>
       <table id="print-table">
-          <thead><tr><th>Date / Time</th><th>Type</th><th>Details</th></tr></thead>
-          <tbody id="print-tbody"></tbody>
+          <thead><tr><th style="width:25%">Time / Duration</th><th style="width:20%">Activity Type</th><th>Details</th></tr></thead>
+          <tbody id="print-body"></tbody>
       </table>
-      <div style="margin-top:30px; font-size:0.8rem; text-align:center; font-style:italic;">Keep exploring, keep growing! — Teacher Shirley</div>
+      <div style="margin-top:20px; font-size:0.8rem; text-align:center;">Generated from Teacher Shirley's ET Platform</div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
+    <div>©️ Teacher Shirley‘s ET Platform 2025</div>
+    <span id="busuanzi_container_site_pv">Total Visits: <span id="busuanzi_value_site_pv"></span></span>
+  </footer>
 
-    // -----------------------------------------------------------------------------------------
-    // 請在此處填入您的 Firebase Config
-    // Please paste your Firebase Config object here
-    // -----------------------------------------------------------------------------------------
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+ <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
       authDomain: "teacher-shirley.firebaseapp.com",
@@ -471,29 +469,350 @@
       appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
     };
 
-    // --- 安全初始化 (Try-Catch) ---
-    // 這樣就算 Config 沒填，程式也不會死掉，信封還是打得開
-    let app, auth, db, googleProvider;
-    try {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        googleProvider = new GoogleAuthProvider();
-    } catch (e) {
-        console.warn("Firebase Init Error (Check Config):", e);
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
 
     let currentUser = null;
+    let csvData = { words: [], quotes: [] };
     let checkinHistory = [];
-    let activityLog = []; // Local cache of logs
-    
-    // --- PARTICLE BG ---
+    let activityLog = [];
+
+    // --- In-App Browser Detection Helpers ---
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
+
+    window.closeWarning = () => {
+        document.getElementById('in-app-browser-warning').style.display = 'none';
+    };
+
+    window.copyCurrentUrl = () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert("Link copied! Open Chrome/Safari and paste it.");
+        }).catch(() => {
+            alert("Failed to copy. Please copy the URL manually.");
+        });
+    };
+
+    // --- HELPER: GET LOCAL DATE STRING (Fixes Timezone Issue) ---
+    function getLocalISODate() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    // --- ENVELOPE LOGIC ---
+    window.openLetter = () => {
+        const windchime = document.getElementById('windchime');
+        windchime.volume = 0.5;
+        windchime.play().catch(e => console.log("Audio play failed"));
+        const container = document.querySelector('.envelope-container');
+        container.classList.add('open');
+        setTimeout(() => {
+            const letterView = document.getElementById('letter-view');
+            letterView.classList.add('show');
+            const paragraphs = document.querySelectorAll('.letter-p');
+            paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); });
+            setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400);
+        }, 800);
+    };
+
+    window.enterVisitorMode = () => {
+        document.getElementById('intro-overlay').style.opacity = '0';
+        setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
+        document.getElementById('visitor-view').classList.add('active');
+    };
+
+    window.reopenAuth = () => {
+        document.getElementById('visitor-view').classList.remove('active');
+        const overlay = document.getElementById('intro-overlay');
+        overlay.style.display = 'flex';
+        void overlay.offsetWidth; 
+        overlay.style.opacity = '1';
+        const container = document.querySelector('.envelope-container');
+        const letterView = document.getElementById('letter-view');
+        if(!container.classList.contains('open')) {
+             container.classList.add('open');
+             letterView.classList.add('show');
+        }
+        showAuthForm();
+    };
+
+    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
+    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
+    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
+    window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
+
+    // --- UPDATED GOOGLE LOGIN LOGIC ---
+    document.getElementById('google-login-btn').addEventListener('click', () => { 
+        if(isInApp) {
+            document.getElementById('in-app-browser-warning').style.display = 'flex';
+            return;
+        }
+        signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); 
+    });
+
+    document.getElementById('email-login-btn').addEventListener('click', () => {
+        const email = document.getElementById('email-input').value;
+        const pass = document.getElementById('pass-input').value;
+        if (!email || !pass) return alert("Please fill in fields");
+        signInWithEmailAndPassword(auth, email, pass).catch(error => {
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                if(confirm("Create account?")) createUserWithEmailAndPassword(auth, email, pass);
+            } else alert(error.message);
+        });
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('intro-overlay').style.display = 'none';
+            document.getElementById('visitor-view').classList.remove('active');
+            document.getElementById('universe-view').classList.add('active');
+            document.getElementById('logoutBtn').style.display = 'flex';
+            document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
+            await loadCSVData();
+            await loadUserData(user.uid);
+            renderDailyContent(getTodayMMDD());
+            trackActivity("Login", "Arrived at Moon Base");
+        }
+    });
+
+    window.visitPlanet = (planetName, url) => {
+        if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
+        setTimeout(() => { window.location.href = url; }, 300);
+    };
+
+    async function trackActivity(type, detail) {
+        if (!currentUser) return;
+        const userRef = doc(db, "users", currentUser.uid);
+        try { await updateDoc(userRef, { activityLogs: arrayUnion({ date: new Date().toISOString(), type, detail }) }); } catch (e) { console.log(e); }
+    }
+
+    async function loadUserData(uid) {
+        const userRef = doc(db, "users", uid);
+        const docSnap = await getDoc(userRef);
+        // FIX: Use local date
+        const fullDate = getLocalISODate();
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            checkinHistory = data.history || [];
+            activityLog = data.activityLogs || [];
+            document.getElementById('total-days').innerText = checkinHistory.length;
+            document.getElementById('streak-days').innerText = data.streak || 0;
+            if (checkinHistory.includes(fullDate)) document.getElementById('checkin-btn').disabled = true;
+        } else {
+            await setDoc(userRef, { email: currentUser.email, history: [], streak: 0, activityLogs: [] }, { merge: true });
+        }
+        renderCalendar();
+    }
+
+    window.handleCheckIn = async () => {
+        if (!currentUser) return;
+        
+        const fullDate = getLocalISODate();
+        
+        // 【0讀優化】直接檢查本地記憶體中的紀錄，如果今天已打卡則直接阻擋，連寫入都省下
+        if (checkinHistory.includes(fullDate)) return;
+
+        const btn = document.getElementById('checkin-btn');
+        btn.disabled = true; 
+        btn.innerText = "Signing in...";
+        
+        try {
+            // 【0讀優化】透過本地記憶體計算 Streak，不需讀取資料庫
+            // 取得目前畫面上的連勝數字
+            let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
+            // 取得最後一次打卡日期 (從本地變數)
+            const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
+            
+            // 計算「昨天」的日期字串
+            const yesterday = new Date(); 
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yYear = yesterday.getFullYear();
+            const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
+            const yDay = String(yesterday.getDate()).padStart(2, '0');
+            const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
+            
+            // 判斷連勝邏輯
+            if (lastCheckIn === yesterdayStr) {
+                currentStreak++;
+            } else {
+                currentStreak = 1;
+            }
+
+            const userRef = doc(db, "users", currentUser.uid);
+            
+            // 準備 Log 物件
+            const logEntry = { date: new Date().toISOString(), type: "Check-in", detail: "Daily Check-in" };
+
+            // 【1寫優化】使用 updateDoc + arrayUnion 同時更新 History、Streak 和 ActivityLogs
+            // 這樣可以省下原本呼叫 trackActivity 所產生的第二次寫入費用
+            await updateDoc(userRef, { 
+                streak: currentStreak, 
+                history: arrayUnion(fullDate),
+                activityLogs: arrayUnion(logEntry)
+            });
+
+            // 更新本地記憶體與 UI
+            checkinHistory.push(fullDate);
+            activityLog.push(logEntry); // 同步更新本地日誌變數，確保列印功能正常
+            
+            document.getElementById('streak-days').innerText = currentStreak;
+            document.getElementById('total-days').innerText = checkinHistory.length;
+            btn.innerText = "Moon Check-in Success! 🌕";
+            renderCalendar();
+
+        } catch (e) {
+            console.error("Check-in error:", e);
+            btn.innerText = "Check-in Failed";
+            btn.disabled = false;
+        }
+    };
+
+    async function loadCSVData() {
+        try {
+            const [resWords, resQuotes] = await Promise.all([
+                fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv'),
+                fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv')
+            ]);
+            csvData.words = parseCSV(await resWords.text());
+            csvData.quotes = parseCSV(await resQuotes.text());
+        } catch (e) {}
+    }
+
+    function parseCSV(text) {
+        const lines = text.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+        return lines.slice(1).map(line => {
+            const row = {}; 
+            const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
+            const matches = []; let match;
+            while ((match = regex.exec(line)) !== null) { if (match.index === regex.lastIndex) regex.lastIndex++; if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g, '').replace(/""/g, '"')); }
+            headers.forEach((h, i) => row[h] = matches[i] ? matches[i].trim() : '');
+            return row;
+        });
+    }
+
+    function getTodayMMDD() { const now = new Date(); return String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0'); }
+
+    function renderDailyContent(dateStr) {
+        const wordObj = csvData.words.find(r => r.date === dateStr);
+        if (wordObj) {
+            document.getElementById('wotd-word').innerText = wordObj.word;
+            document.getElementById('wotd-ipa').innerText = wordObj.ipa;
+            document.getElementById('wotd-pos').innerText = wordObj.pos;
+            document.getElementById('wotd-meaning').innerText = wordObj.meaning;
+            document.getElementById('wotd-sentence-e').innerText = wordObj['sentence e'];
+            document.getElementById('wotd-sentence-c').innerText = wordObj['sentence c'];
+            document.getElementById('word-date').innerText = `(${dateStr})`;
+        }
+        const quoteObj = csvData.quotes.find(r => r.date === dateStr);
+        if (quoteObj) {
+            document.getElementById('qotd-text').innerText = quoteObj['quote e'];
+            document.getElementById('qotd-trans').innerText = quoteObj['quote c'];
+            document.getElementById('qotd-author').innerText = "— " + quoteObj.author;
+        }
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        const now = new Date();
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        // FIX: Use Local Year-Month
+        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
+        
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayEl = document.createElement('div');
+            dayEl.innerText = i;
+            dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px;";
+            if (checkinHistory.includes(`${currentYearMonth}-${String(i).padStart(2, '0')}`)) { dayEl.style.background = "var(--accent)"; dayEl.style.color="white"; dayEl.style.borderRadius="50%"; }
+            grid.appendChild(dayEl);
+        }
+    }
+
+    let processedLogs = [];
+
+    function processActivityLogs(logs) {
+        if (!logs || logs.length === 0) return [];
+        const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
+        const grouped = [];
+        for (let i = 0; i < sortedLogs.length; i++) {
+            const current = sortedLogs[i];
+            const next = sortedLogs[i+1];
+            const startTime = new Date(current.date);
+            let endTime = next ? new Date(next.date) : new Date();
+            let j = i + 1;
+            while(j < sortedLogs.length && sortedLogs[j].detail === current.detail) {
+                endTime = (j + 1 < sortedLogs.length) ? new Date(sortedLogs[j+1].date) : new Date();
+                j++;
+            }
+            const durationMs = endTime - startTime;
+            const minutes = Math.floor(durationMs / 60000);
+            const durationStr = minutes < 1 ? "< 1 min" : `${minutes} mins`;
+            grouped.push({ start: startTime, end: endTime, type: current.type, detail: current.detail, durationStr: durationStr });
+            i = j - 1;
+        }
+        return grouped.reverse();
+    }
+
+    window.openPrintSelection = () => {
+        if (!currentUser) return;
+        processedLogs = processActivityLogs(activityLog);
+        const listContainer = document.getElementById('log-selection-list');
+        listContainer.innerHTML = '';
+        if(processedLogs.length === 0) {
+            listContainer.innerHTML = '<div style="padding:20px; text-align:center;">No records found.</div>';
+            return;
+        }
+        processedLogs.forEach((log, index) => {
+            const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
+            const row = document.createElement('div');
+            row.className = 'log-item-row';
+            row.innerHTML = `<input type="checkbox" id="log-check-${index}" class="log-checkbox"><div class="log-details"><span class="log-action">${log.type}: ${log.detail}</span><span class="log-time">${dateStr} (${log.durationStr})</span></div>`;
+            listContainer.appendChild(row);
+        });
+        document.getElementById('print-selection-modal').style.display = 'flex';
+    };
+
+    window.closePrintSelection = () => { document.getElementById('print-selection-modal').style.display = 'none'; };
+    window.toggleAllLogs = (checkStatus) => { document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = checkStatus); };
+
+    window.confirmPrint = () => {
+        const printBody = document.getElementById('print-body');
+        printBody.innerHTML = '';
+        document.getElementById('print-name').innerText = currentUser.displayName || currentUser.email;
+        document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+        let hasSelection = false;
+        processedLogs.forEach((log, index) => {
+            const checkbox = document.getElementById(`log-check-${index}`);
+            if(checkbox && checkbox.checked) {
+                hasSelection = true;
+                const tr = document.createElement('tr');
+                const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
+                tr.innerHTML = `<td>${dateStr}<br><span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span></td><td>${log.type}</td><td>${log.detail}</td>`;
+                printBody.appendChild(tr);
+            }
+        });
+        if(!hasSelection) return alert("Please select at least one record to print.");
+        document.getElementById('print-selection-modal').style.display = 'none';
+        setTimeout(() => window.print(), 500);
+    };
+
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     let particlesArray;
+    function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+    resizeCanvas();
     class Particle {
-        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25; this.opacity = Math.random() * 0.5; }
+        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2; this.speedX = (Math.random() * 0.2 - 0.1); this.speedY = (Math.random() * 0.2 - 0.1); this.opacity = Math.random() * 0.5; }
         update() { this.x += this.speedX; this.y += this.speedY; if(this.x>canvas.width)this.x=0; if(this.x<0)this.x=canvas.width; if(this.y>canvas.height)this.y=0; if(this.y<0)this.y=canvas.height; }
         draw(isDark) { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(44, 62, 80, ${this.opacity * 0.5})`; ctx.fill(); }
     }
@@ -507,244 +826,10 @@
     const themeSong = document.getElementById('themeSong');
     let isPlaying = false;
     musicToggle.addEventListener('click', () => {
-        if(isPlaying) { themeSong.pause(); musicToggle.innerText='🎵'; } else { themeSong.volume=0.3; themeSong.play(); musicToggle.innerText='🔊'; }
+        if(isPlaying) { themeSong.pause(); musicToggle.style.color="var(--text)"; }
+        else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
-
-    // --- UTILS ---
-    function getLocalISODate() { const now = new Date(); const y = now.getFullYear(); const m = String(now.getMonth() + 1).padStart(2, '0'); const d = String(now.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
-
-    // --- ENVELOPE LOGIC ---
-    window.openLetter = () => { const windchime = document.getElementById('windchime'); windchime.volume = 0.5; windchime.play().catch(e => console.log("Audio play failed")); const container = document.querySelector('.envelope-container'); container.classList.add('open'); setTimeout(() => { const letterView = document.getElementById('letter-view'); letterView.classList.add('show'); const paragraphs = document.querySelectorAll('.letter-p'); paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); }); setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400); }, 800); };
-    window.enterVisitorMode = () => { document.getElementById('intro-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000); document.getElementById('visitor-view').classList.add('active'); };
-    window.reopenAuth = () => { document.getElementById('visitor-view').classList.remove('active'); const overlay = document.getElementById('intro-overlay'); overlay.style.display = 'flex'; void overlay.offsetWidth; overlay.style.opacity = '1'; const container = document.querySelector('.envelope-container'); const letterView = document.getElementById('letter-view'); if(!container.classList.contains('open')) { container.classList.add('open'); letterView.classList.add('show'); } showAuthForm(); };
-    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
-    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
-    
-    // --- MEMBER LOGIC ---
-    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
-
-    // --- AUTH ---
-    if (auth) { // Only run auth logic if Firebase inited successfully
-        document.getElementById('google-login-btn').addEventListener('click', async () => {
-            try { await signInWithPopup(auth, googleProvider); } catch (e) { console.error(e); alert("Login failed. If in Line/FB, open in Chrome."); }
-        });
-        document.getElementById('email-login-btn').addEventListener('click', async () => {
-            const e = document.getElementById('email-input').value; const p = document.getElementById('pass-input').value;
-            try { await signInWithEmailAndPassword(auth, e, p); } catch (err) { alert(err.message); }
-        });
-        window.handleLogout = async () => { await signOut(auth); location.reload(); };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('intro-overlay').style.display = 'none';
-                document.getElementById('universe-view').classList.add('active');
-                document.getElementById('logoutBtn').style.display = 'flex';
-                document.getElementById('logoutBtn').addEventListener('click', window.handleLogout);
-                loadUserData(user.uid);
-                fetchDailyContent();
-            }
-        });
-    }
-
-    async function loadUserData(uid) {
-        if (!db) return;
-        const userRef = doc(db, "users", uid);
-        const docSnap = await getDoc(userRef);
-        const fullDate = getLocalISODate();
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            checkinHistory = data.history || [];
-            activityLog = data.activityLogs || []; // Load logs to local
-            document.getElementById('total-days').innerText = checkinHistory.length;
-            document.getElementById('streak-days').innerText = data.streak || 0;
-            if (checkinHistory.includes(fullDate)) {
-                 const btn = document.getElementById('checkin-btn');
-                 btn.innerText = "Moon Check-in Success! 🌕";
-                 btn.disabled = true;
-            }
-        } else {
-            await setDoc(userRef, { email: currentUser.email, history: [], streak: 0, activityLogs: [] }, { merge: true });
-        }
-        renderCalendar();
-    }
-
-    // =========================================================================
-    //  CHECK-IN LOGIC (Fixed: 0 Reads, 1 Write)
-    //  這是我唯一修改邏輯的地方
-    // =========================================================================
-    window.handleCheckIn = async () => {
-        if (!currentUser || !db) return;
-        const btn = document.getElementById('checkin-btn');
-        if(btn.disabled) return;
-        
-        btn.disabled = true;
-        btn.innerText = "Signing in...";
-
-        const fullDate = getLocalISODate();
-        const userRef = doc(db, "users", currentUser.uid);
-
-        // 1. 直接讀取畫面或本地變數，不浪費錢去讀資料庫
-        let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
-        const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
-
-        if (lastCheckIn === fullDate) {
-             btn.innerText = "Already Checked In today";
-             return;
-        }
-
-        const yesterday = new Date(); 
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
-        
-        if (lastCheckIn === yStr) currentStreak++;
-        else currentStreak = 1;
-
-        const newHistory = [...checkinHistory, fullDate];
-        const newLogEntry = { 
-            date: new Date().toISOString(), 
-            type: "Check-in", 
-            detail: `Daily Check-in success! Streak: ${currentStreak}` 
-        };
-        const newLogs = [...activityLog, newLogEntry]; // 本地更新
-
-        try {
-            // 2. 合併寫入 (1次 Write)
-            await setDoc(userRef, { 
-                streak: currentStreak, 
-                history: newHistory,
-                activityLogs: newLogs
-            }, { merge: true });
-
-            // 更新本地狀態
-            checkinHistory = newHistory;
-            activityLog = newLogs;
-            
-            document.getElementById('streak-days').innerText = currentStreak;
-            document.getElementById('total-days').innerText = checkinHistory.length;
-            renderCalendar();
-
-            btn.innerText = "Moon Check-in Success! 🌕";
-
-        } catch (error) {
-            console.error("Check-in failed:", error);
-            btn.disabled = false;
-            btn.innerText = "Retry Check-in";
-        }
-    };
-
-    // Keep this helper for non-checkin events, but CheckIn doesn't call it anymore
-    async function trackActivity(type, detail) {
-        if(!currentUser || !db) return;
-        const entry = { date: new Date().toISOString(), type, detail };
-        activityLog.push(entry);
-        try {
-             const userRef = doc(db, "users", currentUser.uid);
-             await updateDoc(userRef, { activityLogs: arrayUnion(entry) });
-        } catch(e) { console.log("Track error", e); }
-    }
-
-    window.visitPlanet = (planetName, url) => {
-        if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
-        setTimeout(() => { window.location.href = url; }, 300);
-    };
-
-    // --- CONTENT FETCHING ---
-    async function fetchDailyContent() {
-        const today = new Date();
-        const dateStr = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`;
-        document.getElementById('word-date').innerText = `(${dateStr})`;
-        document.getElementById('wotd-word').innerText = "Serendipity";
-        document.getElementById('wotd-pos').innerText = "n.";
-        document.getElementById('wotd-meaning').innerText = "意外發現珍奇事物的本領";
-        document.getElementById('wotd-ipa').innerText = "/ˌser.ənˈdɪp.ə.t̬i/";
-        document.getElementById('wotd-sentence-e').innerText = "Finding this cafe was pure serendipity.";
-        document.getElementById('wotd-sentence-c').innerText = "發現這家咖啡館純屬意外的驚喜。";
-        
-        document.getElementById('qotd-text').innerText = "Learning is a treasure that will follow its owner everywhere.";
-        document.getElementById('qotd-trans').innerText = "學習是會隨身攜帶的寶藏。";
-        document.getElementById('qotd-author').innerText = "— Chinese Proverb";
-    }
-
-    function renderCalendar() {
-        const grid = document.getElementById('calendar-grid');
-        grid.innerHTML = '';
-        const now = new Date();
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-        for (let i = 1; i <= daysInMonth; i++) {
-            const dayEl = document.createElement('div');
-            dayEl.innerText = i;
-            dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px;";
-            if (checkinHistory.includes(`${currentYearMonth}-${String(i).padStart(2, '0')}`)) {
-                dayEl.style.background = "var(--accent)";
-                dayEl.style.color="white";
-                dayEl.style.borderRadius="50%";
-            }
-            grid.appendChild(dayEl);
-        }
-    }
-
-    // --- PRINT LOGIC ---
-    window.showPrintModal = () => {
-        const list = document.getElementById('log-selection-list');
-        list.innerHTML = '';
-        const sortedLogs = [...activityLog].reverse(); 
-        sortedLogs.forEach((log, index) => {
-            const row = document.createElement('div');
-            row.className = 'log-item-row';
-            const dateStr = new Date(log.date).toLocaleString();
-            row.innerHTML = `
-                <input type="checkbox" id="log-check-${index}" checked>
-                <div class="log-details">
-                    <span class="log-action">${log.type}: ${log.detail}</span>
-                    <span class="log-time">${dateStr}</span>
-                </div>
-            `;
-            list.appendChild(row);
-        });
-        document.getElementById('print-selection-modal').style.display = 'flex';
-    };
-
-    window.toggleAllLogs = (check) => {
-        const checkboxes = document.querySelectorAll('#log-selection-list input[type="checkbox"]');
-        checkboxes.forEach(cb => cb.checked = check);
-    };
-
-    window.confirmPrint = () => {
-        document.getElementById('print-selection-modal').style.display = 'none';
-        const tbody = document.getElementById('print-tbody');
-        tbody.innerHTML = '';
-        document.getElementById('print-name').innerText = currentUser.displayName || currentUser.email;
-        document.getElementById('print-date').innerText = new Date().toLocaleDateString();
-        
-        const sortedLogs = [...activityLog].reverse();
-        sortedLogs.forEach((log, index) => {
-            const checkbox = document.getElementById(`log-check-${index}`);
-            if(checkbox && checkbox.checked) {
-                const tr = document.createElement('tr');
-                const dateStr = new Date(log.date).toLocaleString();
-                tr.innerHTML = `<td>${dateStr}</td><td>${log.type}</td><td>${log.detail}</td>`;
-                tbody.appendChild(tr);
-            }
-        });
-        window.print();
-    };
-
-    // --- BROWSER DETECTION (Original Location) ---
-    // 我完全沒有動這裡，所以行為會跟您原來一模一樣
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isLine = (ua.indexOf("Line") > -1);
-    const isFB = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
-    const isWeChat = (ua.indexOf("MicroMessenger") > -1);
-    if (isLine || isFB || isWeChat) {
-        document.getElementById('in-app-browser-warning').style.display = 'flex';
-    }
-    window.closeWarning = () => { document.getElementById('in-app-browser-warning').style.display = 'none'; };
-    window.copyCurrentUrl = () => {
-        navigator.clipboard.writeText(window.location.href).then(() => { alert("Link Copied! Open in Chrome/Safari."); }).catch(() => { alert("Failed to copy."); });
-    };
   </script>
 </body>
 </html>
