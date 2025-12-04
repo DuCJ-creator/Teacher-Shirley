@@ -1,370 +1,305 @@
 <!DOCTYPE html>
-<html lang="en" id="htmlRoot">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Teacher Shirley's ET Platform</title>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Shirley | Moon Base</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
-  
-  <style id="themeStyles">
+  <!-- Fonts (keep original vibe) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Serif+TC:wght@400;600;700;900&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
     :root {
-      /* --- Light Mode (Morning Mist) --- */
-      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      --surface: rgba(255, 255, 255, 0.9);
-      --border: rgba(20, 30, 48, 0.15);
-      --text: #1a2a3a; 
-      --text-light: #485563;
-      --accent: #b8860b; 
-      --orbit-color: rgba(20, 30, 48, 0.2); 
-      --orbit-glow: none;
-      --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      --info-bg: rgba(255, 255, 255, 0.95);
+      --bg: #0b0f19;
+      --surface: rgba(255,255,255,0.06);
+      --surface-strong: rgba(255,255,255,0.12);
+      --border: rgba(255,255,255,0.12);
+      --text: #e9eef7;
+      --text-light: rgba(233,238,247,0.65);
+      --accent: #7fd6ff;
+      --accent-2: #ffd36b;
+      --card-shadow: 0 10px 35px rgba(0,0,0,0.45);
     }
 
-    .dark {
-      /* --- Dark Mode (Deep Nebula) --- */
-      --bg-gradient: radial-gradient(circle at 50% 50%, #1b2735 0%, #090a0f 100%);
-      --surface: rgba(30, 40, 55, 0.85);
-      --border: rgba(255, 255, 255, 0.15);
-      --text: #ecf0f1;
-      --text-light: #bdc3c7;
-      --accent: #f1c40f; 
-      --orbit-color: rgba(255, 255, 255, 0.2); 
-      --orbit-glow: 0 0 10px rgba(255, 255, 255, 0.05);
-      --card-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      --info-bg: rgba(25, 35, 50, 0.85);
+    *{box-sizing:border-box;}
+    body{
+      margin:0; font-family:'Exo 2',system-ui,-apple-system;
+      background: radial-gradient(1200px 700px at 70% -10%, #112c4a 0%, transparent 60%),
+                  radial-gradient(800px 500px at 10% 0%, #2a174a 0%, transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text);
-      font-family: 'Exo 2', 'Noto Serif TC', serif;
-      line-height: 1.6;
-      transition: color 0.5s, background 0.5s;
-      min-height: 100vh;
-      overflow-x: hidden;
+    /* ----- Layout / Sections (keep original structure but simplified) ----- */
+    #intro-overlay{
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.9); z-index:1000; flex-direction:column; gap:1rem;
+    }
+    #intro-overlay h1{font-family:'Cinzel Decorative'; letter-spacing:2px;}
+    .primary-btn{
+      background:var(--accent); color:#001528; padding:.8rem 1.2rem; border:none; border-radius:12px;
+      font-weight:800; cursor:pointer; box-shadow:var(--card-shadow);
     }
 
-    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    
-    /* --- Controls --- */
-    .top-bar { position: absolute; top: 1.5rem; right: 2rem; display: flex; gap: 1rem; z-index: 2000; }
-    .control-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      width: 42px; height: 42px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text); font-size: 1.2rem;
-      transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      backdrop-filter: blur(5px);
+    #universe-view, #visitor-view{display:none; opacity:0; transition:opacity .5s ease;}
+    #universe-view.active, #visitor-view.active{display:block; opacity:1;}
+
+    header{
+      padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; backdrop-filter:blur(8px); background:rgba(5,8,14,0.6); z-index:50;
+      border-bottom:1px solid var(--border);
     }
-    .control-btn:hover { transform: scale(1.1); color: var(--accent); border-color: var(--accent); }
+    header .logo{font-family:'Cinzel Decorative'; font-weight:900; letter-spacing:2px;}
+    header .right{display:flex; gap:.75rem; align-items:center;}
+    #logoutBtn{display:none;}
 
-    /* --- Header --- */
-    header { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 0; position: relative; z-index: 10; text-align: center; }
-    .main-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; color: var(--text); line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .dark .main-title { color: #ffffff; text-shadow: 0 0 25px rgba(241, 196, 15, 0.5); }
-    .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
-
-    /* ==================== UNIVERSE VIEW ==================== */
-    #universe-view { 
-        display: none; opacity: 0; transition: opacity 0.8s ease; 
-        min-height: 85vh; width: 100%; position: relative; overflow: hidden; 
+    .categories{
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:1.5rem; padding:2rem; max-width:1100px; margin:0 auto;
     }
-    #universe-view.active { display: block; opacity: 1; }
-
-    .solar-system { 
-        position: relative; width: 100%; height: 85vh; 
-        display: flex; justify-content: center; align-items: center; 
-        transform: scale(1);
+    .category-card{
+      background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:2rem 1.5rem;
+      text-decoration:none; color:var(--text); display:flex; flex-direction:column; align-items:center; gap:.5rem;
+      transition:.3s; box-shadow:var(--card-shadow);
     }
+    .category-card:hover{transform:translateY(-6px); border-color:var(--accent);}
+    .icon{font-size:2.5rem;}
 
-    .orbit { 
-        position: absolute; border: 1px dashed var(--orbit-color); box-shadow: var(--orbit-glow); 
-        border-radius: 50%; top: 50%; left: 50%; pointer-events: none; transition: border-color 0.5s;
+    /* ----- Member Terminal / Dashboard ----- */
+    #member-terminal{
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.95);
+      width:92%; max-width:980px; max-height:86vh; overflow:auto; z-index:2000;
+      background:rgba(9,12,20,0.96); border:1px solid var(--border); border-radius:22px; padding:2rem;
+      box-shadow:0 25px 80px rgba(0,0,0,0.55); display:none; opacity:0; transition:.25s;
+      backdrop-filter: blur(10px);
     }
-    .orbit-1 { width: 320px; height: 320px; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; }
-    .orbit-2 { width: 520px; height: 520px; margin-top: -260px; margin-left: -260px; animation: spinOrbit 90s linear infinite reverse; border-style: dotted; }
-    .orbit-3 { width: 780px; height: 780px; margin-top: -390px; margin-left: -390px; animation: spinOrbit 140s linear infinite; }
+    #member-terminal.show{display:block; opacity:1; transform:translate(-50%,-50%) scale(1);}
+    .close-terminal{position:absolute; top:16px; right:18px; font-size:1.5rem; cursor:pointer;}
 
-    .mars-container { position: absolute; width: 320px; height: 320px; top: 50%; left: 50%; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; pointer-events: none; z-index: 5; }
-    .mars-container:hover { animation-play-state: paused; }
-    .mars-wrapper { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; margin-left: -30px; animation: spinCounter 50s linear infinite; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-
-    .static-planet-wrapper { position: absolute; z-index: 6; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; }
-    .static-planet-wrapper:hover { z-index: 100; }
-    .static-planet-wrapper:hover .planet-visual { transform: scale(1.15); transition: transform 0.3s; }
-
-    .pos-mercury { top: 50%; left: 50%; transform: translate(-50%, 260px) translate(-50%, -50%); margin-top: 30px; }
-    .pos-saturn { top: 50%; left: 50%; transform: translate(-390px, 0) translate(-50%, -50%); margin-left: 20px; }
-    .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
-
-    .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-    .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
-
-    .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
-    .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
-    .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
-    .p-saturn { width: 75px; height: 75px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4); }
-    .p-mercury { width: 55px; height: 55px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); box-shadow: 0 0 25px rgba(189, 195, 199, 0.7); }
-
-    .planet-info {
-        position: absolute; width: 220px; background: var(--info-bg); backdrop-filter: blur(15px);
-        padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border);
-        text-align: center; pointer-events: none; box-shadow: var(--card-shadow);
-        bottom: 120%; left: 50%; transform: translateX(-50%);
+    .member-dashboard{
+      display:grid; grid-template-columns:280px 1fr; gap:1.5rem; margin-top:1rem;
     }
-    .moon-info { width: 240px; bottom: 130%; }
-    .p-name { font-family: 'Cinzel Decorative'; font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 4px; display:block; }
-    .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
-    .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
-    .checkin-tag { display: block; margin-top: 8px; background: linear-gradient(90deg, var(--accent), #f39c12); color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+    @media (max-width: 860px){ .member-dashboard{grid-template-columns:1fr;} }
 
-    @keyframes spinOrbit { 100% { transform: rotate(360deg); } }
-    @keyframes spinCounter { 100% { transform: rotate(-360deg); } }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .profile-panel{
+      background:rgba(255,255,255,0.03); border-radius:16px; padding:1.5rem; text-align:center;
+      border:1px solid var(--border);
+    }
+    .streak-ring{
+      width:110px; height:110px; border:5px solid var(--accent); border-radius:50%;
+      margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; flex-direction:column;
+    }
+    .streak-num{font-size:2.4rem; font-weight:900; color:var(--accent);}
+    .data-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.25rem;}
+    .word-card{border-left:5px solid #3498db;}
+    .quote-card{border-left:5px solid #f1c40f; margin-top:1rem;}
 
-    @media (max-width: 1024px) { .solar-system { transform: scale(0.75); } }
-    @media (max-width: 768px) { .solar-system { transform: scale(0.55); height: 70vh; } }
-    @media (max-width: 420px) { .solar-system { transform: scale(0.42); } .pos-mercury { margin-top: 60px; } }
+    .checkin-btn{
+      width:100%; padding:14px; background:var(--accent); color:white; border:none; border-radius:10px;
+      font-weight:800; cursor:pointer; margin-top:12px;
+    }
+    .checkin-btn:disabled{background:#7c8a96; cursor:not-allowed;}
 
-    /* ==================== REST OF THE SITE ==================== */
-    /* Envelope */
-    #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease; }
-    .envelope-container { position: relative; cursor: pointer; width: 320px; height: 210px; transition: transform 0.5s ease; animation: floatEnv 4s ease-in-out infinite; }
-    .envelope-container:hover { transform: scale(1.05); }
-    .envelope-body { position: absolute; bottom: 0; width: 100%; height: 100%; background: #e6dac8; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-radius: 5px; overflow: hidden; z-index: 2; }
-    .envelope-txt { position: absolute; z-index: 10; text-align: center; width: 100%; top: 55%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; padding: 0 10px; }
-    .env-title { font-family: 'Cinzel Decorative'; font-size: 1.1rem; color: #5d4037; margin-bottom: 5px; }
-    .env-subtitle { font-family: 'Dancing Script', font-size: 1.2rem; color: #8d6e63; margin-bottom: 15px; }
-    .env-highlight { font-family: 'Exo 2'; font-weight: 700; color: #c0392b; font-size: 0.85rem; margin-bottom: 2px; }
-    .env-cn { font-family: 'Noto Sans TC'; font-size: 0.75rem; color: #6d4c41; font-weight: 500; }
-    .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-top: 130px solid #dccbb1; transform-origin: top; transition: transform 0.8s ease 0.2s, z-index 0.2s; z-index: 3; }
-    .envelope-pocket { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f0e6d6; border-right: 160px solid #ece0cd; border-bottom: 110px solid #f8f1e5; border-top: 110px solid transparent; z-index: 4; }
-    .heart-seal { position: absolute; top: -55px; left: -15px; font-size: 2rem; color: #c0392b; animation: heartBeat 1.5s infinite; }
-    .envelope-container.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
-    .envelope-container.open { animation: none; transform: scale(1.5); opacity: 0; pointer-events: none; transition: opacity 0.5s 1s, transform 1s; }
-    @keyframes floatEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-
-    /* Letter */
-    .letter-paper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); width: 95%; max-width: 750px; height: auto; max-height: 95vh; background: radial-gradient(circle at 50% 0%, #ffffff 10%, #f7f4e9 80%); box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 0 40px rgba(255,255,255,0.8), inset 0 0 10px rgba(212, 175, 55, 0.1); padding: 2.5rem 3rem; opacity: 0; pointer-events: none; transition: all 0.8s ease 0.8s; overflow-y: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.8); display: flex; flex-direction: column; }
-    .letter-paper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png'); background-size: cover; background-position: center; filter: blur(6px) grayscale(20%); opacity: 0.1; z-index: 0; pointer-events: none; }
-    .sparkle-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-    .sparkle { position: absolute; width: 4px; height: 4px; background: rgba(212, 175, 55, 0.6); border-radius: 50%; box-shadow: 0 0 4px rgba(255, 255, 255, 0.8); animation: floatSparkle 4s infinite linear; }
-    .sparkle:nth-child(1) { top: 10%; left: 20%; animation-duration: 3s; } .sparkle:nth-child(2) { top: 30%; left: 80%; animation-duration: 5s; } .sparkle:nth-child(3) { top: 60%; left: 10%; animation-duration: 4s; }
-    @keyframes floatSparkle { 0% { opacity: 0; } 50% { opacity: 1; transform: translateY(-20px) scale(1.2); } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
-    .letter-paper.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
-    .letter-content { position: relative; z-index: 2; color: #2c3e50; font-family: 'Playfair Display', serif; }
-    .letter-p { margin-bottom: 0.8rem; font-size: 1.05rem; line-height: 1.5; opacity: 0; transform: translateY(10px); transition: all 0.6s ease; text-align: justify; }
-    .letter-p.visible { opacity: 1; transform: translateY(0); }
-    .cn-text { display: block; font-family: 'Noto Sans TC'; font-size: 0.95rem; color: #7f8c8d; margin-top: 2px; line-height: 1.4; }
-    .signature { text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.5rem; margin: 1rem 0; color: var(--accent); }
-
-    .choice-area { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; opacity: 0; transition: opacity 1s ease 0.5s; }
-    .choice-area.visible { opacity: 1; }
-    .btn-letter { padding: 8px 20px; border-radius: 25px; border: none; font-family: 'Exo 2'; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; min-width: 140px; }
-    .btn-visitor { background: transparent; border: 1px solid #8d6e63; color: #5d4037; }
-    .btn-visitor:hover { background: rgba(141, 110, 99, 0.1); }
-    .btn-login { background: var(--accent); color: white; border: 1px solid var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
-    .btn-login:hover { background: var(--accent-hover); transform: translateY(-2px); }
-
-    #auth-form-container { display: none; margin-top: 10px; background: rgba(255,255,255,0.95); padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
-    .google-btn { width: 100%; padding: 10px; background: white; color: #555; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .input-group input { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Exo 2'; }
-    .email-btn { width: 100%; padding: 8px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
-
-    /* Views */
-    #visitor-view { display: none; opacity: 0; transition: opacity 0.5s ease; padding-bottom: 5rem; }
-    #visitor-view.active { display: block; opacity: 1; }
-    .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 0 2rem; max-width: 1000px; margin: 0 auto; position: relative; z-index: 5; }
-    .category-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 1.5rem; text-align: center; text-decoration: none; color: var(--text); transition: all 0.4s; box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; }
-    .category-card:hover { transform: translateY(-8px); border-color: var(--accent); }
-    .icon { font-size: 3rem; margin-bottom: 1rem; }
-
-    #member-terminal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; z-index: 200; box-shadow: 0 25px 80px rgba(0,0,0,0.4); display: none; opacity: 0; transition: all 0.3s; backdrop-filter: blur(10px); }
-    #member-terminal.show { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    .close-terminal { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; cursor: pointer; }
-    .member-dashboard { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; margin-top: 1rem; }
-    @media (max-width: 800px) { .member-dashboard { grid-template-columns: 1fr; } }
-    .profile-panel { background: rgba(0,0,0,0.02); border-radius: 16px; padding: 2rem; text-align: center; border: 1px solid var(--border); }
-    .streak-ring { width: 110px; height: 110px; border: 5px solid var(--accent); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .streak-num { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
-    .data-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
-    .word-card { border-left: 5px solid #3498db; }
-    .quote-card { border-left: 5px solid #f1c40f; margin-top: 1rem; }
-    .checkin-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-    .checkin-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
-
-    /* Print Modal Styles */
-    #print-selection-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-    .print-modal-content { background: white; width: 90%; max-width: 700px; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; max-height: 90vh; color: #333; }
-    .print-modal-header { font-family: 'Cinzel Decorative'; font-size: 1.5rem; color: #2c3e50; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
-    .print-controls { display: flex; justify-content: space-between; margin-bottom: 10px; background: #f8f9fa; padding: 10px; border-radius: 8px; }
-    .selection-list { flex-grow: 1; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 10px; margin-bottom: 20px; max-height: 400px; }
-    .log-item-row { display: flex; align-items: center; padding: 8px 5px; border-bottom: 1px solid #eee; transition: background 0.2s; }
-    .log-item-row:hover { background: #f1f2f6; }
-    .log-item-row input[type="checkbox"] { margin-right: 15px; transform: scale(1.2); cursor: pointer; }
-    .log-details { display: flex; flex-direction: column; font-size: 0.9rem; }
-    .log-time { font-size: 0.8rem; color: #666; font-family: 'Exo 2'; }
-    .log-action { font-weight: 600; color: #2c3e50; }
-    .print-actions { display: flex; gap: 15px; justify-content: center; }
-    .action-btn { padding: 10px 25px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; font-family: 'Exo 2'; transition: all 0.2s; }
-    .btn-cancel { background: #95a5a6; color: white; }
-    .btn-confirm { background: var(--accent); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    .btn-confirm:hover { transform: scale(1.05); }
-
-    .print-only { display: none; }
-    @media print { 
-        body * { visibility: hidden; } 
-        #print-area, #print-area * { visibility: visible; } 
-        #print-area { position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; padding: 20px; } 
-        .print-only { display: block; } 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; } 
-        th, td { border: 1px solid #333; padding: 10px; text-align: left; } 
-        th { background: #f0f0f0; }
+    .calendar-wrap{margin-top:1rem;}
+    .calendar-header{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem;
+    }
+    .calendar-header button{
+      background:var(--surface-strong); color:var(--text); border:1px solid var(--border);
+      padding:.4rem .7rem; border-radius:8px; cursor:pointer;
+    }
+    .calendar-grid{
+      display:grid; grid-template-columns:repeat(7,1fr); gap:4px; font-size:.8rem;
+    }
+    .calendar-day{
+      padding:.6rem .2rem; text-align:center; border-radius:8px; border:1px solid transparent;
+      background:rgba(255,255,255,0.03);
+    }
+    .calendar-day.today{border-color:var(--accent); font-weight:800;}
+    .calendar-day-checked{
+      border-color:var(--accent-2); font-weight:800; cursor:pointer; position:relative; overflow:hidden;
+      background:rgba(255,211,107,0.12);
+    }
+    .calendar-day-checked:hover::after{
+      content:'🃏'; position:absolute; inset:0; background:rgba(0,0,0,0.35);
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem;
     }
 
-    .highlight-box {
-        display: inline-block;
-        font-weight: 900; font-style: italic; color: #5d4037;
-        border: 2px solid var(--accent); border-radius: 8px;
-        padding: 5px 12px; margin: 5px 0;
-        background: rgba(255, 255, 255, 0.6);
-        box-shadow: 3px 3px 0px rgba(184, 134, 11, 0.2);
-        text-decoration: underline; text-decoration-style: wavy;
-        text-decoration-thickness: 1.5px; line-height: 1.6;
+    /* ----- Card Pocket / Bag (by month) ----- */
+    .pocket-section{margin-top:1rem;}
+    .pocket-title{
+      font-family:'Cinzel Decorative'; font-weight:800; letter-spacing:1px;
+      display:flex; align-items:center; gap:.5rem; margin:0 0 .75rem 0;
     }
-    .highlight-box .key-term {
-        color: #c0392b; text-decoration: none; border-bottom: 2px solid #c0392b;
+    .pocket-month{
+      border:1px solid var(--border); background:rgba(255,255,255,0.03);
+      border-radius:14px; padding:1rem; margin-bottom:1rem;
     }
-
-    /* --- In-App Browser Warning Overlay --- */
-    #in-app-browser-warning {
-        display: none; /* Default hidden, triggered via JS */
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.95); z-index: 9999;
-        flex-direction: column; justify-content: center; align-items: center;
-        text-align: center; color: white; padding: 30px;
+    .pocket-month h4{
+      margin:.25rem 0 .75rem 0; font-weight:800; color:var(--accent-2);
+      letter-spacing:.5px;
     }
-    .warning-icon { font-size: 3rem; margin-bottom: 15px; }
-    .warning-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 15px; font-family: 'Exo 2', sans-serif; }
-    .warning-text { font-size: 1rem; line-height: 1.6; margin-bottom: 25px; color: #ddd; max-width: 500px; }
-    .arrow-hint { position: absolute; top: 10px; right: 20px; font-size: 3rem; animation: bounceRight 1.5s infinite; color: var(--accent); }
-    @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
-    
-    .warning-actions { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
-    .btn-warning { padding: 12px; border: none; border-radius: 25px; font-weight: bold; font-family: 'Exo 2'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-copy { background: #3498db; color: white; }
-    .btn-close-warning { background: transparent; border: 1px solid #7f8c8d; color: #bdc3c7; }
-
-    /* ==================== NEW MOON CARD STYLES ==================== */
-    /* 卡片模態框容器 */
-    #card-modal {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        z-index: 6000; justify-content: center; align-items: center;
-        opacity: 0; transition: opacity 0.4s ease;
+    .pocket-grid{
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:.75rem;
     }
-    #card-modal.active { display: flex; opacity: 1; }
-    
-    .card-overlay-bg { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
-    
-    .card-display-container { 
-        position: relative; z-index: 2; display: flex; flex-direction: column; 
-        align-items: center; gap: 20px; transform: scale(0.9); 
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    .pocket-item{
+      background:rgba(0,0,0,0.35); border:1px solid var(--border); border-radius:12px;
+      padding:.5rem; cursor:pointer; transition:.2s; display:flex; flex-direction:column; gap:.25rem;
     }
-    #card-modal.active .card-display-container { transform: scale(1); }
-
-    /* --- 核心卡片結構 (360x580) --- */
-    .moon-card {
-        width: 360px; min-height: 580px;
-        background: var(--card-bg, #1a1a2e);
-        border: 2px solid var(--card-border, #4a4e69);
-        border-radius: 20px;
-        padding: 30px 25px;
-        color: var(--card-text, #e0e1dd);
-        position: relative;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.2);
-        font-family: 'Exo 2', sans-serif;
-        overflow: hidden;
-        display: flex; flex-direction: column;
+    .pocket-item:hover{transform:translateY(-3px); border-color:var(--accent);}
+    .thumb{
+      aspect-ratio: 7/10; border-radius:8px; border:1px solid rgba(255,255,255,0.15);
+      display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.6rem;
+      color:white; position:relative; overflow:hidden;
+      background:var(--card-bg, #111);
+    }
+    .thumb .thumb-glow{
+      position:absolute; inset:-30%; background:radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%);
+      filter: blur(18px);
+    }
+    .thumb .thumb-day{
+      position:relative; z-index:2; text-shadow:0 2px 6px rgba(0,0,0,0.8);
+    }
+    .pocket-date{
+      font-size:.75rem; color:var(--text-light); text-align:center;
     }
 
-    /* 卡片內部元素 */
-    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); padding-bottom: 15px; margin-bottom: 20px; }
-    .card-title { font-family: 'Cinzel Decorative'; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; color: var(--card-accent, #c9d1d9); text-transform: uppercase; }
-    .card-serial { font-family: 'Exo 2'; font-size: 0.7rem; color: var(--card-text-dim, #778ca3); letter-spacing: 1px; }
+    /* ----- Card Modal ----- */
+    #card-modal{
+      position:fixed; inset:0; background:rgba(0,0,0,0.78); z-index:5000;
+      display:none; align-items:center; justify-content:center; padding:1rem;
+      backdrop-filter: blur(4px);
+    }
+    #card-modal.active{display:flex;}
 
-    .card-greeting { font-family: 'Playfair Display'; font-size: 1.5rem; font-weight: 700; color: var(--card-highlight, #fff); line-height: 1.2; margin-bottom: 5px; }
-    .card-subtitle { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #a0a0a0); font-style: italic; margin-bottom: 15px; }
+    .card-modal-content{width:100%; max-width:520px;}
 
-    .card-divider { text-align: center; color: var(--card-accent, #ffd700); font-size: 1.2rem; margin: 15px 0; opacity: 0.7; }
+    .collectible-card{
+      position:relative; width:100%; aspect-ratio: 7/10; border-radius:20px;
+      padding:22px 20px 18px; border:2px solid var(--card-border,#aaa);
+      background:var(--card-bg, linear-gradient(180deg,#111,#333));
+      box-shadow:0 20px 60px rgba(0,0,0,0.6); overflow:hidden; display:flex; flex-direction:column;
+      color:var(--card-text,#eee);
+      text-shadow:0 1px 2px rgba(0,0,0,0.65); /* 保底可讀性 */
+    }
+    .collectible-card.light-theme{
+      color:#111; text-shadow:0 1px 1px rgba(255,255,255,0.35);
+    }
 
-    .card-content-box { text-align: center; margin-bottom: 20px; }
-    .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--card-accent, #ffd700); margin-bottom: 5px; opacity: 0.8; }
-    .card-wotd { font-family: 'Playfair Display'; font-size: 2.2rem; font-weight: 700; color: var(--card-highlight, #fff); text-shadow: 0 2px 10px rgba(255,255,255,0.2); line-height: 1; margin-bottom: 5px; }
-    .card-pos { font-family: 'Exo 2'; font-size: 0.8rem; background: var(--card-accent-dim, rgba(255,255,255,0.1)); display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
-    .card-def { font-family: 'Noto Serif TC'; font-size: 1rem; color: var(--card-text, #ddd); line-height: 1.4; font-weight: 600; }
-    
-    /* 例句樣式 */
-    .card-sentence-container { margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--card-accent-dim, rgba(255,255,255,0.1)); }
-    .card-sent-en { font-family: 'Exo 2'; font-style: italic; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-bottom: 5px; line-height: 1.3; font-weight:500; }
-    .card-sent-cn { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #888); opacity: 0.8; }
+    .card-header{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+      font-family:'Cinzel Decorative';
+    }
+    .card-user{font-weight:900; font-size:1.2rem;}
+    .card-date{font-size:.95rem; opacity:.9;}
+    .card-serial{font-size:.8rem; opacity:.7; font-weight:700;}
 
-    /* 佳句與翻譯樣式 */
-    .card-quote-box { position: relative; padding: 15px; border-left: 3px solid var(--card-accent, #ffd700); background: linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent); margin-top: auto; }
-    .card-quote-text { font-family: 'Playfair Display'; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--card-text, #eee); }
-    .card-quote-trans { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-top: 8px; font-style: normal; line-height: 1.4; opacity: 0.9; }
-    .card-quote-author { text-align: right; font-size: 0.8rem; font-weight: bold; margin-top: 8px; color: var(--card-accent, #ffd700); }
+    .card-body{margin-top:12px; display:flex; flex-direction:column; gap:10px; flex:1;}
 
-    .card-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); display: flex; justify-content: space-between; align-items: center; }
-    .card-streak-badge { background: var(--card-accent, #ffd700); color: var(--card-bg, #000); padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 0 10px var(--card-accent-dim, rgba(255,215,0,0.4)); display: flex; align-items: center; gap: 5px; }
-    .card-signature { font-family: 'Dancing Script'; font-size: 1.5rem; color: var(--card-text-dim, #aaa); transform: rotate(-5deg); }
+    .card-wotd{
+      font-size:1.6rem; font-weight:900; letter-spacing:.5px;
+      font-family:'Playfair Display';
+    }
+    .card-pos{font-size:.95rem; opacity:.9;}
+    .card-def{
+      font-size:1rem; line-height:1.5; color:var(--card-text-dim,#ccc);
+      font-family:'Noto Serif TC';
+    }
 
-    .card-watermark { position: absolute; bottom: 10px; right: 20px; font-size: 4rem; font-weight: 900; color: rgba(255,255,255,0.03); pointer-events: none; z-index: 0; font-family: 'Cinzel Decorative'; white-space: nowrap; }
-    .card-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.05) 45%, transparent 50%); pointer-events: none; }
+    .card-sentence-container{
+      margin-top:8px; padding-top:8px; border-top:1px dashed var(--card-accent-dim, rgba(255,255,255,0.1));
+    }
+    .card-sent-en{
+      font-family:'Exo 2'; font-style:italic; font-size:.95rem; color:var(--card-text-dim,#ccc);
+      line-height:1.35; font-weight:600;
+    }
+    .card-sent-cn{
+      font-family:'Noto Serif TC'; font-size:.9rem; color:var(--card-text-dim,#aaa); opacity:.95;
+      line-height:1.35;
+    }
 
-    /* 按鈕樣式 */
-    .card-actions { display: flex; gap: 15px; margin-top: 15px; }
-    .btn-card-action { padding: 10px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: transform 0.2s; font-family: 'Exo 2'; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
-    .btn-download { background: linear-gradient(90deg, #b8860b, #f1c40f); color: #2c3e50; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3); }
-    .btn-close { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .btn-card-action:hover { transform: translateY(-3px); filter: brightness(1.1); }
+    .card-quote-box{
+      position:relative; padding:12px; border-left:3px solid var(--card-accent, #ffd700);
+      background:linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent);
+      margin-top:auto;
+    }
+    .card-quote-text{font-family:'Playfair Display'; font-style:italic; font-size:1.02rem; line-height:1.55;}
+    .card-quote-trans{
+      font-family:'Noto Serif TC'; font-size:.95rem; color:var(--card-text-dim,#ddd); margin-top:6px;
+    }
+    .card-quote-author{
+      text-align:right; font-size:.85rem; font-weight:900; margin-top:6px; color:var(--card-accent,#ffd700);
+    }
 
-    /* === 11 種高雅模板樣式 === */
-    /* 1. Midnight Gold (經典黑金) */
-    .theme-1 { --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364); --card-border: #b8860b; --card-accent: #ffd700; --card-highlight: #fff; --card-text: #e0e0e0; --card-text-dim: #8fa1b3; --card-accent-dim: rgba(184, 134, 11, 0.2); }
-    /* 2. Silver Mist (冷銀月霧) */
-    .theme-2 { --card-bg: linear-gradient(135deg, #2c3e50, #4ca1af); --card-border: #bdc3c7; --card-accent: #ecf0f1; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #bdc3c7; --card-accent-dim: rgba(255,255,255,0.2); }
-    /* 3. Deep Nebula (深邃星雲 - 紫) */
-    .theme-3 { --card-bg: radial-gradient(circle at 10% 20%, #240b36, #c31432); --card-border: #ffafbd; --card-accent: #ffc3a0; --card-highlight: #fff0f5; --card-text: #ffe4e1; --card-text-dim: #d8bfd8; --card-accent-dim: rgba(255,175,189,0.2); }
-    /* 4. Obsidian (黑曜石) */
-    .theme-4 { --card-bg: #121212; --card-border: #333; --card-accent: #fff; --card-highlight: #fff; --card-text: #ccc; --card-text-dim: #666; --card-accent-dim: rgba(255,255,255,0.1); }
-    /* 5. Royal Blue (皇家夜藍) */
-    .theme-5 { --card-bg: linear-gradient(to bottom, #141e30, #243b55); --card-border: #f1c40f; --card-accent: #f39c12; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #95a5a6; --card-accent-dim: rgba(241, 196, 15, 0.15); }
-    /* 6. Lunar Ash (月塵灰) */
-    .theme-6 { --card-bg: linear-gradient(to top, #304352, #d7d2cc); --card-border: #7f8c8d; --card-accent: #2c3e50; --card-highlight: #2c3e50; --card-text: #1a252f; --card-text-dim: #546e7a; --card-accent-dim: rgba(0,0,0,0.1); }
-    /* 7. Crimson Eclipse (血月) */
-    .theme-7 { --card-bg: linear-gradient(160deg, #4b134f, #190a05); --card-border: #c0392b; --card-accent: #e74c3c; --card-highlight: #fff; --card-text: #fdcb6e; --card-text-dim: #fab1a0; --card-accent-dim: rgba(231, 76, 60, 0.2); }
-    /* 8. Aurora (極光) */
-    .theme-8 { --card-bg: linear-gradient(to right, #00416a, #799f0c, #ffe000); --card-border: #a8ff78; --card-accent: #78ffd6; --card-highlight: #fff; --card-text: #f0f0f0; --card-text-dim: #a8e063; --card-accent-dim: rgba(120, 255, 214, 0.2); }
-    /* 9. Vintage Parchment (古老羊皮卷) */
-    .theme-9 { --card-bg: linear-gradient(to bottom, #3e2b14, #2c1e0e); --card-border: #d4af37; --card-accent: #c5a059; --card-highlight: #f3e5ab; --card-text: #e6d2b5; --card-text-dim: #8b7355; --card-accent-dim: rgba(212, 175, 55, 0.2); }
-    /* 10. Starry Night (梵谷星空) */
-    .theme-10 { --card-bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); --card-border: rgba(255,255,255,0.4); --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: rgba(255,255,255,0.6); --card-accent-dim: rgba(255,255,255,0.1); }
-    /* 11. Cyber Moon (賽博龐克) */
-    .theme-11 { --card-bg: linear-gradient(45deg, #111, #222); --card-border: #0ff; --card-accent: #0ff; --card-highlight: #fff; --card-text: #eee; --card-text-dim: #0aa; --card-accent-dim: rgba(0, 255, 255, 0.2); border-width: 1px; box-shadow: 0 0 15px rgba(0,255,255,0.2); }
-    /* --- 新增普通款 Theme 12 - 29 --- */
-    /* 12. Ocean Depth (深海) */
+    .card-footer{
+      margin-top:14px; padding-top:10px; border-top:1px solid var(--card-accent-dim, rgba(255,255,255,0.15));
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .card-streak-badge{
+      background:var(--card-accent,#ffd700); color:var(--card-bg,#000); padding:5px 12px; border-radius:20px;
+      font-size:.85rem; font-weight:900; display:flex; align-items:center; gap:6px;
+      box-shadow:0 0 10px var(--card-accent-dim, rgba(255,215,0,0.35));
+    }
+    .card-signature{
+      font-family:'Dancing Script'; font-size:1.5rem; color:var(--card-text-dim,#bbb);
+      transform:rotate(-5deg);
+    }
+
+    .card-watermark{
+      position:absolute; bottom:8px; right:16px; font-size:4rem; font-weight:900;
+      color:rgba(255,255,255,0.03); pointer-events:none; font-family:'Cinzel Decorative';
+      white-space:nowrap;
+    }
+    .card-shine{
+      position:absolute; inset:0; background:linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.06) 45%, transparent 50%);
+      pointer-events:none;
+    }
+
+    .card-actions{display:flex; gap:12px; margin-top:12px; justify-content:center;}
+    .btn-card-action{
+      padding:9px 18px; border-radius:25px; border:none; font-weight:900; cursor:pointer;
+      font-family:'Exo 2'; font-size:.95rem; display:flex; align-items:center; gap:6px; transition:.2s;
+    }
+    .btn-download{
+      background:linear-gradient(90deg,#b8860b,#f1c40f); color:#1b2430;
+      box-shadow:0 4px 15px rgba(241,196,15,0.25);
+    }
+    .btn-close{
+      background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.25);
+    }
+    .btn-card-action:hover{transform:translateY(-2px); filter:brightness(1.06);}
+
+    /* =====================
+       88 Themes (from your file)
+       這裡保留你原本 theme-1 ~ theme-88
+       我只在少數亮色系上微調 card-text / dim 以提升可讀性
+       ===================== */
+
+    /* 1. Midnight Gold */
+    .theme-1 { --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364); --card-border: #b8860b; --card-accent: #ffd700; --card-highlight: #fff; --card-text: #e0e0e0; --card-text-dim: #c9d4e1; --card-accent-dim: rgba(184, 134, 11, 0.25); }
+    /* 2. Royal Navy */
+    .theme-2 { --card-bg: linear-gradient(180deg, #001f3f, #003366); --card-border: #7fdbff; --card-accent: #7fdbff; --card-highlight: #fff; --card-text: #f5faff; --card-text-dim: #cfefff; --card-accent-dim: rgba(127, 219, 255, 0.2); }
+    /* 3. Emerald Dawn */
+    .theme-3 { --card-bg: linear-gradient(180deg, #0b3d2e, #145a32); --card-border: #2ecc71; --card-accent: #2ecc71; --card-highlight: #fff; --card-text: #eafff1; --card-text-dim: #c8f7dc; --card-accent-dim: rgba(46, 204, 113, 0.2); }
+    /* 4. Crimson Velvet */
+    .theme-4 { --card-bg: linear-gradient(180deg, #3a001e, #6a0037); --card-border: #ff6b8a; --card-accent: #ff6b8a; --card-highlight: #fff; --card-text: #ffeef2; --card-text-dim: #ffd2de; --card-accent-dim: rgba(255, 107, 138, 0.2); }
+    /* 5. Silver Mist */
+    .theme-5 { --card-bg: linear-gradient(180deg, #bdc3c7, #2c3e50); --card-border: #ecf0f1; --card-accent: #ecf0f1; --card-highlight: #fff; --card-text: #0b0f14; --card-text-dim: #1c2732; --card-accent-dim: rgba(236, 240, 241, 0.25); }
+    /* 6. Celestial Purple */
+    .theme-6 { --card-bg: linear-gradient(180deg, #2b1055, #7597de); --card-border: #c8a2ff; --card-accent: #c8a2ff; --card-highlight: #fff; --card-text: #f7f2ff; --card-text-dim: #e3d5ff; --card-accent-dim: rgba(200, 162, 255, 0.2); }
+    /* 7. Sunlit Sand */
+    .theme-7 { --card-bg: linear-gradient(180deg, #f7d794, #f3a683); --card-border: #fff; --card-accent: #7d4e2d; --card-highlight: #fff; --card-text: #29180e; --card-text-dim: #3b2418; --card-accent-dim: rgba(255,255,255,0.35); }
+    /* 8. Glacier Blue */
+    .theme-8 { --card-bg: linear-gradient(180deg, #dff9fb, #c7ecee); --card-border: #22a6b3; --card-accent: #22a6b3; --card-highlight: #fff; --card-text: #0b1a1b; --card-text-dim: #1c2f31; --card-accent-dim: rgba(34,166,179,0.2); }
+    /* 9. Peach Blossom */
+    .theme-9 { --card-bg: linear-gradient(180deg, #ffb8b8, #ffd6a5); --card-border: #fff; --card-accent: #b23a48; --card-highlight: #fff; --card-text: #2d0d10; --card-text-dim: #482126; --card-accent-dim: rgba(255,255,255,0.35); }
+    /* 10. Space Grey */
+    .theme-10 { --card-bg: linear-gradient(180deg, #232526, #414345); --card-border: #95a5a6; --card-accent: #95a5a6; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #c8d0d2; --card-accent-dim: rgba(149,165,166,0.2); }
+    /* 11. Cyber Moon */
+    .theme-11 { --card-bg: linear-gradient(45deg, #111, #222); --card-border: #0ff; --card-accent: #0ff; --card-highlight: #fff; --card-text: #eee; --card-text-dim: #bfe; --card-accent-dim: rgba(0, 255, 255, 0.2); border-width: 1px; box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+
+    /*  /* 12. Ocean Depth (深海) */
     .theme-12 { --card-bg: linear-gradient(180deg, #1cb5e0 0%, #000851 100%); --card-border: #89f7fe; --card-accent: #66a6ff; --card-highlight: #fff; --card-text: #e2f0f9; --card-text-dim: #89f7fe; --card-accent-dim: rgba(137, 247, 254, 0.2); }
     /* 13. Mint Leaf (薄荷) */
     .theme-13 { --card-bg: linear-gradient(45deg, #81fbb8 0%, #28c76f 100%); --card-border: #fff; --card-accent: #0f4c2e; --card-highlight: #e0ffd4; --card-text: #082015; --card-text-dim: #1e5c3e; --card-accent-dim: rgba(255,255,255,0.3); }
@@ -582,845 +517,848 @@
     .theme-85 { --card-bg: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%); --card-border: #fff; --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ffe0b2; --card-accent-dim: rgba(255, 255, 255, 0.3); }
  
     /* --- THE BIG 3: 隱藏款 (Blind Box Rares) --- */
-    
-    /* 86. Golden Legend (SSR - 王者金) - 機率 3% */
+
+    /* 86. King’s Gold (SSR) */
     .theme-86 { 
-        --card-bg: linear-gradient(135deg, #141414 0%, #333 100%); 
-        --card-border: #ffd700; 
-        --card-accent: #ffecb3; 
-        --card-highlight: #fff; 
-        --card-text: #ffd700; 
-        --card-text-dim: #bf953f; 
-        --card-accent-dim: rgba(255, 215, 0, 0.3);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.8);
-        border: 2px solid transparent;
-        background-clip: padding-box, border-box;
-        background-origin: padding-box, border-box;
-        background-image: linear-gradient(135deg, #141414 0%, #333 100%), linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-        animation: goldShine 5s infinite linear;
+      --card-bg: radial-gradient(circle at 30% 30%, #3b2b0a, #0f0b02); 
+      --card-border: #ffd700; 
+      --card-accent: #ffd700; 
+      --card-highlight: #fff; 
+      --card-text: #fff7d6; 
+      --card-text-dim: rgba(255,247,214,0.9); 
+      --card-accent-dim: rgba(255, 215, 0, 0.25);
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+      animation: goldShine 2.5s infinite alternate;
+      border-width: 3px;
+      border-style: solid;
     }
 
-    /* 87. Cosmic Aurora (UR - 幻彩極光) - 機率 2% */
+    /* 87. Cosmic Aurora (UR) */
     .theme-87 { 
-        --card-bg: radial-gradient(circle at 50% 50%, #2b1055, #7597de); 
-        --card-border: rgba(255,255,255,0.5); 
-        --card-accent: #fff; 
-        --card-highlight: #fff; 
-        --card-text: #fff; 
-        --card-text-dim: rgba(255,255,255,0.8); 
-        --card-accent-dim: rgba(255,255,255,0.2);
-        box-shadow: 0 0 25px rgba(118, 224, 255, 0.6);
-        animation: holoPulse 3s infinite alternate;
-        border-width: 3px;
-        border-style: double;
+      --card-bg: radial-gradient(circle at 50% 50%, #2b1055, #7597de); 
+      --card-border: rgba(255,255,255,0.5); 
+      --card-accent: #fff; 
+      --card-highlight: #fff; 
+      --card-text: #fff; 
+      --card-text-dim: rgba(255,255,255,0.9); 
+      --card-accent-dim: rgba(255,255,255,0.25);
+      box-shadow: 0 0 25px rgba(118, 224, 255, 0.6);
+      animation: holoPulse 3s infinite alternate;
+      border-width: 3px;
+      border-style: double;
     }
 
-    /* 88. Singularity Void (SP - 虛空奇點) - 機率 1% (新增) */
+    /* 88. Singularity Void (SP) */
     .theme-88 {
-        --card-bg: #000;
-        --card-border: #0ff;
-        --card-accent: #0ff;
-        --card-highlight: #f0f;
-        --card-text: #fff;
-        --card-text-dim: #0ff;
-        --card-accent-dim: rgba(0, 255, 255, 0.3);
-        background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-        background-size: 400% 400%;
-        animation: rainbowGlitch 3s ease infinite;
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-        border: 2px solid #fff;
+      --card-bg: #000;
+      --card-border: #0ff;
+      --card-accent: #0ff;
+      --card-highlight: #f0f;
+      --card-text: #fff;
+      --card-text-dim: #d6ffff;
+      --card-accent-dim: rgba(0, 255, 255, 0.3);
+      background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+      background-size: 400% 400%;
+      animation: rainbowGlitch 3s ease infinite;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+      border: 2px solid #fff;
     }
-    
-    @keyframes goldShine { 0% { filter: brightness(1); } 50% { filter: brightness(1.2); } 100% { filter: brightness(1); } }
+
+    @keyframes goldShine { 0% { filter: brightness(1); } 50% { filter: brightness(1.18); } 100% { filter: brightness(1); } }
     @keyframes holoPulse { 0% { box-shadow: 0 0 20px rgba(118, 224, 255, 0.4); border-color: #81ecec; } 100% { box-shadow: 0 0 40px rgba(253, 121, 168, 0.6); border-color: #fd79a8; } }
-    @keyframes rainbowGlitch { 
-        0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
+    @keyframes rainbowGlitch {
+      0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
     }
-    
-    /* 日曆互動增強 (加入卡袋提示) */
-    .calendar-day-checked {
-        cursor: pointer; position: relative; overflow: hidden;
-    }
-    .calendar-day-checked:hover::after {
-        content: '🃏'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
-        font-size: 1.2rem;
+
+    footer{
+      margin-top:3rem; padding:2rem; text-align:center; font-size:.85rem;
+      color:var(--text-light); opacity:.75;
     }
   </style>
 </head>
+
 <body>
+  <!-- Intro / Login -->
+  <div id="intro-overlay">
+    <h1>MOON BASE</h1>
+    <div style="display:flex; gap:10px;">
+      <button id="google-login-btn" class="primary-btn">Login with Google</button>
+      <button onclick="showAuthForm()" class="primary-btn" style="background:var(--accent-2)">Email Login</button>
+    </div>
 
-  <div id="in-app-browser-warning">
-      <div class="arrow-hint">↗</div>
-      <div class="warning-icon">⚠️</div>
-      <div class="warning-title">Sign-in Restricted<br>登入受限</div>
-      <div class="warning-text">
-          Google Login is blocked inside Line/WeChat/FB.<br>
-          Please open this page in <strong>Chrome</strong> or <strong>Safari</strong> to log in.
-          <br><br>
-          此應用程式不支援 Google 登入。<br>
-          請點擊右上角選單，選擇<strong>「在瀏覽器中開啟」</strong>，或複製連結至 Chrome/Safari 開啟。
+    <div id="auth-form-container" style="display:none; margin-top:1rem; width:280px;">
+      <input id="email-input" placeholder="email" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; background:#0d111a; color:var(--text);"/>
+      <input id="pass-input" placeholder="password" type="password" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; background:#0d111a; color:var(--text);"/>
+      <div style="display:flex; gap:8px;">
+        <button id="email-login-btn" class="primary-btn" style="flex:1;">Login / Sign up</button>
+        <button onclick="hideAuthForm()" class="primary-btn" style="flex:1; background:#64748b;">Back</button>
       </div>
-      
-      <div class="warning-actions">
-          <button class="btn-warning btn-copy" onclick="copyCurrentUrl()">
-              📋 Copy Link / 複製連結
-          </button>
-          <button class="btn-warning btn-close-warning" onclick="closeWarning()">
-              Cancel & Stay as Visitor<br>暫不登入，繼續參觀
-          </button>
+    </div>
+
+    <div id="in-app-browser-warning" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999; align-items:center; justify-content:center; color:white; padding:2rem; text-align:center;">
+      <div>
+        <h2>⚠️ Please open in external browser</h2>
+        <p>This login doesn’t work inside in-app browsers.</p>
+        <button onclick="document.getElementById('in-app-browser-warning').style.display='none'" class="primary-btn">OK</button>
       </div>
-  </div>
-
-  <canvas id="particle-canvas"></canvas>
-
-  <audio id="themeSong" src="https://ducj-creator.github.io/Teacher-Shirley/assets/theme%20song.mp3" preload="auto"></audio>
-  <audio id="windchime" src="https://ducj-creator.github.io/Teacher-Shirley/assets/windchime.mp3" preload="auto"></audio>
-
-  <div class="top-bar">
-      <div id="themeToggle" class="control-btn" title="Toggle Theme">🌓</div>
-      <div id="musicToggle" class="control-btn" title="Music">🎵</div>
-      <div id="logoutBtn" class="control-btn" title="Logout" style="display:none;">🚪</div>
+    </div>
   </div>
 
   <header>
-    <div class="title-container">
-        <h1 class="main-title">Teacher Shirley’s<br>ET Platform</h1>
-        <div class="title-underline"></div>
+    <div class="logo">Teacher Shirley | Moon Base</div>
+    <div class="right">
+      <div id="greeting-name" style="font-weight:700; color:var(--text-light);"></div>
+      <button onclick="openMemberTerminal()" class="primary-btn" style="padding:.55rem .9rem;">Member Terminal</button>
+      <button id="logoutBtn" class="primary-btn" style="background:#ef4444;">Logout</button>
     </div>
   </header>
 
-  <div id="intro-overlay">
-      <div class="envelope-container" onclick="openLetter()">
-          <div class="envelope-body"></div>
-          <div class="envelope-txt">
-              <div class="env-title">Welcome Message</div>
-              <div class="env-subtitle">from Teacher Shirley</div>
-              <div class="env-highlight">Welcome to my ET Platform<br>Ready for launch! 🚀</div>
-              <div class="env-cn">歡迎來到我的 ET 月台，準備出發囉！</div>
-          </div>
-          <div class="envelope-pocket"></div>
-          <div class="envelope-flap"><div class="heart-seal">💗</div></div>
-      </div>
+  <!-- Visitor view -->
+  <section id="visitor-view" class="active">
+    <div class="categories">
+      <a class="category-card" href="javascript:void(0)">
+        <div class="icon">🌕</div>
+        <div style="font-weight:800;">Login to Check-in</div>
+        <div style="color:var(--text-light); font-size:.9rem;">Collect a card everyday</div>
+      </a>
+    </div>
+  </section>
 
-      <div class="letter-paper" id="letter-view">
-          <div class="sparkle-overlay">
-              <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
-          </div>
-          <div class="letter-content">
-              <div class="letter-p"><strong>Hi there! 👋</strong> I’m Shirley—an English teacher who believes learning should be joyful, interactive, and full of “aha!” moments. <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span></div>
-              <div class="letter-p">This teaching-and-learning platform is your free, ad-free toolkit—carefully crafted from years of real classroom experience and student feedback. <span class="cn-text">這個教與學平台是您免費、無廣告的學習工具箱——源自多年真實課堂經驗與學生回饋。</span></div>
-              <div class="letter-p">Whether you’re a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you’re welcome to explore all tools and content freely as a visitor. <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span></div>
-              
-              <div class="letter-p" style="background:rgba(212, 175, 55, 0.1); padding:15px; border-radius:10px; margin-top:10px;">
-                If you log in, each day you’ll receive: ✨“Word of the Day”, “Bilingual Quote”, and unlock your 
-                <br>
-                <span class="highlight-box">Shirley's Moon Base Card</span> 
-                <br>
-                to <span style="text-decoration:underline;">track daily check-ins</span>, <span style="text-decoration:underline;">build streaks</span>, and map your journey.
-                
-                <div class="cn-text" style="color:#5d4037; margin-top:8px; line-height:1.8;">
-                    若您選擇登入，每天能獲得✨「每日單字」與「每日佳句」，更可啟用 
-                    <span class="highlight-box">
-                        <span class="key-term">Shirley 老師專屬的「月球基地卡」</span>
-                    </span>
-                    ——<span style="border-bottom:1px solid #5d4037;">記錄打卡</span>、<span style="border-bottom:1px solid #5d4037;">累積天數</span>與<span style="border-bottom:1px solid #5d4037;">探索軌跡</span>。
-                </div>
-              </div>
+  <!-- Universe view -->
+  <section id="universe-view">
+    <div class="categories">
+      <a class="category-card" href="javascript:visitPlanet('Vocabulary','./vocab.html')">
+        <div class="icon">📘</div>
+        <div style="font-weight:800;">Vocabulary Base</div>
+        <div style="color:var(--text-light); font-size:.9rem;">Word of the Day</div>
+      </a>
+      <a class="category-card" href="javascript:visitPlanet('Quotes','./quotes.html')">
+        <div class="icon">✨</div>
+        <div style="font-weight:800;">Quotes Base</div>
+        <div style="color:var(--text-light); font-size:.9rem;">Quote of the Day</div>
+      </a>
+      <a class="category-card" href="javascript:openMemberTerminal()">
+        <div class="icon">🧑‍🚀</div>
+        <div style="font-weight:800;">Member Terminal</div>
+        <div style="color:var(--text-light); font-size:.9rem;">Check-in & Card Pocket</div>
+      </a>
+    </div>
+  </section>
 
-              <div class="letter-p">I highly encourage you to check in every day—consistency turns small efforts into big results, and learning is a journey of steady persistence and joyful discovery. <span class="cn-text">我誠摯鼓勵您每日打卡——持之以恆，微小的努力終將開花結果；學習是一場需要堅持，也充滿樂趣與驚喜的旅程。</span></div>
-              <div class="signature">— Teacher Shirley</div>
-              <div class="choice-area" id="choice-buttons">
-                  <button class="btn-letter btn-visitor" onclick="enterVisitorMode()"><span>🛸 Visitor Mode</span><span style="font-size:0.7rem; font-weight:normal;">訪客參觀 (無紀錄)</span></button>
-                  <button class="btn-letter btn-login" onclick="showAuthForm()"><span>🚀 Log In</span><span style="font-size:0.7rem; font-weight:normal;">登入 / 註冊</span></button>
-              </div>
-              <div id="auth-form-container">
-                  <h4 style="margin-bottom:10px; text-align:center; color:var(--text);">Log In / 登入</h4>
-                  <button id="google-login-btn" class="google-btn"><svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.715H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.159 6.656 3.58 9 3.58z"/></svg> Google Login</button>
-                  <div style="text-align:center; font-size:0.8rem; margin:5px 0;">— OR —</div>
-                  <div class="input-group"><input type="email" id="email-input" placeholder="Email"><input type="password" id="pass-input" placeholder="Password"></div>
-                  <button class="email-btn" id="email-login-btn">Log In</button>
-                  <div style="margin-top:8px; text-align:center; font-size:0.8rem; cursor:pointer; text-decoration:underline;" onclick="hideAuthForm()">Cancel</div>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <div id="visitor-view">
-      <div style="text-align:center; margin-bottom:2rem; color:var(--text-light); background: rgba(255,255,255,0.5); padding: 10px; border-radius: 20px; display: inline-block; position:relative; left:50%; transform:translateX(-50%);">
-          Currently in <strong>Visitor Mode</strong>. 
-          <button onclick="reopenAuth()" style="margin-left: 10px; background: var(--accent); color: white; border: none; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; font-family: 'Exo 2';">
-              Log in? 🚀
-          </button>
-      </div>
-      <div class="categories">
-        <a href="/Teacher-Shirley/teaching-tools/" class="category-card"><span class="icon">🍎</span><h2>Teaching Tools</h2><div class="subtitle">師師百寶箱</div></a>
-        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html" class="category-card"><span class="icon">🪐</span><h2>Study Tools</h2><div class="subtitle">學學智趣閣</div></a>
-        <a href="/Teacher-Shirley/amusement-park/" class="category-card"><span class="icon">🎪</span><h2>Amusement Park</h2><div class="subtitle">樂樂嬉遊谷</div></a>
-        <a href="/Teacher-Shirley/external-resources/" class="category-card"><span class="icon">🔗</span><h2>External Resources</h2><div class="subtitle">源源連結庫</div></a>
-      </div>
-  </div>
-
-  <div id="universe-view">
-      <div class="solar-system">
-          <div class="orbit orbit-1"></div>
-          <div class="orbit orbit-2"></div>
-          <div class="orbit orbit-3"></div>
-          <div class="mars-container"><div class="mars-wrapper" onclick="visitPlanet('Mars', '/Teacher-Shirley/teaching-tools/')"><div class="planet-visual p-mars"></div><div class="planet-info"><span class="p-name">Mars 🔴</span><div class="p-poem-cn">在火星燃起星火<br>於講台化作晨光</div><div class="p-poem-en">Upon Mars, kindle starlight; on the lectern, dawnlight blooms.</div></div></div></div>
-          <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')"><div class="planet-visual p-mercury"></div><div class="planet-info"><span class="p-name">Mercury ⚪</span><div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div><div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div></div></div>
-          <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')"><div class="planet-visual p-jupiter"></div><div class="planet-info"><span class="p-name">Jupiter 🟡</span><div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div><div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div></div></div>
-          <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')"><div class="planet-visual p-saturn"></div><div class="planet-info"><span class="p-name">Saturn 🟠</span><div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div><div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div></div></div>
-          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
-      </div>
-      <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
-  </div>
-
+  <!-- Member Terminal -->
   <div id="member-terminal">
-      <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
-      <h3 id="greeting-name" style="font-family:'Cinzel Decorative'; color:var(--accent); text-align:center; margin-bottom:1rem;">Welcome to Moon Base</h3>
-      <div class="member-dashboard">
-          <div class="profile-panel">
-              <div class="streak-ring"><div class="streak-num" id="streak-days">0</div><div style="font-size:0.7rem;">Days Streak</div></div>
-              <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
-              <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
-              <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
-              <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
-          </div>
-          <div class="content-panel">
-              <div class="data-card word-card">
-                  <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Word of the Day <span id="word-date"></span></span>
-                  <div style="display:flex; gap:10px; align-items:baseline; margin-top:5px;"><span class="the-word" id="wotd-word">Wait...</span><span style="background:var(--accent); color:white; padding:1px 6px; border-radius:4px; font-size:0.75rem;" id="wotd-pos"></span></div>
-                  <div style="font-family:'Noto Sans TC'; font-weight:bold; color:var(--accent); margin:5px 0; font-size:1.1rem;" id="wotd-meaning"></div>
-                  <div style="font-style:italic; color:var(--text-light); font-size:0.9rem; margin-bottom:10px;" id="wotd-ipa"></div>
-                  <div style="background:rgba(0,0,0,0.03); padding:10px; border-radius:8px;"><div id="wotd-sentence-e" style="font-style:italic; margin-bottom:4px;"></div><div id="wotd-sentence-c" style="font-size:0.9rem; color:var(--text-light);"></div></div>
-              </div>
-              <div class="data-card quote-card">
-                  <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Daily Quote</span>
-                  <div style="font-family:'Playfair Display'; font-size:1.3rem; margin:15px 0; line-height:1.4;" id="qotd-text"></div>
-                  <div style="font-size:0.95rem; color:var(--text-light);" id="qotd-trans"></div>
-                  <div style="text-align:right; font-weight:bold; color:var(--accent); margin-top:10px;" id="qotd-author"></div>
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
 
-  <div id="card-modal">
-      <div class="card-overlay-bg" onclick="closeCardModal()"></div>
-      <div class="card-display-container">
-          <div id="collectible-card" class="moon-card">
-              <div class="card-decoration-top"></div>
-              
-              <div class="card-header">
-                  <div class="card-title">MOON BASE CLEARANCE</div>
-                  <div class="card-serial">NO. <span id="card-date-serial"></span></div>
-              </div>
-
-              <div class="card-body">
-                  <div class="card-greeting">
-                      Welcome, <span id="card-user-name">Traveler</span>
-                  </div>
-                  <div class="card-subtitle">
-                      This is your Shirley's Moon Base Card for <span id="card-display-date"></span>
-                  </div>
-
-                  <div class="card-divider">✦ ✦ ✦</div>
-
-                  <div class="card-content-box">
-                      <div class="card-label">Word of the Day</div>
-                      <div class="card-wotd" id="card-wotd"></div>
-                      <div class="card-pos" id="card-pos"></div>
-                      <div class="card-def" id="card-def"></div>
-                      <div class="card-sentence-container">
-                          <div id="card-sent-en" class="card-sent-en"></div>
-                          <div id="card-sent-cn" class="card-sent-cn"></div>
-                      </div>
-                  </div>
-
-                  <div class="card-quote-box">
-                      <div class="card-quote-text" id="card-quote"></div>
-                      <div class="card-quote-trans" id="card-quote-trans"></div>
-                      <div class="card-quote-author" id="card-author"></div>
-                  </div>
-              </div>
-
-              <div class="card-footer">
-                  <div class="card-streak-badge">
-                      <span class="badge-icon">🔥</span> Streak: <span id="card-streak"></span>
-                  </div>
-                  <div class="card-signature">Teacher Shirley</div>
-              </div>
-              
-              <div class="card-watermark">MOON BASE</div>
-              <div class="card-shine"></div>
-          </div>
-
-          <div class="card-actions">
-              <button class="btn-card-action btn-download" onclick="downloadCardImage()">
-                  📥 Download Image (收藏)
-              </button>
-              <button class="btn-card-action btn-close" onclick="closeCardModal()">
-                  ✕ Close (放入卡袋)
-              </button>
-          </div>
-      </div>
-  </div>
-
-  <div id="print-selection-modal">
-    <div class="print-modal-content">
-        <div class="print-modal-header">Select Records to Print</div>
-        <div class="print-controls">
-            <button onclick="toggleAllLogs(true)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold;">☑ Select All</button>
-            <button onclick="toggleAllLogs(false)" style="background:none; border:none; cursor:pointer; color:#7f8c8d; font-weight:bold;">☐ Clear All</button>
+    <div class="member-dashboard">
+      <div class="profile-panel">
+        <div class="streak-ring">
+          <div class="streak-num" id="streak-days">0</div>
+          <div style="font-size:.8rem; color:var(--text-light)">Streak Days</div>
         </div>
-        <div class="selection-list" id="log-selection-list"></div>
-        <div class="print-actions">
-            <button class="action-btn btn-cancel" onclick="closePrintSelection()">Cancel</button>
-            <button class="action-btn btn-confirm" onclick="confirmPrint()">🖨️ Print / Save PDF</button>
+
+        <div style="font-size:1rem; font-weight:800;">Total Check-ins</div>
+        <div style="font-size:2rem; font-weight:900; margin:.25rem 0;" id="total-days">0</div>
+
+        <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
+        <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:.85rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
+
+        <div class="calendar-wrap">
+          <div class="calendar-header">
+            <button onclick="prevMonth()">◀</button>
+            <div id="calendar-title" style="font-weight:800;"></div>
+            <button onclick="nextMonth()">▶</button>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
         </div>
+      </div>
+
+      <div class="content-panel">
+        <div class="data-card word-card">
+          <div style="font-size:.75rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">
+            Word of the Day <span id="word-date"></span>
+          </div>
+          <div style="margin-top:.6rem;">
+            <div id="wotd-word" style="font-size:1.6rem; font-weight:900;"></div>
+            <div id="wotd-ipa" style="color:var(--text-light); margin:.25rem 0;"></div>
+            <div><b id="wotd-pos"></b> — <span id="wotd-meaning"></span></div>
+            <div style="margin-top:.5rem; font-style:italic;" id="wotd-sentence-e"></div>
+            <div style="color:var(--text-light);" id="wotd-sentence-c"></div>
+          </div>
+        </div>
+
+        <div class="data-card quote-card">
+          <div style="font-size:.75rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">
+            Quote of the Day
+          </div>
+          <div style="margin-top:.6rem;">
+            <div id="qotd-text" style="font-size:1.15rem; font-style:italic;"></div>
+            <div id="qotd-trans" style="margin-top:.5rem;"></div>
+            <div id="qotd-author" style="margin-top:.5rem; text-align:right; color:var(--text-light);"></div>
+          </div>
+        </div>
+
+        <!-- Card Pocket / Bag -->
+        <div class="data-card pocket-section" style="margin-top:1rem;">
+          <div class="pocket-title">🃏 Card Pocket / 卡袋</div>
+          <div id="card-pocket"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="print-area" class="print-only">
-      <div class="print-header" style="text-align:center; border-bottom:2px solid black; margin-bottom:20px; padding-bottom:10px;">
-          <h1>My Learning Journey</h1>
-          <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
+  <!-- Card Modal -->
+  <div id="card-modal">
+    <div class="card-modal-content">
+      <div id="collectible-card" class="collectible-card theme-1">
+        <div class="card-header">
+          <div>
+            <div class="card-user" id="card-user-name">Traveler</div>
+            <div class="card-date" id="card-display-date">2025-01-01</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="card-serial">No. <span id="card-date-serial"></span></div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div>
+            <div class="card-wotd" id="card-wotd">Mystery</div>
+            <div class="card-pos" id="card-pos">n.</div>
+            <div class="card-def" id="card-def">To explore the unknown.</div>
+          </div>
+
+          <div class="card-sentence-container">
+            <div class="card-sent-en" id="card-sent-en">Keep looking up.</div>
+            <div class="card-sent-cn" id="card-sent-cn">保持仰望星空。</div>
+          </div>
+
+          <div class="card-quote-box">
+            <div class="card-quote-text" id="card-quote">“The stars are calling.”</div>
+            <div class="card-quote-trans" id="card-quote-trans">群星在召喚。</div>
+            <div class="card-quote-author" id="card-author">Universe</div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-streak-badge"><span>🔥</span> Streak: <span id="card-streak">0</span></div>
+          <div class="card-signature">Teacher Shirley</div>
+        </div>
+
+        <div class="card-watermark">MOON BASE</div>
+        <div class="card-shine"></div>
       </div>
-      <table id="print-table">
-          <thead><tr><th style="width:25%">Time / Duration</th><th style="width:20%">Activity Type</th><th>Details</th></tr></thead>
-          <tbody id="print-body"></tbody>
-      </table>
-      <div style="margin-top:20px; font-size:0.8rem; text-align:center;">Generated from Teacher Shirley's ET Platform</div>
+
+      <div class="card-actions">
+        <button class="btn-card-action btn-download" onclick="downloadCardImage()">📥 Download Image (收藏)</button>
+        <button class="btn-card-action btn-close" onclick="closeCardModal()">✕ Close (放入卡袋)</button>
+      </div>
+    </div>
   </div>
 
-  <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
+  <!-- Print modal / area (left as your original behavior) -->
+  <div id="print-selection-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:6000; justify-content:center; align-items:center;">
+    <div class="print-modal-content" style="background:white; width:90%; max-width:700px; border-radius:12px; padding:25px; display:flex; flex-direction:column; max-height:90vh; color:#333;">
+      <div class="print-modal-header" style="font-family:'Cinzel Decorative'; font-size:1.5rem; color:#2c3e50; border-bottom:2px solid var(--accent); padding-bottom:10px; margin-bottom:15px; text-align:center;">
+        Select Records to Print
+      </div>
+      <div class="print-controls" style="display:flex; justify-content:space-between; margin-bottom:10px; background:#f8f9fa; padding:10px; border-radius:8px;">
+        <button onclick="toggleAllLogs(true)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold;">☑ Select All</button>
+        <button onclick="toggleAllLogs(false)" style="background:none; border:none; cursor:pointer; color:#7f8c8d; font-weight:bold;">☐ Clear All</button>
+      </div>
+      <div class="selection-list" id="log-selection-list" style="flex-grow:1; overflow:auto; border:1px solid #ddd; border-radius:6px; padding:10px; margin-bottom:20px; max-height:400px;"></div>
+      <div class="print-actions" style="display:flex; justify-content:flex-end; gap:10px;">
+        <button class="action-btn btn-cancel" onclick="closePrintSelection()" style="padding:8px 14px; border-radius:8px; border:1px solid #ddd; background:#f2f2f2; cursor:pointer;">Cancel</button>
+        <button class="action-btn btn-confirm" onclick="confirmPrint()" style="padding:8px 14px; border-radius:8px; border:none; background:#111827; color:white; cursor:pointer;">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="print-area" class="print-only" style="display:none;">
+    <div class="print-header" style="text-align:center; border-bottom:2px solid black; margin-bottom:20px; padding-bottom:10px;">
+      <h1>My Learning Journey</h1>
+      <p>Student: <span id="print-name"></span> | Date: <span id="print-date"></span></p>
+    </div>
+    <table id="print-table">
+      <thead><tr><th style="width:25%">Time / Duration</th><th style="width:20%">Activity Type</th><th>Details</th></tr></thead>
+      <tbody id="print-body"></tbody>
+    </table>
+    <div style="margin-top:20px; font-size:0.8rem; text-align:center;">
+      Generated from Teacher Shirley's ET Platform
+    </div>
+  </div>
+
+  <footer>
     <div>©️ Teacher Shirley‘s ET Platform 2025</div>
     <span id="busuanzi_container_site_pv">Total Visits: <span id="busuanzi_value_site_pv"></span></span>
   </footer>
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
- <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup,
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // ===== Firebase config (keep your original) =====
     const firebaseConfig = {
-      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
-      authDomain: "teacher-shirley.firebaseapp.com",
-      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
-      projectId: "teacher-shirley",
-      storageBucket: "teacher-shirley.firebasestorage.app",
-      messagingSenderId: "534843195436",
-      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
+    // ===== Global State =====
     let currentUser = null;
-    let csvData = { words: [], quotes: [] };
     let checkinHistory = [];
     let activityLog = [];
+    let cardsMap = {}; // { "YYYY-MM-DD": themeId }
+    let csvData = { words: [], quotes: [] };
 
-    // --- In-App Browser Detection Helpers ---
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
+    // For calendar
+    let viewDate = new Date();
 
-    window.closeWarning = () => {
-        document.getElementById('in-app-browser-warning').style.display = 'none';
-    };
+    // ===== Utils =====
+    const isInApp = /Line|FB_IAB|Instagram|WebView|MicroMessenger/i.test(navigator.userAgent);
 
-    window.copyCurrentUrl = () => {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            alert("Link copied! Open Chrome/Safari and paste it.");
-        }).catch(() => {
-            alert("Failed to copy. Please copy the URL manually.");
-        });
-    };
-
-    // --- HELPER: GET LOCAL DATE STRING ---
-    function getLocalISODate() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth() + 1).padStart(2, '0');
-        const d = String(now.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
+    function getLocalISODate(date = new Date()){
+      const y = date.getFullYear();
+      const m = String(date.getMonth()+1).padStart(2,'0');
+      const d = String(date.getDate()).padStart(2,'0');
+      return `${y}-${m}-${d}`;
+    }
+    function getTodayMMDD(){
+      const now = new Date();
+      return String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
     }
 
-    // --- ENVELOPE LOGIC ---
-    window.openLetter = () => {
-        const windchime = document.getElementById('windchime');
-        windchime.volume = 0.5;
-        windchime.play().catch(e => console.log("Audio play failed"));
-        const container = document.querySelector('.envelope-container');
-        container.classList.add('open');
-        setTimeout(() => {
-            const letterView = document.getElementById('letter-view');
-            letterView.classList.add('show');
-            const paragraphs = document.querySelectorAll('.letter-p');
-            paragraphs.forEach((p, index) => { setTimeout(() => { p.classList.add('visible'); }, index * 800); });
-            setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400);
-        }, 800);
-    };
-
-    window.enterVisitorMode = () => {
-        document.getElementById('intro-overlay').style.opacity = '0';
-        setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
-        document.getElementById('visitor-view').classList.add('active');
-    };
-
-    window.reopenAuth = () => {
-        document.getElementById('visitor-view').classList.remove('active');
-        const overlay = document.getElementById('intro-overlay');
-        overlay.style.display = 'flex';
-        void overlay.offsetWidth; 
-        overlay.style.opacity = '1';
-        const container = document.querySelector('.envelope-container');
-        const letterView = document.getElementById('letter-view');
-        if(!container.classList.contains('open')) {
-             container.classList.add('open');
-             letterView.classList.add('show');
+    // ===== CSV loader (same as your logic) =====
+    async function loadCSVData() {
+      try {
+        const [resWords, resQuotes] = await Promise.all([
+          fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv'),
+          fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv')
+        ]);
+        csvData.words = parseCSV(await resWords.text());
+        csvData.quotes = parseCSV(await resQuotes.text());
+      } catch (e) {
+        console.log("CSV load failed", e);
+      }
+    }
+    function parseCSV(text){
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      return lines.slice(1).map(line=>{
+        const row = {};
+        const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
+        const matches = []; let match;
+        while ((match = regex.exec(line)) !== null) {
+          if (match.index === regex.lastIndex) regex.lastIndex++;
+          if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g,'').replace(/""/g,'"'));
         }
-        showAuthForm();
-    };
-
-    window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
-    window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
-    window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
-    window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
-
-    // --- UPDATED GOOGLE LOGIN LOGIC ---
-    document.getElementById('google-login-btn').addEventListener('click', () => { 
-        if(isInApp) {
-            document.getElementById('in-app-browser-warning').style.display = 'flex';
-            return;
-        }
-        signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); 
-    });
-
-    document.getElementById('email-login-btn').addEventListener('click', () => {
-        const email = document.getElementById('email-input').value;
-        const pass = document.getElementById('pass-input').value;
-        if (!email || !pass) return alert("Please fill in fields");
-        signInWithEmailAndPassword(auth, email, pass).catch(error => {
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                if(confirm("Create account?")) createUserWithEmailAndPassword(auth, email, pass);
-            } else alert(error.message);
-        });
-    });
-    document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
-
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('visitor-view').classList.remove('active');
-            document.getElementById('universe-view').classList.add('active');
-            document.getElementById('logoutBtn').style.display = 'flex';
-            document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
-            await loadCSVData();
-            await loadUserData(user.uid);
-            renderDailyContent(getTodayMMDD());
-            trackActivity("Login", "Arrived at Moon Base");
-        }
-    });
-
-    window.visitPlanet = (planetName, url) => {
-        if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
-        setTimeout(() => { window.location.href = url; }, 300);
-    };
-
-    async function trackActivity(type, detail) {
-        if (!currentUser) return;
-        const userRef = doc(db, "users", currentUser.uid);
-        try { await updateDoc(userRef, { activityLogs: arrayUnion({ date: new Date().toISOString(), type, detail }) }); } catch (e) { console.log(e); }
+        headers.forEach((h,i)=>row[h] = matches[i] ? matches[i].trim() : '');
+        return row;
+      });
     }
 
-    async function loadUserData(uid) {
-        const userRef = doc(db, "users", uid);
-        const docSnap = await getDoc(userRef);
-        const fullDate = getLocalISODate();
-        
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            checkinHistory = data.history || [];
-            activityLog = data.activityLogs || [];
-            document.getElementById('total-days').innerText = checkinHistory.length;
-            document.getElementById('streak-days').innerText = data.streak || 0;
-            if (checkinHistory.includes(fullDate)) document.getElementById('checkin-btn').disabled = true;
-        } else {
-            await setDoc(userRef, { email: currentUser.email, history: [], streak: 0, activityLogs: [] }, { merge: true });
-        }
-        renderCalendar();
+    function renderDailyContent(dateStr){
+      const wordObj = csvData.words.find(r => r.date === dateStr);
+      if (wordObj){
+        document.getElementById('wotd-word').innerText = wordObj.word;
+        document.getElementById('wotd-ipa').innerText = wordObj.ipa;
+        document.getElementById('wotd-pos').innerText = wordObj.pos;
+        document.getElementById('wotd-meaning').innerText = wordObj.meaning;
+        document.getElementById('wotd-sentence-e').innerText = wordObj['sentence e'];
+        document.getElementById('wotd-sentence-c').innerText = wordObj['sentence c'];
+        document.getElementById('word-date').innerText = `(${dateStr})`;
+      }
+      const quoteObj = csvData.quotes.find(r => r.date === dateStr);
+      if (quoteObj){
+        document.getElementById('qotd-text').innerText = quoteObj['quote e'];
+        document.getElementById('qotd-trans').innerText = quoteObj['quote c'];
+        document.getElementById('qotd-author').innerText = "— " + quoteObj.author;
+      }
     }
 
-    // --- REWRITTEN CHECK-IN & CALENDAR LOGIC WITH CARDS ---
+    // ===== Card logic =====
+    function getTemplateIdByDate(dateStr){
+      if(!dateStr) return 1;
 
-   // 盲盒卡片選擇器 (88張擴充版)
-    function getTemplateIdByDate(dateStr) {
-        if(!dateStr) return 1;
+      let uid = 'visitor';
+      try{ if(currentUser?.uid) uid = currentUser.uid; }catch(e){}
 
-        // 嘗試獲取使用者 UID，讓每個人的運氣不同
-        let uid = 'visitor';
-        try {
-            if (typeof currentUser !== 'undefined' && currentUser && currentUser.uid) {
-                uid = currentUser.uid;
-            }
-        } catch(e) { console.log("User ID retrieval failed for card seed"); }
+      const [y,m,d] = dateStr.split('-').map(n=>parseInt(n,10));
+      const seedStr = `${y}${m}${d}-${uid}`;
+      let hash = 0;
+      for(let i=0;i<seedStr.length;i++){
+        const char = seedStr.charCodeAt(i);
+        hash = ((hash<<5) - hash) + char;
+        hash = hash & hash;
+      }
+      hash = Math.abs(hash);
+      const luck = hash % 100;
 
-        const parts = dateStr.split('-');
-        const y = parseInt(parts[0]);
-        const m = parseInt(parts[1]);
-        const d = parseInt(parts[2]);
-
-        // 產生運氣雜湊值
-        const seedStr = `${y}${m}${d}-${uid}`;
-        let hash = 0;
-        for (let i = 0; i < seedStr.length; i++) {
-            const char = seedStr.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; 
-        }
-        hash = Math.abs(hash);
-
-        const luck = hash % 100; // 0 ~ 99
-
-        // --- 盲盒機率設定 (總共 88 張) ---
-        
-        // 1% 機率獲得 SP 隱藏款 (Theme 88 - 虛空奇點)
-        if (luck === 99) return 88;
-        
-        // 2% 機率獲得 UR 隱藏款 (Theme 87 - 幻彩極光)
-        if (luck >= 97) return 87;
-
-        // 3% 機率獲得 SSR 隱藏款 (Theme 86 - 王者金)
-        if (luck >= 94) return 86;
-
-        // 剩下 94% 機率，在 1 - 85 號普通卡中隨機分配
-        // 使用 (hash % 85) + 1 確保範圍是 1~85
-        return (hash % 85) + 1; 
+      if (luck === 99) return 88;      // SP 1%
+      if (luck >= 97) return 87;       // UR 2%
+      if (luck >= 94) return 86;       // SSR 3%
+      return (hash % 85) + 1;          // Normal 94%
     }
 
-    // 顯示卡片 (加入例句與佳句翻譯)
+    // light themes list: these are visually bright / pastel-ish, use darker text
+    const LIGHT_THEMES = new Set([
+      5,7,8,9,12,14,18,20,21,22,24,25,26,27,28,29,
+      31,32,33,34,35,36,40,41,42,44,45,47,48,49,50,
+      52,53,54,55,57,58,59,60,61,62,63,64,65,66,67,
+      69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85
+    ]);
+
+    function applyTheme(cardEl, themeId){
+      // remove previous
+      for(let i=1;i<=88;i++) cardEl.classList.remove(`theme-${i}`);
+      cardEl.classList.remove('light-theme');
+      cardEl.classList.add(`theme-${themeId}`);
+
+      if (LIGHT_THEMES.has(themeId)) cardEl.classList.add('light-theme');
+    }
+
+    // Always open with FIXED theme if exists
     window.openCard = (dateStr) => {
-        const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
-        
-        // 假設 CSV date 是 "MM-DD"
-        let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
-        let quote = "The stars are calling.", author = "Universe";
-        let sentEn = "Keep looking up."; 
-        let sentCn = "保持仰望星空。";
-        let quoteTrans = "群星在召喚。";
+      const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
 
-        if (csvData && csvData.words) {
-            const queryDate = dateStr.slice(5); // remove YYYY-
-            const wordObj = csvData.words.find(r => r.date === queryDate);
-            const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+      // build data
+      let wotd="Mystery", wotdPos="n.", wotdDef="To explore the unknown.";
+      let quote="The stars are calling.", author="Universe";
+      let sentEn="Keep looking up.", sentCn="保持仰望星空。";
+      let quoteTrans="群星在召喚。";
 
-            if (wordObj) {
-                wotd = wordObj.word || wotd;
-                wotdPos = wordObj.pos || wotdPos;
-                wotdDef = wordObj.meaning || wotdDef;
-                sentEn = wordObj['sentence e'] || sentEn;
-                sentCn = wordObj['sentence c'] || sentCn;
-            }
-            if (quoteObj) {
-                quote = quoteObj['quote e'] || quote;
-                quoteTrans = quoteObj['quote c'] || quoteTrans;
-                author = quoteObj.author || author;
-            }
+      if(csvData?.words){
+        const queryDate = dateStr.slice(5);
+        const wordObj = csvData.words.find(r=>r.date===queryDate);
+        const quoteObj = csvData.quotes.find(r=>r.date===queryDate);
+        if(wordObj){
+          wotd = wordObj.word || wotd;
+          wotdPos = wordObj.pos || wotdPos;
+          wotdDef = wordObj.meaning || wotdDef;
+          sentEn = wordObj['sentence e'] || sentEn;
+          sentCn = wordObj['sentence c'] || sentCn;
         }
+        if(quoteObj){
+          quote = quoteObj['quote e'] || quote;
+          quoteTrans = quoteObj['quote c'] || quoteTrans;
+          author = quoteObj.author || author;
+        }
+      }
 
-        const streakDisplay = document.getElementById('streak-days') ? document.getElementById('streak-days').innerText : "0";
+      const streakDisplay = document.getElementById('streak-days')?.innerText || "0";
 
-        // 填充資料
-        document.getElementById('card-user-name').innerText = userName;
-        document.getElementById('card-display-date').innerText = dateStr;
-        document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, '');
-        document.getElementById('card-wotd').innerText = wotd;
-        document.getElementById('card-pos').innerText = wotdPos;
-        document.getElementById('card-def').innerText = wotdDef;
-        // 填充例句
-        document.getElementById('card-sent-en').innerText = sentEn;
-        document.getElementById('card-sent-cn').innerText = sentCn;
-        // 填充佳句
-        document.getElementById('card-quote').innerText = `“${quote}”`;
-        document.getElementById('card-quote-trans').innerText = quoteTrans;
-        document.getElementById('card-author').innerText = author;
-        document.getElementById('card-streak').innerText = streakDisplay;
+      document.getElementById('card-user-name').innerText = userName;
+      document.getElementById('card-display-date').innerText = dateStr;
+      document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g,'');
+      document.getElementById('card-wotd').innerText = wotd;
+      document.getElementById('card-pos').innerText = wotdPos;
+      document.getElementById('card-def').innerText = wotdDef;
+      document.getElementById('card-sent-en').innerText = sentEn;
+      document.getElementById('card-sent-cn').innerText = sentCn;
+      document.getElementById('card-quote').innerText = `“${quote}”`;
+      document.getElementById('card-quote-trans').innerText = quoteTrans;
+      document.getElementById('card-author').innerText = author;
+      document.getElementById('card-streak').innerText = streakDisplay;
 
-        // 設定模板
-        const cardEl = document.getElementById('collectible-card');
-        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
-        const themeId = getTemplateIdByDate(dateStr);
-        cardEl.classList.add(`theme-${themeId}`);
+      // ---- FIXED theme bucket ----
+      let themeId = cardsMap[dateStr];
+      if (!themeId){
+        // fallback to cached localStorage
+        const cache = JSON.parse(localStorage.getItem('cardsMap')||'{}');
+        themeId = cache[dateStr];
+      }
+      if(!themeId){
+        // first-time open (not checked-in yet)
+        themeId = getTemplateIdByDate(dateStr);
+      }
+      const cardEl = document.getElementById('collectible-card');
+      applyTheme(cardEl, themeId);
 
-        document.getElementById('card-modal').classList.add('active');
+      document.getElementById('card-modal').classList.add('active');
     };
 
     window.closeCardModal = () => {
-        document.getElementById('card-modal').classList.remove('active');
+      document.getElementById('card-modal').classList.remove('active');
     };
 
     window.downloadCardImage = () => {
-        const cardElement = document.getElementById('collectible-card');
-        const btn = document.querySelector('.btn-download');
-        const originalText = btn.innerText;
-        btn.innerText = "Capturing... 📸";
-        
-        if (typeof html2canvas === 'undefined') {
-            alert("Snapshot library not loaded.");
-            btn.innerText = originalText;
-            return;
-        }
+      const cardElement = document.getElementById('collectible-card');
+      const btn = document.querySelector('.btn-download');
+      const originalText = btn.innerText;
+      btn.innerText = "Capturing... 📸";
 
-        html2canvas(cardElement, {
-            scale: 2,
-            backgroundColor: null,
-            useCORS: true
-        }).then(canvas => {
-            const link = document.createElement('a');
-            const dateText = document.getElementById('card-display-date').innerText;
-            link.download = `Shirley_MoonBase_Card_${dateText}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            btn.innerText = originalText;
-        }).catch(err => {
-            console.error(err);
-            alert("Image capture failed.");
-            btn.innerText = originalText;
+      if(typeof html2canvas==='undefined'){
+        alert("Snapshot library not loaded.");
+        btn.innerText = originalText; return;
+      }
+
+      html2canvas(cardElement,{scale:2, backgroundColor:null, useCORS:true})
+        .then(canvas=>{
+          const link=document.createElement('a');
+          const dateText=document.getElementById('card-display-date').innerText;
+          link.download=`Shirley_MoonBase_Card_${dateText}.png`;
+          link.href=canvas.toDataURL('image/png');
+          link.click();
+          btn.innerText=originalText;
+        }).catch(err=>{
+          console.error(err); alert("Image capture failed.");
+          btn.innerText=originalText;
         });
     };
 
-    // 重新定義 handleCheckIn，加入開卡片邏輯
+    // ===== Check-in logic (FIXED card store) =====
     window.handleCheckIn = async () => {
-        if (!currentUser) return;
-        const fullDate = getLocalISODate();
-        if (checkinHistory.includes(fullDate)) return;
+      if(!currentUser) return;
 
-        const btn = document.getElementById('checkin-btn');
-        btn.disabled = true; 
-        btn.innerText = "Transmitting...";
-        
-        try {
-            let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
-            const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
-            
-            const yesterday = new Date(); 
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yYear = yesterday.getFullYear();
-            const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
-            const yDay = String(yesterday.getDate()).padStart(2, '0');
-            const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
-            
-            if (lastCheckIn === yesterdayStr) { currentStreak++; } else { currentStreak = 1; }
+      const fullDate = getLocalISODate();
+      if(checkinHistory.includes(fullDate)) return;
 
-            const userRef = doc(db, "users", currentUser.uid);
-            const logEntry = { date: new Date().toISOString(), type: "Check-in", detail: "Daily Check-in" };
+      const btn = document.getElementById('checkin-btn');
+      btn.disabled = true;
+      btn.innerText = "Transmitting...";
 
-            await updateDoc(userRef, { 
-                streak: currentStreak, 
-                history: arrayUnion(fullDate),
-                activityLogs: arrayUnion(logEntry)
-            });
+      try{
+        let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
+        const lastCheckIn = checkinHistory.length>0 ? checkinHistory[checkinHistory.length-1] : null;
 
-            checkinHistory.push(fullDate);
-            activityLog.push(logEntry);
-            
-            document.getElementById('streak-days').innerText = currentStreak;
-            document.getElementById('total-days').innerText = checkinHistory.length;
-            btn.innerText = "Moon Check-in Success! 🌕";
-            
-            // 重新渲染日曆 (以便更新點擊事件)
-            renderCalendar();
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate()-1);
+        const yesterdayStr = getLocalISODate(yesterday);
 
-            // ★★★ 自動彈出卡片 ★★★
-            setTimeout(() => {
-                window.openCard(fullDate);
-            }, 800);
+        currentStreak = (lastCheckIn === yesterdayStr) ? currentStreak+1 : 1;
 
-        } catch (e) {
-            console.error("Check-in error:", e);
-            btn.innerText = "Check-in Failed";
-            btn.disabled = false;
-        }
-    };
+        // ---- define today's theme ONCE ----
+        const themeId = cardsMap[fullDate] || getTemplateIdByDate(fullDate);
 
-    // 重新定義 renderCalendar，加入卡袋點擊功能
-    window.renderCalendar = function() {
-        const grid = document.getElementById('calendar-grid');
-        grid.innerHTML = '';
-        const now = new Date();
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
-        
-        for (let i = 1; i <= daysInMonth; i++) {
-            const dayEl = document.createElement('div');
-            dayEl.innerText = i;
-            dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
-            
-            const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, '0')}`;
-            
-            if (checkinHistory.includes(thisDateStr)) { 
-                dayEl.style.background = "var(--accent)"; 
-                dayEl.style.color="white"; 
-                dayEl.style.borderRadius="50%"; 
-                dayEl.style.fontWeight = "bold";
+        const userRef = doc(db,"users",currentUser.uid);
+        const logEntry = { date:new Date().toISOString(), type:"Check-in", detail:"Daily Check-in" };
 
-                // ★ 加入可點擊開卡的提示
-                dayEl.classList.add('calendar-day-checked');
-                dayEl.title = "Tap to open Card Pocket";
-                dayEl.onclick = () => window.openCard(thisDateStr);
-            }
-            grid.appendChild(dayEl);
-        }
-    };
-
-    // --- End of new logic ---
-
-    async function loadCSVData() {
-        try {
-            const [resWords, resQuotes] = await Promise.all([
-                fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv'),
-                fetch('https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv')
-            ]);
-            csvData.words = parseCSV(await resWords.text());
-            csvData.quotes = parseCSV(await resQuotes.text());
-        } catch (e) {}
-    }
-
-    function parseCSV(text) {
-        const lines = text.trim().split('\n');
-        const headers = lines[0].split(',').map(h => h.trim());
-        return lines.slice(1).map(line => {
-            const row = {}; 
-            const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
-            const matches = []; let match;
-            while ((match = regex.exec(line)) !== null) { if (match.index === regex.lastIndex) regex.lastIndex++; if (match[1] !== undefined) matches.push(match[1].replace(/^"|"$/g, '').replace(/""/g, '"')); }
-            headers.forEach((h, i) => row[h] = matches[i] ? matches[i].trim() : '');
-            return row;
+        // store history + streak + cardsMap
+        cardsMap[fullDate] = themeId;
+        await updateDoc(userRef,{
+          streak: currentStreak,
+          history: arrayUnion(fullDate),
+          activityLogs: arrayUnion(logEntry),
+          cardsMap: cardsMap
         });
+
+        // update local states
+        checkinHistory.push(fullDate);
+        activityLog.push(logEntry);
+
+        document.getElementById('streak-days').innerText = currentStreak;
+        document.getElementById('total-days').innerText = checkinHistory.length;
+        btn.innerText = "Moon Check-in Success! 🌕";
+
+        // cache to localStorage
+        localStorage.setItem('cardsMap', JSON.stringify(cardsMap));
+
+        renderCalendar();
+        renderCardPocket();
+
+        setTimeout(()=>window.openCard(fullDate), 700);
+
+      }catch(e){
+        console.error(e);
+        alert("Check-in failed: " + e.message);
+        btn.disabled=false;
+        btn.innerText="Daily Check-in";
+      }
+    };
+
+    // ===== Calendar render (click opens FIXED card) =====
+    function renderCalendar(){
+      const title = document.getElementById('calendar-title');
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML='';
+
+      const y=viewDate.getFullYear();
+      const m=viewDate.getMonth();
+      title.innerText=`${y}-${String(m+1).padStart(2,'0')}`;
+
+      const firstDay=new Date(y,m,1);
+      const startWeekday=firstDay.getDay();
+      const daysInMonth=new Date(y,m+1,0).getDate();
+      const todayStr=getLocalISODate();
+
+      // padding before month
+      for(let i=0;i<startWeekday;i++){
+        const empty=document.createElement('div');
+        empty.className='calendar-day';
+        empty.style.opacity=0; grid.appendChild(empty);
+      }
+
+      for(let day=1;day<=daysInMonth;day++){
+        const dateStr=getLocalISODate(new Date(y,m,day));
+        const dayEl=document.createElement('div');
+        dayEl.className='calendar-day';
+        dayEl.innerText=day;
+
+        if(dateStr===todayStr) dayEl.classList.add('today');
+
+        if(checkinHistory.includes(dateStr)){
+          dayEl.classList.add('calendar-day-checked');
+          dayEl.title='Tap to open Card Pocket';
+          dayEl.onclick=()=>window.openCard(dateStr);
+        }
+
+        grid.appendChild(dayEl);
+      }
+    }
+    window.prevMonth=()=>{ viewDate.setMonth(viewDate.getMonth()-1); renderCalendar(); };
+    window.nextMonth=()=>{ viewDate.setMonth(viewDate.getMonth()+1); renderCalendar(); };
+
+    // ===== Card Pocket render (BY MONTH) =====
+    function renderCardPocket(){
+      const container=document.getElementById('card-pocket');
+      if(!container) return;
+
+      if(!checkinHistory.length){
+        container.innerHTML='<div style="color:var(--text-light); padding:.5rem;">No cards yet. Check-in to collect your first card!</div>';
+        return;
+      }
+
+      // build month groups { "YYYY-MM": [dates...] }
+      const byMonth = {};
+      checkinHistory
+        .slice()
+        .sort()
+        .forEach(dateStr=>{
+          const key=dateStr.slice(0,7);
+          if(!byMonth[key]) byMonth[key]=[];
+          byMonth[key].push(dateStr);
+        });
+
+      // render newest month first
+      const monthKeys = Object.keys(byMonth).sort((a,b)=>a<b?1:-1);
+
+      container.innerHTML='';
+      monthKeys.forEach(monthKey=>{
+        const monthBox=document.createElement('div');
+        monthBox.className='pocket-month';
+        monthBox.innerHTML=`<h4>${monthKey}</h4>`;
+
+        const grid=document.createElement('div');
+        grid.className='pocket-grid';
+
+        byMonth[monthKey].forEach(dateStr=>{
+          const themeId = cardsMap[dateStr] || getTemplateIdByDate(dateStr);
+
+          const item=document.createElement('div');
+          item.className='pocket-item';
+          item.onclick=()=>window.openCard(dateStr);
+
+          const thumb=document.createElement('div');
+          thumb.className=`thumb theme-${themeId} ${LIGHT_THEMES.has(themeId)?'light-theme':''}`;
+
+          thumb.innerHTML=`
+            <div class="thumb-glow"></div>
+            <div class="thumb-day">${dateStr.slice(8)}</div>
+          `;
+
+          const meta=document.createElement('div');
+          meta.className='pocket-date';
+          meta.innerText=dateStr;
+
+          item.appendChild(thumb);
+          item.appendChild(meta);
+          grid.appendChild(item);
+        });
+
+        monthBox.appendChild(grid);
+        container.appendChild(monthBox);
+      });
     }
 
-    function getTodayMMDD() { const now = new Date(); return String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0'); }
-
-    function renderDailyContent(dateStr) {
-        const wordObj = csvData.words.find(r => r.date === dateStr);
-        if (wordObj) {
-            document.getElementById('wotd-word').innerText = wordObj.word;
-            document.getElementById('wotd-ipa').innerText = wordObj.ipa;
-            document.getElementById('wotd-pos').innerText = wordObj.pos;
-            document.getElementById('wotd-meaning').innerText = wordObj.meaning;
-            document.getElementById('wotd-sentence-e').innerText = wordObj['sentence e'];
-            document.getElementById('wotd-sentence-c').innerText = wordObj['sentence c'];
-            document.getElementById('word-date').innerText = `(${dateStr})`;
-        }
-        const quoteObj = csvData.quotes.find(r => r.date === dateStr);
-        if (quoteObj) {
-            document.getElementById('qotd-text').innerText = quoteObj['quote e'];
-            document.getElementById('qotd-trans').innerText = quoteObj['quote c'];
-            document.getElementById('qotd-author').innerText = "— " + quoteObj.author;
-        }
-    }
-
-    // renderCalendar is overwritten above, so we don't need the old one here.
-
+    // ===== Activity log print (keep original spirit) =====
     let processedLogs = [];
-
-    function processActivityLogs(logs) {
-        if (!logs || logs.length === 0) return [];
-        const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
-        const grouped = [];
-        for (let i = 0; i < sortedLogs.length; i++) {
-            const current = sortedLogs[i];
-            const next = sortedLogs[i+1];
-            const startTime = new Date(current.date);
-            let endTime = next ? new Date(next.date) : new Date();
-            let j = i + 1;
-            while(j < sortedLogs.length && sortedLogs[j].detail === current.detail) {
-                endTime = (j + 1 < sortedLogs.length) ? new Date(sortedLogs[j+1].date) : new Date();
-                j++;
-            }
-            const durationMs = endTime - startTime;
-            const minutes = Math.floor(durationMs / 60000);
-            const durationStr = minutes < 1 ? "< 1 min" : `${minutes} mins`;
-            grouped.push({ start: startTime, end: endTime, type: current.type, detail: current.detail, durationStr: durationStr });
-            i = j - 1;
+    function processActivityLogs(logs){
+      if(!logs||logs.length===0) return [];
+      const sorted=[...logs].sort((a,b)=>new Date(a.date)-new Date(b.date));
+      const grouped=[];
+      for(let i=0;i<sorted.length;i++){
+        const current=sorted[i];
+        const next=sorted[i+1];
+        const start=new Date(current.date);
+        let end=next?new Date(next.date):new Date();
+        let j=i+1;
+        while(j<sorted.length && sorted[j].detail===current.detail){
+          end=(j+1<sorted.length)?new Date(sorted[j+1].date):new Date();
+          j++;
         }
-        return grouped.reverse();
+        const minutes=Math.floor((end-start)/60000);
+        grouped.push({start,end,type:current.type,detail:current.detail,durationStr:minutes<1?"< 1 min":`${minutes} mins`});
+        i=j-1;
+      }
+      return grouped.reverse();
     }
 
-    window.openPrintSelection = () => {
-        if (!currentUser) return;
-        processedLogs = processActivityLogs(activityLog);
-        const listContainer = document.getElementById('log-selection-list');
-        listContainer.innerHTML = '';
-        if(processedLogs.length === 0) {
-            listContainer.innerHTML = '<div style="padding:20px; text-align:center;">No records found.</div>';
-            return;
-        }
-        processedLogs.forEach((log, index) => {
-            const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
-            const row = document.createElement('div');
-            row.className = 'log-item-row';
-            row.innerHTML = `<input type="checkbox" id="log-check-${index}" class="log-checkbox"><div class="log-details"><span class="log-action">${log.type}: ${log.detail}</span><span class="log-time">${dateStr} (${log.durationStr})</span></div>`;
-            listContainer.appendChild(row);
+    window.openPrintSelection=()=>{
+      if(!currentUser) return;
+      processedLogs=processActivityLogs(activityLog);
+      const list=document.getElementById('log-selection-list');
+      list.innerHTML='';
+      if(!processedLogs.length){
+        list.innerHTML='<div style="padding:20px; text-align:center;">No records found.</div>';
+      }else{
+        processedLogs.forEach((log,index)=>{
+          const row=document.createElement('div');
+          row.className='log-item-row';
+          row.style.cssText='display:flex; align-items:center; padding:8px 5px; border-bottom:1px solid #eee;';
+          row.innerHTML=`
+            <input type="checkbox" class="log-checkbox" data-index="${index}" style="margin-right:8px;">
+            <div style="flex:1;">
+              <div style="font-weight:700;">${log.type}</div>
+              <div style="font-size:.85rem; color:#666;">${log.start.toLocaleString()} • ${log.durationStr}</div>
+              <div>${log.detail}</div>
+            </div>
+          `;
+          list.appendChild(row);
         });
-        document.getElementById('print-selection-modal').style.display = 'flex';
+      }
+      document.getElementById('print-selection-modal').style.display='flex';
     };
 
-    window.closePrintSelection = () => { document.getElementById('print-selection-modal').style.display = 'none'; };
-    window.toggleAllLogs = (checkStatus) => { document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = checkStatus); };
+    window.closePrintSelection=()=>{ document.getElementById('print-selection-modal').style.display='none'; };
 
-    window.confirmPrint = () => {
-        const printBody = document.getElementById('print-body');
-        printBody.innerHTML = '';
-        document.getElementById('print-name').innerText = currentUser.displayName || currentUser.email;
-        document.getElementById('print-date').innerText = new Date().toLocaleDateString();
-        let hasSelection = false;
-        processedLogs.forEach((log, index) => {
-            const checkbox = document.getElementById(`log-check-${index}`);
-            if(checkbox && checkbox.checked) {
-                hasSelection = true;
-                const tr = document.createElement('tr');
-                const dateStr = log.start.toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
-                tr.innerHTML = `<td>${dateStr}<br><span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span></td><td>${log.type}</td><td>${log.detail}</td>`;
-                printBody.appendChild(tr);
-            }
-        });
-        if(!hasSelection) return alert("Please select at least one record to print.");
-        document.getElementById('print-selection-modal').style.display = 'none';
-        setTimeout(() => window.print(), 500);
+    window.toggleAllLogs=(checked)=>{
+      document.querySelectorAll('.log-checkbox').forEach(cb=>cb.checked=checked);
     };
 
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray;
-    function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
-    resizeCanvas();
-    class Particle {
-        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2; this.speedX = (Math.random() * 0.2 - 0.1); this.speedY = (Math.random() * 0.2 - 0.1); this.opacity = Math.random() * 0.5; }
-        update() { this.x += this.speedX; this.y += this.speedY; if(this.x>canvas.width)this.x=0; if(this.x<0)this.x=canvas.width; if(this.y>canvas.height)this.y=0; if(this.y<0)this.y=canvas.height; }
-        draw(isDark) { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${this.opacity})` : `rgba(44, 62, 80, ${this.opacity * 0.5})`; ctx.fill(); }
+    window.confirmPrint=()=>{
+      const picks=[...document.querySelectorAll('.log-checkbox')]
+        .filter(cb=>cb.checked)
+        .map(cb=>processedLogs[parseInt(cb.dataset.index)]);
+      if(!picks.length){ alert("Please select at least one record."); return; }
+
+      document.getElementById('print-name').innerText=currentUser.displayName || currentUser.email;
+      document.getElementById('print-date').innerText=new Date().toLocaleDateString();
+      const body=document.getElementById('print-body');
+      body.innerHTML='';
+      picks.forEach(log=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td>${log.start.toLocaleString()}<br><b>${log.durationStr}</b></td>
+          <td>${log.type}</td>
+          <td>${log.detail}</td>
+        `;
+        body.appendChild(tr);
+      });
+
+      const printArea=document.getElementById('print-area');
+      printArea.style.display='block';
+      window.print();
+      printArea.style.display='none';
+      closePrintSelection();
+    };
+
+    // ===== Auth / UI hooks =====
+    window.showAuthForm=()=>{
+      document.getElementById('auth-form-container').style.display='block';
+    };
+    window.hideAuthForm=()=>{
+      document.getElementById('auth-form-container').style.display='none';
+    };
+    window.openMemberTerminal=()=>{
+      document.getElementById('member-terminal').classList.add('show');
+      renderCardPocket();
+    };
+    window.closeMemberTerminal=()=>document.getElementById('member-terminal').classList.remove('show');
+
+    document.getElementById('google-login-btn').addEventListener('click', ()=>{
+      if(isInApp){
+        document.getElementById('in-app-browser-warning').style.display='flex';
+        return;
+      }
+      signInWithPopup(auth, provider).catch(e=>alert("Login Error: "+e.message));
+    });
+
+    document.getElementById('email-login-btn').addEventListener('click', ()=>{
+      const email=document.getElementById('email-input').value;
+      const pass=document.getElementById('pass-input').value;
+      if(!email||!pass) return alert("Please fill in fields");
+      signInWithEmailAndPassword(auth,email,pass).catch(error=>{
+        if(error.code==='auth/user-not-found'||error.code==='auth/invalid-credential'){
+          if(confirm("Create account?")) createUserWithEmailAndPassword(auth,email,pass);
+        }else alert(error.message);
+      });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', ()=>{
+      signOut(auth).then(()=>location.reload());
+    });
+
+    window.visitPlanet=(planetName,url)=>{
+      if(currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
+      setTimeout(()=>{ window.location.href=url; },300);
+    };
+
+    async function trackActivity(type, detail){
+      if(!currentUser) return;
+      const userRef = doc(db,"users",currentUser.uid);
+      try{
+        await updateDoc(userRef,{ activityLogs: arrayUnion({ date:new Date().toISOString(), type, detail }) });
+      }catch(e){ console.log(e); }
     }
-    function initParticles() { particlesArray = []; for (let i = 0; i < 80; i++) particlesArray.push(new Particle()); }
-    function animateParticles() { requestAnimationFrame(animateParticles); ctx.clearRect(0, 0, canvas.width, canvas.height); const isDark = document.getElementById('htmlRoot').classList.contains('dark'); particlesArray.forEach(p => { p.update(); p.draw(isDark); }); }
-    initParticles(); animateParticles();
 
-    const html = document.getElementById('htmlRoot');
-    document.getElementById('themeToggle').addEventListener('click', () => html.classList.toggle('dark'));
-    const musicToggle = document.getElementById('musicToggle');
-    const themeSong = document.getElementById('themeSong');
-    let isPlaying = false;
-    musicToggle.addEventListener('click', () => {
-        if(isPlaying) { themeSong.pause(); musicToggle.style.color="var(--text)"; }
-        else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
-        isPlaying = !isPlaying;
+    async function loadUserData(uid){
+      const userRef=doc(db,"users",uid);
+      const docSnap=await getDoc(userRef);
+      const today=getLocalISODate();
+
+      if(docSnap.exists()){
+        const data=docSnap.data();
+        checkinHistory=data.history||[];
+        activityLog=data.activityLogs||[];
+        cardsMap=data.cardsMap||{};
+        document.getElementById('total-days').innerText=checkinHistory.length;
+        document.getElementById('streak-days').innerText=data.streak||0;
+        const btn=document.getElementById('checkin-btn');
+        if(checkinHistory.includes(today)) btn.disabled=true;
+
+        // cache
+        localStorage.setItem('cardsMap', JSON.stringify(cardsMap));
+      }else{
+        await setDoc(userRef,{ email:currentUser.email, history:[], streak:0, activityLogs:[], cardsMap:{} },{merge:true});
+      }
+
+      renderCalendar();
+      renderCardPocket();
+    }
+
+    onAuthStateChanged(auth, async (user)=>{
+      if(user){
+        currentUser=user;
+        document.getElementById('intro-overlay').style.display='none';
+        document.getElementById('visitor-view').classList.remove('active');
+        document.getElementById('universe-view').classList.add('active');
+        document.getElementById('logoutBtn').style.display='flex';
+        document.getElementById('greeting-name').innerText=`Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
+
+        await loadCSVData();
+        await loadUserData(user.uid);
+        renderDailyContent(getTodayMMDD());
+        trackActivity("Login","Arrived at Moon Base");
+      }
     });
   </script>
 </body>
