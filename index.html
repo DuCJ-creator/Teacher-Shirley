@@ -648,96 +648,266 @@
         background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
         font-size: 1.2rem;
     }
-    /* --- 月壤收集站專用樣式 (Moon Dust Collector) --- */
-.moon-dust-section {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--border);
-}
 
-.quiz-link-btn {
-    display: block;
+    /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
+.lunar-cache-container {
     width: 100%;
-    text-align: center;
-    background: linear-gradient(90deg, #6366f1, #a855f7);
-    color: white;
-    text-decoration: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-    transition: transform 0.2s;
+    margin-top: 30px; /* 與上方儀表板保持距離 */
+    background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    color: #e0e0e0;
     font-family: 'Exo 2', sans-serif;
-}
-.quiz-link-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+    backdrop-filter: blur(10px);
 }
 
-.dust-calc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+/* 標題區 */
+.lunar-header {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+.lunar-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.6rem;
+    background: linear-gradient(to right, #fff, #ffd700, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    letter-spacing: 1px;
+}
+.lunar-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-top: 5px;
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+/* 操作區佈局 */
+.lunar-control-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+/* 左側：啟動按鈕 */
+.mission-start-btn {
+    flex: 1;
+    min-width: 200px;
+    background: linear-gradient(45deg, #141e30, #243b55);
+    border: 1px solid rgba(255,215,0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+    color: #ffd700;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.mission-start-btn:hover {
+    background: linear-gradient(45deg, #1f2f45, #355375);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    border-color: #ffd700;
+}
+.mission-icon { font-size: 1.5rem; margin-bottom: 5px; }
+
+/* 中間：輸入區 */
+.lunar-inputs {
+    flex: 2;
+    display: flex;
     gap: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.lunar-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.lunar-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.lunar-field {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    font-family: 'Exo 2';
+    transition: border 0.3s;
+}
+.lunar-field:focus {
+    outline: none;
+    border-bottom: 1px solid #ffd700;
+}
+
+/* 右側：提交按鈕 */
+.lunar-submit-btn {
+    padding: 10px 25px;
+    background: #ffd700;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 25px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s;
+}
+.lunar-submit-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.lunar-submit-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background: #ffed4a;
+}
+
+/* 月相顯示與進度 */
+.moon-phase-display {
+    margin-top: 25px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.phase-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.current-moon-icon {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+.phase-text {
+    display: flex;
+    flex-direction: column;
+}
+.phase-name {
+    font-family: 'Noto Serif TC';
+    font-size: 1.1rem;
+    color: #ffd700;
+    font-weight: 600;
+}
+.moonlight-count {
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+.inventory-counter {
+    text-align: right;
+    font-family: 'Cinzel Decorative';
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* 進度條 */
+.moonlight-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 15px;
+    border-radius: 2px;
+    position: relative;
+}
+.moonlight-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4b6cb7, #182848, #ffd700);
+    width: 0%;
+    transition: width 0.8s ease-out;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* 滿月獎勵卡片 Modal */
+#moon-reward-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+.reward-card {
+    width: 340px;
+    padding: 30px;
+    background: linear-gradient(to bottom, #090a0f, #1b2735);
+    border: 2px solid #ffd700;
+    border-radius: 20px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+    position: relative;
+}
+.reward-moon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px #ffd700);
+    animation: floatMoon 3s ease-in-out infinite;
+}
+@keyframes floatMoon { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+.reward-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.4rem;
+    color: #ffd700;
     margin-bottom: 15px;
 }
-
-.dust-input-group label {
-    display: block;
-    font-size: 0.75rem;
-    opacity: 0.8;
-    margin-bottom: 5px;
-    font-family: 'Exo 2';
+.reward-poem-cn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #e0e0e0;
 }
-
-.dust-input {
-    width: 100%;
-    padding: 10px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    text-align: center;
-    font-family: 'Exo 2';
-    outline: none;
+.reward-poem-en {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #a0a0a0;
+    margin-bottom: 25px;
+    line-height: 1.4;
 }
-.dust-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.2);
-}
-
-.dust-result-box {
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-}
-.dark .dust-result-box { background: rgba(0,0,0,0.3); }
-
-.dust-progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 4px;
-    margin-top: 10px;
-    overflow: hidden;
-}
-.dust-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    transition: width 0.5s ease;
-}
-.dust-progress-fill.capped {
-    background: #e74c3c; /* Red when capped */
-}
-.cap-warning {
-    color: #e74c3c;
-    font-size: 0.75rem;
+.reward-actions button {
+    margin: 5px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
     font-weight: bold;
-    margin-top: 5px;
-    display: none;
 }
+.btn-keep { background: #ffd700; color: #000; }
+.btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
+ 
   </style>
 </head>
 <body>
@@ -866,6 +1036,99 @@
       </div>
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
+  <!-- 原本的 member-dashboard 結束標籤 -->
+    </div> 
+
+    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+    <div class="lunar-cache-container">
+        <!-- 標題 -->
+        <div class="lunar-header">
+            <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
+            <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
+        </div>
+
+        <!-- 控制面板 -->
+        <div class="lunar-control-panel">
+            <!-- 1. 開始任務 (計時器起點) -->
+            <a href="https://ivocab-quiz.vercel.app/" target="_blank" class="mission-start-btn" onclick="startLunarMission()">
+                <div class="mission-icon">⏱️</div>
+                <div>START MISSION<br><span style="font-size:0.7rem; font-weight:normal; opacity:0.8;">(Min. 2 mins required)</span></div>
+            </a>
+
+            <!-- 2. 輸入成績 -->
+            <div class="lunar-inputs">
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Level</label>
+                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Unit</label>
+                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#4ade80;">Correct</label>
+                    <input type="number" class="lunar-field" id="moon-correct" min="0">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#f87171;">Wrong</label>
+                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
+                </div>
+            </div>
+
+            <!-- 3. 提交按鈕 -->
+            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
+        </div>
+
+        <!-- 狀態顯示 -->
+        <div class="moon-phase-display">
+            <div class="phase-info">
+                <div class="current-moon-icon" id="phase-icon">🌑</div>
+                <div class="phase-text">
+                    <span class="phase-name" id="phase-name">New Moon 朔月</span>
+                    <span class="moonlight-count">Current Thread: <span id="current-thread">0</span>/300</span>
+                </div>
+            </div>
+            <!-- 滿月庫存 -->
+            <div class="inventory-counter">
+                Storage: <span id="full-moon-count">🌕 x 0</span>
+            </div>
+        </div>
+
+        <!-- 總進度條 -->
+        <div class="moonlight-track">
+            <div class="moonlight-fill" id="moon-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- 滿月獎勵卡片 Modal (隱藏) -->
+    <div id="moon-reward-modal">
+        <div class="reward-card" id="capture-reward-card">
+            <div class="reward-moon">🌕</div>
+            <div class="reward-title">Shirley's Moon Light Card</div>
+            <div style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">For: <span id="reward-user-name">Traveler</span></div>
+            
+            <div class="reward-poem-cn">
+                《滿月之後》<br>
+                滿月圓了，<br>
+                光還在長。<br>
+                它輕輕鋪成路，<br>
+                引你走向下一輪發亮。
+            </div>
+            
+            <div class="reward-poem-en">
+                After the Full Moon<br>
+                The moon is full—<br>
+                but the light keeps growing.<br>
+                It softly becomes a path,<br>
+                leading you to your next glow.
+            </div>
+
+            <div class="reward-actions" data-html2canvas-ignore>
+                <button class="btn-keep" onclick="downloadRewardCard()">📥 Keep Card</button>
+                <button class="btn-close-reward" onclick="closeRewardModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
   <div id="member-terminal">
       <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
@@ -887,64 +1150,6 @@
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
               <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
-
-        <!-- 將此代碼插入到 Check-in 按鈕下方 -->
-
-<div class="moon-dust-section">
-    <!-- 1. 前往測驗的按鈕 -->
-    <a href="https://ivocab-quiz.vercel.app/" target="_blank" class="quiz-link-btn">
-        🚀 前往月壤收集站 (Start Quiz)
-    </a>
-
-    <!-- 2. 成績計算器 -->
-    <h4 style="font-family: 'Cinzel Decorative'; margin-bottom: 15px; color: var(--accent); text-align: center;">
-        Mission Report
-    </h4>
-    
-    <!-- Level / Unit -->
-    <div class="dust-calc-grid">
-        <div class="dust-input-group">
-            <label>Level</label>
-            <input type="text" class="dust-input" placeholder="A1" id="md-level">
-        </div>
-        <div class="dust-input-group">
-            <label>Unit</label>
-            <input type="text" class="dust-input" placeholder="U1" id="md-unit">
-        </div>
-    </div>
-
-    <!-- Correct / Wrong -->
-    <div class="dust-calc-grid">
-        <div class="dust-input-group">
-            <label style="color: #2ecc71;">Correct</label>
-            <input type="number" class="dust-input" value="0" min="0" id="md-correct">
-        </div>
-        <div class="dust-input-group">
-            <label style="color: #e74c3c;">Wrong</label>
-            <input type="number" class="dust-input" value="0" min="0" id="md-wrong">
-        </div>
-    </div>
-
-    <!-- 結果顯示 -->
-    <div class="dust-result-box">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-            <div style="text-align: left;">
-                <span style="font-size: 0.8rem; opacity: 0.7;">Gold Acquired</span><br>
-                <span id="md-gold-display" style="font-size: 1.8rem; font-weight: bold; color: var(--accent);">0</span>
-                <span style="font-size: 0.8rem;">/ 30g</span>
-            </div>
-            <div style="text-align: right;">
-                <span style="font-size: 0.8rem; opacity: 0.7;">Accuracy</span><br>
-                <span id="md-acc-display" style="font-size: 1.2rem; font-weight: bold;">0%</span>
-            </div>
-        </div>
-        
-        <div class="dust-progress-bar">
-            <div id="md-progress-fill" class="dust-progress-fill"></div>
-        </div>
-        <div id="md-cap-warning" class="cap-warning">⚠️ STORAGE FULL (上限 30g)</div>
-    </div>
-</div>
           <div class="content-panel">
               <div class="data-card word-card">
                   <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Word of the Day <span id="word-date"></span></span>
@@ -1634,62 +1839,153 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
-   /* --- Moon Dust Calculator Logic --- */
+   /* --- 🚀 Lunar Glow Cache 核心邏輯 --- */
+
+// 常數設定
+const MOON_CYCLE = 300; // 300點為一個滿月循環
+const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
+
+// 頁面加載時初始化
 document.addEventListener('DOMContentLoaded', () => {
-    const correctInput = document.getElementById('md-correct');
-    const wrongInput = document.getElementById('md-wrong');
-    const goldDisplay = document.getElementById('md-gold-display');
-    const accDisplay = document.getElementById('md-acc-display');
-    const progressFill = document.getElementById('md-progress-fill');
-    const capWarning = document.getElementById('md-cap-warning');
-    
-    const CAP_LIMIT = 30; // 上限 30g
-
-    function updateMoonDust() {
-        const correct = parseInt(correctInput.value) || 0;
-        const wrong = parseInt(wrongInput.value) || 0;
-        const total = correct + wrong;
-
-        // 1. 計算正確率
-        let accuracy = 0;
-        if (total > 0) {
-            accuracy = Math.round((correct / total) * 100);
-        }
-
-        // 2. 計算金幣 (1題 = 1g, 上限30)
-        let rawGold = correct; 
-        let finalGold = Math.min(rawGold, CAP_LIMIT);
-        let isCapped = rawGold >= CAP_LIMIT;
-
-        // 3. 更新介面
-        goldDisplay.innerText = finalGold;
-        accDisplay.innerText = accuracy + "%";
-
-        // 正確率顏色
-        if(accuracy >= 80) accDisplay.style.color = "#2ecc71"; // Green
-        else if(accuracy >= 60) accDisplay.style.color = "#f1c40f"; // Yellow
-        else accDisplay.style.color = "#e74c3c"; // Red
-
-        // 進度條
-        const percent = (finalGold / CAP_LIMIT) * 100;
-        progressFill.style.width = percent + "%";
-
-        // 上限警告
-        if(isCapped) {
-            progressFill.classList.add('capped');
-            capWarning.style.display = "block";
-        } else {
-            progressFill.classList.remove('capped');
-            capWarning.style.display = "none";
-        }
-    }
-
-    // 綁定輸入事件
-    if(correctInput && wrongInput) {
-        correctInput.addEventListener('input', updateMoonDust);
-        wrongInput.addEventListener('input', updateMoonDust);
-    }
+    updateMoonInterface();
 });
+
+// 1. 開始任務 (紀錄時間)
+function startLunarMission() {
+    const now = Date.now();
+    sessionStorage.setItem('lunar_start_time', now);
+    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+}
+
+// 2. 提交成績
+function submitLunarGlow() {
+    // A. 防作弊時間檢查
+    const startTime = sessionStorage.getItem('lunar_start_time');
+    const now = Date.now();
+    
+    // 如果沒有開始時間，或者時間差小於 2 分鐘
+    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
+        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
+        return;
+    }
+
+    // B. 獲取輸入
+    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
+    const levelVal = document.getElementById('moon-level').value;
+    const unitVal = document.getElementById('moon-unit').value;
+
+    if (correctVal === 0 && wrongVal === 0) {
+        alert("請輸入正確或錯誤題數。");
+        return;
+    }
+
+    // C. 計算本場月光 (Thread of Moonlight)
+    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
+    const threadGained = correctVal + wrongVal; 
+
+    // D. 讀取並更新總分
+    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 累積
+    totalMoonlight += threadGained;
+
+    // E. 檢查是否達成滿月循環
+    if (totalMoonlight >= MOON_CYCLE) {
+        // 增加滿月庫存
+        fullMoonStorage += 1;
+        // 扣除循環分數 (進入下一輪)
+        totalMoonlight = totalMoonlight - MOON_CYCLE;
+        
+        // 儲存滿月數
+        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
+        
+        // 如果是第一次獲得滿月，觸發獎勵卡片
+        if (fullMoonStorage === 1) {
+            showRewardCard();
+        } else {
+            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
+        }
+    }
+
+    // F. 儲存新進度
+    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
+    
+    // G. 清空計時器與輸入框 (方便下次)
+    sessionStorage.removeItem('lunar_start_time');
+    document.getElementById('moon-correct').value = '';
+    document.getElementById('moon-wrong').value = '';
+    document.getElementById('moon-level').value = '';
+    document.getElementById('moon-unit').value = '';
+
+    // H. 更新介面
+    updateMoonInterface();
+    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
+}
+
+// 3. 更新介面顯示 (月相與進度)
+function updateMoonInterface() {
+    const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    const fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 更新庫存
+    const storageText = fullMoonStorage > 0 ? `🌕 x ${fullMoonStorage}` : `🌕 x 0`;
+    document.getElementById('full-moon-count').innerText = storageText;
+
+    // 更新當前進度文字
+    document.getElementById('current-thread').innerText = totalMoonlight;
+
+    // 更新進度條
+    const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
+    document.getElementById('moon-progress-bar').style.width = `${percent}%`;
+
+    // 判斷月相
+    const phaseIcon = document.getElementById('phase-icon');
+    const phaseName = document.getElementById('phase-name');
+
+    if (totalMoonlight <= 30) {
+        phaseIcon.innerText = "🌑";
+        phaseName.innerText = "New Moon 朔月";
+    } else if (totalMoonlight <= 60) {
+        phaseIcon.innerText = "🌒";
+        phaseName.innerText = "Waxing Crescent 眉月";
+    } else if (totalMoonlight <= 120) {
+        phaseIcon.innerText = "🌓";
+        phaseName.innerText = "First Quarter 上弦月";
+    } else if (totalMoonlight <= 180) {
+        phaseIcon.innerText = "🌔";
+        phaseName.innerText = "Waxing Gibbous 盈凸月";
+    } else {
+        phaseIcon.innerText = "🌕"; // 接近滿月的光輝
+        phaseName.innerText = "Full Moon Phase 望月";
+        phaseIcon.style.textShadow = "0 0 20px #ffd700"; // 發光特效
+    }
+}
+
+// 4. 獎勵卡片功能
+function showRewardCard() {
+    const modal = document.getElementById('moon-reward-modal');
+    // 填入使用者名字 (嘗試從卡片獲取，若無則預設)
+    const userName = document.getElementById('cardName') ? document.getElementById('cardName').innerText : "Traveler";
+    document.getElementById('reward-user-name').innerText = userName;
+    
+    modal.style.display = 'flex';
+}
+
+function closeRewardModal() {
+    document.getElementById('moon-reward-modal').style.display = 'none';
+}
+
+function downloadRewardCard() {
+    const card = document.getElementById('capture-reward-card');
+    html2canvas(card, { backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Shirley_Moon_Reward.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
   </script>
 </body>
 </html>
