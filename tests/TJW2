@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL Junior Writing - Task 2 Email Responses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- 專屬配色方案 (Indigo/Violet Theme) --- */
+            --primary-base: #4f46e5;       /* 靛青色 - 主按鈕/高亮 */
+            --primary-dark: #312e81;       /* 深靛青 - 標題/背景 */
+            --primary-light: #e0e7ff;      /* 淺靛青 - 選中狀態 */
+            --accent-purple: #7c3aed;      /* 紫色點綴 */
+            
+            --bg-body: #f8fafc;            /* 冷灰背景 */
+            --surface: #ffffff;            /* 卡片白 */
+            --border: #e2e8f0;             /* 邊框色 */
+            
+            --text-main: #1e293b;          /* 主要文字 */
+            --text-sub: #64748b;           /* 次要文字 */
+            
+            --success: #059669;            /* 成功綠 */
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Header Section --- */
+        header {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
+            color: white;
+            padding: 35px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .description {
+            color: #c7d2fe;
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto 15px;
+        }
+
+        .difficulty-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .difficulty-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Tabs Navigation --- */
+        .tabs-container {
+            background: #f1f5f9;
+            padding: 15px 30px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            background: transparent;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            color: var(--text-sub);
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            border-bottom: none;
+        }
+
+        .tab:hover {
+            color: var(--primary-base);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .tab.active {
+            background: var(--surface);
+            color: var(--primary-base);
+            font-weight: 600;
+            border-color: var(--border);
+            box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        /* --- Split Layout --- */
+        .workspace {
+            display: none;
+            padding: 30px;
+            gap: 30px;
+            background: white;
+        }
+        
+        .workspace.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Split view: Email | Editor */
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Left Side: Incoming Email --- */
+        .email-view {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .email-header {
+            background: #f8fafc;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .email-meta-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .meta-label {
+            width: 70px;
+            color: var(--text-sub);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .meta-value {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        
+        .meta-value.highlight {
+            color: var(--primary-base);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            background: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .email-body {
+            padding: 25px;
+            color: #334155;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .email-body p {
+            margin-bottom: 16px;
+        }
+
+        /* --- Right Side: Writing Area --- */
+        .editor-view {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .label-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .label-icon {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-main);
+            transition: all 0.3s;
+            background-color: #ffffff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-base);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .word-count-badge {
+            align-self: flex-end;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-sub);
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-base);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        /* --- Comparison / Result Section --- */
+        .comparison-view {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .submitted-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .submitted-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submitted-content {
+            font-family: 'Inter', sans-serif;
+            white-space: pre-wrap;
+            color: #14532d;
+            font-size: 15px;
+        }
+
+        .edit-card {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .edit-textarea {
+            background: #f1f5f9;
+            height: 200px; /* Smaller height for edit view */
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 850px) {
+            .workspace.active {
+                grid-template-columns: 1fr;
+            }
+            .email-view {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>TOEFL Junior Writing Task 2</h1>
+            <p class="description">Email Response Practice: Read the email carefully and write a polite, complete response addressing all questions asked.</p>
+            <div class="difficulty-tags">
+                <span class="difficulty-tag">Interpersonal</span>
+                <span class="difficulty-tag">Academic</span>
+                <span class="difficulty-tag">Formal</span>
+            </div>
+        </header>
+        
+        <div class="tabs-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchEmail(1)">Email 1 (Easy)</div>
+                <div class="tab" onclick="switchEmail(2)">Email 2 (Easy)</div>
+                <div class="tab" onclick="switchEmail(3)">Email 3 (Med)</div>
+                <div class="tab" onclick="switchEmail(4)">Email 4 (Med)</div>
+                <div class="tab" onclick="switchEmail(5)">Email 5 (Hard)</div>
+                <div class="tab" onclick="switchEmail(6)">Email 6 (Hard)</div>
+            </div>
+        </div>
+
+        <div id="email-1" class="workspace active">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">Sarah Johnson &lt;sarah.johnson@school.edu&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">School Project Meeting</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Hi there,</p>
+                    <p>I'm your partner for the history project. Our teacher said we need to meet this week to work on our presentation.</p>
+                    <p>I'm free on Tuesday and Thursday after school. Which day works better for you? Also, would you prefer to meet at the library or at the student center?</p>
+                    <p>Let me know what you think!</p>
+                    <p>Best,<br>Sarah</p>
+                </div>
+            </div>
+
+            <div class="editor-view">
+                <div class="editor-toolbar">
+                    <div class="label-title"><span class="label-icon"></span>Your Response</div>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-1" placeholder="Type your email response here... Remember to include a greeting and a closing." oninput="updateWordCount(1)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-1">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(1)">Send Email</button>
+
+                <div id="result-1" class="comparison-view">
+                    <div class="submitted-card">
+                        <div class="submitted-header">✓ Sent Successfully</div>
+                        <div class="submitted-content" id="submitted-content-1"></div>
+                    </div>
+                    <div class="edit-card">
+                        <div class="label-title" style="margin-bottom:10px; font-size:14px;">Review & Edit:</div>
+                        <textarea id="edit-1" class="edit-textarea" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="email-2" class="workspace">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">Mr. Anderson &lt;randerson@school.edu&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">Missing Homework</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Hello,</p>
+                    <p>I noticed that you didn't submit your English homework that was due yesterday.</p>
+                    <p>Is everything okay? I'd like to give you the opportunity to turn it in late, but I need to understand why it wasn't submitted on time.</p>
+                    <p>Please send me a brief explanation and let me know when you can submit the assignment.</p>
+                    <p>Sincerely,<br>Mr. Anderson</p>
+                </div>
+            </div>
+            <div class="editor-view">
+                <div class="editor-toolbar"><div class="label-title"><span class="label-icon"></span>Your Response</div></div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-2" placeholder="Type your email response here..." oninput="updateWordCount(2)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-2">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(2)">Send Email</button>
+                <div id="result-2" class="comparison-view">
+                    <div class="submitted-card"><div class="submitted-header">✓ Sent Successfully</div><div class="submitted-content" id="submitted-content-2"></div></div>
+                    <div class="edit-card"><textarea id="edit-2" class="edit-textarea" disabled></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="email-3" class="workspace">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">School Science Club &lt;scienceclub@school.edu&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">Invitation to Join Our Field Trip</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Dear Student,</p>
+                    <p>The Science Club is organizing a field trip to the Natural History Museum next month. We noticed that you've shown great interest in science classes, and we think you would enjoy this trip.</p>
+                    <p>The trip will take place on Saturday, October 15th. We'll leave school at 9 AM and return by 4 PM. The cost is $15, which includes transportation and museum admission.</p>
+                    <p>If you're interested, please let us know by next Friday and indicate if you would need financial assistance for the trip fee.</p>
+                    <p>Best regards,<br>Science Club Committee</p>
+                </div>
+            </div>
+            <div class="editor-view">
+                <div class="editor-toolbar"><div class="label-title"><span class="label-icon"></span>Your Response</div></div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-3" placeholder="Type your email response here..." oninput="updateWordCount(3)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-3">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(3)">Send Email</button>
+                <div id="result-3" class="comparison-view">
+                    <div class="submitted-card"><div class="submitted-header">✓ Sent Successfully</div><div class="submitted-content" id="submitted-content-3"></div></div>
+                    <div class="edit-card"><textarea id="edit-3" class="edit-textarea" disabled></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="email-4" class="workspace">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">Community Service Coordinator &lt;volunteer@community.org&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">Thank You for Your Volunteer Work</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Hello,</p>
+                    <p>On behalf of the Community Food Bank, I want to thank you for your volunteer work last weekend. Your help in organizing donations was invaluable to our operation.</p>
+                    <p>We're planning another volunteer event next month and would love to have you participate again. This time, we'll be assisting with our weekend food distribution program.</p>
+                    <p>Please let us know if you're available on either November 12th or 19th. Also, could you tell us what motivated you to volunteer with us initially?</p>
+                    <p>Thank you again for your support!</p>
+                    <p>Sincerely,<br>Jane Smith<br>Community Service Coordinator</p>
+                </div>
+            </div>
+            <div class="editor-view">
+                <div class="editor-toolbar"><div class="label-title"><span class="label-icon"></span>Your Response</div></div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-4" placeholder="Type your email response here..." oninput="updateWordCount(4)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-4">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(4)">Send Email</button>
+                <div id="result-4" class="comparison-view">
+                    <div class="submitted-card"><div class="submitted-header">✓ Sent Successfully</div><div class="submitted-content" id="submitted-content-4"></div></div>
+                    <div class="edit-card"><textarea id="edit-4" class="edit-textarea" disabled></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="email-5" class="workspace">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">College Admissions Office &lt;admissions@exampleuniversity.edu&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">Follow-up on Your Application</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Dear Applicant,</p>
+                    <p>Thank you for applying to Example University. We've reviewed your application and are impressed with your academic achievements.</p>
+                    <p>We would like to learn more about your extracurricular activities, particularly your leadership role in the debate team. Could you elaborate on how this experience has shaped your personal development and future goals?</p>
+                    <p>Additionally, your application mentions an interest in our environmental science program. What specific aspects of this field are you most passionate about, and how do you plan to contribute to our campus community?</p>
+                    <p>Please respond within two weeks. We look forward to hearing from you.</p>
+                    <p>Best regards,<br>Admissions Committee<br>Example University</p>
+                </div>
+            </div>
+            <div class="editor-view">
+                <div class="editor-toolbar"><div class="label-title"><span class="label-icon"></span>Your Response</div></div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-5" placeholder="Type your email response here..." oninput="updateWordCount(5)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-5">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(5)">Send Email</button>
+                <div id="result-5" class="comparison-view">
+                    <div class="submitted-card"><div class="submitted-header">✓ Sent Successfully</div><div class="submitted-content" id="submitted-content-5"></div></div>
+                    <div class="edit-card"><textarea id="edit-5" class="edit-textarea" disabled></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="email-6" class="workspace">
+            <div class="email-view">
+                <div class="email-header">
+                    <div class="email-meta-row">
+                        <span class="meta-label">From:</span>
+                        <span class="meta-value">International Student Program &lt;isp@school.edu&gt;</span>
+                    </div>
+                    <div class="email-meta-row">
+                        <span class="meta-label">Subject:</span>
+                        <span class="meta-value highlight">Cultural Exchange Opportunity</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Hello,</p>
+                    <p>Our school has been selected to participate in an international cultural exchange program with a school in Japan. We are looking for students to host visiting students for two weeks in December.</p>
+                    <p>Based on your language skills and cultural sensitivity demonstrated in class, we believe you would be an excellent host. This would involve providing accommodation, meals, and showing the student around our community.</p>
+                    <p>Please let us know if you and your family would be interested in participating. We need to know about any dietary restrictions, allergies, or special considerations we should be aware of.</p>
+                    <p>Could you also share what aspects of your local culture you would most want to showcase to an international visitor?</p>
+                    <p>Sincerely,<br>International Student Program Office</p>
+                </div>
+            </div>
+            <div class="editor-view">
+                <div class="editor-toolbar"><div class="label-title"><span class="label-icon"></span>Your Response</div></div>
+                <div class="textarea-wrapper">
+                    <textarea id="response-6" placeholder="Type your email response here..." oninput="updateWordCount(6)"></textarea>
+                    <div class="word-count-badge">Words: <span id="word-count-6">0</span></div>
+                </div>
+                <button class="submit-btn" onclick="submitResponse(6)">Send Email</button>
+                <div id="result-6" class="comparison-view">
+                    <div class="submitted-card"><div class="submitted-header">✓ Sent Successfully</div><div class="submitted-content" id="submitted-content-6"></div></div>
+                    <div class="edit-card"><textarea id="edit-6" class="edit-textarea" disabled></textarea></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store user responses
+        const userResponses = {
+            1: "", 2: "", 3: "", 4: "", 5: "", 6: ""
+        };
+        
+        // Function to switch between emails
+        function switchEmail(emailNumber) {
+            // Hide all workspaces
+            document.querySelectorAll('.workspace').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Show selected workspace
+            document.getElementById('email-' + emailNumber).classList.add('active');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate the clicked tab (index correction)
+            document.querySelectorAll('.tab')[emailNumber - 1].classList.add('active');
+        }
+        
+        // Function to update word count
+        function updateWordCount(emailNumber) {
+            const textarea = document.getElementById('response-' + emailNumber);
+            const wordCountElement = document.getElementById('word-count-' + emailNumber);
+            const text = textarea.value.trim();
+            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+            
+            wordCountElement.textContent = wordCount;
+            userResponses[emailNumber] = text;
+        }
+        
+        // Function to submit response
+        function submitResponse(emailNumber) {
+            const response = userResponses[emailNumber];
+            
+            if (!response || !response.trim()) {
+                alert("Please write a response before submitting.");
+                return;
+            }
+            
+            // Hide main textarea / Show confirmation
+            // (Optional: You could hide the main textarea here if you want to force editing mode only)
+            
+            // Display the submitted response visually
+            const submittedContent = document.getElementById('submitted-content-' + emailNumber);
+            submittedContent.textContent = response;
+            
+            // Show the result container
+            const resultDiv = document.getElementById('result-' + emailNumber);
+            resultDiv.style.display = 'block';
+            
+            // Enable and populate the edit textarea
+            const editTextarea = document.getElementById('edit-' + emailNumber);
+            editTextarea.value = response;
+            editTextarea.disabled = false;
+            
+            // Scroll to the result
+            resultDiv.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+    </script>
+</body>
+</html>
