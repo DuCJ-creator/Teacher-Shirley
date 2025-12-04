@@ -1105,67 +1105,93 @@
         return (hash % 85) + 1; 
     }
 
-    // 顯示卡片 (加入例句與佳句翻譯)
-    window.openCard = (dateStr) => {
-        const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
-        
-        // 假設 CSV date 是 "MM-DD"
-        let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
-        let quote = "The stars are calling.", author = "Universe";
-        let sentEn = "Keep looking up."; 
-        let sentCn = "保持仰望星空。";
-        let quoteTrans = "群星在召喚。";
+// --- 新增：固定亂數產生器 (請放在 window.openCard 之前) ---
+// 透過日期與 UserID 產生固定的 1~88 數字，確保每天抽到的卡片固定
+function getDailyThemeId(dateStr, userId) {
+    // 如果沒有 userId，就用 'traveler' 當作預設值，避免錯誤
+    const seedStr = dateStr + (userId || "traveler");
+    let hash = 0;
+    for (let i = 0; i < seedStr.length; i++) {
+        const char = seedStr.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; 
+    }
+    const x = Math.sin(hash) * 10000;
+    const randomVal = x - Math.floor(x);
+    // 回傳 1 ~ 88
+    return Math.floor(randomVal * 88) + 1;
+}
 
-        if (csvData && csvData.words) {
-            const queryDate = dateStr.slice(5); // remove YYYY-
-            const wordObj = csvData.words.find(r => r.date === queryDate);
-            const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+// --- 修改後的 window.openCard (已修正 ID) ---
+window.openCard = (dateStr) => {
+    // 1. 取得使用者名稱
+    const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+    
+    // 2. 準備預設文字資料
+    // 假設 CSV date 是 "MM-DD"
+    let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
+    let quote = "The stars are calling.", author = "Universe";
+    let sentEn = "Keep looking up."; 
+    let sentCn = "保持仰望星空。";
+    let quoteTrans = "群星在召喚。";
 
-            if (wordObj) {
-                wotd = wordObj.word || wotd;
-                wotdPos = wordObj.pos || wotdPos;
-                wotdDef = wordObj.meaning || wotdDef;
-                sentEn = wordObj['sentence e'] || sentEn;
-                sentCn = wordObj['sentence c'] || sentCn;
-            }
-            if (quoteObj) {
-                quote = quoteObj['quote e'] || quote;
-                quoteTrans = quoteObj['quote c'] || quoteTrans;
-                author = quoteObj.author || author;
-            }
+    // 3. 從 CSV 讀取當日資料
+    if (csvData && csvData.words) {
+        const queryDate = dateStr.slice(5); // remove YYYY-
+        const wordObj = csvData.words.find(r => r.date === queryDate);
+        const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+
+        if (wordObj) {
+            wotd = wordObj.word || wotd;
+            wotdPos = wordObj.pos || wotdPos;
+            wotdDef = wordObj.meaning || wotdDef;
+            sentEn = wordObj['sentence e'] || sentEn;
+            sentCn = wordObj['sentence c'] || sentCn;
         }
+        if (quoteObj) {
+            quote = quoteObj['quote e'] || quote;
+            quoteTrans = quoteObj['quote c'] || quoteTrans;
+            author = quoteObj.author || author;
+        }
+    }
 
-        const streakDisplay = document.getElementById('streak-days') ? document.getElementById('streak-days').innerText : "0";
+    // --- 新增：設定固定主題 ---
+    // 使用 dateStr 和 uid 計算固定的主題編號
+    const themeNum = getDailyThemeId(dateStr, currentUser ? currentUser.uid : null);
+    
+    const card = document.getElementById('collectible-card');
+    if (card) {
+        // 重置 class 並加上 theme-X (保留 moon-card)
+        card.className = 'moon-card'; 
+        card.classList.add(`theme-${themeNum}`);
+    }
 
-        // 填充資料
-        document.getElementById('card-user-name').innerText = userName;
-        document.getElementById('card-display-date').innerText = dateStr;
-        document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, '');
-        document.getElementById('card-wotd').innerText = wotd;
-        document.getElementById('card-pos').innerText = wotdPos;
-        document.getElementById('card-def').innerText = wotdDef;
-        // 填充例句
-        document.getElementById('card-sent-en').innerText = sentEn;
-        document.getElementById('card-sent-cn').innerText = sentCn;
-        // 填充佳句
-        document.getElementById('card-quote').innerText = `“${quote}”`;
-        document.getElementById('card-quote-trans').innerText = quoteTrans;
-        document.getElementById('card-author').innerText = author;
-        document.getElementById('card-streak').innerText = streakDisplay;
+    // --- 填充資料 (使用檔案中正確的 ID) ---
+    // 使用者與日期
+    if(document.getElementById('card-user-name')) document.getElementById('card-user-name').innerText = userName;
+    if(document.getElementById('card-display-date')) document.getElementById('card-display-date').innerText = dateStr;
+    if(document.getElementById('card-date-serial')) document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, '');
 
-        // 設定模板
-        const cardEl = document.getElementById('collectible-card');
-        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
-        const themeId = getTemplateIdByDate(dateStr);
-        cardEl.classList.add(`theme-${themeId}`);
+    // 單字區
+    if(document.getElementById('card-wotd')) document.getElementById('card-wotd').innerText = wotd;
+    if(document.getElementById('card-pos')) document.getElementById('card-pos').innerText = wotdPos;
+    if(document.getElementById('card-def')) document.getElementById('card-def').innerText = wotdDef;
+    
+    // 例句區
+    if(document.getElementById('card-sent-en')) document.getElementById('card-sent-en').innerText = sentEn;
+    if(document.getElementById('card-sent-cn')) document.getElementById('card-sent-cn').innerText = sentCn;
+    
+    // 金句區
+    if(document.getElementById('card-quote-text')) document.getElementById('card-quote-text').innerText = quote;
+    if(document.getElementById('card-quote-trans')) document.getElementById('card-quote-trans').innerText = quoteTrans;
+    if(document.getElementById('card-quote-author')) document.getElementById('card-quote-author').innerText = author;
 
-        document.getElementById('card-modal').classList.add('active');
-    };
-
-    window.closeCardModal = () => {
-        document.getElementById('card-modal').classList.remove('active');
-    };
-
+    // 顯示模態框
+    const modal = document.getElementById('card-modal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+};
     window.downloadCardImage = () => {
         const cardElement = document.getElementById('collectible-card');
         const btn = document.querySelector('.btn-download');
