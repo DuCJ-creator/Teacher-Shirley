@@ -1479,6 +1479,130 @@ document.addEventListener('DOMContentLoaded', () => {
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
+   /* ==========================================================================
+   【強制修正補丁】請將此段放在 <script> 的最後面，不要放在中間
+   ========================================================================== */
+
+// 1. 強制定義關閉函數 (確保全域可呼叫)
+window.closeCard = function() {
+    const modal = document.getElementById('card-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        // 移除所有可能殘留的行內樣式，避免干擾
+        modal.style.display = ''; 
+    }
+};
+
+// 2. 絕對固定的亂數計算器 (只要日期一樣，算出來的數字絕對一樣)
+function getFixedThemeId(dateStr, userId) {
+    // 確保有預設值
+    const uid = userId || "default_traveler";
+    const seed = dateStr + "_" + uid;
+    
+    // 簡單暴力的加總算法，保證結果固定
+    let sum = 0;
+    for (let i = 0; i < seed.length; i++) {
+        sum += seed.charCodeAt(i);
+    }
+    
+    // 取餘數 (1 ~ 88)
+    return (sum % 88) + 1;
+}
+
+// 3. 覆寫 openCard 主程式
+window.openCard = function(dateStr) {
+    console.log("正在打開卡片，日期：", dateStr); // 除錯用
+
+    // --- A. 準備資料 ---
+    const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+    const uid = currentUser ? currentUser.uid : "guest";
+
+    // 預設值
+    let data = {
+        wotd: "Mystery", wotdPos: "n.", wotdDef: "To explore the unknown.",
+        sentEn: "Keep looking up.", sentCn: "保持仰望星空。",
+        quote: "The stars are calling.", quoteTrans: "群星在召喚。", author: "Universe"
+    };
+
+    // 讀取 CSV
+    if (typeof csvData !== 'undefined' && csvData.words) {
+        // 確保日期格式對應 (如果是 YYYY-MM-DD，取後五碼 MM-DD)
+        const queryDate = dateStr.length > 5 ? dateStr.slice(5) : dateStr;
+        const wordObj = csvData.words.find(r => r.date === queryDate);
+        const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+
+        if (wordObj) {
+            data.wotd = wordObj.word || data.wotd;
+            data.wotdPos = wordObj.pos || data.wotdPos;
+            data.wotdDef = wordObj.meaning || data.wotdDef;
+            data.sentEn = wordObj['sentence e'] || data.sentEn;
+            data.sentCn = wordObj['sentence c'] || data.sentCn;
+        }
+        if (quoteObj) {
+            data.quote = quoteObj['quote e'] || data.quote;
+            data.quoteTrans = quoteObj['quote c'] || data.quoteTrans;
+            data.author = quoteObj.author || data.author;
+        }
+    }
+
+    // --- B. 設定 DOM 文字 (加上安全檢查) ---
+    function setText(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+    }
+
+    setText('card-user-name', userName);
+    setText('card-display-date', dateStr);
+    setText('card-date-serial', dateStr.replace(/-/g, ''));
+    setText('card-wotd', data.wotd);
+    setText('card-pos', data.wotdPos);
+    setText('card-def', data.wotdDef);
+    setText('card-sent-en', data.sentEn);
+    setText('card-sent-cn', data.sentCn);
+    setText('card-quote-text', data.quote);
+    setText('card-quote-trans', data.quoteTrans);
+    setText('card-quote-author', data.author);
+
+    // --- C. 設定卡片樣式 (關鍵修正) ---
+    const card = document.getElementById('collectible-card');
+    if (card) {
+        const themeId = getFixedThemeId(dateStr, uid);
+        console.log("計算出的固定主題 ID:", themeId);
+        
+        // ★ 強制清空所有 class，只重新賦予必要的 ★
+        // 這樣做可以確保不會有舊的 random 樣式殘留
+        card.className = ''; 
+        // 強制重繪 (Reflow) 確保樣式清除
+        void card.offsetWidth; 
+        
+        // 設定新的 class
+        card.className = `moon-card theme-${themeId}`;
+    }
+
+    // --- D. 顯示模態框並強制綁定關閉按鈕 ---
+    const modal = document.getElementById('card-modal');
+    if (modal) {
+        modal.classList.add('active');
+        
+        // ★ 這裡直接抓取關閉按鈕，重新綁定點擊事件 ★
+        // 解決 HTML onclick 失效的問題
+        const closeBtn = modal.querySelector('.close') || modal.querySelector('.modal-close') || document.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.onclick = function(e) {
+                e.preventDefault(); // 防止跳轉
+                e.stopPropagation();
+                window.closeCard();
+            };
+            // 為了保險，加上 addEventListener
+            closeBtn.addEventListener('click', window.closeCard);
+        }
+    }
+};
+
+// 4. 防止頁面載入時日曆點擊無效，重新渲染一次日曆 (如果 renderCalendar 存在)
+if (typeof window.renderCalendar === 'function') {
+    setTimeout(window.renderCalendar, 500);
+}
   </script>
 </body>
 </html>
