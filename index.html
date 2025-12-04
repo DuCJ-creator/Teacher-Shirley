@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
 <head>
@@ -1051,10 +1050,10 @@
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
             <!-- 1. 開始任務 (計時器起點) -->
-            <a href="https://ivocab-quiz.vercel.app/" target="_blank" class="mission-start-btn" onclick="startLunarMission()">
-                <div class="mission-icon">⏱️</div>
-                <div>START MISSION<br><span style="font-size:0.7rem; font-weight:normal; opacity:0.8;">(Min. 2 mins required)</span></div>
-            </a>
+           <a href="https://ivocab-quiz.vercel.app/" target="_blank" class="mission-start-btn" onclick="startLunarMission(event)">
+    <div class="mission-icon">⏱️</div>
+    <div>START MISSION<br><span style="font-size:0.7rem; font-weight:normal; opacity:0.8;">(Min. 2 mins required)</span></div>
+</a>
 
             <!-- 2. 輸入成績 -->
             <div class="lunar-inputs">
@@ -1852,12 +1851,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 1. 開始任務 (紀錄時間)
-function startLunarMission() {
+function startLunarMission(event) {
+    event.preventDefault();
     const now = Date.now();
     sessionStorage.setItem('lunar_start_time', now);
     console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+    const href = event.currentTarget.href;
+    setTimeout(() => {
+        window.open(href, '_blank');
+    }, 300);
 }
-
 // 2. 提交成績
 function submitLunarGlow() {
     // A. 防作弊時間檢查
@@ -1967,10 +1970,11 @@ function updateMoonInterface() {
 // 4. 獎勵卡片功能
 function showRewardCard() {
     const modal = document.getElementById('moon-reward-modal');
-    // 填入使用者名字 (嘗試從卡片獲取，若無則預設)
-    const userName = document.getElementById('cardName') ? document.getElementById('cardName').innerText : "Traveler";
+    let userName = "Traveler";
+    if (typeof currentUser !== 'undefined' && currentUser) {
+        userName = currentUser.displayName || currentUser.email.split('@')[0];
+    }
     document.getElementById('reward-user-name').innerText = userName;
-    
     modal.style.display = 'flex';
 }
 
