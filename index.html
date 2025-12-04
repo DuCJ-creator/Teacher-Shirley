@@ -785,6 +785,15 @@
               <div class="streak-ring"><div class="streak-num" id="streak-days">0</div><div style="font-size:0.7rem;">Days Streak</div></div>
               <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
               <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
+
+              <!-- ✅【最小補丁】卡袋區（不改你原排版，只是接在日曆下面） -->
+              <div style="margin-top:12px; text-align:left;">
+                <div style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:var(--text-light);">
+                  🃏 Card Bag / 卡袋收藏
+                </div>
+                <div id="card-bag-list"></div>
+              </div>
+
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
               <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
@@ -1056,6 +1065,7 @@
             await setDoc(userRef, { email: currentUser.email, history: [], streak: 0, activityLogs: [] }, { merge: true });
         }
         renderCalendar();
+        renderCardBagList(); // ✅【最小補丁】登入時同步渲染卡袋
     }
 
     // --- REWRITTEN CHECK-IN & CALENDAR LOGIC WITH CARDS ---
@@ -1153,9 +1163,9 @@
         document.getElementById('card-author').innerText = author;
         document.getElementById('card-streak').innerText = streakDisplay;
 
-        // 設定模板
+        // ✅【最小補丁】設定模板：移除 1~88 全部 class，避免殘留疊加造成“變動”
         const cardEl = document.getElementById('collectible-card');
-        for(let i=1; i<=11; i++) cardEl.classList.remove(`theme-${i}`);
+        for(let i=1; i<=88; i++) cardEl.classList.remove(`theme-${i}`);
         const themeId = getTemplateIdByDate(dateStr);
         cardEl.classList.add(`theme-${themeId}`);
 
@@ -1237,6 +1247,7 @@
             
             // 重新渲染日曆 (以便更新點擊事件)
             renderCalendar();
+            renderCardBagList(); // ✅【最小補丁】打卡後卡袋立即更新
 
             // ★★★ 自動彈出卡片 ★★★
             setTimeout(() => {
@@ -1279,6 +1290,59 @@
             grid.appendChild(dayEl);
         }
     };
+
+    // ✅【最小補丁】renderCardBagList：卡袋按月份分區
+    function renderCardBagList() {
+        const bag = document.getElementById("card-bag-list");
+        if (!bag) return;
+        bag.innerHTML = "";
+
+        if (!checkinHistory || checkinHistory.length === 0) {
+            bag.innerHTML = `<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>`;
+            return;
+        }
+
+        // 依日期排序（新到舊）
+        const sorted = [...checkinHistory].sort().reverse();
+
+        // 分組：YYYY-MM -> [dates...]
+        const groups = {};
+        sorted.forEach(d => {
+            const ym = d.slice(0,7); // YYYY-MM
+            if (!groups[ym]) groups[ym] = [];
+            groups[ym].push(d);
+        });
+
+        // 渲染每個月份區塊（新到舊）
+        Object.keys(groups).sort().reverse().forEach(ym => {
+            const section = document.createElement("div");
+            section.style.cssText = "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
+
+            const title = document.createElement("div");
+            title.innerText = ym;
+            title.style.cssText = "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
+            section.appendChild(title);
+
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
+
+            groups[ym].forEach(dateStr => {
+                const btn = document.createElement("button");
+                btn.innerText = dateStr.slice(8); // DD
+                btn.style.cssText = `
+                  padding:4px 8px; border-radius:999px; border:1px solid var(--border);
+                  background:var(--surface); color:var(--text); font-size:0.75rem;
+                  cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1);
+                `;
+                btn.title = dateStr;
+                btn.onclick = () => window.openCard(dateStr);
+                row.appendChild(btn);
+            });
+
+            section.appendChild(row);
+            bag.appendChild(section);
+        });
+    }
 
     // --- End of new logic ---
 
