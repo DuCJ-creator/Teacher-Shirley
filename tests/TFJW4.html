@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL Junior - Academic Listening & Writing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- 專屬配色: Brick Red & Warm Grey (Focus & Energy) --- */
+            --primary: #be123c;          /* 磚紅/玫瑰紅 - 主色 */
+            --primary-dark: #881337;     /* 深紅 - 標題/Hover */
+            --primary-light: #ffe4e6;    /* 淺粉 - 背景/選中 */
+            
+            --bg-body: #fafaf9;          /* 暖灰背景 */
+            --surface: #ffffff;          /* 卡片白 */
+            --border: #e7e5e4;           /* 邊框色 */
+            
+            --text-main: #1c1917;        /* 主要文字 */
+            --text-sub: #57534e;         /* 次要文字 */
+            
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-glow: 0 0 15px rgba(190, 18, 60, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            height: 100vh; /* 讓頁面充滿視窗，適合左右分欄 */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 若內容過多，body auto height */
+        @media (min-height: 800px) {
+            body { height: 100vh; overflow: hidden; }
+        }
+        @media (max-height: 799px) {
+            body { height: auto; overflow: auto; }
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Header --- */
+        header {
+            background: linear-gradient(to right, #be123c, #e11d48);
+            color: white;
+            padding: 20px 30px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-icon {
+            background: rgba(255,255,255,0.2);
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .difficulty-tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 3px 10px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* --- Tabs (Horizontal Scroll) --- */
+        .tabs-container {
+            background: #f5f5f4;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-sub);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        /* --- Main Content Area (Split View) --- */
+        .content-wrapper {
+            display: none; /* Controlled by JS */
+            flex-direction: row;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .content-wrapper.active {
+            display: flex;
+        }
+
+        /* --- Left: Media & Script --- */
+        .media-panel {
+            flex: 4; /* 40% width */
+            background: #fcfcfc;
+            border-right: 1px solid var(--border);
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .topic-title {
+            font-family: 'Roboto Slab', serif;
+            font-size: 24px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        /* Styled Player Container */
+        .player-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-card);
+        }
+
+        iframe {
+            width: 100%;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+
+        /* Script Accordion */
+        .script-section {
+            margin-top: 10px;
+        }
+
+        .script-toggle-btn {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .script-toggle-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .script-content {
+            margin-top: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: 'Roboto Slab', serif;
+            line-height: 1.8;
+            color: #444;
+            font-size: 15px;
+            display: none; /* Hidden by default */
+            border-left: 4px solid var(--primary);
+        }
+        
+        .script-content p {
+            margin-bottom: 12px;
+        }
+
+        /* --- Right: Writing --- */
+        .writing-panel {
+            flex: 6; /* 60% width */
+            padding: 30px;
+            background: white;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .editor-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .editor-toolbar {
+            background: #f5f5f4;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-sub);
+        }
+
+        textarea {
+            flex-grow: 1;
+            width: 100%;
+            padding: 25px;
+            border: none;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-main);
+            outline: none;
+            min-height: 300px;
+        }
+
+        .action-row {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(190, 18, 60, 0.2);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-box {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .results-title {
+            color: #166534;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .response-text {
+            white-space: pre-wrap;
+            color: #14532d;
+            font-size: 15px;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body { height: auto; overflow: auto; }
+            .container { height: auto; overflow: visible; }
+            .content-wrapper { flex-direction: column; }
+            .media-panel, .writing-panel { border-right: none; border-bottom: 1px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>
+                    <span class="header-icon">🎧</span> 
+                    TOEFL Junior Task 4
+                </h1>
+            </div>
+            <div class="difficulty-tags">
+                <span class="tag">Academic Listening</span>
+                <span class="tag">Summary Writing</span>
+                <span class="tag">Synthesis</span>
+            </div>
+        </header>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTask(1)">1. Butterfly Cycle</div>
+                <div class="tab" onclick="switchTask(2)">2. Water Cycle</div>
+                <div class="tab" onclick="switchTask(3)">3. Ancient Egypt</div>
+                <div class="tab" onclick="switchTask(4)">4. Climate Change</div>
+                <div class="tab" onclick="switchTask(5)">5. Renewable Energy</div>
+                <div class="tab" onclick="switchTask(6)">6. Brain Memory</div>
+            </div>
+        </div>
+
+        <div id="task-1" class="content-wrapper active">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">The Life Cycle of Butterflies</h2>
+                
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/1OOSnuNu398oF8VwWVTxBkURJwIjBKIf3/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(1)">
+                        <span>👁️ View Transcript</span>
+                    </button>
+                    <div id="script-1" class="script-content">
+                        <p>Butterflies undergo a fascinating transformation process called metamorphosis. This process has four distinct stages: egg, larva, pupa, and adult.</p>
+                        <p>First, the female butterfly lays eggs on plants that will serve as food for the caterpillars. After a few days, the eggs hatch into larvae, commonly known as caterpillars. The caterpillar's main job is to eat and grow. It molts several times as it grows larger.</p>
+                        <p>When the caterpillar is fully grown, it forms a chrysalis or pupa. Inside the pupa, the caterpillar's body undergoes remarkable changes. Tissues and organs break down and reorganize into the body of a butterfly.</p>
+                        <p>Finally, the adult butterfly emerges from the chrysalis. It pumps fluid into its wings to expand them, and after a few hours, it's ready to fly. The adult butterfly will then mate and lay eggs, starting the cycle again.</p>
+                        <p>This entire process can take anywhere from a few weeks to several months, depending on the species and environmental conditions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <span>Summarize the main points</span>
+                        <span id="word-count-1">0 words</span>
+                    </div>
+                    <textarea id="response-1" placeholder="Listen to the passage and write a summary here. Focus on the key stages mentioned..." oninput="updateCount(1)"></textarea>
+                </div>
+                
+                <div class="action-row">
+                    <button class="submit-btn" onclick="submitWork(1)">Submit Summary</button>
+                </div>
+
+                <div id="result-1" class="results-box">
+                    <div class="results-title">✓ Submitted Successfully</div>
+                    <div id="submitted-content-1" class="response-text"></div>
+                    <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #bbf7d0">
+                        <span class="section-label" style="color:#166534">Edit / Revise:</span>
+                        <textarea id="edit-1" style="width:100%; height:100px; padding:10px; border:1px solid #bbf7d0; border-radius:6px; margin-top:5px; font-size:14px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="task-2" class="content-wrapper">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">The Water Cycle</h2>
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/173AV6V6aDnVFKGSp_5spEi7jzHjMxam5/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(2)"><span>👁️ View Transcript</span></button>
+                    <div id="script-2" class="script-content">
+                        <p>The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below the surface of the Earth...</p>
+                        <p>This precipitation collects in bodies of water or infiltrates the ground to become groundwater. Surface water eventually flows back to oceans through rivers and streams, completing the cycle.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar"><span>Summarize the main points</span><span id="word-count-2">0 words</span></div>
+                    <textarea id="response-2" placeholder="Write your summary of the Water Cycle here..." oninput="updateCount(2)"></textarea>
+                </div>
+                <div class="action-row"><button class="submit-btn" onclick="submitWork(2)">Submit Summary</button></div>
+                <div id="result-2" class="results-box"><div class="results-title">✓ Submitted</div><div id="submitted-content-2" class="response-text"></div></div>
+            </div>
+        </div>
+
+        <div id="task-3" class="content-wrapper">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">Ancient Egyptian Civilization</h2>
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/12K3cKvsQBYe3SDUN_YSW0t8HZFbLt9BZ/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(3)"><span>👁️ View Transcript</span></button>
+                    <div id="script-3" class="script-content">
+                        <p>Ancient Egypt was one of the most remarkable civilizations in human history, flourishing for over 3,000 years along the Nile River...</p>
+                        <p>Religion played a central role in Egyptian life. They believed in many gods and goddesses and practiced elaborate burial rituals.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar"><span>Summarize the main points</span><span id="word-count-3">0 words</span></div>
+                    <textarea id="response-3" placeholder="Write your summary regarding Ancient Egypt..." oninput="updateCount(3)"></textarea>
+                </div>
+                <div class="action-row"><button class="submit-btn" onclick="submitWork(3)">Submit Summary</button></div>
+                <div id="result-3" class="results-box"><div class="results-title">✓ Submitted</div><div id="submitted-content-3" class="response-text"></div></div>
+            </div>
+        </div>
+
+        <div id="task-4" class="content-wrapper">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">Climate Change and Its Effects</h2>
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/1y7ifjoYOfDgkCtEelJtqIz5Uky5Otf3L/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(4)"><span>👁️ View Transcript</span></button>
+                    <div id="script-4" class="script-content">
+                         <p>Climate change refers to significant and long-term changes in global weather patterns, primarily caused by human activities...</p>
+                         <p>Addressing climate change requires global cooperation to reduce greenhouse gas emissions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar"><span>Summarize the main points</span><span id="word-count-4">0 words</span></div>
+                    <textarea id="response-4" placeholder="Summarize the causes and effects of climate change..." oninput="updateCount(4)"></textarea>
+                </div>
+                <div class="action-row"><button class="submit-btn" onclick="submitWork(4)">Submit Summary</button></div>
+                <div id="result-4" class="results-box"><div class="results-title">✓ Submitted</div><div id="submitted-content-4" class="response-text"></div></div>
+            </div>
+        </div>
+
+        <div id="task-5" class="content-wrapper">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">Renewable Energy Technologies</h2>
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/1d8s8EN6gWbODpgwPOOO724HliGzNm6UQ/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(5)"><span>👁️ View Transcript</span></button>
+                    <div id="script-5" class="script-content">
+                        <p>Renewable energy technologies harness naturally replenishing resources to generate power, offering sustainable alternatives to fossil fuels...</p>
+                        <p>Despite the progress, challenges remain in integrating intermittent renewable sources into existing power grids.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar"><span>Summarize the main points</span><span id="word-count-5">0 words</span></div>
+                    <textarea id="response-5" placeholder="Discuss the types of renewable energy mentioned..." oninput="updateCount(5)"></textarea>
+                </div>
+                <div class="action-row"><button class="submit-btn" onclick="submitWork(5)">Submit Summary</button></div>
+                <div id="result-5" class="results-box"><div class="results-title">✓ Submitted</div><div id="submitted-content-5" class="response-text"></div></div>
+            </div>
+        </div>
+
+        <div id="task-6" class="content-wrapper">
+            <div class="media-panel">
+                <span class="section-label">Listening Passage</span>
+                <h2 class="topic-title">The Human Brain and Memory</h2>
+                <div class="player-card">
+                    <iframe src="https://drive.google.com/file/d/1uwoF2SAhaWWeTM1YXZS2B542EMIns-UQ/preview?usp=drive_link" frameborder="0" height="80"></iframe>
+                </div>
+                <div class="script-section">
+                    <button class="script-toggle-btn" onclick="toggleScript(6)"><span>👁️ View Transcript</span></button>
+                    <div id="script-6" class="script-content">
+                        <p>The human brain's ability to form, store, and retrieve memories is one of the most complex and fascinating functions...</p>
+                        <p>Memory formation begins with encoding... Consolidation follows encoding... Retrieval involves accessing stored memories.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="writing-panel">
+                <span class="section-label">Your Response</span>
+                <div class="editor-container">
+                    <div class="editor-toolbar"><span>Summarize the main points</span><span id="word-count-6">0 words</span></div>
+                    <textarea id="response-6" placeholder="Explain the process of memory formation described in the lecture..." oninput="updateCount(6)"></textarea>
+                </div>
+                <div class="action-row"><button class="submit-btn" onclick="submitWork(6)">Submit Summary</button></div>
+                <div id="result-6" class="results-box"><div class="results-title">✓ Submitted</div><div id="submitted-content-6" class="response-text"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const responses = {};
+
+        function switchTask(id) {
+            document.querySelectorAll('.content-wrapper').forEach(el => el.classList.remove('active'));
+            document.getElementById(`task-${id}`).classList.add('active');
+            
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                if(index + 1 === id) tab.classList.add('active');
+                else tab.classList.remove('active');
+            });
+        }
+
+        function toggleScript(id) {
+            const scriptDiv = document.getElementById(`script-${id}`);
+            const btn = document.querySelector(`#task-${id} .script-toggle-btn span`);
+            
+            if (scriptDiv.style.display === 'block') {
+                scriptDiv.style.display = 'none';
+                btn.textContent = '👁️ View Transcript';
+            } else {
+                scriptDiv.style.display = 'block';
+                btn.textContent = '🙈 Hide Transcript';
+                scriptDiv.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            }
+        }
+
+        function updateCount(id) {
+            const text = document.getElementById(`response-${id}`).value;
+            const count = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            document.getElementById(`word-count-${id}`).textContent = `${count} words`;
+            responses[id] = text;
+        }
+
+        function submitWork(id) {
+            const text = responses[id];
+            if (!text || text.trim() === '') {
+                alert("Please write your response before submitting.");
+                return;
+            }
+
+            const resultBox = document.getElementById(`result-${id}`);
+            const content = document.getElementById(`submitted-content-${id}`);
+            const editArea = document.getElementById(`edit-${id}`);
+
+            content.textContent = text;
+            editArea.value = text;
+            resultBox.style.display = 'block';
+            
+            resultBox.scrollIntoView({behavior: 'smooth'});
+        }
+
+        // Initialize
+        window.onload = function() {
+            switchTask(1);
+        };
+    </script>
+</body>
+</html>
