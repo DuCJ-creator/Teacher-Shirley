@@ -1104,37 +1104,100 @@
         // 使用 (hash % 85) + 1 確保範圍是 1~85
         return (hash % 85) + 1; 
     }
-
+   
+// --- 新增：固定亂數產生器 ---
+function getDailyThemeId(dateStr, userId) {
+    // 將日期與使用者ID結合當作種子
+    const seedStr = dateStr + (userId || "traveler");
+    let hash = 0;
+    
+    // 簡單的雜湊演算法 (Hash function)
+    for (let i = 0; i < seedStr.length; i++) {
+        const char = seedStr.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    // 使用雜湊值產生偽隨機數 (Pseudo-random)
+    const x = Math.sin(hash) * 10000;
+    const randomVal = x - Math.floor(x);
+    
+    // 假設總共有 88 款主題 (根據您程式碼註解)
+    // 回傳 1 ~ 88 之間的固定數字
+    return Math.floor(randomVal * 88) + 1;
+}
+   
     // 顯示卡片 (加入例句與佳句翻譯)
-    window.openCard = (dateStr) => {
-        const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
-        
-        // 假設 CSV date 是 "MM-DD"
-        let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
-        let quote = "The stars are calling.", author = "Universe";
-        let sentEn = "Keep looking up."; 
-        let sentCn = "保持仰望星空。";
-        let quoteTrans = "群星在召喚。";
+   window.openCard = (dateStr) => {
+    // 1. 準備使用者資料
+    const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+    
+    // 2. 準備預設文字資料 (您原本的寫法)
+    // 假設 CSV date 是 "MM-DD"
+    let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
+    let quote = "The stars are calling.", author = "Universe";
+    let sentEn = "Keep looking up."; 
+    let sentCn = "保持仰望星空。";
+    let quoteTrans = "群星在召喚。";
 
-        if (csvData && csvData.words) {
-            const queryDate = dateStr.slice(5); // remove YYYY-
-            const wordObj = csvData.words.find(r => r.date === queryDate);
-            const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+    // 3. 從 CSV 讀取當日資料 (您原本的寫法)
+    if (csvData && csvData.words) {
+        const queryDate = dateStr.slice(5); // remove YYYY-
+        const wordObj = csvData.words.find(r => r.date === queryDate);
+        const quoteObj = csvData.quotes.find(r => r.date === queryDate);
 
-            if (wordObj) {
-                wotd = wordObj.word || wotd;
-                wotdPos = wordObj.pos || wotdPos;
-                wotdDef = wordObj.meaning || wotdDef;
-                sentEn = wordObj['sentence e'] || sentEn;
-                sentCn = wordObj['sentence c'] || sentCn;
-            }
-            if (quoteObj) {
-                quote = quoteObj['quote e'] || quote;
-                quoteTrans = quoteObj['quote c'] || quoteTrans;
-                author = quoteObj.author || author;
-            }
+        if (wordObj) {
+            wotd = wordObj.word || wotd;
+            wotdPos = wordObj.pos || wotdPos;
+            wotdDef = wordObj.meaning || wotdDef;
+            sentEn = wordObj['sentence e'] || sentEn;
+            sentCn = wordObj['sentence c'] || sentCn;
         }
+        if (quoteObj) {
+            quote = quoteObj['quote e'] || quote;
+            quoteTrans = quoteObj['quote c'] || quoteTrans;
+            author = quoteObj.author || author;
+        }
+    }
 
+    // --- 以下為新增與修改的關鍵部分 ---
+
+    // 4. 計算固定主題樣式 (Key Fix)
+    // 使用 dateStr 和 uid 作為種子，確保同一天同一人抽到的卡片樣式固定
+    const themeNum = getDailyThemeId(dateStr, currentUser ? currentUser.uid : null);
+
+    // 5. 更新卡片樣式 (Class)
+    const card = document.getElementById('collectible-card');
+    if (card) {
+        // 重置 class 並加上固定的 theme-X
+        card.className = 'moon-card'; 
+        card.classList.add(`theme-${themeNum}`);
+    }
+
+    // 6. 將文字填入 HTML (更新 DOM)
+    // 這裡補上了原本省略的畫面更新邏輯，請確認 HTML ID 是否對應
+    document.getElementById('card-date').innerText = dateStr;
+    document.getElementById('card-user').innerText = userName;
+
+    // 單字區
+    document.getElementById('wotd-word').innerText = wotd;
+    document.getElementById('wotd-pos').innerText = wotdPos;
+    document.getElementById('wotd-def').innerText = wotdDef;
+    
+    // 例句區
+    document.getElementById('sentence-en').innerText = sentEn;
+    document.getElementById('sentence-cn').innerText = sentCn;
+    
+    // 金句區
+    document.getElementById('quote-en').innerText = quote;
+    document.getElementById('quote-cn').innerText = quoteTrans; // 對應 quoteTrans
+    document.getElementById('quote-author').innerText = author;
+
+    // 7. 顯示模態框
+    const modal = document.getElementById('card-modal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+};
         const streakDisplay = document.getElementById('streak-days') ? document.getElementById('streak-days').innerText : "0";
 
         // 填充資料
