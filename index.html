@@ -74,34 +74,6 @@
     .dark .main-title { color: #ffffff; text-shadow: 0 0 25px rgba(241, 196, 15, 0.5); }
     .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
 
-    /* === 把這段加入到 CSS 區域 === */
-
-/* 設定輸入框字體變大、顯眼 */
-#moon-level, #moon-unit, #moon-correct, #moon-wrong {
-    font-size: 1.5rem !important; /* 字體加大 */
-    font-weight: 800;             /* 字體加粗 */
-    color: #ffd700;               /* 金色文字 */
-    background: rgba(0, 0, 0, 0.5);
-    text-align: center;
-    height: 3rem;
-    border: 2px solid #555;
-    transition: all 0.3s;
-}
-
-/* 鎖定時的樣子 */
-#moon-level:disabled, #moon-unit:disabled, #moon-correct:disabled, #moon-wrong:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: rgba(0, 0, 0, 0.7);
-}
-
-/* 計時器樣式 */
-#mission-timer {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 1.4rem;
-    text-shadow: 0 0 5px rgba(0,0,0,0.8);
-}
-    
     /* ==================== UNIVERSE VIEW ==================== */
     #universe-view { 
         display: none; opacity: 0; transition: opacity 0.8s ease; 
@@ -1100,19 +1072,17 @@
                     <input type="number" class="lunar-field" id="moon-wrong" min="0">
                 </div>
             </div>
-          
-          <div id="mission-timer" style="display:none; width:100%; text-align:center; margin: 10px 0; font-weight:bold; color: #ff6b6b;"></div>
+<div id="mission-timer" style="display:none; width:100%; text-align:center; margin: 10px 0; font-weight:bold; color: #ff6b6b; font-family: sans-serif;"></div>
 
 <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-    <button onclick="startLunarMission()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background: #3498db; color: white; border: none; border-radius: 5px;">
+    <button type="button" onclick="window.startLunarMission()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 1rem;">
         Start Mission
     </button>
     
-    <button onclick="collectMoonlight()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background: #ffd700; color: #333; border: none; border-radius: 5px;">
+    <button type="button" onclick="window.collectMoonlight()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background: #ffd700; color: #333; border: none; border-radius: 5px; font-size: 1rem;">
         Collect Moonlight
     </button>
 </div>
-
             <!-- 3. 提交按鈕 -->
             <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
         </div>
@@ -1266,7 +1236,22 @@
           </div>
       </div>
   </div>
-
+/* === 2. 樣式區域 === */
+#moon-level, #moon-unit, #moon-correct, #moon-wrong {
+    font-size: 1.5rem !important;
+    font-weight: 800;
+    color: #ffd700;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    height: 3rem;
+    border: 2px solid #555;
+    transition: all 0.3s;
+}
+#moon-level:disabled, #moon-unit:disabled, #moon-correct:disabled, #moon-wrong:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.7);
+}
   <div id="print-selection-modal">
     <div class="print-modal-content">
         <div class="print-modal-header">Select Records to Print</div>
@@ -2031,137 +2016,136 @@ function downloadRewardCard() {
         link.click();
     });
 }
-   /* === 請將此段 JavaScript 貼在檔案最末端的 </script> 之前 === */
-
-// 全局變數：用來儲存倒數計時器
-let missionInterval = null;
-
-// --- 功能 1：開始任務 (Start Mission) ---
-function startLunarMission() {
-    const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-    const timerDisplay = document.getElementById('mission-timer');
-    
-    // 1. 鎖定輸入框
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) {
-            el.value = '';        // 清空舊數值
-            el.disabled = true;   // 鎖定
-            el.placeholder = "冷卻中..."; 
-        }
-    });
-
-    // 2. 顯示計時器
-    if(timerDisplay) {
-        timerDisplay.style.display = 'block';
-        timerDisplay.innerText = "⏳ 任務準備中...";
-        timerDisplay.style.color = '#ff6b6b'; 
-    }
-
-    // 3. 設定 2 分鐘 (120秒) 倒數
-    let timeLeft = 120; 
-    
-    // 清除舊的計時，防止重疊
-    if(missionInterval) clearInterval(missionInterval);
-
-    // 開始倒數
-    missionInterval = setInterval(() => {
-        const m = Math.floor(timeLeft / 60);
-        const s = timeLeft % 60;
-        const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
-        
-        if(timerDisplay) {
-            // 顯示剩餘時間
-            timerDisplay.innerText = `⏳ 冷卻中 (Wait): ${timeStr}`;
-        }
-        
-        // 時間到：解鎖
-        if (timeLeft <= 0) {
-            clearInterval(missionInterval);
-            enableMissionInputs(); 
-        }
-        timeLeft--;
-    }, 1000);
-}
-
-// --- 輔助功能：解鎖輸入 (時間到自動執行) ---
-function enableMissionInputs() {
-    const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) {
-            el.disabled = false; // 解鎖
-            el.placeholder = ""; 
-        }
-    });
-
-    const timerDisplay = document.getElementById('mission-timer');
-    if(timerDisplay) {
-        timerDisplay.innerText = "🚀 系統就緒！請輸入數據 (Ready)";
-        timerDisplay.style.color = "#2ecc71"; // 變綠色
-    }
-}
-
-// --- 功能 2：收集數據 (Collect Moonlight) ---
-function collectMoonlight() {
-    const correctEl = document.getElementById('moon-correct');
-    
-    // 1. 檢查是否處於解鎖狀態
-    if (!correctEl || correctEl.disabled) {
-        alert("⚠️ 系統尚未就緒！請先點擊 'Start Mission' 並等待 2 分鐘。");
-        return;
-    }
-
-    // 2. 獲取數值
-    const wrongEl = document.getElementById('moon-wrong');
-    const levelEl = document.getElementById('moon-level');
-    const unitEl = document.getElementById('moon-unit');
-
-    let correctVal = parseInt(correctEl.value);
-    let wrongVal = parseInt(wrongEl.value);
-
-    // 3. 驗證：檢查是否為數字
-    if (isNaN(correctVal) || isNaN(wrongVal)) {
-        alert("❌ 請輸入有效的數字！");
-        return;
-    }
-
-    // 4. 驗證：Correct 不能超過 30
-    if (correctVal > 30) {
-        alert("❌ Correct 值最高不能超過 30！");
-        return;
-    }
-    if (correctVal < 0 || wrongVal < 0) {
-         alert("❌ 數值不能為負數！");
-         return;
-    }
-
-    // 5. 儲存數據 (原有邏輯)
-    let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
-    currentTotal += correctVal; // 獲得量 = Correct 數值
-    localStorage.setItem('shirley_total_moonlight', currentTotal);
-
-    // 6. 成功提示
-    alert(`✨ 成功收集月光！ (獲得: ${correctVal})`);
-    
-    // 更新介面 (如果有的話)
-    if(typeof updateMoonInterface === 'function') {
-        updateMoonInterface();
-    }
-
-    // 7. 完成後：重新鎖定輸入框
-    [levelEl, unitEl, correctEl, wrongEl].forEach(el => {
-        el.value = '';
-        el.disabled = true;
-        el.placeholder = "請重新 Start";
-    });
-
-    const timerDisplay = document.getElementById('mission-timer');
-    if(timerDisplay) {
-        timerDisplay.innerText = "✅ 數據已上傳。請重新 Start Mission。";
-        timerDisplay.style.color = "#ffd700";
-    }
-}
   </script>
+  <script>
+(function() {
+    // 使用立即執行函數避免變數衝突，並掛載到 window 確保按鈕找得到
+    
+    let missionInterval = null;
+
+    // --- Start Mission 功能 ---
+    window.startLunarMission = function() {
+        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
+        const timerDisplay = document.getElementById('mission-timer');
+        
+        // 鎖定輸入
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.value = '';
+                el.disabled = true;
+                el.placeholder = "等待冷卻...";
+            }
+        });
+
+        // 顯示倒數計時器
+        if(timerDisplay) {
+            timerDisplay.style.display = 'block';
+            timerDisplay.style.color = '#ff6b6b';
+            timerDisplay.innerText = "⏳ 任務準備中...";
+        }
+
+        // 設定 120 秒 (2分鐘)
+        let timeLeft = 120;
+        
+        if(missionInterval) clearInterval(missionInterval);
+
+        missionInterval = setInterval(() => {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
+            
+            if(timerDisplay) {
+                timerDisplay.innerText = `⏳ 冷卻中 (Wait): ${timeStr}`;
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(missionInterval);
+                window.enableMissionInputs();
+            }
+            timeLeft--;
+        }, 1000);
+    };
+
+    // --- 解鎖功能 ---
+    window.enableMissionInputs = function() {
+        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.disabled = false;
+                el.placeholder = "";
+            }
+        });
+
+        const timerDisplay = document.getElementById('mission-timer');
+        if(timerDisplay) {
+            timerDisplay.innerText = "🚀 系統就緒！請輸入數據 (Ready)";
+            timerDisplay.style.color = "#2ecc71";
+        }
+    };
+
+    // --- Collect 功能 ---
+    window.collectMoonlight = function() {
+        const correctEl = document.getElementById('moon-correct');
+        const wrongEl = document.getElementById('moon-wrong');
+        const levelEl = document.getElementById('moon-level');
+        const unitEl = document.getElementById('moon-unit');
+        const timerDisplay = document.getElementById('mission-timer');
+
+        // 檢查是否鎖定中
+        if (!correctEl || correctEl.disabled) {
+            alert("⚠️ 系統尚未就緒！請先點擊 'Start Mission' 並等待 2 分鐘。");
+            return;
+        }
+
+        let correctVal = parseInt(correctEl.value);
+        let wrongVal = parseInt(wrongEl.value);
+
+        // 驗證輸入
+        if (isNaN(correctVal) || isNaN(wrongVal)) {
+            alert("❌ 請輸入有效的數字！");
+            return;
+        }
+        if (correctVal > 30) {
+            alert("❌ Correct 值最高不能超過 30！");
+            return;
+        }
+        if (correctVal < 0 || wrongVal < 0) {
+             alert("❌ 數值不能為負數！");
+             return;
+        }
+
+        // 計算與儲存
+        let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
+        currentTotal += correctVal;
+        localStorage.setItem('shirley_total_moonlight', currentTotal);
+
+        // 成功提示
+        alert(`✨ 成功收集月光！ (獲得: ${correctVal})`);
+        
+        // 嘗試更新介面 (若原程式有此函數)
+        if(typeof updateMoonInterface === 'function') {
+            updateMoonInterface();
+        } else {
+             // 若無更新函數，手動重新載入頁面以顯示新數據(可選)
+             // location.reload(); 
+        }
+
+        // 重新鎖定
+        [levelEl, unitEl, correctEl, wrongEl].forEach(el => {
+            el.value = '';
+            el.disabled = true;
+            el.placeholder = "請重新 Start";
+        });
+
+        if(timerDisplay) {
+            timerDisplay.innerText = "✅ 數據已上傳。請重新 Start Mission。";
+            timerDisplay.style.color = "#ffd700";
+        }
+    };
+
+})();
+</script>
 </body>
 </html>
