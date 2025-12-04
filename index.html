@@ -2017,10 +2017,8 @@ function downloadRewardCard() {
     });
 }
   </script>
-  <script>
+ <script>
 (function() {
-    // 使用立即執行函數避免變數衝突，並掛載到 window 確保按鈕找得到
-    
     let missionInterval = null;
 
     // --- Start Mission 功能 ---
@@ -2028,7 +2026,6 @@ function downloadRewardCard() {
         const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
         const timerDisplay = document.getElementById('mission-timer');
         
-        // 鎖定輸入
         inputs.forEach(id => {
             const el = document.getElementById(id);
             if(el) {
@@ -2038,15 +2035,13 @@ function downloadRewardCard() {
             }
         });
 
-        // 顯示倒數計時器
         if(timerDisplay) {
             timerDisplay.style.display = 'block';
             timerDisplay.style.color = '#ff6b6b';
             timerDisplay.innerText = "⏳ 任務準備中...";
         }
 
-        // 設定 120 秒 (2分鐘)
-        let timeLeft = 120;
+        let timeLeft = 120; // 2分鐘倒數
         
         if(missionInterval) clearInterval(missionInterval);
 
@@ -2085,15 +2080,12 @@ function downloadRewardCard() {
         }
     };
 
-    // --- Collect 功能 ---
+    // --- Collect 功能 (含修正) ---
     window.collectMoonlight = function() {
         const correctEl = document.getElementById('moon-correct');
         const wrongEl = document.getElementById('moon-wrong');
-        const levelEl = document.getElementById('moon-level');
-        const unitEl = document.getElementById('moon-unit');
-        const timerDisplay = document.getElementById('mission-timer');
-
-        // 檢查是否鎖定中
+        
+        // 檢查鎖定
         if (!correctEl || correctEl.disabled) {
             alert("⚠️ 系統尚未就緒！請先點擊 'Start Mission' 並等待 2 分鐘。");
             return;
@@ -2102,7 +2094,7 @@ function downloadRewardCard() {
         let correctVal = parseInt(correctEl.value);
         let wrongVal = parseInt(wrongEl.value);
 
-        // 驗證輸入
+        // 驗證
         if (isNaN(correctVal) || isNaN(wrongVal)) {
             alert("❌ 請輸入有效的數字！");
             return;
@@ -2116,7 +2108,8 @@ function downloadRewardCard() {
              return;
         }
 
-        // 計算與儲存
+        // 儲存數據
+        // 注意：這裡假設您的總分變數名稱是 'shirley_total_moonlight'
         let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
         currentTotal += correctVal;
         localStorage.setItem('shirley_total_moonlight', currentTotal);
@@ -2124,27 +2117,9 @@ function downloadRewardCard() {
         // 成功提示
         alert(`✨ 成功收集月光！ (獲得: ${correctVal})`);
         
-        // 嘗試更新介面 (若原程式有此函數)
-        if(typeof updateMoonInterface === 'function') {
-            updateMoonInterface();
-        } else {
-             // 若無更新函數，手動重新載入頁面以顯示新數據(可選)
-             // location.reload(); 
-        }
-
-        // 重新鎖定
-        [levelEl, unitEl, correctEl, wrongEl].forEach(el => {
-            el.value = '';
-            el.disabled = true;
-            el.placeholder = "請重新 Start";
-        });
-
-        if(timerDisplay) {
-            timerDisplay.innerText = "✅ 數據已上傳。請重新 Start Mission。";
-            timerDisplay.style.color = "#ffd700";
-        }
+        // 【關鍵修正】：重新整理頁面以更新 Current Thread 顯示
+        location.reload();
     };
-
 })();
 </script>
 </body>
