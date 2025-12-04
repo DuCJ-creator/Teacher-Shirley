@@ -2000,9 +2000,9 @@ function downloadRewardCard() {
         link.click();
     });
 }
- /* ===== Lunar Glow Cache v3 Patch ===== */
+ /* ===== Lunar Glow Cache v3.1 SAFE Patch ===== */
 (() => {
-  const GATE_SEC = 120; // 2 mins
+  const GATE_SEC = 120;
   const LS_KEY = "lunarMissionStartAt";
 
   let lunarMissionStartAt = Number(localStorage.getItem(LS_KEY)) || null;
@@ -2016,12 +2016,9 @@ function downloadRewardCard() {
   }
 
   function findStartBtn() {
-    // 盡量寬鬆找：class / text 都支援
-    const candidates = [
-      ...document.querySelectorAll("button, .btn, .lunar-start-btn")
-    ];
+    const candidates = [...document.querySelectorAll("button, .btn, .lunar-start-btn")];
     return candidates.find(el => {
-      const t = (el.innerText || "").toUpperCase();
+      const t = (el.innerText || "").trim().toUpperCase();
       return t.includes("START MISSION") || t === "START" || el.classList.contains("lunar-start-btn");
     });
   }
@@ -2055,7 +2052,6 @@ function downloadRewardCard() {
 
     if (!lunarMissionStartAt) {
       collectBtn.disabled = true;
-      collectBtn.style.pointerEvents = "none";
       collectBtn.innerText = "Collect Moonlight";
       hint.innerText = "Please click START to begin the mission.\nCollect unlocks after 2 minutes.";
       return;
@@ -2063,12 +2059,10 @@ function downloadRewardCard() {
 
     if (remain <= 0) {
       collectBtn.disabled = false;
-      collectBtn.style.pointerEvents = "auto";
       collectBtn.innerText = "Collect Moonlight";
       hint.innerText = "✅ Mission complete. You can collect now!";
     } else {
       collectBtn.disabled = true;
-      collectBtn.style.pointerEvents = "none";
       collectBtn.innerText = `Wait ${remain}s...`;
       hint.innerText = `⏳ Mission in progress…\nCollect unlocks in ${remain} seconds.`;
     }
@@ -2078,7 +2072,7 @@ function downloadRewardCard() {
     lunarMissionStartAt = nowSec();
     localStorage.setItem(LS_KEY, String(lunarMissionStartAt));
     updateCollectBtnState();
-    console.log("[LunarPatch] Mission started at", lunarMissionStartAt);
+    console.log("[LunarPatch] Mission started", lunarMissionStartAt);
   }
 
   function resetMission() {
@@ -2088,45 +2082,50 @@ function downloadRewardCard() {
     console.log("[LunarPatch] Mission reset");
   }
 
-  // 事件代理：不管 DOM 怎麼重畫都抓得到 Start / Collect
-  document.addEventListener("click", (e) => {
-    const el = e.target.closest("button, .btn, .lunar-start-btn, .lunar-submit-btn");
-    if (!el) return;
+  // 只綁定兩顆按鈕，不碰全站 click
+  let boundStart = null;
+  let boundCollect = null;
 
-    const text = (el.innerText || "").toUpperCase();
+  function bindButtons() {
+    const startBtn = findStartBtn();
+    const collectBtn = findCollectBtn();
 
-    // 按 START
-    if (text.includes("START MISSION") || text === "START" || el.classList.contains("lunar-start-btn")) {
-      startMission();
-      return;
+    if (startBtn && startBtn !== boundStart) {
+      boundStart = startBtn;
+      startBtn.addEventListener("click", () => {
+        startMission();
+      });
     }
 
-    // 按 COLLECT（但還沒到）
-    if (text.includes("COLLECT")) {
-      const remain = getGateRemainingSec();
-      if (remain > 0) {
-        e.preventDefault();
-        e.stopPropagation();
-        alert(`Still charging moonlight… wait ${remain}s.`);
-        return;
-      } else {
+    if (collectBtn && collectBtn !== boundCollect) {
+      boundCollect = collectBtn;
+      collectBtn.addEventListener("click", (e) => {
+        const remain = getGateRemainingSec();
+        if (remain > 0) {
+          e.preventDefault();
+          e.stopPropagation();
+          // 不用 alert，避免卡 UI
+          collectBtn.classList.add("shake");
+          setTimeout(() => collectBtn.classList.remove("shake"), 300);
+          return;
+        }
         // 到了才允許原行為，並 reset
         setTimeout(resetMission, 0);
-      }
+      });
     }
-  }, true);
+  }
 
-  // 每秒更新一次倒數
-  setInterval(updateCollectBtnState, 1000);
+  // 每秒更新一次 + 重新綁定（避免 SPA 重畫失效）
+  setInterval(() => {
+    bindButtons();
+    updateCollectBtnState();
+  }, 1000);
 
-  // DOM 變動時也 обнов一次（怕 SPA 重畫）
-  const mo = new MutationObserver(updateCollectBtnState);
-  mo.observe(document.body, { childList: true, subtree: true });
-
-  // 初始跑一次
+  // 初始立刻跑
+  bindButtons();
   updateCollectBtnState();
 
-  console.log("[LunarPatch] v3 loaded");
+  console.log("[LunarPatch] v3.1 SAFE loaded");
 })();
   </script>
 </body>
