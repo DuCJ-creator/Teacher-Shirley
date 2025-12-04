@@ -648,6 +648,96 @@
         background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
         font-size: 1.2rem;
     }
+    /* --- 月壤收集站專用樣式 (Moon Dust Collector) --- */
+.moon-dust-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+}
+
+.quiz-link-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+    transition: transform 0.2s;
+    font-family: 'Exo 2', sans-serif;
+}
+.quiz-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+}
+
+.dust-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.dust-input-group label {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+    font-family: 'Exo 2';
+}
+
+.dust-input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-align: center;
+    font-family: 'Exo 2';
+    outline: none;
+}
+.dust-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.2);
+}
+
+.dust-result-box {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+.dark .dust-result-box { background: rgba(0,0,0,0.3); }
+
+.dust-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.dust-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.5s ease;
+}
+.dust-progress-fill.capped {
+    background: #e74c3c; /* Red when capped */
+}
+.cap-warning {
+    color: #e74c3c;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-top: 5px;
+    display: none;
+}
   </style>
 </head>
 <body>
@@ -797,6 +887,64 @@
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
               <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
+
+        <!-- 將此代碼插入到 Check-in 按鈕下方 -->
+
+<div class="moon-dust-section">
+    <!-- 1. 前往測驗的按鈕 -->
+    <a href="https://ivocab-quiz.vercel.app/" target="_blank" class="quiz-link-btn">
+        🚀 前往月壤收集站 (Start Quiz)
+    </a>
+
+    <!-- 2. 成績計算器 -->
+    <h4 style="font-family: 'Cinzel Decorative'; margin-bottom: 15px; color: var(--accent); text-align: center;">
+        Mission Report
+    </h4>
+    
+    <!-- Level / Unit -->
+    <div class="dust-calc-grid">
+        <div class="dust-input-group">
+            <label>Level</label>
+            <input type="text" class="dust-input" placeholder="A1" id="md-level">
+        </div>
+        <div class="dust-input-group">
+            <label>Unit</label>
+            <input type="text" class="dust-input" placeholder="U1" id="md-unit">
+        </div>
+    </div>
+
+    <!-- Correct / Wrong -->
+    <div class="dust-calc-grid">
+        <div class="dust-input-group">
+            <label style="color: #2ecc71;">Correct</label>
+            <input type="number" class="dust-input" value="0" min="0" id="md-correct">
+        </div>
+        <div class="dust-input-group">
+            <label style="color: #e74c3c;">Wrong</label>
+            <input type="number" class="dust-input" value="0" min="0" id="md-wrong">
+        </div>
+    </div>
+
+    <!-- 結果顯示 -->
+    <div class="dust-result-box">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="text-align: left;">
+                <span style="font-size: 0.8rem; opacity: 0.7;">Gold Acquired</span><br>
+                <span id="md-gold-display" style="font-size: 1.8rem; font-weight: bold; color: var(--accent);">0</span>
+                <span style="font-size: 0.8rem;">/ 30g</span>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 0.8rem; opacity: 0.7;">Accuracy</span><br>
+                <span id="md-acc-display" style="font-size: 1.2rem; font-weight: bold;">0%</span>
+            </div>
+        </div>
+        
+        <div class="dust-progress-bar">
+            <div id="md-progress-fill" class="dust-progress-fill"></div>
+        </div>
+        <div id="md-cap-warning" class="cap-warning">⚠️ STORAGE FULL (上限 30g)</div>
+    </div>
+</div>
           <div class="content-panel">
               <div class="data-card word-card">
                   <span style="font-size:0.7rem; text-transform:uppercase; color:var(--text-light); letter-spacing:1px;">Word of the Day <span id="word-date"></span></span>
@@ -1486,6 +1634,62 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
+   /* --- Moon Dust Calculator Logic --- */
+document.addEventListener('DOMContentLoaded', () => {
+    const correctInput = document.getElementById('md-correct');
+    const wrongInput = document.getElementById('md-wrong');
+    const goldDisplay = document.getElementById('md-gold-display');
+    const accDisplay = document.getElementById('md-acc-display');
+    const progressFill = document.getElementById('md-progress-fill');
+    const capWarning = document.getElementById('md-cap-warning');
+    
+    const CAP_LIMIT = 30; // 上限 30g
+
+    function updateMoonDust() {
+        const correct = parseInt(correctInput.value) || 0;
+        const wrong = parseInt(wrongInput.value) || 0;
+        const total = correct + wrong;
+
+        // 1. 計算正確率
+        let accuracy = 0;
+        if (total > 0) {
+            accuracy = Math.round((correct / total) * 100);
+        }
+
+        // 2. 計算金幣 (1題 = 1g, 上限30)
+        let rawGold = correct; 
+        let finalGold = Math.min(rawGold, CAP_LIMIT);
+        let isCapped = rawGold >= CAP_LIMIT;
+
+        // 3. 更新介面
+        goldDisplay.innerText = finalGold;
+        accDisplay.innerText = accuracy + "%";
+
+        // 正確率顏色
+        if(accuracy >= 80) accDisplay.style.color = "#2ecc71"; // Green
+        else if(accuracy >= 60) accDisplay.style.color = "#f1c40f"; // Yellow
+        else accDisplay.style.color = "#e74c3c"; // Red
+
+        // 進度條
+        const percent = (finalGold / CAP_LIMIT) * 100;
+        progressFill.style.width = percent + "%";
+
+        // 上限警告
+        if(isCapped) {
+            progressFill.classList.add('capped');
+            capWarning.style.display = "block";
+        } else {
+            progressFill.classList.remove('capped');
+            capWarning.style.display = "none";
+        }
+    }
+
+    // 綁定輸入事件
+    if(correctInput && wrongInput) {
+        correctInput.addEventListener('input', updateMoonDust);
+        wrongInput.addEventListener('input', updateMoonDust);
+    }
+});
   </script>
 </body>
 </html>
