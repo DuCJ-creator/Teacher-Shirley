@@ -1036,8 +1036,6 @@
       </div>
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
-  <!-- 原本的 member-dashboard 結束標籤 -->
-    </div> 
 
     <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
     <div class="lunar-cache-container">
@@ -1971,8 +1969,10 @@ function updateMoonInterface() {
 function showRewardCard() {
     const modal = document.getElementById('moon-reward-modal');
     let userName = "Traveler";
-    if (typeof currentUser !== 'undefined' && currentUser) {
-        userName = currentUser.displayName || currentUser.email.split('@')[0];
+    if (currentUser && currentUser.displayName) {
+        userName = currentUser.displayName;
+    } else if (currentUser && currentUser.email) {
+        userName = currentUser.email.split('@')[0];
     }
     document.getElementById('reward-user-name').innerText = userName;
     modal.style.display = 'flex';
