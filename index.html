@@ -2000,88 +2000,134 @@ function downloadRewardCard() {
         link.click();
     });
 }
-   // ======================================================================
-// ✅ PATCH START: Lunar Mission 2-min Gate + Correct/Wrong <= 30
-//   - Insert near the END of <script type="module">, before </script>
+  // ======================================================================
+// ✅ PATCH v2: works with <script type="module">
+//   - Intercept button clicks directly (no need to override window funcs)
+//   - 2-min gate after START, reset after every successful COLLECT
+//   - Correct+Wrong <= 30 live cap + submit guard
 // ======================================================================
 
-// --- 2-minute gate state (per session) ---
-let lunarMissionStartAt = null;     // timestamp (ms)
-const LUNAR_GATE_MS = 2 * 60 * 1000; // 2 minutes
+let lunarMissionStartAt = null;
+const LUNAR_GATE_MS = 2 * 60 * 1000;
 
-// keep original functions if they exist
-const __origStartLunarMission = window.startLunarMission;
-const __origSubmitLunarGlow   = window.submitLunarGlow;
+// clear old timer if any
+if (window.__lunarGateTimer) {
+  clearInterval(window.__lunarGateTimer);
+  window.__lunarGateTimer = null;
+}
 
-// helper: get remaining seconds
 function getGateRemainingSec() {
   if (!lunarMissionStartAt) return LUNAR_GATE_MS / 1000;
   const elapsed = Date.now() - lunarMissionStartAt;
-  const remainMs = Math.max(0, LUNAR_GATE_MS - elapsed);
-  return Math.ceil(remainMs / 1000);
+  return Math.ceil(Math.max(0, LUNAR_GATE_MS - elapsed) / 1000);
 }
 
-// helper: update collect button enabled/disabled
 function updateCollectBtnState() {
-  const btn = document.querySelector(".lunar-submit-btn");
-  if (!btn) return;
+  const collectBtn = document.querySelector(".lunar-submit-btn");
+  if (!collectBtn) return;
+
+  // --- ensure hint element exists ---
+  let hint = document.getElementById("lunar-gate-hint");
+  if (!hint) {
+    hint = document.createElement("div");
+    hint.id = "lunar-gate-hint";
+    hint.style.marginTop = "8px";
+    hint.style.fontSize = "14px";
+    hint.style.opacity = "0.9";
+    hint.style.textAlign = "center";
+    hint.style.lineHeight = "1.4";
+    hint.style.userSelect = "none";
+
+    // insert right above the Collect button
+    collectBtn.parentElement?.insertBefore(hint, collectBtn);
+  }
 
   const remain = getGateRemainingSec();
+
+  if (!lunarMissionStartAt) {
+    // not started
+    collectBtn.disabled = true;
+    collectBtn.innerText = "Collect Moonlight";
+    hint.innerText = "Please click START to begin the mission.\nCollect unlocks after 2 minutes.";
+    return;
+  }
+
   if (remain <= 0) {
-    btn.disabled = false;
-    btn.innerText = "Collect Moonlight";
+    // ready
+    collectBtn.disabled = false;
+    collectBtn.innerText = "Collect Moonlight";
+    hint.innerText = "✅ Mission complete. You can collect now!";
   } else {
-    btn.disabled = true;
-    btn.innerText = `Wait ${remain}s...`;
+    // counting down
+    collectBtn.disabled = true;
+    collectBtn.innerText = `Wait ${remain}s...`;
+    hint.innerText = `⏳ Mission in progress…\nCollect unlocks in ${remain} seconds.`;
   }
 }
+// --- START button: begin gate timer ---
+function hookStartBtn() {
+  const startBtn = document.querySelector(".lunar-start-btn");
+  if (!startBtn) return;
 
-// --- override startLunarMission ---
-window.startLunarMission = function startLunarMissionPatched() {
-  lunarMissionStartAt = Date.now();
-  updateCollectBtnState();
-
-  // countdown UI tick
-  if (window.__lunarGateTimer) clearInterval(window.__lunarGateTimer);
-  window.__lunarGateTimer = setInterval(() => {
+  startBtn.addEventListener("click", () => {
+    lunarMissionStartAt = Date.now();
     updateCollectBtnState();
-    if (getGateRemainingSec() <= 0) {
-      clearInterval(window.__lunarGateTimer);
-      window.__lunarGateTimer = null;
+
+    if (window.__lunarGateTimer) clearInterval(window.__lunarGateTimer);
+    window.__lunarGateTimer = setInterval(() => {
+      updateCollectBtnState();
+      if (getGateRemainingSec() <= 0) {
+        clearInterval(window.__lunarGateTimer);
+        window.__lunarGateTimer = null;
+      }
+    }, 1000);
+  }, true); // capture=true, but we DON'T stop it. Just add timer.
+}
+
+// --- COLLECT button: block until gate opens ---
+function hookCollectBtn() {
+  const collectBtn = document.querySelector(".lunar-submit-btn");
+  if (!collectBtn) return;
+
+  collectBtn.addEventListener("click", (e) => {
+    const remain = getGateRemainingSec();
+    if (remain > 0) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      alert(`Please finish the mission first.\nCollect will unlock in ${remain} seconds.`);
+      updateCollectBtnState();
+      return;
     }
-  }, 1000);
 
-  // call original behavior (if any)
-  if (typeof __origStartLunarMission === "function") {
-    try { __origStartLunarMission(); } catch(e){ console.warn(e); }
-  }
-};
+    // If gate open, let original handler run.
+    // After a short tick, reset gate so next collect needs NEW start+wait.
+    setTimeout(() => {
+      lunarMissionStartAt = null;
+      updateCollectBtnState();
+    }, 0);
+  }, true); // capture=true to intercept before original handler
+}
 
-// --- Correct/Wrong live cap at 30 ---
+// --- Correct/Wrong live cap to 30 ---
 function attachMoonScoreCap() {
   const cEl = document.getElementById("moon-correct");
   const wEl = document.getElementById("moon-wrong");
   if (!cEl || !wEl) return;
 
-  function clampNonNeg(v){ return Math.max(0, Math.floor(Number(v)||0)); }
+  const clampNonNeg = v => Math.max(0, Math.floor(Number(v) || 0));
 
   function enforce(changedEl) {
     let c = clampNonNeg(cEl.value);
     let w = clampNonNeg(wEl.value);
 
-    // hard cap each single field to 30
     if (c > 30) c = 30;
     if (w > 30) w = 30;
 
-    // cap sum to 30 by reducing the last edited field
-    let sum = c + w;
+    const sum = c + w;
     if (sum > 30) {
       const overflow = sum - 30;
-      if (changedEl === cEl) {
-        c = Math.max(0, c - overflow);
-      } else {
-        w = Math.max(0, w - overflow);
-      }
+      if (changedEl === cEl) c = Math.max(0, c - overflow);
+      else w = Math.max(0, w - overflow);
     }
 
     cEl.value = c;
@@ -2090,57 +2136,36 @@ function attachMoonScoreCap() {
 
   cEl.addEventListener("input", () => enforce(cEl));
   wEl.addEventListener("input", () => enforce(wEl));
-
-  // run once on load
   enforce(cEl);
 }
 
-// attach when DOM ready (module runs after HTML, but be safe)
-setTimeout(attachMoonScoreCap, 0);
+// --- Final guard on submit (in case any other path calls submit) ---
+function attachSubmitGuard() {
+  const collectBtn = document.querySelector(".lunar-submit-btn");
+  if (!collectBtn) return;
 
-// --- override submitLunarGlow ---
-window.submitLunarGlow = async function submitLunarGlowPatched() {
-  // 1) Gate check
-  const remain = getGateRemainingSec();
-  if (remain > 0) {
-    alert(`Please finish the mission first.\nCollect will unlock in ${remain} seconds.`);
-    updateCollectBtnState();
-    return;
-  }
-
-  // 2) Score sum check (final guard)
-  const c = Math.max(0, Number(document.getElementById("moon-correct")?.value || 0));
-  const w = Math.max(0, Number(document.getElementById("moon-wrong")?.value || 0));
-  if (c + w > 30) {
-    alert("Correct + Wrong must be ≤ 30.");
-    return;
-  }
-
-  // 3) call original submit (actual collect logic)
-  let ok = true;
-  if (typeof __origSubmitLunarGlow === "function") {
-    try {
-      const r = __origSubmitLunarGlow();
-      if (r instanceof Promise) await r;
-    } catch(e){
-      ok = false;
-      console.error(e);
-      alert("Collect failed. Please try again.");
+  collectBtn.addEventListener("click", (e) => {
+    const c = Math.max(0, Number(document.getElementById("moon-correct")?.value || 0));
+    const w = Math.max(0, Number(document.getElementById("moon-wrong")?.value || 0));
+    if (c + w > 30) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      alert("Correct + Wrong must be ≤ 30.");
     }
-  }
+  }, true);
+}
 
-  // 4) Reset gate AFTER a successful collect
-  if (ok) {
-    lunarMissionStartAt = null; // force next time to start mission again
-    updateCollectBtnState();
-  }
-};
-
-// initialize button state on load
-setTimeout(updateCollectBtnState, 0);
+// init
+setTimeout(() => {
+  hookStartBtn();
+  hookCollectBtn();
+  attachMoonScoreCap();
+  attachSubmitGuard();
+  updateCollectBtnState();
+}, 0);
 
 // ======================================================================
-// ✅ PATCH END
+// ✅ END PATCH v2
 // ======================================================================
   </script>
 </body>
