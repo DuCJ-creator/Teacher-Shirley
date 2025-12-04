@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL Junior Writing - Task 3 Opinion Essays</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- 專屬配色: Teal & Amber (Academic & Focus) --- */
+            --primary: #0d9488;          /* 孔雀綠 - 主色 */
+            --primary-dark: #115e59;     /* 深綠 - 標題 */
+            --primary-light: #ccfbf1;    /* 淺綠 - 背景/選中 */
+            
+            --accent: #f59e0b;           /* 琥珀金 - 提示/重點 */
+            --accent-bg: #fffbeb;        /* 淺黃 - 提示背景 */
+            
+            --bg-body: #f3f4f6;          /* 冷灰背景 */
+            --surface: #ffffff;          /* 紙張白 */
+            --text-main: #1f2937;        /* 主要文字 */
+            --text-serif: #374151;       /* 寫作文字 */
+            
+            --border: #e5e7eb;
+            --shadow-paper: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-float: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* --- Header --- */
+        header {
+            background: linear-gradient(135deg, #115e59 0%, #0d9488 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-float);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .difficulty-tags {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+
+        /* --- Tips Section (Styled as a distinct card) --- */
+        .tips-card {
+            background: var(--accent-bg);
+            border: 1px solid #fcd34d;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .tips-icon {
+            font-size: 24px;
+            background: #fef3c7;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .tips-content h3 {
+            color: #92400e;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .tips-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tips-content li {
+            font-size: 14px;
+            color: #78350f;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tips-content li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* --- Navigation Tabs (Pill Shape) --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-serif);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -2px rgba(13, 148, 136, 0.3);
+        }
+
+        /* --- Main Workspace --- */
+        .workspace {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .workspace.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Prompt Card --- */
+        .prompt-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border-top: 6px solid var(--primary);
+            box-shadow: var(--shadow-paper);
+            margin-bottom: 25px;
+        }
+
+        .prompt-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .prompt-text {
+            font-family: 'Merriweather', serif;
+            font-size: 20px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .prompt-instruction {
+            color: var(--text-serif);
+            font-size: 15px;
+            font-style: italic;
+        }
+
+        /* --- Editor Area --- */
+        .editor-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-paper);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .editor-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 40px;
+            border: none;
+            resize: vertical;
+            font-family: 'Merriweather', serif; /* 寫作使用襯線體 */
+            font-size: 17px;
+            line-height: 1.8;
+            color: #374151;
+            background-color: white;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+        
+        /* 模擬信紙格線 (Optional, removed for cleaner look, but kept padding) */
+
+        .status-bar {
+            padding: 10px 20px;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .word-counter {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.3s;
+        }
+        
+        .word-counter.good {
+            background: #d1fae5;
+            color: #047857;
+        }
+        
+        .word-counter.short {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* --- Actions & Results --- */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px auto 0;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(13, 148, 136, 0.4);
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 40px;
+            border-top: 2px dashed var(--border);
+            padding-top: 40px;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .paper-view {
+            background: white;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid var(--border);
+        }
+        
+        .paper-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .paper-content {
+            font-family: 'Merriweather', serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #374151;
+            white-space: pre-wrap;
+        }
+
+        .edit-mode-textarea {
+            background: #f9fafb;
+            font-family: 'Merriweather', serif;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            height: 100%;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        @media (max-width: 800px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>TOEFL Junior Writing Task 3</h1>
+            <p class="description">Opinion Essay: Express your viewpoint clearly, support it with reasons, and provide examples.</p>
+            <div class="difficulty-tags">
+                <span class="tag">Persuasive Writing</span>
+                <span class="tag">Critical Thinking</span>
+                <span class="tag">Structure</span>
+            </div>
+        </header>
+
+        <div class="tips-card">
+            <div class="tips-icon">💡</div>
+            <div class="tips-content">
+                <h3>Structured Essay Guide</h3>
+                <ul>
+                    <li><strong>Intro:</strong> Clearly state your opinion.</li>
+                    <li><strong>Body:</strong> Provide 2-3 reasons with examples.</li>
+                    <li><strong>Conclusion:</strong> Summarize main points.</li>
+                    <li><strong>Target:</strong> 150-200 words.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(1)">Prompt 1 (Easy)</div>
+            <div class="tab" onclick="switchTab(2)">Prompt 2 (Easy)</div>
+            <div class="tab" onclick="switchTab(3)">Prompt 3 (Med)</div>
+            <div class="tab" onclick="switchTab(4)">Prompt 4 (Med)</div>
+            <div class="tab" onclick="switchTab(5)">Prompt 5 (Hard)</div>
+            <div class="tab" onclick="switchTab(6)">Prompt 6 (Hard)</div>
+        </div>
+
+        <div id="prompt-1" class="workspace active">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Do you think students should have homework every day? Why or why not?</div>
+                <div class="prompt-instruction">State your opinion and support it with reasons and examples. Consider both the benefits and drawbacks of daily homework.</div>
+            </div>
+
+            <div class="editor-container">
+                <div class="editor-header">
+                    <div class="editor-title">✏️ Essay Draft</div>
+                </div>
+                <textarea id="response-1" placeholder="Start writing your essay here..." oninput="updateWordCount(1)"></textarea>
+                <div class="status-bar">
+                    <div id="counter-1" class="word-counter">0 words</div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitEssay(1)">Submit Essay</button>
+
+            <div id="result-1" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view">
+                        <div class="paper-title">Your Submission</div>
+                        <div id="submitted-content-1" class="paper-content"></div>
+                    </div>
+                    <div class="paper-view">
+                        <div class="paper-title">Review & Edit</div>
+                        <textarea id="edit-1" class="edit-mode-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="prompt-2" class="workspace">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Is it better to read books in print or on digital devices? Why?</div>
+                <div class="prompt-instruction">State your preference and support it with reasons. Consider factors like convenience, learning experience, and health.</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-header"><div class="editor-title">✏️ Essay Draft</div></div>
+                <textarea id="response-2" placeholder="Start writing your essay here..." oninput="updateWordCount(2)"></textarea>
+                <div class="status-bar"><div id="counter-2" class="word-counter">0 words</div></div>
+            </div>
+            <button class="submit-btn" onclick="submitEssay(2)">Submit Essay</button>
+            <div id="result-2" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view"><div class="paper-title">Your Submission</div><div id="submitted-content-2" class="paper-content"></div></div>
+                    <div class="paper-view"><div class="paper-title">Review & Edit</div><textarea id="edit-2" class="edit-mode-textarea"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="prompt-3" class="workspace">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Should schools require students to wear uniforms? Why or why not?</div>
+                <div class="prompt-instruction">State your opinion and support it. Consider individuality, cost, school spirit, and learning environment.</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-header"><div class="editor-title">✏️ Essay Draft</div></div>
+                <textarea id="response-3" placeholder="Start writing your essay here..." oninput="updateWordCount(3)"></textarea>
+                <div class="status-bar"><div id="counter-3" class="word-counter">0 words</div></div>
+            </div>
+            <button class="submit-btn" onclick="submitEssay(3)">Submit Essay</button>
+            <div id="result-3" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view"><div class="paper-title">Your Submission</div><div id="submitted-content-3" class="paper-content"></div></div>
+                    <div class="paper-view"><div class="paper-title">Review & Edit</div><textarea id="edit-3" class="edit-mode-textarea"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="prompt-4" class="workspace">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Is social media beneficial or harmful for teenagers? Why?</div>
+                <div class="prompt-instruction">State your opinion. Consider both positive and negative aspects of social media use.</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-header"><div class="editor-title">✏️ Essay Draft</div></div>
+                <textarea id="response-4" placeholder="Start writing your essay here..." oninput="updateWordCount(4)"></textarea>
+                <div class="status-bar"><div id="counter-4" class="word-counter">0 words</div></div>
+            </div>
+            <button class="submit-btn" onclick="submitEssay(4)">Submit Essay</button>
+            <div id="result-4" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view"><div class="paper-title">Your Submission</div><div id="submitted-content-4" class="paper-content"></div></div>
+                    <div class="paper-view"><div class="paper-title">Review & Edit</div><textarea id="edit-4" class="edit-mode-textarea"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="prompt-5" class="workspace">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Should the voting age be lowered to 16? Why or why not?</div>
+                <div class="prompt-instruction">State your opinion. Consider maturity, civic responsibility, and political engagement.</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-header"><div class="editor-title">✏️ Essay Draft</div></div>
+                <textarea id="response-5" placeholder="Start writing your essay here..." oninput="updateWordCount(5)"></textarea>
+                <div class="status-bar"><div id="counter-5" class="word-counter">0 words</div></div>
+            </div>
+            <button class="submit-btn" onclick="submitEssay(5)">Submit Essay</button>
+            <div id="result-5" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view"><div class="paper-title">Your Submission</div><div id="submitted-content-5" class="paper-content"></div></div>
+                    <div class="paper-view"><div class="paper-title">Review & Edit</div><textarea id="edit-5" class="edit-mode-textarea"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="prompt-6" class="workspace">
+            <div class="prompt-card">
+                <div class="prompt-label">The Topic</div>
+                <div class="prompt-text">Is artificial intelligence a threat or an opportunity for humanity? Why?</div>
+                <div class="prompt-instruction">State your opinion. Consider potential benefits and risks of AI development.</div>
+            </div>
+            <div class="editor-container">
+                <div class="editor-header"><div class="editor-title">✏️ Essay Draft</div></div>
+                <textarea id="response-6" placeholder="Start writing your essay here..." oninput="updateWordCount(6)"></textarea>
+                <div class="status-bar"><div id="counter-6" class="word-counter">0 words</div></div>
+            </div>
+            <button class="submit-btn" onclick="submitEssay(6)">Submit Essay</button>
+            <div id="result-6" class="result-section">
+                <div class="result-grid">
+                    <div class="paper-view"><div class="paper-title">Your Submission</div><div id="submitted-content-6" class="paper-content"></div></div>
+                    <div class="paper-view"><div class="paper-title">Review & Edit</div><textarea id="edit-6" class="edit-mode-textarea"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // State management
+        const userResponses = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
+
+        // Switch Tabs
+        function switchTab(id) {
+            // Hide all workspaces
+            document.querySelectorAll('.workspace').forEach(el => el.classList.remove('active'));
+            // Show selected
+            document.getElementById(`prompt-${id}`).classList.add('active');
+            
+            // Update tabs UI
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                if(index + 1 === id) tab.classList.add('active');
+                else tab.classList.remove('active');
+            });
+        }
+
+        // Word Count Logic
+        function updateWordCount(id) {
+            const textarea = document.getElementById(`response-${id}`);
+            const counter = document.getElementById(`counter-${id}`);
+            const text = textarea.value.trim();
+            const count = text === '' ? 0 : text.split(/\s+/).length;
+            
+            userResponses[id] = text;
+            counter.textContent = `${count} words`;
+
+            // Visual feedback for word count
+            counter.classList.remove('good', 'short');
+            if (count >= 150) {
+                counter.classList.add('good');
+            } else if (count > 0 && count < 100) {
+                counter.classList.add('short');
+            }
+        }
+
+        // Submit Logic
+        function submitEssay(id) {
+            const text = userResponses[id];
+            if(!text) {
+                alert("Please write your essay before submitting.");
+                return;
+            }
+
+            // Populate Result View
+            document.getElementById(`submitted-content-${id}`).textContent = text;
+            document.getElementById(`edit-${id}`).value = text;
+            
+            // Show Result Section
+            const resultSection = document.getElementById(`result-${id}`);
+            resultSection.style.display = 'block';
+            
+            // Scroll to it
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Init
+        window.onload = function() {
+            switchTab(1);
+        };
+    </script>
+</body>
+</html>
