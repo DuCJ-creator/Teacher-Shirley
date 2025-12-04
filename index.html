@@ -765,6 +765,18 @@
     border-bottom: 1px solid #ffd700;
 }
 
+    /* ✅ PATCH: 提高輸入字體可讀性（不動 layout） */
+.lunar-field{
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.lunar-field::placeholder{
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+}
+
 /* 右側：提交按鈕 */
 .lunar-submit-btn {
     padding: 10px 25px;
@@ -1288,6 +1300,133 @@
     let checkinHistory = [];
     let activityLog = [];
 
+   // ===================== ✅ PATCH: Lunar Glow Cache Logic =====================
+let lunarMissionStart = null;
+let currentThread = 0;      // 0 ~ 300
+let fullMoonCount = 0;      // 🌕 庫存數
+
+function updateLunarUI() {
+    const threadEl = document.getElementById("current-thread");
+    const fullMoonEl = document.getElementById("full-moon-count");
+    const barEl = document.getElementById("moon-progress-bar");
+    const phaseIconEl = document.getElementById("phase-icon");
+    const phaseNameEl = document.getElementById("phase-name");
+
+    if (threadEl) threadEl.innerText = currentThread;
+    if (fullMoonEl) fullMoonEl.innerText = `🌕 x ${fullMoonCount}`;
+
+    const pct = Math.min(currentThread / 300, 1) * 100;
+    if (barEl) barEl.style.width = `${pct}%`;
+
+    // 月相顯示（只更新文字/圖示，不改設計）
+    let icon = "🌑", name = "New Moon 朔月";
+    if (pct >= 100) { icon = "🌕"; name = "Full Moon 滿月"; }
+    else if (pct >= 75) { icon = "🌔"; name = "Waxing Gibbous 盈凸月"; }
+    else if (pct >= 50) { icon = "🌓"; name = "First Quarter 上弦月"; }
+    else if (pct >= 25) { icon = "🌒"; name = "Waxing Crescent 眉月"; }
+
+    if (phaseIconEl) phaseIconEl.innerText = icon;
+    if (phaseNameEl) phaseNameEl.innerText = name;
+}
+
+// START MISSION：只記錄時間，不動 UI
+window.startLunarMission = () => {
+    lunarMissionStart = Date.now();
+};
+
+// Collect Moonlight：真正收集、寫入 thread、限制 30、更新 Firestore
+window.submitLunarGlow = async () => {
+    if (!currentUser) {
+        alert("Please log in first to collect moonlight.");
+        return;
+    }
+
+    const level = (document.getElementById("moon-level").value || "").trim();
+    const unit = (document.getElementById("moon-unit").value || "").trim();
+
+    const correctVal = document.getElementById("moon-correct").value;
+    const wrongVal = document.getElementById("moon-wrong").value;
+
+    const correct = parseInt(correctVal, 10);
+    const wrong = parseInt(wrongVal, 10);
+
+    if (Number.isNaN(correct) || Number.isNaN(wrong)) {
+        alert("Please enter Correct and Wrong numbers.");
+        return;
+    }
+    if (correct < 0 || wrong < 0) {
+        alert("Numbers must be 0 or above.");
+        return;
+    }
+
+    const total = correct + wrong;
+
+    // ✅ 上限 30（correct + wrong <= 30）
+    if (total > 30) {
+        alert("One collect max is 30 (Correct + Wrong).");
+        return;
+    }
+    if (total <= 0) {
+        alert("Total must be greater than 0.");
+        return;
+    }
+
+    // ✅ 兩分鐘門檻（原設計文字有寫 Min. 2 mins required）
+    if (lunarMissionStart && (Date.now() - lunarMissionStart) < 120000) {
+        alert("Min. 2 mins required after START MISSION.");
+        return;
+    }
+
+    // ✅ 累積 thread，滿 300 轉成滿月庫存
+    let newThread = currentThread + total;
+    let newFullMoon = fullMoonCount;
+
+    if (newThread >= 300) {
+        const gainedFull = Math.floor(newThread / 300);
+        newFullMoon += gainedFull;
+        newThread = newThread % 300;
+
+        // 如果你原本有滿月 modal（#moon-reward-modal）
+        // 這裡只在存在時打開一次，不改你原本邏輯
+        const rewardModal = document.getElementById("moon-reward-modal");
+        if (rewardModal) rewardModal.style.display = "flex";
+    }
+
+    currentThread = newThread;
+    fullMoonCount = newFullMoon;
+
+    updateLunarUI();
+
+    // ✅ 寫回 Firestore（不影響你既有欄位）
+    const userRef = doc(db, "users", currentUser.uid);
+    const logEntry = {
+        date: new Date().toISOString(),
+        level, unit, correct, wrong, total
+    };
+
+    try {
+        await updateDoc(userRef, {
+            moonThread: currentThread,
+            fullMoonCount: fullMoonCount,
+            lunarLogs: arrayUnion(logEntry),
+            activityLogs: arrayUnion({
+                date: new Date().toISOString(),
+                type: "Moonlight",
+                detail: `Collected ${total} moonlight (${level || "-"} ${unit || "-"})`
+            })
+        });
+    } catch (e) {
+        console.log("Moonlight save failed:", e);
+        // UI 已更新：所以不回滾，只提示
+        alert("Collected, but save failed. Please check connection.");
+    }
+
+    // ✅ 清空輸入（只清 correct/wrong，不改你使用習慣）
+    document.getElementById("moon-correct").value = "";
+    document.getElementById("moon-wrong").value = "";
+};
+// =================== ✅ PATCH END ===================
+
     // --- In-App Browser Detection Helpers ---
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
@@ -1414,6 +1553,11 @@
             document.getElementById('total-days').innerText = checkinHistory.length;
             document.getElementById('streak-days').innerText = data.streak || 0;
             if (checkinHistory.includes(fullDate)) document.getElementById('checkin-btn').disabled = true;
+
+          // ✅ PATCH: 讀取月光寶盒數據
+currentThread = data.moonThread || 0;
+fullMoonCount = data.fullMoonCount || 0;
+updateLunarUI();
         } else {
             await setDoc(userRef, { email: currentUser.email, history: [], streak: 0, activityLogs: [] }, { merge: true });
         }
