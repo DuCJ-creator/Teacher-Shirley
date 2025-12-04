@@ -1105,29 +1105,23 @@
         return (hash % 85) + 1; 
     }
    
-// --- 新增：固定亂數產生器 ---
+// --- 新增：固定亂數產生器 (請放在 window.openCard 之前或 script 標籤開頭) ---
+// 透過日期與 UserID 產生固定的 1~88 數字
 function getDailyThemeId(dateStr, userId) {
-    // 將日期與使用者ID結合當作種子
     const seedStr = dateStr + (userId || "traveler");
     let hash = 0;
-    
-    // 簡單的雜湊演算法 (Hash function)
     for (let i = 0; i < seedStr.length; i++) {
         const char = seedStr.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
+        hash = hash & hash; 
     }
-    // 使用雜湊值產生偽隨機數 (Pseudo-random)
     const x = Math.sin(hash) * 10000;
     const randomVal = x - Math.floor(x);
-    
-    // 假設總共有 88 款主題 (根據您程式碼註解)
-    // 回傳 1 ~ 88 之間的固定數字
     return Math.floor(randomVal * 88) + 1;
 }
-   
-    // 顯示卡片 (加入例句與佳句翻譯)
-   window.openCard = (dateStr) => {
+
+// --- 修改後的主程式 ---
+window.openCard = (dateStr) => {
     // 1. 準備使用者資料
     const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
     
