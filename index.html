@@ -1105,39 +1105,53 @@
         return (hash % 85) + 1; 
     }
 
-// --- 新增：固定亂數產生器 (請放在 window.openCard 之前) ---
-// 透過日期與 UserID 產生固定的 1~88 數字，確保每天抽到的卡片固定
+/* =========================================
+   1. 固定亂數產生器 (絕對固定版)
+   ========================================= */
 function getDailyThemeId(dateStr, userId) {
-    // 如果沒有 userId，就用 'traveler' 當作預設值，避免錯誤
-    const seedStr = dateStr + (userId || "traveler");
+    // 預設 ID，確保沒登入也有固定值
+    const uid = userId || "traveler_default_id";
+    const seedStr = dateStr + "_" + uid;
+    
+    // 使用簡單且穩定的字串雜湊算法
     let hash = 0;
     for (let i = 0; i < seedStr.length; i++) {
-        const char = seedStr.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; 
+        hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+        hash |= 0; // 轉為 32bit 整數
     }
-    const x = Math.sin(hash) * 10000;
-    const randomVal = x - Math.floor(x);
-    // 回傳 1 ~ 88
-    return Math.floor(randomVal * 88) + 1;
+    
+    // 取絕對值後，對 88 取餘數，結果保證在 1~88 之間
+    // 只要 seedStr 不變，這個結果永遠不會變
+    return (Math.abs(hash) % 88) + 1; 
 }
 
-// --- 修改後的 window.openCard (已修正 ID) ---
+/* =========================================
+   2. 關閉卡片功能 (修復關不掉的問題)
+   ========================================= */
+window.closeCard = function() {
+    const modal = document.getElementById('card-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+};
+
+/* =========================================
+   3. 開啟卡片功能 (整合版)
+   ========================================= */
 window.openCard = (dateStr) => {
-    // 1. 取得使用者名稱
+    // A. 準備使用者與文字資料
     const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+    const uid = currentUser ? currentUser.uid : "traveler_default_id";
     
-    // 2. 準備預設文字資料
-    // 假設 CSV date 是 "MM-DD"
+    // 預設文字
     let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
     let quote = "The stars are calling.", author = "Universe";
-    let sentEn = "Keep looking up."; 
-    let sentCn = "保持仰望星空。";
+    let sentEn = "Keep looking up.", sentCn = "保持仰望星空。";
     let quoteTrans = "群星在召喚。";
 
-    // 3. 從 CSV 讀取當日資料
+    // 從 CSV 撈取資料
     if (csvData && csvData.words) {
-        const queryDate = dateStr.slice(5); // remove YYYY-
+        const queryDate = dateStr.slice(5); // MM-DD
         const wordObj = csvData.words.find(r => r.date === queryDate);
         const quoteObj = csvData.quotes.find(r => r.date === queryDate);
 
@@ -1155,43 +1169,60 @@ window.openCard = (dateStr) => {
         }
     }
 
-    // --- 新增：設定固定主題 ---
-    // 使用 dateStr 和 uid 計算固定的主題編號
-    const themeNum = getDailyThemeId(dateStr, currentUser ? currentUser.uid : null);
-    
+    // B. 設定卡片樣式 (核心修正)
     const card = document.getElementById('collectible-card');
     if (card) {
-        // 重置 class 並加上 theme-X (保留 moon-card)
+        // 算出固定的主題編號
+        const themeNum = getDailyThemeId(dateStr, uid);
+        
+        // ★★★ 清除舊的 theme-XXX class，只保留 moon-card ★★★
         card.className = 'moon-card'; 
+        
+        // 加上新的固定 class
         card.classList.add(`theme-${themeNum}`);
     }
 
-    // --- 填充資料 (使用檔案中正確的 ID) ---
-    // 使用者與日期
+    // C. 填入文字內容 (使用正確 ID)
     if(document.getElementById('card-user-name')) document.getElementById('card-user-name').innerText = userName;
     if(document.getElementById('card-display-date')) document.getElementById('card-display-date').innerText = dateStr;
     if(document.getElementById('card-date-serial')) document.getElementById('card-date-serial').innerText = dateStr.replace(/-/g, '');
 
-    // 單字區
     if(document.getElementById('card-wotd')) document.getElementById('card-wotd').innerText = wotd;
     if(document.getElementById('card-pos')) document.getElementById('card-pos').innerText = wotdPos;
     if(document.getElementById('card-def')) document.getElementById('card-def').innerText = wotdDef;
     
-    // 例句區
     if(document.getElementById('card-sent-en')) document.getElementById('card-sent-en').innerText = sentEn;
     if(document.getElementById('card-sent-cn')) document.getElementById('card-sent-cn').innerText = sentCn;
     
-    // 金句區
     if(document.getElementById('card-quote-text')) document.getElementById('card-quote-text').innerText = quote;
     if(document.getElementById('card-quote-trans')) document.getElementById('card-quote-trans').innerText = quoteTrans;
     if(document.getElementById('card-quote-author')) document.getElementById('card-quote-author').innerText = author;
 
-    // 顯示模態框
+    // D. 打開模態框
     const modal = document.getElementById('card-modal');
     if (modal) {
         modal.classList.add('active');
     }
 };
+
+/* =========================================
+   4. 強制綁定關閉按鈕 (防止 HTML onclick 失效)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    // 尋找所有的關閉按鈕 class
+    const closeBtns = document.querySelectorAll('.close, .close-btn, .modal-close');
+    closeBtns.forEach(btn => {
+        btn.onclick = window.closeCard; // 綁定關閉函數
+    });
+    
+    // 也可以點擊模態框背景關閉 (選擇性功能)
+    const modal = document.getElementById('card-modal');
+    if(modal) {
+        modal.onclick = (e) => {
+            if (e.target === modal) window.closeCard();
+        };
+    }
+});
     window.downloadCardImage = () => {
         const cardElement = document.getElementById('collectible-card');
         const btn = document.querySelector('.btn-download');
