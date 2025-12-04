@@ -2000,35 +2000,34 @@ function downloadRewardCard() {
         link.click();
     });
 }
- /* ===== Lunar Glow Cache v3.1 SAFE Patch ===== */
-(() => {
-  const GATE_SEC = 120;
-  const LS_KEY = "lunarMissionStartAt";
+/* Lunar Patch v3.2 ultra-safe */
+(function () {
+  var GATE_SEC = 120;
+  var LS_KEY = "lunarMissionStartAt";
+  var startAt = parseInt(localStorage.getItem(LS_KEY), 10);
+  if (isNaN(startAt)) startAt = null;
 
-  let lunarMissionStartAt = Number(localStorage.getItem(LS_KEY)) || null;
-
-  const nowSec = () => Math.floor(Date.now() / 1000);
-
-  function getGateRemainingSec() {
-    if (!lunarMissionStartAt) return GATE_SEC;
-    const elapsed = nowSec() - lunarMissionStartAt;
-    return Math.max(0, GATE_SEC - elapsed);
+  function nowSec() {
+    return Math.floor(Date.now() / 1000);
   }
 
   function findStartBtn() {
-    const candidates = [...document.querySelectorAll("button, .btn, .lunar-start-btn")];
-    return candidates.find(el => {
-      const t = (el.innerText || "").trim().toUpperCase();
-      return t.includes("START MISSION") || t === "START" || el.classList.contains("lunar-start-btn");
-    });
+    var btns = document.querySelectorAll("button, .btn, .lunar-start-btn");
+    for (var i = 0; i < btns.length; i++) {
+      var t = (btns[i].innerText || "").trim().toUpperCase();
+      if (t.indexOf("START MISSION") >= 0 || t === "START" || btns[i].classList.contains("lunar-start-btn")) {
+        return btns[i];
+      }
+    }
+    return null;
   }
 
   function findCollectBtn() {
     return document.querySelector(".lunar-submit-btn, .collect-btn, button[data-action='collect']");
   }
 
-  function ensureHint(collectBtn) {
-    let hint = document.getElementById("lunar-gate-hint");
+  function ensureHint(btn) {
+    var hint = document.getElementById("lunar-gate-hint");
     if (!hint) {
       hint = document.createElement("div");
       hint.id = "lunar-gate-hint";
@@ -2037,95 +2036,63 @@ function downloadRewardCard() {
       hint.style.opacity = "0.9";
       hint.style.textAlign = "center";
       hint.style.lineHeight = "1.4";
-      hint.style.userSelect = "none";
-      collectBtn.parentElement?.insertBefore(hint, collectBtn);
+      if (btn && btn.parentNode) btn.parentNode.insertBefore(hint, btn);
     }
     return hint;
   }
 
-  function updateCollectBtnState() {
-    const collectBtn = findCollectBtn();
+  function remainingSec() {
+    if (!startAt) return GATE_SEC;
+    var elapsed = nowSec() - startAt;
+    var remain = GATE_SEC - elapsed;
+    return remain < 0 ? 0 : remain;
+  }
+
+  function updateUI() {
+    var collectBtn = findCollectBtn();
     if (!collectBtn) return;
 
-    const hint = ensureHint(collectBtn);
-    const remain = getGateRemainingSec();
+    var hint = ensureHint(collectBtn);
+    var remain = remainingSec();
 
-    if (!lunarMissionStartAt) {
+    if (!startAt) {
       collectBtn.disabled = true;
       collectBtn.innerText = "Collect Moonlight";
       hint.innerText = "Please click START to begin the mission.\nCollect unlocks after 2 minutes.";
       return;
     }
 
-    if (remain <= 0) {
+    if (remain === 0) {
       collectBtn.disabled = false;
       collectBtn.innerText = "Collect Moonlight";
       hint.innerText = "✅ Mission complete. You can collect now!";
     } else {
       collectBtn.disabled = true;
-      collectBtn.innerText = `Wait ${remain}s...`;
-      hint.innerText = `⏳ Mission in progress…\nCollect unlocks in ${remain} seconds.`;
+      collectBtn.innerText = "Wait " + remain + "s...";
+      hint.innerText = "⏳ Mission in progress…\nCollect unlocks in " + remain + " seconds.";
     }
   }
 
-  function startMission() {
-    lunarMissionStartAt = nowSec();
-    localStorage.setItem(LS_KEY, String(lunarMissionStartAt));
-    updateCollectBtnState();
-    console.log("[LunarPatch] Mission started", lunarMissionStartAt);
+  function bindStart() {
+    var startBtn = findStartBtn();
+    if (!startBtn) return;
+    if (startBtn.getAttribute("data-lunar-bound")) return;
+
+    startBtn.setAttribute("data-lunar-bound", "1");
+    startBtn.addEventListener("click", function () {
+      startAt = nowSec();
+      localStorage.setItem(LS_KEY, String(startAt));
+      updateUI();
+    });
   }
 
-  function resetMission() {
-    lunarMissionStartAt = null;
-    localStorage.removeItem(LS_KEY);
-    updateCollectBtnState();
-    console.log("[LunarPatch] Mission reset");
+  function tick() {
+    bindStart();
+    updateUI();
   }
 
-  // 只綁定兩顆按鈕，不碰全站 click
-  let boundStart = null;
-  let boundCollect = null;
-
-  function bindButtons() {
-    const startBtn = findStartBtn();
-    const collectBtn = findCollectBtn();
-
-    if (startBtn && startBtn !== boundStart) {
-      boundStart = startBtn;
-      startBtn.addEventListener("click", () => {
-        startMission();
-      });
-    }
-
-    if (collectBtn && collectBtn !== boundCollect) {
-      boundCollect = collectBtn;
-      collectBtn.addEventListener("click", (e) => {
-        const remain = getGateRemainingSec();
-        if (remain > 0) {
-          e.preventDefault();
-          e.stopPropagation();
-          // 不用 alert，避免卡 UI
-          collectBtn.classList.add("shake");
-          setTimeout(() => collectBtn.classList.remove("shake"), 300);
-          return;
-        }
-        // 到了才允許原行為，並 reset
-        setTimeout(resetMission, 0);
-      });
-    }
-  }
-
-  // 每秒更新一次 + 重新綁定（避免 SPA 重畫失效）
-  setInterval(() => {
-    bindButtons();
-    updateCollectBtnState();
-  }, 1000);
-
-  // 初始立刻跑
-  bindButtons();
-  updateCollectBtnState();
-
-  console.log("[LunarPatch] v3.1 SAFE loaded");
+  tick();
+  setInterval(tick, 1000);
 })();
   </script>
 </body>
