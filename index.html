@@ -923,30 +923,6 @@
         animation: shootToMoon 0.8s forwards ease-in;
     }
 
-    /* 月光寶盒控制面板 - 登入後顯示 */
-    .lunar-dashboard {
-        display: none !important;
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 500px;
-        background: rgba(5, 5, 10, 0.8);
-        border: 1px solid rgba(255,215,0,0.2);
-        backdrop-filter: blur(5px);
-        border-radius: 12px;
-        padding: 8px 12px;
-        z-index: 9999;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .lunar-dashboard.active {
-        display: flex !important;
-    }
 
     .lunar-dashboard-left {
         display: flex;
@@ -1164,93 +1140,90 @@
   </div>
 
     <!-- === 新增：Lunar Glow Cache 月光寶盒 (只有登入用戶可見) === -->
-    <div id="lunar-cache-container" class="lunar-cache-container" style="display: none;">
-        <!-- 標題 -->
-        <div class="lunar-header">
-            <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
-            <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
-        </div>
+<div id="lunar-cache-container" class="lunar-cache-container" style="display: none;">
+    <!-- 標題 -->
+    <div class="lunar-header">
+        <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
+        <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
+    </div>
 
-        <!-- 控制面板 -->
-        <div class="lunar-control-panel">
-            <!-- 輸入區 -->
-            <div class="lunar-inputs">
-                <div class="lunar-input-group">
-                    <label class="lunar-label">Level</label>
-                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label">Unit</label>
-                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label" style="color:#4ade80;">Correct</label>
-                    <input type="number" class="lunar-field" id="moon-correct" min="0">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label" style="color:#f87171;">Wrong</label>
-                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
-                </div>
+    <!-- LEVEL UNIT CORRECT WRONG 表格 -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; text-align: center; font-family: 'Exo 2';">
+        <div style="font-weight: bold; color: var(--text-light); font-size: 0.9rem;">LEVEL</div>
+        <div style="font-weight: bold; color: var(--text-light); font-size: 0.9rem;">UNIT</div>
+        <div style="font-weight: bold; color: #4ade80; font-size: 0.9rem;">CORRECT</div>
+        <div style="font-weight: bold; color: #f87171; font-size: 0.9rem;">WRONG</div>
+    </div>
+
+    <!-- 控制面板 -->
+    <div class="lunar-control-panel" style="margin-bottom: 20px;">
+        <!-- 輸入區 -->
+        <div class="lunar-inputs" style="flex: 1; margin-right: 15px;">
+            <div class="lunar-input-group">
+                <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
             </div>
-
-            <!-- 提交按鈕 -->
-            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
-        </div>
-
-        <!-- 狀態顯示 -->
-        <div class="moon-phase-display">
-            <div class="phase-info">
-                <div class="current-moon-icon" id="phase-icon">🌑</div>
-                <div class="phase-text">
-                    <span class="phase-name" id="phase-name">New Moon 朔月</span>
-                    <span class="moonlight-count">Current Thread: <span id="current-thread">0</span>/300</span>
-                </div>
+            <div class="lunar-input-group">
+                <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
             </div>
-            <!-- 滿月庫存 -->
-            <div class="inventory-counter">
-                Storage: <span id="full-moon-count">🌕 x 0</span>
+            <div class="lunar-input-group">
+                <input type="number" class="lunar-field" id="moon-correct" min="0" placeholder="0">
+            </div>
+            <div class="lunar-input-group">
+                <input type="number" class="lunar-field" id="moon-wrong" min="0" placeholder="0">
             </div>
         </div>
 
-        <!-- 總進度條 -->
-        <div class="moonlight-track">
-            <div class="moonlight-fill" id="moon-progress-bar"></div>
+        <!-- 大按鈕區 -->
+        <div style="display: flex; flex-direction: column; gap: 12px; min-width: 150px;">
+            <button class="lunar-submit-btn" onclick="startLunarMission()" 
+                    style="padding: 12px 20px; font-size: 1rem; background: #2980b9; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+                🚀 Start Activation
+            </button>
+            <button class="lunar-submit-btn" onclick="submitLunarGlow()" 
+                    style="padding: 12px 20px; font-size: 1rem; background: linear-gradient(135deg, #f1c40f, #f39c12); color: #222; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+                🌙 Collect Moonlight
+            </button>
         </div>
     </div>
 
-    <!-- 月光寶盒控制面板 (底部固定) -->
-    <div id="lunar-dashboard" class="lunar-dashboard">
-        <div class="lunar-dashboard-left">
-            <div id="mission-timer" class="lunar-timer">Standing By</div>
-            
-            <div class="lunar-inputs-small">
-                <input type="text" id="moon-level-small" placeholder="Lv" disabled>
-                <input type="text" id="moon-unit-small" placeholder="Unit" disabled>
-                <input type="number" id="moon-correct-small" placeholder="✓" disabled>
-                <input type="number" id="moon-wrong-small" placeholder="✗" disabled>
-            </div>
-
-            <div style="display: flex; gap: 3px;">
-                <button class="lunar-btn btn-start" onclick="startLunarMission()">Start</button>
-                <button class="lunar-btn btn-collect" onclick="collectMoonlight()">Get</button>
-            </div>
+    <!-- Collect Moonlight 標題 -->
+    <div style="text-align: center; margin: 25px 0 15px 0; position: relative;">
+        <div style="font-family: 'Cinzel Decorative'; font-size: 1.3rem; color: var(--accent); margin-bottom: 5px;">
+            Collect Moonlight
         </div>
-        
-        <div class="lunar-dashboard-right">
-            <div class="lunar-stats">
-                <div class="lunar-stats-label">THREADS</div>
-                <div class="lunar-stats-value">
-                    <span id="current-moonlight-display">0</span>/300
-                </div>
-            </div>
-            <div class="lunar-stats">
-                <div class="lunar-stats-label">MOONS</div>
-                <div class="lunar-moon-count">
-                    <span id="moon-storage-count">0</span>🌕
-                </div>
-            </div>
+        <div style="font-family: 'Noto Serif TC'; font-size: 0.9rem; color: var(--text-light);">
+            收集月光
+        </div>
+        <div style="width: 60px; height: 2px; background: var(--accent); margin: 8px auto;"></div>
+    </div>
+
+    <!-- First Quarter 上弦月 -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-family: 'Exo 2'; font-weight: bold; font-size: 1.1rem; color: #ffd700; margin-bottom: 5px;">
+            First Quarter 上弦月
+        </div>
+        <div style="font-size: 1.2rem; font-weight: bold; color: white;">
+            Current Thread: <span id="current-thread">0</span>/300
         </div>
     </div>
+
+    <!-- STORAGE 顯示 -->
+    <div style="text-align: center; margin-bottom: 25px;">
+        <div style="font-family: 'Exo 2'; font-size: 1rem; color: var(--text-light); margin-bottom: 8px;">
+            STORAGE: <span id="full-moon-count" style="color: #ffd700; font-weight: bold;">🌕 x 0</span>
+        </div>
+    </div>
+
+    <!-- 總進度條 -->
+    <div class="moonlight-track">
+        <div class="moonlight-fill" id="moon-progress-bar"></div>
+    </div>
+
+    <!-- 底部版權 -->
+    <div style="text-align: center; margin-top: 20px; font-size: 0.7rem; color: #888; font-family: 'Exo 2';">
+        © Teacher Shirley's ET Platform 2025
+    </div>
+</div>
 
     <!-- 玻璃匣子容器 -->
     <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
@@ -1536,29 +1509,31 @@
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('visitor-view').classList.remove('active');
-            document.getElementById('universe-view').classList.add('active');
-            document.getElementById('logoutBtn').style.display = 'flex';
-            document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
-            await loadCSVData();
-            await loadUserData(user.uid);
-            renderDailyContent(getTodayMMDD());
-            trackActivity("Login", "Arrived at Moon Base");
-            
-            // ✅ 登入時顯示月光寶盒
-            document.getElementById('lunar-cache-container').style.display = 'block';
-            document.getElementById('lunar-dashboard').classList.add('active');
-            updateMoonInterface();
-        } else {
-            // ✅ 登出時隱藏月光寶盒
-            document.getElementById('lunar-cache-container').style.display = 'none';
-            document.getElementById('lunar-dashboard').classList.remove('active');
-        }
-    });
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        document.getElementById('intro-overlay').style.display = 'none';
+        document.getElementById('visitor-view').classList.remove('active');
+        document.getElementById('universe-view').classList.add('active');
+        document.getElementById('logoutBtn').style.display = 'flex';
+        document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
+        await loadCSVData();
+        await loadUserData(user.uid);
+        renderDailyContent(getTodayMMDD());
+        trackActivity("Login", "Arrived at Moon Base");
+        
+        // ✅ 登入時顯示月光寶盒（大儀表板）
+        document.getElementById('lunar-cache-container').style.display = 'block';
+        // 不再顯示小儀表板
+        // document.getElementById('lunar-dashboard').classList.add('active');
+        updateMoonInterface();
+    } else {
+        // ✅ 登出時隱藏月光寶盒
+        document.getElementById('lunar-cache-container').style.display = 'none';
+        // 不再處理小儀表板
+        // document.getElementById('lunar-dashboard').classList.remove('active');
+    }
+});
 
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
