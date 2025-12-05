@@ -650,20 +650,51 @@
     }
 
     /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
-.lunar-cache-container {
-    width: 100%;
-    margin-top: 30px; /* 與上方儀表板保持距離 */
-    background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
-    color: #e0e0e0;
-    font-family: 'Exo 2', sans-serif;
-    backdrop-filter: blur(10px);
+./* === Lunar Glow Cache 迷你化 + 右下角停靠 === */
+#lunar-cache-container{
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+  width: auto;
+  max-width: 320px;
+  pointer-events: none; /* 避免擋到星體點擊 */
 }
+
+/* 真正可互動的 dashboard */
+.lunar-dashboard{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(5,5,10,0.55);
+  border: 1px solid rgba(255,215,0,0.25);
+  backdrop-filter: blur(4px);
+  border-radius: 14px;
+  padding: 6px 8px;
+  box-shadow: 0 0 12px rgba(255,215,0,0.18);
+  pointer-events: auto; /* 只有這塊可以按 */
+  transform: scale(0.82);
+  transform-origin: bottom right;
+}
+
+/* 讓輸入框/按鈕更省空間 */
+.lunar-dashboard input{
+  height: 26px !important;
+  padding: 2px 4px !important;
+  font-size: 0.75rem !important;
+}
+
+.lunar-dashboard button{
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+}
+
+/* 左邊 timer 不要太寬 */
+#mission-timer{
+  width: 72px !important;
+  font-size: 0.72rem !important;
+}
+
 
 /* 標題區 */
 .lunar-header {
@@ -1066,8 +1097,9 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
-    <div class="lunar-cache-container">
+  <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+<div class="lunar-cache-container" id="lunar-cache-container" style="display:none;">
+
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1076,8 +1108,8 @@
 
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
-    
+<div id="lunar-dashboard" class="lunar-dashboard" style="display:none;">
+
     <div style="display: flex; align-items: center; gap: 10px;">
         <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
             Standing By
@@ -2071,37 +2103,38 @@ function downloadRewardCard() {
     let missionInterval = null;
 
     // --- [核心] 權限控制與顯示邏輯 ---
-    function initAuthCheck() {
-        const dashboard = document.getElementById('lunar-dashboard');
-        
-        // 1. 先強制隱藏 (雙重保險)
-        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+   function initAuthCheck() {
+    const dashboard = document.getElementById('lunar-dashboard');
+    const cacheContainer = document.getElementById('lunar-cache-container');
 
-        // 2. 啟動 Firebase 監聽
-        // 使用 setInterval 確保 Firebase SDK 載入完成
-        const checkFirebase = setInterval(() => {
-            if (typeof firebase !== 'undefined' && firebase.auth()) {
-                clearInterval(checkFirebase);
-                
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        // [已登入]
-                        // 移除 important 屬性，改為 flex 顯示
-                        if(dashboard) {
-                            dashboard.style.display = 'flex'; 
-                            // 這裡可以根據 user.uid 載入專屬數據，如果有的話
-                        }
-                        updateInterface(); // 更新數據顯示
-                    } else {
-                        // [未登入 / 訪客]
-                        // 強制隱藏，並清空顯示的數據
-                        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
-                        clearInterfaceDisplay(); 
-                    }
-                });
-            }
-        }, 200); // 每 0.2 秒檢查一次 Firebase 是否就緒
-    }
+    // 1) 先全部強制隱藏（雙保險）
+    if (dashboard) dashboard.style.setProperty('display', 'none', 'important');
+    if (cacheContainer) cacheContainer.style.setProperty('display', 'none', 'important');
+
+    // 2) 等 Firebase 就緒後監聽登入狀態
+    const checkFirebase = setInterval(() => {
+        if (typeof firebase !== 'undefined' && firebase.auth()) {
+            clearInterval(checkFirebase);
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // 已登入：顯示整個寶盒 + dashboard
+                    if (cacheContainer) cacheContainer.style.display = 'block';
+                    if (dashboard) dashboard.style.display = 'flex';
+
+                    updateInterface();
+                } else {
+                    // 訪客：整個寶盒隱藏 + 清空殘留
+                    if (dashboard) dashboard.style.setProperty('display', 'none', 'important');
+                    if (cacheContainer) cacheContainer.style.setProperty('display', 'none', 'important');
+
+                    clearInterfaceDisplay();
+                }
+            });
+        }
+    }, 200);
+}
+
 
     // 清空介面顯示 (防止訪客看到殘留數據)
     function clearInterfaceDisplay() {
