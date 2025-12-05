@@ -650,25 +650,19 @@
     }
 
     /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
+./* 壓縮月光寶盒高度，適配所有螢幕 */
 .lunar-cache-container {
-    width: 100%;
-    margin-top: 30px; /* 與上方儀表板保持距離 */
-    background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
-    color: #e0e0e0;
-    font-family: 'Exo 2', sans-serif;
-    backdrop-filter: blur(10px);
+    max-height: 280px; /* 限制最大高度 */
+    padding: 16px;     /* 原為 25px */
+    margin: 16px auto 0; /* 移除過多上邊距 */
+    width: 95%;        /* 更窄一點 */
+    max-width: 700px;  /* 原為 900px */
 }
 
 /* 標題區 */
 .lunar-header {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 12px;
     position: relative;
     z-index: 2;
 }
@@ -781,7 +775,7 @@
 
 /* 月相顯示與進度 */
 .moon-phase-display {
-    margin-top: 25px;
+    margin-top: 12px;
     background: rgba(0,0,0,0.3);
     border-radius: 12px;
     padding: 15px 20px;
@@ -826,7 +820,7 @@
     width: 100%;
     height: 4px;
     background: rgba(255,255,255,0.1);
-    margin-top: 15px;
+    margin-top: 10px;
     border-radius: 2px;
     position: relative;
 }
@@ -1067,7 +1061,7 @@
   </div>
 
     <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
-    <div class="lunar-cache-container">
+<div class="lunar-cache-container" id="lunar-cache-container" style="display: none;">
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1078,7 +1072,7 @@
         <div class="lunar-control-panel">
 <div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
     
-    <div style="display: flex; align-items: center; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
         <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
             Standing By
         </div>
@@ -1396,7 +1390,10 @@
         document.getElementById('intro-overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
         document.getElementById('visitor-view').classList.add('active');
-    };
+      // 強制隱藏月光寶盒
+    const cache = document.getElementById('lunar-cache-container');
+    if (cache) cache.style.display = 'none';
+};
 
     window.reopenAuth = () => {
         document.getElementById('visitor-view').classList.remove('active');
@@ -1451,8 +1448,10 @@
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
-        }
-    });
+          // ✅ 顯示月光寶盒（僅限登入用戶）
+        document.getElementById('lunar-cache-container').style.display = 'block';
+    }
+});
 
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
