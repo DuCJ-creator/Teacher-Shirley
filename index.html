@@ -1108,26 +1108,6 @@
 
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-<div id="lunar-dashboard" class="lunar-dashboard" style="display:none;">
-
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
-            Standing By
-        </div>
-
-        <div style="display: flex; gap: 4px;">
-            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
-            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
-            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
-            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
-        </div>
-
-        <div style="display: flex; gap: 5px;">
-            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
-            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
-        </div>
-    </div>
-
     <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
         <div class="glass-box" id="myGlassBox">
             <div class="glass-label">GET</div>
@@ -1471,20 +1451,33 @@
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('visitor-view').classList.remove('active');
-            document.getElementById('universe-view').classList.add('active');
-            document.getElementById('logoutBtn').style.display = 'flex';
-            document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
-            await loadCSVData();
-            await loadUserData(user.uid);
-            renderDailyContent(getTodayMMDD());
-            trackActivity("Login", "Arrived at Moon Base");
-        }
-    });
+ onAuthStateChanged(auth, async (user) => {
+    const dash = document.getElementById('lunar-dashboard');
+
+    if (user) {
+        currentUser = user;
+
+        if (dash) dash.style.display = 'flex';
+        if (window.updateInterface) window.updateInterface();
+
+        document.getElementById('intro-overlay').style.display = 'none';
+        document.getElementById('visitor-view').classList.remove('active');
+        document.getElementById('universe-view').classList.add('active');
+        document.getElementById('logoutBtn').style.display = 'flex';
+        document.getElementById('greeting-name').innerText =
+          `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
+
+        await loadCSVData();
+        await loadUserData(user.uid);
+        renderDailyContent(getTodayMMDD());
+        trackActivity("Login", "Arrived at Moon Base");
+
+    } else {
+        // 訪客：dashboard 不出現
+        if (dash) dash.style.display = 'none';
+        if (window.clearInterfaceDisplay) window.clearInterfaceDisplay();
+    }
+});
 
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
@@ -2098,6 +2091,49 @@ function downloadRewardCard() {
         </div>
     </div>
 </div>
+
+  /* 1) 大塊月光寶盒整個不顯示（不佔空間、不擋星體） */
+.lunar-cache-container{
+  display: none !important;
+}
+
+/* 2) 迷你右下角 dashboard */
+.lunar-dashboard{
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: rgba(5,5,10,0.55);
+  border: 1px solid rgba(255,215,0,0.25);
+  backdrop-filter: blur(4px);
+  border-radius: 14px;
+  padding: 6px 8px;
+  box-shadow: 0 0 12px rgba(255,215,0,0.18);
+
+  transform: scale(0.82);
+  transform-origin: bottom right;
+}
+
+/* 讓輸入框/按鈕更省空間 */
+.lunar-dashboard input{
+  height: 26px !important;
+  padding: 2px 4px !important;
+  font-size: 0.75rem !important;
+}
+.lunar-dashboard button{
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+}
+#mission-timer{
+  width: 72px !important;
+  font-size: 0.72rem !important;
+}
+
 <script>
 (function() {
     let missionInterval = null;
@@ -2281,9 +2317,31 @@ function downloadRewardCard() {
 
         if(stEl) stEl.innerText = storage;
         if(phEl) phEl.innerText = total;
-    }
+   window.updateInterface = updateInterface;
+window.clearInterfaceDisplay = clearInterfaceDisplay;
+ }
 })();
 </script>
+<!-- === Lunar mini dashboard (floating) === -->
+<div id="lunar-dashboard" class="lunar-dashboard" style="display:none;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
+            Standing By
+        </div>
+
+        <div style="display: flex; gap: 4px;">
+            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
+            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
+        </div>
+    </div>
+
 </body>
 </html>
 
