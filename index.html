@@ -964,52 +964,61 @@
 .glass-box.flying {
     animation: shootToMoon 0.8s forwards ease-in;
 }
-    /* 1) 大塊月光寶盒整個不顯示（不佔空間、不擋星體） */
+   /* 大塊月光寶盒永遠不顯示 */
 .lunar-cache-container{
   display: none !important;
 }
 
-/* 2) 迷你右下角 dashboard */
+/* 右下角可用版 dashboard */
 .lunar-dashboard{
   position: fixed;
-  right: 12px;
-  bottom: 12px;
+  right: 14px;
+  bottom: 14px;
   z-index: 9999;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 
-  background: rgba(5,5,10,0.55);
-  border: 1px solid rgba(255,215,0,0.25);
-  backdrop-filter: blur(4px);
+  background: rgba(5,5,10,0.60);
+  border: 1px solid rgba(255,215,0,0.28);
+  backdrop-filter: blur(6px);
   border-radius: 14px;
-  padding: 6px 8px;
-  box-shadow: 0 0 12px rgba(255,215,0,0.18);
+  padding: 8px 10px;
+  box-shadow: 0 0 14px rgba(255,215,0,0.22);
 
-  transform: scale(0.82);
+  transform: scale(0.95);     /* 幾乎原尺寸，方便操作 */
   transform-origin: bottom right;
 }
 
-/* 讓輸入框/按鈕更省空間 */
+/* 輸入框：變回正常可打字 */
 .lunar-dashboard input{
-  height: 26px !important;
-  padding: 2px 4px !important;
-  font-size: 0.75rem !important;
-}
-.lunar-dashboard button{
+  height: 34px !important;
+  min-width: 160px !important;
   padding: 4px 8px !important;
-  font-size: 0.75rem !important;
-}
-#mission-timer{
-  width: 72px !important;
-  font-size: 0.72rem !important;
+  font-size: 0.95rem !important;
 }
 
+/* 按鈕也放大一點 */
+.lunar-dashboard button{
+  padding: 6px 10px !important;
+  font-size: 0.9rem !important;
+}
+
+/* 左邊 timer 合理寬度 */
+#mission-timer{
+  width: 96px !important;
+  font-size: 0.85rem !important;
+}
+
+/* 訪客預設不要看到月光數字 */
+#moonlight-count,
+#inventory-counter{
+  display: none;
+}
   </style>
 </head>
 <body>
-
   <div id="in-app-browser-warning">
       <div class="arrow-hint">↗</div>
       <div class="warning-icon">⚠️</div>
@@ -1198,13 +1207,13 @@
                 <div class="current-moon-icon" id="phase-icon">🌑</div>
                 <div class="phase-text">
                     <span class="phase-name" id="phase-name">New Moon 朔月</span>
-                    <span class="moonlight-count">Current Thread: <span id="current-thread">0</span>/300</span>
-                </div>
-            </div>
-            <!-- 滿月庫存 -->
-            <div class="inventory-counter">
-                Storage: <span id="full-moon-count">🌕 x 0</span>
-            </div>
+                   <span class="moonlight-count" id="moonlight-count">
+  Current Thread: <span id="current-thread">0</span>/300
+</span>
+
+<div class="inventory-counter" id="inventory-counter">
+  Storage: <span id="full-moon-count">🌕 x 0</span>
+</div>
         </div>
 
         <!-- 總進度條 -->
@@ -1489,15 +1498,23 @@
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
 
- onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user) => {
     const dash = document.getElementById('lunar-dashboard');
+    const moonCount = document.getElementById('moonlight-count');
+    const invCount = document.getElementById('inventory-counter');
 
     if (user) {
         currentUser = user;
 
+        // ✅ 登入後才顯示月光數字
+        if (moonCount) moonCount.style.display = 'inline';
+        if (invCount) invCount.style.display = 'block';
+
+        // ✅ 登入後才顯示右下角小 dashboard
         if (dash) dash.style.display = 'flex';
         if (window.updateInterface) window.updateInterface();
 
+        // --- 你原本登入後的程式照舊 ---
         document.getElementById('intro-overlay').style.display = 'none';
         document.getElementById('visitor-view').classList.remove('active');
         document.getElementById('universe-view').classList.add('active');
@@ -1511,7 +1528,11 @@
         trackActivity("Login", "Arrived at Moon Base");
 
     } else {
-        // 訪客：dashboard 不出現
+        // ✅ 訪客：月光數字不顯示
+        if (moonCount) moonCount.style.display = 'none';
+        if (invCount) invCount.style.display = 'none';
+
+        // ✅ 訪客：dashboard 不顯示
         if (dash) dash.style.display = 'none';
         if (window.clearInterfaceDisplay) window.clearInterfaceDisplay();
     }
@@ -2317,6 +2338,7 @@ window.clearInterfaceDisplay = clearInterfaceDisplay;
  }
 })();
 </script>
+          
 <!-- === Lunar mini dashboard (floating) === -->
 <div id="lunar-dashboard" class="lunar-dashboard" style="display:none;">
     <div style="display: flex; align-items: center; gap: 10px;">
