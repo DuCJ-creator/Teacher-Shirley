@@ -648,8 +648,6 @@
         background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
         font-size: 1.2rem;
     }
-
-    /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
 ./* === Lunar Glow Cache 迷你化 + 右下角停靠 === */
 #lunar-cache-container{
   position: fixed;
@@ -931,8 +929,6 @@
 .btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
 
 /* === [Step 2] 縮小版玻璃匣子 CSS === */
-
-/* === [Step 2] 微型玻璃匣子 === */
 .glass-box {
     width: 120px;   /* 更小巧 */
     height: 80px;
@@ -968,6 +964,48 @@
 .glass-box.flying {
     animation: shootToMoon 0.8s forwards ease-in;
 }
+    /* 1) 大塊月光寶盒整個不顯示（不佔空間、不擋星體） */
+.lunar-cache-container{
+  display: none !important;
+}
+
+/* 2) 迷你右下角 dashboard */
+.lunar-dashboard{
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: rgba(5,5,10,0.55);
+  border: 1px solid rgba(255,215,0,0.25);
+  backdrop-filter: blur(4px);
+  border-radius: 14px;
+  padding: 6px 8px;
+  box-shadow: 0 0 12px rgba(255,215,0,0.18);
+
+  transform: scale(0.82);
+  transform-origin: bottom right;
+}
+
+/* 讓輸入框/按鈕更省空間 */
+.lunar-dashboard input{
+  height: 26px !important;
+  padding: 2px 4px !important;
+  font-size: 0.75rem !important;
+}
+.lunar-dashboard button{
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+}
+#mission-timer{
+  width: 72px !important;
+  font-size: 0.72rem !important;
+}
+
   </style>
 </head>
 <body>
