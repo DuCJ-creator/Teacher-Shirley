@@ -922,63 +922,50 @@
 }
 
 /* 2. 精緻玻璃匣子本體 */
+/* === [Step 2] 玻璃匣子與動畫樣式 === */
+
+/* 匣子外觀 (位於左側面板內) */
 .glass-box {
-    width: 240px;
-    height: 150px;
-    background: rgba(25, 25, 40, 0.85); /* 深色半透明 */
-    backdrop-filter: blur(12px);         /* 磨砂效果 */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-top: 1px solid rgba(255, 255, 255, 0.7); /* 頂部高光 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(255, 215, 0, 0.2),
-        inset 0 0 20px rgba(255, 255, 255, 0.05);
+    width: 200px;
+    height: 120px;
+    background: rgba(25, 25, 40, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    animation: boxFloat 3s ease-in-out infinite;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 彈性出現 */
+    margin: 0 auto; /* 水平置中於左側面板 */
+    transition: all 0.5s ease;
 }
 
-/* 當匣子顯示時的狀態 */
-.glass-box.active {
-    opacity: 1;
-    transform: scale(1);
+/* 內容文字 */
+.glass-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+.glass-value { font-size: 2.5rem; color: #fff; font-weight: 800; text-shadow: 0 0 15px #ffd700; }
+.glass-sub { font-size: 0.7rem; color: #ffd700; font-style: italic; }
+
+/* 狀態：發光 (Collecting) */
+.glass-box.glowing {
+    background: rgba(40, 40, 60, 0.9);
+    border-color: #ffd700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+    transform: scale(1.05);
 }
 
-/* 匣子內的文字 */
-.glass-label { font-size: 0.85rem; color: #aaa; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-.glass-value { font-size: 3rem; color: #fff; font-weight: 900; text-shadow: 0 0 20px #ffd700; line-height: 1; }
-.glass-sub { font-size: 0.8rem; color: #ffd700; font-style: italic; margin-top: 5px; }
-
-/* 3. 動畫：懸浮感 */
-@keyframes boxFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-/* 4. 動畫：往右飛走 (Transfer) */
-@keyframes flyRightToStorage {
-    0% { 
-        transform: translate(0, 0) scale(1); 
-        opacity: 1;
-    }
-    20% {
-        transform: translate(-20px, 10px) scale(1.1); /* 先蓄力後退 */
-    }
+/* 動畫：傳輸到右邊 (Transfer) */
+/* 使用 translate 模擬從左欄飛到右欄 */
+@keyframes transferRight {
+    0% { transform: scale(1.05) translate(0, 0); opacity: 1; }
+    20% { transform: scale(0.9) translate(-10px, 0); } /* 蓄力 */
     100% { 
-        transform: translate(40vw, -30vh) scale(0.1); /* 往右上方飛走 */
-        opacity: 0;
+        transform: scale(0.2) translate(150%, -50%); /* 往右上方飛並縮小 */
+        opacity: 0; 
     }
 }
-
-.fly-away {
-    animation: flyRightToStorage 1.2s forwards cubic-bezier(0.6, -0.28, 0.735, 0.045);
+.transfer-anim {
+    animation: transferRight 1.2s forwards cubic-bezier(0.7, 0, 0.3, 1);
 }
   </style>
 </head>
@@ -1119,39 +1106,59 @@
 
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-          <h3 style="color: #ffd700; text-align: center; margin-bottom: 15px;">Lunar Mission Control</h3>
-<div style="text-align: center; margin-bottom: 15px; font-family: 'Cinzel Decorative', serif;">
-    <span style="color: #888; font-size: 0.9rem;">Moon Storage:</span>
-    <span id="moon-storage-count" style="font-size: 1.4rem; color: #ffd700; font-weight: bold; margin-left: 5px;">0</span>
-    <span style="font-size: 1.2rem;">🌕</span>
-</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; justify-content: center;">
+    
+    <div style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color: #ffd700; text-align: center; margin-top: 0;">📡 Mission Control</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="number" id="moon-level" placeholder="Level" disabled style="width: 100%; text-align:center; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #555; padding:10px; font-size:1.2rem; font-weight:bold; box-sizing: border-box;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width: 100%; text-align:center; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #555; padding:10px; font-size:1.2rem; font-weight:bold; box-sizing: border-box;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <input type="number" id="moon-correct" placeholder="Correct" disabled style="width: 100%; text-align:center; background:rgba(0,0,0,0.5); color:#ffd700; border:2px solid #ffd700; padding:10px; font-size:1.5rem; font-weight:800; height: 3.5rem; box-sizing: border-box;">
+            <input type="number" id="moon-wrong" placeholder="Wrong" disabled style="width: 100%; text-align:center; background:rgba(0,0,0,0.5); color:#ff6b6b; border:2px solid #ff6b6b; padding:10px; font-size:1.5rem; font-weight:800; height: 3.5rem; box-sizing: border-box;">
+        </div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-    <input type="number" id="moon-level" placeholder="Level" disabled style="text-align:center; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #555; padding:10px; font-size:1.2rem; font-weight:bold;">
-    <input type="text" id="moon-unit" placeholder="Unit" disabled style="text-align:center; background:rgba(0,0,0,0.3); color:#fff; border:1px solid #555; padding:10px; font-size:1.2rem; font-weight:bold;">
-</div>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-    <input type="number" id="moon-correct" placeholder="Correct" disabled style="text-align:center; background:rgba(0,0,0,0.5); color:#ffd700; border:2px solid #ffd700; padding:10px; font-size:1.5rem; font-weight:800; height: 3.5rem;">
-    <input type="number" id="moon-wrong" placeholder="Wrong" disabled style="text-align:center; background:rgba(0,0,0,0.5); color:#ff6b6b; border:2px solid #ff6b6b; padding:10px; font-size:1.5rem; font-weight:800; height: 3.5rem;">
-</div>
+        <div id="mission-timer" style="text-align: center; color: #aaa; margin-bottom: 15px; font-family: sans-serif; font-weight: bold; min-height: 1.5em;">
+            請點擊 Start Mission 前往練習
+        </div>
 
-<div id="mission-timer" style="text-align: center; color: #aaa; margin: 10px 0; font-family: sans-serif; font-weight: bold; min-height: 1.5em;">
-    請點擊 Start Mission
-</div>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button onclick="window.startLunarMission()" style="flex:1; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Start Mission</button>
+            <button onclick="window.collectMoonlight()" style="flex:1; padding: 12px; background: linear-gradient(135deg, #ffd700, #f39c12); color: #222; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px #ffd700;">Collect</button>
+        </div>
 
-<div style="display: flex; gap: 10px; justify-content: center;">
-    <button onclick="window.startLunarMission()" style="flex:1; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">
-        Start Mission
-    </button>
-    <button onclick="window.collectMoonlight()" style="flex:1; padding: 12px; background: linear-gradient(135deg, #ffd700, #f39c12); color: #222; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);">
-        Collect
-    </button>
-</div>
+        <div id="glass-box-container" style="display:none; margin: 0 auto;">
+            <div class="glass-box" id="myGlassBox">
+                <div class="glass-label">Collected</div>
+                <div class="glass-value" id="glass-box-value">0</div>
+                <div class="glass-sub">Glowing Threads</div>
+            </div>
+        </div>
+    </div>
 
-<div style="text-align: center; margin-top: 20px; font-family: 'Exo 2', sans-serif;">
-    Current Phase: 
-    <span id="current-moonlight-display" style="font-size: 1.5rem; color: #fff; font-weight: bold;">0</span> 
-    <span style="color: #888;">/ 300 Threads</span>
+    <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 20px;">
+        
+        <div style="margin-bottom: 20px; text-align: center;">
+            <div style="font-family: 'Cinzel Decorative'; color: #888; margin-bottom: 5px;">Moon Storage</div>
+            <div style="font-size: 2.5rem; color: #ffd700; text-shadow: 0 0 15px gold;">
+                <span id="moon-storage-count">0</span> 🌕
+            </div>
+        </div>
+
+        <hr style="width: 50%; border-color: rgba(255,255,255,0.1);">
+
+        <div style="margin-top: 20px; text-align: center;">
+            <div style="color: #aaa; margin-bottom: 5px;">Current Energy</div>
+            <div style="font-family: 'Exo 2'; font-size: 1.2rem; color: #fff;">
+                <span id="current-moonlight-display" style="font-size: 2rem; font-weight: bold; color: #fff;">0</span> 
+                <span style="color: #666;">/ 300</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #555; margin-top: 5px;">Threads Needed</div>
+        </div>
+
+    </div>
 </div>
 
             <!-- 2. 輸入成績 -->
@@ -2104,44 +2111,37 @@ function downloadRewardCard() {
 </div>
 
 <script>
+<script>
 (function() {
-    // --- 全局變數 ---
     let missionInterval = null;
 
-    // --- 頁面載入初始化 ---
+    // 初始化
     window.addEventListener('load', () => {
         updateInterface(); 
-        
-        // 確保玻璃匣子容器顯示狀態正確
-        const wrapper = document.getElementById('glass-box-container');
-        if(wrapper) wrapper.style.display = 'none';
     });
 
-    // --- 1. 開始任務 (Start Mission) ---
+    // --- 1. Start Mission (含跳轉) ---
     window.startLunarMission = function() {
         const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
         const timerDisplay = document.getElementById('mission-timer');
         
-        // 鎖定並清空
+        // 鎖定輸入
         inputs.forEach(id => {
             const el = document.getElementById(id);
-            if(el) {
-                el.value = '';
-                el.disabled = true;
-                el.placeholder = "等待冷卻...";
-                el.style.borderColor = "#555"; // 恢復邊框顏色
-            }
+            if(el) { el.value = ''; el.disabled = true; el.placeholder = "等待冷卻..."; }
         });
 
-        // 倒數計時邏輯
+        // 隱藏匣子 (如果是上一輪留下的)
+        const boxContainer = document.getElementById('glass-box-container');
+        if(boxContainer) boxContainer.style.display = 'none';
+
+        // 倒數計時
         if(timerDisplay) {
             timerDisplay.style.color = '#ff6b6b';
-            timerDisplay.innerText = "⏳ 任務準備中...";
+            timerDisplay.innerText = "⏳ 任務進行中...";
         }
 
         let timeLeft = 120; // 2分鐘
-        // let timeLeft = 5; // 測試用：如果想測試快一點，可以把上面那行改成 5
-
         if(missionInterval) clearInterval(missionInterval);
 
         missionInterval = setInterval(() => {
@@ -2149,7 +2149,7 @@ function downloadRewardCard() {
             const s = timeLeft % 60;
             const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
             
-            if(timerDisplay) timerDisplay.innerText = `⏳ 冷卻中 (Cool-down): ${timeStr}`;
+            if(timerDisplay) timerDisplay.innerText = `⏳ 冷卻中 (Wait): ${timeStr}`;
             
             if (timeLeft <= 0) {
                 clearInterval(missionInterval);
@@ -2157,92 +2157,79 @@ function downloadRewardCard() {
             }
             timeLeft--;
         }, 1000);
+
+        // 【新增】開啟學習網站
+        // 使用 setTimeout 稍微延遲一下，讓使用者感覺到按鈕反饋
+        setTimeout(() => {
+            if(confirm("即將前往 iVocab Quiz 進行練習，準備好了嗎？")) {
+                window.open('https://ivocab-quiz.vercel.app/', '_blank');
+            }
+        }, 300);
     };
 
-    // --- 2. 解鎖輸入 (Enable Inputs) ---
+    // --- 2. 解鎖輸入 ---
     window.enableMissionInputs = function() {
         ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
             const el = document.getElementById(id);
             if(el) { 
                 el.disabled = false; 
                 el.placeholder = "";
-                if(id === 'moon-correct') el.focus(); // 自動聚焦到 Correct
+                if(id === 'moon-correct') el.focus();
             }
         });
-
         const timer = document.getElementById('mission-timer');
         if(timer) {
-            timer.innerText = "🚀 系統就緒！請輸入數據 (Ready)";
+            timer.innerText = "🚀 練習完成！請輸入數據 (Ready)";
             timer.style.color = "#2ecc71";
         }
     };
 
-    // --- 3. 收集月光 (Collect Logic) ---
+    // --- 3. 收集流程 (左 -> 右) ---
     window.collectMoonlight = function() {
         const correctEl = document.getElementById('moon-correct');
-        const wrongEl = document.getElementById('moon-wrong');
-
-        // A. 檢查是否解鎖
-        if (!correctEl || correctEl.disabled) {
-            alert("⚠️ 系統冷卻中，請先點擊 'Start Mission' 並等待倒數結束！");
-            return;
-        }
-
-        // B. 驗證數值
-        let val = parseInt(correctEl.value);
-        let wrongVal = parseInt(wrongEl.value);
-
-        if (isNaN(val)) { alert("❌ 請輸入 Correct 數值"); return; }
-        if (val < 0) { alert("❌ 數值不能為負"); return; }
-        if (val > 30) { alert("❌ Correct 不能超過 30 (Max 30)"); return; }
-
-        // C. 啟動玻璃匣子動畫
-        showGlassBoxAnimation(val);
-    };
-
-    // --- 4. 玻璃匣子動畫流程 ---
-    function showGlassBoxAnimation(value) {
-        const container = document.getElementById('glass-box-container');
+        const boxContainer = document.getElementById('glass-box-container');
         const box = document.getElementById('myGlassBox');
         const valDisplay = document.getElementById('glass-box-value');
         const timer = document.getElementById('mission-timer');
 
-        // 鎖定輸入框，防止重複提交
-        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = true;
-        });
+        if (!correctEl || correctEl.disabled) {
+            alert("⚠️ 請先 Start Mission，並在練習後等待冷卻結束！");
+            return;
+        }
 
-        // 顯示匣子
-        container.style.display = 'block';
-        valDisplay.innerText = value;
-        box.classList.remove('fly-away'); // 重置飛行動畫
-        
-        // 強制重繪 (Reflow) 以重啟動畫
-        void box.offsetWidth; 
-        
-        box.classList.add('active'); // 觸發出現動畫
+        let val = parseInt(correctEl.value);
+        if (isNaN(val) || val < 0) { alert("❌ 無效數字"); return; }
+        if (val > 30) { alert("❌ Correct 不能超過 30"); return; }
+
+        // Step A: 顯示左邊的玻璃匣子
+        boxContainer.style.display = 'block';
+        valDisplay.innerText = val;
+        box.className = 'glass-box glowing'; // 加入發光特效，移除舊動畫
+
+        // 鎖定輸入
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            document.getElementById(id).disabled = true;
+        });
 
         if(timer) timer.innerText = "✨ 正在收集月光能量...";
 
-        // 延遲 1.5 秒後，執行「飛走 + 更新數據」
+        // Step B: 1.5秒後，飛向右邊
         setTimeout(() => {
-            box.classList.add('fly-away'); // 飛向右邊
-            
-            // 再等 1 秒 (動畫飛完)，更新真正的數據
+            box.classList.add('transfer-anim'); // 播放飛行動畫
+
+            // Step C: 動畫結束 (約1.2秒) 後，更新右邊數據
             setTimeout(() => {
-                performDataTransfer(value);
+                performDataTransfer(val);
                 
                 // 隱藏匣子
-                box.classList.remove('active');
-                container.style.display = 'none';
-
-            }, 1000); 
+                boxContainer.style.display = 'none';
+                box.classList.remove('transfer-anim'); 
+            }, 1000);
 
         }, 1500);
-    }
+    };
 
-    // --- 5. 數據計算與儲存 (Data Transfer) ---
+    // --- 4. 數據更新邏輯 ---
     function performDataTransfer(newThreads) {
         let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
         let storageCount = parseInt(localStorage.getItem('shirley_moon_storage') || 0);
@@ -2250,59 +2237,40 @@ function downloadRewardCard() {
         currentTotal += newThreads;
         let isFullMoon = false;
 
-        // 滿月判斷 (>= 300)
         if (currentTotal >= 300) {
-            const moons = Math.floor(currentTotal / 300); // 算出多了幾個滿月
+            const moons = Math.floor(currentTotal / 300);
             storageCount += moons;
-            currentTotal = currentTotal % 300; // 留下餘數
+            currentTotal = currentTotal % 300;
             isFullMoon = true;
         }
 
-        // 存檔
         localStorage.setItem('shirley_total_moonlight', currentTotal);
         localStorage.setItem('shirley_moon_storage', storageCount);
 
-        // 更新介面
         updateInterface();
 
-        // 狀態顯示
         const timer = document.getElementById('mission-timer');
         if(timer) {
-            timer.innerText = "✅ 能量傳輸完成。請重新 Start Mission";
+            timer.innerText = "✅ 能量已傳輸。準備下一輪 Start Mission。";
             timer.style.color = "#ffd700";
         }
 
         if(isFullMoon) {
-            alert(`🌕 恭喜！月光滿溢！已轉化為 ${storageCount} 個滿月儲存！`);
-            updateInterface(); // 再次更新以顯示 Storage 變化
+            // 簡單的滿月提示
+            alert(`🌕 月光能量滿溢！獲得 ${storageCount} 個滿月儲存！`);
+            updateInterface();
         }
     }
 
-    // --- 6. 更新介面顯示 (UI Update) ---
     function updateInterface() {
         const total = localStorage.getItem('shirley_total_moonlight') || 0;
         const storage = localStorage.getItem('shirley_moon_storage') || 0;
 
-        // 1. 更新 Storage
         const stEl = document.getElementById('moon-storage-count');
+        const disEl = document.getElementById('current-moonlight-display');
+
         if(stEl) stEl.innerText = storage;
-
-        // 2. 更新 Thread (右邊的 / 300)
-        // 這裡對應我们在第一步 HTML 裡設定的 ID
-        const displayEl = document.getElementById('current-moonlight-display');
-        if(displayEl) {
-            displayEl.innerText = total;
-            
-            // 簡單的發光特效反馈
-            displayEl.style.textShadow = "0 0 20px #fff";
-            setTimeout(() => displayEl.style.textShadow = "none", 500);
-        }
-
-        // 3. (選用) 更新原本的月相圖示，如果有該函數的話
-        if(typeof window.updateMoonPhase === 'function') {
-             // 這裡傳入 total 讓原本的月相邏輯運作
-             window.updateMoonPhase(total); 
-        }
+        if(disEl) disEl.innerText = total;
     }
 
 })();
