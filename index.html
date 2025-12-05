@@ -1079,8 +1079,8 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
-    <div class="lunar-cache-container">
+   <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+<div class="lunar-cache-container" id="moonlight-box" style="display: none;">
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1477,13 +1477,19 @@
             document.getElementById('visitor-view').classList.remove('active');
             document.getElementById('universe-view').classList.add('active');
             document.getElementById('logoutBtn').style.display = 'flex';
-            document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
-            await loadCSVData();
-            await loadUserData(user.uid);
-            renderDailyContent(getTodayMMDD());
-            trackActivity("Login", "Arrived at Moon Base");
-        }
-    });
+             // 显示月光宝盒
+        document.getElementById('moonlight-box').style.display = 'block';
+        
+        document.getElementById('greeting-name').innerText = `Welcome to Moon Base, ${user.displayName || user.email.split('@')[0]}`;
+        await loadCSVData();
+        await loadUserData(user.uid);
+        renderDailyContent(getTodayMMDD());
+        trackActivity("Login", "Arrived at Moon Base");
+    } else {
+        // 如果是访客，隐藏月光宝盒
+        document.getElementById('moonlight-box').style.display = 'none';
+    }
+});
 
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
