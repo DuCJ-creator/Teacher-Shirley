@@ -1066,46 +1066,82 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-<!-- === 新增：Lunar Glow Cache 月光寶盒 (僅會員可見) === -->
-<div id="lunar-cache-wrapper" style="display: none;">
-  <div class="lunar-cache-container" id="lunar-cache-container" style="display: none;">
+    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+    <div class="lunar-cache-container">
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
             <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
         </div>
+
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-            <!-- 1. 開始任務按鈕 -->
-            <div class="mission-start-btn" onclick="startLunarMission()">
-                <div class="mission-icon">🚀</div>
-                <div>Start Quiz Mission</div>
-                <div style="font-size:0.7rem; margin-top:4px; opacity:0.7;">(External Practice)</div>
-            </div>
+<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
+            Standing By
+        </div>
 
+        <div style="display: flex; gap: 4px;">
+            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
+            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
+        </div>
+    </div>
+
+    <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">GET</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px;">
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">THREADS</div>
+            <div style="font-family: 'Exo 2'; color: #fff; font-size: 1rem;">
+                <span id="current-moonlight-display" style="color: #fff; font-weight: bold;">0</span>/300
+            </div>
+        </div>
+        <div style="text-align: center; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">MOONS</div>
+            <div style="font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 5px gold;">
+                <span id="moon-storage-count">0</span>🌕
+            </div>
+        </div>
+    </div>
+</div>
             <!-- 2. 輸入成績 -->
             <div class="lunar-inputs">
                 <div class="lunar-input-group">
                     <label class="lunar-label">Level</label>
-                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1" disabled>
+                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
                 </div>
                 <div class="lunar-input-group">
                     <label class="lunar-label">Unit</label>
-                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1" disabled>
+                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
                 </div>
                 <div class="lunar-input-group">
                     <label class="lunar-label" style="color:#4ade80;">Correct</label>
-                    <input type="number" class="lunar-field" id="moon-correct" min="0" disabled>
+                    <input type="number" class="lunar-field" id="moon-correct" min="0">
                 </div>
                 <div class="lunar-input-group">
                     <label class="lunar-label" style="color:#f87171;">Wrong</label>
-                    <input type="number" class="lunar-field" id="moon-wrong" min="0" disabled>
+                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
                 </div>
             </div>
 
             <!-- 3. 提交按鈕 -->
-            <button class="lunar-submit-btn" id="collect-btn" onclick="submitLunarGlow()" disabled>Collect Moonlight</button>
+            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
         </div>
+
         <!-- 狀態顯示 -->
         <div class="moon-phase-display">
             <div class="phase-info">
@@ -1120,38 +1156,42 @@
                 Storage: <span id="full-moon-count">🌕 x 0</span>
             </div>
         </div>
+
         <!-- 總進度條 -->
         <div class="moonlight-track">
             <div class="moonlight-fill" id="moon-progress-bar"></div>
         </div>
     </div>
-</div>
-<!-- 滿月獎勵卡片 Modal (隱藏) -->
-<div id="moon-reward-modal">
-    <div class="reward-card" id="capture-reward-card">
-        <div class="reward-moon">🌕</div>
-        <div class="reward-title">Shirley's Moon Light Card</div>
-        <div style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">For: <span id="reward-user-name">Traveler</span></div>
-        <div class="reward-poem-cn">
-            《滿月之後》<br>
-            滿月圓了，<br>
-            光還在長。<br>
-            它輕輕鋪成路，<br>
-            引你走向下一輪發亮。
-        </div>
-        <div class="reward-poem-en">
-            After the Full Moon<br>
-            The moon is full—<br>
-            but the light keeps growing.<br>
-            It softly becomes a path,<br>
-            leading you to your next glow.
-        </div>
-        <div class="reward-actions" data-html2canvas-ignore>
-            <button class="btn-keep" onclick="downloadRewardCard()">📥 Keep Card</button>
-            <button class="btn-close-reward" onclick="closeRewardModal()">Close</button>
+
+    <!-- 滿月獎勵卡片 Modal (隱藏) -->
+    <div id="moon-reward-modal">
+        <div class="reward-card" id="capture-reward-card">
+            <div class="reward-moon">🌕</div>
+            <div class="reward-title">Shirley's Moon Light Card</div>
+            <div style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">For: <span id="reward-user-name">Traveler</span></div>
+            
+            <div class="reward-poem-cn">
+                《滿月之後》<br>
+                滿月圓了，<br>
+                光還在長。<br>
+                它輕輕鋪成路，<br>
+                引你走向下一輪發亮。
+            </div>
+            
+            <div class="reward-poem-en">
+                After the Full Moon<br>
+                The moon is full—<br>
+                but the light keeps growing.<br>
+                It softly becomes a path,<br>
+                leading you to your next glow.
+            </div>
+
+            <div class="reward-actions" data-html2canvas-ignore>
+                <button class="btn-keep" onclick="downloadRewardCard()">📥 Keep Card</button>
+                <button class="btn-close-reward" onclick="closeRewardModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
   <div id="member-terminal">
       <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
@@ -1356,10 +1396,7 @@
         document.getElementById('intro-overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
         document.getElementById('visitor-view').classList.add('active');
-      // ✅【新增】訪客模式下強制隱藏月光寶盒儀表板
-    const dashboardWrapper = document.getElementById('lunar-dashboard-wrapper');
-    if (dashboardWrapper) dashboardWrapper.style.display = 'none';
-};
+    };
 
     window.reopenAuth = () => {
         document.getElementById('visitor-view').classList.remove('active');
@@ -1414,11 +1451,8 @@
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
-        // 在 user 登入成功後
-document.getElementById('lunar-cache-container').style.display = 'block';
-updateMoonInterface(); // 初始化月光進度
-    }
-});
+        }
+    });
 
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
@@ -1872,87 +1906,89 @@ updateMoonInterface(); // 初始化月光進度
 
 // 常數設定
 const MOON_CYCLE = 300; // 300點為一個滿月循環
-const MIN_STUDY_TIME = 60000; // 1分鐘 (毫秒)
+const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
 
 // 頁面加載時初始化
 document.addEventListener('DOMContentLoaded', () => {
     updateMoonInterface();
 });
 
-// 1. 開始任務 (1分鐘冷卻)
-function startLunarMission() {
-    if (!currentUser) {
-        alert("請先登入才能收集月光！");
-        return;
-    }
-    const startTime = Date.now();
-    sessionStorage.setItem('lunar_start_time', startTime);
-    window.open('https://ivocab-quiz.vercel.app/', '_blank');
-
-    const btn = document.querySelector('.mission-start-btn');
-    const collectBtn = document.getElementById('collect-btn');
-    const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-
-    btn.style.opacity = '0.6';
-    btn.style.pointerEvents = 'none';
-    collectBtn.disabled = true;
-
-    let countdown = 60; // ⬅️ 改為 1 分鐘
-    const timer = setInterval(() => {
-        countdown--;
-        const mins = Math.floor(countdown / 60);
-        const secs = countdown % 60;
-        btn.innerHTML = `
-            <div class="mission-icon">⏳</div>
-            <div>Cooling: ${mins}:${secs < 10 ? '0' + secs : secs}</div>
-        `;
-        if (countdown <= 0) {
-            clearInterval(timer);
-            // 解鎖輸入 & 按鈕
-            inputs.forEach(id => document.getElementById(id).disabled = false);
-            collectBtn.disabled = false;
-            btn.innerHTML = '<div class="mission-icon">✅</div><div>Ready to Submit</div>';
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-        }
-    }, 1000);
+// 1. 開始任務 (紀錄時間)
+function startLunarMission(event) {
+    event.preventDefault();
+    const now = Date.now();
+    sessionStorage.setItem('lunar_start_time', now);
+    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+    const href = event.currentTarget.href;
+    setTimeout(() => {
+        window.open(href, '_blank');
+    }, 300);
 }
-
-// 2. 提交月光
+// 2. 提交成績
 function submitLunarGlow() {
+    // A. 防作弊時間檢查
     const startTime = sessionStorage.getItem('lunar_start_time');
     const now = Date.now();
-    if (!startTime || (now - startTime) < 60000) { // ⬅️ 改為 60 秒
-        alert("⚠️ 請至少練習 1 分鐘！");
+    
+    // 如果沒有開始時間，或者時間差小於 2 分鐘
+    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
+        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
         return;
     }
-    const correct = parseInt(document.getElementById('moon-correct').value) || 0;
-    const wrong = parseInt(document.getElementById('moon-wrong').value) || 0;
-    if (correct === 0 && wrong === 0) {
-        alert("請輸入題數。");
+
+    // B. 獲取輸入
+    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
+    const levelVal = document.getElementById('moon-level').value;
+    const unitVal = document.getElementById('moon-unit').value;
+
+    if (correctVal === 0 && wrongVal === 0) {
+        alert("請輸入正確或錯誤題數。");
         return;
     }
-    const gained = correct + wrong;
-    let total = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-    let full = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-    total += gained;
-    if (total >= 300) {
-        full += 1;
-        total -= 300;
-        localStorage.setItem('shirley_full_moon_count', full);
-        if (full === 1) showRewardCard();
-        else alert(`🌕 獲得第 ${full} 個滿月！`);
+
+    // C. 計算本場月光 (Thread of Moonlight)
+    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
+    const threadGained = correctVal + wrongVal; 
+
+    // D. 讀取並更新總分
+    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 累積
+    totalMoonlight += threadGained;
+
+    // E. 檢查是否達成滿月循環
+    if (totalMoonlight >= MOON_CYCLE) {
+        // 增加滿月庫存
+        fullMoonStorage += 1;
+        // 扣除循環分數 (進入下一輪)
+        totalMoonlight = totalMoonlight - MOON_CYCLE;
+        
+        // 儲存滿月數
+        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
+        
+        // 如果是第一次獲得滿月，觸發獎勵卡片
+        if (fullMoonStorage === 1) {
+            showRewardCard();
+        } else {
+            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
+        }
     }
-    localStorage.setItem('shirley_total_moonlight', total);
-    // 清空
-    ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
-        document.getElementById(id).value = '';
-        document.getElementById(id).disabled = true;
-    });
-    document.getElementById('collect-btn').disabled = true;
+
+    // F. 儲存新進度
+    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
+    
+    // G. 清空計時器與輸入框 (方便下次)
     sessionStorage.removeItem('lunar_start_time');
+    document.getElementById('moon-correct').value = '';
+    document.getElementById('moon-wrong').value = '';
+    document.getElementById('moon-level').value = '';
+    document.getElementById('moon-unit').value = '';
+
+    // H. 更新介面
     updateMoonInterface();
-    alert(`✨ 擷取 ${gained} 縷月光！`);
+    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
 }
 
 // 3. 更新介面顯示 (月相與進度)
@@ -2102,7 +2138,7 @@ function downloadRewardCard() {
             }
         }, 300);
 
-        let timeLeft = 60; 
+        let timeLeft = 120; 
         if(missionInterval) clearInterval(missionInterval);
 
         missionInterval = setInterval(() => {
@@ -2214,76 +2250,6 @@ function downloadRewardCard() {
         if(phEl) phEl.innerText = total;
     }
 })();
-  // 啟動外部任務（2分鐘冷卻）
-function startLunarMission() {
-    if (!currentUser) {
-        alert("請先登入才能收集月光！");
-        return;
-    }
-    const startTime = Date.now();
-    sessionStorage.setItem('lunar_start_time', startTime);
-    window.open('https://ivocab-quiz.vercel.app/', '_blank');
-
-    const btn = document.querySelector('.mission-start-btn');
-    const collectBtn = document.getElementById('collect-btn');
-    const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-
-    btn.style.opacity = '0.6';
-    btn.style.pointerEvents = 'none';
-    collectBtn.disabled = true;
-
-    let countdown = 120;
-    const timer = setInterval(() => {
-        countdown--;
-        const mins = Math.floor(countdown / 60);
-        const secs = countdown % 60;
-        btn.innerHTML = `
-            <div class="mission-icon">⏳</div>
-            <div>Cooldown: ${mins}:${secs < 10 ? '0' + secs : secs}</div>
-        `;
-        if (countdown <= 0) {
-            clearInterval(timer);
-            inputs.forEach(id => document.getElementById(id).disabled = false);
-            collectBtn.disabled = false;
-            btn.innerHTML = '<div class="mission-icon">✅</div><div>Ready to Submit</div>';
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-            btn.onclick = null;
-        }
-    }, 1000);
-}
-
-// 提交月光
-function submitLunarGlow() {
-    const startTime = sessionStorage.getItem('lunar_start_time');
-    const now = Date.now();
-    if (!startTime || (now - startTime) < 120000) {
-        alert("⚠️ 請至少練習 2 分鐘！");
-        return;
-    }
-    const correct = parseInt(document.getElementById('moon-correct').value) || 0;
-    const wrong = parseInt(document.getElementById('moon-wrong').value) || 0;
-    if (correct === 0 && wrong === 0) {
-        alert("請輸入題數。");
-        return;
-    }
-    const gained = correct + wrong;
-    let total = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-    let full = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-    total += gained;
-    if (total >= 300) {
-        full += 1;
-        total -= 300;
-        localStorage.setItem('shirley_full_moon_count', full);
-        if (full === 1) showRewardCard();
-        else alert(`🌕 獲得第 ${full} 個滿月！`);
-    }
-    localStorage.setItem('shirley_total_moonlight', total);
-    ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => document.getElementById(id).value = '');
-    sessionStorage.removeItem('lunar_start_time');
-    updateMoonInterface();
-    alert(`✨ 擷取 ${gained} 縷月光！`);
-}
 </script>
 </body>
 </html>
