@@ -108,13 +108,12 @@
     .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
 
     .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-
-.planet-moon { 
-    width: 60px;  /* 寬度縮小 */
-    height: 60px; /* 高度縮小 */
+    ..planet-moon { 
+    width: 60px;   /* 原本是 100px */
+    height: 60px;  /* 原本是 100px */
     border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); 
-    box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 0 30px rgba(255,255,255,0.6), inset -5px -5px 15px rgba(0,0,0,0.1); /* 光暈也稍微調小 */
     border: 1px solid rgba(255,255,255,0.4); 
     animation: bounce 2s ease-in-out infinite; 
 }
@@ -1074,6 +1073,58 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
+    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+    <div class="lunar-cache-container">
+        <!-- 標題 -->
+        <div class="lunar-header">
+            <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
+            <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
+        </div>
+
+        <!-- 控制面板 -->
+        <div class="lunar-control-panel">
+<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
+            Standing By
+        </div>
+
+        <div style="display: flex; gap: 4px;">
+            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
+            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
+        </div>
+    </div>
+
+    <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">GET</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px;">
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">THREADS</div>
+            <div style="font-family: 'Exo 2'; color: #fff; font-size: 1rem;">
+                <span id="current-moonlight-display" style="color: #fff; font-weight: bold;">0</span>/300
+            </div>
+        </div>
+        <div style="text-align: center; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">MOONS</div>
+            <div style="font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 5px gold;">
+                <span id="moon-storage-count">0</span>🌕
+            </div>
+        </div>
+    </div>
+</div>
             <!-- 2. 輸入成績 -->
             <div class="lunar-inputs">
                 <div class="lunar-input-group">
@@ -2012,7 +2063,200 @@ function downloadRewardCard() {
         link.click();
     });
 }
- 
-<script>
+  </script>
+  <div id="glass-box-wrapper">
+    <div id="glass-box-container" style="display:none;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">Collected</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+            <div class="glass-sub">Glowing Threads</div>
+        </div>
+    </div>
+</div>
+  
+(function() {
+    let missionInterval = null;
+
+    // --- [核心] 權限控制與顯示邏輯 ---
+    function initAuthCheck() {
+        const dashboard = document.getElementById('lunar-dashboard');
+        
+        // 1. 先強制隱藏 (雙重保險)
+        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+
+        // 2. 啟動 Firebase 監聽
+        // 使用 setInterval 確保 Firebase SDK 載入完成
+        const checkFirebase = setInterval(() => {
+            if (typeof firebase !== 'undefined' && firebase.auth()) {
+                clearInterval(checkFirebase);
+                
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // [已登入]
+                        // 移除 important 屬性，改為 flex 顯示
+                        if(dashboard) {
+                            dashboard.style.display = 'flex'; 
+                            // 這裡可以根據 user.uid 載入專屬數據，如果有的話
+                        }
+                        updateInterface(); // 更新數據顯示
+                    } else {
+                        // [未登入 / 訪客]
+                        // 強制隱藏，並清空顯示的數據
+                        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+                        clearInterfaceDisplay(); 
+                    }
+                });
+            }
+        }, 200); // 每 0.2 秒檢查一次 Firebase 是否就緒
+    }
+
+    // 清空介面顯示 (防止訪客看到殘留數據)
+    function clearInterfaceDisplay() {
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+        if(stEl) stEl.innerText = '0';
+        if(phEl) phEl.innerText = '0';
+    }
+
+    // 頁面載入時啟動
+    window.addEventListener('load', initAuthCheck);
+
+
+    // --- [功能] 任務邏輯 ---
+
+    window.startLunarMission = function() {
+        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
+        const timerDisplay = document.getElementById('mission-timer');
+        
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.value = ''; el.disabled = true; el.placeholder = "..."; }
+        });
+        document.getElementById('glass-box-container').style.display = 'none';
+
+        if(timerDisplay) {
+            timerDisplay.innerText = "Launching...";
+            timerDisplay.style.color = '#ff6b6b';
+        }
+
+        setTimeout(() => {
+            if(confirm("Start Quiz Mission?")) {
+                window.open('https://ivocab-quiz.vercel.app/', '_blank');
+            }
+        }, 300);
+
+        let timeLeft = 120; 
+        if(missionInterval) clearInterval(missionInterval);
+
+        missionInterval = setInterval(() => {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
+            if(timerDisplay) timerDisplay.innerText = `Wait: ${timeStr}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(missionInterval);
+                enableMissionInputs();
+            }
+            timeLeft--;
+        }, 1000);
+    };
+
+    function enableMissionInputs() {
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.disabled = false; el.placeholder = ""; }
+        });
+        const timer = document.getElementById('mission-timer');
+        if(timer) {
+            timer.innerText = "Ready!";
+            timer.style.color = "#2ecc71";
+        }
+    }
+
+    window.collectMoonlight = function() {
+        const correctEl = document.getElementById('moon-correct');
+        const boxContainer = document.getElementById('glass-box-container');
+        const box = document.getElementById('myGlassBox');
+        const valDisplay = document.getElementById('glass-box-value');
+
+        if (!correctEl || correctEl.disabled) {
+            alert("Please wait for cooldown!");
+            return;
+        }
+
+        let val = parseInt(correctEl.value);
+        if (isNaN(val) || val < 0) return;
+        if (val > 30) { alert("Max 30"); return; }
+
+        // 顯示匣子
+        boxContainer.style.display = 'block';
+        valDisplay.innerText = val;
+        
+        box.className = 'glass-box';
+        void box.offsetWidth;
+        box.classList.add('visible');
+
+        // 鎖定
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            document.getElementById(id).disabled = true;
+        });
+        document.getElementById('mission-timer').innerText = "Sending...";
+
+        // 動畫
+        setTimeout(() => {
+            box.classList.remove('visible');
+            box.classList.add('flying');
+
+            setTimeout(() => {
+                performDataTransfer(val);
+                boxContainer.style.display = 'none';
+            }, 800);
+        }, 1200);
+    };
+
+    function performDataTransfer(newThreads) {
+        let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
+        let storageCount = parseInt(localStorage.getItem('shirley_moon_storage') || 0);
+
+        currentTotal += newThreads;
+        let isFullMoon = false;
+
+        if (currentTotal >= 300) {
+            const moons = Math.floor(currentTotal / 300);
+            storageCount += moons;
+            currentTotal = currentTotal % 300;
+            isFullMoon = true;
+        }
+
+        localStorage.setItem('shirley_total_moonlight', currentTotal);
+        localStorage.setItem('shirley_moon_storage', storageCount);
+
+        updateInterface();
+
+        const timer = document.getElementById('mission-timer');
+        if(timer) {
+            timer.innerText = "Done";
+            timer.style.color = "#ffd700";
+        }
+
+        if(isFullMoon) {
+            alert(`🌕 Full Moon! Storage: ${storageCount}`);
+            updateInterface();
+        }
+    }
+
+    function updateInterface() {
+        const total = localStorage.getItem('shirley_total_moonlight') || 0;
+        const storage = localStorage.getItem('shirley_moon_storage') || 0;
+
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+
+        if(stEl) stEl.innerText = storage;
+        if(phEl) phEl.innerText = total;
+    }
+})();
+</script>
 </body>
 </html>
