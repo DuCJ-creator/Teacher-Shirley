@@ -649,391 +649,294 @@
         font-size: 1.2rem;
     }
 
-    /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 (縮小版) --- */
-    .lunar-cache-container {
-        width: 90%;
-        max-width: 800px;
-        margin: 20px auto; /* 改為自動居中，不擋住星體 */
-        background: linear-gradient(135deg, rgba(15, 32, 39, 0.7), rgba(32, 58, 67, 0.7));
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.1);
-        position: relative;
-        overflow: hidden;
-        color: #e0e0e0;
-        font-family: 'Exo 2', sans-serif;
-        backdrop-filter: blur(5px);
-        z-index: 5; /* 確保在背景之上 */
-    }
+    /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
+.lunar-cache-container {
+    width: 100%;
+    margin-top: 30px; /* 與上方儀表板保持距離 */
+    background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    color: #e0e0e0;
+    font-family: 'Exo 2', sans-serif;
+    backdrop-filter: blur(10px);
+}
 
-    /* 標題區 */
-    .lunar-header {
-        text-align: center;
-        margin-bottom: 15px;
-        position: relative;
-        z-index: 2;
-    }
-    .lunar-title {
-        font-family: 'Cinzel Decorative', cursive;
-        font-size: 1.2rem; /* 縮小 */
-        background: linear-gradient(to right, #fff, #ffd700, #fff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-        letter-spacing: 0.5px;
-    }
-    .lunar-subtitle {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 0.75rem; /* 縮小 */
-        color: #a0a0a0;
-        margin-top: 3px;
-        font-style: italic;
-        letter-spacing: 1px;
-    }
+/* 標題區 */
+.lunar-header {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+.lunar-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.6rem;
+    background: linear-gradient(to right, #fff, #ffd700, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    letter-spacing: 1px;
+}
+.lunar-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-top: 5px;
+    font-style: italic;
+    letter-spacing: 2px;
+}
 
-    /* 操作區佈局 */
-    .lunar-control-panel {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 15px;
-    }
+/* 操作區佈局 */
 
-    /* 輸入區 */
-    .lunar-inputs {
-        flex: 2;
-        display: flex;
-        gap: 8px;
-        background: rgba(0,0,0,0.15);
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-    .lunar-input-group {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-width: 60px;
-    }
-    .lunar-label {
-        font-size: 0.6rem; /* 縮小 */
-        color: #888;
-        text-transform: uppercase;
-        margin-bottom: 3px;
-        text-align: center;
-    }
-    .lunar-field {
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255,255,255,0.15);
-        color: #fff;
-        text-align: center;
-        padding: 3px;
-        font-family: 'Exo 2';
-        font-size: 0.8rem; /* 縮小 */
-        transition: border 0.3s;
-    }
-    .lunar-field:focus {
-        outline: none;
-        border-bottom: 1px solid #ffd700;
-    }
+/* 左側：啟動按鈕 */
+.mission-start-btn {
+    flex: 1;
+    min-width: 200px;
+    background: linear-gradient(45deg, #141e30, #243b55);
+    border: 1px solid rgba(255,215,0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+    color: #ffd700;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.mission-start-btn:hover {
+    background: linear-gradient(45deg, #1f2f45, #355375);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    border-color: #ffd700;
+}
+.mission-icon { font-size: 1.5rem; margin-bottom: 5px; }
 
-    /* 提交按鈕 */
-    .lunar-submit-btn {
-        padding: 8px 15px; /* 縮小 */
-        background: #ffd700;
-        color: #1a1a2e;
-        border: none;
-        border-radius: 20px;
-        font-weight: 700; /* 減輕 */
-        font-size: 0.8rem; /* 縮小 */
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-        transition: all 0.3s;
-    }
-    .lunar-submit-btn:disabled {
-        background: #555;
-        color: #888;
-        cursor: not-allowed;
-        box-shadow: none;
-    }
-    .lunar-submit-btn:hover:not(:disabled) {
-        transform: scale(1.03);
-        background: #ffed4a;
-    }
+/* 中間：輸入區 */
+.lunar-inputs {
+    flex: 2;
+    display: flex;
+    gap: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.lunar-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.lunar-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.lunar-field {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    font-family: 'Exo 2';
+    transition: border 0.3s;
+}
+.lunar-field:focus {
+    outline: none;
+    border-bottom: 1px solid #ffd700;
+}
 
-    /* 月相顯示與進度 */
-    .moon-phase-display {
-        margin-top: 15px;
-        background: rgba(0,0,0,0.2);
-        border-radius: 10px;
-        padding: 10px 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .phase-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .current-moon-icon {
-        font-size: 1.8rem; /* 縮小 */
-        filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-    }
-    .phase-text {
-        display: flex;
-        flex-direction: column;
-    }
-    .phase-name {
-        font-family: 'Noto Serif TC';
-        font-size: 0.9rem; /* 縮小 */
-        color: #ffd700;
-        font-weight: 600;
-    }
-    .moonlight-count {
-        font-size: 0.7rem; /* 縮小 */
-        color: #ccc;
-    }
+/* 右側：提交按鈕 */
+.lunar-submit-btn {
+    padding: 10px 25px;
+    background: #ffd700;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 25px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s;
+}
+.lunar-submit-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.lunar-submit-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background: #ffed4a;
+}
 
-    .inventory-counter {
-        text-align: right;
-        font-family: 'Cinzel Decorative';
-        font-size: 0.9rem; /* 縮小 */
-        color: #fff;
-        text-shadow: 0 0 5px rgba(255,255,255,0.3);
-    }
+/* 月相顯示與進度 */
+.moon-phase-display {
+    margin-top: 25px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.phase-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.current-moon-icon {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+.phase-text {
+    display: flex;
+    flex-direction: column;
+}
+.phase-name {
+    font-family: 'Noto Serif TC';
+    font-size: 1.1rem;
+    color: #ffd700;
+    font-weight: 600;
+}
+.moonlight-count {
+    font-size: 0.85rem;
+    color: #ccc;
+}
 
-    /* 進度條 */
-    .moonlight-track {
-        width: 100%;
-        height: 3px; /* 縮小 */
-        background: rgba(255,255,255,0.08);
-        margin-top: 10px;
-        border-radius: 2px;
-        position: relative;
-    }
-    .moonlight-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #4b6cb7, #182848, #ffd700);
-        width: 0%;
-        transition: width 0.8s ease-out;
-        box-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
-    }
+.inventory-counter {
+    text-align: right;
+    font-family: 'Cinzel Decorative';
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
 
-    /* 滿月獎勵卡片 Modal */
-    #moon-reward-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.9);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(8px);
-    }
-    .reward-card {
-        width: 300px; /* 縮小 */
-        padding: 20px;
-        background: linear-gradient(to bottom, #090a0f, #1b2735);
-        border: 2px solid #ffd700;
-        border-radius: 15px;
-        text-align: center;
-        color: #fff;
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-        position: relative;
-    }
-    .reward-moon {
-        font-size: 3rem; /* 縮小 */
-        margin-bottom: 15px;
-        filter: drop-shadow(0 0 20px #ffd700);
-        animation: floatMoon 3s ease-in-out infinite;
-    }
-    @keyframes floatMoon { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
-    .reward-title {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 1.1rem; /* 縮小 */
-        color: #ffd700;
-        margin-bottom: 10px;
-    }
-    .reward-poem-cn {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 0.9rem; /* 縮小 */
-        line-height: 1.4;
-        margin-bottom: 10px;
-        color: #e0e0e0;
-    }
-    .reward-poem-en {
-        font-family: 'Playfair Display', serif;
-        font-size: 0.8rem; /* 縮小 */
-        font-style: italic;
-        color: #a0a0a0;
-        margin-bottom: 15px;
-        line-height: 1.2;
-    }
-    .reward-actions button {
-        margin: 5px;
-        padding: 6px 15px; /* 縮小 */
-        border-radius: 15px;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 0.8rem; /* 縮小 */
-    }
-    .btn-keep { background: #ffd700; color: #000; }
-    .btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
+/* 進度條 */
+.moonlight-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 15px;
+    border-radius: 2px;
+    position: relative;
+}
+.moonlight-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4b6cb7, #182848, #ffd700);
+    width: 0%;
+    transition: width 0.8s ease-out;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
 
-    /* === [Step 2] 微型玻璃匣子 === */
-    .glass-box {
-        width: 100px;   /* 更小巧 */
-        height: 70px;
-        background: rgba(20, 20, 35, 0.95);
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 215, 0, 0.8);
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transform: scale(0.5);
-        transition: all 0.3s ease;
-    }
+/* 滿月獎勵卡片 Modal */
+#moon-reward-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+.reward-card {
+    width: 340px;
+    padding: 30px;
+    background: linear-gradient(to bottom, #090a0f, #1b2735);
+    border: 2px solid #ffd700;
+    border-radius: 20px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+    position: relative;
+}
+.reward-moon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px #ffd700);
+    animation: floatMoon 3s ease-in-out infinite;
+}
+@keyframes floatMoon { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+.reward-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.4rem;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+.reward-poem-cn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #e0e0e0;
+}
+.reward-poem-en {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #a0a0a0;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+.reward-actions button {
+    margin: 5px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-keep { background: #ffd700; color: #000; }
+.btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
 
-    .glass-box.visible {
-        opacity: 1;
-        transform: scale(1);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    }
+/* === [Step 2] 縮小版玻璃匣子 CSS === */
 
-    .glass-value { font-size: 1.5rem; color: #fff; font-weight: 800; text-shadow: 0 0 8px gold; line-height: 1; }
-    .glass-label { font-size: 0.5rem; color: #aaa; letter-spacing: 1px; }
+/* === [Step 2] 微型玻璃匣子 === */
+.glass-box {
+    width: 120px;   /* 更小巧 */
+    height: 80px;
+    background: rgba(20, 20, 35, 0.95);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 215, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+}
 
-    /* 發射動畫 */
-    @keyframes shootToMoon {
-        0% { transform: scale(1) translateY(0); opacity: 1; }
-        100% { transform: scale(0.2) translate(30vw, -40vh); opacity: 0; }
-    }
+.glass-box.visible {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
 
-    .glass-box.flying {
-        animation: shootToMoon 0.8s forwards ease-in;
-    }
+.glass-value { font-size: 2rem; color: #fff; font-weight: 800; text-shadow: 0 0 10px gold; line-height: 1; }
+.glass-label { font-size: 0.6rem; color: #aaa; letter-spacing: 1px; }
 
-    /* 月光寶盒控制面板 - 登入後顯示 */
-    .lunar-dashboard {
-        display: none !important;
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 500px;
-        background: rgba(5, 5, 10, 0.8);
-        border: 1px solid rgba(255,215,0,0.2);
-        backdrop-filter: blur(5px);
-        border-radius: 12px;
-        padding: 8px 12px;
-        z-index: 9999;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
+/* 發射動畫 */
+@keyframes shootToMoon {
+    0% { transform: scale(1) translateY(0); opacity: 1; }
+    100% { transform: scale(0.2) translate(30vw, -40vh); opacity: 0; }
+}
 
-    .lunar-dashboard.active {
-        display: flex !important;
-    }
-
-    .lunar-dashboard-left {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .lunar-timer {
-        font-size: 0.7rem;
-        color: #aaa;
-        font-weight: bold;
-        width: 80px;
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    .lunar-inputs-small {
-        display: flex;
-        gap: 3px;
-    }
-
-    .lunar-inputs-small input {
-        width: 35px;
-        text-align: center;
-        background: rgba(255,255,255,0.05);
-        color: #fff;
-        border: 1px solid #444;
-        padding: 3px;
-        font-size: 0.7rem;
-        border-radius: 4px;
-    }
-
-    .lunar-inputs-small input:disabled {
-        background: rgba(0,0,0,0.3);
-        color: #ccc;
-    }
-
-    .lunar-btn {
-        padding: 4px 8px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.7rem;
-        font-weight: bold;
-    }
-
-    .btn-start {
-        background: rgba(41, 128, 185, 0.8);
-        color: white;
-    }
-
-    .btn-collect {
-        background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8));
-        color: #222;
-    }
-
-    .lunar-dashboard-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-left: 1px solid rgba(255,255,255,0.1);
-        padding-left: 10px;
-    }
-
-    .lunar-stats {
-        text-align: right;
-        line-height: 1.1;
-    }
-
-    .lunar-stats-label {
-        font-size: 0.5rem;
-        color: #888;
-    }
-
-    .lunar-stats-value {
-        font-family: 'Exo 2';
-        color: #fff;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-
-    .lunar-moon-count {
-        font-size: 0.9rem;
-        color: #ffd700;
-        text-shadow: 0 0 5px gold;
-    }
+.glass-box.flying {
+    animation: shootToMoon 0.8s forwards ease-in;
+}
   </style>
 </head>
 <body>
@@ -1073,7 +976,7 @@
 
   <header>
     <div class="title-container">
-        <h1 class="main-title">Teacher Shirley's<br>ET Platform</h1>
+        <h1 class="main-title">Teacher Shirley’s<br>ET Platform</h1>
         <div class="title-underline"></div>
     </div>
   </header>
@@ -1096,12 +999,12 @@
               <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
           </div>
           <div class="letter-content">
-              <div class="letter-p"><strong>Hi there! 👋</strong> I'm Shirley—an English teacher who believes learning should be joyful, interactive, and full of "aha!" moments. <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span></div>
+              <div class="letter-p"><strong>Hi there! 👋</strong> I’m Shirley—an English teacher who believes learning should be joyful, interactive, and full of “aha!” moments. <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span></div>
               <div class="letter-p">This teaching-and-learning platform is your free, ad-free toolkit—carefully crafted from years of real classroom experience and student feedback. <span class="cn-text">這個教與學平台是您免費、無廣告的學習工具箱——源自多年真實課堂經驗與學生回饋。</span></div>
-              <div class="letter-p">Whether you're a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you're welcome to explore all tools and content freely as a visitor. <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span></div>
+              <div class="letter-p">Whether you’re a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you’re welcome to explore all tools and content freely as a visitor. <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span></div>
               
               <div class="letter-p" style="background:rgba(212, 175, 55, 0.1); padding:15px; border-radius:10px; margin-top:10px;">
-                If you log in, each day you'll receive: ✨"Word of the Day", "Bilingual Quote", and unlock your 
+                If you log in, each day you’ll receive: ✨“Word of the Day”, “Bilingual Quote”, and unlock your 
                 <br>
                 <span class="highlight-box">Shirley's Moon Base Card</span> 
                 <br>
@@ -1158,13 +1061,13 @@
           <div class="static-planet-wrapper pos-mercury" onclick="visitPlanet('Mercury', '/Teacher-Shirley/external-resources/')"><div class="planet-visual p-mercury"></div><div class="planet-info"><span class="p-name">Mercury ⚪</span><div class="p-poem-cn">在水星攬盡星語<br>於微光結成橋樑</div><div class="p-poem-en">Upon Mercury, catch star-words; in glimmers, weave a bridge.</div></div></div>
           <div class="static-planet-wrapper pos-jupiter" onclick="visitPlanet('Jupiter', 'https://ducj-creator.github.io/Teacher-Shirley/study-tools/index.html')"><div class="planet-visual p-jupiter"></div><div class="planet-info"><span class="p-name">Jupiter 🟡</span><div class="p-poem-cn">在木星涵納星河<br>於書頁長出新芽</div><div class="p-poem-en">Upon Jupiter, gather star-rivers; in pages, sprouts unfold.</div></div></div>
           <div class="static-planet-wrapper pos-saturn" onclick="visitPlanet('Saturn', '/Teacher-Shirley/amusement-park/')"><div class="planet-visual p-saturn"></div><div class="planet-info"><span class="p-name">Saturn 🟠</span><div class="p-poem-cn">在土星旋舞光環<br>於笑語拾得珠璣</div><div class="p-poem-en">Upon Saturn, spin the rings; in laughter, catch bright pearls.</div></div></div>
-          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon's shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
+          <div class="moon-wrapper" onclick="openMemberTerminal()"><div class="planet-moon"></div><div class="planet-info moon-info"><span class="p-name">Moon 🌕</span><div class="p-poem-cn">在月之暗面沉思<br>於月之明面成長</div><div class="p-poem-en">In the moon’s shadow, ponder. In its light, grow.</div><span class="checkin-tag">Tap to Check-in: 🌕基地打卡</span></div></div>
       </div>
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-    <!-- === 新增：Lunar Glow Cache 月光寶盒 (只有登入用戶可見) === -->
-    <div id="lunar-cache-container" class="lunar-cache-container" style="display: none;">
+    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
+    <div class="lunar-cache-container">
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1173,7 +1076,49 @@
 
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-            <!-- 輸入區 -->
+<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
+            Standing By
+        </div>
+
+        <div style="display: flex; gap: 4px;">
+            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
+            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
+        </div>
+    </div>
+
+    <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">GET</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px;">
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">THREADS</div>
+            <div style="font-family: 'Exo 2'; color: #fff; font-size: 1rem;">
+                <span id="current-moonlight-display" style="color: #fff; font-weight: bold;">0</span>/300
+            </div>
+        </div>
+        <div style="text-align: center; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">MOONS</div>
+            <div style="font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 5px gold;">
+                <span id="moon-storage-count">0</span>🌕
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- 2. 輸入成績 -->
             <div class="lunar-inputs">
                 <div class="lunar-input-group">
                     <label class="lunar-label">Level</label>
@@ -1193,7 +1138,7 @@
                 </div>
             </div>
 
-            <!-- 提交按鈕 -->
+            <!-- 3. 提交按鈕 -->
             <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
         </div>
 
@@ -1215,48 +1160,6 @@
         <!-- 總進度條 -->
         <div class="moonlight-track">
             <div class="moonlight-fill" id="moon-progress-bar"></div>
-        </div>
-    </div>
-
-    <!-- 月光寶盒控制面板 (底部固定) -->
-    <div id="lunar-dashboard" class="lunar-dashboard">
-        <div class="lunar-dashboard-left">
-            <div id="mission-timer" class="lunar-timer">Standing By</div>
-            
-            <div class="lunar-inputs-small">
-                <input type="text" id="moon-level-small" placeholder="Lv" disabled>
-                <input type="text" id="moon-unit-small" placeholder="Unit" disabled>
-                <input type="number" id="moon-correct-small" placeholder="✓" disabled>
-                <input type="number" id="moon-wrong-small" placeholder="✗" disabled>
-            </div>
-
-            <div style="display: flex; gap: 3px;">
-                <button class="lunar-btn btn-start" onclick="startLunarMission()">Start</button>
-                <button class="lunar-btn btn-collect" onclick="collectMoonlight()">Get</button>
-            </div>
-        </div>
-        
-        <div class="lunar-dashboard-right">
-            <div class="lunar-stats">
-                <div class="lunar-stats-label">THREADS</div>
-                <div class="lunar-stats-value">
-                    <span id="current-moonlight-display">0</span>/300
-                </div>
-            </div>
-            <div class="lunar-stats">
-                <div class="lunar-stats-label">MOONS</div>
-                <div class="lunar-moon-count">
-                    <span id="moon-storage-count">0</span>🌕
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 玻璃匣子容器 -->
-    <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
-        <div class="glass-box" id="myGlassBox">
-            <div class="glass-label">GET</div>
-            <div class="glass-value" id="glass-box-value">0</div>
         </div>
     </div>
 
@@ -1417,7 +1320,7 @@
   </div>
 
   <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
-    <div>©️ Teacher Shirley's ET Platform 2025</div>
+    <div>©️ Teacher Shirley‘s ET Platform 2025</div>
     <span id="busuanzi_container_site_pv">Total Visits: <span id="busuanzi_value_site_pv"></span></span>
   </footer>
 
@@ -1548,15 +1451,6 @@
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
-            
-            // ✅ 登入時顯示月光寶盒
-            document.getElementById('lunar-cache-container').style.display = 'block';
-            document.getElementById('lunar-dashboard').classList.add('active');
-            updateMoonInterface();
-        } else {
-            // ✅ 登出時隱藏月光寶盒
-            document.getElementById('lunar-cache-container').style.display = 'none';
-            document.getElementById('lunar-dashboard').classList.remove('active');
         }
     });
 
@@ -1680,12 +1574,12 @@
         document.getElementById('card-sent-en').innerText = sentEn;
         document.getElementById('card-sent-cn').innerText = sentCn;
         // 填充佳句
-        document.getElementById('card-quote').innerText = `"${quote}"`;
+        document.getElementById('card-quote').innerText = `“${quote}”`;
         document.getElementById('card-quote-trans').innerText = quoteTrans;
         document.getElementById('card-author').innerText = author;
         document.getElementById('card-streak').innerText = streakDisplay;
 
-        // ✅【最小補丁】設定模板：移除 1~88 全部 class，避免殘留疊加造成"變動"
+        // ✅【最小補丁】設定模板：移除 1~88 全部 class，避免殘留疊加造成“變動”
         const cardEl = document.getElementById('collectible-card');
         for(let i=1; i<=88; i++) cardEl.classList.remove(`theme-${i}`);
         const themeId = getTemplateIdByDate(dateStr);
@@ -1866,6 +1760,8 @@
         });
     }
 
+    // --- End of new logic ---
+
     async function loadCSVData() {
         try {
             const [resWords, resQuotes] = await Promise.all([
@@ -1910,6 +1806,8 @@
             document.getElementById('qotd-author').innerText = "— " + quoteObj.author;
         }
     }
+
+    // renderCalendar is overwritten above, so we don't need the old one here.
 
     let processedLogs = [];
 
@@ -2004,54 +1902,229 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
+   /* --- 🚀 Lunar Glow Cache 核心邏輯 --- */
 
-    /* --- 🚀 Lunar Glow Cache 核心邏輯 (修正版) --- */
+// 常數設定
+const MOON_CYCLE = 300; // 300點為一個滿月循環
+const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
+
+// 頁面加載時初始化
+document.addEventListener('DOMContentLoaded', () => {
+    updateMoonInterface();
+});
+
+// 1. 開始任務 (紀錄時間)
+function startLunarMission(event) {
+    event.preventDefault();
+    const now = Date.now();
+    sessionStorage.setItem('lunar_start_time', now);
+    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+    const href = event.currentTarget.href;
+    setTimeout(() => {
+        window.open(href, '_blank');
+    }, 300);
+}
+// 2. 提交成績
+function submitLunarGlow() {
+    // A. 防作弊時間檢查
+    const startTime = sessionStorage.getItem('lunar_start_time');
+    const now = Date.now();
     
-    // 常數設定
-    const MOON_CYCLE = 300; // 300點為一個滿月循環
-    const MIN_STUDY_TIME = 60000; // 1分鐘 (毫秒) - 從2分鐘改為1分鐘
+    // 如果沒有開始時間，或者時間差小於 2 分鐘
+    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
+        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
+        return;
+    }
 
-    // 頁面加載時初始化
-    document.addEventListener('DOMContentLoaded', () => {
-        // 只有登入用戶才初始化月光寶盒
-        if (currentUser) {
-            updateMoonInterface();
+    // B. 獲取輸入
+    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
+    const levelVal = document.getElementById('moon-level').value;
+    const unitVal = document.getElementById('moon-unit').value;
+
+    if (correctVal === 0 && wrongVal === 0) {
+        alert("請輸入正確或錯誤題數。");
+        return;
+    }
+
+    // C. 計算本場月光 (Thread of Moonlight)
+    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
+    const threadGained = correctVal + wrongVal; 
+
+    // D. 讀取並更新總分
+    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 累積
+    totalMoonlight += threadGained;
+
+    // E. 檢查是否達成滿月循環
+    if (totalMoonlight >= MOON_CYCLE) {
+        // 增加滿月庫存
+        fullMoonStorage += 1;
+        // 扣除循環分數 (進入下一輪)
+        totalMoonlight = totalMoonlight - MOON_CYCLE;
+        
+        // 儲存滿月數
+        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
+        
+        // 如果是第一次獲得滿月，觸發獎勵卡片
+        if (fullMoonStorage === 1) {
+            showRewardCard();
+        } else {
+            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
         }
+    }
+
+    // F. 儲存新進度
+    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
+    
+    // G. 清空計時器與輸入框 (方便下次)
+    sessionStorage.removeItem('lunar_start_time');
+    document.getElementById('moon-correct').value = '';
+    document.getElementById('moon-wrong').value = '';
+    document.getElementById('moon-level').value = '';
+    document.getElementById('moon-unit').value = '';
+
+    // H. 更新介面
+    updateMoonInterface();
+    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
+}
+
+// 3. 更新介面顯示 (月相與進度)
+function updateMoonInterface() {
+    const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    const fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 更新庫存
+    const storageText = fullMoonStorage > 0 ? `🌕 x ${fullMoonStorage}` : `🌕 x 0`;
+    document.getElementById('full-moon-count').innerText = storageText;
+
+    // 更新當前進度文字
+    document.getElementById('current-thread').innerText = totalMoonlight;
+
+    // 更新進度條
+    const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
+    document.getElementById('moon-progress-bar').style.width = `${percent}%`;
+
+    // 判斷月相
+    const phaseIcon = document.getElementById('phase-icon');
+    const phaseName = document.getElementById('phase-name');
+
+    if (totalMoonlight <= 30) {
+        phaseIcon.innerText = "🌑";
+        phaseName.innerText = "New Moon 朔月";
+    } else if (totalMoonlight <= 60) {
+        phaseIcon.innerText = "🌒";
+        phaseName.innerText = "Waxing Crescent 眉月";
+    } else if (totalMoonlight <= 120) {
+        phaseIcon.innerText = "🌓";
+        phaseName.innerText = "First Quarter 上弦月";
+    } else if (totalMoonlight <= 180) {
+        phaseIcon.innerText = "🌔";
+        phaseName.innerText = "Waxing Gibbous 盈凸月";
+    } else {
+        phaseIcon.innerText = "🌕"; // 接近滿月的光輝
+        phaseName.innerText = "Full Moon Phase 望月";
+        phaseIcon.style.textShadow = "0 0 20px #ffd700"; // 發光特效
+    }
+}
+
+// 4. 獎勵卡片功能
+function showRewardCard() {
+    const modal = document.getElementById('moon-reward-modal');
+    let userName = "Traveler";
+    if (currentUser && currentUser.displayName) {
+        userName = currentUser.displayName;
+    } else if (currentUser && currentUser.email) {
+        userName = currentUser.email.split('@')[0];
+    }
+    document.getElementById('reward-user-name').innerText = userName;
+    modal.style.display = 'flex';
+}
+
+function closeRewardModal() {
+    document.getElementById('moon-reward-modal').style.display = 'none';
+}
+
+function downloadRewardCard() {
+    const card = document.getElementById('capture-reward-card');
+    html2canvas(card, { backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Shirley_Moon_Reward.png';
+        link.href = canvas.toDataURL();
+        link.click();
     });
+}
+  </script>
+  <div id="glass-box-wrapper">
+    <div id="glass-box-container" style="display:none;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">Collected</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+            <div class="glass-sub">Glowing Threads</div>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    let missionInterval = null;
+
+    // --- [核心] 權限控制與顯示邏輯 ---
+    function initAuthCheck() {
+        const dashboard = document.getElementById('lunar-dashboard');
+        
+        // 1. 先強制隱藏 (雙重保險)
+        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+
+        // 2. 啟動 Firebase 監聽
+        // 使用 setInterval 確保 Firebase SDK 載入完成
+        const checkFirebase = setInterval(() => {
+            if (typeof firebase !== 'undefined' && firebase.auth()) {
+                clearInterval(checkFirebase);
+                
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // [已登入]
+                        // 移除 important 屬性，改為 flex 顯示
+                        if(dashboard) {
+                            dashboard.style.display = 'flex'; 
+                            // 這裡可以根據 user.uid 載入專屬數據，如果有的話
+                        }
+                        updateInterface(); // 更新數據顯示
+                    } else {
+                        // [未登入 / 訪客]
+                        // 強制隱藏，並清空顯示的數據
+                        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+                        clearInterfaceDisplay(); 
+                    }
+                });
+            }
+        }, 200); // 每 0.2 秒檢查一次 Firebase 是否就緒
+    }
+
+    // 清空介面顯示 (防止訪客看到殘留數據)
+    function clearInterfaceDisplay() {
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+        if(stEl) stEl.innerText = '0';
+        if(phEl) phEl.innerText = '0';
+    }
+
+    // 頁面載入時啟動
+    window.addEventListener('load', initAuthCheck);
+
 
     // --- [功能] 任務邏輯 ---
 
-    // 1. 開始任務 (紀錄時間)
-    function startLunarMission() {
-        // 檢查是否已登入
-        if (!currentUser) {
-            alert("Please log in to use Lunar Glow Cache.");
-            return;
-        }
-        
+    window.startLunarMission = function() {
         const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-        const inputsSmall = ['moon-level-small', 'moon-unit-small', 'moon-correct-small', 'moon-wrong-small'];
         const timerDisplay = document.getElementById('mission-timer');
         
-        // 清空並禁用所有輸入框
         inputs.forEach(id => {
             const el = document.getElementById(id);
-            if(el) { 
-                el.value = ''; 
-                el.disabled = true; 
-                el.placeholder = "..."; 
-            }
+            if(el) { el.value = ''; el.disabled = true; el.placeholder = "..."; }
         });
-        
-        inputsSmall.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) { 
-                el.value = ''; 
-                el.disabled = true; 
-                el.placeholder = "..."; 
-            }
-        });
-        
         document.getElementById('glass-box-container').style.display = 'none';
 
         if(timerDisplay) {
@@ -2059,62 +2132,34 @@
             timerDisplay.style.color = '#ff6b6b';
         }
 
-        // 記錄開始時間
-        const now = Date.now();
-        sessionStorage.setItem('lunar_start_time', now);
-        console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
-
-        // 打開測驗網站
         setTimeout(() => {
             if(confirm("Start Quiz Mission?")) {
                 window.open('https://ivocab-quiz.vercel.app/', '_blank');
             }
         }, 300);
 
-        // 啟動倒數計時器 (1分鐘)
-        let timeLeft = 60; // 從120秒改為60秒
-        if(window.missionInterval) clearInterval(window.missionInterval);
+        let timeLeft = 120; 
+        if(missionInterval) clearInterval(missionInterval);
 
-        window.missionInterval = setInterval(() => {
+        missionInterval = setInterval(() => {
             const m = Math.floor(timeLeft / 60);
             const s = timeLeft % 60;
             const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
-            if(timerDisplay) {
-                timerDisplay.innerText = `Wait: ${timeStr}`;
-                if (timeLeft <= 10) {
-                    timerDisplay.style.color = "#ff6b6b"; // 最後10秒變紅色
-                }
-            }
+            if(timerDisplay) timerDisplay.innerText = `Wait: ${timeStr}`;
             
             if (timeLeft <= 0) {
-                clearInterval(window.missionInterval);
+                clearInterval(missionInterval);
                 enableMissionInputs();
             }
             timeLeft--;
         }, 1000);
-    }
+    };
 
     function enableMissionInputs() {
-        // 啟用所有輸入框
-        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-        const inputsSmall = ['moon-level-small', 'moon-unit-small', 'moon-correct-small', 'moon-wrong-small'];
-        
-        inputs.forEach(id => {
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
             const el = document.getElementById(id);
-            if(el) { 
-                el.disabled = false; 
-                el.placeholder = ""; 
-            }
+            if(el) { el.disabled = false; el.placeholder = ""; }
         });
-        
-        inputsSmall.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) { 
-                el.disabled = false; 
-                el.placeholder = ""; 
-            }
-        });
-        
         const timer = document.getElementById('mission-timer');
         if(timer) {
             timer.innerText = "Ready!";
@@ -2122,107 +2167,33 @@
         }
     }
 
-    // 2. 提交成績 (從主表單)
-    function submitLunarGlow() {
-        // 檢查是否已登入
-        if (!currentUser) {
-            alert("Please log in to use Lunar Glow Cache.");
-            return;
-        }
-        
-        // A. 防作弊時間檢查 (1分鐘)
-        const startTime = sessionStorage.getItem('lunar_start_time');
-        const now = Date.now();
-        
-        // 如果沒有開始時間，或者時間差小於 1 分鐘
-        if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
-            alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 1 分鐘後再收集。\n(系統偵測到時間過短)");
-            return;
-        }
-
-        // B. 獲取輸入
-        const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
-        const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
-        const levelVal = document.getElementById('moon-level').value;
-        const unitVal = document.getElementById('moon-unit').value;
-
-        if (correctVal === 0 && wrongVal === 0) {
-            alert("請輸入正確或錯誤題數。");
-            return;
-        }
-
-        // 同步到小輸入框
-        document.getElementById('moon-level-small').value = levelVal;
-        document.getElementById('moon-unit-small').value = unitVal;
-        document.getElementById('moon-correct-small').value = correctVal;
-        document.getElementById('moon-wrong-small').value = wrongVal;
-
-        // C. 計算本場月光 (Thread of Moonlight)
-        const threadGained = correctVal + wrongVal;
-
-        // D. 顯示玻璃匣子動畫
-        collectMoonlightWithAnimation(threadGained);
-    }
-
-    // 3. 收集月光 (從底部面板)
-    function collectMoonlight() {
-        // 檢查是否已登入
-        if (!currentUser) {
-            alert("Please log in to use Lunar Glow Cache.");
-            return;
-        }
-        
-        const correctEl = document.getElementById('moon-correct-small');
+    window.collectMoonlight = function() {
+        const correctEl = document.getElementById('moon-correct');
         const boxContainer = document.getElementById('glass-box-container');
         const box = document.getElementById('myGlassBox');
         const valDisplay = document.getElementById('glass-box-value');
 
-        if (!correctEl || correctEl.disabled || correctEl.value === '') {
-            alert("Please enter quiz results first!");
+        if (!correctEl || correctEl.disabled) {
+            alert("Please wait for cooldown!");
             return;
         }
 
-        const correctVal = parseInt(correctEl.value) || 0;
-        const wrongVal = parseInt(document.getElementById('moon-wrong-small').value) || 0;
-        const threadGained = correctVal + wrongVal;
-
-        if (threadGained === 0) {
-            alert("Please enter at least one correct or wrong answer.");
-            return;
-        }
-
-        // 顯示匣子動畫
-        collectMoonlightWithAnimation(threadGained);
-    }
-
-    // 4. 收集月光動畫與數據處理
-    function collectMoonlightWithAnimation(threadGained) {
-        const boxContainer = document.getElementById('glass-box-container');
-        const box = document.getElementById('myGlassBox');
-        const valDisplay = document.getElementById('glass-box-value');
+        let val = parseInt(correctEl.value);
+        if (isNaN(val) || val < 0) return;
+        if (val > 30) { alert("Max 30"); return; }
 
         // 顯示匣子
         boxContainer.style.display = 'block';
-        valDisplay.innerText = threadGained;
+        valDisplay.innerText = val;
         
         box.className = 'glass-box';
         void box.offsetWidth;
         box.classList.add('visible');
 
-        // 鎖定輸入
-        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-        const inputsSmall = ['moon-level-small', 'moon-unit-small', 'moon-correct-small', 'moon-wrong-small'];
-        
-        inputs.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = true;
+        // 鎖定
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            document.getElementById(id).disabled = true;
         });
-        
-        inputsSmall.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.disabled = true;
-        });
-        
         document.getElementById('mission-timer').innerText = "Sending...";
 
         // 動畫
@@ -2231,50 +2202,12 @@
             box.classList.add('flying');
 
             setTimeout(() => {
-                performDataTransfer(threadGained);
+                performDataTransfer(val);
                 boxContainer.style.display = 'none';
-                
-                // 清空輸入框
-                inputs.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) el.value = '';
-                });
-                
-                inputsSmall.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) el.value = '';
-                });
-                
-                // 清除計時器
-                sessionStorage.removeItem('lunar_start_time');
-                if(window.missionInterval) clearInterval(window.missionInterval);
-                document.getElementById('mission-timer').innerText = "Standing By";
-                document.getElementById('mission-timer').style.color = '#aaa';
-                
-                // 重新啟用輸入
-                setTimeout(() => {
-                    inputs.forEach(id => {
-                        const el = document.getElementById(id);
-                        if(el) { 
-                            el.disabled = false; 
-                            el.placeholder = ""; 
-                        }
-                    });
-                    
-                    inputsSmall.forEach(id => {
-                        const el = document.getElementById(id);
-                        if(el) { 
-                            el.disabled = false; 
-                            el.placeholder = ""; 
-                        }
-                    });
-                }, 1000);
-                
             }, 800);
         }, 1200);
-    }
+    };
 
-    // 5. 數據傳輸與儲存
     function performDataTransfer(newThreads) {
         let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
         let storageCount = parseInt(localStorage.getItem('shirley_moon_storage') || 0);
@@ -2282,98 +2215,43 @@
         currentTotal += newThreads;
         let isFullMoon = false;
 
-        if (currentTotal >= MOON_CYCLE) {
-            const moons = Math.floor(currentTotal / MOON_CYCLE);
+        if (currentTotal >= 300) {
+            const moons = Math.floor(currentTotal / 300);
             storageCount += moons;
-            currentTotal = currentTotal % MOON_CYCLE;
+            currentTotal = currentTotal % 300;
             isFullMoon = true;
         }
 
         localStorage.setItem('shirley_total_moonlight', currentTotal);
         localStorage.setItem('shirley_moon_storage', storageCount);
 
-        updateMoonInterface();
+        updateInterface();
+
+        const timer = document.getElementById('mission-timer');
+        if(timer) {
+            timer.innerText = "Done";
+            timer.style.color = "#ffd700";
+        }
 
         if(isFullMoon) {
             alert(`🌕 Full Moon! Storage: ${storageCount}`);
-            showRewardCard();
+            updateInterface();
         }
     }
 
-    // 6. 更新介面顯示 (月相與進度)
-    function updateMoonInterface() {
-        const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-        const fullMoonStorage = parseInt(localStorage.getItem('shirley_moon_storage') || '0');
+    function updateInterface() {
+        const total = localStorage.getItem('shirley_total_moonlight') || 0;
+        const storage = localStorage.getItem('shirley_moon_storage') || 0;
 
-        // 更新庫存
-        const storageText = fullMoonStorage > 0 ? `🌕 x ${fullMoonStorage}` : `🌕 x 0`;
-        document.getElementById('full-moon-count').innerText = storageText;
-        document.getElementById('moon-storage-count').innerText = fullMoonStorage;
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
 
-        // 更新當前進度文字
-        document.getElementById('current-thread').innerText = totalMoonlight;
-        document.getElementById('current-moonlight-display').innerText = totalMoonlight;
-
-        // 更新進度條
-        const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
-        document.getElementById('moon-progress-bar').style.width = `${percent}%`;
-
-        // 判斷月相
-        const phaseIcon = document.getElementById('phase-icon');
-        const phaseName = document.getElementById('phase-name');
-
-        if (totalMoonlight <= 30) {
-            phaseIcon.innerText = "🌑";
-            phaseName.innerText = "New Moon 朔月";
-        } else if (totalMoonlight <= 60) {
-            phaseIcon.innerText = "🌒";
-            phaseName.innerText = "Waxing Crescent 眉月";
-        } else if (totalMoonlight <= 120) {
-            phaseIcon.innerText = "🌓";
-            phaseName.innerText = "First Quarter 上弦月";
-        } else if (totalMoonlight <= 180) {
-            phaseIcon.innerText = "🌔";
-            phaseName.innerText = "Waxing Gibbous 盈凸月";
-        } else {
-            phaseIcon.innerText = "🌕"; // 接近滿月的光輝
-            phaseName.innerText = "Full Moon Phase 望月";
-            phaseIcon.style.textShadow = "0 0 10px #ffd700"; // 發光特效
-        }
+        if(stEl) stEl.innerText = storage;
+        if(phEl) phEl.innerText = total;
     }
-
-    // 7. 獎勵卡片功能
-    function showRewardCard() {
-        const modal = document.getElementById('moon-reward-modal');
-        let userName = "Traveler";
-        if (currentUser && currentUser.displayName) {
-            userName = currentUser.displayName;
-        } else if (currentUser && currentUser.email) {
-            userName = currentUser.email.split('@')[0];
-        }
-        document.getElementById('reward-user-name').innerText = userName;
-        modal.style.display = 'flex';
-    }
-
-    function closeRewardModal() {
-        document.getElementById('moon-reward-modal').style.display = 'none';
-    }
-
-    function downloadRewardCard() {
-        const card = document.getElementById('capture-reward-card');
-        html2canvas(card, { backgroundColor: null }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'Shirley_Moon_Reward.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        });
-    }
-
-    // 8. 導出函數到全局作用域
-    window.startLunarMission = startLunarMission;
-    window.collectMoonlight = collectMoonlight;
-    window.submitLunarGlow = submitLunarGlow;
-    window.closeRewardModal = closeRewardModal;
-    window.downloadRewardCard = downloadRewardCard;
-  </script>
+})();
+</script>
 </body>
 </html>
+
+
