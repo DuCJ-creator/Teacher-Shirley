@@ -1149,6 +1149,29 @@
         </div>
     </div>
 </div>
+            <!-- 2. 輸入成績 -->
+            <div class="lunar-inputs">
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Level</label>
+                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Unit</label>
+                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#4ade80;">Correct</label>
+                    <input type="number" class="lunar-field" id="moon-correct" min="0">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#f87171;">Wrong</label>
+                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
+                </div>
+            </div>
+
+            <!-- 3. 提交按鈕 -->
+            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
+        </div>
 
         <!-- 狀態顯示 -->
         <div class="moon-phase-display">
@@ -1927,59 +1950,39 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMoonInterface();
 });
 
-    // 1. 開始任務：跳轉與倒數
-    window.startLunarMission = function(event) {
-        if (event && event.preventDefault) event.preventDefault();
-        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-        const timerDisplay = document.getElementById('mission-timer');
-        
-        // 鎖定輸入
-        inputs.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) { 
-                el.value = ''; 
-                el.disabled = true; 
-                el.placeholder = "等待冷卻..."; 
-            }
-        });
+// 1. 開始任務 (紀錄時間)
+function startLunarMission(event) {
+    event.preventDefault();
+    const now = Date.now();
+    sessionStorage.setItem('lunar_start_time', now);
+    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+    const href = event.currentTarget.href;
+    setTimeout(() => {
+        window.open(href, '_blank');
+    }, 300);
+}
+// 2. 提交成績
+function submitLunarGlow() {
+    // A. 防作弊時間檢查
+    const startTime = sessionStorage.getItem('lunar_start_time');
+    const now = Date.now();
+    
+    // 如果沒有開始時間，或者時間差小於 2 分鐘
+    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
+        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
+        return;
+    }
 
-        // 確保匣子隱藏
-        document.getElementById('glass-box-container').style.display = 'none';
+    // B. 獲取輸入
+    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
+    const levelVal = document.getElementById('moon-level').value;
+    const unitVal = document.getElementById('moon-unit').value;
 
-        // 倒數文字
-        if(timerDisplay) {
-            timerDisplay.innerText = "⏳ 任務啟動中...";
-            timerDisplay.style.color = '#ff6b6b';
-        }
-
-        // 開始任務：跳轉到學習網站
-        const now = Date.now();
-        sessionStorage.setItem('lunar_start_time', now);
-        
-        setTimeout(() => {
-            if(confirm("即將前往 iVocab Quiz 進行練習，準備好了嗎？")) {
-                window.open('https://ivocab-quiz.vercel.app/', '_blank');
-            }
-        }, 500);
-
-        // 開始 60 秒倒數
-        let timeLeft = 60; 
-        if(missionInterval) clearInterval(missionInterval);
-
-        missionInterval = setInterval(() => {
-            const m = Math.floor(timeLeft / 60);
-            const s = timeLeft % 60;
-            const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
-            
-            if(timerDisplay) timerDisplay.innerText = `⏳ 冷卻中 (Wait): ${timeStr}`;
-            
-            if (timeLeft <= 0) {
-                clearInterval(missionInterval);
-                enableMissionInputs();
-            }
-            timeLeft--;
-        }, 1000);
-    };
+    if (correctVal === 0 && wrongVal === 0) {
+        alert("請輸入正確或錯誤題數。");
+        return;
+    }
 
     // C. 計算本場月光 (Thread of Moonlight)
     // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
