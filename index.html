@@ -2056,115 +2056,67 @@ function downloadRewardCard() {
         link.click();
     });
 }
-
-<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 800px; margin: 0 auto; background: rgba(15, 15, 25, 0.7); border-top: 1px solid rgba(255,215,0,0.3); backdrop-filter: blur(5px); border-radius: 15px 15px 0 0; padding: 10px 20px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);">
-    
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 80px; text-align: center; white-space: nowrap;">
-            Standby
-        </div>
-
-        <div style="display: flex; gap: 5px;">
-            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:30px; text-align:center; background:rgba(255,255,255,0.1); color:#fff; border:1px solid #555; padding:5px; font-size:0.8rem; border-radius:5px;">
-            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:40px; text-align:center; background:rgba(255,255,255,0.1); color:#fff; border:1px solid #555; padding:5px; font-size:0.8rem; border-radius:5px;">
-            <input type="number" id="moon-correct" placeholder="Correct" disabled style="width:60px; text-align:center; background:rgba(0,0,0,0.4); color:#ffd700; border:1px solid #ffd700; padding:5px; font-size:0.9rem; font-weight:bold; border-radius:5px;">
-            <input type="number" id="moon-wrong" placeholder="Wrong" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.4); color:#ff6b6b; border:1px solid #ff6b6b; padding:5px; font-size:0.9rem; font-weight:bold; border-radius:5px;">
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-            <button onclick="window.startLunarMission()" style="padding: 6px 12px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.8rem;">Start</button>
-            <button onclick="window.collectMoonlight()" style="padding: 6px 12px; background: linear-gradient(135deg, #f1c40f, #d35400); color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Collect</button>
-        </div>
-    </div>
-
-    <div id="glass-box-container" style="display:none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); z-index: 10001;">
+  </script>
+  <div id="glass-box-wrapper">
+    <div id="glass-box-container" style="display:none;">
         <div class="glass-box" id="myGlassBox">
-            <div class="glass-label">GET</div>
+            <div class="glass-label">Collected</div>
             <div class="glass-value" id="glass-box-value">0</div>
-        </div>
-    </div>
-
-    <div style="display: flex; align-items: center; gap: 20px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 20px;">
-        <div style="text-align: right;">
-            <div style="font-size: 0.6rem; color: #888;">THREADS</div>
-            <div style="font-family: sans-serif; color: #fff; font-size: 1rem;">
-                <span id="current-moonlight-display" style="color: #fff; font-weight: bold;">0</span>/300
-            </div>
-        </div>
-        <div style="text-align: center;">
-            <div style="font-size: 0.6rem; color: #888;">STORAGE</div>
-            <div style="font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 10px gold;">
-                <span id="moon-storage-count">0</span>🌕
-            </div>
+            <div class="glass-sub">Glowing Threads</div>
         </div>
     </div>
 </div>
-
-<style>
-    /* 玻璃匣子樣式 */
-    .glass-box {
-        width: 140px; height: 90px;
-        background: rgba(20, 20, 35, 0.95);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 215, 0, 0.6);
-        border-radius: 12px;
-        box-shadow: 0 0 25px rgba(0,0,0,0.8);
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        opacity: 0; transform: scale(0.5); transition: all 0.3s ease;
-    }
-    .glass-box.visible { opacity: 1; transform: scale(1); box-shadow: 0 0 35px rgba(255,215,0,0.4); }
-    .glass-value { font-size: 2.2rem; color: #fff; font-weight: 800; text-shadow: 0 0 10px gold; line-height: 1; }
-    .glass-label { font-size: 0.6rem; color: #aaa; letter-spacing: 2px; }
-
-    /* 發射動畫 */
-    @keyframes launchRight {
-        0% { transform: scale(1) translate(0, 0); opacity: 1; }
-        100% { transform: scale(0.2) translate(40vw, -50vh); opacity: 0; }
-    }
-    .glass-box.flying { animation: launchRight 0.8s forwards ease-in; }
-</style>
-
 <script>
 (function() {
     let missionInterval = null;
 
-    // --- [核心權限檢查] ---
-    window.addEventListener('load', function() {
-        // 1. 雙重保險：JS 一執行先強制隱藏
+    // --- [核心] 權限控制與顯示邏輯 ---
+    function initAuthCheck() {
         const dashboard = document.getElementById('lunar-dashboard');
+        
+        // 1. 先強制隱藏 (雙重保險)
         if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
 
-        // 2. 監聽 Firebase 狀態
-        const checkAuth = setInterval(() => {
+        // 2. 啟動 Firebase 監聽
+        // 使用 setInterval 確保 Firebase SDK 載入完成
+        const checkFirebase = setInterval(() => {
             if (typeof firebase !== 'undefined' && firebase.auth()) {
-                clearInterval(checkAuth);
+                clearInterval(checkFirebase);
+                
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
-                        // [已登入] -> 顯示面板
-                        console.log("Moonlight: User logged in.");
-                        if(dashboard) dashboard.style.display = 'flex';
-                        updateInterface(); // 載入數據
+                        // [已登入]
+                        // 移除 important 屬性，改為 flex 顯示
+                        if(dashboard) {
+                            dashboard.style.display = 'flex'; 
+                            // 這裡可以根據 user.uid 載入專屬數據，如果有的話
+                        }
+                        updateInterface(); // 更新數據顯示
                     } else {
-                        // [訪客/登出] -> 強制隱藏並清空
-                        console.log("Moonlight: Guest mode.");
+                        // [未登入 / 訪客]
+                        // 強制隱藏，並清空顯示的數據
                         if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
-                        clearData();
+                        clearInterfaceDisplay(); 
                     }
                 });
             }
-        }, 300);
-    });
-
-    // 清除數據顯示
-    function clearData() {
-        const els = ['moon-storage-count', 'current-moonlight-display'];
-        els.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerText = '0';
-        });
+        }, 200); // 每 0.2 秒檢查一次 Firebase 是否就緒
     }
 
-    // --- [任務邏輯] ---
+    // 清空介面顯示 (防止訪客看到殘留數據)
+    function clearInterfaceDisplay() {
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+        if(stEl) stEl.innerText = '0';
+        if(phEl) phEl.innerText = '0';
+    }
+
+    // 頁面載入時啟動
+    window.addEventListener('load', initAuthCheck);
+
+
+    // --- [功能] 任務邏輯 ---
+
     window.startLunarMission = function() {
         const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
         const timerDisplay = document.getElementById('mission-timer');
@@ -2173,7 +2125,6 @@ function downloadRewardCard() {
             const el = document.getElementById(id);
             if(el) { el.value = ''; el.disabled = true; el.placeholder = "..."; }
         });
-
         document.getElementById('glass-box-container').style.display = 'none';
 
         if(timerDisplay) {
@@ -2185,9 +2136,9 @@ function downloadRewardCard() {
             if(confirm("Start Quiz Mission?")) {
                 window.open('https://ivocab-quiz.vercel.app/', '_blank');
             }
-        }, 500);
+        }, 300);
 
-        let timeLeft = 120; // 2分鐘
+        let timeLeft = 120; 
         if(missionInterval) clearInterval(missionInterval);
 
         missionInterval = setInterval(() => {
@@ -2239,6 +2190,7 @@ function downloadRewardCard() {
         void box.offsetWidth;
         box.classList.add('visible');
 
+        // 鎖定
         ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
             document.getElementById(id).disabled = true;
         });
@@ -2301,3 +2253,5 @@ function downloadRewardCard() {
 </script>
 </body>
 </html>
+
+
