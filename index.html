@@ -108,15 +108,8 @@
     .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
 
     .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-    ..planet-moon { 
-    width: 60px;   /* 原本是 100px */
-    height: 60px;  /* 原本是 100px */
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); 
-    box-shadow: 0 0 30px rgba(255,255,255,0.6), inset -5px -5px 15px rgba(0,0,0,0.1); /* 光暈也稍微調小 */
-    border: 1px solid rgba(255,255,255,0.4); 
-    animation: bounce 2s ease-in-out infinite; 
-}
+    .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
+
     .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
     .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
@@ -2073,7 +2066,7 @@ function downloadRewardCard() {
         </div>
     </div>
 </div>
-  
+<script>
 (function() {
     let missionInterval = null;
 
@@ -2260,3 +2253,5 @@ function downloadRewardCard() {
 </script>
 </body>
 </html>
+
+
