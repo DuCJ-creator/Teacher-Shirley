@@ -1068,7 +1068,7 @@
 
 <!-- === 新增：Lunar Glow Cache 月光寶盒 (僅會員可見) === -->
 <div id="lunar-cache-wrapper" style="display: none;">
-    <div class="lunar-cache-container">
+  <div class="lunar-cache-container" id="lunar-cache-container" style="display: none;">
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1415,8 +1415,8 @@
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
         // 在 user 登入成功後
-document.getElementById('lunar-cache-wrapper').style.display = 'block';
-updateMoonInterface(); // 初始化進度顯示
+document.getElementById('lunar-cache-container').style.display = 'block';
+updateMoonInterface(); // 初始化月光進度
     }
 });
 
@@ -1879,82 +1879,80 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMoonInterface();
 });
 
-// 1. 開始任務 (紀錄時間)
-function startLunarMission(event) {
-    event.preventDefault();
-    const now = Date.now();
-    sessionStorage.setItem('lunar_start_time', now);
-    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
-    const href = event.currentTarget.href;
-    setTimeout(() => {
-        window.open(href, '_blank');
-    }, 300);
+// 1. 開始任務 (1分鐘冷卻)
+function startLunarMission() {
+    if (!currentUser) {
+        alert("請先登入才能收集月光！");
+        return;
+    }
+    const startTime = Date.now();
+    sessionStorage.setItem('lunar_start_time', startTime);
+    window.open('https://ivocab-quiz.vercel.app/', '_blank');
+
+    const btn = document.querySelector('.mission-start-btn');
+    const collectBtn = document.getElementById('collect-btn');
+    const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
+
+    btn.style.opacity = '0.6';
+    btn.style.pointerEvents = 'none';
+    collectBtn.disabled = true;
+
+    let countdown = 60; // ⬅️ 改為 1 分鐘
+    const timer = setInterval(() => {
+        countdown--;
+        const mins = Math.floor(countdown / 60);
+        const secs = countdown % 60;
+        btn.innerHTML = `
+            <div class="mission-icon">⏳</div>
+            <div>Cooling: ${mins}:${secs < 10 ? '0' + secs : secs}</div>
+        `;
+        if (countdown <= 0) {
+            clearInterval(timer);
+            // 解鎖輸入 & 按鈕
+            inputs.forEach(id => document.getElementById(id).disabled = false);
+            collectBtn.disabled = false;
+            btn.innerHTML = '<div class="mission-icon">✅</div><div>Ready to Submit</div>';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }
+    }, 1000);
 }
-// 2. 提交成績
+
+// 2. 提交月光
 function submitLunarGlow() {
-    // A. 防作弊時間檢查
     const startTime = sessionStorage.getItem('lunar_start_time');
     const now = Date.now();
-    
-    // 如果沒有開始時間，或者時間差小於 2 分鐘
-    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
-        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
+    if (!startTime || (now - startTime) < 60000) { // ⬅️ 改為 60 秒
+        alert("⚠️ 請至少練習 1 分鐘！");
         return;
     }
-
-    // B. 獲取輸入
-    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
-    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
-    const levelVal = document.getElementById('moon-level').value;
-    const unitVal = document.getElementById('moon-unit').value;
-
-    if (correctVal === 0 && wrongVal === 0) {
-        alert("請輸入正確或錯誤題數。");
+    const correct = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrong = parseInt(document.getElementById('moon-wrong').value) || 0;
+    if (correct === 0 && wrong === 0) {
+        alert("請輸入題數。");
         return;
     }
-
-    // C. 計算本場月光 (Thread of Moonlight)
-    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
-    const threadGained = correctVal + wrongVal; 
-
-    // D. 讀取並更新總分
-    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-
-    // 累積
-    totalMoonlight += threadGained;
-
-    // E. 檢查是否達成滿月循環
-    if (totalMoonlight >= MOON_CYCLE) {
-        // 增加滿月庫存
-        fullMoonStorage += 1;
-        // 扣除循環分數 (進入下一輪)
-        totalMoonlight = totalMoonlight - MOON_CYCLE;
-        
-        // 儲存滿月數
-        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
-        
-        // 如果是第一次獲得滿月，觸發獎勵卡片
-        if (fullMoonStorage === 1) {
-            showRewardCard();
-        } else {
-            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
-        }
+    const gained = correct + wrong;
+    let total = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    let full = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+    total += gained;
+    if (total >= 300) {
+        full += 1;
+        total -= 300;
+        localStorage.setItem('shirley_full_moon_count', full);
+        if (full === 1) showRewardCard();
+        else alert(`🌕 獲得第 ${full} 個滿月！`);
     }
-
-    // F. 儲存新進度
-    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
-    
-    // G. 清空計時器與輸入框 (方便下次)
+    localStorage.setItem('shirley_total_moonlight', total);
+    // 清空
+    ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+        document.getElementById(id).value = '';
+        document.getElementById(id).disabled = true;
+    });
+    document.getElementById('collect-btn').disabled = true;
     sessionStorage.removeItem('lunar_start_time');
-    document.getElementById('moon-correct').value = '';
-    document.getElementById('moon-wrong').value = '';
-    document.getElementById('moon-level').value = '';
-    document.getElementById('moon-unit').value = '';
-
-    // H. 更新介面
     updateMoonInterface();
-    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
+    alert(`✨ 擷取 ${gained} 縷月光！`);
 }
 
 // 3. 更新介面顯示 (月相與進度)
