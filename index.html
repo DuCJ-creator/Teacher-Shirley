@@ -2091,49 +2091,6 @@ function downloadRewardCard() {
         </div>
     </div>
 </div>
-
-  /* 1) 大塊月光寶盒整個不顯示（不佔空間、不擋星體） */
-.lunar-cache-container{
-  display: none !important;
-}
-
-/* 2) 迷你右下角 dashboard */
-.lunar-dashboard{
-  position: fixed;
-  right: 12px;
-  bottom: 12px;
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  background: rgba(5,5,10,0.55);
-  border: 1px solid rgba(255,215,0,0.25);
-  backdrop-filter: blur(4px);
-  border-radius: 14px;
-  padding: 6px 8px;
-  box-shadow: 0 0 12px rgba(255,215,0,0.18);
-
-  transform: scale(0.82);
-  transform-origin: bottom right;
-}
-
-/* 讓輸入框/按鈕更省空間 */
-.lunar-dashboard input{
-  height: 26px !important;
-  padding: 2px 4px !important;
-  font-size: 0.75rem !important;
-}
-.lunar-dashboard button{
-  padding: 4px 8px !important;
-  font-size: 0.75rem !important;
-}
-#mission-timer{
-  width: 72px !important;
-  font-size: 0.72rem !important;
-}
-
 <script>
 (function() {
     let missionInterval = null;
