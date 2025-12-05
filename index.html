@@ -1066,10 +1066,8 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-    <!-- === Lunar Glow Cache 月光寶盒 (僅會員可見) === -->
-<div id="lunar-cache-wrapper" style="display: none;">
+    <!-- === 新增：Lunar Glow Cache 月光寶盒 === -->
     <div class="lunar-cache-container">
-</div> <!-- #lunar-cache-wrapper -->
         <!-- 標題 -->
         <div class="lunar-header">
             <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
@@ -1078,9 +1076,12 @@
 
         <!-- 控制面板 -->
         <div class="lunar-control-panel">
-<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
-    
-    <div style="display: flex; align-items: center; gap: 10px;">
+<!-- === Lunar Glow Cache Dashboard (僅會員可見) === -->
+<div id="lunar-dashboard-wrapper" style="display: none;">
+    <div id="lunar-dashboard" style="width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
+ </div> <!-- #lunar-dashboard-wrapper -->
+  
+      <div style="display: flex; align-items: center; gap: 10px;">
         <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
             Standing By
         </div>
@@ -1398,9 +1399,9 @@
         document.getElementById('intro-overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
         document.getElementById('visitor-view').classList.add('active');
-      // ✅【新增】訪客模式下強制隱藏月光寶盒
-    const lunarWrapper = document.getElementById('lunar-cache-wrapper');
-    if (lunarWrapper) lunarWrapper.style.display = 'none';
+      // ✅【新增】訪客模式下強制隱藏月光寶盒儀表板
+    const dashboardWrapper = document.getElementById('lunar-dashboard-wrapper');
+    if (dashboardWrapper) dashboardWrapper.style.display = 'none';
 };
 
     window.reopenAuth = () => {
@@ -1456,8 +1457,8 @@
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
-          // ✅【新增】登入後顯示月光寶盒
-        document.getElementById('lunar-cache-wrapper').style.display = 'block';
+          // ✅【新增】登入後顯示月光寶盒儀表板
+        document.getElementById('lunar-dashboard-wrapper').style.display = 'flex';
     }
 });
 
@@ -1913,7 +1914,7 @@
 
 // 常數設定
 const MOON_CYCLE = 300; // 300點為一個滿月循環
-const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
+const MIN_STUDY_TIME = 60000; // 1分鐘 (毫秒)
 
 // 頁面加載時初始化
 document.addEventListener('DOMContentLoaded', () => {
@@ -2145,7 +2146,7 @@ function downloadRewardCard() {
             }
         }, 300);
 
-        let timeLeft = 120; 
+        let timeLeft = 60; 
         if(missionInterval) clearInterval(missionInterval);
 
         missionInterval = setInterval(() => {
