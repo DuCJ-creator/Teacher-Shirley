@@ -1149,29 +1149,6 @@
         </div>
     </div>
 </div>
-            <!-- 2. 輸入成績 -->
-            <div class="lunar-inputs">
-                <div class="lunar-input-group">
-                    <label class="lunar-label">Level</label>
-                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label">Unit</label>
-                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label" style="color:#4ade80;">Correct</label>
-                    <input type="number" class="lunar-field" id="moon-correct" min="0">
-                </div>
-                <div class="lunar-input-group">
-                    <label class="lunar-label" style="color:#f87171;">Wrong</label>
-                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
-                </div>
-            </div>
-
-            <!-- 3. 提交按鈕 -->
-            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
-        </div>
 
         <!-- 狀態顯示 -->
         <div class="moon-phase-display">
@@ -1961,18 +1938,6 @@ function startLunarMission(event) {
         window.open(href, '_blank');
     }, 300);
 }
-// 2. 提交成績
-function submitLunarGlow() {
-    // A. 防作弊時間檢查
-    const startTime = sessionStorage.getItem('lunar_start_time');
-    const now = Date.now();
-    
-    // 如果沒有開始時間，或者時間差小於 2 分鐘
-    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
-        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
-        return;
-    }
-
     // B. 獲取輸入
     const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
     const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
