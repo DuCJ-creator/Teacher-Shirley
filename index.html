@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Teacher Shirley's ET Platform</title>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
+  
   <style id="themeStyles">
     :root {
       /* --- Light Mode (Morning Mist) --- */
@@ -23,6 +26,7 @@
       --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
       --info-bg: rgba(255, 255, 255, 0.95);
     }
+
     .dark {
       /* --- Dark Mode (Deep Nebula) --- */
       --bg-gradient: radial-gradient(circle at 50% 50%, #1b2735 0%, #090a0f 100%);
@@ -36,7 +40,9 @@
       --card-shadow: 0 15px 40px rgba(0,0,0,0.5);
       --info-bg: rgba(25, 35, 50, 0.85);
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       background: var(--bg-gradient);
       background-attachment: fixed;
@@ -47,7 +53,9 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+
     #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    
     /* --- Controls --- */
     .top-bar { position: absolute; top: 1.5rem; right: 2rem; display: flex; gap: 1rem; z-index: 2000; }
     .control-btn {
@@ -59,22 +67,26 @@
       backdrop-filter: blur(5px);
     }
     .control-btn:hover { transform: scale(1.1); color: var(--accent); border-color: var(--accent); }
+
     /* --- Header --- */
     header { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 0; position: relative; z-index: 10; text-align: center; }
     .main-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; color: var(--text); line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     .dark .main-title { color: #ffffff; text-shadow: 0 0 25px rgba(241, 196, 15, 0.5); }
     .title-underline { width: 80px; height: 3px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
+
     /* ==================== UNIVERSE VIEW ==================== */
     #universe-view { 
         display: none; opacity: 0; transition: opacity 0.8s ease; 
         min-height: 85vh; width: 100%; position: relative; overflow: hidden; 
     }
     #universe-view.active { display: block; opacity: 1; }
+
     .solar-system { 
         position: relative; width: 100%; height: 85vh; 
         display: flex; justify-content: center; align-items: center; 
         transform: scale(1);
     }
+
     .orbit { 
         position: absolute; border: 1px dashed var(--orbit-color); box-shadow: var(--orbit-glow); 
         border-radius: 50%; top: 50%; left: 50%; pointer-events: none; transition: border-color 0.5s;
@@ -82,22 +94,28 @@
     .orbit-1 { width: 320px; height: 320px; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; }
     .orbit-2 { width: 520px; height: 520px; margin-top: -260px; margin-left: -260px; animation: spinOrbit 90s linear infinite reverse; border-style: dotted; }
     .orbit-3 { width: 780px; height: 780px; margin-top: -390px; margin-left: -390px; animation: spinOrbit 140s linear infinite; }
+
     .mars-container { position: absolute; width: 320px; height: 320px; top: 50%; left: 50%; margin-top: -160px; margin-left: -160px; animation: spinOrbit 50s linear infinite; pointer-events: none; z-index: 5; }
     .mars-container:hover { animation-play-state: paused; }
     .mars-wrapper { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; margin-left: -30px; animation: spinCounter 50s linear infinite; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+
     .static-planet-wrapper { position: absolute; z-index: 6; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; }
     .static-planet-wrapper:hover { z-index: 100; }
     .static-planet-wrapper:hover .planet-visual { transform: scale(1.15); transition: transform 0.3s; }
+
     .pos-mercury { top: 50%; left: 50%; transform: translate(-50%, 260px) translate(-50%, -50%); margin-top: 30px; }
     .pos-saturn { top: 50%; left: 50%; transform: translate(-390px, 0) translate(-50%, -50%); margin-left: 20px; }
     .pos-jupiter { top: 50%; left: 50%; transform: translate(390px, 0) translate(-50%, -50%); margin-left: -20px; }
+
     .moon-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
     .planet-moon { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f5f6fa, #bdc3c7); box-shadow: 0 0 50px rgba(255,255,255,0.6), inset -10px -10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); animation: bounce 2s ease-in-out infinite; }
+
     .planet-visual { width: 100%; height: 100%; border-radius: 50%; position: relative; }
     .p-mars { background: radial-gradient(#e74c3c, #c0392b); box-shadow: 0 0 25px rgba(231, 76, 60, 0.6); }
     .p-jupiter { width: 85px; height: 85px; background: radial-gradient(#f1c40f, #d35400); box-shadow: 0 0 35px rgba(241, 196, 15, 0.6); }
     .p-saturn { width: 75px; height: 75px; background: radial-gradient(#f39c12, #e67e22); border: 4px double rgba(255,255,255,0.3); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4); }
     .p-mercury { width: 55px; height: 55px; background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50); box-shadow: 0 0 25px rgba(189, 195, 199, 0.7); }
+
     .planet-info {
         position: absolute; width: 220px; background: var(--info-bg); backdrop-filter: blur(15px);
         padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border);
@@ -109,12 +127,15 @@
     .p-poem-cn { font-family: 'Noto Serif TC', serif; font-size: 0.85rem; color: var(--text); line-height: 1.4; margin-bottom: 3px; font-weight: 600; }
     .p-poem-en { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--text-light); font-style: italic; line-height: 1.2; }
     .checkin-tag { display: block; margin-top: 8px; background: linear-gradient(90deg, var(--accent), #f39c12); color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 15px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+
     @keyframes spinOrbit { 100% { transform: rotate(360deg); } }
     @keyframes spinCounter { 100% { transform: rotate(-360deg); } }
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
     @media (max-width: 1024px) { .solar-system { transform: scale(0.75); } }
     @media (max-width: 768px) { .solar-system { transform: scale(0.55); height: 70vh; } }
     @media (max-width: 420px) { .solar-system { transform: scale(0.42); } .pos-mercury { margin-top: 60px; } }
+
     /* ==================== REST OF THE SITE ==================== */
     /* Envelope */
     #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease; }
@@ -133,6 +154,7 @@
     .envelope-container.open { animation: none; transform: scale(1.5); opacity: 0; pointer-events: none; transition: opacity 0.5s 1s, transform 1s; }
     @keyframes floatEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
     /* Letter */
     .letter-paper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); width: 95%; max-width: 750px; height: auto; max-height: 95vh; background: radial-gradient(circle at 50% 0%, #ffffff 10%, #f7f4e9 80%); box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 0 40px rgba(255,255,255,0.8), inset 0 0 10px rgba(212, 175, 55, 0.1); padding: 2.5rem 3rem; opacity: 0; pointer-events: none; transition: all 0.8s ease 0.8s; overflow-y: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.8); display: flex; flex-direction: column; }
     .letter-paper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png'); background-size: cover; background-position: center; filter: blur(6px) grayscale(20%); opacity: 0.1; z-index: 0; pointer-events: none; }
@@ -146,6 +168,7 @@
     .letter-p.visible { opacity: 1; transform: translateY(0); }
     .cn-text { display: block; font-family: 'Noto Sans TC'; font-size: 0.95rem; color: #7f8c8d; margin-top: 2px; line-height: 1.4; }
     .signature { text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.5rem; margin: 1rem 0; color: var(--accent); }
+
     .choice-area { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; opacity: 0; transition: opacity 1s ease 0.5s; }
     .choice-area.visible { opacity: 1; }
     .btn-letter { padding: 8px 20px; border-radius: 25px; border: none; font-family: 'Exo 2'; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; min-width: 140px; }
@@ -153,10 +176,12 @@
     .btn-visitor:hover { background: rgba(141, 110, 99, 0.1); }
     .btn-login { background: var(--accent); color: white; border: 1px solid var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
     .btn-login:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
     #auth-form-container { display: none; margin-top: 10px; background: rgba(255,255,255,0.95); padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
     .google-btn { width: 100%; padding: 10px; background: white; color: #555; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .input-group input { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Exo 2'; }
     .email-btn { width: 100%; padding: 8px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+
     /* Views */
     #visitor-view { display: none; opacity: 0; transition: opacity 0.5s ease; padding-bottom: 5rem; }
     #visitor-view.active { display: block; opacity: 1; }
@@ -164,6 +189,7 @@
     .category-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 1.5rem; text-align: center; text-decoration: none; color: var(--text); transition: all 0.4s; box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; }
     .category-card:hover { transform: translateY(-8px); border-color: var(--accent); }
     .icon { font-size: 3rem; margin-bottom: 1rem; }
+
     #member-terminal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; z-index: 200; box-shadow: 0 25px 80px rgba(0,0,0,0.4); display: none; opacity: 0; transition: all 0.3s; backdrop-filter: blur(10px); }
     #member-terminal.show { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
     .close-terminal { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; cursor: pointer; }
@@ -177,6 +203,7 @@
     .quote-card { border-left: 5px solid #f1c40f; margin-top: 1rem; }
     .checkin-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     .checkin-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+
     /* Print Modal Styles */
     #print-selection-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
     .print-modal-content { background: white; width: 90%; max-width: 700px; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; max-height: 90vh; color: #333; }
@@ -194,6 +221,7 @@
     .btn-cancel { background: #95a5a6; color: white; }
     .btn-confirm { background: var(--accent); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     .btn-confirm:hover { transform: scale(1.05); }
+
     .print-only { display: none; }
     @media print { 
         body * { visibility: hidden; } 
@@ -204,6 +232,7 @@
         th, td { border: 1px solid #333; padding: 10px; text-align: left; } 
         th { background: #f0f0f0; }
     }
+
     .highlight-box {
         display: inline-block;
         font-weight: 900; font-style: italic; color: #5d4037;
@@ -217,6 +246,7 @@
     .highlight-box .key-term {
         color: #c0392b; text-decoration: none; border-bottom: 2px solid #c0392b;
     }
+
     /* --- In-App Browser Warning Overlay --- */
     #in-app-browser-warning {
         display: none; /* Default hidden, triggered via JS */
@@ -230,10 +260,12 @@
     .warning-text { font-size: 1rem; line-height: 1.6; margin-bottom: 25px; color: #ddd; max-width: 500px; }
     .arrow-hint { position: absolute; top: 10px; right: 20px; font-size: 3rem; animation: bounceRight 1.5s infinite; color: var(--accent); }
     @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
+    
     .warning-actions { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
     .btn-warning { padding: 12px; border: none; border-radius: 25px; font-weight: bold; font-family: 'Exo 2'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-copy { background: #3498db; color: white; }
     .btn-close-warning { background: transparent; border: 1px solid #7f8c8d; color: #bdc3c7; }
+
     /* ==================== NEW MOON CARD STYLES ==================== */
     /* 卡片模態框容器 */
     #card-modal {
@@ -242,13 +274,16 @@
         opacity: 0; transition: opacity 0.4s ease;
     }
     #card-modal.active { display: flex; opacity: 1; }
+    
     .card-overlay-bg { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+    
     .card-display-container { 
         position: relative; z-index: 2; display: flex; flex-direction: column; 
         align-items: center; gap: 20px; transform: scale(0.9); 
         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     }
     #card-modal.active .card-display-container { transform: scale(1); }
+
     /* --- 核心卡片結構 (360x580) --- */
     .moon-card {
         width: 360px; min-height: 580px;
@@ -263,38 +298,48 @@
         overflow: hidden;
         display: flex; flex-direction: column;
     }
+
     /* 卡片內部元素 */
     .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); padding-bottom: 15px; margin-bottom: 20px; }
     .card-title { font-family: 'Cinzel Decorative'; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; color: var(--card-accent, #c9d1d9); text-transform: uppercase; }
     .card-serial { font-family: 'Exo 2'; font-size: 0.7rem; color: var(--card-text-dim, #778ca3); letter-spacing: 1px; }
+
     .card-greeting { font-family: 'Playfair Display'; font-size: 1.5rem; font-weight: 700; color: var(--card-highlight, #fff); line-height: 1.2; margin-bottom: 5px; }
     .card-subtitle { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #a0a0a0); font-style: italic; margin-bottom: 15px; }
+
     .card-divider { text-align: center; color: var(--card-accent, #ffd700); font-size: 1.2rem; margin: 15px 0; opacity: 0.7; }
+
     .card-content-box { text-align: center; margin-bottom: 20px; }
     .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--card-accent, #ffd700); margin-bottom: 5px; opacity: 0.8; }
     .card-wotd { font-family: 'Playfair Display'; font-size: 2.2rem; font-weight: 700; color: var(--card-highlight, #fff); text-shadow: 0 2px 10px rgba(255,255,255,0.2); line-height: 1; margin-bottom: 5px; }
     .card-pos { font-family: 'Exo 2'; font-size: 0.8rem; background: var(--card-accent-dim, rgba(255,255,255,0.1)); display: inline-block; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
     .card-def { font-family: 'Noto Serif TC'; font-size: 1rem; color: var(--card-text, #ddd); line-height: 1.4; font-weight: 600; }
+    
     /* 例句樣式 */
     .card-sentence-container { margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--card-accent-dim, rgba(255,255,255,0.1)); }
     .card-sent-en { font-family: 'Exo 2'; font-style: italic; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-bottom: 5px; line-height: 1.3; font-weight:500; }
     .card-sent-cn { font-family: 'Noto Serif TC'; font-size: 0.85rem; color: var(--card-text-dim, #888); opacity: 0.8; }
+
     /* 佳句與翻譯樣式 */
     .card-quote-box { position: relative; padding: 15px; border-left: 3px solid var(--card-accent, #ffd700); background: linear-gradient(90deg, var(--card-accent-dim, rgba(255,255,255,0.05)), transparent); margin-top: auto; }
     .card-quote-text { font-family: 'Playfair Display'; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--card-text, #eee); }
     .card-quote-trans { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; color: var(--card-text-dim, #ccc); margin-top: 8px; font-style: normal; line-height: 1.4; opacity: 0.9; }
     .card-quote-author { text-align: right; font-size: 0.8rem; font-weight: bold; margin-top: 8px; color: var(--card-accent, #ffd700); }
+
     .card-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--card-accent-dim, rgba(255,255,255,0.2)); display: flex; justify-content: space-between; align-items: center; }
     .card-streak-badge { background: var(--card-accent, #ffd700); color: var(--card-bg, #000); padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 0 10px var(--card-accent-dim, rgba(255,215,0,0.4)); display: flex; align-items: center; gap: 5px; }
     .card-signature { font-family: 'Dancing Script'; font-size: 1.5rem; color: var(--card-text-dim, #aaa); transform: rotate(-5deg); }
+
     .card-watermark { position: absolute; bottom: 10px; right: 20px; font-size: 4rem; font-weight: 900; color: rgba(255,255,255,0.03); pointer-events: none; z-index: 0; font-family: 'Cinzel Decorative'; white-space: nowrap; }
     .card-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.05) 45%, transparent 50%); pointer-events: none; }
+
     /* 按鈕樣式 */
     .card-actions { display: flex; gap: 15px; margin-top: 15px; }
     .btn-card-action { padding: 10px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: transform 0.2s; font-family: 'Exo 2'; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
     .btn-download { background: linear-gradient(90deg, #b8860b, #f1c40f); color: #2c3e50; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3); }
     .btn-close { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
     .btn-card-action:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
     /* === 11 種高雅模板樣式 === */
     /* 1. Midnight Gold (經典黑金) */
     .theme-1 { --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364); --card-border: #b8860b; --card-accent: #ffd700; --card-highlight: #fff; --card-text: #e0e0e0; --card-text-dim: #8fa1b3; --card-accent-dim: rgba(184, 134, 11, 0.2); }
@@ -355,125 +400,189 @@
     .theme-28 { --card-bg: #2d3436; --card-border: #dfe6e9; --card-accent: #fd79a8; --card-highlight: #fff; --card-text: #dfe6e9; --card-text-dim: #b2bec3; --card-accent-dim: rgba(255,255,255,0.1); border-style: dashed; }
     /* 29. Ink Wash (水墨) */
     .theme-29 { --card-bg: linear-gradient(to bottom, #ffffff, #dcdcdc); --card-border: #000; --card-accent: #c0392b; --card-highlight: #000; --card-text: #000; --card-text-dim: #555; --card-accent-dim: rgba(0,0,0,0.1); }
+
    /* --- 30-39: 珠寶與礦石系列 (Gemstones & Minerals) --- */
+    
     /* 30. White Pearl (白珍珠) - 溫潤光澤 */
     .theme-30 { --card-bg: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); --card-border: #d7d7d7; --card-accent: #b0b0b0; --card-highlight: #fff; --card-text: #2c3e50; --card-text-dim: #7f8c8d; --card-accent-dim: rgba(0,0,0,0.05); }
+
     /* 31. Emerald City (祖母綠) - 深邃尊貴 */
     .theme-31 { --card-bg: linear-gradient(to bottom right, #051937, #004d40); --card-border: #00897b; --card-accent: #26a69a; --card-highlight: #b2dfdb; --card-text: #e0f2f1; --card-text-dim: #80cbc4; --card-accent-dim: rgba(38, 166, 154, 0.2); }
+
     /* 32. Royal Amethyst (皇家紫晶) - 神秘奢華 */
     .theme-32 { --card-bg: radial-gradient(circle at top right, #360033, #0b8793); --card-border: #d1c4e9; --card-accent: #e1bee7; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #b39ddb; --card-accent-dim: rgba(225, 190, 231, 0.15); }
+
     /* 33. Sapphire Night (藍寶石) - 靜謐深藍 */
     .theme-33 { --card-bg: linear-gradient(160deg, #002244, #001122); --card-border: #1565c0; --card-accent: #42a5f5; --card-highlight: #fff; --card-text: #e3f2fd; --card-text-dim: #90caf9; --card-accent-dim: rgba(66, 165, 245, 0.2); }
+
     /* 34. Ruby Wine (紅寶石酒紅) - 醇厚質感 */
     .theme-34 { --card-bg: linear-gradient(to bottom, #4a0000, #2b0000); --card-border: #b71c1c; --card-accent: #ff5252; --card-highlight: #ffcdd2; --card-text: #ffebee; --card-text-dim: #ef9a9a; --card-accent-dim: rgba(255, 82, 82, 0.2); }
+
     /* 35. Black Opal (黑蛋白石) - 暗夜流光 */
     .theme-35 { --card-bg: linear-gradient(45deg, #141e30, #243b55); --card-border: #00bcd4; --card-accent: #00e5ff; --card-highlight: #e0f7fa; --card-text: #eceff1; --card-text-dim: #607d8b; --card-accent-dim: rgba(0, 229, 255, 0.1); }
+
     /* 36. Amber Fossil (琥珀) - 凝固時光 */
     .theme-36 { --card-bg: linear-gradient(to right, #b46105, #5e3100); --card-border: #ffca28; --card-accent: #ffd54f; --card-highlight: #fff8e1; --card-text: #fff; --card-text-dim: #ffecb3; --card-accent-dim: rgba(255, 213, 79, 0.2); }
+
     /* 37. Moonstone (月光石) - 夢幻藍暈 */
     .theme-37 { --card-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); --card-border: #aab7b8; --card-accent: #78909c; --card-highlight: #fff; --card-text: #455a64; --card-text-dim: #90a4ae; --card-accent-dim: rgba(120, 144, 156, 0.1); }
+
     /* 38. Jade Dragon (墨玉) - 東方古典 */
     .theme-38 { --card-bg: linear-gradient(to bottom, #1d2b25, #0f1612); --card-border: #69f0ae; --card-accent: #b9f6ca; --card-highlight: #fff; --card-text: #e8f5e9; --card-text-dim: #81c784; --card-accent-dim: rgba(105, 240, 174, 0.1); }
+
     /* 39. Bronze Age (青銅時代) - 復古金屬 */
     .theme-39 { --card-bg: linear-gradient(to right, #4b3832, #2c1e18); --card-border: #cd7f32; --card-accent: #d7a877; --card-highlight: #fff; --card-text: #f5deb3; --card-text-dim: #a1887f; --card-accent-dim: rgba(205, 127, 50, 0.2); }
+
     /* --- 40-49: 自然與氛圍系列 (Nature & Atmosphere) --- */
+
     /* 40. Nordic Aurora (北歐極光) - 幽冷極簡 */
     .theme-40 { --card-bg: #1c2329; --card-border: #4a6fa5; --card-accent: #90caf9; --card-highlight: #e3f2fd; --card-text: #eceff1; --card-text-dim: #78909c; --card-accent-dim: rgba(144, 202, 249, 0.1); }
+
     /* 41. Deep Ocean (深海潛行) - 漸層藍綠 */
     .theme-41 { --card-bg: linear-gradient(180deg, #1a2980 0%, #26d0ce 100%); --card-border: #81d4fa; --card-accent: #4dd0e1; --card-highlight: #e0f7fa; --card-text: #e1f5fe; --card-text-dim: #80deea; --card-accent-dim: rgba(77, 208, 225, 0.2); }
+
     /* 42. Sakura Rain (櫻花雨) - 柔美粉嫩 */
     .theme-42 { --card-bg: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%); --card-border: #ffab91; --card-accent: #ff8a65; --card-highlight: #fff; --card-text: #5d4037; --card-text-dim: #a1887f; --card-accent-dim: rgba(255, 138, 101, 0.2); }
+
     /* 43. Desert Gold (流沙金) - 溫暖輝煌 */
     .theme-43 { --card-bg: linear-gradient(to bottom, #C06C84, #6C5B7B, #355C7D); --card-border: #f8b195; --card-accent: #ffccbc; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ffab91; --card-accent-dim: rgba(248, 177, 149, 0.2); }
+
     /* 44. Misty Forest (迷霧森林) - 低飽和綠 */
     .theme-44 { --card-bg: linear-gradient(to top, #2C3E50, #4CA1AF); --card-border: #80cbc4; --card-accent: #b2dfdb; --card-highlight: #e0f2f1; --card-text: #e0f7fa; --card-text-dim: #80deea; --card-accent-dim: rgba(178, 223, 219, 0.1); }
+
     /* 45. Lavender Dream (薰衣草夢) - 淡雅紫 */
     .theme-45 { --card-bg: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%); --card-border: #9fa8da; --card-accent: #7986cb; --card-highlight: #fff; --card-text: #303f9f; --card-text-dim: #5c6bc0; --card-accent-dim: rgba(121, 134, 203, 0.2); }
+
     /* 46. Volcanic Ash (火山灰) - 冷冽質感 */
     .theme-46 { --card-bg: linear-gradient(to right, #434343 0%, #000000 100%); --card-border: #757575; --card-accent: #bdbdbd; --card-highlight: #fff; --card-text: #f5f5f5; --card-text-dim: #9e9e9e; --card-accent-dim: rgba(255,255,255,0.1); }
+
     /* 47. Autumn Maple (秋楓) - 濃郁橙紅 */
     .theme-47 { --card-bg: linear-gradient(to right, #d31027, #ea384d); --card-border: #ff8a80; --card-accent: #ff5252; --card-highlight: #ffebee; --card-text: #fff; --card-text-dim: #ffcdd2; --card-accent-dim: rgba(255, 82, 82, 0.2); }
+
     /* 48. Glacial Ice (冰河) - 通透藍白 */
     .theme-48 { --card-bg: linear-gradient(to top, #accbee 0%, #e7f0fd 100%); --card-border: #90caf9; --card-accent: #64b5f6; --card-highlight: #fff; --card-text: #1565c0; --card-text-dim: #64b5f6; --card-accent-dim: rgba(33, 150, 243, 0.1); }
+
     /* 49. Bamboo Zen (竹禪) - 清幽雅致 */
     .theme-49 { --card-bg: linear-gradient(135deg, #134e5e, #71b280); --card-border: #a5d6a7; --card-accent: #c8e6c9; --card-highlight: #e8f5e9; --card-text: #f1f8e9; --card-text-dim: #a5d6a7; --card-accent-dim: rgba(165, 214, 167, 0.2); }
+
     /* --- 50-59: 高級材質與現代風 (Material & Modern) --- */
+
     /* 50. Champagne Gold (香檳金) - 派對奢華 */
     .theme-50 { --card-bg: linear-gradient(to bottom, #eee4d6, #dccdb6); --card-border: #c5a065; --card-accent: #bfa068; --card-highlight: #fff; --card-text: #5d4037; --card-text-dim: #8d6e63; --card-accent-dim: rgba(197, 160, 101, 0.2); }
+
     /* 51. Carbon Fiber (碳纖維) - 科技運動 */
     .theme-51 { --card-bg: repeating-linear-gradient(45deg, #111, #111 10px, #222 10px, #222 20px); --card-border: #333; --card-accent: #e74c3c; --card-highlight: #fff; --card-text: #eee; --card-text-dim: #777; --card-accent-dim: rgba(231, 76, 60, 0.3); }
+
     /* 52. Vintage Leather (老皮革) - 紳士棕 */
     .theme-52 { --card-bg: linear-gradient(#3e2723, #281a16); --card-border: #8d6e63; --card-accent: #d7ccc8; --card-highlight: #efebe9; --card-text: #d7ccc8; --card-text-dim: #a1887f; --card-accent-dim: rgba(141, 110, 99, 0.2); }
+
     /* 53. Royal Velvet (絲絨藍) - 柔軟深沉 */
     .theme-53 { --card-bg: linear-gradient(to bottom, #1a237e, #0d1245); --card-border: #7986cb; --card-accent: #c5cae9; --card-highlight: #fff; --card-text: #e8eaf6; --card-text-dim: #9fa8da; --card-accent-dim: rgba(197, 202, 233, 0.1); }
+
     /* 54. Rose Gold (玫瑰金箔) - 時尚金屬 */
     .theme-54 { --card-bg: linear-gradient(135deg, #e6b9b8, #c68a88); --card-border: #fff; --card-accent: #8e5856; --card-highlight: #fff0f0; --card-text: #4e342e; --card-text-dim: #8d6e63; --card-accent-dim: rgba(255, 255, 255, 0.4); }
+
     /* 55. Polished Steel (拋光鋼) - 工業冷調 */
     .theme-55 { --card-bg: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%); --card-border: #757575; --card-accent: #616161; --card-highlight: #fff; --card-text: #212121; --card-text-dim: #616161; --card-accent-dim: rgba(0,0,0,0.1); }
+
     /* 56. Matte Black (消光黑) - 極致低調 */
     .theme-56 { --card-bg: #121212; --card-border: #2c2c2c; --card-accent: #666; --card-highlight: #444; --card-text: #bbb; --card-text-dim: #444; --card-accent-dim: rgba(255,255,255,0.05); }
+
     /* 57. Neon Noir (霓虹黑夜) - 賽博龐克 */
     .theme-57 { --card-bg: linear-gradient(to bottom, #000428, #004e92); --card-border: #d500f9; --card-accent: #00e5ff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #d500f9; --card-accent-dim: rgba(213, 0, 249, 0.2); }
+
     /* 58. Ivory Tower (象牙白) - 純淨典雅 */
     .theme-58 { --card-bg: linear-gradient(to bottom, #fffff0, #f0f0e0); --card-border: #dcdcdc; --card-accent: #a9a9a9; --card-highlight: #fff; --card-text: #333; --card-text-dim: #888; --card-accent-dim: rgba(0,0,0,0.03); }
+
     /* 59. Gunmetal (槍灰色) - 硬派軍事 */
     .theme-59 { --card-bg: linear-gradient(180deg, #232526 0%, #414345 100%); --card-border: #585858; --card-accent: #d32f2f; --card-highlight: #757575; --card-text: #e0e0e0; --card-text-dim: #616161; --card-accent-dim: rgba(211, 47, 47, 0.2); }
+
     /* --- 60-69: 藝術與人文系列 (Arts & Culture) --- */
+
     /* 60. Ink Wash Painting (水墨山水) - 黑白層次 */
     .theme-60 { --card-bg: linear-gradient(to bottom, #f5f5f5, #cfd9df); --card-border: #212121; --card-accent: #424242; --card-highlight: #000; --card-text: #000; --card-text-dim: #616161; --card-accent-dim: rgba(0,0,0,0.1); }
+
     /* 61. Porcelain Blue (青花瓷) - 藍白相間 */
     .theme-61 { --card-bg: #fff; --card-border: #1565c0; --card-accent: #0d47a1; --card-highlight: #e3f2fd; --card-text: #0d47a1; --card-text-dim: #64b5f6; --card-accent-dim: rgba(13, 71, 161, 0.1); border: 2px solid #1565c0; }
+
     /* 62. Old Parchment (舊羊皮紙) - 歷史感 */
     .theme-62 { --card-bg: linear-gradient(to bottom, #fdfbfb, #ebedee); background-color: #f3e5f5; --card-bg: #fff8e1; --card-border: #d7ccc8; --card-accent: #8d6e63; --card-highlight: #fff; --card-text: #5d4037; --card-text-dim: #a1887f; --card-accent-dim: rgba(141, 110, 99, 0.1); }
+
     /* 63. Renaissance (文藝復興) - 油畫質感 */
     .theme-63 { --card-bg: linear-gradient(to right, #3e5151, #decba4); --card-border: #8d6e63; --card-accent: #d7ccc8; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #efebe9; --card-accent-dim: rgba(255,255,255,0.2); }
+
     /* 64. Film Noir (黑色電影) - 高對比 */
     .theme-64 { --card-bg: radial-gradient(circle, #444, #000); --card-border: #fff; --card-accent: #eee; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #aaa; --card-accent-dim: rgba(255,255,255,0.1); }
+
     /* 65. Ukiyo-e (浮世繪) - 浪花藍 */
     .theme-65 { --card-bg: linear-gradient(to bottom, #2b5876, #4e4376); --card-border: #ffccbc; --card-accent: #ffab91; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #b39ddb; --card-accent-dim: rgba(255, 171, 145, 0.2); }
+
     /* 66. Art Deco (裝飾藝術) - 蓋茨比金黑 */
     .theme-66 { --card-bg: #1c1c1c; --card-border: #d4af37; --card-accent: #f1c40f; --card-highlight: #fff; --card-text: #d4af37; --card-text-dim: #8e7d48; --card-accent-dim: rgba(212, 175, 55, 0.15); border-width: 2px; }
+
     /* 67. Bauhaus (包浩斯) - 幾何原色 */
     .theme-67 { --card-bg: #f0f0f0; --card-border: #d32f2f; --card-accent: #1976d2; --card-highlight: #ffeb3b; --card-text: #212121; --card-text-dim: #757575; --card-accent-dim: rgba(25, 118, 210, 0.1); }
+
     /* 68. Vaporwave (蒸汽波) - 復古未來 */
     .theme-68 { --card-bg: linear-gradient(to right, #cc2b5e, #753a88); --card-border: #00d2ff; --card-accent: #3a7bd5; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #eaafc8; --card-accent-dim: rgba(0, 210, 255, 0.2); }
+
     /* 69. Mosaic (馬賽克) - 異域風情 */
     .theme-69 { --card-bg: linear-gradient(45deg, #85ffbd 0%, #ffffb0 100%); --card-border: #009688; --card-accent: #00796b; --card-highlight: #fff; --card-text: #004d40; --card-text-dim: #4db6ac; --card-accent-dim: rgba(0, 121, 107, 0.1); }
+
     /* --- 70-79: 宇宙與星際系列 (Cosmic & Celestial) --- */
+
     /* 70. Deep Space (深空) - 無盡黑 */
     .theme-70 { --card-bg: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); --card-border: #3f51b5; --card-accent: #7986cb; --card-highlight: #fff; --card-text: #e8eaf6; --card-text-dim: #5c6bc0; --card-accent-dim: rgba(121, 134, 203, 0.1); }
+
     /* 71. Supernova (超新星) - 爆發能量 */
     .theme-71 { --card-bg: linear-gradient(to right, #ff512f, #dd2476); --card-border: #ffcc80; --card-accent: #ffe0b2; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ffab91; --card-accent-dim: rgba(255, 204, 128, 0.2); }
+
     /* 72. Nebula Cloud (星雲團) - 粉紫迷幻 */
     .theme-72 { --card-bg: linear-gradient(to bottom, #20002c, #cbb4d4); --card-border: #e1bee7; --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ba68c8; --card-accent-dim: rgba(225, 190, 231, 0.2); }
+
     /* 73. Solar Flare (太陽耀斑) - 炙熱 */
     .theme-73 { --card-bg: linear-gradient(0deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); background: linear-gradient(to bottom, #f83600 0%, #f9d423 100%); --card-border: #fff59d; --card-accent: #ffeb3b; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #fff9c4; --card-accent-dim: rgba(255, 235, 59, 0.2); }
+
     /* 74. Black Hole (黑洞) - 引力邊緣 */
     .theme-74 { --card-bg: radial-gradient(circle, #000000, #434343); --card-border: #fff; --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #666; --card-accent-dim: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); }
+
     /* 75. Comet Tail (彗尾) - 冰藍軌跡 */
     .theme-75 { --card-bg: linear-gradient(to left, #89f7fe, #66a6ff); --card-border: #fff; --card-accent: #fff; --card-highlight: #fff; --card-text: #01579b; --card-text-dim: #0288d1; --card-accent-dim: rgba(255,255,255,0.3); }
+
     /* 76. Mars Dust (火星塵) - 鏽紅異星 */
     .theme-76 { --card-bg: linear-gradient(to bottom, #870000, #190a05); --card-border: #ff5722; --card-accent: #ffab91; --card-highlight: #fff; --card-text: #ffccbc; --card-text-dim: #bf360c; --card-accent-dim: rgba(255, 87, 34, 0.2); }
+
     /* 77. Starlight (星光) - 點點閃爍 */
     .theme-77 { --card-bg: #0f2027; --card-border: #fff; --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #cfd8dc; --card-accent-dim: rgba(255,255,255,0.1); box-shadow: inset 0 0 20px rgba(255,255,255,0.05); }
+
     /* 78. Eclipse (日蝕) - 光環 */
     .theme-78 { --card-bg: radial-gradient(circle at 50% 0, #5c5c5c, #000000); --card-border: #f5f5f5; --card-accent: #e0e0e0; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #9e9e9e; --card-accent-dim: rgba(255,255,255,0.1); }
+
     /* 79. Constellation (星座) - 連線 */
     .theme-79 { --card-bg: #2c3e50; --card-border: #f1c40f; --card-accent: #f39c12; --card-highlight: #fff; --card-text: #ecf0f1; --card-text-dim: #95a5a6; --card-accent-dim: rgba(241, 196, 15, 0.1); }
+
     /* --- 80-85: 抽象概念系列 (Abstract Concepts) --- */
+
     /* 80. Eternal Time (永恆時間) - 齒輪銅金 */
     .theme-80 { --card-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); background: linear-gradient(to right, #8e9eab, #eef2f3); --card-border: #78909c; --card-accent: #546e7a; --card-highlight: #fff; --card-text: #263238; --card-text-dim: #607d8b; --card-accent-dim: rgba(84, 110, 122, 0.1); }
+
     /* 81. Inner Peace (內心平靜) - 禪意灰 */
     .theme-81 { --card-bg: #d7d2cc; --card-bg: linear-gradient(to bottom, #d7d2cc, #304352); --card-border: #90a4ae; --card-accent: #cfd8dc; --card-highlight: #fff; --card-text: #eceff1; --card-text-dim: #b0bec5; --card-accent-dim: rgba(207, 216, 220, 0.1); }
+
     /* 82. Passion (熱情) - 魅惑深紅 */
     .theme-82 { --card-bg: linear-gradient(147deg, #f71735 0%, #db3445 74%); --card-border: #ff8a80; --card-accent: #ffcdd2; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ef9a9a; --card-accent-dim: rgba(255, 205, 210, 0.2); }
+
     /* 83. Wisdom (智慧) - 靛藍深沈 */
     .theme-83 { --card-bg: linear-gradient(to right, #243949 0%, #517fa4 100%); --card-border: #b3e5fc; --card-accent: #81d4fa; --card-highlight: #fff; --card-text: #e1f5fe; --card-text-dim: #81d4fa; --card-accent-dim: rgba(129, 212, 250, 0.1); }
+
     /* 84. Balance (陰陽平衡) - 黑白太極 */
     .theme-84 { --card-bg: linear-gradient(90deg, #111 50%, #eee 50%); --card-border: #888; --card-accent: #888; --card-highlight: #f00; --card-text: #888; --card-text-dim: #aaa; --card-accent-dim: rgba(136, 136, 136, 0.2); }
+
     /* 85. The Singularity (奇點) - 終極虹光 */
     .theme-85 { --card-bg: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%); --card-border: #fff; --card-accent: #fff; --card-highlight: #fff; --card-text: #fff; --card-text-dim: #ffe0b2; --card-accent-dim: rgba(255, 255, 255, 0.3); }
+ 
     /* --- THE BIG 3: 隱藏款 (Blind Box Rares) --- */
+    
     /* 86. Golden Legend (SSR - 王者金) - 機率 3% */
     .theme-86 { 
         --card-bg: linear-gradient(135deg, #141414 0%, #333 100%); 
@@ -490,6 +599,7 @@
         background-image: linear-gradient(135deg, #141414 0%, #333 100%), linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
         animation: goldShine 5s infinite linear;
     }
+
     /* 87. Cosmic Aurora (UR - 幻彩極光) - 機率 2% */
     .theme-87 { 
         --card-bg: radial-gradient(circle at 50% 50%, #2b1055, #7597de); 
@@ -504,6 +614,7 @@
         border-width: 3px;
         border-style: double;
     }
+
     /* 88. Singularity Void (SP - 虛空奇點) - 機率 1% (新增) */
     .theme-88 {
         --card-bg: #000;
@@ -519,6 +630,7 @@
         box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
         border: 2px solid #fff;
     }
+    
     @keyframes goldShine { 0% { filter: brightness(1); } 50% { filter: brightness(1.2); } 100% { filter: brightness(1); } }
     @keyframes holoPulse { 0% { box-shadow: 0 0 20px rgba(118, 224, 255, 0.4); border-color: #81ecec; } 100% { box-shadow: 0 0 40px rgba(253, 121, 168, 0.6); border-color: #fd79a8; } }
     @keyframes rainbowGlitch { 
@@ -526,6 +638,7 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
     }
+    
     /* 日曆互動增強 (加入卡袋提示) */
     .calendar-day-checked {
         cursor: pointer; position: relative; overflow: hidden;
@@ -535,232 +648,299 @@
         background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
         font-size: 1.2rem;
     }
-    /* === 🚀 Lunar Glow Cache 月光寶盒 (完整壓縮版) === */
-    .lunar-cache-container {
-        max-height: 280px;
-        padding: 16px;
-        margin: 16px auto 0;
-        width: 95%;
-        max-width: 700px;
-        background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(0,0,0,0.2);
-        position: relative;
-        overflow: hidden;
-        color: #e0e0e0;
-        font-family: 'Exo 2', sans-serif;
-        backdrop-filter: blur(8px);
-    }
-    .lunar-header { margin-bottom: 12px; }
-    .lunar-title {
-        font-family: 'Cinzel Decorative', cursive;
-        font-size: 1.6rem;
-        background: linear-gradient(to right, #fff, #ffd700, #fff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        letter-spacing: 1px;
-    }
-    .lunar-subtitle {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 0.9rem;
-        color: #a0a0a0;
-        margin-top: 5px;
-        font-style: italic;
-        letter-spacing: 2px;
-    }
-    .lunar-control-panel {
-        display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;
-    }
-    .mission-start-btn {
-        min-width: 180px;
-        padding: 12px;
-        background: linear-gradient(45deg, #141e30, #243b55);
-        border: 1px solid rgba(255,215,0,0.3);
-        border-radius: 12px;
-        color: #ffd700;
-        text-align: center;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    .mission-start-btn:hover {
-        background: linear-gradient(45deg, #1f2f45, #355375);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-        transform: translateY(-2px);
-        border-color: #ffd700;
-    }
-    .mission-icon { font-size: 1.5rem; margin-bottom: 5px; }
-    .lunar-inputs {
-        flex: 2;
-        display: flex;
-        gap: 8px;
-        background: rgba(0,0,0,0.2);
-        padding: 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-    .lunar-input-group {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .lunar-label {
-        font-size: 0.7rem;
-        color: #888;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-        text-align: center;
-    }
-    .lunar-field {
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
-        color: #fff;
-        text-align: center;
-        padding: 5px;
-        font-family: 'Exo 2';
-        transition: border 0.3s;
-    }
-    .lunar-field:focus {
-        outline: none;
-        border-bottom: 1px solid #ffd700;
-    }
-    .lunar-submit-btn {
-        padding: 10px 25px;
-        background: #ffd700;
-        color: #1a1a2e;
-        border: none;
-        border-radius: 25px;
-        font-weight: 800;
-        cursor: pointer;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-        transition: all 0.3s;
-    }
-    .lunar-submit-btn:disabled {
-        background: #555;
-        color: #888;
-        cursor: not-allowed;
-    }
-    .moon-phase-display {
-        margin-top: 12px;
-        background: rgba(0,0,0,0.3);
-        border-radius: 12px;
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .phase-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    .current-moon-icon {
-        font-size: 2.5rem;
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-    }
-    .phase-text {
-        display: flex;
-        flex-direction: column;
-    }
-    .phase-name {
-        font-family: 'Noto Serif TC';
-        font-size: 1.1rem;
-        color: #ffd700;
-        font-weight: 600;
-    }
-    .moonlight-count {
-        font-size: 0.85rem;
-        color: #ccc;
-    }
-    .inventory-counter {
-        text-align: right;
-        font-family: 'Cinzel Decorative';
-        font-size: 1.2rem;
-        color: #fff;
-        text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-    .moonlight-track {
-        height: 4px;
-        background: rgba(255,255,255,0.1);
-        margin-top: 10px;
-        border-radius: 2px;
-    }
-    .moonlight-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #4b6cb7, #182848, #ffd700);
-        transition: width 0.8s ease-out;
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-    }
-    #moon-reward-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.9);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(8px);
-    }
-    .reward-card {
-        width: 340px;
-        padding: 30px;
-        background: linear-gradient(to bottom, #090a0f, #1b2735);
-        border: 2px solid #ffd700;
-        border-radius: 20px;
-        text-align: center;
-        color: #fff;
-        box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
-        position: relative;
-    }
-    .reward-moon {
-        font-size: 4rem;
-        margin-bottom: 20px;
-        filter: drop-shadow(0 0 30px #ffd700);
-        animation: floatMoon 3s ease-in-out infinite;
-    }
-    @keyframes floatMoon { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-    .reward-title {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 1.4rem;
-        color: #ffd700;
-        margin-bottom: 15px;
-    }
-    .reward-poem-cn {
-        font-family: 'Noto Serif TC', serif;
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 15px;
-        color: #e0e0e0;
-    }
-    .reward-poem-en {
-        font-family: 'Playfair Display', serif;
-        font-size: 0.9rem;
-        font-style: italic;
-        color: #a0a0a0;
-        margin-bottom: 25px;
-        line-height: 1.4;
-    }
-    .reward-actions button {
-        margin: 5px;
-        padding: 8px 20px;
-        border-radius: 20px;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    .btn-keep { background: #ffd700; color: #000; }
-    .btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
+
+    /* --- 🚀 Lunar Glow Cache 月光寶盒專用樣式 --- */
+.lunar-cache-container {
+    width: 100%;
+    margin-top: 30px; /* 與上方儀表板保持距離 */
+    background: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85), rgba(44, 83, 100, 0.85));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    color: #e0e0e0;
+    font-family: 'Exo 2', sans-serif;
+    backdrop-filter: blur(10px);
+}
+
+/* 標題區 */
+.lunar-header {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+.lunar-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.6rem;
+    background: linear-gradient(to right, #fff, #ffd700, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    letter-spacing: 1px;
+}
+.lunar-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-top: 5px;
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+/* 操作區佈局 */
+
+/* 左側：啟動按鈕 */
+.mission-start-btn {
+    flex: 1;
+    min-width: 200px;
+    background: linear-gradient(45deg, #141e30, #243b55);
+    border: 1px solid rgba(255,215,0, 0.3);
+    padding: 15px;
+    border-radius: 12px;
+    color: #ffd700;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.mission-start-btn:hover {
+    background: linear-gradient(45deg, #1f2f45, #355375);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    border-color: #ffd700;
+}
+.mission-icon { font-size: 1.5rem; margin-bottom: 5px; }
+
+/* 中間：輸入區 */
+.lunar-inputs {
+    flex: 2;
+    display: flex;
+    gap: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.lunar-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.lunar-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.lunar-field {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    font-family: 'Exo 2';
+    transition: border 0.3s;
+}
+.lunar-field:focus {
+    outline: none;
+    border-bottom: 1px solid #ffd700;
+}
+
+/* 右側：提交按鈕 */
+.lunar-submit-btn {
+    padding: 10px 25px;
+    background: #ffd700;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 25px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s;
+}
+.lunar-submit-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.lunar-submit-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background: #ffed4a;
+}
+
+/* 月相顯示與進度 */
+.moon-phase-display {
+    margin-top: 25px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.phase-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.current-moon-icon {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+.phase-text {
+    display: flex;
+    flex-direction: column;
+}
+.phase-name {
+    font-family: 'Noto Serif TC';
+    font-size: 1.1rem;
+    color: #ffd700;
+    font-weight: 600;
+}
+.moonlight-count {
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+.inventory-counter {
+    text-align: right;
+    font-family: 'Cinzel Decorative';
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* 進度條 */
+.moonlight-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 15px;
+    border-radius: 2px;
+    position: relative;
+}
+.moonlight-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4b6cb7, #182848, #ffd700);
+    width: 0%;
+    transition: width 0.8s ease-out;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* 滿月獎勵卡片 Modal */
+#moon-reward-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+.reward-card {
+    width: 340px;
+    padding: 30px;
+    background: linear-gradient(to bottom, #090a0f, #1b2735);
+    border: 2px solid #ffd700;
+    border-radius: 20px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+    position: relative;
+}
+.reward-moon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px #ffd700);
+    animation: floatMoon 3s ease-in-out infinite;
+}
+@keyframes floatMoon { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+.reward-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.4rem;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+.reward-poem-cn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #e0e0e0;
+}
+.reward-poem-en {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #a0a0a0;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+.reward-actions button {
+    margin: 5px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-keep { background: #ffd700; color: #000; }
+.btn-close-reward { background: transparent; border: 1px solid #666; color: #aaa; }
+
+/* === [Step 2] 縮小版玻璃匣子 CSS === */
+
+/* === [Step 2] 微型玻璃匣子 === */
+.glass-box {
+    width: 120px;   /* 更小巧 */
+    height: 80px;
+    background: rgba(20, 20, 35, 0.95);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 215, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+}
+
+.glass-box.visible {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+
+.glass-value { font-size: 2rem; color: #fff; font-weight: 800; text-shadow: 0 0 10px gold; line-height: 1; }
+.glass-label { font-size: 0.6rem; color: #aaa; letter-spacing: 1px; }
+
+/* 發射動畫 */
+@keyframes shootToMoon {
+    0% { transform: scale(1) translateY(0); opacity: 1; }
+    100% { transform: scale(0.2) translate(30vw, -40vh); opacity: 0; }
+}
+
+.glass-box.flying {
+    animation: shootToMoon 0.8s forwards ease-in;
+}
   </style>
 </head>
 <body>
+
   <div id="in-app-browser-warning">
       <div class="arrow-hint">↗</div>
       <div class="warning-icon">⚠️</div>
@@ -772,6 +952,7 @@
           此應用程式不支援 Google 登入。<br>
           請點擊右上角選單，選擇<strong>「在瀏覽器中開啟」</strong>，或複製連結至 Chrome/Safari 開啟。
       </div>
+      
       <div class="warning-actions">
           <button class="btn-warning btn-copy" onclick="copyCurrentUrl()">
               📋 Copy Link / 複製連結
@@ -781,20 +962,25 @@
           </button>
       </div>
   </div>
+
   <canvas id="particle-canvas"></canvas>
+
   <audio id="themeSong" src="https://ducj-creator.github.io/Teacher-Shirley/assets/theme%20song.mp3" preload="auto"></audio>
   <audio id="windchime" src="https://ducj-creator.github.io/Teacher-Shirley/assets/windchime.mp3" preload="auto"></audio>
+
   <div class="top-bar">
       <div id="themeToggle" class="control-btn" title="Toggle Theme">🌓</div>
       <div id="musicToggle" class="control-btn" title="Music">🎵</div>
       <div id="logoutBtn" class="control-btn" title="Logout" style="display:none;">🚪</div>
   </div>
+
   <header>
     <div class="title-container">
         <h1 class="main-title">Teacher Shirley’s<br>ET Platform</h1>
         <div class="title-underline"></div>
     </div>
   </header>
+
   <div id="intro-overlay">
       <div class="envelope-container" onclick="openLetter()">
           <div class="envelope-body"></div>
@@ -807,6 +993,7 @@
           <div class="envelope-pocket"></div>
           <div class="envelope-flap"><div class="heart-seal">💗</div></div>
       </div>
+
       <div class="letter-paper" id="letter-view">
           <div class="sparkle-overlay">
               <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
@@ -815,12 +1002,14 @@
               <div class="letter-p"><strong>Hi there! 👋</strong> I’m Shirley—an English teacher who believes learning should be joyful, interactive, and full of “aha!” moments. <span class="cn-text">我是 Shirley——一位相信學習應該充滿樂趣、互動，並時常迸發「啊哈！」靈感的英文老師。</span></div>
               <div class="letter-p">This teaching-and-learning platform is your free, ad-free toolkit—carefully crafted from years of real classroom experience and student feedback. <span class="cn-text">這個教與學平台是您免費、無廣告的學習工具箱——源自多年真實課堂經驗與學生回饋。</span></div>
               <div class="letter-p">Whether you’re a teacher looking for ready-to-use activities or an English learner eager to practice anytime, anywhere, you’re welcome to explore all tools and content freely as a visitor. <span class="cn-text">不論您是尋找現成教學活動的老師，還是想隨時隨地練習英文的學習者，都歡迎以訪客身份自由使用所有資源。</span></div>
+              
               <div class="letter-p" style="background:rgba(212, 175, 55, 0.1); padding:15px; border-radius:10px; margin-top:10px;">
                 If you log in, each day you’ll receive: ✨“Word of the Day”, “Bilingual Quote”, and unlock your 
                 <br>
                 <span class="highlight-box">Shirley's Moon Base Card</span> 
                 <br>
                 to <span style="text-decoration:underline;">track daily check-ins</span>, <span style="text-decoration:underline;">build streaks</span>, and map your journey.
+                
                 <div class="cn-text" style="color:#5d4037; margin-top:8px; line-height:1.8;">
                     若您選擇登入，每天能獲得✨「每日單字」與「每日佳句」，更可啟用 
                     <span class="highlight-box">
@@ -829,6 +1018,7 @@
                     ——<span style="border-bottom:1px solid #5d4037;">記錄打卡</span>、<span style="border-bottom:1px solid #5d4037;">累積天數</span>與<span style="border-bottom:1px solid #5d4037;">探索軌跡</span>。
                 </div>
               </div>
+
               <div class="letter-p">I highly encourage you to check in every day—consistency turns small efforts into big results, and learning is a journey of steady persistence and joyful discovery. <span class="cn-text">我誠摯鼓勵您每日打卡——持之以恆，微小的努力終將開花結果；學習是一場需要堅持，也充滿樂趣與驚喜的旅程。</span></div>
               <div class="signature">— Teacher Shirley</div>
               <div class="choice-area" id="choice-buttons">
@@ -846,6 +1036,7 @@
           </div>
       </div>
   </div>
+
   <div id="visitor-view">
       <div style="text-align:center; margin-bottom:2rem; color:var(--text-light); background: rgba(255,255,255,0.5); padding: 10px; border-radius: 20px; display: inline-block; position:relative; left:50%; transform:translateX(-50%);">
           Currently in <strong>Visitor Mode</strong>. 
@@ -860,6 +1051,7 @@
         <a href="/Teacher-Shirley/external-resources/" class="category-card"><span class="icon">🔗</span><h2>External Resources</h2><div class="subtitle">源源連結庫</div></a>
       </div>
   </div>
+
   <div id="universe-view">
       <div class="solar-system">
           <div class="orbit orbit-1"></div>
@@ -874,92 +1066,134 @@
       <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:var(--text-light); font-size:0.75rem; font-style:italic;">Explore the galaxy to find your learning path.</div>
   </div>
 
-  <!-- === ✨【全新】隱藏版 Lunar Glow Cache 月光寶盒 === -->
-  <div id="lunar-cache-container" class="lunar-cache-container" style="display: none;">
-      <!-- 標題 -->
-      <div class="lunar-header">
-          <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
-          <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
-      </div>
-      <!-- 控制面板 -->
-      <div class="lunar-control-panel">
-        <!-- 1. 開始任務按鈕 -->
-        <div class="mission-start-btn" onclick="startLunarMission()">
-          <div class="mission-icon">🚀</div>
-          <div>Start Quiz Mission</div>
-          <div style="font-size:0.7rem; margin-top:4px; opacity:0.7;">(External Practice)</div>
+    <!-- === Lunar Glow Cache 月光寶盒 (僅會員可見) === -->
+<div id="lunar-cache-wrapper" style="display: none;">
+    <div class="lunar-cache-container">
+</div> <!-- #lunar-cache-wrapper -->
+        <!-- 標題 -->
+        <div class="lunar-header">
+            <div class="lunar-title">🚀 Lunar Glow Cache 月光寶盒</div>
+            <div class="lunar-subtitle">Gather a thread of moonlight 擷取一縷月光</div>
         </div>
 
-        <!-- 2. 輸入成績 -->
-        <div class="lunar-inputs">
-          <div class="lunar-input-group">
-            <label class="lunar-label">Level</label>
-            <input type="text" class="lunar-field" id="moon-level" placeholder="A1" disabled>
-          </div>
-          <div class="lunar-input-group">
-            <label class="lunar-label">Unit</label>
-            <input type="text" class="lunar-field" id="moon-unit" placeholder="U1" disabled>
-          </div>
-          <div class="lunar-input-group">
-            <label class="lunar-label" style="color:#4ade80;">Correct</label>
-            <input type="number" class="lunar-field" id="moon-correct" min="0" disabled>
-          </div>
-          <div class="lunar-input-group">
-            <label class="lunar-label" style="color:#f87171;">Wrong</label>
-            <input type="number" class="lunar-field" id="moon-wrong" min="0" disabled>
-          </div>
+        <!-- 控制面板 -->
+        <div class="lunar-control-panel">
+<div id="lunar-dashboard" style="display: none !important; width: 90%; max-width: 900px; margin: 0 auto; background: rgba(5, 5, 10, 0.4); border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(3px); border-radius: 20px 20px 0 0; padding: 8px 15px; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div id="mission-timer" style="font-size: 0.8rem; color: #aaa; font-weight: bold; width: 100px; text-align: center; white-space: nowrap;">
+            Standing By
         </div>
 
-        <!-- 3. 提交按鈕 -->
-        <button class="lunar-submit-btn" id="collect-btn" onclick="submitLunarGlow()" disabled>Collect Moonlight</button>
-      </div>
-
-      <!-- 狀態顯示 -->
-      <div class="moon-phase-display">
-        <div class="phase-info">
-          <div class="current-moon-icon" id="phase-icon">🌑</div>
-          <div class="phase-text">
-            <span class="phase-name" id="phase-name">New Moon 朔月</span>
-            <span class="moonlight-count">Current Thread: <span id="current-thread">0</span>/300</span>
-          </div>
+        <div style="display: flex; gap: 4px;">
+            <input type="text" id="moon-level" placeholder="Lv" disabled style="width:35px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="text" id="moon-unit" placeholder="Unit" disabled style="width:45px; text-align:center; background:rgba(255,255,255,0.05); color:#fff; border:1px solid #444; padding:4px; font-size:0.8rem; border-radius:4px;">
+            <input type="number" id="moon-correct" placeholder="✓" disabled style="width:50px; text-align:center; background:rgba(0,0,0,0.3); color:#ffd700; border:1px solid #ffd700; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
+            <input type="number" id="moon-wrong" placeholder="✗" disabled style="width:45px; text-align:center; background:rgba(0,0,0,0.3); color:#ff6b6b; border:1px solid #ff6b6b; padding:4px; font-size:1rem; font-weight:bold; border-radius:4px;">
         </div>
-        <!-- 滿月庫存 -->
-        <div class="inventory-counter">
-          Storage: <span id="full-moon-count">🌕 x 0</span>
-        </div>
-      </div>
-      <!-- 總進度條 -->
-      <div class="moonlight-track">
-        <div class="moonlight-fill" id="moon-progress-bar"></div>
-      </div>
-  </div>
 
-  <!-- 滿月獎勵卡片 Modal (隱藏) -->
-  <div id="moon-reward-modal">
-      <div class="reward-card" id="capture-reward-card">
-          <div class="reward-moon">🌕</div>
-          <div class="reward-title">Shirley's Moon Light Card</div>
-          <div style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">For: <span id="reward-user-name">Traveler</span></div>
-          <div class="reward-poem-cn">
-              《滿月之後》<br>
-              滿月圓了，<br>
-              光還在長。<br>
-              它輕輕鋪成路，<br>
-              引你走向下一輪發亮。
-          </div>
-          <div class="reward-poem-en">
-              After the Full Moon<br>
-              The moon is full—<br>
-              but the light keeps growing.<br>
-              It softly becomes a path,<br>
-              leading you to your next glow.
-          </div>
-          <div class="reward-actions" data-html2canvas-ignore>
-              <button class="btn-keep" onclick="downloadRewardCard()">📥 Keep Card</button>
-              <button class="btn-close-reward" onclick="closeRewardModal()">Close</button>
-          </div>
-      </div>
-  </div>
+        <div style="display: flex; gap: 5px;">
+            <button onclick="window.startLunarMission()" style="padding: 5px 12px; background: rgba(41, 128, 185, 0.8); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Start</button>
+            <button onclick="window.collectMoonlight()" style="padding: 5px 12px; background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.8)); color: #222; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Get</button>
+        </div>
+    </div>
+
+    <div id="glass-box-container" style="display:none; position: absolute; bottom: 150%; left: 30%; z-index: 10000;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">GET</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px;">
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">THREADS</div>
+            <div style="font-family: 'Exo 2'; color: #fff; font-size: 1rem;">
+                <span id="current-moonlight-display" style="color: #fff; font-weight: bold;">0</span>/300
+            </div>
+        </div>
+        <div style="text-align: center; line-height: 1.2;">
+            <div style="font-size: 0.6rem; color: #888;">MOONS</div>
+            <div style="font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 5px gold;">
+                <span id="moon-storage-count">0</span>🌕
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- 2. 輸入成績 -->
+            <div class="lunar-inputs">
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Level</label>
+                    <input type="text" class="lunar-field" id="moon-level" placeholder="A1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label">Unit</label>
+                    <input type="text" class="lunar-field" id="moon-unit" placeholder="U1">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#4ade80;">Correct</label>
+                    <input type="number" class="lunar-field" id="moon-correct" min="0">
+                </div>
+                <div class="lunar-input-group">
+                    <label class="lunar-label" style="color:#f87171;">Wrong</label>
+                    <input type="number" class="lunar-field" id="moon-wrong" min="0">
+                </div>
+            </div>
+
+            <!-- 3. 提交按鈕 -->
+            <button class="lunar-submit-btn" onclick="submitLunarGlow()">Collect Moonlight</button>
+        </div>
+
+        <!-- 狀態顯示 -->
+        <div class="moon-phase-display">
+            <div class="phase-info">
+                <div class="current-moon-icon" id="phase-icon">🌑</div>
+                <div class="phase-text">
+                    <span class="phase-name" id="phase-name">New Moon 朔月</span>
+                    <span class="moonlight-count">Current Thread: <span id="current-thread">0</span>/300</span>
+                </div>
+            </div>
+            <!-- 滿月庫存 -->
+            <div class="inventory-counter">
+                Storage: <span id="full-moon-count">🌕 x 0</span>
+            </div>
+        </div>
+
+        <!-- 總進度條 -->
+        <div class="moonlight-track">
+            <div class="moonlight-fill" id="moon-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- 滿月獎勵卡片 Modal (隱藏) -->
+    <div id="moon-reward-modal">
+        <div class="reward-card" id="capture-reward-card">
+            <div class="reward-moon">🌕</div>
+            <div class="reward-title">Shirley's Moon Light Card</div>
+            <div style="font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7;">For: <span id="reward-user-name">Traveler</span></div>
+            
+            <div class="reward-poem-cn">
+                《滿月之後》<br>
+                滿月圓了，<br>
+                光還在長。<br>
+                它輕輕鋪成路，<br>
+                引你走向下一輪發亮。
+            </div>
+            
+            <div class="reward-poem-en">
+                After the Full Moon<br>
+                The moon is full—<br>
+                but the light keeps growing.<br>
+                It softly becomes a path,<br>
+                leading you to your next glow.
+            </div>
+
+            <div class="reward-actions" data-html2canvas-ignore>
+                <button class="btn-keep" onclick="downloadRewardCard()">📥 Keep Card</button>
+                <button class="btn-close-reward" onclick="closeRewardModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
   <div id="member-terminal">
       <div class="close-terminal" onclick="closeMemberTerminal()">✕</div>
@@ -969,6 +1203,7 @@
               <div class="streak-ring"><div class="streak-num" id="streak-days">0</div><div style="font-size:0.7rem;">Days Streak</div></div>
               <div style="margin-bottom:1rem; font-size:0.9rem;">Total Check-ins: <strong id="total-days">0</strong></div>
               <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; font-size:0.7rem; margin-bottom:10px;"></div>
+
               <!-- ✅【最小補丁】卡袋區（不改你原排版，只是接在日曆下面） -->
               <div style="margin-top:12px; text-align:left;">
                 <div style="font-size:0.8rem; font-weight:bold; margin-bottom:6px; color:var(--text-light);">
@@ -976,6 +1211,7 @@
                 </div>
                 <div id="card-bag-list"></div>
               </div>
+
               <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">Daily Check-in</button>
               <div style="margin-top:1rem; cursor:pointer; text-decoration:underline; font-size:0.8rem; color:var(--text-light);" onclick="openPrintSelection()">🖨️ Print Learning Log</div>
           </div>
@@ -996,15 +1232,18 @@
           </div>
       </div>
   </div>
+
   <div id="card-modal">
       <div class="card-overlay-bg" onclick="closeCardModal()"></div>
       <div class="card-display-container">
           <div id="collectible-card" class="moon-card">
               <div class="card-decoration-top"></div>
+              
               <div class="card-header">
                   <div class="card-title">MOON BASE CLEARANCE</div>
                   <div class="card-serial">NO. <span id="card-date-serial"></span></div>
               </div>
+
               <div class="card-body">
                   <div class="card-greeting">
                       Welcome, <span id="card-user-name">Traveler</span>
@@ -1012,7 +1251,9 @@
                   <div class="card-subtitle">
                       This is your Shirley's Moon Base Card for <span id="card-display-date"></span>
                   </div>
+
                   <div class="card-divider">✦ ✦ ✦</div>
+
                   <div class="card-content-box">
                       <div class="card-label">Word of the Day</div>
                       <div class="card-wotd" id="card-wotd"></div>
@@ -1023,21 +1264,25 @@
                           <div id="card-sent-cn" class="card-sent-cn"></div>
                       </div>
                   </div>
+
                   <div class="card-quote-box">
                       <div class="card-quote-text" id="card-quote"></div>
                       <div class="card-quote-trans" id="card-quote-trans"></div>
                       <div class="card-quote-author" id="card-author"></div>
                   </div>
               </div>
+
               <div class="card-footer">
                   <div class="card-streak-badge">
                       <span class="badge-icon">🔥</span> Streak: <span id="card-streak"></span>
                   </div>
                   <div class="card-signature">Teacher Shirley</div>
               </div>
+              
               <div class="card-watermark">MOON BASE</div>
               <div class="card-shine"></div>
           </div>
+
           <div class="card-actions">
               <button class="btn-card-action btn-download" onclick="downloadCardImage()">
                   📥 Download Image (收藏)
@@ -1048,6 +1293,7 @@
           </div>
       </div>
   </div>
+
   <div id="print-selection-modal">
     <div class="print-modal-content">
         <div class="print-modal-header">Select Records to Print</div>
@@ -1062,6 +1308,7 @@
         </div>
     </div>
   </div>
+
   <div id="print-area" class="print-only">
       <div class="print-header" style="text-align:center; border-bottom:2px solid black; margin-bottom:20px; padding-bottom:10px;">
           <h1>My Learning Journey</h1>
@@ -1073,15 +1320,19 @@
       </table>
       <div style="margin-top:20px; font-size:0.8rem; text-align:center;">Generated from Teacher Shirley's ET Platform</div>
   </div>
+
   <footer class="page-footer" style="margin-top:3rem; padding:2rem; text-align:center; font-size:0.8rem; color:var(--text-light); opacity:0.6;">
     <div>©️ Teacher Shirley‘s ET Platform 2025</div>
     <span id="busuanzi_container_site_pv">Total Visits: <span id="busuanzi_value_site_pv"></span></span>
   </footer>
+
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
       authDomain: "teacher-shirley.firebaseapp.com",
@@ -1091,20 +1342,25 @@
       messagingSenderId: "534843195436",
       appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
+
     let currentUser = null;
     let csvData = { words: [], quotes: [] };
     let checkinHistory = [];
     let activityLog = [];
+
     // --- In-App Browser Detection Helpers ---
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1) || (ua.indexOf("MicroMessenger") > -1);
+
     window.closeWarning = () => {
         document.getElementById('in-app-browser-warning').style.display = 'none';
     };
+
     window.copyCurrentUrl = () => {
         navigator.clipboard.writeText(window.location.href).then(() => {
             alert("Link copied! Open Chrome/Safari and paste it.");
@@ -1112,6 +1368,7 @@
             alert("Failed to copy. Please copy the URL manually.");
         });
     };
+
     // --- HELPER: GET LOCAL DATE STRING ---
     function getLocalISODate() {
         const now = new Date();
@@ -1120,6 +1377,7 @@
         const d = String(now.getDate()).padStart(2, '0');
         return `${y}-${m}-${d}`;
     }
+
     // --- ENVELOPE LOGIC ---
     window.openLetter = () => {
         const windchime = document.getElementById('windchime');
@@ -1135,11 +1393,16 @@
             setTimeout(() => { document.getElementById('choice-buttons').classList.add('visible'); }, paragraphs.length * 800 + 400);
         }, 800);
     };
+
     window.enterVisitorMode = () => {
         document.getElementById('intro-overlay').style.opacity = '0';
         setTimeout(() => { document.getElementById('intro-overlay').style.display = 'none'; }, 1000);
         document.getElementById('visitor-view').classList.add('active');
-    };
+      // ✅【新增】訪客模式下強制隱藏月光寶盒
+    const lunarWrapper = document.getElementById('lunar-cache-wrapper');
+    if (lunarWrapper) lunarWrapper.style.display = 'none';
+};
+
     window.reopenAuth = () => {
         document.getElementById('visitor-view').classList.remove('active');
         const overlay = document.getElementById('intro-overlay');
@@ -1154,10 +1417,12 @@
         }
         showAuthForm();
     };
+
     window.showAuthForm = () => { document.getElementById('choice-buttons').style.display = 'none'; document.getElementById('auth-form-container').style.display = 'block'; };
     window.hideAuthForm = () => { document.getElementById('choice-buttons').style.display = 'flex'; document.getElementById('auth-form-container').style.display = 'none'; };
     window.openMemberTerminal = () => { document.getElementById('member-terminal').classList.add('show'); };
     window.closeMemberTerminal = () => { document.getElementById('member-terminal').classList.remove('show'); };
+
     // --- UPDATED GOOGLE LOGIN LOGIC ---
     document.getElementById('google-login-btn').addEventListener('click', () => { 
         if(isInApp) {
@@ -1166,6 +1431,7 @@
         }
         signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); 
     });
+
     document.getElementById('email-login-btn').addEventListener('click', () => {
         const email = document.getElementById('email-input').value;
         const pass = document.getElementById('pass-input').value;
@@ -1177,6 +1443,7 @@
         });
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
@@ -1189,25 +1456,27 @@
             await loadUserData(user.uid);
             renderDailyContent(getTodayMMDD());
             trackActivity("Login", "Arrived at Moon Base");
+          // ✅【新增】登入後顯示月光寶盒
+        document.getElementById('lunar-cache-wrapper').style.display = 'block';
+    }
+});
 
-            // ✅【關鍵】顯示月光寶盒
-            document.getElementById('lunar-cache-container').style.display = 'block';
-            updateMoonInterface();
-        }
-    });
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
         setTimeout(() => { window.location.href = url; }, 300);
     };
+
     async function trackActivity(type, detail) {
         if (!currentUser) return;
         const userRef = doc(db, "users", currentUser.uid);
         try { await updateDoc(userRef, { activityLogs: arrayUnion({ date: new Date().toISOString(), type, detail }) }); } catch (e) { console.log(e); }
     }
+
     async function loadUserData(uid) {
         const userRef = doc(db, "users", uid);
         const docSnap = await getDoc(userRef);
         const fullDate = getLocalISODate();
+        
         if (docSnap.exists()) {
             const data = docSnap.data();
             checkinHistory = data.history || [];
@@ -1221,10 +1490,13 @@
         renderCalendar();
         renderCardBagList(); // ✅【最小補丁】登入時同步渲染卡袋
     }
+
     // --- REWRITTEN CHECK-IN & CALENDAR LOGIC WITH CARDS ---
+
    // 盲盒卡片選擇器 (88張擴充版)
     function getTemplateIdByDate(dateStr) {
         if(!dateStr) return 1;
+
         // 嘗試獲取使用者 UID，讓每個人的運氣不同
         let uid = 'visitor';
         try {
@@ -1232,10 +1504,12 @@
                 uid = currentUser.uid;
             }
         } catch(e) { console.log("User ID retrieval failed for card seed"); }
+
         const parts = dateStr.split('-');
         const y = parseInt(parts[0]);
         const m = parseInt(parts[1]);
         const d = parseInt(parts[2]);
+
         // 產生運氣雜湊值
         const seedStr = `${y}${m}${d}-${uid}`;
         let hash = 0;
@@ -1245,31 +1519,41 @@
             hash = hash & hash; 
         }
         hash = Math.abs(hash);
+
         const luck = hash % 100; // 0 ~ 99
+
         // --- 盲盒機率設定 (總共 88 張) ---
+        
         // 1% 機率獲得 SP 隱藏款 (Theme 88 - 虛空奇點)
         if (luck === 99) return 88;
+        
         // 2% 機率獲得 UR 隱藏款 (Theme 87 - 幻彩極光)
         if (luck >= 97) return 87;
+
         // 3% 機率獲得 SSR 隱藏款 (Theme 86 - 王者金)
         if (luck >= 94) return 86;
+
         // 剩下 94% 機率，在 1 - 85 號普通卡中隨機分配
         // 使用 (hash % 85) + 1 確保範圍是 1~85
         return (hash % 85) + 1; 
     }
+
     // 顯示卡片 (加入例句與佳句翻譯)
     window.openCard = (dateStr) => {
         const userName = (currentUser && (currentUser.displayName || currentUser.email.split('@')[0])) || "Traveler";
+        
         // 假設 CSV date 是 "MM-DD"
         let wotd = "Mystery", wotdPos = "n.", wotdDef = "To explore the unknown.";
         let quote = "The stars are calling.", author = "Universe";
         let sentEn = "Keep looking up."; 
         let sentCn = "保持仰望星空。";
         let quoteTrans = "群星在召喚。";
+
         if (csvData && csvData.words) {
             const queryDate = dateStr.slice(5); // remove YYYY-
             const wordObj = csvData.words.find(r => r.date === queryDate);
             const quoteObj = csvData.quotes.find(r => r.date === queryDate);
+
             if (wordObj) {
                 wotd = wordObj.word || wotd;
                 wotdPos = wordObj.pos || wotdPos;
@@ -1283,7 +1567,9 @@
                 author = quoteObj.author || author;
             }
         }
+
         const streakDisplay = document.getElementById('streak-days') ? document.getElementById('streak-days').innerText : "0";
+
         // 填充資料
         document.getElementById('card-user-name').innerText = userName;
         document.getElementById('card-display-date').innerText = dateStr;
@@ -1299,26 +1585,32 @@
         document.getElementById('card-quote-trans').innerText = quoteTrans;
         document.getElementById('card-author').innerText = author;
         document.getElementById('card-streak').innerText = streakDisplay;
+
         // ✅【最小補丁】設定模板：移除 1~88 全部 class，避免殘留疊加造成“變動”
         const cardEl = document.getElementById('collectible-card');
         for(let i=1; i<=88; i++) cardEl.classList.remove(`theme-${i}`);
         const themeId = getTemplateIdByDate(dateStr);
         cardEl.classList.add(`theme-${themeId}`);
+
         document.getElementById('card-modal').classList.add('active');
     };
+
     window.closeCardModal = () => {
         document.getElementById('card-modal').classList.remove('active');
     };
+
     window.downloadCardImage = () => {
         const cardElement = document.getElementById('collectible-card');
         const btn = document.querySelector('.btn-download');
         const originalText = btn.innerText;
         btn.innerText = "Capturing... 📸";
+        
         if (typeof html2canvas === 'undefined') {
             alert("Snapshot library not loaded.");
             btn.innerText = originalText;
             return;
         }
+
         html2canvas(cardElement, {
             scale: 2,
             backgroundColor: null,
@@ -1336,49 +1628,62 @@
             btn.innerText = originalText;
         });
     };
+
     // 重新定義 handleCheckIn，加入開卡片邏輯
     window.handleCheckIn = async () => {
         if (!currentUser) return;
         const fullDate = getLocalISODate();
         if (checkinHistory.includes(fullDate)) return;
+
         const btn = document.getElementById('checkin-btn');
         btn.disabled = true; 
         btn.innerText = "Transmitting...";
+        
         try {
             let currentStreak = parseInt(document.getElementById('streak-days').innerText) || 0;
             const lastCheckIn = checkinHistory.length > 0 ? checkinHistory[checkinHistory.length - 1] : null;
+            
             const yesterday = new Date(); 
             yesterday.setDate(yesterday.getDate() - 1);
             const yYear = yesterday.getFullYear();
             const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0');
             const yDay = String(yesterday.getDate()).padStart(2, '0');
             const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
+            
             if (lastCheckIn === yesterdayStr) { currentStreak++; } else { currentStreak = 1; }
+
             const userRef = doc(db, "users", currentUser.uid);
             const logEntry = { date: new Date().toISOString(), type: "Check-in", detail: "Daily Check-in" };
+
             await updateDoc(userRef, { 
                 streak: currentStreak, 
                 history: arrayUnion(fullDate),
                 activityLogs: arrayUnion(logEntry)
             });
+
             checkinHistory.push(fullDate);
             activityLog.push(logEntry);
+            
             document.getElementById('streak-days').innerText = currentStreak;
             document.getElementById('total-days').innerText = checkinHistory.length;
             btn.innerText = "Moon Check-in Success! 🌕";
+            
             // 重新渲染日曆 (以便更新點擊事件)
             renderCalendar();
             renderCardBagList(); // ✅【最小補丁】打卡後卡袋立即更新
+
             // ★★★ 自動彈出卡片 ★★★
             setTimeout(() => {
                 window.openCard(fullDate);
             }, 800);
+
         } catch (e) {
             console.error("Check-in error:", e);
             btn.innerText = "Check-in Failed";
             btn.disabled = false;
         }
     };
+
     // 重新定義 renderCalendar，加入卡袋點擊功能
     window.renderCalendar = function() {
         const grid = document.getElementById('calendar-grid');
@@ -1386,16 +1691,20 @@
         const now = new Date();
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; 
+        
         for (let i = 1; i <= daysInMonth; i++) {
             const dayEl = document.createElement('div');
             dayEl.innerText = i;
             dayEl.style.cssText = "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
+            
             const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, '0')}`;
+            
             if (checkinHistory.includes(thisDateStr)) { 
                 dayEl.style.background = "var(--accent)"; 
                 dayEl.style.color="white"; 
                 dayEl.style.borderRadius="50%"; 
                 dayEl.style.fontWeight = "bold";
+
                 // ★ 加入可點擊開卡的提示
                 dayEl.classList.add('calendar-day-checked');
                 dayEl.title = "Tap to open Card Pocket";
@@ -1404,17 +1713,21 @@
             grid.appendChild(dayEl);
         }
     };
+
     // ✅【最小補丁】renderCardBagList：卡袋按月份分區
     function renderCardBagList() {
         const bag = document.getElementById("card-bag-list");
         if (!bag) return;
         bag.innerHTML = "";
+
         if (!checkinHistory || checkinHistory.length === 0) {
             bag.innerHTML = `<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>`;
             return;
         }
+
         // 依日期排序（新到舊）
         const sorted = [...checkinHistory].sort().reverse();
+
         // 分組：YYYY-MM -> [dates...]
         const groups = {};
         sorted.forEach(d => {
@@ -1422,16 +1735,20 @@
             if (!groups[ym]) groups[ym] = [];
             groups[ym].push(d);
         });
+
         // 渲染每個月份區塊（新到舊）
         Object.keys(groups).sort().reverse().forEach(ym => {
             const section = document.createElement("div");
             section.style.cssText = "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
+
             const title = document.createElement("div");
             title.innerText = ym;
             title.style.cssText = "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
             section.appendChild(title);
+
             const row = document.createElement("div");
             row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
+
             groups[ym].forEach(dateStr => {
                 const btn = document.createElement("button");
                 btn.innerText = dateStr.slice(8); // DD
@@ -1444,11 +1761,14 @@
                 btn.onclick = () => window.openCard(dateStr);
                 row.appendChild(btn);
             });
+
             section.appendChild(row);
             bag.appendChild(section);
         });
     }
+
     // --- End of new logic ---
+
     async function loadCSVData() {
         try {
             const [resWords, resQuotes] = await Promise.all([
@@ -1459,6 +1779,7 @@
             csvData.quotes = parseCSV(await resQuotes.text());
         } catch (e) {}
     }
+
     function parseCSV(text) {
         const lines = text.trim().split('\n');
         const headers = lines[0].split(',').map(h => h.trim());
@@ -1471,7 +1792,9 @@
             return row;
         });
     }
+
     function getTodayMMDD() { const now = new Date(); return String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0'); }
+
     function renderDailyContent(dateStr) {
         const wordObj = csvData.words.find(r => r.date === dateStr);
         if (wordObj) {
@@ -1490,8 +1813,11 @@
             document.getElementById('qotd-author').innerText = "— " + quoteObj.author;
         }
     }
+
     // renderCalendar is overwritten above, so we don't need the old one here.
+
     let processedLogs = [];
+
     function processActivityLogs(logs) {
         if (!logs || logs.length === 0) return [];
         const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -1514,6 +1840,7 @@
         }
         return grouped.reverse();
     }
+
     window.openPrintSelection = () => {
         if (!currentUser) return;
         processedLogs = processActivityLogs(activityLog);
@@ -1532,8 +1859,10 @@
         });
         document.getElementById('print-selection-modal').style.display = 'flex';
     };
+
     window.closePrintSelection = () => { document.getElementById('print-selection-modal').style.display = 'none'; };
     window.toggleAllLogs = (checkStatus) => { document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = checkStatus); };
+
     window.confirmPrint = () => {
         const printBody = document.getElementById('print-body');
         printBody.innerHTML = '';
@@ -1554,6 +1883,7 @@
         document.getElementById('print-selection-modal').style.display = 'none';
         setTimeout(() => window.print(), 500);
     };
+
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -1568,6 +1898,7 @@
     function initParticles() { particlesArray = []; for (let i = 0; i < 80; i++) particlesArray.push(new Particle()); }
     function animateParticles() { requestAnimationFrame(animateParticles); ctx.clearRect(0, 0, canvas.width, canvas.height); const isDark = document.getElementById('htmlRoot').classList.contains('dark'); particlesArray.forEach(p => { p.update(); p.draw(isDark); }); }
     initParticles(); animateParticles();
+
     const html = document.getElementById('htmlRoot');
     document.getElementById('themeToggle').addEventListener('click', () => html.classList.toggle('dark'));
     const musicToggle = document.getElementById('musicToggle');
@@ -1578,137 +1909,356 @@
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
+   /* --- 🚀 Lunar Glow Cache 核心邏輯 --- */
 
-    /* ✅【關鍵】月光寶盒核心功能 — 全新整合版 */
-    const MOON_CYCLE = 300;
-    const MIN_STUDY_TIME = 120000; // 2分鐘
+// 常數設定
+const MOON_CYCLE = 300; // 300點為一個滿月循環
+const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
 
-    // 啟動外部任務（2分鐘冷卻）
-    function startLunarMission() {
-        if (!currentUser) {
-            alert("請先登入才能收集月光！");
-            return;
-        }
-        const startTime = Date.now();
-        sessionStorage.setItem('lunar_start_time', startTime);
-        window.open('https://ivocab-quiz.vercel.app/', '_blank');
+// 頁面加載時初始化
+document.addEventListener('DOMContentLoaded', () => {
+    updateMoonInterface();
+});
 
-        const btn = document.querySelector('.mission-start-btn');
-        const collectBtn = document.getElementById('collect-btn');
-        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
-
-        btn.style.opacity = '0.6';
-        btn.style.pointerEvents = 'none';
-        collectBtn.disabled = true;
-
-        let countdown = 120;
-        const timer = setInterval(() => {
-            countdown--;
-            const mins = Math.floor(countdown / 60);
-            const secs = countdown % 60;
-            btn.innerHTML = `
-                <div class="mission-icon">⏳</div>
-                <div>Cooldown: ${mins}:${secs < 10 ? '0' + secs : secs}</div>
-            `;
-            if (countdown <= 0) {
-                clearInterval(timer);
-                inputs.forEach(id => document.getElementById(id).disabled = false);
-                collectBtn.disabled = false;
-                btn.innerHTML = '<div class="mission-icon">✅</div><div>Ready to Submit</div>';
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
-                btn.onclick = null;
-            }
-        }, 1000);
+// 1. 開始任務 (紀錄時間)
+function startLunarMission(event) {
+    event.preventDefault();
+    const now = Date.now();
+    sessionStorage.setItem('lunar_start_time', now);
+    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
+    const href = event.currentTarget.href;
+    setTimeout(() => {
+        window.open(href, '_blank');
+    }, 300);
+}
+// 2. 提交成績
+function submitLunarGlow() {
+    // A. 防作弊時間檢查
+    const startTime = sessionStorage.getItem('lunar_start_time');
+    const now = Date.now();
+    
+    // 如果沒有開始時間，或者時間差小於 2 分鐘
+    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
+        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
+        return;
     }
 
-    // 提交成績
-    function submitLunarGlow() {
-        const startTime = sessionStorage.getItem('lunar_start_time');
-        const now = Date.now();
-        if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
-            alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
-            return;
-        }
+    // B. 獲取輸入
+    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
+    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
+    const levelVal = document.getElementById('moon-level').value;
+    const unitVal = document.getElementById('moon-unit').value;
 
-        const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
-        const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
-        if (correctVal === 0 && wrongVal === 0) {
-            alert("請輸入正確或錯誤題數。");
-            return;
-        }
-
-        const threadGained = correctVal + wrongVal;
-        let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-        let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-
-        totalMoonlight += threadGained;
-
-        if (totalMoonlight >= MOON_CYCLE) {
-            fullMoonStorage += 1;
-            totalMoonlight -= MOON_CYCLE;
-            localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
-            if (fullMoonStorage === 1) showRewardCard();
-            else alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
-        }
-
-        localStorage.setItem('shirley_total_moonlight', totalMoonlight);
-        sessionStorage.removeItem('lunar_start_time');
-        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => document.getElementById(id).value = '');
-
-        updateMoonInterface();
-        alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
+    if (correctVal === 0 && wrongVal === 0) {
+        alert("請輸入正確或錯誤題數。");
+        return;
     }
 
-    // 更新介面
-    function updateMoonInterface() {
-        const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-        const fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+    // C. 計算本場月光 (Thread of Moonlight)
+    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
+    const threadGained = correctVal + wrongVal; 
 
-        document.getElementById('full-moon-count').innerText = `🌕 x ${fullMoonStorage}`;
-        document.getElementById('current-thread').innerText = totalMoonlight;
+    // D. 讀取並更新總分
+    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
 
-        const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
-        document.getElementById('moon-progress-bar').style.width = `${percent}%`;
+    // 累積
+    totalMoonlight += threadGained;
 
-        const phaseIcon = document.getElementById('phase-icon');
-        const phaseName = document.getElementById('phase-name');
-        if (totalMoonlight <= 30) { phaseIcon.innerText = "🌑"; phaseName.innerText = "New Moon 朔月"; }
-        else if (totalMoonlight <= 60) { phaseIcon.innerText = "🌒"; phaseName.innerText = "Waxing Crescent 眉月"; }
-        else if (totalMoonlight <= 120) { phaseIcon.innerText = "🌓"; phaseName.innerText = "First Quarter 上弦月"; }
-        else if (totalMoonlight <= 180) { phaseIcon.innerText = "🌔"; phaseName.innerText = "Waxing Gibbous 盈凸月"; }
-        else { 
-            phaseIcon.innerText = "🌕";
-            phaseName.innerText = "Full Moon Phase 望月";
-            phaseIcon.style.textShadow = "0 0 20px #ffd700";
+    // E. 檢查是否達成滿月循環
+    if (totalMoonlight >= MOON_CYCLE) {
+        // 增加滿月庫存
+        fullMoonStorage += 1;
+        // 扣除循環分數 (進入下一輪)
+        totalMoonlight = totalMoonlight - MOON_CYCLE;
+        
+        // 儲存滿月數
+        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
+        
+        // 如果是第一次獲得滿月，觸發獎勵卡片
+        if (fullMoonStorage === 1) {
+            showRewardCard();
+        } else {
+            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
         }
     }
 
-    // 獎勵卡片
-    function showRewardCard() {
-        const modal = document.getElementById('moon-reward-modal');
-        let userName = "Traveler";
-        if (currentUser) userName = currentUser.displayName || currentUser.email.split('@')[0];
-        document.getElementById('reward-user-name').innerText = userName;
-        modal.style.display = 'flex';
-    }
-    function closeRewardModal() {
-        document.getElementById('moon-reward-modal').style.display = 'none';
-    }
-    function downloadRewardCard() {
-        const card = document.getElementById('capture-reward-card');
-        html2canvas(card).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'Shirley_Moon_Reward.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        });
-    }
+    // F. 儲存新進度
+    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
+    
+    // G. 清空計時器與輸入框 (方便下次)
+    sessionStorage.removeItem('lunar_start_time');
+    document.getElementById('moon-correct').value = '';
+    document.getElementById('moon-wrong').value = '';
+    document.getElementById('moon-level').value = '';
+    document.getElementById('moon-unit').value = '';
 
-    // 頁面載入初始化（介面）
-    document.addEventListener('DOMContentLoaded', () => {
-        updateMoonInterface();
+    // H. 更新介面
+    updateMoonInterface();
+    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
+}
+
+// 3. 更新介面顯示 (月相與進度)
+function updateMoonInterface() {
+    const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
+    const fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
+
+    // 更新庫存
+    const storageText = fullMoonStorage > 0 ? `🌕 x ${fullMoonStorage}` : `🌕 x 0`;
+    document.getElementById('full-moon-count').innerText = storageText;
+
+    // 更新當前進度文字
+    document.getElementById('current-thread').innerText = totalMoonlight;
+
+    // 更新進度條
+    const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
+    document.getElementById('moon-progress-bar').style.width = `${percent}%`;
+
+    // 判斷月相
+    const phaseIcon = document.getElementById('phase-icon');
+    const phaseName = document.getElementById('phase-name');
+
+    if (totalMoonlight <= 30) {
+        phaseIcon.innerText = "🌑";
+        phaseName.innerText = "New Moon 朔月";
+    } else if (totalMoonlight <= 60) {
+        phaseIcon.innerText = "🌒";
+        phaseName.innerText = "Waxing Crescent 眉月";
+    } else if (totalMoonlight <= 120) {
+        phaseIcon.innerText = "🌓";
+        phaseName.innerText = "First Quarter 上弦月";
+    } else if (totalMoonlight <= 180) {
+        phaseIcon.innerText = "🌔";
+        phaseName.innerText = "Waxing Gibbous 盈凸月";
+    } else {
+        phaseIcon.innerText = "🌕"; // 接近滿月的光輝
+        phaseName.innerText = "Full Moon Phase 望月";
+        phaseIcon.style.textShadow = "0 0 20px #ffd700"; // 發光特效
+    }
+}
+
+// 4. 獎勵卡片功能
+function showRewardCard() {
+    const modal = document.getElementById('moon-reward-modal');
+    let userName = "Traveler";
+    if (currentUser && currentUser.displayName) {
+        userName = currentUser.displayName;
+    } else if (currentUser && currentUser.email) {
+        userName = currentUser.email.split('@')[0];
+    }
+    document.getElementById('reward-user-name').innerText = userName;
+    modal.style.display = 'flex';
+}
+
+function closeRewardModal() {
+    document.getElementById('moon-reward-modal').style.display = 'none';
+}
+
+function downloadRewardCard() {
+    const card = document.getElementById('capture-reward-card');
+    html2canvas(card, { backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Shirley_Moon_Reward.png';
+        link.href = canvas.toDataURL();
+        link.click();
     });
+}
   </script>
+  <div id="glass-box-wrapper">
+    <div id="glass-box-container" style="display:none;">
+        <div class="glass-box" id="myGlassBox">
+            <div class="glass-label">Collected</div>
+            <div class="glass-value" id="glass-box-value">0</div>
+            <div class="glass-sub">Glowing Threads</div>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    let missionInterval = null;
+
+    // --- [核心] 權限控制與顯示邏輯 ---
+    function initAuthCheck() {
+        const dashboard = document.getElementById('lunar-dashboard');
+        
+        // 1. 先強制隱藏 (雙重保險)
+        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+
+        // 2. 啟動 Firebase 監聽
+        // 使用 setInterval 確保 Firebase SDK 載入完成
+        const checkFirebase = setInterval(() => {
+            if (typeof firebase !== 'undefined' && firebase.auth()) {
+                clearInterval(checkFirebase);
+                
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // [已登入]
+                        // 移除 important 屬性，改為 flex 顯示
+                        if(dashboard) {
+                            dashboard.style.display = 'flex'; 
+                            // 這裡可以根據 user.uid 載入專屬數據，如果有的話
+                        }
+                        updateInterface(); // 更新數據顯示
+                    } else {
+                        // [未登入 / 訪客]
+                        // 強制隱藏，並清空顯示的數據
+                        if(dashboard) dashboard.style.setProperty('display', 'none', 'important');
+                        clearInterfaceDisplay(); 
+                    }
+                });
+            }
+        }, 200); // 每 0.2 秒檢查一次 Firebase 是否就緒
+    }
+
+    // 清空介面顯示 (防止訪客看到殘留數據)
+    function clearInterfaceDisplay() {
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+        if(stEl) stEl.innerText = '0';
+        if(phEl) phEl.innerText = '0';
+    }
+
+    // 頁面載入時啟動
+    window.addEventListener('load', initAuthCheck);
+
+
+    // --- [功能] 任務邏輯 ---
+
+    window.startLunarMission = function() {
+        const inputs = ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'];
+        const timerDisplay = document.getElementById('mission-timer');
+        
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.value = ''; el.disabled = true; el.placeholder = "..."; }
+        });
+        document.getElementById('glass-box-container').style.display = 'none';
+
+        if(timerDisplay) {
+            timerDisplay.innerText = "Launching...";
+            timerDisplay.style.color = '#ff6b6b';
+        }
+
+        setTimeout(() => {
+            if(confirm("Start Quiz Mission?")) {
+                window.open('https://ivocab-quiz.vercel.app/', '_blank');
+            }
+        }, 300);
+
+        let timeLeft = 120; 
+        if(missionInterval) clearInterval(missionInterval);
+
+        missionInterval = setInterval(() => {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            const timeStr = `${m}:${s < 10 ? '0'+s : s}`;
+            if(timerDisplay) timerDisplay.innerText = `Wait: ${timeStr}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(missionInterval);
+                enableMissionInputs();
+            }
+            timeLeft--;
+        }, 1000);
+    };
+
+    function enableMissionInputs() {
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) { el.disabled = false; el.placeholder = ""; }
+        });
+        const timer = document.getElementById('mission-timer');
+        if(timer) {
+            timer.innerText = "Ready!";
+            timer.style.color = "#2ecc71";
+        }
+    }
+
+    window.collectMoonlight = function() {
+        const correctEl = document.getElementById('moon-correct');
+        const boxContainer = document.getElementById('glass-box-container');
+        const box = document.getElementById('myGlassBox');
+        const valDisplay = document.getElementById('glass-box-value');
+
+        if (!correctEl || correctEl.disabled) {
+            alert("Please wait for cooldown!");
+            return;
+        }
+
+        let val = parseInt(correctEl.value);
+        if (isNaN(val) || val < 0) return;
+        if (val > 30) { alert("Max 30"); return; }
+
+        // 顯示匣子
+        boxContainer.style.display = 'block';
+        valDisplay.innerText = val;
+        
+        box.className = 'glass-box';
+        void box.offsetWidth;
+        box.classList.add('visible');
+
+        // 鎖定
+        ['moon-level', 'moon-unit', 'moon-correct', 'moon-wrong'].forEach(id => {
+            document.getElementById(id).disabled = true;
+        });
+        document.getElementById('mission-timer').innerText = "Sending...";
+
+        // 動畫
+        setTimeout(() => {
+            box.classList.remove('visible');
+            box.classList.add('flying');
+
+            setTimeout(() => {
+                performDataTransfer(val);
+                boxContainer.style.display = 'none';
+            }, 800);
+        }, 1200);
+    };
+
+    function performDataTransfer(newThreads) {
+        let currentTotal = parseInt(localStorage.getItem('shirley_total_moonlight') || 0);
+        let storageCount = parseInt(localStorage.getItem('shirley_moon_storage') || 0);
+
+        currentTotal += newThreads;
+        let isFullMoon = false;
+
+        if (currentTotal >= 300) {
+            const moons = Math.floor(currentTotal / 300);
+            storageCount += moons;
+            currentTotal = currentTotal % 300;
+            isFullMoon = true;
+        }
+
+        localStorage.setItem('shirley_total_moonlight', currentTotal);
+        localStorage.setItem('shirley_moon_storage', storageCount);
+
+        updateInterface();
+
+        const timer = document.getElementById('mission-timer');
+        if(timer) {
+            timer.innerText = "Done";
+            timer.style.color = "#ffd700";
+        }
+
+        if(isFullMoon) {
+            alert(`🌕 Full Moon! Storage: ${storageCount}`);
+            updateInterface();
+        }
+    }
+
+    function updateInterface() {
+        const total = localStorage.getItem('shirley_total_moonlight') || 0;
+        const storage = localStorage.getItem('shirley_moon_storage') || 0;
+
+        const stEl = document.getElementById('moon-storage-count');
+        const phEl = document.getElementById('current-moonlight-display');
+
+        if(stEl) stEl.innerText = storage;
+        if(phEl) phEl.innerText = total;
+    }
+})();
+</script>
 </body>
 </html>
+
+
