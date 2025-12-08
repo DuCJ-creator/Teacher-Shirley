@@ -232,6 +232,7 @@
     <div id="loading-screen" class="text-center no-print">
       <div class="animate-spin rounded-full h-14 w-14 border-b-4 border-cyan-400 mx-auto mb-6"></div>
       <p class="text-xl tracking-widest text-cyan-200 font-light uppercase">Initializing System...</p>
+      <p id="loading-sub" class="text-sm text-blue-200/70 mt-3">Connecting to data source...</p>
     </div>
 
     <div id="start-screen" class="text-center hidden fade-in no-print">
@@ -339,49 +340,57 @@
 
     // --- Particle System Initialization ---
     async function initParticles() {
-      await tsParticles.load("tsparticles", {
-        particles: {
-          number: { value: 60, density: { enable: true, value_area: 800 } },
-          color: { value: ["#67e8f9", "#ffffff", "#3b82f6"] },
-          shape: { type: "circle" },
-          opacity: { value: 0.4, random: true },
-          size: { value: 2, random: true },
-          links: {
-            enable: true,
-            distance: 150,
-            color: "#ffffff",
-            opacity: 0.15,
-            width: 1
+      try {
+        await tsParticles.load("tsparticles", {
+          particles: {
+            number: { value: 60, density: { enable: true, value_area: 800 } },
+            color: { value: ["#67e8f9", "#ffffff", "#3b82f6"] },
+            shape: { type: "circle" },
+            opacity: { value: 0.4, random: true },
+            size: { value: 2, random: true },
+            links: {
+              enable: true,
+              distance: 150,
+              color: "#ffffff",
+              opacity: 0.15,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 0.8,
+              direction: "none",
+              random: true,
+              straight: false,
+              out_mode: "out",
+              bounce: false,
+            }
           },
-          move: {
-            enable: true,
-            speed: 0.8,
-            direction: "none",
-            random: true,
-            straight: false,
-            out_mode: "out",
-            bounce: false,
-          }
-        },
-        interactivity: {
-          detect_on: "canvas",
-          events: {
-            onhover: { enable: true, mode: "grab" },
-            onclick: { enable: true, mode: "push" },
-            resize: true
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: true, mode: "grab" },
+              onclick: { enable: true, mode: "push" },
+              resize: true
+            },
+            modes: {
+              grab: { distance: 180, line_linked: { opacity: 0.3 } },
+              push: { particles_nb: 3 }
+            }
           },
-          modes: {
-            grab: { distance: 180, line_linked: { opacity: 0.3 } },
-            push: { particles_nb: 3 }
-          }
-        },
-        retina_detect: true,
-        background: { color: "transparent" }
-      });
+          retina_detect: true,
+          background: { color: "transparent" }
+        });
+      } catch(e){
+        console.warn("Particles init failed", e);
+      }
     }
 
     // --- Configuration & State ---
-    const CSV_URL = 'https://ducj-creator.github.io/GSAT%20vocab%20fixed%20option%20quiz.csv';
+    // ✅ 先用你原本的 CSV，再 fallback 到 Teacher-Shirley 版本
+    const CSV_CANDIDATES = [
+      'https://ducj-creator.github.io/GSAT%20vocab%20fixed%20option%20quiz.csv',
+      'https://ducj-creator.github.io/Teacher-Shirley/GSAT%20vocab%20fixed%20option%20quiz.csv'
+    ];
     const QUESTION_LIMIT = 10;
     const TIME_LIMIT = 30;
 
@@ -400,15 +409,36 @@
     // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
       initParticles();
-      loadData();
+      loadData(); // ✅ 不再卡死
     });
 
-    function loadData() {
-      Papa.parse(CSV_URL, {
-        download: true,
-        header: false,
-        skipEmptyLines: true,
-        complete: function(results) {
+    // ✅ 強化版 CSV 載入：自動嘗試多個來源
+    async function loadData() {
+      const loading = document.getElementById('loading-screen');
+      const loadingSub = document.getElementById('loading-sub');
+      const start = document.getElementById('start-screen');
+
+      for (let i = 0; i < CSV_CANDIDATES.length; i++) {
+        const baseUrl = CSV_CANDIDATES[i];
+        const url = baseUrl + (baseUrl.includes("?") ? "&" : "?") + "v=" + Date.now();
+
+        try {
+          loadingSub.textContent = `Connecting to data source ${i+1}/${CSV_CANDIDATES.length}...`;
+
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) throw new Error("CSV fetch failed: " + res.status);
+
+          const csvText = await res.text();
+
+          const results = Papa.parse(csvText, {
+            header: false,
+            skipEmptyLines: true
+          });
+
+          if (results.errors?.length) {
+            throw new Error("CSV parse error: " + results.errors[0].message);
+          }
+
           allQuestions = results.data
             .filter(row => row.length >= 7)
             .map((row, index) => ({
@@ -419,14 +449,30 @@
               correctAnswer: row[6].trim()
             }));
 
-          document.getElementById('loading-screen').classList.add('hidden');
-          document.getElementById('start-screen').classList.remove('hidden');
-        },
-        error: function(err) {
-          alert("Failed to connect to data source.");
-          console.error(err);
+          // ✅ 成功 → 切到 start screen
+          loading.classList.add('hidden');
+          start.classList.remove('hidden');
+          return;
+
+        } catch (err) {
+          console.warn("CSV candidate failed:", baseUrl, err);
         }
-      });
+      }
+
+      // ✅ 全部失敗，顯示錯誤畫面（不再卡 loading）
+      loading.innerHTML = `
+        <div class="text-center">
+          <div style="font-size:42px;margin-bottom:10px;">⚠️</div>
+          <p class="text-lg text-rose-200 font-bold mb-2">CSV 資料載入失敗</p>
+          <p class="text-sm text-blue-100/80 mb-4">
+            可能原因：CSV 路徑變更 / GitHub Pages 快取 / 檔案未公開
+          </p>
+          <div class="text-xs text-blue-200/70 break-all text-left bg-black/20 p-3 rounded-xl border border-white/10">
+            嘗試過的來源：<br>
+            ${CSV_CANDIDATES.map(u=>`- ${u}`).join("<br>")}
+          </div>
+        </div>
+      `;
     }
 
     // --- Quiz Logic ---
@@ -505,7 +551,7 @@
       });
 
       setTimeout(() => {
-        timerBar.style.transition = \`width ${TIME_LIMIT}s linear\`;
+        timerBar.style.transition = `width ${TIME_LIMIT}s linear`;
         timerBar.style.width = '0%';
       }, 50);
 
