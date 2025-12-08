@@ -1694,6 +1694,17 @@ onAuthStateChanged(auth, async (user) => {
   }
   .mlb-log-time{color:var(--dim); font-size:0.8rem;}
 </style>
+  /* ✅ Moonlight Box click fix */
+#moonlight-box,
+#moonlight-box * {
+  pointer-events: auto !important;
+}
+
+#moonlight-box {
+  position: relative;
+  z-index: 5; /* 先壓過主站常見遮罩 */
+}
+
 <!-- 🌙 Moonlight Box Module END -->
 
 <script>
