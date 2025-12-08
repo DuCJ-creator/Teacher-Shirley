@@ -1871,36 +1871,27 @@ onAuthStateChanged(auth, async (user) => {
     }
 })();
 </script>
-  <script type="module">
-  // ====== 取用主站 Firebase ======
+ <script>
+(function(){
+  // ====== 取用主站 Firebase（必須是主站已初始化） ======
   function getAuthDB(){
-    // 兼容多種主站寫法
-    const auth = window.__AUTH__ || window.auth || window.firebaseAuth;
-    const db   = window.__DB__   || window.db   || window.firestoreDB;
+    // 你主站常見的掛法我都兼容
+    const auth = window.__AUTH__ || window.auth || (window.firebase && window.firebase.auth && window.firebase.auth());
+    const db   = window.__DB__   || window.db   || (window.firebase && window.firebase.firestore && window.firebase.firestore());
     if (!auth || !db) {
       console.error("[MoonlightBox] Firebase auth/db not found on main site.");
     }
     return {auth, db};
   }
-
-  // 從 firebase sdk（主站應該已載入；若沒載入就不會跑到這）
-  import {
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
-  import {
-    doc, getDoc, setDoc, updateDoc, arrayUnion, increment
-  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-
   const {auth, db} = getAuthDB();
+  if (!auth || !db) return;
 
-  // ====== 常數 ======
   const MOON_CYCLE = 300;
-
   let currentUser = null;
   let moonData = { totalGlow:0, cycleGlow:0, logs:[] };
 
-  // ====== 月相 UI ======
+  function $(id){ return document.getElementById(id); }
+
   function phaseByPercent(p){
     if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
     if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
@@ -1912,43 +1903,19 @@ onAuthStateChanged(auth, async (user) => {
     return {emoji:"🌘", text:"Waning Crescent / 殘月"};
   }
 
-  function renderMoonUI(){
-    const totalEl = document.getElementById("mlb-total");
-    const cycleEl = document.getElementById("mlb-cycle");
-    const barEl   = document.getElementById("mlb-progress");
-    const emojiEl = document.getElementById("mlb-moon-emoji");
-    const phaseEl = document.getElementById("mlb-phase-text");
-
-    if (!totalEl) return; // 模組不在頁面上就跳過
-
-    totalEl.innerText = moonData.totalGlow || 0;
-    cycleEl.innerText = moonData.cycleGlow || 0;
-
-    const percent = Math.min((moonData.cycleGlow || 0)/MOON_CYCLE, 1);
-    barEl.style.width = `${percent*100}%`;
-
-    const phase = phaseByPercent(percent);
-    emojiEl.innerText = phase.emoji;
-    phaseEl.innerText = phase.text;
-
-    renderLogs();
-  }
-
   function renderLogs(){
-    const box = document.getElementById("mlb-log-box");
+    const box = $("mlb-log-box");
     if (!box) return;
-
     box.innerHTML = "";
     const logs = moonData.logs || [];
-    if (logs.length===0){
+    if (!logs.length){
       box.innerHTML = `<div class="mlb-hint">目前還沒有月光紀錄。</div>`;
       return;
     }
-
     logs.slice().reverse().slice(0,30).forEach(l=>{
+      const time = new Date(l.time).toLocaleString();
       const div = document.createElement("div");
       div.className="mlb-log-item";
-      const time = new Date(l.time).toLocaleString();
       div.innerHTML = `
         <div>
           +<b>${l.glow}</b> pts
@@ -1961,27 +1928,121 @@ onAuthStateChanged(auth, async (user) => {
     });
   }
 
-  // ====== 讀 Firestore（只用 uid） ======
-  async function loadMoonData(uid){
-    const userRef = doc(db, "users", uid);
-    const snap = await getDoc(userRef);
+  function renderMoonUI(){
+    if (!$("mlb-total")) return;
 
-    if (!snap.exists()){
-      await setDoc(userRef, {
+    $("mlb-total").innerText = moonData.totalGlow || 0;
+    $("mlb-cycle").innerText = moonData.cycleGlow || 0;
+
+    const percent = Math.min((moonData.cycleGlow || 0)/MOON_CYCLE, 1);
+    $("mlb-progress").style.width = `${percent*100}%`;
+
+    const phase = phaseByPercent(percent);
+    $("mlb-moon-emoji").innerText = phase.emoji;
+    $("mlb-phase-text").innerText = phase.text;
+
+    renderLogs();
+  }
+
+  function calcGlow(correctCount){
+    return Math.max(0, (correctCount||0) * 5);
+  }
+
+  async function loadMoonData(uid){
+    const userRef = db.collection("users").doc(uid);
+    const snap = await userRef.get();
+    if (!snap.exists){
+      await userRef.set({
         moonGlowTotal:0,
         moonGlowCycle:0,
         moonGlowLogs:[]
       }, {merge:true});
-      moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+      moonData={totalGlow:0, cycleGlow:0, logs:[]};
       renderMoonUI();
       return;
     }
-    const d = snap.data();
+    const d = snap.data() || {};
     moonData.totalGlow = d.moonGlowTotal || 0;
     moonData.cycleGlow = d.moonGlowCycle || 0;
     moonData.logs = d.moonGlowLogs || [];
     renderMoonUI();
   }
+
+  async function applyResult(data){
+    if (!currentUser) {
+      $("mlb-login-hint") && ($("mlb-login-hint").style.display="block");
+      return;
+    }
+    const correct = parseInt(data.correctCount)||0;
+    if (correct<=0) return;
+
+    const glow = calcGlow(correct);
+    let newCycle = (moonData.cycleGlow||0) + glow;
+    if (newCycle >= MOON_CYCLE) newCycle = newCycle % MOON_CYCLE;
+
+    const logEntry = {
+      time: new Date().toISOString(),
+      correct,
+      glow,
+      mission: data.mission || null
+    };
+
+    const userRef = db.collection("users").doc(currentUser.uid);
+    await userRef.update({
+      moonGlowTotal: (window.firebase.firestore.FieldValue.increment(glow)),
+      moonGlowCycle: newCycle,
+      moonGlowLogs: (window.firebase.firestore.FieldValue.arrayUnion(logEntry)),
+      activityLogs: (window.firebase.firestore.FieldValue.arrayUnion({
+        date: new Date().toISOString(),
+        type: "Lunar Glow",
+        detail: `Collected ${glow} pts (✅${correct}) ${data.mission? "["+data.mission+"]":""}`
+      }))
+    });
+
+    moonData.totalGlow += glow;
+    moonData.cycleGlow = newCycle;
+    moonData.logs.push(logEntry);
+
+    renderMoonUI();
+    $("mlb-last-result").innerHTML = `✅${correct} 題 → +${glow} pts ${data.mission? " · "+data.mission:""}`;
+    localStorage.removeItem("lunar_pending_result");
+  }
+
+  function checkPending(){
+    const raw = localStorage.getItem("lunar_pending_result");
+    if (!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      if (data && data.correctCount) applyResult(data);
+    }catch(e){}
+  }
+
+  window.addEventListener("message", (e)=>{
+    const data = e.data;
+    if (!data || data.type!=="LUNAR_RESULT") return;
+    localStorage.setItem("lunar_pending_result", JSON.stringify(data));
+    applyResult(data);
+  });
+
+  $("mlb-recheck") && $("mlb-recheck").addEventListener("click", checkPending);
+
+  auth.onAuthStateChanged(async (user)=>{
+    currentUser = user || null;
+    const hint = $("mlb-login-hint");
+    if (!currentUser){
+      hint && (hint.style.display="block");
+      moonData={totalGlow:0, cycleGlow:0, logs:[]};
+      renderMoonUI();
+      return;
+    }
+    hint && (hint.style.display="none");
+    await loadMoonData(currentUser.uid);
+    checkPending();
+  });
+
+  document.addEventListener("DOMContentLoaded", renderMoonUI);
+})();
+</script>
 
   // ====== ✅ 新計分邏輯（系統根據 correctCount 自動累積）=====
   // 你可自由改倍率
