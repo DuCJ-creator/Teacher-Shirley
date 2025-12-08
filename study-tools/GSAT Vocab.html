@@ -13,7 +13,6 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            /* New brighter, deeper gradient background */
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0891b2 100%);
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
@@ -23,15 +22,12 @@
             position: relative;
         }
 
-        /* Particle container fixed behind everything */
         #tsparticles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; /* Behind the main app card */
-            pointer-events: none; /* Let clicks pass through except for hover interaction */
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         @keyframes gradientBG {
@@ -40,19 +36,17 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Lighter, cleaner Glassmorphism Card */
         .glass-card {
-            background: rgba(255, 255, 255, 0.12); /* More transparent and lighter */
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            z-index: 10; /* Ensure it sits on top of particles */
+            z-index: 10;
         }
 
-        /* New accent color gradient for buttons/bars */
         .accent-gradient {
-            background: linear-gradient(90deg, #22d3ee, #3b82f6); /* Cyan to Blue */
+            background: linear-gradient(90deg, #22d3ee, #3b82f6);
         }
         
         .accent-text {
@@ -71,27 +65,23 @@
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
             border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.15); /* Cyan shadow hover */
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.15);
         }
 
         .option-btn.selected {
-            background: linear-gradient(90deg, #22d3ee, #3b82f6); /* New accent */
+            background: linear-gradient(90deg, #22d3ee, #3b82f6);
             border-color: transparent;
             font-weight: 600;
-            color: #0f172a; /* Dark text on bright button for contrast */
+            color: #0f172a;
             box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
         }
         
-        /* Ensure the A/B/C/D circle contrasts well when selected */
         .option-btn.selected .option-letter {
             border-color: rgba(0,0,0,0.3);
             color: #0f172a;
         }
 
-        /* Custom Scrollbar for feedback list */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(255,255,255,0.05);
             border-radius: 10px;
@@ -106,9 +96,11 @@
 
         .timer-bar { transition: width 1s linear; }
         .fade-in { animation: fadeIn 0.6s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        /* --- Print Styles (Optimized for Result List) --- */
         @media print {
             body {
                 background: white !important;
@@ -117,15 +109,8 @@
                 height: auto !important;
                 overflow: visible !important;
             }
+            #tsparticles, .no-print, button { display: none !important; }
 
-            /* Hide decorative and interactive elements */
-            #tsparticles, 
-            .no-print, 
-            button {
-                display: none !important;
-            }
-
-            /* Reset container for print */
             #app-container {
                 position: static !important;
                 transform: none !important;
@@ -139,22 +124,17 @@
                 min-height: auto !important;
             }
 
-            /* Result header adjustments */
             #results-screen .text-center {
                 margin-bottom: 20px !important;
                 color: black !important;
                 border-bottom: 2px solid #eee;
                 padding-bottom: 10px;
             }
-            #results-screen h2, 
-            #score-display, 
-            .text-blue-200,
-            .text-white {
+            #results-screen h2, #score-display, .text-blue-200, .text-white {
                 color: black !important;
                 text-shadow: none !important;
             }
 
-            /* Expand the feedback list */
             #feedback-list {
                 max-height: none !important;
                 overflow: visible !important;
@@ -162,9 +142,8 @@
                 display: block !important;
             }
 
-            /* Style individual question items for print */
             #feedback-list > div {
-                break-inside: avoid; /* Prevent splitting a question across pages */
+                break-inside: avoid;
                 background: white !important;
                 border: 1px solid #ccc !important;
                 color: black !important;
@@ -173,14 +152,10 @@
                 padding: 10px !important;
             }
 
-            /* Text colors force black */
-            #feedback-list p, 
-            #feedback-list span,
-            #feedback-list div {
+            #feedback-list p, #feedback-list span, #feedback-list div {
                 color: black !important;
             }
 
-            /* Highlighting logic for print */
             .bg-emerald-500 {
                 border: 1px solid #000;
                 color: #000 !important;
@@ -196,13 +171,9 @@
                 text-decoration: line-through;
                 box-shadow: none !important;
             }
-            
-            /* Hide audio buttons in print */
-            #feedback-list button {
-                display: none !important;
-            }
-            
-            /* Highlight the answer word clearly */
+
+            #feedback-list button { display: none !important; }
+
             .text-emerald-300 {
                 color: black !important;
                 text-decoration: underline;
@@ -270,8 +241,7 @@
                 <h2 id="q-text" class="text-2xl md:text-3xl font-medium leading-relaxed text-white drop-shadow-md">Loading question...</h2>
             </div>
 
-            <div id="options-container" class="grid grid-cols-1 gap-4 relative z-10">
-                </div>
+            <div id="options-container" class="grid grid-cols-1 gap-4 relative z-10"></div>
         </div>
 
         <div id="results-screen" class="hidden fade-in w-full">
@@ -291,8 +261,7 @@
                 </div>
             </div>
 
-            <div id="feedback-list" class="space-y-4 mb-8 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar">
-                </div>
+            <div id="feedback-list" class="space-y-4 mb-8 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar"></div>
 
             <div class="flex flex-col md:flex-row gap-4 justify-center mt-8 no-print">
                 <button onclick="startQuiz(true)" class="px-8 py-4 rounded-2xl accent-gradient text-blue-950 font-extrabold shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-1 hover:shadow-cyan-500/40 flex items-center justify-center">
@@ -317,11 +286,10 @@
             await tsParticles.load("tsparticles", {
                 particles: {
                     number: { value: 60, density: { enable: true, value_area: 800 } },
-                    color: { value: ["#67e8f9", "#ffffff", "#3b82f6"] }, // Cyan, White, Blue dots
+                    color: { value: ["#67e8f9", "#ffffff", "#3b82f6"] },
                     shape: { type: "circle" },
                     opacity: { value: 0.4, random: true },
                     size: { value: 2, random: true },
-                    // Connecting lines
                     links: {
                         enable: true,
                         distance: 150,
@@ -329,10 +297,9 @@
                         opacity: 0.15,
                         width: 1
                     },
-                    // Movement style: slow floating
                     move: {
                         enable: true,
-                        speed: 0.8, 
+                        speed: 0.8,
                         direction: "none",
                         random: true,
                         straight: false,
@@ -340,12 +307,11 @@
                         bounce: false,
                     }
                 },
-                // Interactive effects on mouse hover
                 interactivity: {
                     detect_on: "canvas",
                     events: {
-                        onhover: { enable: true, mode: "grab" }, // grab connections nearby
-                        onclick: { enable: true, mode: "push" }, // push more particles on click
+                        onhover: { enable: true, mode: "grab" },
+                        onclick: { enable: true, mode: "push" },
                         resize: true
                     },
                     modes: {
@@ -354,19 +320,18 @@
                     }
                 },
                 retina_detect: true,
-                background: { color: "transparent" } // Transparent to let CSS gradient show
+                background: { color: "transparent" }
             });
         }
 
-
-        // --- Configuration & State (Same as before) ---
+        // --- Configuration & State ---
         const CSV_URL = 'https://ducj-creator.github.io/GSAT%20vocab%20fixed%20option%20quiz.csv';
         const QUESTION_LIMIT = 10;
         const TIME_LIMIT = 30;
 
         let allQuestions = [];
-        let wrongHistory = new Set();
-        let seenHistory = new Set();
+        let wrongHistory = new Set(); // ✅ 錯題池（含 TIME OUT）
+        let seenHistory = new Set();  // ✅ 看過池
         
         let currentSession = {
             questions: [],
@@ -378,8 +343,8 @@
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            initParticles(); // Start particles
-            loadData();      // Start loading data
+            initParticles();
+            loadData();
         });
 
         function loadData() {
@@ -388,13 +353,15 @@
                 header: false,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    allQuestions = results.data.filter(row => row.length >= 7).map((row, index) => ({
+                    allQuestions = results.data
+                      .filter(row => row.length >= 7)
+                      .map((row, index) => ({
                         originalIndex: index,
                         code: row[0],
                         text: row[1],
                         options: [row[2], row[3], row[4], row[5]],
                         correctAnswer: row[6].trim()
-                    }));
+                      }));
                     
                     document.getElementById('loading-screen').classList.add('hidden');
                     document.getElementById('start-screen').classList.remove('hidden');
@@ -406,18 +373,29 @@
             });
         }
 
-        // --- Quiz Logic (Same structure, updated UI classes) ---
+        // --- Quiz Logic ---
 
+        // ✅ 下一關策略：
+        // 1) 本次錯題（含 TIME OUT）優先
+        // 2) 再補沒看過的
+        // 3) 不夠再補已熟
         function startQuiz(isNextChallenge = false) {
             let pool = [];
+
             if (isNextChallenge) {
-                const priorityIndices = allQuestions.filter(q => 
-                    wrongHistory.has(q.originalIndex) || !seenHistory.has(q.originalIndex)
-                );
-                shuffleArray(priorityIndices);
-                pool = [...priorityIndices];
+                // (1) 錯題優先（wrongHistory 內）
+                const wrongFirst = allQuestions.filter(q => wrongHistory.has(q.originalIndex));
+                shuffleArray(wrongFirst);
+
+                // (2) 沒看過的補上
+                const unseen = allQuestions.filter(q => !seenHistory.has(q.originalIndex) && !wrongHistory.has(q.originalIndex));
+                shuffleArray(unseen);
+
+                pool = wrongFirst.concat(unseen);
+
+                // (3) 不夠再補已熟題
                 if (pool.length < QUESTION_LIMIT) {
-                    const mastered = allQuestions.filter(q => 
+                    const mastered = allQuestions.filter(q =>
                         !wrongHistory.has(q.originalIndex) && seenHistory.has(q.originalIndex)
                     );
                     shuffleArray(mastered);
@@ -460,9 +438,12 @@
 
             qData.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                // Updated classes for new theme
                 btn.className = `option-btn w-full text-left p-5 rounded-2xl text-gray-100 text-lg font-medium flex items-center group`;
-                btn.innerHTML = `<span class="option-letter inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-white/30 text-sm font-bold mr-4 text-blue-200 group-hover:border-cyan-400 group-hover:text-cyan-400 transition-colors">${String.fromCharCode(65+idx)}</span> ${opt}`;
+                btn.innerHTML = `
+                  <span class="option-letter inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-white/30 text-sm font-bold mr-4 text-blue-200 group-hover:border-cyan-400 group-hover:text-cyan-400 transition-colors">
+                    ${String.fromCharCode(65+idx)}
+                  </span> ${opt}
+                `;
                 btn.onclick = () => selectOption(idx, btn);
                 optsContainer.appendChild(btn);
             });
@@ -477,7 +458,6 @@
                 const timerText = document.getElementById('timer-text');
                 timerText.innerText = `${currentSession.timeLeft}s`;
                 
-                // Optional: make timer turn red near end
                 if(currentSession.timeLeft <= 5) {
                     timerText.classList.remove('accent-text');
                     timerText.classList.add('text-red-400');
@@ -488,6 +468,7 @@
                 
                 if (currentSession.timeLeft <= 0) {
                     clearInterval(currentSession.timer);
+                    // ✅ TIME OUT：userAnswers 保持 null（finishQuiz 會當錯題）
                     handleNext();
                 }
             }, 1000);
@@ -501,7 +482,7 @@
             currentSession.userAnswers[currentSession.currentIndex] = optIndex;
             
             clearInterval(currentSession.timer);
-            setTimeout(handleNext, 300); // Slightly faster transition
+            setTimeout(handleNext, 300);
         }
 
         function handleNext() {
@@ -512,7 +493,7 @@
             }
         }
 
-        // --- Results & Feedback (UI updated for new theme) ---
+        // --- Results & Feedback ---
 
         function finishQuiz() {
             document.getElementById('quiz-screen').classList.add('hidden');
@@ -521,66 +502,91 @@
             const listContainer = document.getElementById('feedback-list');
             listContainer.innerHTML = '';
             
-            let correctCount = 0;
+            let correctCount = 0; // ✅ 正確題數
 
             currentSession.questions.forEach((q, idx) => {
                 const userChoiceIndex = currentSession.userAnswers[idx];
-                const userChoiceText = userChoiceIndex !== null ? q.options[userChoiceIndex] : "Time Out / No Answer";
-                const isCorrect = userChoiceIndex !== null && q.options[userChoiceIndex] === q.correctAnswer;
-                
+
+                // ✅ TIME OUT / 未作答顯示字樣
+                const userChoiceText =
+                  userChoiceIndex !== null ? q.options[userChoiceIndex]
+                                           : "Time Out / No Answer";
+
+                const isCorrect =
+                  userChoiceIndex !== null &&
+                  q.options[userChoiceIndex] === q.correctAnswer;
+
                 if (isCorrect) {
                     correctCount++;
                     wrongHistory.delete(q.originalIndex);
                 } else {
+                    // ✅ 不正確 or TIME OUT → 都進錯題池
                     wrongHistory.add(q.originalIndex);
                 }
 
-const correctCount = SCORE.correct;  
-const missionName  = "GSAT 真題";     
-
-window.opener?.postMessage({
-  type: "LUNAR_RESULT",
-  correctCount,
-  mission: missionName
-}, "*");
-
-// 同時寫一份 localStorage 保底
-localStorage.setItem("lunar_pending_result", JSON.stringify({
-  type:"LUNAR_RESULT",
-  correctCount,
-  mission: missionName
-}));
-
-                // Brighter highlight colors for the new dark/blue theme
-                const completedSentence = q.text.replace(/_{2,}/g, `<span class="text-emerald-300 font-bold border-b-2 border-emerald-300/50 px-1">${q.correctAnswer}</span>`);
+                const completedSentence = q.text.replace(/_{2,}/g,
+                  `<span class="text-emerald-300 font-bold border-b-2 border-emerald-300/50 px-1">${q.correctAnswer}</span>`
+                );
                 const plainSentence = q.text.replace(/_{2,}/g, q.correctAnswer);
 
                 const item = document.createElement('div');
-                // Updated feedback card styling
-                item.className = `p-5 rounded-2xl border backdrop-blur-sm ${isCorrect ? 'border-emerald-400/30 bg-emerald-900/20' : 'border-rose-400/30 bg-rose-900/20'} transition-all hover:bg-white/5`;
+                item.className = `
+                  p-5 rounded-2xl border backdrop-blur-sm
+                  ${isCorrect ? 'border-emerald-400/30 bg-emerald-900/20'
+                              : 'border-rose-400/30 bg-rose-900/20'}
+                  transition-all hover:bg-white/5
+                `;
                 
                 item.innerHTML = `
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs font-mono text-blue-200/60 bg-blue-950/50 px-2 py-1 rounded">${q.code}</span>
-                        <span class="text-xs font-extrabold px-3 py-1 rounded-full tracking-wider ${isCorrect ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'}">
-                            ${isCorrect ? '<i class="fas fa-check mr-1"></i> CORRECT' : '<i class="fas fa-times mr-1"></i> WRONG'}
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full tracking-wider
+                          ${isCorrect ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                      : 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'}">
+                            ${isCorrect ? '<i class="fas fa-check mr-1"></i> CORRECT'
+                                        : '<i class="fas fa-times mr-1"></i> WRONG'}
                         </span>
                     </div>
                     <p class="text-lg mb-4 leading-relaxed text-white/90 font-medium">${completedSentence}</p>
-                    ${!isCorrect ? `<div class="text-sm text-rose-300 mb-3 bg-rose-950/30 p-2 rounded-lg"><i class="fas fa-arrow-right mr-2"></i>You chose: <span class="font-bold">${userChoiceText}</span></div>` : ''}
-                    <button onclick="speakText(this, '${plainSentence.replace(/'/g, "\\'")}')" class="text-sm px-4 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 transition-colors flex items-center gap-2 border border-blue-400/20 hover:border-blue-400/50">
+
+                    ${
+                      !isCorrect ? `
+                        <div class="text-sm text-rose-300 mb-3 bg-rose-950/30 p-2 rounded-lg">
+                          <i class="fas fa-arrow-right mr-2"></i>You chose:
+                          <span class="font-bold">${userChoiceText}</span>
+                        </div>
+                      ` : ''
+                    }
+
+                    <button onclick="speakText(this, '${plainSentence.replace(/'/g, "\\'")}')"
+                      class="text-sm px-4 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 transition-colors flex items-center gap-2 border border-blue-400/20 hover:border-blue-400/50">
                         <i class="fas fa-volume-high"></i> Play Audio
                     </button>
                 `;
                 listContainer.appendChild(item);
             });
 
+            // ✅ 成績算完後送回月光寶盒（正確 type / 欄位）
+            window.opener?.postMessage({
+              type: "LUNAR_MISSION_RESULT",
+              correct: correctCount,
+              mission: "GSAT 真題"
+            }, "*");
+
+            // ✅ localStorage 保底
+            localStorage.setItem("lunar_pending_result", JSON.stringify({
+              type: "LUNAR_MISSION_RESULT",
+              correct: correctCount,
+              mission: "GSAT 真題"
+            }));
+
+            // ✅ 顯示分數 %
             const score = Math.round((correctCount / QUESTION_LIMIT) * 100);
             const scoreDisplay = document.getElementById('score-display');
             animateValue(scoreDisplay, 0, score, 1200);
         }
 
-        // --- Utilities (Same as before) ---
+        // --- Utilities ---
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -617,9 +623,7 @@ localStorage.setItem("lunar_pending_result", JSON.stringify({
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
+                if (progress < 1) window.requestAnimationFrame(step);
             };
             window.requestAnimationFrame(step);
         }
