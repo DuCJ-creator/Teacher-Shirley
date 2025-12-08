@@ -1023,6 +1023,47 @@
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => location.reload()); });
 
+   // ✅【你刪掉的核心】登入狀態監聽 + 進入星球
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+
+        // 1) UI 切換：進入宇宙
+        document.getElementById('intro-overlay').style.display = 'none';
+        document.getElementById('visitor-view').classList.remove('active');
+        document.getElementById('universe-view').classList.add('active');
+
+        // 2) 顯示登出鍵
+        document.getElementById('logoutBtn').style.display = 'flex';
+
+        // 3) 更新歡迎字
+        const name =
+            user.displayName ||
+            (user.email ? user.email.split('@')[0] : "Traveler");
+        const greet = document.getElementById('greeting-name');
+        if (greet) greet.innerText = `Welcome, ${name}`;
+
+        // 4) 載入每日內容 + 使用者資料
+        await loadCSVData();
+        renderDailyContent(getTodayMMDD());
+        await loadUserData(user.uid);
+
+        // optional：記錄登入行為
+        trackActivity("Login", "User logged in");
+
+    } else {
+        currentUser = null;
+
+        // 登出後 UI 還原（可依你需求要回信封或留在 visitor）
+        document.getElementById('logoutBtn').style.display = 'none';
+        document.getElementById('universe-view').classList.remove('active');
+
+        // 如果你希望登出回到信封
+        document.getElementById('intro-overlay').style.display = 'flex';
+        document.getElementById('intro-overlay').style.opacity = '1';
+    }
+});
+
     window.visitPlanet = (planetName, url) => {
         if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
         setTimeout(() => { window.location.href = url; }, 300);
