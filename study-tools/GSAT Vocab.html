@@ -535,6 +535,22 @@
                     wrongHistory.add(q.originalIndex);
                 }
 
+const correctCount = SCORE.correct;  
+const missionName  = "GSAT 真題";     
+
+window.opener?.postMessage({
+  type: "LUNAR_RESULT",
+  correctCount,
+  mission: missionName
+}, "*");
+
+// 同時寫一份 localStorage 保底
+localStorage.setItem("lunar_pending_result", JSON.stringify({
+  type:"LUNAR_RESULT",
+  correctCount,
+  mission: missionName
+}));
+
                 // Brighter highlight colors for the new dark/blue theme
                 const completedSentence = q.text.replace(/_{2,}/g, `<span class="text-emerald-300 font-bold border-b-2 border-emerald-300/50 px-1">${q.correctAnswer}</span>`);
                 const plainSentence = q.text.replace(/_{2,}/g, q.correctAnswer);
