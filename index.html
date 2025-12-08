@@ -2245,7 +2245,7 @@
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
     <!-- ==================== MAIN APP (module) ==================== -->
-  <script type="module">
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
   import {
     getAuth,
@@ -2257,7 +2257,9 @@
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     setPersistence,
-    browserLocalPersistence
+    browserLocalPersistence,
+    browserSessionPersistence,
+    getRedirectResult
   } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
   import {
     getFirestore,
@@ -2292,700 +2294,728 @@
     20: { bg: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)", border: "#fff", accent: "#d35400", highlight: "#fff", text: "#d35400", textDim: "#e67e22", accentDim: "rgba(255, 255, 255, 0.4)" }, 
     21: { bg: "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)", border: "#7f8c8d", accent: "#2c3e50", highlight: "#bdc3c7", text: "#2c3e50", textDim: "#7f8c8d", accentDim: "rgba(44, 62, 80, 0.1)" }, 22: { bg: "linear-gradient(to right, #fff1eb 0%, #ace0f9 100%)", border: "#b76e79", accent: "#b76e79", highlight: "#fff", text: "#5e3b42", textDim: "#b76e79", accentDim: "rgba(183, 110, 121, 0.2)" }, 23: { bg: "#111", border: "#ff00de", accent: "#00ffea", highlight: "#fff", text: "#fff", textDim: "#ff00de", accentDim: "rgba(255, 0, 222, 0.2)", fxClass: "theme-fx-23" }, 24: { bg: "linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d)", border: "#f8b195", accent: "#f67280", highlight: "#fff", text: "#fff", textDim: "#f8b195", accentDim: "rgba(248, 177, 149, 0.2)" }, 25: { bg: "linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)", border: "#fff", accent: "#6a11cb", highlight: "#fff", text: "#4a00e0", textDim: "#8e2de2", accentDim: "rgba(255, 255, 255, 0.5)" }, 26: { bg: "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)", border: "#2d6a4f", accent: "#1b4332", highlight: "#fff", text: "#081c15", textDim: "#2d6a4f", accentDim: "rgba(45, 106, 79, 0.2)" }, 27: { bg: "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)", border: "#ff6b6b", accent: "#ff6b6b", highlight: "#fff", text: "#c0392b", textDim: "#e17055", accentDim: "rgba(255, 107, 107, 0.2)" }, 28: { bg: "#2d3436", border: "#dfe6e9", accent: "#fd79a8", highlight: "#fff", text: "#dfe6e9", textDim: "#b2bec3", accentDim: "rgba(255, 255, 255, 0.1)", fxClass: "theme-fx-28" }, 29: { bg: "linear-gradient(to bottom, #ffffff, #dcdcdc)", border: "#000", accent: "#c0392b", highlight: "#000", text: "#000", textDim: "#555", accentDim: "rgba(0, 0, 0, 0.1)" }, 30: { bg: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", border: "#d7d7d7", accent: "#b0b0b0", highlight: "#fff", text: "#2c3e50", textDim: "#7f8c8d", accentDim: "rgba(0, 0, 0, 0.05)" }, 31: { bg: "linear-gradient(to bottom right, #051937, #004d40)", border: "#00897b", accent: "#26a69a", highlight: "#b2dfdb", text: "#e0f2f1", textDim: "#80cbc4", accentDim: "rgba(38, 166, 154, 0.2)" }, 32: { bg: "radial-gradient(circle at top right, #360033, #0b8793)", border: "#d1c4e9", accent: "#e1bee7", highlight: "#fff", text: "#fff", textDim: "#b39ddb", accentDim: "rgba(225, 190, 231, 0.15)" }, 33: { bg: "linear-gradient(160deg, #002244, #001122)", border: "#1565c0", accent: "#42a5f5", highlight: "#fff", text: "#e3f2fd", textDim: "#90caf9", accentDim: "rgba(66, 165, 245, 0.2)" }, 34: { bg: "linear-gradient(to bottom, #4a0000, #2b0000)", border: "#b71c1c", accent: "#ff5252", highlight: "#ffcdd2", text: "#ffebee", textDim: "#ef9a9a", accentDim: "rgba(255, 82, 82, 0.2)" }, 35: { bg: "linear-gradient(45deg, #141e30, #243b55)", border: "#00bcd4", accent: "#00e5ff", highlight: "#e0f7fa", text: "#eceff1", textDim: "#607d8b", accentDim: "rgba(0, 229, 255, 0.1)" }, 36: { bg: "linear-gradient(to right, #b46105, #5e3100)", border: "#ffca28", accent: "#ffd54f", highlight: "#fff8e1", text: "#fff", textDim: "#ffecb3", accentDim: "rgba(255, 213, 79, 0.2)" }, 37: { bg: "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)", border: "#aab7b8", accent: "#78909c", highlight: "#fff", text: "#455a64", textDim: "#90a4ae", accentDim: "rgba(120, 144, 156, 0.1)" }, 38: { bg: "linear-gradient(to bottom, #1d2b25, #0f1612)", border: "#69f0ae", accent: "#b9f6ca", highlight: "#fff", text: "#e8f5e9", textDim: "#81c784", accentDim: "rgba(105, 240, 174, 0.1)" }, 39: { bg: "linear-gradient(to right, #4b3832, #2c1e18)", border: "#cd7f32", accent: "#d7a877", highlight: "#fff", text: "#f5deb3", textDim: "#a1887f", accentDim: "rgba(205, 127, 50, 0.2)" }, 40: { bg: "#1c2329", border: "#4a6fa5", accent: "#90caf9", highlight: "#e3f2fd", text: "#eceff1", textDim: "#78909c", accentDim: "rgba(144, 202, 249, 0.1)" }, 41: { bg: "linear-gradient(180deg, #1a2980 0%, #26d0ce 100%)", border: "#81d4fa", accent: "#4dd0e1", highlight: "#e0f7fa", text: "#e1f5fe", textDim: "#80deea", accentDim: "rgba(77, 208, 225, 0.2)" }, 42: { bg: "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)", border: "#ffab91", accent: "#ff8a65", highlight: "#fff", text: "#5d4037", textDim: "#a1887f", accentDim: "rgba(255, 138, 101, 0.2)" }, 43: { bg: "linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d)", border: "#f8b195", accent: "#ffccbc", highlight: "#fff", text: "#fff", textDim: "#ffab91", accentDim: "rgba(248, 177, 149, 0.2)" }, 44: { bg: "linear-gradient(to top, #2c3e50, #4ca1af)", border: "#80cbc4", accent: "#b2dfdb", highlight: "#e0f2f1", text: "#e0f7fa", textDim: "#80deea", accentDim: "rgba(178, 223, 219, 0.1)" }, 45: { bg: "linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%)", border: "#9fa8da", accent: "#7986cb", highlight: "#fff", text: "#303f9f", textDim: "#5c6bc0", accentDim: "rgba(121, 134, 203, 0.2)" }, 46: { bg: "linear-gradient(to right, #434343 0%, #000000 100%)", border: "#757575", accent: "#bdbdbd", highlight: "#fff", text: "#f5f5f5", textDim: "#9e9e9e", accentDim: "rgba(255, 255, 255, 0.1)" }, 47: { bg: "linear-gradient(to right, #d31027, #ea384d)", border: "#ff8a80", accent: "#ff5252", highlight: "#ffebee", text: "#fff", textDim: "#ffcdd2", accentDim: "rgba(255, 82, 82, 0.2)" }, 48: { bg: "linear-gradient(to top, #accbee 0%, #e7f0fd 100%)", border: "#90caf9", accent: "#64b5f6", highlight: "#fff", text: "#1565c0", textDim: "#64b5f6", accentDim: "rgba(33, 150, 243, 0.1)" }, 49: { bg: "linear-gradient(135deg, #134e5e, #71b280)", border: "#a5d6a7", accent: "#c8e6c9", highlight: "#e8f5e9", text: "#f1f8e9", textDim: "#a5d6a7", accentDim: "rgba(165, 214, 167, 0.2)" }, 50: { bg: "linear-gradient(to bottom, #eee4d6, #dccdb6)", border: "#c5a065", accent: "#bfa068", highlight: "#fff", text: "#5d4037", textDim: "#8d6e63", accentDim: "rgba(197, 160, 101, 0.2)" }, 51: { bg: "repeating-linear-gradient(45deg,#111,#111 10px,#222 10px,#222 20px)", border: "#333", accent: "#e74c3c", highlight: "#fff", text: "#eee", textDim: "#777", accentDim: "rgba(231, 76, 60, 0.3)" }, 52: { bg: "linear-gradient(#3e2723, #281a16)", border: "#8d6e63", accent: "#d7ccc8", highlight: "#efebe9", text: "#d7ccc8", textDim: "#a1887f", accentDim: "rgba(141, 110, 99, 0.2)" }, 53: { bg: "linear-gradient(to bottom, #1a237e, #0d1245)", border: "#7986cb", accent: "#c5cae9", highlight: "#fff", text: "#e8eaf6", textDim: "#9fa8da", accentDim: "rgba(197, 202, 233, 0.1)" }, 54: { bg: "linear-gradient(135deg, #e6b9b8, #c68a88)", border: "#fff", accent: "#8e5856", highlight: "#fff0f0", text: "#4e342e", textDim: "#8d6e63", accentDim: "rgba(255, 255, 255, 0.4)" }, 55: { bg: "linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)", border: "#757575", accent: "#616161", highlight: "#fff", text: "#212121", textDim: "#616161", accentDim: "rgba(0, 0, 0, 0.1)" }, 56: { bg: "#121212", border: "#2c2c2c", accent: "#666", highlight: "#444", text: "#bbb", textDim: "#444", accentDim: "rgba(255, 255, 255, 0.05)" }, 57: { bg: "linear-gradient(to bottom, #000428, #004e92)", border: "#d500f9", accent: "#00e5ff", highlight: "#fff", text: "#fff", textDim: "#d500f9", accentDim: "rgba(213, 0, 249, 0.2)" }, 58: { bg: "linear-gradient(to bottom, #fffff0, #f0f0e0)", border: "#dcdcdc", accent: "#a9a9a9", highlight: "#fff", text: "#333", textDim: "#888", accentDim: "rgba(0, 0, 0, 0.03)" }, 59: { bg: "linear-gradient(180deg, #232526 0%, #414345 100%)", border: "#585858", accent: "#d32f2f", highlight: "#757575", text: "#e0e0e0", textDim: "#616161", accentDim: "rgba(211, 47, 47, 0.2)" }, 60: { bg: "linear-gradient(to bottom, #f5f5f5, #cfd9df)", border: "#212121", accent: "#424242", highlight: "#000", text: "#000", textDim: "#616161", accentDim: "rgba(0, 0, 0, 0.1)" }, 61: { bg: "#fff", border: "#1565c0", accent: "#0d47a1", highlight: "#e3f2fd", text: "#0d47a1", textDim: "#64b5f6", accentDim: "rgba(13, 71, 161, 0.1)", fxClass: "theme-fx-61" }, 62: { bg: "#fff8e1", border: "#d7ccc8", accent: "#8d6e63", highlight: "#fff", text: "#5d4037", textDim: "#a1887f", accentDim: "rgba(141, 110, 99, 0.1)" }, 63: { bg: "linear-gradient(to right, #3e5151, #decba4)", border: "#8d6e63", accent: "#d7ccc8", highlight: "#fff", text: "#fff", textDim: "#efebe9", accentDim: "rgba(255, 255, 255, 0.2)" }, 64: { bg: "radial-gradient(circle, #444, #000)", border: "#fff", accent: "#eee", highlight: "#fff", text: "#fff", textDim: "#aaa", accentDim: "rgba(255, 255, 255, 0.1)" }, 65: { bg: "linear-gradient(to bottom, #2b5876, #4e4376)", border: "#ffccbc", accent: "#ffab91", highlight: "#fff", text: "#fff", textDim: "#b39ddb", accentDim: "rgba(255, 171, 145, 0.2)" }, 66: { bg: "#1c1c1c", border: "#d4af37", accent: "#f1c40f", highlight: "#fff", text: "#d4af37", textDim: "#8e7d48", accentDim: "rgba(212, 175, 55, 0.15)", fxClass: "theme-fx-66" }, 67: { bg: "#f0f0f0", border: "#d32f2f", accent: "#1976d2", highlight: "#ffeb3b", text: "#212121", textDim: "#757575", accentDim: "rgba(25, 118, 210, 0.1)" }, 68: { bg: "linear-gradient(to right, #cc2b5e, #753a88)", border: "#00d2ff", accent: "#3a7bd5", highlight: "#fff", text: "#fff", textDim: "#eaafc8", accentDim: "rgba(0, 210, 255, 0.2)" }, 69: { bg: "linear-gradient(45deg, #85ffbd 0%, #ffffb0 100%)", border: "#009688", accent: "#00796b", highlight: "#fff", text: "#004d40", textDim: "#4db6ac", accentDim: "rgba(0, 121, 107, 0.1)" }, 70: { bg: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)", border: "#3f51b5", accent: "#7986cb", highlight: "#fff", text: "#e8eaf6", textDim: "#5c6bc0", accentDim: "rgba(121, 134, 203, 0.1)" }, 71: { bg: "linear-gradient(to right, #ff512f, #dd2476)", border: "#ffcc80", accent: "#ffe0b2", highlight: "#fff", text: "#fff", textDim: "#ffab91", accentDim: "rgba(255, 204, 128, 0.2)" }, 72: { bg: "linear-gradient(to bottom, #20002c, #cbb4d4)", border: "#e1bee7", accent: "#fff", highlight: "#fff", text: "#fff", textDim: "#ba68c8", accentDim: "rgba(225, 190, 231, 0.2)" }, 73: { bg: "linear-gradient(to bottom, #f83600 0%, #f9d423 100%)", border: "#fff59d", accent: "#ffeb3b", highlight: "#fff", text: "#fff", textDim: "#fff9c4", accentDim: "rgba(255, 235, 59, 0.2)" }, 74: { bg: "radial-gradient(circle, #000000, #434343)", border: "#fff", accent: "#fff", highlight: "#fff", text: "#fff", textDim: "#666", accentDim: "rgba(255, 255, 255, 0.05)", fxClass: "theme-fx-74" }, 75: { bg: "linear-gradient(to left, #89f7fe, #66a6ff)", border: "#fff", accent: "#fff", highlight: "#fff", text: "#01579b", textDim: "#0288d1", accentDim: "rgba(255, 255, 255, 0.3)" }, 76: { bg: "linear-gradient(to bottom, #870000, #190a05)", border: "#ff5722", accent: "#ffab91", highlight: "#fff", text: "#ffccbc", textDim: "#bf360c", accentDim: "rgba(255, 87, 34, 0.2)" }, 77: { bg: "#0f2027", border: "#fff", accent: "#fff", highlight: "#fff", text: "#fff", textDim: "#cfd8dc", accentDim: "rgba(255, 255, 255, 0.1)", fxClass: "theme-fx-77" }, 78: { bg: "radial-gradient(circle at 50% 0, #5c5c5c, #000000)", border: "#f5f5f5", accent: "#e0e0e0", highlight: "#fff", text: "#fff", textDim: "#9e9e9e", accentDim: "rgba(255, 255, 255, 0.1)" }, 79: { bg: "#2c3e50", border: "#f1c40f", accent: "#f39c12", highlight: "#fff", text: "#ecf0f1", textDim: "#95a5a6", accentDim: "rgba(241, 196, 15, 0.1)" }, 80: { bg: "linear-gradient(to right, #8e9eab, #eef2f3)", border: "#78909c", accent: "#546e7a", highlight: "#fff", text: "#263238", textDim: "#607d8b", accentDim: "rgba(84, 110, 122, 0.1)" }, 81: { bg: "linear-gradient(to bottom, #d7d2cc, #304352)", border: "#90a4ae", accent: "#cfd8dc", highlight: "#fff", text: "#eceff1", textDim: "#b0bec5", accentDim: "rgba(207, 216, 220, 0.1)" }, 82: { bg: "linear-gradient(147deg, #f71735 0%, #db3445 74%)", border: "#ff8a80", accent: "#ffcdd2", highlight: "#fff", text: "#fff", textDim: "#ef9a9a", accentDim: "rgba(255, 205, 210, 0.2)" }, 83: { bg: "linear-gradient(to right, #243949 0%, #517fa4 100%)", border: "#b3e5fc", accent: "#81d4fa", highlight: "#fff", text: "#e1f5fe", textDim: "#81d4fa", accentDim: "rgba(129, 212, 250, 0.1)" }, 84: { bg: "linear-gradient(90deg, #111 50%, #eee 50%)", border: "#888", accent: "#888", highlight: "#f00", text: "#888", textDim: "#aaa", accentDim: "rgba(136, 136, 136, 0.2)" }, 85: { bg: "linear-gradient(43deg,#4158d0 0%,#c850c0 46%,#ffcc70 100%)", border: "#fff", accent: "#fff", highlight: "#fff", text: "#fff", textDim: "#ffe0b2", accentDim: "rgba(255, 255, 255, 0.3)" }, 86: { bg: "linear-gradient(135deg, #141414 0%, #333 100%)", border: "#ffd700", accent: "#ffecb3", highlight: "#fff", text: "#ffd700", textDim: "#bf953f", accentDim: "rgba(255, 215, 0, 0.3)", fxClass: "theme-fx-86" }, 87: { bg: "radial-gradient(circle at 50% 50%, #2b1055, #7597de)", border: "rgba(255, 255, 255, 0.5)", accent: "#fff", highlight: "#fff", text: "#fff", textDim: "rgba(255, 255, 255, 0.8)", accentDim: "rgba(255, 255, 255, 0.2)", fxClass: "theme-fx-87" },     88:{bg:"linear-gradient(45deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3)",border:"#0ff",accent:"#0ff",highlight:"#f0f",text:"#fff",textDim:"#0ff",accentDim:"rgba(0, 255, 255, 0.3)",fxClass:"theme-fx-88"}
   };
-  /* ==================== Firebase ==================== */
-  const firebaseConfig = {
-    apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
-    authDomain: "teacher-shirley.firebaseapp.com",
-    databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
-    projectId: "teacher-shirley",
-    storageBucket: "teacher-shirley.firebasestorage.app",
-    messagingSenderId: "534843195436",
-    appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
-  };
+ /* ==================== Firebase ==================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+  authDomain: "teacher-shirley.firebaseapp.com",
+  databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+  projectId: "teacher-shirley",
+  storageBucket: "teacher-shirley.firebasestorage.app",
+  messagingSenderId: "534843195436",
+  appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-  // ✅ 強制把登入狀態存到 localStorage，避免一登入又掉
-  setPersistence(auth, browserLocalPersistence).catch((e) => {
-    console.warn("Persistence set failed:", e);
-  });
-
-  let currentUser = null;
-  let csvData = { words: [], quotes: [] };
-  let checkinHistory = [];
-  let activityLog = [];
-
-  /* ==================== In-app browser warning ==================== */
-  const ua = navigator.userAgent || navigator.vendor || window.opera;
-  const isInApp =
-    ua.includes("FBAN") ||
-    ua.includes("FBAV") ||
-    ua.includes("Instagram") ||
-    ua.includes("Line") ||
-    ua.includes("MicroMessenger");
-
-  window.closeWarning = () => {
-    document.getElementById("in-app-browser-warning").style.display = "none";
-  };
-
-  window.copyCurrentUrl = () => {
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => alert("Link copied! Open Chrome/Safari and paste it."))
-      .catch(() => alert("Failed to copy. Please copy the URL manually."));
-  };
-
-  /* ==================== Date helpers ==================== */
-  function getLocalISODate() {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    const d = String(now.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
+/**
+ * ✅ iOS / iPad Safari 常會擋 localStorage/IndexedDB
+ * local persistence 失敗時，Firebase 會退到 memory persistence，
+ * redirect 回來就會掉登入。
+ * 所以：先嘗試 local，失敗就 fallback 到 session。
+ */
+setPersistence(auth, browserLocalPersistence).catch(async (e) => {
+  console.warn("Local persistence failed, fallback to session:", e);
+  try {
+    await setPersistence(auth, browserSessionPersistence);
+  } catch (e2) {
+    console.warn("Session persistence also failed:", e2);
   }
-  function getTodayMMDD() {
-    const now = new Date();
-    return (
-      String(now.getMonth() + 1).padStart(2, "0") +
-      "-" +
-      String(now.getDate()).padStart(2, "0")
+});
+
+/**
+ * ✅ 如果剛從 Google redirect 回來，
+ * 這行會把 redirect 的結果「結算」掉，避免狀態卡住或不穩。
+ * 沒有 redirect 時可能會丟 no-redirect 之類的錯，忽略即可。
+ */
+getRedirectResult(auth).catch((e) => {
+  console.warn("getRedirectResult:", e);
+});
+
+let currentUser = null;
+let csvData = { words: [], quotes: [] };
+let checkinHistory = [];
+let activityLog = [];
+
+/* ==================== In-app browser warning ==================== */
+const ua = navigator.userAgent || navigator.vendor || window.opera;
+const isInApp =
+  ua.includes("FBAN") ||
+  ua.includes("FBAV") ||
+  ua.includes("Instagram") ||
+  ua.includes("Line") ||
+  ua.includes("MicroMessenger");
+
+window.closeWarning = () => {
+  document.getElementById("in-app-browser-warning").style.display = "none";
+};
+
+window.copyCurrentUrl = () => {
+  navigator.clipboard
+    .writeText(window.location.href)
+    .then(() => alert("Link copied! Open Chrome/Safari and paste it."))
+    .catch(() => alert("Failed to copy. Please copy the URL manually."));
+};
+
+/* ==================== Date helpers ==================== */
+function getLocalISODate() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+function getTodayMMDD() {
+  const now = new Date();
+  return (
+    String(now.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(now.getDate()).padStart(2, "0")
+  );
+}
+
+/* ==================== UI helpers for auth ==================== */
+function showLoggedInUI() {
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) overlay.style.display = "none";
+
+  const v = document.getElementById("visitor-view");
+  if (v) v.classList.remove("active");
+
+  const u = document.getElementById("universe-view");
+  if (u) u.classList.add("active");
+
+  const logout = document.getElementById("logoutBtn");
+  if (logout) logout.style.display = "flex";
+
+  const moonEmbed = document.getElementById("moonlight-embed");
+  if (moonEmbed) moonEmbed.style.display = "block";
+}
+
+function showLoggedOutUI() {
+  const logout = document.getElementById("logoutBtn");
+  if (logout) logout.style.display = "none";
+
+  const u = document.getElementById("universe-view");
+  if (u) u.classList.remove("active");
+
+  const t = document.getElementById("member-terminal");
+  if (t) t.classList.remove("show");
+
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    overlay.style.opacity = "1";
+  }
+
+  const moonEmbed = document.getElementById("moonlight-embed");
+  if (moonEmbed) moonEmbed.style.display = "none";
+}
+
+/* ==================== Intro / Envelope ==================== */
+window.openLetter = () => {
+  const windchime = document.getElementById("windchime");
+  windchime.volume = 0.5;
+  windchime.play().catch(() => {});
+
+  const container = document.querySelector(".envelope-container");
+  if (!container) return;
+
+  container.classList.add("open");
+
+  setTimeout(() => {
+    const letterView = document.getElementById("letter-view");
+    if (letterView) letterView.classList.add("show");
+
+    const paragraphs = document.querySelectorAll(".letter-p");
+    paragraphs.forEach((p, index) => {
+      setTimeout(() => p.classList.add("visible"), index * 800);
+    });
+
+    setTimeout(() => {
+      const choice = document.getElementById("choice-buttons");
+      if (choice) choice.classList.add("visible");
+    }, paragraphs.length * 800 + 400);
+  }, 800);
+};
+
+window.enterVisitorMode = () => {
+  const overlay = document.getElementById("intro-overlay");
+  overlay.style.opacity = "0";
+  setTimeout(() => (overlay.style.display = "none"), 1000);
+  document.getElementById("visitor-view").classList.add("active");
+};
+
+window.reopenAuth = () => {
+  document.getElementById("visitor-view").classList.remove("active");
+
+  const overlay = document.getElementById("intro-overlay");
+  overlay.style.display = "flex";
+  void overlay.offsetWidth;
+  overlay.style.opacity = "1";
+
+  const container = document.querySelector(".envelope-container");
+  const letterView = document.getElementById("letter-view");
+  if (container && !container.classList.contains("open")) {
+    container.classList.add("open");
+    if (letterView) letterView.classList.add("show");
+  }
+  showAuthForm();
+};
+
+window.showAuthForm = () => {
+  document.getElementById("choice-buttons").style.display = "none";
+  document.getElementById("auth-form-container").style.display = "block";
+};
+
+window.hideAuthForm = () => {
+  document.getElementById("choice-buttons").style.display = "flex";
+  document.getElementById("auth-form-container").style.display = "none";
+};
+
+/* ==================== Universe / Member terminal ==================== */
+window.openMemberTerminal = () =>
+  document.getElementById("member-terminal").classList.add("show");
+window.closeMemberTerminal = () =>
+  document.getElementById("member-terminal").classList.remove("show");
+
+window.visitPlanet = (planetName, url) => {
+  if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
+  setTimeout(() => (window.location.href = url), 300);
+};
+
+/* ==================== Auth buttons ==================== */
+document.getElementById("google-login-btn").addEventListener("click", async () => {
+  if (isInApp) {
+    document.getElementById("in-app-browser-warning").style.display = "flex";
+    return;
+  }
+
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  /**
+   * ✅ iOS/iPad 先試 popup（不重載、不會丟狀態）
+   * popup 被擋再 fallback redirect
+   */
+  if (isIOS) {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      console.warn("Popup failed on iOS, fallback to redirect:", e);
+      await signInWithRedirect(auth, provider);
+    }
+  } else {
+    signInWithPopup(auth, provider).catch((e) =>
+      alert("Login Error: " + e.message)
+    );
+  }
+});
+
+document.getElementById("email-login-btn").addEventListener("click", () => {
+  const email = document.getElementById("email-input").value;
+  const pass = document.getElementById("pass-input").value;
+  if (!email || !pass) return alert("Please fill in fields");
+
+  signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+    if (
+      error.code === "auth/user-not-found" ||
+      error.code === "auth/invalid-credential"
+    ) {
+      if (confirm("Create account?"))
+        createUserWithEmailAndPassword(auth, email, pass);
+    } else alert(error.message);
+  });
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  signOut(auth).then(() => location.reload());
+});
+
+/* ==================== Auth state ==================== */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    showLoggedInUI();
+
+    await loadCSVData();
+    await loadUserData(user.uid);
+    renderDailyContent(getTodayMMDD());
+  } else {
+    currentUser = null;
+    showLoggedOutUI();
+  }
+});
+
+/* ==================== Firestore helpers ==================== */
+async function trackActivity(type, detail) {
+  if (!currentUser) return;
+  const userRef = doc(db, "users", currentUser.uid);
+  try {
+    await updateDoc(userRef, {
+      activityLogs: arrayUnion({
+        date: new Date().toISOString(),
+        type,
+        detail
+      })
+    });
+  } catch {}
+}
+
+async function loadUserData(uid) {
+  const userRef = doc(db, "users", uid);
+  const docSnap = await getDoc(userRef);
+  const fullDate = getLocalISODate();
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    checkinHistory = data.history || [];
+    activityLog = data.activityLogs || [];
+
+    document.getElementById("total-days").innerText = checkinHistory.length;
+    document.getElementById("streak-days").innerText = data.streak || 0;
+
+    if (checkinHistory.includes(fullDate)) {
+      document.getElementById("checkin-btn").disabled = true;
+    }
+  } else {
+    await setDoc(
+      userRef,
+      { email: currentUser.email, history: [], streak: 0, activityLogs: [] },
+      { merge: true }
     );
   }
 
-  /* ==================== UI helpers for auth ==================== */
-  function showLoggedInUI() {
-    const overlay = document.getElementById("intro-overlay");
-    if (overlay) overlay.style.display = "none";
+  renderCalendar();
+  renderCardBagList();
+}
 
-    const v = document.getElementById("visitor-view");
-    if (v) v.classList.remove("active");
+/* ==================== Card / Check-in logic（以下維持你原本） ==================== */
+function getTemplateIdByDate(dateStr) {
+  if (!dateStr) return 1;
 
-    const u = document.getElementById("universe-view");
-    if (u) u.classList.add("active");
+  let uid = "visitor";
+  try {
+    if (currentUser?.uid) uid = currentUser.uid;
+  } catch {}
 
-    const logout = document.getElementById("logoutBtn");
-    if (logout) logout.style.display = "flex";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const seedStr = `${y}${m}${d}-${uid}`;
 
-    const moonEmbed = document.getElementById("moonlight-embed");
-    if (moonEmbed) moonEmbed.style.display = "block";
+  let hash = 0;
+  for (let i = 0; i < seedStr.length; i++) {
+    hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+    hash |= 0;
+  }
+  hash = Math.abs(hash);
+
+  const luck = hash % 100;
+  if (luck === 99) return 88;
+  if (luck >= 97) return 87;
+  if (luck >= 94) return 86;
+  return (hash % 85) + 1;
+}
+
+window.openCard = (dateStr) => {
+  const userName =
+    (currentUser &&
+      (currentUser.displayName || currentUser.email.split("@")[0])) ||
+    "Traveler";
+
+  let wotd = "Mystery",
+    wotdPos = "n.",
+    wotdDef = "To explore the unknown.",
+    sentEn = "Keep looking up.",
+    sentCn = "保持仰望星空。",
+    quote = "The stars are calling.",
+    quoteTrans = "群星在召喚。",
+    author = "Universe";
+
+  if (csvData?.words) {
+    const queryDate = dateStr.slice(5);
+    const wordObj = csvData.words.find((r) => r.date === queryDate);
+    const quoteObj = csvData.quotes.find((r) => r.date === queryDate);
+
+    if (wordObj) {
+      wotd = wordObj.word || wotd;
+      wotdPos = wordObj.pos || wotdPos;
+      wotdDef = wordObj.meaning || wotdDef;
+      sentEn = wordObj["sentence e"] || sentEn;
+      sentCn = wordObj["sentence c"] || sentCn;
+    }
+    if (quoteObj) {
+      quote = quoteObj["quote e"] || quote;
+      quoteTrans = quoteObj["quote c"] || quoteTrans;
+      author = quoteObj.author || author;
+    }
   }
 
-  function showLoggedOutUI() {
-    const logout = document.getElementById("logoutBtn");
-    if (logout) logout.style.display = "none";
+  const streakDisplay =
+    document.getElementById("streak-days")?.innerText || "0";
 
-    const u = document.getElementById("universe-view");
-    if (u) u.classList.remove("active");
+  document.getElementById("card-user-name").innerText = userName;
+  document.getElementById("card-display-date").innerText = dateStr;
+  document.getElementById("card-date-serial").innerText =
+    dateStr.replace(/-/g, "");
 
-    const t = document.getElementById("member-terminal");
-    if (t) t.classList.remove("show");
+  document.getElementById("card-wotd").innerText = wotd;
+  document.getElementById("card-pos").innerText = wotdPos;
+  document.getElementById("card-def").innerText = wotdDef;
+  document.getElementById("card-sent-en").innerText = sentEn;
+  document.getElementById("card-sent-cn").innerText = sentCn;
 
-    const overlay = document.getElementById("intro-overlay");
-    if (overlay) {
-      overlay.style.display = "flex";
-      overlay.style.opacity = "1";
-    }
+  document.getElementById("card-quote").innerText = `“${quote}”`;
+  document.getElementById("card-quote-trans").innerText = quoteTrans;
+  document.getElementById("card-author").innerText = author;
+  document.getElementById("card-streak").innerText = streakDisplay;
 
-    const moonEmbed = document.getElementById("moonlight-embed");
-    if (moonEmbed) moonEmbed.style.display = "none";
+  const cardEl = document.getElementById("collectible-card");
+  const themeId = getTemplateIdByDate(dateStr);
+
+  applyTheme(cardEl, themeId);
+  document.getElementById("card-modal").classList.add("active");
+};
+
+function applyTheme(cardEl, themeId) {
+  const t = THEMES[themeId];
+  cardEl.classList.add("card-theme");
+
+  for (let i = 1; i <= 88; i++) cardEl.classList.remove(`theme-fx-${i}`);
+
+  if (t) {
+    cardEl.style.setProperty("--card-bg", t.bg);
+    cardEl.style.setProperty("--card-border", t.border);
+    cardEl.style.setProperty("--card-accent", t.accent);
+    cardEl.style.setProperty("--card-highlight", t.highlight);
+    cardEl.style.setProperty("--card-text", t.text);
+    cardEl.style.setProperty("--card-text-dim", t.textDim);
+    cardEl.style.setProperty("--card-accent-dim", t.accentDim);
+    if (t.fxClass) cardEl.classList.add(t.fxClass);
+  }
+}
+
+window.closeCardModal = () => {
+  document.getElementById("card-modal").classList.remove("active");
+};
+
+window.downloadCardImage = () => {
+  const cardElement = document.getElementById("collectible-card");
+  const btn = document.querySelector(".btn-download");
+  const originalText = btn.innerText;
+  btn.innerText = "Capturing... 📸";
+
+  if (typeof html2canvas === "undefined") {
+    alert("Snapshot library not loaded.");
+    btn.innerText = originalText;
+    return;
   }
 
-  /* ==================== Intro / Envelope ==================== */
-  window.openLetter = () => {
-    const windchime = document.getElementById("windchime");
-    windchime.volume = 0.5;
-    windchime.play().catch(() => {});
-
-    const container = document.querySelector(".envelope-container");
-    if (!container) return;
-
-    container.classList.add("open");
-
-    setTimeout(() => {
-      const letterView = document.getElementById("letter-view");
-      if (letterView) letterView.classList.add("show");
-
-      const paragraphs = document.querySelectorAll(".letter-p");
-      paragraphs.forEach((p, index) => {
-        setTimeout(() => p.classList.add("visible"), index * 800);
-      });
-
-      setTimeout(() => {
-        const choice = document.getElementById("choice-buttons");
-        if (choice) choice.classList.add("visible");
-      }, paragraphs.length * 800 + 400);
-    }, 800);
-  };
-
-  window.enterVisitorMode = () => {
-    const overlay = document.getElementById("intro-overlay");
-    overlay.style.opacity = "0";
-    setTimeout(() => (overlay.style.display = "none"), 1000);
-    document.getElementById("visitor-view").classList.add("active");
-  };
-
-  window.reopenAuth = () => {
-    document.getElementById("visitor-view").classList.remove("active");
-
-    const overlay = document.getElementById("intro-overlay");
-    overlay.style.display = "flex";
-    void overlay.offsetWidth;
-    overlay.style.opacity = "1";
-
-    const container = document.querySelector(".envelope-container");
-    const letterView = document.getElementById("letter-view");
-    if (container && !container.classList.contains("open")) {
-      container.classList.add("open");
-      if (letterView) letterView.classList.add("show");
-    }
-    showAuthForm();
-  };
-
-  window.showAuthForm = () => {
-    document.getElementById("choice-buttons").style.display = "none";
-    document.getElementById("auth-form-container").style.display = "block";
-  };
-
-  window.hideAuthForm = () => {
-    document.getElementById("choice-buttons").style.display = "flex";
-    document.getElementById("auth-form-container").style.display = "none";
-  };
-
-  /* ==================== Universe / Member terminal ==================== */
-  window.openMemberTerminal = () =>
-    document.getElementById("member-terminal").classList.add("show");
-  window.closeMemberTerminal = () =>
-    document.getElementById("member-terminal").classList.remove("show");
-
-  window.visitPlanet = (planetName, url) => {
-    if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
-    setTimeout(() => (window.location.href = url), 300);
-  };
-
-  /* ==================== Auth buttons ==================== */
-  document.getElementById("google-login-btn").addEventListener("click", () => {
-    if (isInApp) {
-      document.getElementById("in-app-browser-warning").style.display = "flex";
-      return;
-    }
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isIOS) {
-      signInWithRedirect(auth, provider).catch((e) =>
-        alert("Login Error: " + e.message)
-      );
-    } else {
-      signInWithPopup(auth, provider).catch((e) =>
-        alert("Login Error: " + e.message)
-      );
-    }
-  });
-
-  document.getElementById("email-login-btn").addEventListener("click", () => {
-    const email = document.getElementById("email-input").value;
-    const pass = document.getElementById("pass-input").value;
-    if (!email || !pass) return alert("Please fill in fields");
-
-    signInWithEmailAndPassword(auth, email, pass).catch((error) => {
-      if (
-        error.code === "auth/user-not-found" ||
-        error.code === "auth/invalid-credential"
-      ) {
-        if (confirm("Create account?"))
-          createUserWithEmailAndPassword(auth, email, pass);
-      } else alert(error.message);
+  html2canvas(cardElement, {
+    scale: 2,
+    backgroundColor: null,
+    useCORS: true
+  })
+    .then((canvas) => {
+      const link = document.createElement("a");
+      const dateText =
+        document.getElementById("card-display-date").innerText;
+      link.download = `Shirley_MoonBase_Card_${dateText}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      btn.innerText = originalText;
+    })
+    .catch(() => {
+      alert("Image capture failed.");
+      btn.innerText = originalText;
     });
-  });
+};
 
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => location.reload());
-  });
+window.handleCheckIn = async () => {
+  if (!currentUser) return;
+  const fullDate = getLocalISODate();
+  if (checkinHistory.includes(fullDate)) return;
 
-  /* ==================== Auth state ==================== */
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      currentUser = user;
-      showLoggedInUI();
+  const btn = document.getElementById("checkin-btn");
+  btn.disabled = true;
+  btn.innerText = "Transmitting...";
 
-      await loadCSVData();
-      await loadUserData(user.uid);
-      renderDailyContent(getTodayMMDD());
-    } else {
-      currentUser = null;
-      showLoggedOutUI();
-    }
-  });
+  try {
+    let currentStreak =
+      parseInt(document.getElementById("streak-days").innerText) || 0;
+    const lastCheckIn =
+      checkinHistory.length > 0
+        ? checkinHistory[checkinHistory.length - 1]
+        : null;
 
-  /* ==================== Firestore helpers ==================== */
-  async function trackActivity(type, detail) {
-    if (!currentUser) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    currentStreak = lastCheckIn === yesterdayStr ? currentStreak + 1 : 1;
+
     const userRef = doc(db, "users", currentUser.uid);
-    try {
-      await updateDoc(userRef, {
-        activityLogs: arrayUnion({
-          date: new Date().toISOString(),
-          type,
-          detail
-        })
-      });
-    } catch {}
-  }
+    const logEntry = {
+      date: new Date().toISOString(),
+      type: "Check-in",
+      detail: "Daily Check-in"
+    };
 
-  async function loadUserData(uid) {
-    const userRef = doc(db, "users", uid);
-    const docSnap = await getDoc(userRef);
-    const fullDate = getLocalISODate();
+    await updateDoc(userRef, {
+      streak: currentStreak,
+      history: arrayUnion(fullDate),
+      activityLogs: arrayUnion(logEntry)
+    });
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      checkinHistory = data.history || [];
-      activityLog = data.activityLogs || [];
+    checkinHistory.push(fullDate);
+    activityLog.push(logEntry);
 
-      document.getElementById("total-days").innerText = checkinHistory.length;
-      document.getElementById("streak-days").innerText = data.streak || 0;
+    document.getElementById("streak-days").innerText = currentStreak;
+    document.getElementById("total-days").innerText = checkinHistory.length;
 
-      if (checkinHistory.includes(fullDate)) {
-        document.getElementById("checkin-btn").disabled = true;
-      }
-    } else {
-      await setDoc(
-        userRef,
-        { email: currentUser.email, history: [], streak: 0, activityLogs: [] },
-        { merge: true }
-      );
-    }
+    btn.innerText = "Moon Check-in Success! 🌕";
 
     renderCalendar();
     renderCardBagList();
+
+    setTimeout(() => window.openCard(fullDate), 800);
+  } catch (e) {
+    console.error(e);
+    btn.innerText = "Check-in Failed";
+    btn.disabled = false;
+  }
+};
+
+window.renderCalendar = () => {
+  const grid = document.getElementById("calendar-grid");
+  grid.innerHTML = "";
+
+  const now = new Date();
+  const daysInMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0
+  ).getDate();
+
+  const currentYearMonth = `${now.getFullYear()}-${String(
+    now.getMonth() + 1
+  ).padStart(2, "0")}`;
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayEl = document.createElement("div");
+    dayEl.innerText = i;
+    dayEl.style.cssText =
+      "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
+
+    const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, "0")}`;
+
+    if (checkinHistory.includes(thisDateStr)) {
+      dayEl.style.background = "var(--accent)";
+      dayEl.style.color = "white";
+      dayEl.style.borderRadius = "50%";
+      dayEl.style.fontWeight = "bold";
+      dayEl.classList.add("calendar-day-checked");
+      dayEl.title = "Tap to open Card Pocket";
+      dayEl.onclick = () => window.openCard(thisDateStr);
+    }
+
+    grid.appendChild(dayEl);
+  }
+};
+
+function renderCardBagList() {
+  const bag = document.getElementById("card-bag-list");
+  if (!bag) return;
+  bag.innerHTML = "";
+
+  if (!checkinHistory.length) {
+    bag.innerHTML =
+      '<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>';
+    return;
   }
 
-  /* ==================== Card / Check-in logic（以下維持你原本） ==================== */
-  function getTemplateIdByDate(dateStr) {
-    if (!dateStr) return 1;
+  const sorted = [...checkinHistory].sort().reverse();
+  const groups = {};
 
-    let uid = "visitor";
-    try {
-      if (currentUser?.uid) uid = currentUser.uid;
-    } catch {}
-
-    const [y, m, d] = dateStr.split("-").map(Number);
-    const seedStr = `${y}${m}${d}-${uid}`;
-
-    let hash = 0;
-    for (let i = 0; i < seedStr.length; i++) {
-      hash = (hash << 5) - hash + seedStr.charCodeAt(i);
-      hash |= 0;
-    }
-    hash = Math.abs(hash);
-
-    const luck = hash % 100;
-    if (luck === 99) return 88;
-    if (luck >= 97) return 87;
-    if (luck >= 94) return 86;
-    return (hash % 85) + 1;
-  }
-
-  window.openCard = (dateStr) => {
-    const userName =
-      (currentUser &&
-        (currentUser.displayName || currentUser.email.split("@")[0])) ||
-      "Traveler";
-
-    let wotd = "Mystery",
-      wotdPos = "n.",
-      wotdDef = "To explore the unknown.",
-      sentEn = "Keep looking up.",
-      sentCn = "保持仰望星空。",
-      quote = "The stars are calling.",
-      quoteTrans = "群星在召喚。",
-      author = "Universe";
-
-    if (csvData?.words) {
-      const queryDate = dateStr.slice(5);
-      const wordObj = csvData.words.find((r) => r.date === queryDate);
-      const quoteObj = csvData.quotes.find((r) => r.date === queryDate);
-
-      if (wordObj) {
-        wotd = wordObj.word || wotd;
-        wotdPos = wordObj.pos || wotdPos;
-        wotdDef = wordObj.meaning || wotdDef;
-        sentEn = wordObj["sentence e"] || sentEn;
-        sentCn = wordObj["sentence c"] || sentCn;
-      }
-      if (quoteObj) {
-        quote = quoteObj["quote e"] || quote;
-        quoteTrans = quoteObj["quote c"] || quoteTrans;
-        author = quoteObj.author || author;
-      }
-    }
-
-    const streakDisplay =
-      document.getElementById("streak-days")?.innerText || "0";
-
-    document.getElementById("card-user-name").innerText = userName;
-    document.getElementById("card-display-date").innerText = dateStr;
-    document.getElementById("card-date-serial").innerText =
-      dateStr.replace(/-/g, "");
-
-    document.getElementById("card-wotd").innerText = wotd;
-    document.getElementById("card-pos").innerText = wotdPos;
-    document.getElementById("card-def").innerText = wotdDef;
-    document.getElementById("card-sent-en").innerText = sentEn;
-    document.getElementById("card-sent-cn").innerText = sentCn;
-
-    document.getElementById("card-quote").innerText = `“${quote}”`;
-    document.getElementById("card-quote-trans").innerText = quoteTrans;
-    document.getElementById("card-author").innerText = author;
-    document.getElementById("card-streak").innerText = streakDisplay;
-
-    const cardEl = document.getElementById("collectible-card");
-    const themeId = getTemplateIdByDate(dateStr);
-
-    applyTheme(cardEl, themeId);
-    document.getElementById("card-modal").classList.add("active");
-  };
-
-  function applyTheme(cardEl, themeId) {
-    const t = THEMES[themeId];
-    cardEl.classList.add("card-theme");
-
-    for (let i = 1; i <= 88; i++) cardEl.classList.remove(`theme-fx-${i}`);
-
-    if (t) {
-      cardEl.style.setProperty("--card-bg", t.bg);
-      cardEl.style.setProperty("--card-border", t.border);
-      cardEl.style.setProperty("--card-accent", t.accent);
-      cardEl.style.setProperty("--card-highlight", t.highlight);
-      cardEl.style.setProperty("--card-text", t.text);
-      cardEl.style.setProperty("--card-text-dim", t.textDim);
-      cardEl.style.setProperty("--card-accent-dim", t.accentDim);
-      if (t.fxClass) cardEl.classList.add(t.fxClass);
-    }
-  }
-
-  window.closeCardModal = () => {
-    document.getElementById("card-modal").classList.remove("active");
-  };
-
-  window.downloadCardImage = () => {
-    const cardElement = document.getElementById("collectible-card");
-    const btn = document.querySelector(".btn-download");
-    const originalText = btn.innerText;
-    btn.innerText = "Capturing... 📸";
-
-    if (typeof html2canvas === "undefined") {
-      alert("Snapshot library not loaded.");
-      btn.innerText = originalText;
-      return;
-    }
-
-    html2canvas(cardElement, {
-      scale: 2,
-      backgroundColor: null,
-      useCORS: true
-    })
-      .then((canvas) => {
-        const link = document.createElement("a");
-        const dateText =
-          document.getElementById("card-display-date").innerText;
-        link.download = `Shirley_MoonBase_Card_${dateText}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        btn.innerText = originalText;
-      })
-      .catch(() => {
-        alert("Image capture failed.");
-        btn.innerText = originalText;
-      });
-  };
-
-  window.handleCheckIn = async () => {
-    if (!currentUser) return;
-    const fullDate = getLocalISODate();
-    if (checkinHistory.includes(fullDate)) return;
-
-    const btn = document.getElementById("checkin-btn");
-    btn.disabled = true;
-    btn.innerText = "Transmitting...";
-
-    try {
-      let currentStreak =
-        parseInt(document.getElementById("streak-days").innerText) || 0;
-      const lastCheckIn =
-        checkinHistory.length > 0
-          ? checkinHistory[checkinHistory.length - 1]
-          : null;
-
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().slice(0, 10);
-
-      currentStreak = lastCheckIn === yesterdayStr ? currentStreak + 1 : 1;
-
-      const userRef = doc(db, "users", currentUser.uid);
-      const logEntry = {
-        date: new Date().toISOString(),
-        type: "Check-in",
-        detail: "Daily Check-in"
-      };
-
-      await updateDoc(userRef, {
-        streak: currentStreak,
-        history: arrayUnion(fullDate),
-        activityLogs: arrayUnion(logEntry)
-      });
-
-      checkinHistory.push(fullDate);
-      activityLog.push(logEntry);
-
-      document.getElementById("streak-days").innerText = currentStreak;
-      document.getElementById("total-days").innerText = checkinHistory.length;
-
-      btn.innerText = "Moon Check-in Success! 🌕";
-
-      renderCalendar();
-      renderCardBagList();
-
-      setTimeout(() => window.openCard(fullDate), 800);
-    } catch (e) {
-      console.error(e);
-      btn.innerText = "Check-in Failed";
-      btn.disabled = false;
-    }
-  };
-
-  window.renderCalendar = () => {
-    const grid = document.getElementById("calendar-grid");
-    grid.innerHTML = "";
-
-    const now = new Date();
-    const daysInMonth = new Date(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      0
-    ).getDate();
-
-    const currentYearMonth = `${now.getFullYear()}-${String(
-      now.getMonth() + 1
-    ).padStart(2, "0")}`;
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      const dayEl = document.createElement("div");
-      dayEl.innerText = i;
-      dayEl.style.cssText =
-        "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
-
-      const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, "0")}`;
-
-      if (checkinHistory.includes(thisDateStr)) {
-        dayEl.style.background = "var(--accent)";
-        dayEl.style.color = "white";
-        dayEl.style.borderRadius = "50%";
-        dayEl.style.fontWeight = "bold";
-        dayEl.classList.add("calendar-day-checked");
-        dayEl.title = "Tap to open Card Pocket";
-        dayEl.onclick = () => window.openCard(thisDateStr);
-      }
-
-      grid.appendChild(dayEl);
-    }
-  };
-
-  function renderCardBagList() {
-    const bag = document.getElementById("card-bag-list");
-    if (!bag) return;
-    bag.innerHTML = "";
-
-    if (!checkinHistory.length) {
-      bag.innerHTML =
-        '<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>';
-      return;
-    }
-
-    const sorted = [...checkinHistory].sort().reverse();
-    const groups = {};
-
-    sorted.forEach((d) => {
-      const ym = d.slice(0, 7);
-      (groups[ym] ||= []).push(d);
-    });
-
-    Object.keys(groups)
-      .sort()
-      .reverse()
-      .forEach((ym) => {
-        const section = document.createElement("div");
-        section.style.cssText =
-          "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
-
-        const title = document.createElement("div");
-        title.innerText = ym;
-        title.style.cssText =
-          "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
-        section.appendChild(title);
-
-        const row = document.createElement("div");
-        row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
-
-        groups[ym].forEach((dateStr) => {
-          const btn = document.createElement("button");
-          btn.innerText = dateStr.slice(8);
-          btn.style.cssText = `
-            padding:4px 8px; border-radius:999px; border:1px solid var(--border);
-            background:var(--surface); color:var(--text); font-size:0.75rem;
-            cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1);
-          `;
-          btn.title = dateStr;
-          btn.onclick = () => window.openCard(dateStr);
-          row.appendChild(btn);
-        });
-
-        section.appendChild(row);
-        bag.appendChild(section);
-      });
-  }
-
-  /* ==================== CSV ==================== */
-  async function loadCSVData() {
-    try {
-      const [resWords, resQuotes] = await Promise.all([
-        fetch("https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv"),
-        fetch("https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv")
-      ]);
-
-      csvData.words = parseCSV(await resWords.text());
-      csvData.quotes = parseCSV(await resQuotes.text());
-    } catch (e) {
-      console.warn("CSV load failed:", e);
-    }
-  }
-
-  function parseCSV(text) {
-    const lines = text.trim().split("\n");
-    const headers = lines[0].split(",").map((h) => h.trim());
-
-    return lines.slice(1).map((line) => {
-      const row = {};
-      const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
-
-      const matches = [];
-      let match;
-      while ((match = regex.exec(line)) !== null) {
-        if (match.index === regex.lastIndex) regex.lastIndex++;
-        if (match[1] !== undefined)
-          matches.push(
-            match[1].replace(/^"|"$/g, "").replace(/""/g, '"')
-          );
-      }
-
-      headers.forEach((h, i) => (row[h] = matches[i] ? matches[i].trim() : ""));
-      return row;
-    });
-  }
-
-  function renderDailyContent(dateStr) {
-    const wordObj = csvData.words.find((r) => r.date === dateStr);
-    if (wordObj) {
-      document.getElementById("wotd-word").innerText = wordObj.word;
-      document.getElementById("wotd-ipa").innerText = wordObj.ipa;
-      document.getElementById("wotd-pos").innerText = wordObj.pos;
-      document.getElementById("wotd-meaning").innerText = wordObj.meaning;
-      document.getElementById("wotd-sentence-e").innerText = wordObj["sentence e"];
-      document.getElementById("wotd-sentence-c").innerText = wordObj["sentence c"];
-      document.getElementById("word-date").innerText = `(${dateStr})`;
-    }
-
-    const quoteObj = csvData.quotes.find((r) => r.date === dateStr);
-    if (quoteObj) {
-      document.getElementById("qotd-text").innerText = quoteObj["quote e"];
-      document.getElementById("qotd-trans").innerText = quoteObj["quote c"];
-      document.getElementById("qotd-author").innerText = "— " + quoteObj.author;
-    }
-  }
-
-  /* ==================== Particles + UI toggles（維持你原本） ==================== */
-  const canvas = document.getElementById("particle-canvas");
-  const ctx = canvas.getContext("2d");
-  let particlesArray = [];
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2;
-      this.speedX = Math.random() * 0.2 - 0.1;
-      this.speedY = Math.random() * 0.2 - 0.1;
-      this.opacity = Math.random() * 0.5;
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.x > canvas.width) this.x = 0;
-      if (this.x < 0) this.x = canvas.width;
-      if (this.y > canvas.height) this.y = 0;
-      if (this.y < 0) this.y = canvas.height;
-    }
-    draw(isDark) {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = isDark
-        ? `rgba(255,255,255,${this.opacity})`
-        : `rgba(44,62,80,${this.opacity * 0.5})`;
-      ctx.fill();
-    }
-  }
-
-  function initParticles() {
-    particlesArray = [];
-    for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
-  }
-
-  function animateParticles() {
-    requestAnimationFrame(animateParticles);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const isDark = document.getElementById("htmlRoot").classList.contains("dark");
-    particlesArray.forEach((p) => {
-      p.update();
-      p.draw(isDark);
-    });
-  }
-
-  window.addEventListener("resize", () => {
-    resizeCanvas();
-    initParticles();
+  sorted.forEach((d) => {
+    const ym = d.slice(0, 7);
+    (groups[ym] ||= []).push(d);
   });
 
+  Object.keys(groups)
+    .sort()
+    .reverse()
+    .forEach((ym) => {
+      const section = document.createElement("div");
+      section.style.cssText =
+        "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
+
+      const title = document.createElement("div");
+      title.innerText = ym;
+      title.style.cssText =
+        "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
+      section.appendChild(title);
+
+      const row = document.createElement("div");
+      row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
+
+      groups[ym].forEach((dateStr) => {
+        const btn = document.createElement("button");
+        btn.innerText = dateStr.slice(8);
+        btn.style.cssText = `
+          padding:4px 8px; border-radius:999px; border:1px solid var(--border);
+          background:var(--surface); color:var(--text); font-size:0.75rem;
+          cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        `;
+        btn.title = dateStr;
+        btn.onclick = () => window.openCard(dateStr);
+        row.appendChild(btn);
+      });
+
+      section.appendChild(row);
+      bag.appendChild(section);
+    });
+}
+
+/* ==================== CSV ==================== */
+async function loadCSVData() {
+  try {
+    const [resWords, resQuotes] = await Promise.all([
+      fetch("https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv"),
+      fetch("https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv")
+    ]);
+
+    csvData.words = parseCSV(await resWords.text());
+    csvData.quotes = parseCSV(await resQuotes.text());
+  } catch (e) {
+    console.warn("CSV load failed:", e);
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  const headers = lines[0].split(",").map((h) => h.trim());
+
+  return lines.slice(1).map((line) => {
+    const row = {};
+    const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
+
+    const matches = [];
+    let match;
+    while ((match = regex.exec(line)) !== null) {
+      if (match.index === regex.lastIndex) regex.lastIndex++;
+      if (match[1] !== undefined)
+        matches.push(
+          match[1].replace(/^"|"$/g, "").replace(/""/g, '"')
+        );
+    }
+
+    headers.forEach((h, i) => (row[h] = matches[i] ? matches[i].trim() : ""));
+    return row;
+  });
+}
+
+function renderDailyContent(dateStr) {
+  const wordObj = csvData.words.find((r) => r.date === dateStr);
+  if (wordObj) {
+    document.getElementById("wotd-word").innerText = wordObj.word;
+    document.getElementById("wotd-ipa").innerText = wordObj.ipa;
+    document.getElementById("wotd-pos").innerText = wordObj.pos;
+    document.getElementById("wotd-meaning").innerText = wordObj.meaning;
+    document.getElementById("wotd-sentence-e").innerText = wordObj["sentence e"];
+    document.getElementById("wotd-sentence-c").innerText = wordObj["sentence c"];
+    document.getElementById("word-date").innerText = `(${dateStr})`;
+  }
+
+  const quoteObj = csvData.quotes.find((r) => r.date === dateStr);
+  if (quoteObj) {
+    document.getElementById("qotd-text").innerText = quoteObj["quote e"];
+    document.getElementById("qotd-trans").innerText = quoteObj["quote c"];
+    document.getElementById("qotd-author").innerText = "— " + quoteObj.author;
+  }
+}
+
+/* ==================== Particles + UI toggles（維持你原本） ==================== */
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
+let particlesArray = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2;
+    this.speedX = Math.random() * 0.2 - 0.1;
+    this.speedY = Math.random() * 0.2 - 0.1;
+    this.opacity = Math.random() * 0.5;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
+  }
+  draw(isDark) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = isDark
+      ? `rgba(255,255,255,${this.opacity})`
+      : `rgba(44,62,80,${this.opacity * 0.5})`;
+    ctx.fill();
+  }
+}
+
+function initParticles() {
+  particlesArray = [];
+  for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
+}
+
+function animateParticles() {
+  requestAnimationFrame(animateParticles);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const isDark = document.getElementById("htmlRoot").classList.contains("dark");
+  particlesArray.forEach((p) => {
+    p.update();
+    p.draw(isDark);
+  });
+}
+
+window.addEventListener("resize", () => {
   resizeCanvas();
   initParticles();
-  animateParticles();
+});
 
-  const html = document.getElementById("htmlRoot");
-  document.getElementById("themeToggle").addEventListener("click", () => {
-    html.classList.toggle("dark");
-  });
+resizeCanvas();
+initParticles();
+animateParticles();
 
-  const musicToggle = document.getElementById("musicToggle");
-  const themeSong = document.getElementById("themeSong");
-  let isPlaying = false;
+const html = document.getElementById("htmlRoot");
+document.getElementById("themeToggle").addEventListener("click", () => {
+  html.classList.toggle("dark");
+});
 
-  musicToggle.addEventListener("click", () => {
-    if (isPlaying) {
-      themeSong.pause();
-      musicToggle.style.color = "var(--text)";
-    } else {
-      themeSong.currentTime = 0;
-      themeSong.play().catch(()=>{});
-      musicToggle.style.color = "var(--accent)";
-    }
-    isPlaying = !isPlaying;
-  });
+const musicToggle = document.getElementById("musicToggle");
+const themeSong = document.getElementById("themeSong");
+let isPlaying = false;
+
+musicToggle.addEventListener("click", () => {
+  if (isPlaying) {
+    themeSong.pause();
+    musicToggle.style.color = "var(--text)";
+  } else {
+    themeSong.currentTime = 0;
+    themeSong.play().catch(()=>{});
+    musicToggle.style.color = "var(--accent)";
+  }
+  isPlaying = !isPlaying;
+});
 </script>
   </body>
 </html>
