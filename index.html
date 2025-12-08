@@ -1512,170 +1512,189 @@ onAuthStateChanged(auth, async (user) => {
         else { themeSong.currentTime=0; themeSong.play(); musicToggle.style.color="var(--accent)"; }
         isPlaying = !isPlaying;
     });
-   /* --- 🚀 Lunar Glow Cache 核心邏輯 --- */
+<!-- 🌙 Moonlight Box Module START -->
+<section id="moonlight-box" class="mlb-panel">
+  <header class="mlb-header">
+    <h2 class="mlb-title">🌙 月光寶盒</h2>
+    <div class="mlb-subtitle">Lunar Glow Cache — 完成任務自動累積月光</div>
+  </header>
 
-// 常數設定
-const MOON_CYCLE = 300; // 300點為一個滿月循環
-const MIN_STUDY_TIME = 120000; // 2分鐘 (毫秒)
-
-// 頁面加載時初始化
-document.addEventListener('DOMContentLoaded', () => {
-    updateMoonInterface();
-});
-
-// 1. 開始任務 (紀錄時間)
-function startLunarMission(event) {
-    event.preventDefault();
-    const now = Date.now();
-    sessionStorage.setItem('lunar_start_time', now);
-    console.log("Mission Timer Started at: " + new Date(now).toLocaleTimeString());
-    const href = event.currentTarget.href;
-    setTimeout(() => {
-        window.open(href, '_blank');
-    }, 300);
-}
-// 2. 提交成績
-function submitLunarGlow() {
-    // A. 防作弊時間檢查
-    const startTime = sessionStorage.getItem('lunar_start_time');
-    const now = Date.now();
-    
-    // 如果沒有開始時間，或者時間差小於 2 分鐘
-    if (!startTime || (now - startTime) < MIN_STUDY_TIME) {
-        alert("⚠️ 月光需要時間凝聚！\n請至少專注練習 2 分鐘後再收集。\n(系統偵測到時間過短)");
-        return;
-    }
-
-    // B. 獲取輸入
-    const correctVal = parseInt(document.getElementById('moon-correct').value) || 0;
-    const wrongVal = parseInt(document.getElementById('moon-wrong').value) || 0;
-    const levelVal = document.getElementById('moon-level').value;
-    const unitVal = document.getElementById('moon-unit').value;
-
-    if (correctVal === 0 && wrongVal === 0) {
-        alert("請輸入正確或錯誤題數。");
-        return;
-    }
-
-    // C. 計算本場月光 (Thread of Moonlight)
-    // 簡單邏輯：總題數作為獲得的月光量 (您可以根據難度調整，例如 Correct * 2)
-    const threadGained = correctVal + wrongVal; 
-
-    // D. 讀取並更新總分
-    let totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-    let fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-
-    // 累積
-    totalMoonlight += threadGained;
-
-    // E. 檢查是否達成滿月循環
-    if (totalMoonlight >= MOON_CYCLE) {
-        // 增加滿月庫存
-        fullMoonStorage += 1;
-        // 扣除循環分數 (進入下一輪)
-        totalMoonlight = totalMoonlight - MOON_CYCLE;
-        
-        // 儲存滿月數
-        localStorage.setItem('shirley_full_moon_count', fullMoonStorage);
-        
-        // 如果是第一次獲得滿月，觸發獎勵卡片
-        if (fullMoonStorage === 1) {
-            showRewardCard();
-        } else {
-            alert(`🌕 月光凝聚完成！你獲得了第 ${fullMoonStorage} 個滿月！`);
-        }
-    }
-
-    // F. 儲存新進度
-    localStorage.setItem('shirley_total_moonlight', totalMoonlight);
-    
-    // G. 清空計時器與輸入框 (方便下次)
-    sessionStorage.removeItem('lunar_start_time');
-    document.getElementById('moon-correct').value = '';
-    document.getElementById('moon-wrong').value = '';
-    document.getElementById('moon-level').value = '';
-    document.getElementById('moon-unit').value = '';
-
-    // H. 更新介面
-    updateMoonInterface();
-    alert(`✨ 成功擷取 ${threadGained} 縷月光！`);
-}
-
-// 3. 更新介面顯示 (月相與進度)
-function updateMoonInterface() {
-    const totalMoonlight = parseInt(localStorage.getItem('shirley_total_moonlight') || '0');
-    const fullMoonStorage = parseInt(localStorage.getItem('shirley_full_moon_count') || '0');
-
-    // 更新庫存
-    const storageText = fullMoonStorage > 0 ? `🌕 x ${fullMoonStorage}` : `🌕 x 0`;
-    document.getElementById('full-moon-count').innerText = storageText;
-
-    // 更新當前進度文字
-    document.getElementById('current-thread').innerText = totalMoonlight;
-
-    // 更新進度條
-    const percent = Math.min((totalMoonlight / MOON_CYCLE) * 100, 100);
-    document.getElementById('moon-progress-bar').style.width = `${percent}%`;
-
-    // 判斷月相
-    const phaseIcon = document.getElementById('phase-icon');
-    const phaseName = document.getElementById('phase-name');
-
-    if (totalMoonlight <= 30) {
-        phaseIcon.innerText = "🌑";
-        phaseName.innerText = "New Moon 朔月";
-    } else if (totalMoonlight <= 60) {
-        phaseIcon.innerText = "🌒";
-        phaseName.innerText = "Waxing Crescent 眉月";
-    } else if (totalMoonlight <= 120) {
-        phaseIcon.innerText = "🌓";
-        phaseName.innerText = "First Quarter 上弦月";
-    } else if (totalMoonlight <= 180) {
-        phaseIcon.innerText = "🌔";
-        phaseName.innerText = "Waxing Gibbous 盈凸月";
-    } else {
-        phaseIcon.innerText = "🌕"; // 接近滿月的光輝
-        phaseName.innerText = "Full Moon Phase 望月";
-        phaseIcon.style.textShadow = "0 0 20px #ffd700"; // 發光特效
-    }
-}
-
-// 4. 獎勵卡片功能
-function showRewardCard() {
-    const modal = document.getElementById('moon-reward-modal');
-    let userName = "Traveler";
-    if (currentUser && currentUser.displayName) {
-        userName = currentUser.displayName;
-    } else if (currentUser && currentUser.email) {
-        userName = currentUser.email.split('@')[0];
-    }
-    document.getElementById('reward-user-name').innerText = userName;
-    modal.style.display = 'flex';
-}
-
-function closeRewardModal() {
-    document.getElementById('moon-reward-modal').style.display = 'none';
-}
-
-function downloadRewardCard() {
-    const card = document.getElementById('capture-reward-card');
-    html2canvas(card, { backgroundColor: null }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'Shirley_Moon_Reward.png';
-        link.href = canvas.toDataURL();
-        link.click();
-    });
-}
-  </script>
-  <div id="glass-box-wrapper">
-    <div id="glass-box-container" style="display:none;">
-        <div class="glass-box" id="myGlassBox">
-            <div class="glass-label">Collected</div>
-            <div class="glass-value" id="glass-box-value">0</div>
-            <div class="glass-sub">Glowing Threads</div>
-        </div>
+  <!-- 月相 / 點數總覽 -->
+  <div class="mlb-card mlb-moon-ui">
+    <div class="mlb-moon-emoji" id="mlb-moon-emoji">🌑</div>
+    <div class="mlb-moon-stats">
+      <div class="mlb-stat">目前月光點數：<b id="mlb-total">0</b> pts</div>
+      <div class="mlb-stat">本輪滿月進度：<b id="mlb-cycle">0</b> / 300</div>
+      <div class="mlb-progress-wrap">
+        <div class="mlb-progress-bar" id="mlb-progress"></div>
+      </div>
+      <div class="mlb-stat">月相階段：<b id="mlb-phase-text">New Moon</b></div>
     </div>
-</div>
+  </div>
+
+  <div class="mlb-row">
+    <!-- 任務入口 -->
+    <div class="mlb-col mlb-card">
+      <h3 class="mlb-card-title">🚀 Lunar Missions（月光任務）</h3>
+
+      <div class="mlb-task-list">
+        <a class="mlb-task" href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html"
+           target="_blank" rel="noopener"
+           data-mission="GSAT 真題">
+          <span>Mission 1：GSAT 真題</span>
+          <span class="mlb-task-tag">開始</span>
+        </a>
+
+        <a class="mlb-task" href="https://ivocab-quiz.vercel.app/"
+           target="_blank" rel="noopener"
+           data-mission="iVocab 考題">
+          <span>Mission 2：iVocab 考題</span>
+          <span class="mlb-task-tag">開始</span>
+        </a>
+
+        <!-- Mission 3: TBA（先留著，顯示「即將開放」） -->
+        <div class="mlb-task mlb-task-disabled">
+          <span>Mission 3：TBA</span>
+          <span class="mlb-task-tag">即將開放</span>
+        </div>
+
+        <!-- Mission 4：以後你要新增，只要照 Mission 1/2 形式再加一條 a -->
+      </div>
+
+      <div class="mlb-hint">
+        任務完成後，系統會自動把「正確題數」回傳到主站並更新月光。<br/>
+        （不需等待、不需手填）
+      </div>
+    </div>
+
+    <!-- 自動收集狀態 -->
+    <div class="mlb-col mlb-card">
+      <h3 class="mlb-card-title">🧪 Auto Collection（自動收集）</h3>
+
+      <div class="mlb-auto-box">
+        <div class="mlb-stat">
+          最近收到的任務成績：
+          <b id="mlb-last-result">尚未收到</b>
+        </div>
+
+        <button class="mlb-btn mlb-btn-ghost" id="mlb-recheck">
+          🔄 檢查是否有新成績
+        </button>
+
+        <div class="mlb-hint">
+          若任務頁面回傳成功，這裡會顯示正確題數，並立即累積月光。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近收集紀錄 -->
+  <div class="mlb-card">
+    <h3 class="mlb-card-title">📜 Recent Lunar Logs（最近收集）</h3>
+    <div class="mlb-log-box" id="mlb-log-box"></div>
+
+    <div class="mlb-hint" id="mlb-login-hint" style="display:none;">
+      你目前尚未登入，月光寶盒只會對登入帳號記錄。請先登入主站。
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Moonlight Box Module Styles (scoped) ===== */
+  #moonlight-box{
+    --bg: rgba(255,255,255,0.06);
+    --bg2: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.15);
+    --text: #ecf0f1;
+    --dim: #b2bec3;
+    --accent: #f1c40f;
+    --accent2: #7ed6ff;
+    font-family: "Exo 2","Noto Sans TC",sans-serif;
+    color: var(--text);
+  }
+  .mlb-panel{
+    width:100%; max-width:980px; margin:0 auto 16px auto;
+    background: var(--bg); border:1px solid var(--border);
+    border-radius:18px; padding:18px;
+    backdrop-filter: blur(8px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.35);
+  }
+  .mlb-header{text-align:center; margin-bottom:12px;}
+  .mlb-title{margin:0; font-size:1.6rem; letter-spacing:1px;}
+  .mlb-subtitle{color:var(--dim); font-size:0.95rem;}
+
+  .mlb-row{display:flex; gap:12px; flex-wrap:wrap;}
+  .mlb-col{flex:1; min-width:280px;}
+
+  .mlb-card{
+    background:var(--bg2);
+    border:1px dashed var(--border);
+    border-radius:14px; padding:14px; margin-bottom:12px;
+  }
+  .mlb-card-title{
+    margin:0 0 8px 0; font-size:1.05rem; letter-spacing:0.5px;
+    color:var(--accent);
+  }
+
+  .mlb-moon-ui{display:flex; align-items:center; gap:14px;}
+  .mlb-moon-emoji{font-size:2.6rem; width:52px; text-align:center;}
+  .mlb-moon-stats{display:flex; flex-direction:column; gap:6px; width:100%;}
+  .mlb-stat{font-size:0.92rem; color:var(--dim);}
+  .mlb-stat b{color:var(--text); font-size:1.05rem;}
+
+  .mlb-progress-wrap{
+    background:rgba(255,255,255,0.08);
+    border-radius:999px; overflow:hidden; height:12px;
+    border:1px solid var(--border);
+  }
+  .mlb-progress-bar{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    transition:width 0.6s ease;
+    box-shadow:0 0 12px rgba(241,196,15,0.6);
+  }
+
+  .mlb-task-list{display:flex; flex-direction:column; gap:8px;}
+  .mlb-task{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 12px; border-radius:10px;
+    background:rgba(0,0,0,0.25);
+    border:1px solid var(--border);
+    text-decoration:none; color:var(--text);
+    transition:0.2s;
+  }
+  .mlb-task:hover{
+    transform:translateY(-2px);
+    border-color:var(--accent);
+    box-shadow:0 4px 14px rgba(0,0,0,0.35);
+  }
+  .mlb-task-tag{font-size:0.8rem; color:var(--dim);}
+  .mlb-task-disabled{
+    opacity:0.6; cursor:not-allowed;
+  }
+
+  .mlb-btn{
+    width:100%; padding:10px 12px; border-radius:999px;
+    font-weight:700; font-size:1rem; cursor:pointer; border:none;
+    margin-top:10px; transition:0.2s;
+  }
+  .mlb-btn-ghost{
+    background:transparent; border:1px solid var(--border); color:var(--text);
+  }
+  .mlb-btn-ghost:hover{border-color:var(--accent); transform:translateY(-1px);}
+
+  .mlb-hint{font-size:0.85rem; color:var(--dim); line-height:1.6; margin-top:6px;}
+
+  .mlb-log-box{max-height:240px; overflow:auto; padding-right:6px;}
+  .mlb-log-item{
+    padding:8px 10px; border-radius:8px;
+    background:rgba(0,0,0,0.25); border:1px solid var(--border);
+    margin-bottom:6px; font-size:0.9rem;
+    display:flex; justify-content:space-between; gap:8px;
+  }
+  .mlb-log-time{color:var(--dim); font-size:0.8rem;}
+</style>
+<!-- 🌙 Moonlight Box Module END -->
 
 <script>
 (function() {
@@ -1839,8 +1858,224 @@ function downloadRewardCard() {
         if(stEl) stEl.innerText = storage;
         if(phEl) phEl.innerText = total;
     }
-
 })();
+</script>
+  <script type="module">
+  // ====== 取用主站 Firebase ======
+  function getAuthDB(){
+    // 兼容多種主站寫法
+    const auth = window.__AUTH__ || window.auth || window.firebaseAuth;
+    const db   = window.__DB__   || window.db   || window.firestoreDB;
+    if (!auth || !db) {
+      console.error("[MoonlightBox] Firebase auth/db not found on main site.");
+    }
+    return {auth, db};
+  }
+
+  // 從 firebase sdk（主站應該已載入；若沒載入就不會跑到這）
+  import {
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+  import {
+    doc, getDoc, setDoc, updateDoc, arrayUnion, increment
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+  const {auth, db} = getAuthDB();
+
+  // ====== 常數 ======
+  const MOON_CYCLE = 300;
+
+  let currentUser = null;
+  let moonData = { totalGlow:0, cycleGlow:0, logs:[] };
+
+  // ====== 月相 UI ======
+  function phaseByPercent(p){
+    if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
+    if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
+    if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
+    if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
+    if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
+    if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
+    if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
+    return {emoji:"🌘", text:"Waning Crescent / 殘月"};
+  }
+
+  function renderMoonUI(){
+    const totalEl = document.getElementById("mlb-total");
+    const cycleEl = document.getElementById("mlb-cycle");
+    const barEl   = document.getElementById("mlb-progress");
+    const emojiEl = document.getElementById("mlb-moon-emoji");
+    const phaseEl = document.getElementById("mlb-phase-text");
+
+    if (!totalEl) return; // 模組不在頁面上就跳過
+
+    totalEl.innerText = moonData.totalGlow || 0;
+    cycleEl.innerText = moonData.cycleGlow || 0;
+
+    const percent = Math.min((moonData.cycleGlow || 0)/MOON_CYCLE, 1);
+    barEl.style.width = `${percent*100}%`;
+
+    const phase = phaseByPercent(percent);
+    emojiEl.innerText = phase.emoji;
+    phaseEl.innerText = phase.text;
+
+    renderLogs();
+  }
+
+  function renderLogs(){
+    const box = document.getElementById("mlb-log-box");
+    if (!box) return;
+
+    box.innerHTML = "";
+    const logs = moonData.logs || [];
+    if (logs.length===0){
+      box.innerHTML = `<div class="mlb-hint">目前還沒有月光紀錄。</div>`;
+      return;
+    }
+
+    logs.slice().reverse().slice(0,30).forEach(l=>{
+      const div = document.createElement("div");
+      div.className="mlb-log-item";
+      const time = new Date(l.time).toLocaleString();
+      div.innerHTML = `
+        <div>
+          +<b>${l.glow}</b> pts
+          <span style="color:#aaa;">(✅${l.correct})</span>
+          <span style="color:#bbb;">${l.mission? " · "+l.mission:""}</span>
+        </div>
+        <div class="mlb-log-time">${time}</div>
+      `;
+      box.appendChild(div);
+    });
+  }
+
+  // ====== 讀 Firestore（只用 uid） ======
+  async function loadMoonData(uid){
+    const userRef = doc(db, "users", uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()){
+      await setDoc(userRef, {
+        moonGlowTotal:0,
+        moonGlowCycle:0,
+        moonGlowLogs:[]
+      }, {merge:true});
+      moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+      renderMoonUI();
+      return;
+    }
+    const d = snap.data();
+    moonData.totalGlow = d.moonGlowTotal || 0;
+    moonData.cycleGlow = d.moonGlowCycle || 0;
+    moonData.logs = d.moonGlowLogs || [];
+    renderMoonUI();
+  }
+
+  // ====== ✅ 新計分邏輯（系統根據 correctCount 自動累積）=====
+  // 你可自由改倍率
+  function calcGlow(correctCount){
+    // 月光 = 正確題數 × 5
+    return Math.max(0, (correctCount||0) * 5);
+  }
+
+  async function applyResult({correctCount, mission}){
+    if (!currentUser) {
+      document.getElementById("mlb-login-hint").style.display="block";
+      return;
+    }
+
+    const correct = parseInt(correctCount)||0;
+    if (correct<=0) return;
+
+    const glow = calcGlow(correct);
+
+    // cycle溢出
+    let newCycle = (moonData.cycleGlow||0) + glow;
+    if (newCycle >= MOON_CYCLE) newCycle = newCycle % MOON_CYCLE;
+
+    const logEntry = {
+      time: new Date().toISOString(),
+      correct,
+      glow,
+      mission: mission || null
+    };
+
+    const userRef = doc(db,"users",currentUser.uid);
+    await updateDoc(userRef,{
+      moonGlowTotal: increment(glow),
+      moonGlowCycle: newCycle,
+      moonGlowLogs: arrayUnion(logEntry),
+      activityLogs: arrayUnion({
+        date: new Date().toISOString(),
+        type: "Lunar Glow",
+        detail: `Collected ${glow} pts (✅${correct}) ${mission? "["+mission+"]":""}`
+      })
+    });
+
+    // 本地同步
+    moonData.totalGlow += glow;
+    moonData.cycleGlow = newCycle;
+    moonData.logs.push(logEntry);
+
+    renderMoonUI();
+    showLastResult(correct, mission, glow);
+
+    // 用完就清掉暫存避免重複加分
+    localStorage.removeItem("lunar_pending_result");
+  }
+
+  function showLastResult(correct, mission, glow){
+    const el = document.getElementById("mlb-last-result");
+    if (!el) return;
+    el.innerHTML = `✅${correct} 題 → +${glow} pts ${mission? " · "+mission:""}`;
+  }
+
+  // ====== 接收任務頁面回傳成績（兩種方式都支援）=====
+  // A) postMessage
+  window.addEventListener("message", (e)=>{
+    // 你自己的任務站都可加這個，不限制 domain 也可
+    const data = e.data;
+    if (!data || data.type!=="LUNAR_RESULT") return;
+
+    // data = {type:"LUNAR_RESULT", correctCount:xx, mission:"GSAT 真題"}
+    localStorage.setItem("lunar_pending_result", JSON.stringify(data));
+    applyResult(data);
+  });
+
+  // B) localStorage（同源任務頁）
+  function checkPending(){
+    const raw = localStorage.getItem("lunar_pending_result");
+    if (!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      if (data && data.correctCount) applyResult(data);
+    }catch(err){
+      console.warn("[MoonlightBox] pending_result parse failed", err);
+    }
+  }
+
+  document.getElementById("mlb-recheck")?.addEventListener("click", checkPending);
+
+  // ====== Auth 綁定（只看登入帳號）=====
+  onAuthStateChanged(auth, async (user)=>{
+    currentUser = user || null;
+
+    const hint = document.getElementById("mlb-login-hint");
+    if (!currentUser){
+      if (hint) hint.style.display="block";
+      moonData={totalGlow:0, cycleGlow:0, logs:[]};
+      renderMoonUI();
+      return;
+    }
+
+    if (hint) hint.style.display="none";
+    await loadMoonData(currentUser.uid);
+    checkPending();
+  });
+
+  // 初始渲染
+  document.addEventListener("DOMContentLoaded", renderMoonUI);
 </script>
 </body>
 </html>
