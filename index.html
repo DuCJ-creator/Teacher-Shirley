@@ -12,18 +12,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap"
-      rel="stylesheet"
-    />
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:wght@300;400;500;700&family=Noto+Sans+TC:wght@400;600&family=Noto+Serif+TC:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@700&display=swap"
+  rel="stylesheet"
+/>
     <link
       rel="icon"
       href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>'
     />
 
     <style id="themeStyles">
+      .btn-card-action:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+      :root {
+  /* existing vars ... */
+
+  /* ✅ Phase 2 add-ons */
+  --accent-hover: #a6760a;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-soft: 0 6px 16px rgba(0,0,0,0.12);
+  --shadow-deep: 0 15px 40px rgba(0,0,0,0.5);
+  --surface-blur: blur(10px);
+}
+
+.dark {
+  /* existing vars ... */
+
+  /* ✅ Phase 2 add-ons */
+  --accent-hover: #ffd54f;
+}
       :root {
         /* --- Light Mode (Morning Mist) --- */
         --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -509,12 +532,12 @@
       }
 
       /* ✅ FIX: font-family typo */
-      .env-subtitle {
-        font-family: "Dancing Script";
-        font-size: 1.2rem;
-        color: #8d6e63;
-        margin-bottom: 15px;
-      }
+    .env-subtitle {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.2rem;
+  color: #8d6e63;
+  margin-bottom: 15px;
+}
 
       .env-highlight {
         font-family: "Exo 2";
@@ -788,10 +811,7 @@
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
       }
 
-      .btn-login:hover {
-        background: var(--accent-hover);
-        transform: translateY(-2px);
-      }
+      .btn-login:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
       #auth-form-container {
         display: none;
@@ -1580,1005 +1600,6 @@
         color: white;
         border: 1px solid rgba(255, 255, 255, 0.3);
       }
-
-      .btn-card-action:hover {
-        transform: translateY(-3px);
-        filter: brightness(1.1);
-      }
-
-      /* ==================== THEMES ==================== */
-      /* 1. Midnight Gold (經典黑金) */
-      .theme-1 {
-        --card-bg: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-        --card-border: #b8860b;
-        --card-accent: #ffd700;
-        --card-highlight: #fff;
-        --card-text: #e0e0e0;
-        --card-text-dim: #8fa1b3;
-        --card-accent-dim: rgba(184, 134, 11, 0.2);
-      }
-
-      /* 2. Silver Mist (冷銀月霧) */
-      .theme-2 {
-        --card-bg: linear-gradient(135deg, #2c3e50, #4ca1af);
-        --card-border: #bdc3c7;
-        --card-accent: #ecf0f1;
-        --card-highlight: #fff;
-        --card-text: #ecf0f1;
-        --card-text-dim: #bdc3c7;
-        --card-accent-dim: rgba(255, 255, 255, 0.2);
-      }
-
-      /* 3. Deep Nebula (深邃星雲 - 紫) */
-      .theme-3 {
-        --card-bg: radial-gradient(circle at 10% 20%, #240b36, #c31432);
-        --card-border: #ffafbd;
-        --card-accent: #ffc3a0;
-        --card-highlight: #fff0f5;
-        --card-text: #ffe4e1;
-        --card-text-dim: #d8bfd8;
-        --card-accent-dim: rgba(255, 175, 189, 0.2);
-      }
-
-      /* 4. Obsidian (黑曜石) */
-      .theme-4 {
-        --card-bg: #121212;
-        --card-border: #333;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #ccc;
-        --card-text-dim: #666;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-      }
-
-      /* 5. Royal Blue (皇家夜藍) */
-      .theme-5 {
-        --card-bg: linear-gradient(to bottom, #141e30, #243b55);
-        --card-border: #f1c40f;
-        --card-accent: #f39c12;
-        --card-highlight: #fff;
-        --card-text: #ecf0f1;
-        --card-text-dim: #95a5a6;
-        --card-accent-dim: rgba(241, 196, 15, 0.15);
-      }
-
-      /* 6. Lunar Ash (月塵灰) */
-      .theme-6 {
-        --card-bg: linear-gradient(to top, #304352, #d7d2cc);
-        --card-border: #7f8c8d;
-        --card-accent: #2c3e50;
-        --card-highlight: #2c3e50;
-        --card-text: #1a252f;
-        --card-text-dim: #546e7a;
-        --card-accent-dim: rgba(0, 0, 0, 0.1);
-      }
-
-      /* 7. Crimson Eclipse (血月) */
-      .theme-7 {
-        --card-bg: linear-gradient(160deg, #4b134f, #190a05);
-        --card-border: #c0392b;
-        --card-accent: #e74c3c;
-        --card-highlight: #fff;
-        --card-text: #fdcb6e;
-        --card-text-dim: #fab1a0;
-        --card-accent-dim: rgba(231, 76, 60, 0.2);
-      }
-
-      /* 8. Aurora (極光) */
-      .theme-8 {
-        --card-bg: linear-gradient(to right, #00416a, #799f0c, #ffe000);
-        --card-border: #a8ff78;
-        --card-accent: #78ffd6;
-        --card-highlight: #fff;
-        --card-text: #f0f0f0;
-        --card-text-dim: #a8e063;
-        --card-accent-dim: rgba(120, 255, 214, 0.2);
-      }
-
-      /* 9. Vintage Parchment (古老羊皮卷) */
-      .theme-9 {
-        --card-bg: linear-gradient(to bottom, #3e2b14, #2c1e0e);
-        --card-border: #d4af37;
-        --card-accent: #c5a059;
-        --card-highlight: #f3e5ab;
-        --card-text: #e6d2b5;
-        --card-text-dim: #8b7355;
-        --card-accent-dim: rgba(212, 175, 55, 0.2);
-      }
-
-      /* 10. Starry Night (梵谷星空) */
-      .theme-10 {
-        --card-bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-        --card-border: rgba(255, 255, 255, 0.4);
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: rgba(255, 255, 255, 0.6);
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-      }
-
-      /* 11. Cyber Moon (賽博龐克) */
-      .theme-11 {
-        --card-bg: linear-gradient(45deg, #111, #222);
-        --card-border: #0ff;
-        --card-accent: #0ff;
-        --card-highlight: #fff;
-        --card-text: #eee;
-        --card-text-dim: #0aa;
-        --card-accent-dim: rgba(0, 255, 255, 0.2);
-        border-width: 1px;
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
-      }
-
-      /* --- 新增普通款 Theme 12 - 29 --- */
-      .theme-12 {
-        --card-bg: linear-gradient(180deg, #1cb5e0 0%, #000851 100%);
-        --card-border: #89f7fe;
-        --card-accent: #66a6ff;
-        --card-highlight: #fff;
-        --card-text: #e2f0f9;
-        --card-text-dim: #89f7fe;
-        --card-accent-dim: rgba(137, 247, 254, 0.2);
-      }
-
-      .theme-13 {
-        --card-bg: linear-gradient(45deg, #81fbb8 0%, #28c76f 100%);
-        --card-border: #fff;
-        --card-accent: #0f4c2e;
-        --card-highlight: #e0ffd4;
-        --card-text: #082015;
-        --card-text-dim: #1e5c3e;
-        --card-accent-dim: rgba(255, 255, 255, 0.3);
-      }
-
-      .theme-14 {
-        --card-bg: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-        --card-border: #ff6f91;
-        --card-accent: #ff80bf;
-        --card-highlight: #fff;
-        --card-text: #5e2c3a;
-        --card-text-dim: #965f70;
-        --card-accent-dim: rgba(255, 111, 145, 0.2);
-      }
-
-      .theme-15 {
-        --card-bg: linear-gradient(to right, #654ea3, #eaafc8);
-        --card-border: #ffd700;
-        --card-accent: #ffd700;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #e0c3fc;
-        --card-accent-dim: rgba(255, 215, 0, 0.2);
-      }
-
-      .theme-16 {
-        --card-bg: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
-        --card-border: #520000;
-        --card-accent: #8b0000;
-        --card-highlight: #fff;
-        --card-text: #520000;
-        --card-text-dim: #941818;
-        --card-accent-dim: rgba(82, 0, 0, 0.1);
-      }
-
-      .theme-17 {
-        --card-bg: linear-gradient(180deg, #0f0c29, #302b63, #24243e);
-        --card-border: #00f260;
-        --card-accent: #0575e6;
-        --card-highlight: #00f260;
-        --card-text: #00f260;
-        --card-text-dim: #0575e6;
-        --card-accent-dim: rgba(0, 242, 96, 0.15);
-      }
-
-      .theme-18 {
-        --card-bg: linear-gradient(to right, #d7d2cc 0%, #304352 100%);
-        --card-border: #5d4037;
-        --card-accent: #8d6e63;
-        --card-highlight: #3e2723;
-        --card-text: #1a1a1a;
-        --card-text-dim: #4e342e;
-        --card-accent-dim: rgba(93, 64, 55, 0.1);
-      }
-
-      .theme-19 {
-        --card-bg: linear-gradient(to bottom, #093028, #237a57);
-        --card-border: #43cca1;
-        --card-accent: #43cca1;
-        --card-highlight: #fff;
-        --card-text: #d4fc79;
-        --card-text-dim: #96e6a1;
-        --card-accent-dim: rgba(67, 204, 161, 0.2);
-      }
-
-      .theme-20 {
-        --card-bg: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-        --card-border: #fff;
-        --card-accent: #d35400;
-        --card-highlight: #fff;
-        --card-text: #d35400;
-        --card-text-dim: #e67e22;
-        --card-accent-dim: rgba(255, 255, 255, 0.4);
-      }
-
-      .theme-21 {
-        --card-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-        --card-border: #7f8c8d;
-        --card-accent: #2c3e50;
-        --card-highlight: #bdc3c7;
-        --card-text: #2c3e50;
-        --card-text-dim: #7f8c8d;
-        --card-accent-dim: rgba(44, 62, 80, 0.1);
-      }
-
-      .theme-22 {
-        --card-bg: linear-gradient(to right, #fff1eb 0%, #ace0f9 100%);
-        --card-border: #b76e79;
-        --card-accent: #b76e79;
-        --card-highlight: #fff;
-        --card-text: #5e3b42;
-        --card-text-dim: #b76e79;
-        --card-accent-dim: rgba(183, 110, 121, 0.2);
-      }
-
-      .theme-23 {
-        --card-bg: #111;
-        --card-border: #ff00de;
-        --card-accent: #00ffea;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ff00de;
-        --card-accent-dim: rgba(255, 0, 222, 0.2);
-        box-shadow: 0 0 15px rgba(255, 0, 222, 0.4);
-      }
-
-      .theme-24 {
-        --card-bg: linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d);
-        --card-border: #f8b195;
-        --card-accent: #f67280;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #f8b195;
-        --card-accent-dim: rgba(248, 177, 149, 0.2);
-      }
-
-      .theme-25 {
-        --card-bg: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
-        --card-border: #fff;
-        --card-accent: #6a11cb;
-        --card-highlight: #fff;
-        --card-text: #4a00e0;
-        --card-text-dim: #8e2de2;
-        --card-accent-dim: rgba(255, 255, 255, 0.5);
-      }
-
-      .theme-26 {
-        --card-bg: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-        --card-border: #2d6a4f;
-        --card-accent: #1b4332;
-        --card-highlight: #fff;
-        --card-text: #081c15;
-        --card-text-dim: #2d6a4f;
-        --card-accent-dim: rgba(45, 106, 79, 0.2);
-      }
-
-      .theme-27 {
-        --card-bg: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
-        --card-border: #ff6b6b;
-        --card-accent: #ff6b6b;
-        --card-highlight: #fff;
-        --card-text: #c0392b;
-        --card-text-dim: #e17055;
-        --card-accent-dim: rgba(255, 107, 107, 0.2);
-      }
-
-      .theme-28 {
-        --card-bg: #2d3436;
-        --card-border: #dfe6e9;
-        --card-accent: #fd79a8;
-        --card-highlight: #fff;
-        --card-text: #dfe6e9;
-        --card-text-dim: #b2bec3;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-        border-style: dashed;
-      }
-
-      .theme-29 {
-        --card-bg: linear-gradient(to bottom, #ffffff, #dcdcdc);
-        --card-border: #000;
-        --card-accent: #c0392b;
-        --card-highlight: #000;
-        --card-text: #000;
-        --card-text-dim: #555;
-        --card-accent-dim: rgba(0, 0, 0, 0.1);
-      }
-
-      /* --- 30-39: Gemstones & Minerals --- */
-      .theme-30 {
-        --card-bg: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        --card-border: #d7d7d7;
-        --card-accent: #b0b0b0;
-        --card-highlight: #fff;
-        --card-text: #2c3e50;
-        --card-text-dim: #7f8c8d;
-        --card-accent-dim: rgba(0, 0, 0, 0.05);
-      }
-
-      .theme-31 {
-        --card-bg: linear-gradient(to bottom right, #051937, #004d40);
-        --card-border: #00897b;
-        --card-accent: #26a69a;
-        --card-highlight: #b2dfdb;
-        --card-text: #e0f2f1;
-        --card-text-dim: #80cbc4;
-        --card-accent-dim: rgba(38, 166, 154, 0.2);
-      }
-
-      .theme-32 {
-        --card-bg: radial-gradient(circle at top right, #360033, #0b8793);
-        --card-border: #d1c4e9;
-        --card-accent: #e1bee7;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #b39ddb;
-        --card-accent-dim: rgba(225, 190, 231, 0.15);
-      }
-
-      .theme-33 {
-        --card-bg: linear-gradient(160deg, #002244, #001122);
-        --card-border: #1565c0;
-        --card-accent: #42a5f5;
-        --card-highlight: #fff;
-        --card-text: #e3f2fd;
-        --card-text-dim: #90caf9;
-        --card-accent-dim: rgba(66, 165, 245, 0.2);
-      }
-
-      .theme-34 {
-        --card-bg: linear-gradient(to bottom, #4a0000, #2b0000);
-        --card-border: #b71c1c;
-        --card-accent: #ff5252;
-        --card-highlight: #ffcdd2;
-        --card-text: #ffebee;
-        --card-text-dim: #ef9a9a;
-        --card-accent-dim: rgba(255, 82, 82, 0.2);
-      }
-
-      .theme-35 {
-        --card-bg: linear-gradient(45deg, #141e30, #243b55);
-        --card-border: #00bcd4;
-        --card-accent: #00e5ff;
-        --card-highlight: #e0f7fa;
-        --card-text: #eceff1;
-        --card-text-dim: #607d8b;
-        --card-accent-dim: rgba(0, 229, 255, 0.1);
-      }
-
-      .theme-36 {
-        --card-bg: linear-gradient(to right, #b46105, #5e3100);
-        --card-border: #ffca28;
-        --card-accent: #ffd54f;
-        --card-highlight: #fff8e1;
-        --card-text: #fff;
-        --card-text-dim: #ffecb3;
-        --card-accent-dim: rgba(255, 213, 79, 0.2);
-      }
-
-      .theme-37 {
-        --card-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-        --card-border: #aab7b8;
-        --card-accent: #78909c;
-        --card-highlight: #fff;
-        --card-text: #455a64;
-        --card-text-dim: #90a4ae;
-        --card-accent-dim: rgba(120, 144, 156, 0.1);
-      }
-
-      .theme-38 {
-        --card-bg: linear-gradient(to bottom, #1d2b25, #0f1612);
-        --card-border: #69f0ae;
-        --card-accent: #b9f6ca;
-        --card-highlight: #fff;
-        --card-text: #e8f5e9;
-        --card-text-dim: #81c784;
-        --card-accent-dim: rgba(105, 240, 174, 0.1);
-      }
-
-      .theme-39 {
-        --card-bg: linear-gradient(to right, #4b3832, #2c1e18);
-        --card-border: #cd7f32;
-        --card-accent: #d7a877;
-        --card-highlight: #fff;
-        --card-text: #f5deb3;
-        --card-text-dim: #a1887f;
-        --card-accent-dim: rgba(205, 127, 50, 0.2);
-      }
-
-      /* --- 40-49: Nature & Atmosphere --- */
-      .theme-40 {
-        --card-bg: #1c2329;
-        --card-border: #4a6fa5;
-        --card-accent: #90caf9;
-        --card-highlight: #e3f2fd;
-        --card-text: #eceff1;
-        --card-text-dim: #78909c;
-        --card-accent-dim: rgba(144, 202, 249, 0.1);
-      }
-
-      .theme-41 {
-        --card-bg: linear-gradient(180deg, #1a2980 0%, #26d0ce 100%);
-        --card-border: #81d4fa;
-        --card-accent: #4dd0e1;
-        --card-highlight: #e0f7fa;
-        --card-text: #e1f5fe;
-        --card-text-dim: #80deea;
-        --card-accent-dim: rgba(77, 208, 225, 0.2);
-      }
-
-      .theme-42 {
-        --card-bg: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
-        --card-border: #ffab91;
-        --card-accent: #ff8a65;
-        --card-highlight: #fff;
-        --card-text: #5d4037;
-        --card-text-dim: #a1887f;
-        --card-accent-dim: rgba(255, 138, 101, 0.2);
-      }
-
-      .theme-43 {
-        --card-bg: linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d);
-        --card-border: #f8b195;
-        --card-accent: #ffccbc;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ffab91;
-        --card-accent-dim: rgba(248, 177, 149, 0.2);
-      }
-
-      .theme-44 {
-        --card-bg: linear-gradient(to top, #2c3e50, #4ca1af);
-        --card-border: #80cbc4;
-        --card-accent: #b2dfdb;
-        --card-highlight: #e0f2f1;
-        --card-text: #e0f7fa;
-        --card-text-dim: #80deea;
-        --card-accent-dim: rgba(178, 223, 219, 0.1);
-      }
-
-      .theme-45 {
-        --card-bg: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-        --card-border: #9fa8da;
-        --card-accent: #7986cb;
-        --card-highlight: #fff;
-        --card-text: #303f9f;
-        --card-text-dim: #5c6bc0;
-        --card-accent-dim: rgba(121, 134, 203, 0.2);
-      }
-
-      .theme-46 {
-        --card-bg: linear-gradient(to right, #434343 0%, #000000 100%);
-        --card-border: #757575;
-        --card-accent: #bdbdbd;
-        --card-highlight: #fff;
-        --card-text: #f5f5f5;
-        --card-text-dim: #9e9e9e;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-      }
-
-      .theme-47 {
-        --card-bg: linear-gradient(to right, #d31027, #ea384d);
-        --card-border: #ff8a80;
-        --card-accent: #ff5252;
-        --card-highlight: #ffebee;
-        --card-text: #fff;
-        --card-text-dim: #ffcdd2;
-        --card-accent-dim: rgba(255, 82, 82, 0.2);
-      }
-
-      .theme-48 {
-        --card-bg: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
-        --card-border: #90caf9;
-        --card-accent: #64b5f6;
-        --card-highlight: #fff;
-        --card-text: #1565c0;
-        --card-text-dim: #64b5f6;
-        --card-accent-dim: rgba(33, 150, 243, 0.1);
-      }
-
-      .theme-49 {
-        --card-bg: linear-gradient(135deg, #134e5e, #71b280);
-        --card-border: #a5d6a7;
-        --card-accent: #c8e6c9;
-        --card-highlight: #e8f5e9;
-        --card-text: #f1f8e9;
-        --card-text-dim: #a5d6a7;
-        --card-accent-dim: rgba(165, 214, 167, 0.2);
-      }
-
-      /* --- 50-59: Material & Modern --- */
-      .theme-50 {
-        --card-bg: linear-gradient(to bottom, #eee4d6, #dccdb6);
-        --card-border: #c5a065;
-        --card-accent: #bfa068;
-        --card-highlight: #fff;
-        --card-text: #5d4037;
-        --card-text-dim: #8d6e63;
-        --card-accent-dim: rgba(197, 160, 101, 0.2);
-      }
-
-      .theme-51 {
-        --card-bg: repeating-linear-gradient(
-          45deg,
-          #111,
-          #111 10px,
-          #222 10px,
-          #222 20px
-        );
-        --card-border: #333;
-        --card-accent: #e74c3c;
-        --card-highlight: #fff;
-        --card-text: #eee;
-        --card-text-dim: #777;
-        --card-accent-dim: rgba(231, 76, 60, 0.3);
-      }
-
-      .theme-52 {
-        --card-bg: linear-gradient(#3e2723, #281a16);
-        --card-border: #8d6e63;
-        --card-accent: #d7ccc8;
-        --card-highlight: #efebe9;
-        --card-text: #d7ccc8;
-        --card-text-dim: #a1887f;
-        --card-accent-dim: rgba(141, 110, 99, 0.2);
-      }
-
-      .theme-53 {
-        --card-bg: linear-gradient(to bottom, #1a237e, #0d1245);
-        --card-border: #7986cb;
-        --card-accent: #c5cae9;
-        --card-highlight: #fff;
-        --card-text: #e8eaf6;
-        --card-text-dim: #9fa8da;
-        --card-accent-dim: rgba(197, 202, 233, 0.1);
-      }
-
-      .theme-54 {
-        --card-bg: linear-gradient(135deg, #e6b9b8, #c68a88);
-        --card-border: #fff;
-        --card-accent: #8e5856;
-        --card-highlight: #fff0f0;
-        --card-text: #4e342e;
-        --card-text-dim: #8d6e63;
-        --card-accent-dim: rgba(255, 255, 255, 0.4);
-      }
-
-      .theme-55 {
-        --card-bg: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
-        --card-border: #757575;
-        --card-accent: #616161;
-        --card-highlight: #fff;
-        --card-text: #212121;
-        --card-text-dim: #616161;
-        --card-accent-dim: rgba(0, 0, 0, 0.1);
-      }
-
-      .theme-56 {
-        --card-bg: #121212;
-        --card-border: #2c2c2c;
-        --card-accent: #666;
-        --card-highlight: #444;
-        --card-text: #bbb;
-        --card-text-dim: #444;
-        --card-accent-dim: rgba(255, 255, 255, 0.05);
-      }
-
-      .theme-57 {
-        --card-bg: linear-gradient(to bottom, #000428, #004e92);
-        --card-border: #d500f9;
-        --card-accent: #00e5ff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #d500f9;
-        --card-accent-dim: rgba(213, 0, 249, 0.2);
-      }
-
-      .theme-58 {
-        --card-bg: linear-gradient(to bottom, #fffff0, #f0f0e0);
-        --card-border: #dcdcdc;
-        --card-accent: #a9a9a9;
-        --card-highlight: #fff;
-        --card-text: #333;
-        --card-text-dim: #888;
-        --card-accent-dim: rgba(0, 0, 0, 0.03);
-      }
-
-      .theme-59 {
-        --card-bg: linear-gradient(180deg, #232526 0%, #414345 100%);
-        --card-border: #585858;
-        --card-accent: #d32f2f;
-        --card-highlight: #757575;
-        --card-text: #e0e0e0;
-        --card-text-dim: #616161;
-        --card-accent-dim: rgba(211, 47, 47, 0.2);
-      }
-
-      /* --- 60-69: Arts & Culture --- */
-      .theme-60 {
-        --card-bg: linear-gradient(to bottom, #f5f5f5, #cfd9df);
-        --card-border: #212121;
-        --card-accent: #424242;
-        --card-highlight: #000;
-        --card-text: #000;
-        --card-text-dim: #616161;
-        --card-accent-dim: rgba(0, 0, 0, 0.1);
-      }
-
-      .theme-61 {
-        --card-bg: #fff;
-        --card-border: #1565c0;
-        --card-accent: #0d47a1;
-        --card-highlight: #e3f2fd;
-        --card-text: #0d47a1;
-        --card-text-dim: #64b5f6;
-        --card-accent-dim: rgba(13, 71, 161, 0.1);
-        border: 2px solid #1565c0;
-      }
-
-      /* ✅ FIX: remove repeated vars, keep final effect */
-      .theme-62 {
-        background-color: #f3e5f5;
-        --card-bg: #fff8e1;
-        --card-border: #d7ccc8;
-        --card-accent: #8d6e63;
-        --card-highlight: #fff;
-        --card-text: #5d4037;
-        --card-text-dim: #a1887f;
-        --card-accent-dim: rgba(141, 110, 99, 0.1);
-      }
-
-      .theme-63 {
-        --card-bg: linear-gradient(to right, #3e5151, #decba4);
-        --card-border: #8d6e63;
-        --card-accent: #d7ccc8;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #efebe9;
-        --card-accent-dim: rgba(255, 255, 255, 0.2);
-      }
-
-      .theme-64 {
-        --card-bg: radial-gradient(circle, #444, #000);
-        --card-border: #fff;
-        --card-accent: #eee;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #aaa;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-      }
-
-      .theme-65 {
-        --card-bg: linear-gradient(to bottom, #2b5876, #4e4376);
-        --card-border: #ffccbc;
-        --card-accent: #ffab91;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #b39ddb;
-        --card-accent-dim: rgba(255, 171, 145, 0.2);
-      }
-
-      .theme-66 {
-        --card-bg: #1c1c1c;
-        --card-border: #d4af37;
-        --card-accent: #f1c40f;
-        --card-highlight: #fff;
-        --card-text: #d4af37;
-        --card-text-dim: #8e7d48;
-        --card-accent-dim: rgba(212, 175, 55, 0.15);
-        border-width: 2px;
-      }
-
-      .theme-67 {
-        --card-bg: #f0f0f0;
-        --card-border: #d32f2f;
-        --card-accent: #1976d2;
-        --card-highlight: #ffeb3b;
-        --card-text: #212121;
-        --card-text-dim: #757575;
-        --card-accent-dim: rgba(25, 118, 210, 0.1);
-      }
-
-      .theme-68 {
-        --card-bg: linear-gradient(to right, #cc2b5e, #753a88);
-        --card-border: #00d2ff;
-        --card-accent: #3a7bd5;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #eaafc8;
-        --card-accent-dim: rgba(0, 210, 255, 0.2);
-      }
-
-      .theme-69 {
-        --card-bg: linear-gradient(45deg, #85ffbd 0%, #ffffb0 100%);
-        --card-border: #009688;
-        --card-accent: #00796b;
-        --card-highlight: #fff;
-        --card-text: #004d40;
-        --card-text-dim: #4db6ac;
-        --card-accent-dim: rgba(0, 121, 107, 0.1);
-      }
-
-      /* --- 70-79: Cosmic & Celestial --- */
-      .theme-70 {
-        --card-bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-        --card-border: #3f51b5;
-        --card-accent: #7986cb;
-        --card-highlight: #fff;
-        --card-text: #e8eaf6;
-        --card-text-dim: #5c6bc0;
-        --card-accent-dim: rgba(121, 134, 203, 0.1);
-      }
-
-      .theme-71 {
-        --card-bg: linear-gradient(to right, #ff512f, #dd2476);
-        --card-border: #ffcc80;
-        --card-accent: #ffe0b2;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ffab91;
-        --card-accent-dim: rgba(255, 204, 128, 0.2);
-      }
-
-      .theme-72 {
-        --card-bg: linear-gradient(to bottom, #20002c, #cbb4d4);
-        --card-border: #e1bee7;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ba68c8;
-        --card-accent-dim: rgba(225, 190, 231, 0.2);
-      }
-
-      .theme-73 {
-        --card-bg: linear-gradient(0deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-        background: linear-gradient(to bottom, #f83600 0%, #f9d423 100%);
-        --card-border: #fff59d;
-        --card-accent: #ffeb3b;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #fff9c4;
-        --card-accent-dim: rgba(255, 235, 59, 0.2);
-      }
-
-      .theme-74 {
-        --card-bg: radial-gradient(circle, #000000, #434343);
-        --card-border: #fff;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #666;
-        --card-accent-dim: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-
-      .theme-75 {
-        --card-bg: linear-gradient(to left, #89f7fe, #66a6ff);
-        --card-border: #fff;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #01579b;
-        --card-text-dim: #0288d1;
-        --card-accent-dim: rgba(255, 255, 255, 0.3);
-      }
-
-      .theme-76 {
-        --card-bg: linear-gradient(to bottom, #870000, #190a05);
-        --card-border: #ff5722;
-        --card-accent: #ffab91;
-        --card-highlight: #fff;
-        --card-text: #ffccbc;
-        --card-text-dim: #bf360c;
-        --card-accent-dim: rgba(255, 87, 34, 0.2);
-      }
-
-      .theme-77 {
-        --card-bg: #0f2027;
-        --card-border: #fff;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #cfd8dc;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
-      }
-
-      .theme-78 {
-        --card-bg: radial-gradient(circle at 50% 0, #5c5c5c, #000000);
-        --card-border: #f5f5f5;
-        --card-accent: #e0e0e0;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #9e9e9e;
-        --card-accent-dim: rgba(255, 255, 255, 0.1);
-      }
-
-      .theme-79 {
-        --card-bg: #2c3e50;
-        --card-border: #f1c40f;
-        --card-accent: #f39c12;
-        --card-highlight: #fff;
-        --card-text: #ecf0f1;
-        --card-text-dim: #95a5a6;
-        --card-accent-dim: rgba(241, 196, 15, 0.1);
-      }
-
-      /* --- 80-85: Abstract Concepts --- */
-      .theme-80 {
-        --card-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-        background: linear-gradient(to right, #8e9eab, #eef2f3);
-        --card-border: #78909c;
-        --card-accent: #546e7a;
-        --card-highlight: #fff;
-        --card-text: #263238;
-        --card-text-dim: #607d8b;
-        --card-accent-dim: rgba(84, 110, 122, 0.1);
-      }
-
-      .theme-81 {
-        --card-bg: linear-gradient(to bottom, #d7d2cc, #304352);
-        --card-border: #90a4ae;
-        --card-accent: #cfd8dc;
-        --card-highlight: #fff;
-        --card-text: #eceff1;
-        --card-text-dim: #b0bec5;
-        --card-accent-dim: rgba(207, 216, 220, 0.1);
-      }
-
-      .theme-82 {
-        --card-bg: linear-gradient(147deg, #f71735 0%, #db3445 74%);
-        --card-border: #ff8a80;
-        --card-accent: #ffcdd2;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ef9a9a;
-        --card-accent-dim: rgba(255, 205, 210, 0.2);
-      }
-
-      .theme-83 {
-        --card-bg: linear-gradient(to right, #243949 0%, #517fa4 100%);
-        --card-border: #b3e5fc;
-        --card-accent: #81d4fa;
-        --card-highlight: #fff;
-        --card-text: #e1f5fe;
-        --card-text-dim: #81d4fa;
-        --card-accent-dim: rgba(129, 212, 250, 0.1);
-      }
-
-      .theme-84 {
-        --card-bg: linear-gradient(90deg, #111 50%, #eee 50%);
-        --card-border: #888;
-        --card-accent: #888;
-        --card-highlight: #f00;
-        --card-text: #888;
-        --card-text-dim: #aaa;
-        --card-accent-dim: rgba(136, 136, 136, 0.2);
-      }
-
-      .theme-85 {
-        --card-bg: linear-gradient(
-          43deg,
-          #4158d0 0%,
-          #c850c0 46%,
-          #ffcc70 100%
-        );
-        --card-border: #fff;
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: #ffe0b2;
-        --card-accent-dim: rgba(255, 255, 255, 0.3);
-      }
-
-      /* --- THE BIG 3: Blind Box Rares --- */
-      .theme-86 {
-        --card-bg: linear-gradient(135deg, #141414 0%, #333 100%);
-        --card-border: #ffd700;
-        --card-accent: #ffecb3;
-        --card-highlight: #fff;
-        --card-text: #ffd700;
-        --card-text-dim: #bf953f;
-        --card-accent-dim: rgba(255, 215, 0, 0.3);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4),
-          inset 0 0 30px rgba(0, 0, 0, 0.8);
-        border: 2px solid transparent;
-        background-clip: padding-box, border-box;
-        background-origin: padding-box, border-box;
-        background-image: linear-gradient(135deg, #141414 0%, #333 100%),
-          linear-gradient(
-            45deg,
-            #bf953f,
-            #fcf6ba,
-            #b38728,
-            #fbf5b7,
-            #aa771c
-          );
-        animation: goldShine 5s infinite linear;
-      }
-
-      .theme-87 {
-        --card-bg: radial-gradient(circle at 50% 50%, #2b1055, #7597de);
-        --card-border: rgba(255, 255, 255, 0.5);
-        --card-accent: #fff;
-        --card-highlight: #fff;
-        --card-text: #fff;
-        --card-text-dim: rgba(255, 255, 255, 0.8);
-        --card-accent-dim: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 0 25px rgba(118, 224, 255, 0.6);
-        animation: holoPulse 3s infinite alternate;
-        border-width: 3px;
-        border-style: double;
-      }
-
-      .theme-88 {
-        --card-bg: #000;
-        --card-border: #0ff;
-        --card-accent: #0ff;
-        --card-highlight: #f0f;
-        --card-text: #fff;
-        --card-text-dim: #0ff;
-        --card-accent-dim: rgba(0, 255, 255, 0.3);
-        background: linear-gradient(
-          45deg,
-          #ff0000,
-          #ff7f00,
-          #ffff00,
-          #00ff00,
-          #0000ff,
-          #4b0082,
-          #9400d3
-        );
-        background-size: 400% 400%;
-        animation: rainbowGlitch 3s ease infinite;
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-        border: 2px solid #fff;
-      }
-
-      @keyframes goldShine {
-        0% {
-          filter: brightness(1);
-        }
-        50% {
-          filter: brightness(1.2);
-        }
-        100% {
-          filter: brightness(1);
-        }
-      }
-
-      @keyframes holoPulse {
-        0% {
-          box-shadow: 0 0 20px rgba(118, 224, 255, 0.4);
-          border-color: #81ecec;
-        }
-        100% {
-          box-shadow: 0 0 40px rgba(253, 121, 168, 0.6);
-          border-color: #fd79a8;
-        }
-      }
-
-      @keyframes rainbowGlitch {
-        0% {
-          background-position: 0% 50%;
-          filter: hue-rotate(0deg);
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-          filter: hue-rotate(360deg);
-        }
-      }
-
       /* Calendar hint */
       .calendar-day-checked {
         cursor: pointer;
@@ -3356,867 +2377,1499 @@
 
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-    <!-- ==================== SCRIPT (MODULE) ==================== -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-      import {
-        getAuth,
-        signInWithPopup,
-        GoogleAuthProvider,
-        signOut,
-        onAuthStateChanged,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-      import {
-        getFirestore,
-        doc,
-        getDoc,
-        setDoc,
-        updateDoc,
-        arrayUnion,
-      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import {
+    getAuth,
+    signInWithPopup,
+    GoogleAuthProvider,
+    signOut,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    arrayUnion
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
-        authDomain: "teacher-shirley.firebaseapp.com",
-        databaseURL:
-          "https://teacher-shirley-default-rtdb.firebaseio.com",
-        projectId: "teacher-shirley",
-        storageBucket: "teacher-shirley.firebasestorage.app",
-        messagingSenderId: "534843195436",
-        appId: "1:534843195436:web:f1f873e6f6e8c257ce9189",
-      };
+      const THEMES = {
+  1: {
+    bg: "linear-gradient(180deg, #0f2027, #203a43, #2c5364)",
+    border: "#b8860b",
+    accent: "#ffd700",
+    highlight: "#fff",
+    text: "#e0e0e0",
+    textDim: "#8fa1b3",
+    accentDim: "rgba(184, 134, 11, 0.2)"
+  },
+  2: {
+    bg: "linear-gradient(135deg, #2c3e50, #4ca1af)",
+    border: "#bdc3c7",
+    accent: "#ecf0f1",
+    highlight: "#fff",
+    text: "#ecf0f1",
+    textDim: "#bdc3c7",
+    accentDim: "rgba(255, 255, 255, 0.2)"
+  },
+  3: {
+    bg: "radial-gradient(circle at 10% 20%, #240b36, #c31432)",
+    border: "#ffafbd",
+    accent: "#ffc3a0",
+    highlight: "#fff0f5",
+    text: "#ffe4e1",
+    textDim: "#d8bfd8",
+    accentDim: "rgba(255, 175, 189, 0.2)"
+  },
+  4: {
+    bg: "#121212",
+    border: "#333",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#ccc",
+    textDim: "#666",
+    accentDim: "rgba(255, 255, 255, 0.1)"
+  },
+  5: {
+    bg: "linear-gradient(to bottom, #141e30, #243b55)",
+    border: "#f1c40f",
+    accent: "#f39c12",
+    highlight: "#fff",
+    text: "#ecf0f1",
+    textDim: "#95a5a6",
+    accentDim: "rgba(241, 196, 15, 0.15)"
+  },
+  6: {
+    bg: "linear-gradient(to top, #304352, #d7d2cc)",
+    border: "#7f8c8d",
+    accent: "#2c3e50",
+    highlight: "#2c3e50",
+    text: "#1a252f",
+    textDim: "#546e7a",
+    accentDim: "rgba(0, 0, 0, 0.1)"
+  },
+  7: {
+    bg: "linear-gradient(160deg, #4b134f, #190a05)",
+    border: "#c0392b",
+    accent: "#e74c3c",
+    highlight: "#fff",
+    text: "#fdcb6e",
+    textDim: "#fab1a0",
+    accentDim: "rgba(231, 76, 60, 0.2)"
+  },
+  8: {
+    bg: "linear-gradient(to right, #00416a, #799f0c, #ffe000)",
+    border: "#a8ff78",
+    accent: "#78ffd6",
+    highlight: "#fff",
+    text: "#f0f0f0",
+    textDim: "#a8e063",
+    accentDim: "rgba(120, 255, 214, 0.2)"
+  },
+  9: {
+    bg: "linear-gradient(to bottom, #3e2b14, #2c1e0e)",
+    border: "#d4af37",
+    accent: "#c5a059",
+    highlight: "#f3e5ab",
+    text: "#e6d2b5",
+    textDim: "#8b7355",
+    accentDim: "rgba(212, 175, 55, 0.2)"
+  },
+  10: {
+    bg: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)",
+    border: "rgba(255, 255, 255, 0.4)",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "rgba(255, 255, 255, 0.6)",
+    accentDim: "rgba(255, 255, 255, 0.1)"
+  },
+  11: {
+    bg: "linear-gradient(45deg, #111, #222)",
+    border: "#0ff",
+    accent: "#0ff",
+    highlight: "#fff",
+    text: "#eee",
+    textDim: "#0aa",
+    accentDim: "rgba(0, 255, 255, 0.2)",
+    fxClass: "theme-fx-11"
+  },
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
-      const provider = new GoogleAuthProvider();
+  12: {
+    bg: "linear-gradient(180deg, #1cb5e0 0%, #000851 100%)",
+    border: "#89f7fe",
+    accent: "#66a6ff",
+    highlight: "#fff",
+    text: "#e2f0f9",
+    textDim: "#89f7fe",
+    accentDim: "rgba(137, 247, 254, 0.2)"
+  },
+  13: {
+    bg: "linear-gradient(45deg, #81fbb8 0%, #28c76f 100%)",
+    border: "#fff",
+    accent: "#0f4c2e",
+    highlight: "#e0ffd4",
+    text: "#082015",
+    textDim: "#1e5c3e",
+    accentDim: "rgba(255, 255, 255, 0.3)"
+  },
+  14: {
+    bg: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)",
+    border: "#ff6f91",
+    accent: "#ff80bf",
+    highlight: "#fff",
+    text: "#5e2c3a",
+    textDim: "#965f70",
+    accentDim: "rgba(255, 111, 145, 0.2)"
+  },
+  15: {
+    bg: "linear-gradient(to right, #654ea3, #eaafc8)",
+    border: "#ffd700",
+    accent: "#ffd700",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#e0c3fc",
+    accentDim: "rgba(255, 215, 0, 0.2)"
+  },
+  16: {
+    bg: "linear-gradient(to top, #ff0844 0%, #ffb199 100%)",
+    border: "#520000",
+    accent: "#8b0000",
+    highlight: "#fff",
+    text: "#520000",
+    textDim: "#941818",
+    accentDim: "rgba(82, 0, 0, 0.1)"
+  },
+  17: {
+    bg: "linear-gradient(180deg, #0f0c29, #302b63, #24243e)",
+    border: "#00f260",
+    accent: "#0575e6",
+    highlight: "#00f260",
+    text: "#00f260",
+    textDim: "#0575e6",
+    accentDim: "rgba(0, 242, 96, 0.15)"
+  },
+  18: {
+    bg: "linear-gradient(to right, #d7d2cc 0%, #304352 100%)",
+    border: "#5d4037",
+    accent: "#8d6e63",
+    highlight: "#3e2723",
+    text: "#1a1a1a",
+    textDim: "#4e342e",
+    accentDim: "rgba(93, 64, 55, 0.1)"
+  },
+  19: {
+    bg: "linear-gradient(to bottom, #093028, #237a57)",
+    border: "#43cca1",
+    accent: "#43cca1",
+    highlight: "#fff",
+    text: "#d4fc79",
+    textDim: "#96e6a1",
+    accentDim: "rgba(67, 204, 161, 0.2)"
+  },
+  20: {
+    bg: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
+    border: "#fff",
+    accent: "#d35400",
+    highlight: "#fff",
+    text: "#d35400",
+    textDim: "#e67e22",
+    accentDim: "rgba(255, 255, 255, 0.4)"
+  },
+  21: {
+    bg: "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)",
+    border: "#7f8c8d",
+    accent: "#2c3e50",
+    highlight: "#bdc3c7",
+    text: "#2c3e50",
+    textDim: "#7f8c8d",
+    accentDim: "rgba(44, 62, 80, 0.1)"
+  },
+  22: {
+    bg: "linear-gradient(to right, #fff1eb 0%, #ace0f9 100%)",
+    border: "#b76e79",
+    accent: "#b76e79",
+    highlight: "#fff",
+    text: "#5e3b42",
+    textDim: "#b76e79",
+    accentDim: "rgba(183, 110, 121, 0.2)"
+  },
+  23: {
+    bg: "#111",
+    border: "#ff00de",
+    accent: "#00ffea",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ff00de",
+    accentDim: "rgba(255, 0, 222, 0.2)",
+    fxClass: "theme-fx-23"
+  },
+  24: {
+    bg: "linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d)",
+    border: "#f8b195",
+    accent: "#f67280",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#f8b195",
+    accentDim: "rgba(248, 177, 149, 0.2)"
+  },
+  25: {
+    bg: "linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)",
+    border: "#fff",
+    accent: "#6a11cb",
+    highlight: "#fff",
+    text: "#4a00e0",
+    textDim: "#8e2de2",
+    accentDim: "rgba(255, 255, 255, 0.5)"
+  },
+  26: {
+    bg: "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)",
+    border: "#2d6a4f",
+    accent: "#1b4332",
+    highlight: "#fff",
+    text: "#081c15",
+    textDim: "#2d6a4f",
+    accentDim: "rgba(45, 106, 79, 0.2)"
+  },
+  27: {
+    bg: "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)",
+    border: "#ff6b6b",
+    accent: "#ff6b6b",
+    highlight: "#fff",
+    text: "#c0392b",
+    textDim: "#e17055",
+    accentDim: "rgba(255, 107, 107, 0.2)"
+  },
+  28: {
+    bg: "#2d3436",
+    border: "#dfe6e9",
+    accent: "#fd79a8",
+    highlight: "#fff",
+    text: "#dfe6e9",
+    textDim: "#b2bec3",
+    accentDim: "rgba(255, 255, 255, 0.1)",
+    fxClass: "theme-fx-28"
+  },
+  29: {
+    bg: "linear-gradient(to bottom, #ffffff, #dcdcdc)",
+    border: "#000",
+    accent: "#c0392b",
+    highlight: "#000",
+    text: "#000",
+    textDim: "#555",
+    accentDim: "rgba(0, 0, 0, 0.1)"
+  },
 
-      let currentUser = null;
-      let csvData = { words: [], quotes: [] };
-      let checkinHistory = [];
-      let activityLog = [];
+  30: {
+    bg: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)",
+    border: "#d7d7d7",
+    accent: "#b0b0b0",
+    highlight: "#fff",
+    text: "#2c3e50",
+    textDim: "#7f8c8d",
+    accentDim: "rgba(0, 0, 0, 0.05)"
+  },
+  31: {
+    bg: "linear-gradient(to bottom right, #051937, #004d40)",
+    border: "#00897b",
+    accent: "#26a69a",
+    highlight: "#b2dfdb",
+    text: "#e0f2f1",
+    textDim: "#80cbc4",
+    accentDim: "rgba(38, 166, 154, 0.2)"
+  },
+  32: {
+    bg: "radial-gradient(circle at top right, #360033, #0b8793)",
+    border: "#d1c4e9",
+    accent: "#e1bee7",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#b39ddb",
+    accentDim: "rgba(225, 190, 231, 0.15)"
+  },
+  33: {
+    bg: "linear-gradient(160deg, #002244, #001122)",
+    border: "#1565c0",
+    accent: "#42a5f5",
+    highlight: "#fff",
+    text: "#e3f2fd",
+    textDim: "#90caf9",
+    accentDim: "rgba(66, 165, 245, 0.2)"
+  },
+  34: {
+    bg: "linear-gradient(to bottom, #4a0000, #2b0000)",
+    border: "#b71c1c",
+    accent: "#ff5252",
+    highlight: "#ffcdd2",
+    text: "#ffebee",
+    textDim: "#ef9a9a",
+    accentDim: "rgba(255, 82, 82, 0.2)"
+  },
+  35: {
+    bg: "linear-gradient(45deg, #141e30, #243b55)",
+    border: "#00bcd4",
+    accent: "#00e5ff",
+    highlight: "#e0f7fa",
+    text: "#eceff1",
+    textDim: "#607d8b",
+    accentDim: "rgba(0, 229, 255, 0.1)"
+  },
+  36: {
+    bg: "linear-gradient(to right, #b46105, #5e3100)",
+    border: "#ffca28",
+    accent: "#ffd54f",
+    highlight: "#fff8e1",
+    text: "#fff",
+    textDim: "#ffecb3",
+    accentDim: "rgba(255, 213, 79, 0.2)"
+  },
+  37: {
+    bg: "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)",
+    border: "#aab7b8",
+    accent: "#78909c",
+    highlight: "#fff",
+    text: "#455a64",
+    textDim: "#90a4ae",
+    accentDim: "rgba(120, 144, 156, 0.1)"
+  },
+  38: {
+    bg: "linear-gradient(to bottom, #1d2b25, #0f1612)",
+    border: "#69f0ae",
+    accent: "#b9f6ca",
+    highlight: "#fff",
+    text: "#e8f5e9",
+    textDim: "#81c784",
+    accentDim: "rgba(105, 240, 174, 0.1)"
+  },
+  39: {
+    bg: "linear-gradient(to right, #4b3832, #2c1e18)",
+    border: "#cd7f32",
+    accent: "#d7a877",
+    highlight: "#fff",
+    text: "#f5deb3",
+    textDim: "#a1887f",
+    accentDim: "rgba(205, 127, 50, 0.2)"
+  },
 
-      // --- In-App Browser Detection Helpers ---
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      const isInApp =
-        ua.indexOf("FBAN") > -1 ||
-        ua.indexOf("FBAV") > -1 ||
-        ua.indexOf("Instagram") > -1 ||
-        ua.indexOf("Line") > -1 ||
-        ua.indexOf("MicroMessenger") > -1;
+  40: {
+    bg: "#1c2329",
+    border: "#4a6fa5",
+    accent: "#90caf9",
+    highlight: "#e3f2fd",
+    text: "#eceff1",
+    textDim: "#78909c",
+    accentDim: "rgba(144, 202, 249, 0.1)"
+  },
+  41: {
+    bg: "linear-gradient(180deg, #1a2980 0%, #26d0ce 100%)",
+    border: "#81d4fa",
+    accent: "#4dd0e1",
+    highlight: "#e0f7fa",
+    text: "#e1f5fe",
+    textDim: "#80deea",
+    accentDim: "rgba(77, 208, 225, 0.2)"
+  },
+  42: {
+    bg: "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)",
+    border: "#ffab91",
+    accent: "#ff8a65",
+    highlight: "#fff",
+    text: "#5d4037",
+    textDim: "#a1887f",
+    accentDim: "rgba(255, 138, 101, 0.2)"
+  },
+  43: {
+    bg: "linear-gradient(to bottom, #c06c84, #6c5b7b, #355c7d)",
+    border: "#f8b195",
+    accent: "#ffccbc",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ffab91",
+    accentDim: "rgba(248, 177, 149, 0.2)"
+  },
+  44: {
+    bg: "linear-gradient(to top, #2c3e50, #4ca1af)",
+    border: "#80cbc4",
+    accent: "#b2dfdb",
+    highlight: "#e0f2f1",
+    text: "#e0f7fa",
+    textDim: "#80deea",
+    accentDim: "rgba(178, 223, 219, 0.1)"
+  },
+  45: {
+    bg: "linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%)",
+    border: "#9fa8da",
+    accent: "#7986cb",
+    highlight: "#fff",
+    text: "#303f9f",
+    textDim: "#5c6bc0",
+    accentDim: "rgba(121, 134, 203, 0.2)"
+  },
+  46: {
+    bg: "linear-gradient(to right, #434343 0%, #000000 100%)",
+    border: "#757575",
+    accent: "#bdbdbd",
+    highlight: "#fff",
+    text: "#f5f5f5",
+    textDim: "#9e9e9e",
+    accentDim: "rgba(255, 255, 255, 0.1)"
+  },
+  47: {
+    bg: "linear-gradient(to right, #d31027, #ea384d)",
+    border: "#ff8a80",
+    accent: "#ff5252",
+    highlight: "#ffebee",
+    text: "#fff",
+    textDim: "#ffcdd2",
+    accentDim: "rgba(255, 82, 82, 0.2)"
+  },
+  48: {
+    bg: "linear-gradient(to top, #accbee 0%, #e7f0fd 100%)",
+    border: "#90caf9",
+    accent: "#64b5f6",
+    highlight: "#fff",
+    text: "#1565c0",
+    textDim: "#64b5f6",
+    accentDim: "rgba(33, 150, 243, 0.1)"
+  },
+  49: {
+    bg: "linear-gradient(135deg, #134e5e, #71b280)",
+    border: "#a5d6a7",
+    accent: "#c8e6c9",
+    highlight: "#e8f5e9",
+    text: "#f1f8e9",
+    textDim: "#a5d6a7",
+    accentDim: "rgba(165, 214, 167, 0.2)"
+  },
 
-      window.closeWarning = () => {
-        document.getElementById("in-app-browser-warning").style.display = "none";
-      };
+  50: {
+    bg: "linear-gradient(to bottom, #eee4d6, #dccdb6)",
+    border: "#c5a065",
+    accent: "#bfa068",
+    highlight: "#fff",
+    text: "#5d4037",
+    textDim: "#8d6e63",
+    accentDim: "rgba(197, 160, 101, 0.2)"
+  },
+  51: {
+    bg: "repeating-linear-gradient(45deg,#111,#111 10px,#222 10px,#222 20px)",
+    border: "#333",
+    accent: "#e74c3c",
+    highlight: "#fff",
+    text: "#eee",
+    textDim: "#777",
+    accentDim: "rgba(231, 76, 60, 0.3)"
+  },
+  52: {
+    bg: "linear-gradient(#3e2723, #281a16)",
+    border: "#8d6e63",
+    accent: "#d7ccc8",
+    highlight: "#efebe9",
+    text: "#d7ccc8",
+    textDim: "#a1887f",
+    accentDim: "rgba(141, 110, 99, 0.2)"
+  },
+  53: {
+    bg: "linear-gradient(to bottom, #1a237e, #0d1245)",
+    border: "#7986cb",
+    accent: "#c5cae9",
+    highlight: "#fff",
+    text: "#e8eaf6",
+    textDim: "#9fa8da",
+    accentDim: "rgba(197, 202, 233, 0.1)"
+  },
+  54: {
+    bg: "linear-gradient(135deg, #e6b9b8, #c68a88)",
+    border: "#fff",
+    accent: "#8e5856",
+    highlight: "#fff0f0",
+    text: "#4e342e",
+    textDim: "#8d6e63",
+    accentDim: "rgba(255, 255, 255, 0.4)"
+  },
+  55: {
+    bg: "linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)",
+    border: "#757575",
+    accent: "#616161",
+    highlight: "#fff",
+    text: "#212121",
+    textDim: "#616161",
+    accentDim: "rgba(0, 0, 0, 0.1)"
+  },
+  56: {
+    bg: "#121212",
+    border: "#2c2c2c",
+    accent: "#666",
+    highlight: "#444",
+    text: "#bbb",
+    textDim: "#444",
+    accentDim: "rgba(255, 255, 255, 0.05)"
+  },
+  57: {
+    bg: "linear-gradient(to bottom, #000428, #004e92)",
+    border: "#d500f9",
+    accent: "#00e5ff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#d500f9",
+    accentDim: "rgba(213, 0, 249, 0.2)"
+  },
+  58: {
+    bg: "linear-gradient(to bottom, #fffff0, #f0f0e0)",
+    border: "#dcdcdc",
+    accent: "#a9a9a9",
+    highlight: "#fff",
+    text: "#333",
+    textDim: "#888",
+    accentDim: "rgba(0, 0, 0, 0.03)"
+  },
+  59: {
+    bg: "linear-gradient(180deg, #232526 0%, #414345 100%)",
+    border: "#585858",
+    accent: "#d32f2f",
+    highlight: "#757575",
+    text: "#e0e0e0",
+    textDim: "#616161",
+    accentDim: "rgba(211, 47, 47, 0.2)"
+  },
 
-      window.copyCurrentUrl = () => {
-        navigator.clipboard
-          .writeText(window.location.href)
-          .then(() => {
-            alert("Link copied! Open Chrome/Safari and paste it.");
-          })
-          .catch(() => {
-            alert("Failed to copy. Please copy the URL manually.");
-          });
-      };
+  60: {
+    bg: "linear-gradient(to bottom, #f5f5f5, #cfd9df)",
+    border: "#212121",
+    accent: "#424242",
+    highlight: "#000",
+    text: "#000",
+    textDim: "#616161",
+    accentDim: "rgba(0, 0, 0, 0.1)"
+  },
+  61: {
+    bg: "#fff",
+    border: "#1565c0",
+    accent: "#0d47a1",
+    highlight: "#e3f2fd",
+    text: "#0d47a1",
+    textDim: "#64b5f6",
+    accentDim: "rgba(13, 71, 161, 0.1)",
+    fxClass: "theme-fx-61"
+  },
+  62: {
+    bg: "#fff8e1",
+    border: "#d7ccc8",
+    accent: "#8d6e63",
+    highlight: "#fff",
+    text: "#5d4037",
+    textDim: "#a1887f",
+    accentDim: "rgba(141, 110, 99, 0.1)"
+  },
+  63: {
+    bg: "linear-gradient(to right, #3e5151, #decba4)",
+    border: "#8d6e63",
+    accent: "#d7ccc8",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#efebe9",
+    accentDim: "rgba(255, 255, 255, 0.2)"
+  },
+  64: {
+    bg: "radial-gradient(circle, #444, #000)",
+    border: "#fff",
+    accent: "#eee",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#aaa",
+    accentDim: "rgba(255, 255, 255, 0.1)"
+  },
+  65: {
+    bg: "linear-gradient(to bottom, #2b5876, #4e4376)",
+    border: "#ffccbc",
+    accent: "#ffab91",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#b39ddb",
+    accentDim: "rgba(255, 171, 145, 0.2)"
+  },
+  66: {
+    bg: "#1c1c1c",
+    border: "#d4af37",
+    accent: "#f1c40f",
+    highlight: "#fff",
+    text: "#d4af37",
+    textDim: "#8e7d48",
+    accentDim: "rgba(212, 175, 55, 0.15)",
+    fxClass: "theme-fx-66"
+  },
+  67: {
+    bg: "#f0f0f0",
+    border: "#d32f2f",
+    accent: "#1976d2",
+    highlight: "#ffeb3b",
+    text: "#212121",
+    textDim: "#757575",
+    accentDim: "rgba(25, 118, 210, 0.1)"
+  },
+  68: {
+    bg: "linear-gradient(to right, #cc2b5e, #753a88)",
+    border: "#00d2ff",
+    accent: "#3a7bd5",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#eaafc8",
+    accentDim: "rgba(0, 210, 255, 0.2)"
+  },
+  69: {
+    bg: "linear-gradient(45deg, #85ffbd 0%, #ffffb0 100%)",
+    border: "#009688",
+    accent: "#00796b",
+    highlight: "#fff",
+    text: "#004d40",
+    textDim: "#4db6ac",
+    accentDim: "rgba(0, 121, 107, 0.1)"
+  },
 
-      // --- HELPER: GET LOCAL DATE STRING ---
-      function getLocalISODate() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth() + 1).padStart(2, "0");
-        const d = String(now.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
-      }
+  70: {
+    bg: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)",
+    border: "#3f51b5",
+    accent: "#7986cb",
+    highlight: "#fff",
+    text: "#e8eaf6",
+    textDim: "#5c6bc0",
+    accentDim: "rgba(121, 134, 203, 0.1)"
+  },
+  71: {
+    bg: "linear-gradient(to right, #ff512f, #dd2476)",
+    border: "#ffcc80",
+    accent: "#ffe0b2",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ffab91",
+    accentDim: "rgba(255, 204, 128, 0.2)"
+  },
+  72: {
+    bg: "linear-gradient(to bottom, #20002c, #cbb4d4)",
+    border: "#e1bee7",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ba68c8",
+    accentDim: "rgba(225, 190, 231, 0.2)"
+  },
+  73: {
+    bg: "linear-gradient(to bottom, #f83600 0%, #f9d423 100%)",
+    border: "#fff59d",
+    accent: "#ffeb3b",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#fff9c4",
+    accentDim: "rgba(255, 235, 59, 0.2)"
+  },
+  74: {
+    bg: "radial-gradient(circle, #000000, #434343)",
+    border: "#fff",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#666",
+    accentDim: "rgba(255, 255, 255, 0.05)",
+    fxClass: "theme-fx-74"
+  },
+  75: {
+    bg: "linear-gradient(to left, #89f7fe, #66a6ff)",
+    border: "#fff",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#01579b",
+    textDim: "#0288d1",
+    accentDim: "rgba(255, 255, 255, 0.3)"
+  },
+  76: {
+    bg: "linear-gradient(to bottom, #870000, #190a05)",
+    border: "#ff5722",
+    accent: "#ffab91",
+    highlight: "#fff",
+    text: "#ffccbc",
+    textDim: "#bf360c",
+    accentDim: "rgba(255, 87, 34, 0.2)"
+  },
+  77: {
+    bg: "#0f2027",
+    border: "#fff",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#cfd8dc",
+    accentDim: "rgba(255, 255, 255, 0.1)",
+    fxClass: "theme-fx-77"
+  },
+  78: {
+    bg: "radial-gradient(circle at 50% 0, #5c5c5c, #000000)",
+    border: "#f5f5f5",
+    accent: "#e0e0e0",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#9e9e9e",
+    accentDim: "rgba(255, 255, 255, 0.1)"
+  },
+  79: {
+    bg: "#2c3e50",
+    border: "#f1c40f",
+    accent: "#f39c12",
+    highlight: "#fff",
+    text: "#ecf0f1",
+    textDim: "#95a5a6",
+    accentDim: "rgba(241, 196, 15, 0.1)"
+  },
 
-      // --- ENVELOPE LOGIC ---
-      window.openLetter = () => {
-        const windchime = document.getElementById("windchime");
-        windchime.volume = 0.5;
-        windchime.play().catch(() => console.log("Audio play failed"));
+  80: {
+    bg: "linear-gradient(to right, #8e9eab, #eef2f3)",
+    border: "#78909c",
+    accent: "#546e7a",
+    highlight: "#fff",
+    text: "#263238",
+    textDim: "#607d8b",
+    accentDim: "rgba(84, 110, 122, 0.1)"
+  },
+  81: {
+    bg: "linear-gradient(to bottom, #d7d2cc, #304352)",
+    border: "#90a4ae",
+    accent: "#cfd8dc",
+    highlight: "#fff",
+    text: "#eceff1",
+    textDim: "#b0bec5",
+    accentDim: "rgba(207, 216, 220, 0.1)"
+  },
+  82: {
+    bg: "linear-gradient(147deg, #f71735 0%, #db3445 74%)",
+    border: "#ff8a80",
+    accent: "#ffcdd2",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ef9a9a",
+    accentDim: "rgba(255, 205, 210, 0.2)"
+  },
+  83: {
+    bg: "linear-gradient(to right, #243949 0%, #517fa4 100%)",
+    border: "#b3e5fc",
+    accent: "#81d4fa",
+    highlight: "#fff",
+    text: "#e1f5fe",
+    textDim: "#81d4fa",
+    accentDim: "rgba(129, 212, 250, 0.1)"
+  },
+  84: {
+    bg: "linear-gradient(90deg, #111 50%, #eee 50%)",
+    border: "#888",
+    accent: "#888",
+    highlight: "#f00",
+    text: "#888",
+    textDim: "#aaa",
+    accentDim: "rgba(136, 136, 136, 0.2)"
+  },
+  85: {
+    bg: "linear-gradient(43deg,#4158d0 0%,#c850c0 46%,#ffcc70 100%)",
+    border: "#fff",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "#ffe0b2",
+    accentDim: "rgba(255, 255, 255, 0.3)"
+  },
 
-        const container = document.querySelector(".envelope-container");
-        container.classList.add("open");
+  86: {
+    bg: "linear-gradient(135deg, #141414 0%, #333 100%)",
+    border: "#ffd700",
+    accent: "#ffecb3",
+    highlight: "#fff",
+    text: "#ffd700",
+    textDim: "#bf953f",
+    accentDim: "rgba(255, 215, 0, 0.3)",
+    fxClass: "theme-fx-86"
+  },
+  87: {
+    bg: "radial-gradient(circle at 50% 50%, #2b1055, #7597de)",
+    border: "rgba(255, 255, 255, 0.5)",
+    accent: "#fff",
+    highlight: "#fff",
+    text: "#fff",
+    textDim: "rgba(255, 255, 255, 0.8)",
+    accentDim: "rgba(255, 255, 255, 0.2)",
+    fxClass: "theme-fx-87"
+  },
+  88: {
+    bg: "linear-gradient(45deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3)",
+    border: "#0ff",
+    accent: "#0ff",
+    highlight: "#f0f",
+    text: "#fff",
+    textDim: "#0ff",
+    accentDim: "rgba(0, 255, 255, 0.3)",
+    fxClass: "theme-fx-88"
+  }
+};
 
-        setTimeout(() => {
-          const letterView = document.getElementById("letter-view");
-          letterView.classList.add("show");
+  /* ==================== Firebase ==================== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+    authDomain: "teacher-shirley.firebaseapp.com",
+    databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+    projectId: "teacher-shirley",
+    storageBucket: "teacher-shirley.firebasestorage.app",
+    messagingSenderId: "534843195436",
+    appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+  };
 
-          const paragraphs = document.querySelectorAll(".letter-p");
-          paragraphs.forEach((p, index) => {
-            setTimeout(() => p.classList.add("visible"), index * 800);
-          });
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
-          setTimeout(() => {
-            document
-              .getElementById("choice-buttons")
-              .classList.add("visible");
-          }, paragraphs.length * 800 + 400);
-        }, 800);
-      };
+  let currentUser = null;
+  let csvData = { words: [], quotes: [] };
+  let checkinHistory = [];
+  let activityLog = [];
+  let processedLogs = [];
 
-      window.enterVisitorMode = () => {
-        document.getElementById("intro-overlay").style.opacity = "0";
-        setTimeout(() => {
-          document.getElementById("intro-overlay").style.display = "none";
-        }, 1000);
-        document.getElementById("visitor-view").classList.add("active");
-      };
+  /* ==================== In-app browser warning ==================== */
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isInApp =
+    ua.includes("FBAN") ||
+    ua.includes("FBAV") ||
+    ua.includes("Instagram") ||
+    ua.includes("Line") ||
+    ua.includes("MicroMessenger");
 
-      window.reopenAuth = () => {
-        document.getElementById("visitor-view").classList.remove("active");
+  window.closeWarning = () => {
+    document.getElementById("in-app-browser-warning").style.display = "none";
+  };
 
-        const overlay = document.getElementById("intro-overlay");
-        overlay.style.display = "flex";
-        void overlay.offsetWidth;
-        overlay.style.opacity = "1";
+  window.copyCurrentUrl = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => alert("Link copied! Open Chrome/Safari and paste it."))
+      .catch(() => alert("Failed to copy. Please copy the URL manually."));
+  };
 
-        const container = document.querySelector(".envelope-container");
-        const letterView = document.getElementById("letter-view");
+  /* ==================== Date helpers ==================== */
+  function getLocalISODate() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
 
-        if (!container.classList.contains("open")) {
-          container.classList.add("open");
-          letterView.classList.add("show");
-        }
+  function getTodayMMDD() {
+    const now = new Date();
+    return (
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0")
+    );
+  }
 
-        showAuthForm();
-      };
+  /* ==================== Intro / Envelope ==================== */
+  window.openLetter = () => {
+    const windchime = document.getElementById("windchime");
+    windchime.volume = 0.5;
+    windchime.play().catch(() => {});
 
-      window.showAuthForm = () => {
-        document.getElementById("choice-buttons").style.display = "none";
-        document.getElementById("auth-form-container").style.display =
-          "block";
-      };
+    const container = document.querySelector(".envelope-container");
+    container.classList.add("open");
 
-      window.hideAuthForm = () => {
-        document.getElementById("choice-buttons").style.display =
-          "flex";
-        document.getElementById("auth-form-container").style.display =
-          "none";
-      };
+    setTimeout(() => {
+      const letterView = document.getElementById("letter-view");
+      letterView.classList.add("show");
 
-      window.openMemberTerminal = () => {
-        document.getElementById("member-terminal").classList.add("show");
-      };
-
-      window.closeMemberTerminal = () => {
-        document.getElementById("member-terminal").classList.remove("show");
-      };
-
-      // --- UPDATED GOOGLE LOGIN LOGIC ---
-      document
-        .getElementById("google-login-btn")
-        .addEventListener("click", () => {
-          if (isInApp) {
-            document.getElementById("in-app-browser-warning").style.display =
-              "flex";
-            return;
-          }
-          signInWithPopup(auth, provider).catch((e) =>
-            alert("Login Error: " + e.message)
-          );
-        });
-
-      document
-        .getElementById("email-login-btn")
-        .addEventListener("click", () => {
-          const email = document.getElementById("email-input").value;
-          const pass = document.getElementById("pass-input").value;
-          if (!email || !pass) return alert("Please fill in fields");
-
-          signInWithEmailAndPassword(auth, email, pass).catch((error) => {
-            if (
-              error.code === "auth/user-not-found" ||
-              error.code === "auth/invalid-credential"
-            ) {
-              if (confirm("Create account?"))
-                createUserWithEmailAndPassword(auth, email, pass);
-            } else {
-              alert(error.message);
-            }
-          });
-        });
-
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        signOut(auth).then(() => location.reload());
+      const paragraphs = document.querySelectorAll(".letter-p");
+      paragraphs.forEach((p, index) => {
+        setTimeout(() => p.classList.add("visible"), index * 800);
       });
 
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          currentUser = user;
+      setTimeout(() => {
+        document.getElementById("choice-buttons").classList.add("visible");
+      }, paragraphs.length * 800 + 400);
+    }, 800);
+  };
 
-          document.getElementById("intro-overlay").style.display = "none";
-          document.getElementById("visitor-view").classList.remove("active");
-          document.getElementById("universe-view").classList.add("active");
-          document.getElementById("logoutBtn").style.display = "flex";
+  window.enterVisitorMode = () => {
+    const overlay = document.getElementById("intro-overlay");
+    overlay.style.opacity = "0";
+    setTimeout(() => (overlay.style.display = "none"), 1000);
+    document.getElementById("visitor-view").classList.add("active");
+  };
 
-          await loadCSVData();
-          await loadUserData(user.uid);
-          renderDailyContent(getTodayMMDD());
-        } else {
-          currentUser = null;
-          document.getElementById("logoutBtn").style.display = "none";
-          document.getElementById("universe-view").classList.remove("active");
-        }
-      });
+  window.reopenAuth = () => {
+    document.getElementById("visitor-view").classList.remove("active");
 
-      // ✅ visitPlanet needs to be global
-      window.visitPlanet = (planetName, url) => {
-        if (currentUser)
-          trackActivity("Exploration", `Departed Moon for ${planetName}`);
-        setTimeout(() => (window.location.href = url), 300);
-      };
+    const overlay = document.getElementById("intro-overlay");
+    overlay.style.display = "flex";
+    void overlay.offsetWidth;
+    overlay.style.opacity = "1";
 
-      async function trackActivity(type, detail) {
-        if (!currentUser) return;
-        const userRef = doc(db, "users", currentUser.uid);
-        try {
-          await updateDoc(userRef, {
-            activityLogs: arrayUnion({
-              date: new Date().toISOString(),
-              type,
-              detail,
-            }),
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
+    const container = document.querySelector(".envelope-container");
+    const letterView = document.getElementById("letter-view");
+    if (!container.classList.contains("open")) {
+      container.classList.add("open");
+      letterView.classList.add("show");
+    }
+    showAuthForm();
+  };
 
-      async function loadUserData(uid) {
-        const userRef = doc(db, "users", uid);
-        const docSnap = await getDoc(userRef);
-        const fullDate = getLocalISODate();
+  window.showAuthForm = () => {
+    document.getElementById("choice-buttons").style.display = "none";
+    document.getElementById("auth-form-container").style.display = "block";
+  };
 
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          checkinHistory = data.history || [];
-          activityLog = data.activityLogs || [];
+  window.hideAuthForm = () => {
+    document.getElementById("choice-buttons").style.display = "flex";
+    document.getElementById("auth-form-container").style.display = "none";
+  };
 
-          document.getElementById("total-days").innerText =
-            checkinHistory.length;
-          document.getElementById("streak-days").innerText =
-            data.streak || 0;
+  /* ==================== Universe / Member terminal ==================== */
+  window.openMemberTerminal = () =>
+    document.getElementById("member-terminal").classList.add("show");
+  window.closeMemberTerminal = () =>
+    document.getElementById("member-terminal").classList.remove("show");
 
-          if (checkinHistory.includes(fullDate)) {
-            document.getElementById("checkin-btn").disabled = true;
-          }
-        } else {
-          await setDoc(
-            userRef,
-            {
-              email: currentUser.email,
-              history: [],
-              streak: 0,
-              activityLogs: [],
-            },
-            { merge: true }
-          );
-        }
+  window.visitPlanet = (planetName, url) => {
+    if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
+    setTimeout(() => (window.location.href = url), 300);
+  };
 
-        renderCalendar();
-        renderCardBagList();
-      }
+  /* ==================== Auth buttons ==================== */
+  document.getElementById("google-login-btn").addEventListener("click", () => {
+    if (isInApp) {
+      document.getElementById("in-app-browser-warning").style.display = "flex";
+      return;
+    }
+    signInWithPopup(auth, provider).catch((e) =>
+      alert("Login Error: " + e.message)
+    );
+  });
 
-      // --- CARD TEMPLATE SELECTOR (88) ---
-      function getTemplateIdByDate(dateStr) {
-        if (!dateStr) return 1;
+  document.getElementById("email-login-btn").addEventListener("click", () => {
+    const email = document.getElementById("email-input").value;
+    const pass = document.getElementById("pass-input").value;
+    if (!email || !pass) return alert("Please fill in fields");
 
-        let uid = "visitor";
-        try {
-          if (currentUser?.uid) uid = currentUser.uid;
-        } catch (e) {
-          console.log("User ID retrieval failed for card seed");
-        }
+    signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/invalid-credential"
+      ) {
+        if (confirm("Create account?"))
+          createUserWithEmailAndPassword(auth, email, pass);
+      } else alert(error.message);
+    });
+  });
 
-        const [y, m, d] = dateStr.split("-").map((v) => parseInt(v, 10));
-        const seedStr = `${y}${m}${d}-${uid}`;
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => location.reload());
+  });
 
-        let hash = 0;
-        for (let i = 0; i < seedStr.length; i++) {
-          const char = seedStr.charCodeAt(i);
-          hash = (hash << 5) - hash + char;
-          hash |= 0;
-        }
-        hash = Math.abs(hash);
+  /* ==================== Auth state ==================== */
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
 
-        const luck = hash % 100;
+      document.getElementById("intro-overlay").style.display = "none";
+      document.getElementById("visitor-view").classList.remove("active");
+      document.getElementById("universe-view").classList.add("active");
+      document.getElementById("logoutBtn").style.display = "flex";
 
-        if (luck === 99) return 88; // SP 1%
-        if (luck >= 97) return 87; // UR 2%
-        if (luck >= 94) return 86; // SSR 3%
+      await loadCSVData();
+      await loadUserData(user.uid);
+      renderDailyContent(getTodayMMDD());
+    } else {
+      currentUser = null;
+      document.getElementById("logoutBtn").style.display = "none";
+      document.getElementById("universe-view").classList.remove("active");
+      // intro / visitor 保留你原流程
+    }
+  });
 
-        return (hash % 85) + 1;
-      }
-
-      // --- OPEN CARD ---
-      window.openCard = (dateStr) => {
-        const userName =
-          (currentUser &&
-            (currentUser.displayName ||
-              currentUser.email.split("@")[0])) ||
-          "Traveler";
-
-        let wotd = "Mystery",
-          wotdPos = "n.",
-          wotdDef = "To explore the unknown.";
-        let quote = "The stars are calling.",
-          author = "Universe";
-        let sentEn = "Keep looking up.",
-          sentCn = "保持仰望星空。";
-        let quoteTrans = "群星在召喚。";
-
-        if (csvData?.words) {
-          const queryDate = dateStr.slice(5);
-          const wordObj = csvData.words.find((r) => r.date === queryDate);
-          const quoteObj = csvData.quotes.find((r) => r.date === queryDate);
-
-          if (wordObj) {
-            wotd = wordObj.word || wotd;
-            wotdPos = wordObj.pos || wotdPos;
-            wotdDef = wordObj.meaning || wotdDef;
-            sentEn = wordObj["sentence e"] || sentEn;
-            sentCn = wordObj["sentence c"] || sentCn;
-          }
-
-          if (quoteObj) {
-            quote = quoteObj["quote e"] || quote;
-            quoteTrans = quoteObj["quote c"] || quoteTrans;
-            author = quoteObj.author || author;
-          }
-        }
-
-        const streakDisplay =
-          document.getElementById("streak-days")?.innerText || "0";
-
-        document.getElementById("card-user-name").innerText = userName;
-        document.getElementById("card-display-date").innerText =
-          dateStr;
-        document.getElementById("card-date-serial").innerText =
-          dateStr.replace(/-/g, "");
-        document.getElementById("card-wotd").innerText = wotd;
-        document.getElementById("card-pos").innerText = wotdPos;
-        document.getElementById("card-def").innerText = wotdDef;
-        document.getElementById("card-sent-en").innerText =
-          sentEn;
-        document.getElementById("card-sent-cn").innerText =
-          sentCn;
-        document.getElementById("card-quote").innerText =
-          `“${quote}”`;
-        document.getElementById("card-quote-trans").innerText =
-          quoteTrans;
-        document.getElementById("card-author").innerText =
-          author;
-        document.getElementById("card-streak").innerText =
-          streakDisplay;
-
-        const cardEl = document.getElementById("collectible-card");
-        for (let i = 1; i <= 88; i++) cardEl.classList.remove(`theme-${i}`);
-        cardEl.classList.add(`theme-${getTemplateIdByDate(dateStr)}`);
-
-        document.getElementById("card-modal").classList.add("active");
-      };
-
-      window.closeCardModal = () => {
-        document.getElementById("card-modal").classList.remove("active");
-      };
-
-      window.downloadCardImage = () => {
-        const cardElement = document.getElementById("collectible-card");
-        const btn = document.querySelector(".btn-download");
-        const originalText = btn.innerText;
-        btn.innerText = "Capturing... 📸";
-
-        if (typeof html2canvas === "undefined") {
-          alert("Snapshot library not loaded.");
-          btn.innerText = originalText;
-          return;
-        }
-
-        html2canvas(cardElement, {
-          scale: 2,
-          backgroundColor: null,
-          useCORS: true,
+  /* ==================== Firestore helpers ==================== */
+  async function trackActivity(type, detail) {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await updateDoc(userRef, {
+        activityLogs: arrayUnion({
+          date: new Date().toISOString(),
+          type,
+          detail
         })
-          .then((canvas) => {
-            const link = document.createElement("a");
-            const dateText =
-              document.getElementById("card-display-date").innerText;
-            link.download = `Shirley_MoonBase_Card_${dateText}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-            btn.innerText = originalText;
-          })
-          .catch((err) => {
-            console.error(err);
-            alert("Image capture failed.");
-            btn.innerText = originalText;
-          });
+      });
+    } catch {}
+  }
+
+  async function loadUserData(uid) {
+    const userRef = doc(db, "users", uid);
+    const docSnap = await getDoc(userRef);
+    const fullDate = getLocalISODate();
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      checkinHistory = data.history || [];
+      activityLog = data.activityLogs || [];
+
+      document.getElementById("total-days").innerText = checkinHistory.length;
+      document.getElementById("streak-days").innerText = data.streak || 0;
+
+      if (checkinHistory.includes(fullDate)) {
+        document.getElementById("checkin-btn").disabled = true;
+      }
+    } else {
+      await setDoc(
+        userRef,
+        { email: currentUser.email, history: [], streak: 0, activityLogs: [] },
+        { merge: true }
+      );
+    }
+
+    renderCalendar();
+    renderCardBagList();
+  }
+
+  /* ==================== Card / Check-in logic ==================== */
+  function getTemplateIdByDate(dateStr) {
+    if (!dateStr) return 1;
+
+    let uid = "visitor";
+    try {
+      if (currentUser?.uid) uid = currentUser.uid;
+    } catch {}
+
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const seedStr = `${y}${m}${d}-${uid}`;
+
+    let hash = 0;
+    for (let i = 0; i < seedStr.length; i++) {
+      hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+      hash |= 0;
+    }
+    hash = Math.abs(hash);
+
+    const luck = hash % 100;
+    if (luck === 99) return 88; // SP 1%
+    if (luck >= 97) return 87;  // UR 2%
+    if (luck >= 94) return 86;  // SSR 3%
+    return (hash % 85) + 1;
+  }
+window.openCard = (dateStr) => {
+  const userName =
+    (currentUser &&
+      (currentUser.displayName || currentUser.email.split("@")[0])) ||
+    "Traveler";
+
+  let wotd = "Mystery",
+    wotdPos = "n.",
+    wotdDef = "To explore the unknown.",
+    sentEn = "Keep looking up.",
+    sentCn = "保持仰望星空。",
+    quote = "The stars are calling.",
+    quoteTrans = "群星在召喚。",
+    author = "Universe";
+
+  if (csvData?.words) {
+    const queryDate = dateStr.slice(5);
+    const wordObj = csvData.words.find((r) => r.date === queryDate);
+    const quoteObj = csvData.quotes.find((r) => r.date === queryDate);
+
+    if (wordObj) {
+      wotd = wordObj.word || wotd;
+      wotdPos = wordObj.pos || wotdPos;
+      wotdDef = wordObj.meaning || wotdDef;
+      sentEn = wordObj["sentence e"] || sentEn;
+      sentCn = wordObj["sentence c"] || sentCn;
+    }
+    if (quoteObj) {
+      quote = quoteObj["quote e"] || quote;
+      quoteTrans = quoteObj["quote c"] || quoteTrans;
+      author = quoteObj.author || author;
+    }
+  }
+
+  const streakDisplay =
+    document.getElementById("streak-days")?.innerText || "0";
+
+  document.getElementById("card-user-name").innerText = userName;
+  document.getElementById("card-display-date").innerText = dateStr;
+  document.getElementById("card-date-serial").innerText = dateStr.replace(/-/g, "");
+
+  document.getElementById("card-wotd").innerText = wotd;
+  document.getElementById("card-pos").innerText = wotdPos;
+  document.getElementById("card-def").innerText = wotdDef;
+  document.getElementById("card-sent-en").innerText = sentEn;
+  document.getElementById("card-sent-cn").innerText = sentCn;
+
+  document.getElementById("card-quote").innerText = `“${quote}”`;
+  document.getElementById("card-quote-trans").innerText = quoteTrans;
+  document.getElementById("card-author").innerText = author;
+  document.getElementById("card-streak").innerText = streakDisplay;
+
+  const cardEl = document.getElementById("collectible-card");
+  const themeId = getTemplateIdByDate(dateStr);
+
+  applyTheme(cardEl, themeId);     // ✅ 套主題
+  document.getElementById("card-modal").classList.add("active");  // ✅ 開 modal
+};
+
+// ✅ 移到 openCard 外面
+function applyTheme(cardEl, themeId) {
+  const t = THEMES[themeId];
+  cardEl.classList.add("card-theme");
+
+  for (let i = 1; i <= 88; i++) cardEl.classList.remove(`theme-fx-${i}`);
+
+  if (t) {
+    cardEl.style.setProperty("--card-bg", t.bg);
+    cardEl.style.setProperty("--card-border", t.border);
+    cardEl.style.setProperty("--card-accent", t.accent);
+    cardEl.style.setProperty("--card-highlight", t.highlight);
+    cardEl.style.setProperty("--card-text", t.text);
+    cardEl.style.setProperty("--card-text-dim", t.textDim);
+    cardEl.style.setProperty("--card-accent-dim", t.accentDim);
+
+    if (t.fxClass) cardEl.classList.add(t.fxClass);
+  }
+}
+  window.closeCardModal = () => {
+    document.getElementById("card-modal").classList.remove("active");
+  };
+
+  window.downloadCardImage = () => {
+    const cardElement = document.getElementById("collectible-card");
+    const btn = document.querySelector(".btn-download");
+    const originalText = btn.innerText;
+    btn.innerText = "Capturing... 📸";
+
+    if (typeof html2canvas === "undefined") {
+      alert("Snapshot library not loaded.");
+      btn.innerText = originalText;
+      return;
+    }
+
+    html2canvas(cardElement, {
+      scale: 2,
+      backgroundColor: null,
+      useCORS: true
+    })
+      .then((canvas) => {
+        const link = document.createElement("a");
+        const dateText =
+          document.getElementById("card-display-date").innerText;
+        link.download = `Shirley_MoonBase_Card_${dateText}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        btn.innerText = originalText;
+      })
+      .catch(() => {
+        alert("Image capture failed.");
+        btn.innerText = originalText;
+      });
+  };
+
+  window.handleCheckIn = async () => {
+    if (!currentUser) return;
+    const fullDate = getLocalISODate();
+    if (checkinHistory.includes(fullDate)) return;
+
+    const btn = document.getElementById("checkin-btn");
+    btn.disabled = true;
+    btn.innerText = "Transmitting...";
+
+    try {
+      let currentStreak =
+        parseInt(document.getElementById("streak-days").innerText) || 0;
+      const lastCheckIn =
+        checkinHistory.length > 0
+          ? checkinHistory[checkinHistory.length - 1]
+          : null;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+      currentStreak = lastCheckIn === yesterdayStr ? currentStreak + 1 : 1;
+
+      const userRef = doc(db, "users", currentUser.uid);
+      const logEntry = {
+        date: new Date().toISOString(),
+        type: "Check-in",
+        detail: "Daily Check-in"
       };
 
-      // --- CHECK-IN ---
-      window.handleCheckIn = async () => {
-        if (!currentUser) return;
+      await updateDoc(userRef, {
+        streak: currentStreak,
+        history: arrayUnion(fullDate),
+        activityLogs: arrayUnion(logEntry)
+      });
 
-        const fullDate = getLocalISODate();
-        if (checkinHistory.includes(fullDate)) return;
+      checkinHistory.push(fullDate);
+      activityLog.push(logEntry);
 
-        const btn = document.getElementById("checkin-btn");
-        btn.disabled = true;
-        btn.innerText = "Transmitting...";
+      document.getElementById("streak-days").innerText = currentStreak;
+      document.getElementById("total-days").innerText = checkinHistory.length;
 
-        try {
-          let currentStreak =
-            parseInt(document.getElementById("streak-days").innerText) ||
-            0;
-          const lastCheckIn =
-            checkinHistory.length > 0
-              ? checkinHistory[checkinHistory.length - 1]
-              : null;
+      btn.innerText = "Moon Check-in Success! 🌕";
 
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = `${yesterday.getFullYear()}-${String(
-            yesterday.getMonth() + 1
-          ).padStart(2, "0")}-${String(yesterday.getDate()).padStart(2, "0")}`;
+      renderCalendar();
+      renderCardBagList();
 
-          currentStreak = lastCheckIn === yesterdayStr ? currentStreak + 1 : 1;
+      setTimeout(() => window.openCard(fullDate), 800);
+    } catch (e) {
+      console.error(e);
+      btn.innerText = "Check-in Failed";
+      btn.disabled = false;
+    }
+  };
 
-          const userRef = doc(db, "users", currentUser.uid);
-          const logEntry = {
-            date: new Date().toISOString(),
-            type: "Check-in",
-            detail: "Daily Check-in",
-          };
+  window.renderCalendar = () => {
+    const grid = document.getElementById("calendar-grid");
+    grid.innerHTML = "";
 
-          await updateDoc(userRef, {
-            streak: currentStreak,
-            history: arrayUnion(fullDate),
-            activityLogs: arrayUnion(logEntry),
-          });
+    const now = new Date();
+    const daysInMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0
+    ).getDate();
 
-          checkinHistory.push(fullDate);
-          activityLog.push(logEntry);
+    const currentYearMonth = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}`;
 
-          document.getElementById("streak-days").innerText =
-            currentStreak;
-          document.getElementById("total-days").innerText =
-            checkinHistory.length;
+    for (let i = 1; i <= daysInMonth; i++) {
+      const dayEl = document.createElement("div");
+      dayEl.innerText = i;
+      dayEl.style.cssText =
+        "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
 
-          btn.innerText = "Moon Check-in Success! 🌕";
+      const thisDateStr = `${currentYearMonth}-${String(i).padStart(2, "0")}`;
 
-          renderCalendar();
-          renderCardBagList();
-
-          setTimeout(() => window.openCard(fullDate), 800);
-        } catch (e) {
-          console.error("Check-in error:", e);
-          btn.innerText = "Check-in Failed";
-          btn.disabled = false;
-        }
-      };
-
-      // --- CALENDAR ---
-      window.renderCalendar = function () {
-        const grid = document.getElementById("calendar-grid");
-        grid.innerHTML = "";
-
-        const now = new Date();
-        const daysInMonth = new Date(
-          now.getFullYear(),
-          now.getMonth() + 1,
-          0
-        ).getDate();
-        const currentYearMonth = `${now.getFullYear()}-${String(
-          now.getMonth() + 1
-        ).padStart(2, "0")}`;
-
-        for (let i = 1; i <= daysInMonth; i++) {
-          const dayEl = document.createElement("div");
-          dayEl.innerText = i;
-          dayEl.style.cssText =
-            "aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); border-radius:4px; transition:all 0.2s; color: var(--text);";
-
-          const thisDateStr = `${currentYearMonth}-${String(i).padStart(2,"0")}`;
-
-          if (checkinHistory.includes(thisDateStr)) {
-            dayEl.style.background = "var(--accent)";
-            dayEl.style.color = "white";
-            dayEl.style.borderRadius = "50%";
-            dayEl.style.fontWeight = "bold";
-
-            dayEl.classList.add("calendar-day-checked");
-            dayEl.title = "Tap to open Card Pocket";
-            dayEl.onclick = () => window.openCard(thisDateStr);
-          }
-
-          grid.appendChild(dayEl);
-        }
-      };
-
-      // --- CARD BAG ---
-      function renderCardBagList() {
-        const bag = document.getElementById("card-bag-list");
-        if (!bag) return;
-
-        bag.innerHTML = "";
-
-        if (!checkinHistory?.length) {
-          bag.innerHTML = `<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>`;
-          return;
-        }
-
-        const sorted = [...checkinHistory].sort().reverse();
-        const groups = {};
-
-        sorted.forEach((d) => {
-          const ym = d.slice(0, 7);
-          if (!groups[ym]) groups[ym] = [];
-          groups[ym].push(d);
-        });
-
-        Object.keys(groups)
-          .sort()
-          .reverse()
-          .forEach((ym) => {
-            const section = document.createElement("div");
-            section.style.cssText =
-              "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
-
-            const title = document.createElement("div");
-            title.innerText = ym;
-            title.style.cssText =
-              "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
-            section.appendChild(title);
-
-            const row = document.createElement("div");
-            row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
-
-            groups[ym].forEach((dateStr) => {
-              const btn = document.createElement("button");
-              btn.innerText = dateStr.slice(8);
-              btn.style.cssText = `
-                padding:4px 8px; border-radius:999px; border:1px solid var(--border);
-                background:var(--surface); color:var(--text); font-size:0.75rem;
-                cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1);
-              `;
-              btn.title = dateStr;
-              btn.onclick = () => window.openCard(dateStr);
-              row.appendChild(btn);
-            });
-
-            section.appendChild(row);
-            bag.appendChild(section);
-          });
+      if (checkinHistory.includes(thisDateStr)) {
+        dayEl.style.background = "var(--accent)";
+        dayEl.style.color = "white";
+        dayEl.style.borderRadius = "50%";
+        dayEl.style.fontWeight = "bold";
+        dayEl.classList.add("calendar-day-checked");
+        dayEl.title = "Tap to open Card Pocket";
+        dayEl.onclick = () => window.openCard(thisDateStr);
       }
 
-      // --- CSV LOADING ---
-      async function loadCSVData() {
-        try {
-          const [resWords, resQuotes] = await Promise.all([
-            fetch(
-              "https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv"
-            ),
-            fetch(
-              "https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv"
-            ),
-          ]);
+      grid.appendChild(dayEl);
+    }
+  };
 
-          csvData.words = parseCSV(await resWords.text());
-          csvData.quotes = parseCSV(await resQuotes.text());
-        } catch (e) {}
-      }
+  function renderCardBagList() {
+    const bag = document.getElementById("card-bag-list");
+    if (!bag) return;
+    bag.innerHTML = "";
 
-      function parseCSV(text) {
-        const lines = text.trim().split("\n");
-        const headers = lines[0].split(",").map((h) => h.trim());
+    if (!checkinHistory.length) {
+      bag.innerHTML =
+        '<div style="font-size:0.75rem; color:var(--text-light);">No cards yet.</div>';
+      return;
+    }
 
-        return lines.slice(1).map((line) => {
-          const row = {};
-          const regex =
-            /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
-          const matches = [];
-          let match;
+    const sorted = [...checkinHistory].sort().reverse();
+    const groups = {};
 
-          while ((match = regex.exec(line)) !== null) {
-            if (match.index === regex.lastIndex) regex.lastIndex++;
-            if (match[1] !== undefined) {
-              matches.push(
-                match[1].replace(/^"|"$/g, "").replace(/""/g, '"')
-              );
-            }
-          }
+    sorted.forEach((d) => {
+      const ym = d.slice(0, 7);
+      (groups[ym] ||= []).push(d);
+    });
 
-          headers.forEach((h, i) => {
-            row[h] = matches[i] ? matches[i].trim() : "";
-          });
+    Object.keys(groups)
+      .sort()
+      .reverse()
+      .forEach((ym) => {
+        const section = document.createElement("div");
+        section.style.cssText =
+          "margin-bottom:10px; padding:8px; border:1px dashed var(--border); border-radius:10px; background:rgba(0,0,0,0.02);";
 
-          return row;
-        });
-      }
+        const title = document.createElement("div");
+        title.innerText = ym;
+        title.style.cssText =
+          "font-size:0.75rem; font-weight:bold; color:var(--text-light); margin-bottom:6px; letter-spacing:0.5px;";
+        section.appendChild(title);
 
-      const getTodayMMDD = () => {
-        const now = new Date();
-        return (
-          String(now.getMonth() + 1).padStart(2, "0") +
-          "-" +
-          String(now.getDate()).padStart(2, "0")
-        );
-      };
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex; flex-wrap:wrap; gap:6px;";
 
-      function renderDailyContent(dateStr) {
-        const wordObj = csvData.words.find((r) => r.date === dateStr);
-        if (wordObj) {
-          document.getElementById("wotd-word").innerText = wordObj.word;
-          document.getElementById("wotd-ipa").innerText = wordObj.ipa;
-          document.getElementById("wotd-pos").innerText = wordObj.pos;
-          document.getElementById("wotd-meaning").innerText =
-            wordObj.meaning;
-          document.getElementById("wotd-sentence-e").innerText =
-            wordObj["sentence e"];
-          document.getElementById("wotd-sentence-c").innerText =
-            wordObj["sentence c"];
-          document.getElementById("word-date").innerText = `(${dateStr})`;
-        }
-
-        const quoteObj = csvData.quotes.find((r) => r.date === dateStr);
-        if (quoteObj) {
-          document.getElementById("qotd-text").innerText =
-            quoteObj["quote e"];
-          document.getElementById("qotd-trans").innerText =
-            quoteObj["quote c"];
-          document.getElementById("qotd-author").innerText =
-            "— " + quoteObj.author;
-        }
-      }
-
-      // --- ACTIVITY LOG PRINTING ---
-      let processedLogs = [];
-
-      function processActivityLogs(logs) {
-        if (!logs?.length) return [];
-
-        const sortedLogs = [...logs].sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
-        );
-        const grouped = [];
-
-        for (let i = 0; i < sortedLogs.length; i++) {
-          const current = sortedLogs[i];
-          const next = sortedLogs[i + 1];
-          const startTime = new Date(current.date);
-          let endTime = next ? new Date(next.date) : new Date();
-
-          let j = i + 1;
-          while (j < sortedLogs.length && sortedLogs[j].detail === current.detail) {
-            endTime =
-              j + 1 < sortedLogs.length
-                ? new Date(sortedLogs[j + 1].date)
-                : new Date();
-            j++;
-          }
-
-          const durationMs = endTime - startTime;
-          const minutes = Math.floor(durationMs / 60000);
-          const durationStr = minutes < 1 ? "< 1 min" : `${minutes} mins`;
-
-          grouped.push({
-            start: startTime,
-            end: endTime,
-            type: current.type,
-            detail: current.detail,
-            durationStr,
-          });
-
-          i = j - 1;
-        }
-
-        return grouped.reverse();
-      }
-
-      window.openPrintSelection = () => {
-        if (!currentUser) return;
-
-        processedLogs = processActivityLogs(activityLog);
-        const listContainer =
-          document.getElementById("log-selection-list");
-
-        listContainer.innerHTML = "";
-
-        if (!processedLogs.length) {
-          listContainer.innerHTML =
-            '<div style="padding:20px; text-align:center;">No records found.</div>';
-          return;
-        }
-
-        processedLogs.forEach((log, index) => {
-          const dateStr = log.start.toLocaleString([], {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-
-          const row = document.createElement("div");
-          row.className = "log-item-row";
-          row.innerHTML = `
-            <input type="checkbox" id="log-check-${index}" class="log-checkbox">
-            <div class="log-details">
-              <span class="log-action">${log.type}: ${log.detail}</span>
-              <span class="log-time">${dateStr} (${log.durationStr})</span>
-            </div>
+        groups[ym].forEach((dateStr) => {
+          const btn = document.createElement("button");
+          btn.innerText = dateStr.slice(8);
+          btn.style.cssText = `
+            padding:4px 8px; border-radius:999px; border:1px solid var(--border);
+            background:var(--surface); color:var(--text); font-size:0.75rem;
+            cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1);
           `;
-          listContainer.appendChild(row);
+          btn.title = dateStr;
+          btn.onclick = () => window.openCard(dateStr);
+          row.appendChild(btn);
         });
 
-        document.getElementById("print-selection-modal").style.display =
-          "flex";
-      };
-
-      window.closePrintSelection = () => {
-        document.getElementById("print-selection-modal").style.display =
-          "none";
-      };
-
-      window.toggleAllLogs = (checkStatus) => {
-        document
-          .querySelectorAll(".log-checkbox")
-          .forEach((cb) => (cb.checked = checkStatus));
-      };
-
-      window.confirmPrint = () => {
-        const printBody = document.getElementById("print-body");
-        printBody.innerHTML = "";
-
-        document.getElementById("print-name").innerText =
-          currentUser.displayName || currentUser.email;
-        document.getElementById("print-date").innerText =
-          new Date().toLocaleDateString();
-
-        let hasSelection = false;
-
-        processedLogs.forEach((log, index) => {
-          const checkbox = document.getElementById(`log-check-${index}`);
-          if (checkbox?.checked) {
-            hasSelection = true;
-            const tr = document.createElement("tr");
-            const dateStr = log.start.toLocaleString([], {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-
-            tr.innerHTML = `
-              <td>${dateStr}<br>
-                <span style="font-size:0.8em; color:#666;">Duration: ${log.durationStr}</span>
-              </td>
-              <td>${log.type}</td>
-              <td>${log.detail}</td>
-            `;
-            printBody.appendChild(tr);
-          }
-        });
-
-        if (!hasSelection) return alert("Please select at least one record to print.");
-
-        document.getElementById("print-selection-modal").style.display =
-          "none";
-        setTimeout(() => window.print(), 500);
-      };
-
-      // --- PARTICLES ---
-      const canvas = document.getElementById("particle-canvas");
-      const ctx = canvas.getContext("2d");
-      let particlesArray;
-
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-
-      window.addEventListener("resize", () => {
-        resizeCanvas();
-        initParticles();
+        section.appendChild(row);
+        bag.appendChild(section);
       });
+  }
 
-      resizeCanvas();
+  /* ==================== CSV ==================== */
+  async function loadCSVData() {
+    try {
+      const [resWords, resQuotes] = await Promise.all([
+        fetch(
+          "https://ducj-creator.github.io/Teacher-Shirley/assets/word%20of%20the%20day.csv"
+        ),
+        fetch(
+          "https://ducj-creator.github.io/Teacher-Shirley/assets/quote%20of%20the%20day.csv"
+        )
+      ]);
 
-      class Particle {
-        constructor() {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
-          this.size = Math.random() * 2;
-          this.speedX = Math.random() * 0.2 - 0.1;
-          this.speedY = Math.random() * 0.2 - 0.1;
-          this.opacity = Math.random() * 0.5;
-        }
+      csvData.words = parseCSV(await resWords.text());
+      csvData.quotes = parseCSV(await resQuotes.text());
+    } catch {}
+  }
 
-        update() {
-          this.x += this.speedX;
-          this.y += this.speedY;
+  function parseCSV(text) {
+    const lines = text.trim().split("\n");
+    const headers = lines[0].split(",").map((h) => h.trim());
 
-          if (this.x > canvas.width) this.x = 0;
-          if (this.x < 0) this.x = canvas.width;
-          if (this.y > canvas.height) this.y = 0;
-          if (this.y < 0) this.y = canvas.height;
-        }
+    return lines.slice(1).map((line) => {
+      const row = {};
+      const regex =
+        /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
 
-        draw(isDark) {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fillStyle = isDark
-            ? `rgba(255, 255, 255, ${this.opacity})`
-            : `rgba(44, 62, 80, ${this.opacity * 0.5})`;
-          ctx.fill();
-        }
+      const matches = [];
+      let match;
+      while ((match = regex.exec(line)) !== null) {
+        if (match.index === regex.lastIndex) regex.lastIndex++;
+        if (match[1] !== undefined)
+          matches.push(
+            match[1].replace(/^"|"$/g, "").replace(/""/g, '"')
+          );
       }
 
-      function initParticles() {
-        particlesArray = [];
-        for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
-      }
+      headers.forEach(
+        (h, i) => (row[h] = matches[i] ? matches[i].trim() : "")
+      );
+      return row;
+    });
+  }
 
-      function animateParticles() {
-        requestAnimationFrame(animateParticles);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function renderDailyContent(dateStr) {
+    const wordObj = csvData.words.find((r) => r.date === dateStr);
+    if (wordObj) {
+      document.getElementById("wotd-word").innerText = wordObj.word;
+      document.getElementById("wotd-ipa").innerText = wordObj.ipa;
+      document.getElementById("wotd-pos").innerText = wordObj.pos;
+      document.getElementById("wotd-meaning").innerText = wordObj.meaning;
+      document.getElementById("wotd-sentence-e").innerText =
+        wordObj["sentence e"];
+      document.getElementById("wotd-sentence-c").innerText =
+        wordObj["sentence c"];
+      document.getElementById("word-date").innerText = `(${dateStr})`;
+    }
 
-        const isDark =
-          document.getElementById("htmlRoot").classList.contains("dark");
-        particlesArray.forEach((p) => {
-          p.update();
-          p.draw(isDark);
-        });
-      }
+    const quoteObj = csvData.quotes.find((r) => r.date === dateStr);
+    if (quoteObj) {
+      document.getElementById("qotd-text").innerText =
+        quoteObj["quote e"];
+      document.getElementById("qotd-trans").innerText =
+        quoteObj["quote c"];
+      document.getElementById("qotd-author").innerText =
+        "— " + quoteObj.author;
+    }
+  }
 
-      initParticles();
-      animateParticles();
+  /* ==================== Particles + UI toggles ==================== */
+  const canvas = document.getElementById("particle-canvas");
+  const ctx = canvas.getContext("2d");
+  let particlesArray = [];
 
-      // --- THEME & MUSIC TOGGLES ---
-      const html = document.getElementById("htmlRoot");
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 
-      document.getElementById("themeToggle")
-        .addEventListener("click", () => html.classList.toggle("dark"));
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2;
+      this.speedX = Math.random() * 0.2 - 0.1;
+      this.speedY = Math.random() * 0.2 - 0.1;
+      this.opacity = Math.random() * 0.5;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x > canvas.width) this.x = 0;
+      if (this.x < 0) this.x = canvas.width;
+      if (this.y > canvas.height) this.y = 0;
+      if (this.y < 0) this.y = canvas.height;
+    }
+    draw(isDark) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = isDark
+        ? `rgba(255,255,255,${this.opacity})`
+        : `rgba(44,62,80,${this.opacity * 0.5})`;
+      ctx.fill();
+    }
+  }
 
-      const musicToggle = document.getElementById("musicToggle");
-      const themeSong = document.getElementById("themeSong");
-      let isPlaying = false;
+  function initParticles() {
+    particlesArray = [];
+    for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
+  }
 
-      musicToggle.addEventListener("click", () => {
-        if (isPlaying) {
-          themeSong.pause();
-          musicToggle.style.color = "var(--text)";
-        } else {
-          themeSong.currentTime = 0;
-          themeSong.play();
-          musicToggle.style.color = "var(--accent)";
-        }
-        isPlaying = !isPlaying;
-      });
-    </script>
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const isDark = document
+      .getElementById("htmlRoot")
+      .classList.contains("dark");
+    particlesArray.forEach((p) => {
+      p.update();
+      p.draw(isDark);
+    });
+  }
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    initParticles();
+  });
+
+  resizeCanvas();
+  initParticles();
+  animateParticles();
+
+  const html = document.getElementById("htmlRoot");
+  document
+    .getElementById("themeToggle")
+    .addEventListener("click", () => html.classList.toggle("dark"));
+
+  const musicToggle = document.getElementById("musicToggle");
+  const themeSong = document.getElementById("themeSong");
+  let isPlaying = false;
+
+  musicToggle.addEventListener("click", () => {
+    if (isPlaying) {
+      themeSong.pause();
+      musicToggle.style.color = "var(--text)";
+    } else {
+      themeSong.currentTime = 0;
+      themeSong.play();
+      musicToggle.style.color = "var(--accent)";
+    }
+    isPlaying = !isPlaying;
+  });
+</script>
   </body>
 </html>
