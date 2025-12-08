@@ -786,6 +786,21 @@
       renderMissions();
       renderMoonUI();
     });
-  </script>
+ <script>
+  function sendHeight(){
+    const h = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    parent.postMessage({ type: "moonlightHeight", height: h }, "*");
+  }
+
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+
+  // 若你的頁面會動態新增內容，這段也能自動更新高度
+  const mo = new MutationObserver(sendHeight);
+  mo.observe(document.body, { childList: true, subtree: true });
+</script>
 </body>
 </html>
