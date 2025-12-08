@@ -2248,14 +2248,17 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
       import {
-        getAuth,
-        signInWithPopup,
-        GoogleAuthProvider,
-        signOut,
-        onAuthStateChanged,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword
-      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+  getAuth,
+  signInWithPopup,
+  signInWithRedirect,        // ✅ iOS 可用 redirect（更穩）
+  GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  setPersistence,            // ✅ 新增
+  browserLocalPersistence    // ✅ 新增
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
       import {
         getFirestore,
         doc,
@@ -2297,7 +2300,10 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
       const provider = new GoogleAuthProvider();
-
+      // ✅ 強制把登入狀態存到 localStorage，避免一登入又掉線
+setPersistence(auth, browserLocalPersistence).catch((e) => {
+  console.warn("Persistence set failed:", e);
+});
       let currentUser = null;
       let csvData = { words: [], quotes: [] };
       let checkinHistory = [];
@@ -2416,16 +2422,25 @@
       };
 
       /* ==================== Auth buttons ==================== */
-      document.getElementById("google-login-btn").addEventListener("click", () => {
-        if (isInApp) {
-          document.getElementById("in-app-browser-warning").style.display = "flex";
-          return;
-        }
-        signInWithPopup(auth, provider).catch((e) =>
-          alert("Login Error: " + e.message)
-        );
-      });
+ document.getElementById("google-login-btn").addEventListener("click", () => {
+  if (isInApp) {
+    document.getElementById("in-app-browser-warning").style.display = "flex";
+    return;
+  }
 
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  // ✅ iOS/Safari 用 redirect 更不容易被擋 popup
+  if (isIOS) {
+    signInWithRedirect(auth, provider).catch((e) =>
+      alert("Login Error: " + e.message)
+    );
+  } else {
+    signInWithPopup(auth, provider).catch((e) =>
+      alert("Login Error: " + e.message)
+    );
+  }
+});
       document.getElementById("email-login-btn").addEventListener("click", () => {
         const email = document.getElementById("email-input").value;
         const pass = document.getElementById("pass-input").value;
@@ -2447,28 +2462,55 @@
       });
 
       /* ==================== Auth state ==================== */
-      onAuthStateChanged(auth, async (user) => {
-        const moonEmbed = document.getElementById("moonlight-embed");
+      function showLoggedInUI() {
+  // ✅ 關掉信封/登入 overlay
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) overlay.style.display = "none";
 
-        if (user) {
-          currentUser = user;
+  // ✅ 關掉 visitor 模式、打開宇宙
+  document.getElementById("visitor-view").classList.remove("active");
+  document.getElementById("universe-view").classList.add("active");
 
-          document.getElementById("intro-overlay").style.display = "none";
-          document.getElementById("visitor-view").classList.remove("active");
-          document.getElementById("universe-view").classList.add("active");
-          document.getElementById("logoutBtn").style.display = "flex";
+  // ✅ 顯示登出按鈕
+  document.getElementById("logoutBtn").style.display = "flex";
 
-          // ✅ 登入後先隱藏月光寶盒，等使用者開終端機才顯示
-          if (moonEmbed) moonEmbed.style.display = "none";
+  // ✅ 月光寶盒只在登入後顯示
+  const moonEmbed = document.getElementById("moonlight-embed");
+  if (moonEmbed) moonEmbed.style.display = "block";
+}
 
-          await loadCSVData();
-          await loadUserData(user.uid);
-          renderDailyContent(getTodayMMDD());
-        } else {
-          currentUser = null;
-          document.getElementById("logoutBtn").style.display = "none";
-          document.getElementById("universe-view").classList.remove("active");
+function showLoggedOutUI() {
+  // ✅ 隱藏登出按鈕
+  document.getElementById("logoutBtn").style.display = "none";
 
+  // ✅ 關掉宇宙＆會員終端
+  document.getElementById("universe-view").classList.remove("active");
+  document.getElementById("member-terminal").classList.remove("show");
+
+  // ✅ 明確回到信封/登入入口
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) {
+    overlay.style.display = "flex";
+    overlay.style.opacity = "1";
+  }
+
+  // ✅ 月光寶盒未登入就隱藏
+  const moonEmbed = document.getElementById("moonlight-embed");
+  if (moonEmbed) moonEmbed.style.display = "none";
+}
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    showLoggedInUI();
+
+    await loadCSVData();
+    await loadUserData(user.uid);
+    renderDailyContent(getTodayMMDD());
+  } else {
+    currentUser = null;
+    showLoggedOutUI();
+  }
+});
           // ✅ 未登入 / 登出：回到登入信封頁
           const overlay = document.getElementById("intro-overlay");
           overlay.style.display = "flex";
