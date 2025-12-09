@@ -480,201 +480,204 @@
 
   <footer>© Teacher Shirley’s ET Platform 2025</footer>
 
-  <script>
-    const MOON_CYCLE = 300;
+<script>
+  const MOON_CYCLE = 300;
 
-    const MISSIONS = [
-      {
-        title: "Mission 1: GSAT 真題",
-        url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html"
-      },
-      {
-        title: "Mission 2: iVocab 考題",
-        url: "https://ivocab-quiz.vercel.app/"
-      },
-      {
-        title: "Mission 3: Topic Reading 素養閱讀",
-        url: "https://shirley-ai-reading.vercel.app/"
-      },
-      {
-        title: "Mission 4: (以後有新的再增加)",
-        url: ""
-      }
-    ];
-
-    let missionStarted = sessionStorage.getItem("missionStarted") === "1";
-
-    function setMissionStarted(v){
-      missionStarted = v;
-      sessionStorage.setItem("missionStarted", v ? "1" : "0");
-
-      const panel = document.getElementById("startMissionPanel");
-      if(panel) panel.style.display = v ? "none" : "flex";
-
-      document.querySelectorAll("#mission-list a").forEach(a=>{
-        a.classList.toggle("locked", !v);
-      });
+  const MISSIONS = [
+    {
+      title: "Mission 1: GSAT 真題",
+      url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html"
+    },
+    {
+      title: "Mission 2: iVocab 考題",
+      url: "https://ivocab-quiz.vercel.app/"
+    },
+    {
+      title: "Mission 3: Topic Reading 素養閱讀",
+      url: "https://shirley-ai-reading.vercel.app/"
+    },
+    {
+      title: "Mission 4: (以後有新的再增加)",
+      url: ""
     }
+  ];
 
-    document.addEventListener("click", (e)=>{
-      if(e.target?.id === "startMissionBtn"){
-        setMissionStarted(true);
-      }
+  let missionStarted = sessionStorage.getItem("missionStarted") === "1";
+
+  function setMissionStarted(v){
+    missionStarted = v;
+    sessionStorage.setItem("missionStarted", v ? "1" : "0");
+
+    const panel = document.getElementById("startMissionPanel");
+    if(panel) panel.style.display = v ? "none" : "flex";
+
+    document.querySelectorAll("#mission-list a").forEach(a=>{
+      a.classList.toggle("locked", !v);
     });
+  }
+  window.setMissionStarted = setMissionStarted;
+  window.missionStarted = missionStarted;
 
-    window.startLunarMission = function(event){
-      event.preventDefault();
-      const href = event.currentTarget.href;
-      window.open(href, "_blank");
-    };
-
-    function renderMissions(){
-      const listEl = document.getElementById("mission-list");
-      if (!listEl) return;
-      listEl.innerHTML = "";
-
-      MISSIONS.forEach(m => {
-        const a = document.createElement("a");
-
-        if (m.url && m.url.trim() !== "") {
-          a.href = m.url;
-          a.onclick = window.startLunarMission;
-          a.innerHTML = `
-            <div>${m.title}</div>
-            <div class="task-tag">開啟任務</div>
-          `;
-        } else {
-          a.href = "javascript:void(0)";
-          a.classList.add("disabled");
-          a.onclick = (e)=> {
-            e.preventDefault();
-            alert(`${m.title} 尚未開放`);
-          };
-          a.innerHTML = `
-            <div>${m.title}</div>
-            <div class="task-tag">尚未開放</div>
-          `;
-        }
-
-        listEl.appendChild(a);
-      });
-
-      setMissionStarted(missionStarted);
+  document.addEventListener("click", (e)=>{
+    if(e.target?.id === "startMissionBtn"){
+      setMissionStarted(true);
+      window.missionStarted = true;
     }
+  });
 
-    let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
+  window.startLunarMission = function(event){
+    event.preventDefault();
+    const href = event.currentTarget.href;
+    window.open(href, "_blank");
+  };
 
-    function phaseByPercent(p){
-      if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
-      if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
-      if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
-      if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
-      if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
-      if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
-      if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
-      return {emoji:"🌘", text:"Waning Crescent / 殘月"};
-    }
+  function renderMissions(){
+    const listEl = document.getElementById("mission-list");
+    if (!listEl) return;
+    listEl.innerHTML = "";
 
-    function isFullMoonPercent(p){
-      return p >= 0.50 && p < 0.62;
-    }
+    MISSIONS.forEach(m => {
+      const a = document.createElement("a");
 
-    function burstStars(){
-      const layer = document.getElementById("burst-layer");
-      if (!layer) return;
-
-      const stars = ["✨","⭐","🌟","💫"];
-      const count = 18;
-
-      for (let i=0;i<count;i++){
-        const s = document.createElement("span");
-        s.className = "burst-star";
-        s.innerText = stars[Math.floor(Math.random()*stars.length)];
-
-        const angle = Math.random()*Math.PI*2;
-        const dist  = 70 + Math.random()*100;
-        const dx = Math.cos(angle)*dist;
-        const dy = Math.sin(angle)*dist;
-
-        s.style.left = "50%";
-        s.style.top  = "50%";
-        s.style.setProperty("--dx", `${dx}px`);
-        s.style.setProperty("--dy", `${dy}px`);
-        s.style.fontSize = `${10 + Math.random()*10}px`;
-        s.style.animationDelay = `${Math.random()*0.25}s`;
-
-        layer.appendChild(s);
-        s.addEventListener("animationend", ()=> s.remove());
-      }
-    }
-
-    let prevIsFull = false;
-
-    function renderLogs(){
-      const box = document.getElementById("moon-log-box");
-      if (!box) return;
-      box.innerHTML = "";
-
-      const logs = moonData.logs || [];
-      if (logs.length === 0){
-        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
-        return;
-      }
-
-      logs.slice().reverse().slice(0,30).forEach(l=>{
-        const div = document.createElement("div");
-        div.className = "log-item";
-        const time = new Date(l.time).toLocaleString();
-        div.innerHTML = `
-          <div>
-            +<b>${l.glow}</b> pts
-            <span style="color:#aaa;">(✅${l.correct})</span>
-          </div>
-          <div class="log-time">${time}</div>
+      if (m.url && m.url.trim() !== "") {
+        a.href = m.url;
+        a.onclick = window.startLunarMission;
+        a.innerHTML = `
+          <div>${m.title}</div>
+          <div class="task-tag">開啟任務</div>
         `;
-        box.appendChild(div);
-      });
-    }
-
-    function renderMoonUI(){
-      const totalEl = document.getElementById("moon-total");
-      const cycleEl = document.getElementById("moon-cycle");
-      const barEl   = document.getElementById("moon-progress");
-      const emojiEl = document.getElementById("moon-emoji");
-      const phaseEl = document.getElementById("moon-phase-text");
-      const glassBox = document.getElementById("glass-box");
-
-      if(!totalEl || !cycleEl || !barEl || !emojiEl || !phaseEl) return;
-
-      totalEl.innerText = moonData.totalGlow || 0;
-      cycleEl.innerText = moonData.cycleGlow || 0;
-
-      const percent = Math.min((moonData.cycleGlow || 0) / MOON_CYCLE, 1);
-      barEl.style.width = `${percent*100}%`;
-
-      const phase = phaseByPercent(percent);
-      emojiEl.innerText = phase.emoji;
-      phaseEl.innerText = phase.text;
-
-      const nowIsFull = isFullMoonPercent(percent);
-      if (glassBox){
-        glassBox.classList.toggle("full-moon", nowIsFull);
+      } else {
+        a.href = "javascript:void(0)";
+        a.classList.add("disabled");
+        a.onclick = (e)=> {
+          e.preventDefault();
+          alert(`${m.title} 尚未開放`);
+        };
+        a.innerHTML = `
+          <div>${m.title}</div>
+          <div class="task-tag">尚未開放</div>
+        `;
       }
 
-      if (nowIsFull && !prevIsFull){
-        burstStars();
-      }
-      prevIsFull = nowIsFull;
-
-      renderLogs();
-    }
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-      renderMissions();
-      renderMoonUI();
-      setMissionStarted(missionStarted);
+      listEl.appendChild(a);
     });
-  </script>
+
+    setMissionStarted(missionStarted);
+  }
+
+  let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
+  window.moonData = moonData;
+
+  function phaseByPercent(p){
+    if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
+    if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
+    if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
+    if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
+    if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
+    if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
+    if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
+    return {emoji:"🌘", text:"Waning Crescent / 殘月"};
+  }
+
+  function isFullMoonPercent(p){
+    return p >= 0.50 && p < 0.62;
+  }
+
+  function burstStars(){
+    const layer = document.getElementById("burst-layer");
+    if (!layer) return;
+
+    const stars = ["✨","⭐","🌟","💫"];
+    const count = 18;
+
+    for (let i=0;i<count;i++){
+      const s = document.createElement("span");
+      s.className = "burst-star";
+      s.innerText = stars[Math.floor(Math.random()*stars.length)];
+
+      const angle = Math.random()*Math.PI*2;
+      const dist  = 70 + Math.random()*100;
+      const dx = Math.cos(angle)*dist;
+      const dy = Math.sin(angle)*dist;
+
+      s.style.left = "50%";
+      s.style.top  = "50%";
+      s.style.setProperty("--dx", `${dx}px`);
+      s.style.setProperty("--dy", `${dy}px`);
+      s.style.fontSize = `${10 + Math.random()*10}px`;
+      s.style.animationDelay = `${Math.random()*0.25}s`;
+
+      layer.appendChild(s);
+      s.addEventListener("animationend", ()=> s.remove());
+    }
+  }
+
+  let prevIsFull = false;
+
+  function renderLogs(){
+    const box = document.getElementById("moon-log-box");
+    if (!box) return;
+    box.innerHTML = "";
+
+    const logs = moonData.logs || [];
+    if (logs.length === 0){
+      box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
+      return;
+    }
+
+    logs.slice().reverse().slice(0,30).forEach(l=>{
+      const div = document.createElement("div");
+      div.className = "log-item";
+      const time = new Date(l.time).toLocaleString();
+      div.innerHTML = `
+        <div>
+          +<b>${l.glow}</b> pts
+          <span style="color:#aaa;">(✅${l.correct})</span>
+        </div>
+        <div class="log-time">${time}</div>
+      `;
+      box.appendChild(div);
+    });
+  }
+
+  function renderMoonUI(){
+    const totalEl = document.getElementById("moon-total");
+    const cycleEl = document.getElementById("moon-cycle");
+    const barEl   = document.getElementById("moon-progress");
+    const emojiEl = document.getElementById("moon-emoji");
+    const phaseEl = document.getElementById("moon-phase-text");
+    const glassBox = document.getElementById("glass-box");
+
+    if(!totalEl || !cycleEl || !barEl || !emojiEl || !phaseEl) return;
+
+    totalEl.innerText = moonData.totalGlow || 0;
+    cycleEl.innerText = moonData.cycleGlow || 0;
+
+    const percent = Math.min((moonData.cycleGlow || 0) / MOON_CYCLE, 1);
+    barEl.style.width = `${percent*100}%`;
+
+    const phase = phaseByPercent(percent);
+    emojiEl.innerText = phase.emoji;
+    phaseEl.innerText = phase.text;
+
+    const nowIsFull = isFullMoonPercent(percent);
+    if (glassBox){
+      glassBox.classList.toggle("full-moon", nowIsFull);
+    }
+
+    if (nowIsFull && !prevIsFull){
+      burstStars();
+    }
+    prevIsFull = nowIsFull;
+
+    renderLogs();
+  }
+  window.renderMoonUI = renderMoonUI;
+
+  renderMissions();
+  renderMoonUI();
+  setMissionStarted(missionStarted);
+</script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
