@@ -21,6 +21,7 @@
       --accent-2: #7ed6ff;
       --danger: #ff7675;
       --good: #55efc4;
+
       --glow-soft: 0 0 18px rgba(126,214,255,0.25);
       --glow-strong: 0 0 28px rgba(241,196,15,0.35);
     }
@@ -33,6 +34,7 @@
       position:relative;
       overflow-x:hidden;
     }
+
     body::before,
     body::after{
       content:"";
@@ -66,6 +68,7 @@
       animation: starTwinkle 7.5s ease-in-out infinite alternate, starDrift 240s linear infinite reverse;
       z-index:-1;
     }
+
     @keyframes starTwinkle{
       0%{opacity:0.45; filter:drop-shadow(0 0 0 rgba(255,255,255,0));}
       100%{opacity:1; filter:drop-shadow(0 0 6px rgba(255,255,255,0.35));}
@@ -74,6 +77,7 @@
       0%{transform:translateY(0px);}
       100%{transform:translateY(120px);}
     }
+
     header{
       text-align:center; margin-top:10px; margin-bottom:16px;
       position:relative;
@@ -91,9 +95,11 @@
       from{filter:drop-shadow(0 0 0px rgba(241,196,15,0));}
       to{filter:drop-shadow(0 0 14px rgba(241,196,15,0.6));}
     }
+
     .subtitle{
       color:var(--text-dim); font-size:0.95rem;
     }
+
     .panel{
       width:100%; max-width:860px;
       background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
@@ -122,8 +128,10 @@
       0%{transform:translateY(0) rotate(0deg);}
       100%{transform:translateY(6%) rotate(2deg);}
     }
+
     .row{display:flex; gap:12px; flex-wrap:wrap;}
     .col{flex:1; min-width:260px;}
+
     .card{
       background:rgba(255,255,255,0.07);
       border:1px dashed rgba(255,255,255,0.22);
@@ -149,6 +157,7 @@
       mix-blend-mode:screen;
     }
     @keyframes rimSpin{to{transform:rotate(360deg);} }
+
     .card h3{
       margin:0 0 8px 0; font-size:1.05rem; letter-spacing:0.5px;
       color:var(--accent);
@@ -156,6 +165,7 @@
       position:relative;
       z-index:1;
     }
+
     .glass-box{
       position: relative;
       border-radius: 20px;
@@ -172,6 +182,7 @@
       overflow: hidden;
       transition: 0.6s ease;
     }
+
     .glass-box .corner{
       position:absolute; width:72px; height:72px; pointer-events:none;
       background: radial-gradient(circle at center, rgba(255,255,255,0.9), transparent 70%);
@@ -183,6 +194,7 @@
     .glass-box .c-tr{top:-22px; right:-22px;}
     .glass-box .c-bl{bottom:-22px; left:-22px;}
     .glass-box .c-br{bottom:-22px; right:-22px;}
+
     .glass-box::before{
       content:"";
       position:absolute; inset:-40%;
@@ -202,6 +214,7 @@
       50%  {transform: translateX(10%) rotate(8deg);}
       100% {transform: translateX(45%) rotate(8deg);}
     }
+
     .glass-box::after{
       content:"";
       position:absolute; inset:-20%;
@@ -220,6 +233,7 @@
       from{transform:translateY(0);}
       to{transform:translateY(6%);}
     }
+
     .glass-box.full-moon{
       box-shadow:
         0 14px 60px rgba(0,0,0,0.65),
@@ -235,6 +249,7 @@
       from{filter:brightness(1);}
       to{filter:brightness(1.12);}
     }
+
     .burst-layer{
       position:absolute; inset:0; pointer-events:none; z-index:3;
     }
@@ -250,6 +265,7 @@
       15%  {opacity:1;}
       100% {transform:translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg); opacity:0;}
     }
+
     .moon-ui{
       display:flex; align-items:center; gap:14px;
       position:relative; z-index:1;
@@ -266,6 +282,7 @@
       from{transform:translateY(0);}
       to{transform:translateY(-4px);}
     }
+
     .moon-stats{
       display:flex; flex-direction:column; gap:6px; width:100%;
       position:relative; z-index:1;
@@ -300,11 +317,13 @@
       from{transform:translateX(-8%); opacity:0.35;}
       to{transform:translateX(8%); opacity:0.9;}
     }
+
     .stat{
       font-size:0.9rem; color:var(--text-dim);
       position:relative; z-index:1;
     }
     .stat b{color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25);}
+
     .lunar-crystal{
       position:absolute;
       left:50%; top:50%;
@@ -348,6 +367,7 @@
         inset 0 0 14px rgba(255,255,255,0.35);
       animation-duration: 2s;
     }
+
     .task-list a{
       display:flex; justify-content:space-between; align-items:center;
       padding:10px 12px; border-radius:10px;
@@ -367,10 +387,12 @@
     .task-tag{
       font-size:0.8rem; color:var(--text-dim);
     }
+
     .hint{
       font-size:0.85rem; color:var(--text-dim); line-height:1.6;
       margin-top:6px; position:relative; z-index:1;
     }
+
     .log-box{
       max-height:260px; overflow:auto; padding-right:6px;
       position:relative; z-index:1;
@@ -383,10 +405,12 @@
       box-shadow: 0 0 8px rgba(126,214,255,0.12);
     }
     .log-time{color:var(--text-dim); font-size:0.8rem;}
+
     footer{
       margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8;
       position:relative; z-index:1;
     }
+
     .start-mission-panel{
       display:flex;
       flex-direction:column;
@@ -420,6 +444,36 @@
       filter: grayscale(0.4);
       pointer-events: none;
     }
+
+    .redeem-wrap{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;
+      position:relative; z-index:1;
+    }
+    .redeem-select{
+      flex:1; min-width:170px;
+      background:rgba(0,0,0,0.35);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:10px;
+      font-size:16px;
+      outline:none;
+      appearance:none;
+    }
+    .redeem-btn{
+      padding:10px 16px;
+      border-radius:10px;
+      border:none; cursor:pointer;
+      font-weight:800; letter-spacing:1px;
+      background:linear-gradient(135deg,#7ed6ff,#ffe08a);
+      color:#071021;
+      box-shadow:0 6px 14px rgba(0,0,0,.25), 0 0 18px rgba(126,214,255,0.35);
+    }
+    .redeem-btn:active{transform:translateY(1px);}
+    .redeem-note{
+      font-size:12px; color:var(--text-dim); margin-top:6px;
+      position:relative; z-index:1;
+    }
   </style>
 </head>
 
@@ -433,6 +487,7 @@
     <div class="glass-box" id="glass-box">
       <i class="corner c-tl"></i><i class="corner c-tr"></i>
       <i class="corner c-bl"></i><i class="corner c-br"></i>
+
       <div class="burst-layer" id="burst-layer"></div>
       <div class="lunar-crystal" aria-hidden="true"></div>
 
@@ -468,6 +523,25 @@
   </section>
 
   <section class="panel card">
+    <h3>🎁 月光兌換（Redeem Lunar Glow）</h3>
+    <div class="redeem-wrap">
+      <select id="redeemAmount" class="redeem-select">
+        <option value="">選擇兌換數值</option>
+        <option value="100">100 pts</option>
+        <option value="300">300 pts</option>
+        <option value="600">600 pts</option>
+        <option value="900">900 pts</option>
+        <option value="1200">1200 pts</option>
+        <option value="1500">1500 pts</option>
+      </select>
+      <button id="redeemBtn" class="redeem-btn">兌換扣除</button>
+    </div>
+    <div class="redeem-note">
+      兌換後會直接扣除月光，滿月進度以「目前總月光 % 300」自動計算。
+    </div>
+  </section>
+
+  <section class="panel card">
     <h3>📜 Recent Lunar Logs（最近收集）</h3>
     <div class="log-box" id="moon-log-box"></div>
     <div class="hint" id="login-hint" style="display:none;">
@@ -480,205 +554,6 @@
 
   <footer>© Teacher Shirley’s ET Platform 2025</footer>
 
-<script>
-  const MOON_CYCLE = 300;
-
-  const MISSIONS = [
-    {
-      title: "Mission 1: GSAT 真題",
-      url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html"
-    },
-    {
-      title: "Mission 2: iVocab 考題",
-      url: "https://ivocab-quiz.vercel.app/"
-    },
-    {
-      title: "Mission 3: Topic Reading 素養閱讀",
-      url: "https://shirley-ai-reading.vercel.app/"
-    },
-    {
-      title: "Mission 4: (以後有新的再增加)",
-      url: ""
-    }
-  ];
-
-  let missionStarted = sessionStorage.getItem("missionStarted") === "1";
-
-  function setMissionStarted(v){
-    missionStarted = v;
-    sessionStorage.setItem("missionStarted", v ? "1" : "0");
-
-    const panel = document.getElementById("startMissionPanel");
-    if(panel) panel.style.display = v ? "none" : "flex";
-
-    document.querySelectorAll("#mission-list a").forEach(a=>{
-      a.classList.toggle("locked", !v);
-    });
-  }
-  window.setMissionStarted = setMissionStarted;
-  window.missionStarted = missionStarted;
-
-  document.addEventListener("click", (e)=>{
-    if(e.target?.id === "startMissionBtn"){
-      setMissionStarted(true);
-      window.missionStarted = true;
-    }
-  });
-
-  window.startLunarMission = function(event){
-    event.preventDefault();
-    const href = event.currentTarget.href;
-    window.open(href, "_blank");
-  };
-
-  function renderMissions(){
-    const listEl = document.getElementById("mission-list");
-    if (!listEl) return;
-    listEl.innerHTML = "";
-
-    MISSIONS.forEach(m => {
-      const a = document.createElement("a");
-
-      if (m.url && m.url.trim() !== "") {
-        a.href = m.url;
-        a.onclick = window.startLunarMission;
-        a.innerHTML = `
-          <div>${m.title}</div>
-          <div class="task-tag">開啟任務</div>
-        `;
-      } else {
-        a.href = "javascript:void(0)";
-        a.classList.add("disabled");
-        a.onclick = (e)=> {
-          e.preventDefault();
-          alert(`${m.title} 尚未開放`);
-        };
-        a.innerHTML = `
-          <div>${m.title}</div>
-          <div class="task-tag">尚未開放</div>
-        `;
-      }
-
-      listEl.appendChild(a);
-    });
-
-    setMissionStarted(missionStarted);
-  }
-
-  let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
-  window.moonData = moonData;
-
-  function phaseByPercent(p){
-    if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
-    if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
-    if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
-    if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
-    if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
-    if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
-    if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
-    return {emoji:"🌘", text:"Waning Crescent / 殘月"};
-  }
-
-  function isFullMoonPercent(p){
-    return p >= 0.50 && p < 0.62;
-  }
-
-  function burstStars(){
-    const layer = document.getElementById("burst-layer");
-    if (!layer) return;
-
-    const stars = ["✨","⭐","🌟","💫"];
-    const count = 18;
-
-    for (let i=0;i<count;i++){
-      const s = document.createElement("span");
-      s.className = "burst-star";
-      s.innerText = stars[Math.floor(Math.random()*stars.length)];
-
-      const angle = Math.random()*Math.PI*2;
-      const dist  = 70 + Math.random()*100;
-      const dx = Math.cos(angle)*dist;
-      const dy = Math.sin(angle)*dist;
-
-      s.style.left = "50%";
-      s.style.top  = "50%";
-      s.style.setProperty("--dx", `${dx}px`);
-      s.style.setProperty("--dy", `${dy}px`);
-      s.style.fontSize = `${10 + Math.random()*10}px`;
-      s.style.animationDelay = `${Math.random()*0.25}s`;
-
-      layer.appendChild(s);
-      s.addEventListener("animationend", ()=> s.remove());
-    }
-  }
-
-  let prevIsFull = false;
-
-  function renderLogs(){
-    const box = document.getElementById("moon-log-box");
-    if (!box) return;
-    box.innerHTML = "";
-
-    const logs = moonData.logs || [];
-    if (logs.length === 0){
-      box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
-      return;
-    }
-
-    logs.slice().reverse().slice(0,30).forEach(l=>{
-      const div = document.createElement("div");
-      div.className = "log-item";
-      const time = new Date(l.time).toLocaleString();
-      div.innerHTML = `
-        <div>
-          +<b>${l.glow}</b> pts
-          <span style="color:#aaa;">(✅${l.correct})</span>
-        </div>
-        <div class="log-time">${time}</div>
-      `;
-      box.appendChild(div);
-    });
-  }
-
-  function renderMoonUI(){
-    const totalEl = document.getElementById("moon-total");
-    const cycleEl = document.getElementById("moon-cycle");
-    const barEl   = document.getElementById("moon-progress");
-    const emojiEl = document.getElementById("moon-emoji");
-    const phaseEl = document.getElementById("moon-phase-text");
-    const glassBox = document.getElementById("glass-box");
-
-    if(!totalEl || !cycleEl || !barEl || !emojiEl || !phaseEl) return;
-
-    totalEl.innerText = moonData.totalGlow || 0;
-    cycleEl.innerText = moonData.cycleGlow || 0;
-
-    const percent = Math.min((moonData.cycleGlow || 0) / MOON_CYCLE, 1);
-    barEl.style.width = `${percent*100}%`;
-
-    const phase = phaseByPercent(percent);
-    emojiEl.innerText = phase.emoji;
-    phaseEl.innerText = phase.text;
-
-    const nowIsFull = isFullMoonPercent(percent);
-    if (glassBox){
-      glassBox.classList.toggle("full-moon", nowIsFull);
-    }
-
-    if (nowIsFull && !prevIsFull){
-      burstStars();
-    }
-    prevIsFull = nowIsFull;
-
-    renderLogs();
-  }
-  window.renderMoonUI = renderMoonUI;
-
-  renderMissions();
-  renderMoonUI();
-  setMissionStarted(missionStarted);
-</script>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import {
@@ -686,7 +561,7 @@
       setPersistence, browserLocalPersistence
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import {
-      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -705,7 +580,178 @@
 
     setPersistence(auth, browserLocalPersistence);
 
+    const MOON_CYCLE = 300;
+
+    const MISSIONS = [
+      { title: "Mission 1: GSAT 真題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
+      { title: "Mission 2: iVocab 考題", url: "https://ivocab-quiz.vercel.app/" },
+      { title: "Mission 3: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
+      { title: "Mission 4: (以後有新的再增加)", url: "" }
+    ];
+
     let currentUser = null;
+    let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
+
+    let missionStarted = sessionStorage.getItem("missionStarted") === "1";
+
+    function setMissionStarted(v){
+      missionStarted = v;
+      sessionStorage.setItem("missionStarted", v ? "1" : "0");
+      const panel = document.getElementById("startMissionPanel");
+      if(panel) panel.style.display = v ? "none" : "flex";
+      document.querySelectorAll("#mission-list a").forEach(a=>{
+        a.classList.toggle("locked", !v);
+      });
+    }
+
+    document.addEventListener("click", (e)=>{
+      if(e.target?.id === "startMissionBtn"){
+        setMissionStarted(true);
+      }
+    });
+
+    function renderMissions(){
+      const listEl = document.getElementById("mission-list");
+      if (!listEl) return;
+      listEl.innerHTML = "";
+
+      MISSIONS.forEach(m => {
+        const a = document.createElement("a");
+
+        if (m.url && m.url.trim() !== "") {
+          a.href = m.url;
+          a.onclick = startLunarMission;
+          a.innerHTML = `
+            <div>${m.title}</div>
+            <div class="task-tag">開啟任務</div>
+          `;
+        } else {
+          a.href = "javascript:void(0)";
+          a.classList.add("disabled");
+          a.onclick = (e)=> {
+            e.preventDefault();
+            alert(\`\${m.title} 尚未開放\`);
+          };
+          a.innerHTML = `
+            <div>${m.title}</div>
+            <div class="task-tag">尚未開放</div>
+          `;
+        }
+
+        listEl.appendChild(a);
+      });
+
+      setMissionStarted(missionStarted);
+    }
+
+    function phaseByPercent(p){
+      if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
+      if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
+      if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
+      if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
+      if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
+      if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
+      if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
+      return {emoji:"🌘", text:"Waning Crescent / 殘月"};
+    }
+
+    function isFullMoonPercent(p){
+      return p >= 0.50 && p < 0.62;
+    }
+
+    function burstStars(){
+      const layer = document.getElementById("burst-layer");
+      if (!layer) return;
+
+      const stars = ["✨","⭐","🌟","💫"];
+      const count = 18;
+
+      for (let i=0;i<count;i++){
+        const s = document.createElement("span");
+        s.className = "burst-star";
+        s.innerText = stars[Math.floor(Math.random()*stars.length)];
+
+        const angle = Math.random()*Math.PI*2;
+        const dist  = 70 + Math.random()*100;
+        const dx = Math.cos(angle)*dist;
+        const dy = Math.sin(angle)*dist;
+
+        s.style.left = "50%";
+        s.style.top  = "50%";
+        s.style.setProperty("--dx", `${dx}px`);
+        s.style.setProperty("--dy", `${dy}px`);
+        s.style.fontSize = `${10 + Math.random()*10}px`;
+        s.style.animationDelay = `${Math.random()*0.25}s`;
+
+        layer.appendChild(s);
+        s.addEventListener("animationend", ()=> s.remove());
+      }
+    }
+
+    let prevIsFull = false;
+
+    function renderMoonUI(){
+      const totalEl = document.getElementById("moon-total");
+      const cycleEl = document.getElementById("moon-cycle");
+      const barEl   = document.getElementById("moon-progress");
+      const emojiEl = document.getElementById("moon-emoji");
+      const phaseEl = document.getElementById("moon-phase-text");
+      const glassBox = document.getElementById("glass-box");
+
+      totalEl.innerText = moonData.totalGlow || 0;
+      cycleEl.innerText = moonData.cycleGlow || 0;
+
+      const percent = Math.min((moonData.cycleGlow || 0) / MOON_CYCLE, 1);
+      barEl.style.width = `${percent*100}%`;
+
+      const phase = phaseByPercent(percent);
+      emojiEl.innerText = phase.emoji;
+      phaseEl.innerText = phase.text;
+
+      const nowIsFull = isFullMoonPercent(percent);
+      if (glassBox){
+        glassBox.classList.toggle("full-moon", nowIsFull);
+      }
+
+      if (nowIsFull && !prevIsFull){
+        burstStars();
+      }
+      prevIsFull = nowIsFull;
+
+      renderLogs();
+    }
+
+    function renderLogs(){
+      const box = document.getElementById("moon-log-box");
+      box.innerHTML = "";
+
+      const logs = moonData.logs || [];
+      if (logs.length === 0){
+        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
+        return;
+      }
+
+      logs.slice().reverse().slice(0,30).forEach(l=>{
+        const div = document.createElement("div");
+        div.className = "log-item";
+        const time = new Date(l.time).toLocaleString();
+        const sign = l.type === "redeem" ? "−" : "+";
+        const badge = l.type === "redeem" ? "🎁" : "🌙";
+        div.innerHTML = `
+          <div>
+            ${badge} ${sign}<b>${l.glow}</b> pts
+            <span style="color:#aaa;">(${l.type === "redeem" ? "兌換" : "✅"+(l.correct||0)})</span>
+          </div>
+          <div class="log-time">${time}</div>
+        `;
+        box.appendChild(div);
+      });
+    }
+
+    function recomputeCycleFromTotal(total){
+      const t = Math.max(0, total || 0);
+      return t % MOON_CYCLE;
+    }
 
     async function loadMoonData(uid){
       const userRef = doc(db, "users", uid);
@@ -717,23 +763,31 @@
           moonGlowCycle: 0,
           moonGlowLogs: []
         }, {merge:true});
-        window.moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-        window.renderMoonUI();
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        renderMoonUI();
         return;
       }
 
       const d = snap.data();
-      window.moonData.totalGlow = d.moonGlowTotal || 0;
-      window.moonData.cycleGlow = d.moonGlowCycle || 0;
-      window.moonData.logs = d.moonGlowLogs || [];
-      window.renderMoonUI();
+      const total = d.moonGlowTotal || 0;
+      moonData.totalGlow = total;
+      moonData.cycleGlow = recomputeCycleFromTotal(total);
+      moonData.logs = d.moonGlowLogs || [];
+      renderMoonUI();
     }
 
-    const isAllowedOrigin = (origin) => {
+    window.startLunarMission = function(event){
+      event.preventDefault();
+      const href = event.currentTarget.href;
+      window.open(href, "_blank");
+    };
+
+    function isAllowedOrigin(origin){
+      if (!origin) return false;
       if (origin === "https://ducj-creator.github.io") return true;
       if (origin.endsWith(".vercel.app")) return true;
       return false;
-    };
+    }
 
     window.addEventListener("message", async (event) => {
       if (!isAllowedOrigin(event.origin)) return;
@@ -744,7 +798,7 @@
       const correctVal = parseInt(data.correct) || 0;
       if (correctVal <= 0) return;
 
-      if(!window.missionStarted){
+      if(!missionStarted){
         alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
         return;
       }
@@ -758,20 +812,19 @@
       const glow = correctVal;
       const userRef = doc(db, "users", currentUser.uid);
 
+      const newTotal = (moonData.totalGlow || 0) + glow;
+      const newCycle = recomputeCycleFromTotal(newTotal);
+
       const logEntry = {
         time: new Date().toISOString(),
         correct: correctVal,
         wrong: 0,
-        glow
+        glow,
+        type: "earn"
       };
 
-      let newCycle = (window.moonData.cycleGlow || 0) + glow;
-      if (newCycle >= MOON_CYCLE){
-        newCycle = newCycle % MOON_CYCLE;
-      }
-
       await updateDoc(userRef, {
-        moonGlowTotal: increment(glow),
+        moonGlowTotal: newTotal,
         moonGlowCycle: newCycle,
         moonGlowLogs: arrayUnion(logEntry),
         activityLogs: arrayUnion({
@@ -781,25 +834,91 @@
         })
       });
 
-      window.moonData.totalGlow += glow;
-      window.moonData.cycleGlow = newCycle;
-      window.moonData.logs.push(logEntry);
-      window.renderMoonUI();
+      moonData.totalGlow = newTotal;
+      moonData.cycleGlow = newCycle;
+      moonData.logs.push(logEntry);
+      renderMoonUI();
 
       alert(`🌕 任務完成！\n自動收集 ${glow} 點月光（✅${correctVal}）`);
+    });
+
+    async function redeemGlow(){
+      const sel = document.getElementById("redeemAmount");
+      const raw = sel?.value;
+      const amt = parseInt(raw, 10);
+
+      if (!currentUser){
+        alert("請先登入主站，才能兌換月光 🌙");
+        return;
+      }
+      if (!missionStarted){
+        alert("請先按 Start Mission 才能使用兌換功能 🌙");
+        return;
+      }
+      if (!amt){
+        alert("請先選擇兌換數值");
+        return;
+      }
+      if (amt > (moonData.totalGlow || 0)){
+        alert(`月光不足 🌙\n目前只有 ${moonData.totalGlow || 0} pts`);
+        return;
+      }
+
+      const userRef = doc(db, "users", currentUser.uid);
+
+      const newTotal = (moonData.totalGlow || 0) - amt;
+      const newCycle = recomputeCycleFromTotal(newTotal);
+
+      const logEntry = {
+        time: new Date().toISOString(),
+        glow: amt,
+        type: "redeem"
+      };
+
+      await updateDoc(userRef, {
+        moonGlowTotal: newTotal,
+        moonGlowCycle: newCycle,
+        moonGlowLogs: arrayUnion(logEntry),
+        activityLogs: arrayUnion({
+          date: new Date().toISOString(),
+          type: "Redeem Lunar Glow",
+          detail: `Redeemed ${amt} pts`
+        })
+      });
+
+      moonData.totalGlow = newTotal;
+      moonData.cycleGlow = newCycle;
+      moonData.logs.push(logEntry);
+      renderMoonUI();
+
+      sel.value = "";
+      alert(`🎁 已兌換成功！\n扣除 ${amt} 點月光`);
+    }
+
+    document.addEventListener("click", (e)=>{
+      if(e.target?.id === "redeemBtn"){
+        redeemGlow();
+      }
     });
 
     onAuthStateChanged(auth, async (user)=>{
       currentUser = user || null;
       if (!currentUser){
         document.getElementById("login-hint").style.display = "block";
-        window.renderMoonUI();
-        window.setMissionStarted(false);
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        renderMoonUI();
+        setMissionStarted(false);
         return;
       }
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
-      window.setMissionStarted(window.missionStarted);
+      setMissionStarted(missionStarted);
+    });
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      renderMissions();
+      renderMoonUI();
+      setMissionStarted(missionStarted);
     });
   </script>
 
