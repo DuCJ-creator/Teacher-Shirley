@@ -556,7 +556,7 @@
     // ====== 🚀 Lunar Glow Cache 核心常數 ======
     const MOON_CYCLE = 300; // 300點為一個滿月循環
 
-    // ✅ Missions 設定（之後只要改這裡）
+    // ✅ Missions 設定（只要改這裡）
     const MISSIONS = [
       {
         title: "Mission 1: GSAT 真題",
@@ -567,8 +567,8 @@
         url: "https://ivocab-quiz.vercel.app/"
       },
       {
-        title: "Mission 3: TBA",
-        url: "" // 留空就不可點
+        title: "Mission 3: Topic Reading 素養閱讀",
+        url: "https://shirley-ai-reading-q9ub2qvkb-ducj-creators-projects.vercel.app/"
       },
       {
         title: "Mission 4: (以後有新的再增加)",
@@ -584,7 +584,7 @@
     };
 
     // ======================
-    // ✅ Start Mission 狀態控制（新增）
+    // ✅ Start Mission 狀態控制
     // ======================
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
 
@@ -659,7 +659,6 @@
     // 滿月區間判定（到滿月格就算）
     function isFullMoonPercent(p){
       return p >= 0.50 && p < 0.62;
-      // 你 phaseByPercent 的滿月區間就是這段
     }
 
     // 噴星星（只在「剛進入滿月」時觸發）
@@ -718,7 +717,6 @@
         glassBox.classList.toggle("full-moon", nowIsFull);
       }
 
-      // 剛進入滿月 → 噴星星
       if (nowIsFull && !prevIsFull){
         burstStars();
       }
@@ -786,7 +784,8 @@
     window.addEventListener("message", async (event) => {
       const allowOrigins = [
         "https://ducj-creator.github.io",
-        "https://ivocab-quiz.vercel.app"
+        "https://ivocab-quiz.vercel.app",
+        "https://shirley-ai-reading-q9ub2qvkb-ducj-creators-projects.vercel.app"
       ];
       if (!allowOrigins.includes(event.origin)) return;
 
