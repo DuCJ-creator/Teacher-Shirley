@@ -535,6 +535,7 @@
 
     const MOON_CYCLE = 300;
 
+    // ✅ Missions 設定（Mission3 換新網址）
     const MISSIONS = [
       {
         title: "Mission 1: GSAT 真題",
@@ -546,7 +547,7 @@
       },
       {
         title: "Mission 3: Topic Reading 素養閱讀",
-        url: "https://shirley-ai-reading-q9ub2qvkb-ducj-creators-projects.vercel.app/"
+        url: "https://shirley-ai-reading.vercel.app/"
       },
       {
         title: "Mission 4: (以後有新的再增加)",
@@ -555,11 +556,7 @@
     ];
 
     let currentUser = null;
-    let moonData = {
-      totalGlow: 0,
-      cycleGlow: 0,
-      logs: []
-    };
+    let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
 
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
 
@@ -655,7 +652,6 @@
         s.style.animationDelay = `${Math.random()*0.25}s`;
 
         layer.appendChild(s);
-
         s.addEventListener("animationend", ()=> s.remove());
       }
     }
@@ -748,16 +744,14 @@
 
     // ✅ 接收任務頁回傳的成績（postMessage → 自動計分）
     window.addEventListener("message", async (event) => {
-      // ✅ 基礎白名單
-      const allowOrigins = [
-        "https://ducj-creator.github.io",
-        "https://ivocab-quiz.vercel.app"
-      ];
-
-      // ✅ 允許整個 vercel.app 網域
+      // ✅ 允許:
+      // 1) github.io 主站
+      // 2) ivocab-quiz
+      // 3) 所有 *.vercel.app（包含你的新 prod / preview 網址）
       const isAllowed =
-        allowOrigins.includes(event.origin) ||
-        event.origin.endsWith(".vercel.app");
+        event.origin === "https://ducj-creator.github.io" ||
+        event.origin === "https://ivocab-quiz.vercel.app" ||
+        /\.vercel\.app$/i.test(new URL(event.origin).hostname);
 
       if (!isAllowed) return;
 
@@ -779,7 +773,6 @@
       }
 
       const glow = correctVal;
-
       const userRef = doc(db, "users", currentUser.uid);
 
       const logEntry = {
