@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
   <head>
-    <meta charset="UTF-8" />
-    <metahttps://ivocab-quiz.vercel.app/
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+   <meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
     <title>Teacher Shirley's ET Platform</title>
 
     <!-- libs -->
@@ -1273,7 +1272,39 @@
         display: flex;
         flex-direction: column;
       }
+      
+      /* ✅ 讓卡片在矮高度裝置可捲動 */
+.moon-card{
+  max-height: 80vh;       /* 不超過視窗 80% 高 */
+  overflow-y: auto;       /* 內容超出就捲 */
+  -webkit-overflow-scrolling: touch;
+}
 
+/* ✅ 底部動作列固定在可視區 */
+.card-actions{
+  position: sticky;
+  bottom: 0;
+  background: rgba(0,0,0,0.35); /* 依你深色卡片調個半透明底 */
+  backdrop-filter: blur(6px);
+  padding: 10px 0;
+  margin-top: 12px;
+  z-index: 5;
+}
+      
+/* iPad / 平板橫屏：縮一點字/間距，確保按鈕行完整露出 */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape){
+  .moon-card{
+    max-height: 72vh;
+    padding-bottom: 20px;
+  }
+  .btn-card-action{
+    font-size: 0.85rem;
+    padding: 8px 14px;
+  }
+  .card-actions{
+    gap: 10px;
+  }
+}
       .card-header {
         display: flex;
         justify-content: space-between;
@@ -2270,6 +2301,16 @@
     arrayUnion
   } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
+   /* ==================== BASE PATH / SAFE NAV ==================== */
+// ✅ 自動判斷部署根目錄（GitHub Pages / Vercel / in-app browser 都安全）
+const BASE_PATH = location.pathname.includes("/Teacher-Shirley/")
+  ? "/Teacher-Shirley"
+  : "";
+
+// ✅ 把寫死的 /Teacher-Shirley/... 轉成「跟著目前站點」
+function fixPath(url) {
+  return url.replace(/^\/Teacher-Shirley/, BASE_PATH);
+}
   /* ==================== THEMES ==================== */
   const THEMES = {
     1:{bg:"linear-gradient(180deg, #0f2027, #203a43, #2c5364)",border:"#b8860b",accent:"#ffd700",highlight:"#fff",text:"#e0e0e0",textDim:"#8fa1b3",accentDim:"rgba(184, 134, 11, 0.2)"},
@@ -2330,9 +2371,13 @@ setPersistence(auth, browserLocalPersistence).catch(async (e) => {
  * 這行會把 redirect 的結果「結算」掉，避免狀態卡住或不穩。
  * 沒有 redirect 時可能會丟 no-redirect 之類的錯，忽略即可。
  */
-getRedirectResult(auth).catch((e) => {
-  console.warn("getRedirectResult:", e);
-});
+getRedirectResult(auth)
+  .then((res) => {
+    if (res?.user) sessionStorage.removeItem("ts_redirecting"); // ✅ redirect 成功就清掉
+  })
+  .catch((e) => {
+    console.warn("getRedirectResult:", e);
+  });
 
 let currentUser = null;
 let csvData = { words: [], quotes: [] };
@@ -2483,7 +2528,8 @@ window.closeMemberTerminal = () =>
 
 window.visitPlanet = (planetName, url) => {
   if (currentUser) trackActivity("Exploration", `Departed Moon for ${planetName}`);
-  setTimeout(() => (window.location.href = url), 300);
+  const safeUrl = fixPath(url);   // ✅ 核心：自動修正根目錄
+  setTimeout(() => (window.location.href = safeUrl), 300);
 };
 
 /* ==================== Auth buttons ==================== */
@@ -2504,7 +2550,9 @@ document.getElementById("google-login-btn").addEventListener("click", async () =
       await signInWithPopup(auth, provider);
     } catch (e) {
       console.warn("Popup failed on iOS, fallback to redirect:", e);
+      sessionStorage.setItem("ts_redirecting", "1");
       await signInWithRedirect(auth, provider);
+
     }
   } else {
     signInWithPopup(auth, provider).catch((e) =>
@@ -2536,9 +2584,10 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 /* ==================== Auth state ==================== */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    currentUser = user;
-    showLoggedInUI();
-
+  sessionStorage.removeItem("ts_redirecting"); // ✅ 加這行
+  currentUser = user;
+  showLoggedInUI();
+    
     await loadCSVData();
     await loadUserData(user.uid);
     renderDailyContent(getTodayMMDD());
