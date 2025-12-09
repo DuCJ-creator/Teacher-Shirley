@@ -35,7 +35,6 @@
       overflow-x:hidden;
     }
 
-    /* ====== 星空背景（多層 + 閃爍） ====== */
     body::before,
     body::after{
       content:"";
@@ -167,7 +166,6 @@
       z-index:1;
     }
 
-    /* ====== 玻璃寶盒（厚度 + 邊角高光 + 反光 + 星塵） ====== */
     .glass-box{
       position: relative;
       border-radius: 20px;
@@ -461,6 +459,7 @@
       <i class="corner c-bl"></i><i class="corner c-br"></i>
 
       <div class="burst-layer" id="burst-layer"></div>
+
       <div class="lunar-crystal" aria-hidden="true"></div>
 
       <div class="card moon-ui">
@@ -546,7 +545,7 @@
       },
       {
         title: "Mission 3: Topic Reading 素養閱讀",
-        url: "https://shirley-ai-reading.vercel.app/"   <!-- ✅ 新網址 -->
+        url: "https://shirley-ai-reading.vercel.app/"
       },
       {
         title: "Mission 4: (以後有新的再增加)",
@@ -601,7 +600,7 @@
           a.classList.add("disabled");
           a.onclick = (e)=> {
             e.preventDefault();
-            alert(`${m.title} 尚未開放`);
+            alert(\`\${m.title} 尚未開放\`);
           };
           a.innerHTML = `
             <div>${m.title}</div>
@@ -746,17 +745,14 @@
       window.open(href, "_blank");
     };
 
-    // ✅ 接收任務頁回傳的成績（postMessage → 自動計分）
     window.addEventListener("message", async (event) => {
       const origin = event.origin || "";
 
-      // ✅ 白名單（固定可接受來源）
       const fixedAllowOrigins = [
         "https://ducj-creator.github.io",
         "https://ivocab-quiz.vercel.app"
       ];
 
-      // ✅ 允許整個 vercel.app（含所有子網域）
       const allowVercel = origin.endsWith(".vercel.app");
 
       if (!allowVercel && !fixedAllowOrigins.includes(origin)) return;
@@ -779,6 +775,7 @@
       }
 
       const glow = correctVal;
+
       const userRef = doc(db, "users", currentUser.uid);
 
       const logEntry = {
@@ -823,7 +820,6 @@
       }
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
-
       setMissionStarted(missionStarted);
     });
 
