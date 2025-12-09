@@ -177,15 +177,14 @@
       border: 1px solid rgba(255,255,255,0.25);
       box-shadow:
         0 12px 38px rgba(0,0,0,0.62),
-        inset 0 0 0 1px rgba(255,255,255,0.10),        /* 內圈厚度 */
-        inset 0 0 0 8px rgba(255,255,255,0.02),        /* 玻璃厚度感 */
+        inset 0 0 0 1px rgba(255,255,255,0.10),
+        inset 0 0 0 8px rgba(255,255,255,0.02),
         inset 0 0 22px rgba(126,214,255,0.12);
       backdrop-filter: blur(12px) saturate(155%);
       overflow: hidden;
       transition: 0.6s ease;
     }
 
-    /* 四角高光 */
     .glass-box .corner{
       position:absolute; width:72px; height:72px; pointer-events:none;
       background: radial-gradient(circle at center, rgba(255,255,255,0.9), transparent 70%);
@@ -198,7 +197,6 @@
     .glass-box .c-bl{bottom:-22px; left:-22px;}
     .glass-box .c-br{bottom:-22px; right:-22px;}
 
-    /* 玻璃反光斜面 */
     .glass-box::before{
       content:"";
       position:absolute; inset:-40%;
@@ -219,7 +217,6 @@
       100% {transform: translateX(45%) rotate(8deg);}
     }
 
-    /* 玻璃盒內的星塵微粒 */
     .glass-box::after{
       content:"";
       position:absolute; inset:-20%;
@@ -239,7 +236,6 @@
       to{transform:translateY(6%);}
     }
 
-    /* ====== 滿月強化：寶盒發亮 ====== */
     .glass-box.full-moon{
       box-shadow:
         0 14px 60px rgba(0,0,0,0.65),
@@ -256,7 +252,6 @@
       to{filter:brightness(1.12);}
     }
 
-    /* ====== 噴星星層 ====== */
     .burst-layer{
       position:absolute; inset:0; pointer-events:none; z-index:3;
     }
@@ -331,7 +326,6 @@
     }
     .stat b{color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25);}
 
-    /* ====== 盒子中央：月光水晶／寶盒 icon ====== */
     .lunar-crystal{
       position:absolute;
       left:50%; top:50%;
@@ -419,7 +413,6 @@
       position:relative; z-index:1;
     }
 
-    /* ===== Start Mission UI (新增) ===== */
     .start-mission-panel{
       display:flex;
       flex-direction:column;
@@ -448,7 +441,6 @@
       color: var(--text-dim);
       text-align:center;
     }
-    /* 任務未啟動時鎖定樣式 */
     .task-list a.locked{
       opacity: .45;
       filter: grayscale(0.4);
@@ -463,17 +455,12 @@
     <div class="subtitle">Lunar Glow Cache — 專注練習 → 收集月光 → 點亮滿月循環</div>
   </header>
 
-  <!-- 月相 / 點數總覽 -->
   <section class="panel">
     <div class="glass-box" id="glass-box">
-      <!-- 四角高光 -->
       <i class="corner c-tl"></i><i class="corner c-tr"></i>
       <i class="corner c-bl"></i><i class="corner c-br"></i>
 
-      <!-- 噴星星層 -->
       <div class="burst-layer" id="burst-layer"></div>
-
-      <!-- 中央水晶 icon -->
       <div class="lunar-crystal" aria-hidden="true"></div>
 
       <div class="card moon-ui">
@@ -489,11 +476,9 @@
   </section>
 
   <section class="panel row">
-    <!-- 任務入口（自動渲染） -->
     <div class="col card">
       <h3>🚀 Lunar Missions（月光任務）</h3>
 
-      <!-- ✅ Start Mission Panel（新增） -->
       <div id="startMissionPanel" class="start-mission-panel">
         <button id="startMissionBtn" class="start-mission-btn">🚀 Start Mission</button>
         <div class="start-mission-hint">
@@ -501,7 +486,6 @@
         </div>
       </div>
 
-      <!-- ✅ 改成空容器，JS 自動渲染 -->
       <div class="task-list" id="mission-list"></div>
 
       <div class="hint">
@@ -510,7 +494,6 @@
     </div>
   </section>
 
-  <!-- 最近收集紀錄 -->
   <section class="panel card">
     <h3>📜 Recent Lunar Logs（最近收集）</h3>
     <div class="log-box" id="moon-log-box"></div>
@@ -524,7 +507,6 @@
 
   <footer>© Teacher Shirley’s ET Platform 2025</footer>
 
-  <!-- Firebase / 月光核心邏輯 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import {
@@ -535,7 +517,6 @@
       getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-    // ===== Firebase Config（與你主站一致）=====
     const firebaseConfig = {
       apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
       authDomain: "teacher-shirley.firebaseapp.com",
@@ -550,13 +531,10 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ✅ 確保 auth session 與主站同帳號綁定
     setPersistence(auth, browserLocalPersistence);
 
-    // ====== 🚀 Lunar Glow Cache 核心常數 ======
-    const MOON_CYCLE = 300; // 300點為一個滿月循環
+    const MOON_CYCLE = 300;
 
-    // ✅ Missions 設定（只要改這裡）
     const MISSIONS = [
       {
         title: "Mission 1: GSAT 真題",
@@ -572,7 +550,7 @@
       },
       {
         title: "Mission 4: (以後有新的再增加)",
-        url: "" // 留空就不可點
+        url: ""
       }
     ];
 
@@ -583,9 +561,6 @@
       logs: []
     };
 
-    // ======================
-    // ✅ Start Mission 狀態控制
-    // ======================
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
 
     function setMissionStarted(v){
@@ -595,20 +570,17 @@
       const panel = document.getElementById("startMissionPanel");
       if(panel) panel.style.display = v ? "none" : "flex";
 
-      // 鎖/解鎖任務入口
       document.querySelectorAll("#mission-list a").forEach(a=>{
         a.classList.toggle("locked", !v);
       });
     }
 
-    // Start Mission 按鈕
     document.addEventListener("click", (e)=>{
       if(e.target?.id === "startMissionBtn"){
         setMissionStarted(true);
       }
     });
 
-    // ✅ 自動渲染任務入口
     function renderMissions(){
       const listEl = document.getElementById("mission-list");
       if (!listEl) return;
@@ -640,11 +612,9 @@
         listEl.appendChild(a);
       });
 
-      // 渲染完畢後依 missionStarted 鎖/解鎖
       setMissionStarted(missionStarted);
     }
 
-    // ====== UI Helpers ======
     function phaseByPercent(p){
       if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
       if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
@@ -656,12 +626,10 @@
       return {emoji:"🌘", text:"Waning Crescent / 殘月"};
     }
 
-    // 滿月區間判定（到滿月格就算）
     function isFullMoonPercent(p){
       return p >= 0.50 && p < 0.62;
     }
 
-    // 噴星星（只在「剛進入滿月」時觸發）
     function burstStars(){
       const layer = document.getElementById("burst-layer");
       if (!layer) return;
@@ -750,7 +718,6 @@
       });
     }
 
-    // ====== 讀取使用者月光資料（uid 綁定） ======
     async function loadMoonData(uid){
       const userRef = doc(db, "users", uid);
       const snap = await getDoc(userRef);
@@ -773,7 +740,6 @@
       renderMoonUI();
     }
 
-    // ====== 任務：只負責開新分頁 ======
     window.startLunarMission = function(event){
       event.preventDefault();
       const href = event.currentTarget.href;
@@ -782,12 +748,18 @@
 
     // ✅ 接收任務頁回傳的成績（postMessage → 自動計分）
     window.addEventListener("message", async (event) => {
+      // ✅ 基礎白名單
       const allowOrigins = [
         "https://ducj-creator.github.io",
-        "https://ivocab-quiz.vercel.app",
-        "https://shirley-ai-reading-q9ub2qvkb-ducj-creators-projects.vercel.app"
+        "https://ivocab-quiz.vercel.app"
       ];
-      if (!allowOrigins.includes(event.origin)) return;
+
+      // ✅ 允許整個 vercel.app 網域
+      const isAllowed =
+        allowOrigins.includes(event.origin) ||
+        event.origin.endsWith(".vercel.app");
+
+      if (!isAllowed) return;
 
       const data = event.data || {};
       if (data.type !== "LUNAR_MISSION_RESULT") return;
@@ -795,7 +767,6 @@
       const correctVal = parseInt(data.correct) || 0;
       if (correctVal <= 0) return;
 
-      // ✅ 沒 Start Mission 不收
       if(!missionStarted){
         alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
         return;
@@ -807,7 +778,6 @@
         return;
       }
 
-      // ✅ 1題 = 1縷（月光）
       const glow = correctVal;
 
       const userRef = doc(db, "users", currentUser.uid);
@@ -843,24 +813,21 @@
       alert(`🌕 任務完成！\n自動收集 ${glow} 點月光（✅${correctVal}）`);
     });
 
-    // ====== auth state ======
     onAuthStateChanged(auth, async (user)=>{
       currentUser = user || null;
       if (!currentUser){
         document.getElementById("login-hint").style.display = "block";
         moonData = {totalGlow:0, cycleGlow:0, logs:[]};
         renderMoonUI();
-        setMissionStarted(false); // 未登入時也不允許 mission
+        setMissionStarted(false);
         return;
       }
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
 
-      // 登入後同步一次 mission 狀態
       setMissionStarted(missionStarted);
     });
 
-    // page init
     document.addEventListener("DOMContentLoaded", ()=>{
       renderMissions();
       renderMoonUI();
@@ -868,7 +835,6 @@
     });
   </script>
 
-  <!-- iframe 自動高度：一定要在 module script 外面 -->
   <script>
     function sendHeight(){
       const h = Math.max(
