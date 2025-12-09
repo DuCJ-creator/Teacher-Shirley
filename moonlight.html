@@ -21,7 +21,6 @@
       --accent-2: #7ed6ff;
       --danger: #ff7675;
       --good: #55efc4;
-
       --glow-soft: 0 0 18px rgba(126,214,255,0.25);
       --glow-strong: 0 0 28px rgba(241,196,15,0.35);
     }
@@ -34,7 +33,6 @@
       position:relative;
       overflow-x:hidden;
     }
-
     body::before,
     body::after{
       content:"";
@@ -68,7 +66,6 @@
       animation: starTwinkle 7.5s ease-in-out infinite alternate, starDrift 240s linear infinite reverse;
       z-index:-1;
     }
-
     @keyframes starTwinkle{
       0%{opacity:0.45; filter:drop-shadow(0 0 0 rgba(255,255,255,0));}
       100%{opacity:1; filter:drop-shadow(0 0 6px rgba(255,255,255,0.35));}
@@ -77,7 +74,6 @@
       0%{transform:translateY(0px);}
       100%{transform:translateY(120px);}
     }
-
     header{
       text-align:center; margin-top:10px; margin-bottom:16px;
       position:relative;
@@ -95,11 +91,9 @@
       from{filter:drop-shadow(0 0 0px rgba(241,196,15,0));}
       to{filter:drop-shadow(0 0 14px rgba(241,196,15,0.6));}
     }
-
     .subtitle{
       color:var(--text-dim); font-size:0.95rem;
     }
-
     .panel{
       width:100%; max-width:860px;
       background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
@@ -128,10 +122,8 @@
       0%{transform:translateY(0) rotate(0deg);}
       100%{transform:translateY(6%) rotate(2deg);}
     }
-
     .row{display:flex; gap:12px; flex-wrap:wrap;}
     .col{flex:1; min-width:260px;}
-
     .card{
       background:rgba(255,255,255,0.07);
       border:1px dashed rgba(255,255,255,0.22);
@@ -157,7 +149,6 @@
       mix-blend-mode:screen;
     }
     @keyframes rimSpin{to{transform:rotate(360deg);} }
-
     .card h3{
       margin:0 0 8px 0; font-size:1.05rem; letter-spacing:0.5px;
       color:var(--accent);
@@ -165,7 +156,6 @@
       position:relative;
       z-index:1;
     }
-
     .glass-box{
       position: relative;
       border-radius: 20px;
@@ -182,7 +172,6 @@
       overflow: hidden;
       transition: 0.6s ease;
     }
-
     .glass-box .corner{
       position:absolute; width:72px; height:72px; pointer-events:none;
       background: radial-gradient(circle at center, rgba(255,255,255,0.9), transparent 70%);
@@ -194,7 +183,6 @@
     .glass-box .c-tr{top:-22px; right:-22px;}
     .glass-box .c-bl{bottom:-22px; left:-22px;}
     .glass-box .c-br{bottom:-22px; right:-22px;}
-
     .glass-box::before{
       content:"";
       position:absolute; inset:-40%;
@@ -214,7 +202,6 @@
       50%  {transform: translateX(10%) rotate(8deg);}
       100% {transform: translateX(45%) rotate(8deg);}
     }
-
     .glass-box::after{
       content:"";
       position:absolute; inset:-20%;
@@ -233,7 +220,6 @@
       from{transform:translateY(0);}
       to{transform:translateY(6%);}
     }
-
     .glass-box.full-moon{
       box-shadow:
         0 14px 60px rgba(0,0,0,0.65),
@@ -249,7 +235,6 @@
       from{filter:brightness(1);}
       to{filter:brightness(1.12);}
     }
-
     .burst-layer{
       position:absolute; inset:0; pointer-events:none; z-index:3;
     }
@@ -265,7 +250,6 @@
       15%  {opacity:1;}
       100% {transform:translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg); opacity:0;}
     }
-
     .moon-ui{
       display:flex; align-items:center; gap:14px;
       position:relative; z-index:1;
@@ -282,7 +266,6 @@
       from{transform:translateY(0);}
       to{transform:translateY(-4px);}
     }
-
     .moon-stats{
       display:flex; flex-direction:column; gap:6px; width:100%;
       position:relative; z-index:1;
@@ -317,13 +300,11 @@
       from{transform:translateX(-8%); opacity:0.35;}
       to{transform:translateX(8%); opacity:0.9;}
     }
-
     .stat{
       font-size:0.9rem; color:var(--text-dim);
       position:relative; z-index:1;
     }
     .stat b{color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25);}
-
     .lunar-crystal{
       position:absolute;
       left:50%; top:50%;
@@ -367,7 +348,6 @@
         inset 0 0 14px rgba(255,255,255,0.35);
       animation-duration: 2s;
     }
-
     .task-list a{
       display:flex; justify-content:space-between; align-items:center;
       padding:10px 12px; border-radius:10px;
@@ -387,12 +367,10 @@
     .task-tag{
       font-size:0.8rem; color:var(--text-dim);
     }
-
     .hint{
       font-size:0.85rem; color:var(--text-dim); line-height:1.6;
       margin-top:6px; position:relative; z-index:1;
     }
-
     .log-box{
       max-height:260px; overflow:auto; padding-right:6px;
       position:relative; z-index:1;
@@ -405,12 +383,10 @@
       box-shadow: 0 0 8px rgba(126,214,255,0.12);
     }
     .log-time{color:var(--text-dim); font-size:0.8rem;}
-
     footer{
       margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8;
       position:relative; z-index:1;
     }
-
     .start-mission-panel{
       display:flex;
       flex-direction:column;
@@ -457,9 +433,7 @@
     <div class="glass-box" id="glass-box">
       <i class="corner c-tl"></i><i class="corner c-tr"></i>
       <i class="corner c-bl"></i><i class="corner c-br"></i>
-
       <div class="burst-layer" id="burst-layer"></div>
-
       <div class="lunar-crystal" aria-hidden="true"></div>
 
       <div class="card moon-ui">
@@ -506,32 +480,7 @@
 
   <footer>© Teacher Shirley’s ET Platform 2025</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import {
-      getAuth, onAuthStateChanged,
-      setPersistence, browserLocalPersistence
-    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import {
-      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
-    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
-      authDomain: "teacher-shirley.firebaseapp.com",
-      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
-      projectId: "teacher-shirley",
-      storageBucket: "teacher-shirley.firebasestorage.app",
-      messagingSenderId: "534843195436",
-      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    setPersistence(auth, browserLocalPersistence);
-
+  <script>
     const MOON_CYCLE = 300;
 
     const MISSIONS = [
@@ -553,13 +502,6 @@
       }
     ];
 
-    let currentUser = null;
-    let moonData = {
-      totalGlow: 0,
-      cycleGlow: 0,
-      logs: []
-    };
-
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
 
     function setMissionStarted(v){
@@ -580,6 +522,12 @@
       }
     });
 
+    window.startLunarMission = function(event){
+      event.preventDefault();
+      const href = event.currentTarget.href;
+      window.open(href, "_blank");
+    };
+
     function renderMissions(){
       const listEl = document.getElementById("mission-list");
       if (!listEl) return;
@@ -590,7 +538,7 @@
 
         if (m.url && m.url.trim() !== "") {
           a.href = m.url;
-          a.onclick = startLunarMission;
+          a.onclick = window.startLunarMission;
           a.innerHTML = `
             <div>${m.title}</div>
             <div class="task-tag">開啟任務</div>
@@ -600,7 +548,7 @@
           a.classList.add("disabled");
           a.onclick = (e)=> {
             e.preventDefault();
-            alert(\`\${m.title} 尚未開放\`);
+            alert(`${m.title} 尚未開放`);
           };
           a.innerHTML = `
             <div>${m.title}</div>
@@ -613,6 +561,8 @@
 
       setMissionStarted(missionStarted);
     }
+
+    let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
 
     function phaseByPercent(p){
       if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
@@ -654,12 +604,37 @@
         s.style.animationDelay = `${Math.random()*0.25}s`;
 
         layer.appendChild(s);
-
         s.addEventListener("animationend", ()=> s.remove());
       }
     }
 
     let prevIsFull = false;
+
+    function renderLogs(){
+      const box = document.getElementById("moon-log-box");
+      if (!box) return;
+      box.innerHTML = "";
+
+      const logs = moonData.logs || [];
+      if (logs.length === 0){
+        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
+        return;
+      }
+
+      logs.slice().reverse().slice(0,30).forEach(l=>{
+        const div = document.createElement("div");
+        div.className = "log-item";
+        const time = new Date(l.time).toLocaleString();
+        div.innerHTML = `
+          <div>
+            +<b>${l.glow}</b> pts
+            <span style="color:#aaa;">(✅${l.correct})</span>
+          </div>
+          <div class="log-time">${time}</div>
+        `;
+        box.appendChild(div);
+      });
+    }
 
     function renderMoonUI(){
       const totalEl = document.getElementById("moon-total");
@@ -668,6 +643,8 @@
       const emojiEl = document.getElementById("moon-emoji");
       const phaseEl = document.getElementById("moon-phase-text");
       const glassBox = document.getElementById("glass-box");
+
+      if(!totalEl || !cycleEl || !barEl || !emojiEl || !phaseEl) return;
 
       totalEl.innerText = moonData.totalGlow || 0;
       cycleEl.innerText = moonData.cycleGlow || 0;
@@ -692,30 +669,40 @@
       renderLogs();
     }
 
-    function renderLogs(){
-      const box = document.getElementById("moon-log-box");
-      box.innerHTML = "";
+    document.addEventListener("DOMContentLoaded", ()=>{
+      renderMissions();
+      renderMoonUI();
+      setMissionStarted(missionStarted);
+    });
+  </script>
 
-      const logs = moonData.logs || [];
-      if (logs.length === 0){
-        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
-        return;
-      }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import {
+      getAuth, onAuthStateChanged,
+      setPersistence, browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-      logs.slice().reverse().slice(0,30).forEach(l=>{
-        const div = document.createElement("div");
-        div.className = "log-item";
-        const time = new Date(l.time).toLocaleString();
-        div.innerHTML = `
-          <div>
-            +<b>${l.glow}</b> pts
-            <span style="color:#aaa;">(✅${l.correct})</span>
-          </div>
-          <div class="log-time">${time}</div>
-        `;
-        box.appendChild(div);
-      });
-    }
+    const firebaseConfig = {
+      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+      authDomain: "teacher-shirley.firebaseapp.com",
+      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+      projectId: "teacher-shirley",
+      storageBucket: "teacher-shirley.firebasestorage.app",
+      messagingSenderId: "534843195436",
+      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    setPersistence(auth, browserLocalPersistence);
+
+    let currentUser = null;
 
     async function loadMoonData(uid){
       const userRef = doc(db, "users", uid);
@@ -727,35 +714,26 @@
           moonGlowCycle: 0,
           moonGlowLogs: []
         }, {merge:true});
-        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-        renderMoonUI();
+        window.moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        window.renderMoonUI();
         return;
       }
 
       const d = snap.data();
-      moonData.totalGlow = d.moonGlowTotal || 0;
-      moonData.cycleGlow = d.moonGlowCycle || 0;
-      moonData.logs = d.moonGlowLogs || [];
-      renderMoonUI();
+      window.moonData.totalGlow = d.moonGlowTotal || 0;
+      window.moonData.cycleGlow = d.moonGlowCycle || 0;
+      window.moonData.logs = d.moonGlowLogs || [];
+      window.renderMoonUI();
     }
 
-    window.startLunarMission = function(event){
-      event.preventDefault();
-      const href = event.currentTarget.href;
-      window.open(href, "_blank");
+    const isAllowedOrigin = (origin) => {
+      if (origin === "https://ducj-creator.github.io") return true;
+      if (origin.endsWith(".vercel.app")) return true;
+      return false;
     };
 
     window.addEventListener("message", async (event) => {
-      const origin = event.origin || "";
-
-      const fixedAllowOrigins = [
-        "https://ducj-creator.github.io",
-        "https://ivocab-quiz.vercel.app"
-      ];
-
-      const allowVercel = origin.endsWith(".vercel.app");
-
-      if (!allowVercel && !fixedAllowOrigins.includes(origin)) return;
+      if (!isAllowedOrigin(event.origin)) return;
 
       const data = event.data || {};
       if (data.type !== "LUNAR_MISSION_RESULT") return;
@@ -763,7 +741,7 @@
       const correctVal = parseInt(data.correct) || 0;
       if (correctVal <= 0) return;
 
-      if(!missionStarted){
+      if(!window.missionStarted){
         alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
         return;
       }
@@ -775,7 +753,6 @@
       }
 
       const glow = correctVal;
-
       const userRef = doc(db, "users", currentUser.uid);
 
       const logEntry = {
@@ -785,7 +762,7 @@
         glow
       };
 
-      let newCycle = (moonData.cycleGlow || 0) + glow;
+      let newCycle = (window.moonData.cycleGlow || 0) + glow;
       if (newCycle >= MOON_CYCLE){
         newCycle = newCycle % MOON_CYCLE;
       }
@@ -801,10 +778,10 @@
         })
       });
 
-      moonData.totalGlow += glow;
-      moonData.cycleGlow = newCycle;
-      moonData.logs.push(logEntry);
-      renderMoonUI();
+      window.moonData.totalGlow += glow;
+      window.moonData.cycleGlow = newCycle;
+      window.moonData.logs.push(logEntry);
+      window.renderMoonUI();
 
       alert(`🌕 任務完成！\n自動收集 ${glow} 點月光（✅${correctVal}）`);
     });
@@ -813,20 +790,13 @@
       currentUser = user || null;
       if (!currentUser){
         document.getElementById("login-hint").style.display = "block";
-        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-        renderMoonUI();
-        setMissionStarted(false);
+        window.renderMoonUI();
+        window.setMissionStarted(false);
         return;
       }
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
-      setMissionStarted(missionStarted);
-    });
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-      renderMissions();
-      renderMoonUI();
-      setMissionStarted(missionStarted);
+      window.setMissionStarted(window.missionStarted);
     });
   </script>
 
