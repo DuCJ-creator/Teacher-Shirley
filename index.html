@@ -164,541 +164,166 @@
       }
 
       /* ==================== UNIVERSE VIEW ==================== */
-      #universe-view {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.8s ease;
-        min-height: 85vh;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-      }
+/* ==================== PARTICLE CANVAS ==================== */
+/* 放在最底部，但不能被背景壓住 → 所以 z-index:0 */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(0.2px);
+}
 
-      #universe-view.active {
-        display: block;
-        opacity: 1;
-      }
 
-      .solar-system {
-        position: relative;
-        width: 100%;
-        height: 85vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: scale(1);
-      }
+/* ==================== ENVELOPE (信封) ==================== */
 
-      .orbit {
-        position: absolute;
-        border: 1px dashed var(--orbit-color);
-        box-shadow: var(--orbit-glow);
-        border-radius: 50%;
-        top: 50%;
-        left: 50%;
-        pointer-events: none;
-        transition: border-color 0.5s;
-      }
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(80,150,255,0.28) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,1) 65%);
+  backdrop-filter: blur(14px);
+  transition: opacity 1s ease;
+}
 
-      .orbit-1 {
-        width: 320px;
-        height: 320px;
-        margin-top: -160px;
-        margin-left: -160px;
-        animation: spinOrbit 50s linear infinite;
-      }
+.envelope-container {
+  position: relative;
+  cursor: pointer;
+  width: 340px;
+  height: 220px;
+  transition: transform 0.6s ease;
+  animation: floatEnv 4s ease-in-out infinite;
+}
 
-      .orbit-2 {
-        width: 520px;
-        height: 520px;
-        margin-top: -260px;
-        margin-left: -260px;
-        animation: spinOrbit 90s linear infinite reverse;
-        border-style: dotted;
-      }
+.envelope-container:hover {
+  transform: translateY(-6px) scale(1.04);
+}
 
-      .orbit-3 {
-        width: 780px;
-        height: 780px;
-        margin-top: -390px;
-        margin-left: -390px;
-        animation: spinOrbit 140s linear infinite;
-      }
+@keyframes floatEnv {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 
-      .mars-container {
-        position: absolute;
-        width: 320px;
-        height: 320px;
-        top: 50%;
-        left: 50%;
-        margin-top: -160px;
-        margin-left: -160px;
-        animation: spinOrbit 50s linear infinite;
-        pointer-events: none;
-        z-index: 5;
-      }
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(145deg, rgba(15,20,45,0.95), rgba(5,5,20,0.98)),
+    radial-gradient(circle at 0% 0%, rgba(120,190,255,0.25), transparent 55%);
+  border-radius: 16px;
+  border: 1px solid rgba(180,220,255,0.4);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.7),
+    inset 0 0 20px rgba(120,180,255,0.25);
+}
 
-      .mars-container:hover {
-        animation-play-state: paused;
-      }
+.envelope-flap {
+  position: absolute;
+  top: -1px;
+  width: 100%;
+  height: 55%;
+  background:
+    linear-gradient(140deg, rgba(120,190,255,0.6), rgba(40,40,80,0.95));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.8s ease 0.2s;
+  z-index: 3;
+}
 
-      .mars-wrapper {
-        position: absolute;
-        width: 60px;
-        height: 60px;
-        top: -30px;
-        left: 50%;
-        margin-left: -30px;
-        animation: spinCounter 50s linear infinite;
-        pointer-events: auto;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+.envelope-container.open .envelope-flap {
+  transform: rotateX(180deg);
+}
 
-      .static-planet-wrapper {
-        position: absolute;
-        z-index: 6;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: pointer;
-        transition: transform 0.3s;
-      }
+.heart-seal {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #fff8e1, #ffca28, #f57f17);
+  box-shadow:
+    0 0 22px rgba(255,214,102,0.8),
+    0 0 60px rgba(255,214,102,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  animation: heartBeat 1.6s infinite;
+  z-index: 4;
+}
 
-      .static-planet-wrapper:hover {
-        z-index: 100;
-      }
+@keyframes heartBeat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
 
-      .static-planet-wrapper:hover .planet-visual {
-        transform: scale(1.15);
-        transition: transform 0.3s;
-      }
+/* ==================== LETTER ==================== */
 
-      .pos-mercury {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, 260px) translate(-50%, -50%);
-        margin-top: 30px;
-      }
+.letter-paper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 92%;
+  max-width: 780px;
+  max-height: 94vh;
 
-      .pos-saturn {
-        top: 50%;
-        left: 50%;
-        transform: translate(-390px, 0) translate(-50%, -50%);
-        margin-left: 20px;
-      }
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(120,190,255,0.38) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(5,15,35,0.85), rgba(2,5,15,0.9));
 
-      .pos-jupiter {
-        top: 50%;
-        left: 50%;
-        transform: translate(390px, 0) translate(-50%, -50%);
-        margin-left: -20px;
-      }
+  border-radius: 20px;
+  border: 1px solid rgba(180, 220, 255, 0.35);
+  box-shadow:
+    0 0 50px rgba(20,40,90,0.8),
+    0 0 140px rgba(50,160,255,0.6);
 
-      .moon-wrapper {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+  padding: 2.6rem 3rem;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.8s ease 0.8s;
+}
 
-      .planet-moon {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle at 35% 35%,
-          #f5f6fa,
-          #bdc3c7
-        );
-        box-shadow: 0 0 50px rgba(255, 255, 255, 0.6),
-          inset -10px -10px 30px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        animation: bounce 2s ease-in-out infinite;
-      }
+.letter-paper.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
 
-      .planet-visual {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        position: relative;
-      }
+/* 星塵特效層 */
+.letter-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(144, 202, 249, 0.55) 0, rgba(144, 202, 249, 0) 55%),
+    radial-gradient(circle, rgba(0, 230, 255, 0.35) 0, rgba(0, 230, 255, 0) 60%);
+  background-size: 4px 4px, 6px 6px;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  z-index: 1;
+}
 
-      .p-mars {
-        background: radial-gradient(#e74c3c, #c0392b);
-        box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
-      }
+.letter-content {
+  position: relative;
+  z-index: 3;
+  color: #e7efff;
+  font-family: "Playfair Display", serif;
+}
 
-      .p-jupiter {
-        width: 85px;
-        height: 85px;
-        background: radial-gradient(#f1c40f, #d35400);
-        box-shadow: 0 0 35px rgba(241, 196, 15, 0.6);
-      }
-
-      .p-saturn {
-        width: 75px;
-        height: 75px;
-        background: radial-gradient(#f39c12, #e67e22);
-        border: 4px double rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
-      }
-
-      .p-mercury {
-        width: 55px;
-        height: 55px;
-        background: radial-gradient(#dfe6e9, #95a5a6, #2c3e50);
-        box-shadow: 0 0 25px rgba(189, 195, 199, 0.7);
-      }
-
-      .planet-info {
-        position: absolute;
-        width: 220px;
-        background: var(--info-bg);
-        backdrop-filter: blur(15px);
-        padding: 12px 15px;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        text-align: center;
-        pointer-events: none;
-        box-shadow: var(--card-shadow);
-        bottom: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .moon-info {
-        width: 240px;
-        bottom: 130%;
-      }
-
-      .p-name {
-        font-family: "Cinzel Decorative";
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: var(--text);
-        margin-bottom: 4px;
-        display: block;
-      }
-
-      .p-poem-cn {
-        font-family: "Noto Serif TC", serif;
-        font-size: 0.85rem;
-        color: var(--text);
-        line-height: 1.4;
-        margin-bottom: 3px;
-        font-weight: 600;
-      }
-
-      .p-poem-en {
-        font-family: "Playfair Display", serif;
-        font-size: 0.75rem;
-        color: var(--text-light);
-        font-style: italic;
-        line-height: 1.2;
-      }
-
-      .checkin-tag {
-        display: block;
-        margin-top: 8px;
-        background: linear-gradient(90deg, var(--accent), #f39c12);
-        color: white;
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-weight: bold;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      @keyframes spinOrbit {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes spinCounter {
-        100% {
-          transform: rotate(-360deg);
-        }
-      }
-
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-12px);
-        }
-      }
-
-      @media (max-width: 1024px) {
-        .solar-system {
-          transform: scale(0.75);
-        }
-      }
-
-      @media (max-width: 768px) {
-        .solar-system {
-          transform: scale(0.55);
-          height: 70vh;
-        }
-      }
-
-      @media (max-width: 420px) {
-        .solar-system {
-          transform: scale(0.42);
-        }
-        .pos-mercury {
-          margin-top: 60px;
-        }
-      }
-
-      /* ==================== INTRO / ENVELOPE ==================== */
-      #intro-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(10px);
-        z-index: 5000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 1s ease;
-      }
-
-      .envelope-container {
-        position: relative;
-        cursor: pointer;
-        width: 320px;
-        height: 210px;
-        transition: transform 0.5s ease;
-        animation: floatEnv 4s ease-in-out infinite;
-      }
-
-      .envelope-container:hover {
-        transform: scale(1.05);
-      }
-
-      .envelope-body {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background: #e6dac8;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
-        overflow: hidden;
-        z-index: 2;
-      }
-
-      .envelope-txt {
-        position: absolute;
-        z-index: 10;
-        text-align: center;
-        width: 100%;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        padding: 0 10px;
-      }
-
-      .env-title {
-        font-family: "Cinzel Decorative";
-        font-size: 1.1rem;
-        color: #5d4037;
-        margin-bottom: 5px;
-      }
-
-      .env-subtitle {
-        font-family: "Dancing Script", cursive;
-        font-size: 1.2rem;
-        color: #8d6e63;
-        margin-bottom: 15px;
-      }
-
-      .env-highlight {
-        font-family: "Exo 2";
-        font-weight: 700;
-        color: #c0392b;
-        font-size: 0.85rem;
-        margin-bottom: 2px;
-      }
-
-      .env-cn {
-        font-family: "Noto Sans TC";
-        font-size: 0.75rem;
-        color: #6d4c41;
-        font-weight: 500;
-      }
-
-      .envelope-flap {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        border-left: 160px solid transparent;
-        border-right: 160px solid transparent;
-        border-top: 130px solid #dccbb1;
-        transform-origin: top;
-        transition: transform 0.8s ease 0.2s, z-index 0.2s;
-        z-index: 3;
-      }
-
-      .envelope-pocket {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        border-left: 160px solid #f0e6d6;
-        border-right: 160px solid #ece0cd;
-        border-bottom: 110px solid #f8f1e5;
-        border-top: 110px solid transparent;
-        z-index: 4;
-      }
-
-      .heart-seal {
-        position: absolute;
-        top: -55px;
-        left: -15px;
-        font-size: 2rem;
-        color: #c0392b;
-        animation: heartBeat 1.5s infinite;
-      }
-
-      .envelope-container.open .envelope-flap {
-        transform: rotateX(180deg);
-        z-index: 1;
-      }
-
-      .envelope-container.open {
-        animation: none;
-        transform: scale(1.5);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.5s 1s, transform 1s;
-      }
-
-      @keyframes floatEnv {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-8px);
-        }
-      }
-
-      @keyframes heartBeat {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.15);
-        }
-      }
-
-      /* ==================== LETTER ==================== */
-      .letter-paper {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.8);
-        width: 95%;
-        max-width: 750px;
-        max-height: 95vh;
-        background: radial-gradient(
-          circle at 50% 0%,
-          #ffffff 10%,
-          #f7f4e9 80%
-        );
-        box-shadow: 0 0 60px rgba(0, 0, 0, 0.6),
-          inset 0 0 40px rgba(255, 255, 255, 0.8),
-          inset 0 0 10px rgba(212, 175, 55, 0.1);
-        padding: 2.5rem 3rem;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.8s ease 0.8s;
-        overflow-y: auto;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .letter-paper::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("https://ducj-creator.github.io/Teacher-Shirley/assets/Shirley.png");
-        background-size: cover;
-        background-position: center;
-        filter: blur(6px) grayscale(20%);
-        opacity: 0.1;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      .sparkle-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-      }
-
-      .sparkle {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: rgba(212, 175, 55, 0.6);
-        border-radius: 50%;
-        box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
-        animation: floatSparkle 4s infinite linear;
-      }
-
-      .sparkle:nth-child(1) { top: 10%; left: 20%; animation-duration: 3s; }
-      .sparkle:nth-child(2) { top: 30%; left: 80%; animation-duration: 5s; }
-      .sparkle:nth-child(3) { top: 60%; left: 10%; animation-duration: 4s; }
-
-      @keyframes floatSparkle {
-        0% { opacity: 0; }
-        50% { opacity: 1; transform: translateY(-20px) scale(1.2); }
-        100% { transform: translateY(-40px) scale(0); opacity: 0; }
-      }
-
-      .letter-paper.show {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-        pointer-events: auto;
-      }
-
-      .letter-content {
-        position: relative;
-        z-index: 2;
-        color: #2c3e50;
-        font-family: "Playfair Display", serif;
-      }
 
       .letter-p {
         margin-bottom: 0.8rem;
@@ -2467,24 +2092,26 @@ window.openLetter = () => {
 
   const container = document.querySelector(".envelope-container");
   if (!container) return;
-
   container.classList.add("open");
 
-  setTimeout(() => {
-    const letterView = document.getElementById("letter-view");
-    if (letterView) letterView.classList.add("show");
+  // ★ 在信封打開瞬間 → 粒子爆炸
+  if (window.triggerParticleExplosion) {
+    window.triggerParticleExplosion(window.innerWidth / 2, window.innerHeight / 2);
+  }
 
-    const paragraphs = document.querySelectorAll(".letter-p");
-    paragraphs.forEach((p, index) => {
+  setTimeout(() => {
+    document.getElementById("letter-view")?.classList.add("show");
+
+    document.querySelectorAll(".letter-p").forEach((p, index) => {
       setTimeout(() => p.classList.add("visible"), index * 800);
     });
 
     setTimeout(() => {
-      const choice = document.getElementById("choice-buttons");
-      if (choice) choice.classList.add("visible");
-    }, paragraphs.length * 800 + 400);
+      document.getElementById("choice-buttons")?.classList.add("visible");
+    }, 800 * document.querySelectorAll(".letter-p").length + 400);
   }, 800);
 };
+
 
 window.enterVisitorMode = () => {
   const overlay = document.getElementById("intro-overlay");
@@ -2985,55 +2612,133 @@ function renderDailyContent(dateStr) {
 }
 
 /* ==================== Particles + UI toggles（維持你原本） ==================== */
+/* ==================== PARTICLES – COSMIC GRAIN + EXPLOSION ==================== */
 const canvas = document.getElementById("particle-canvas");
 const ctx = canvas.getContext("2d");
+
 let particlesArray = [];
+let explosionTimer = 0;
+
+const mouse = { x: null, y: null, radius: 120 };
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
 
+function getParticleCount() {
+  const area = canvas.width * canvas.height;
+  let count = Math.floor(area / 4500);
+  if (count < 180) count = 180;
+  if (count > 650) count = 650;
+  return count;
+}
+
+window.addEventListener("mousemove", e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+window.addEventListener("mouseleave", () => {
+  mouse.x = null;
+  mouse.y = null;
+});
+
 class Particle {
   constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2;
-    this.speedX = Math.random() * 0.2 - 0.1;
-    this.speedY = Math.random() * 0.2 - 0.1;
-    this.opacity = Math.random() * 0.5;
+    this.baseX = Math.random() * canvas.width;
+    this.baseY = Math.random() * canvas.height;
+    this.x = this.baseX;
+    this.y = this.baseY;
+    this.size = 1.0 + Math.random() * 1.8; // 顯眼粒子
+    this.vx = (Math.random() - 0.5) * 0.2;
+    this.vy = (Math.random() - 0.5) * 0.2;
+    this.opacity = 0.4 + Math.random() * 0.6;
   }
+
   update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
+    this.x += this.vx;
+    this.y += this.vy;
+
     if (this.x > canvas.width) this.x = 0;
     if (this.x < 0) this.x = canvas.width;
     if (this.y > canvas.height) this.y = 0;
     if (this.y < 0) this.y = canvas.height;
+
+    this.x += (this.baseX - this.x) * 0.01;
+    this.y += (this.baseY - this.y) * 0.01;
+
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < mouse.radius) {
+        const angle = Math.atan2(dy, dx);
+        const force = (mouse.radius - distance) / mouse.radius;
+        const repel = 4;
+        this.x += Math.cos(angle) * force * repel;
+        this.y += Math.sin(angle) * force * repel;
+      }
+    }
+
+    if (explosionTimer > 0) {
+      this.vx *= 0.96;
+      this.vy *= 0.96;
+    } else {
+      this.vx *= 0.9;
+      this.vy *= 0.9;
+    }
   }
+
   draw(isDark) {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    const half = this.size / 2;
+    ctx.rect(this.x - half, this.y - half, this.size, this.size);
+
     ctx.fillStyle = isDark
-      ? `rgba(255,255,255,${this.opacity})`
-      : `rgba(44,62,80,${this.opacity * 0.5})`;
+      ? `rgba(160, 235, 255, ${this.opacity})`
+      : `rgba(44, 62, 80, ${this.opacity * 0.8})`;
+
     ctx.fill();
   }
 }
 
 function initParticles() {
   particlesArray = [];
-  for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
+  const count = getParticleCount();
+  for (let i = 0; i < count; i++) particlesArray.push(new Particle());
 }
+
+function triggerParticleExplosion(cx, cy) {
+  explosionTimer = 45;
+
+  const x = cx ?? canvas.width / 2;
+  const y = cy ?? canvas.height / 2;
+
+  particlesArray.forEach(p => {
+    const dx = p.x - x;
+    const dy = p.y - y;
+    const angle = Math.atan2(dy, dx);
+    const speed = 3 + Math.random() * 4;
+
+    p.vx = Math.cos(angle) * speed;
+    p.vy = Math.sin(angle) * speed;
+  });
+}
+
+window.triggerParticleExplosion = triggerParticleExplosion;
 
 function animateParticles() {
   requestAnimationFrame(animateParticles);
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const isDark = document.getElementById("htmlRoot").classList.contains("dark");
-  particlesArray.forEach((p) => {
+
+  particlesArray.forEach(p => {
     p.update();
     p.draw(isDark);
   });
+
+  if (explosionTimer > 0) explosionTimer--;
 }
 
 window.addEventListener("resize", () => {
