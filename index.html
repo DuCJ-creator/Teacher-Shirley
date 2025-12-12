@@ -1586,15 +1586,17 @@
         display: block;
       }
       /* --- 宇宙背景與特效畫布 --- */
+/* --- 修正：藍絲絨天幕背景 --- */
 #cosmicCanvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* 確保在所有內容最底層 */
-  pointer-events: none; /* 讓滑鼠點擊能穿透畫布 */
-  background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); /* 深邃宇宙底色 */
+  z-index: -1;
+  pointer-events: none;
+  /* 這裡改掉了原本的黑色，換成深藍到皇家藍的漸層，像極了藍絲絨 */
+  background: linear-gradient(to bottom, #000428, #004e92) !important; 
 }
 
 /* --- (選項) 宇宙風格信封質感升級 --- */
@@ -3183,7 +3185,7 @@ musicToggle.addEventListener("click", () => {
   }
   isPlaying = !isPlaying;
 });
-/* ==================== 宇宙特效外掛系統 ==================== */
+/* ==================== 宇宙特效外掛系統 (藍絲絨璀璨版) ==================== */
 (function() {
   const canvas = document.getElementById("cosmicCanvas");
   if (!canvas) return;
@@ -3193,7 +3195,7 @@ musicToggle.addEventListener("click", () => {
   let explosionParticles = [];
 
   // 滑鼠磁場設定
-  let mouse = { x: null, y: null, radius: 150 }; // radius 為磁場半徑
+  let mouse = { x: null, y: null, radius: 150 };
 
   window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
@@ -3214,28 +3216,31 @@ musicToggle.addEventListener("click", () => {
     init() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.baseX = this.x; // 記住原始位置
+      this.baseX = this.x;
       this.baseY = this.y;
-      this.size = Math.random() * 2; // 顆粒大小
-      this.density = (Math.random() * 30) + 1; // 質量，影響被推開的程度
-      this.opacity = Math.random() * 0.8 + 0.2;
-      this.pulseSpeed = 0.02;
+      // 修改：星星變大一點，更有存在感
+      this.size = Math.random() * 2.5 + 0.5; 
+      this.density = (Math.random() * 30) + 1;
+      // 修改：亮度提升，原本是 0.2 起跳，現在改為 0.5 起跳
+      this.opacity = Math.random() * 0.5 + 0.5; 
+      this.pulseSpeed = Math.random() * 0.02 + 0.005;
     }
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      // 修改：加入強烈的白色光暈，製造璀璨感
+      ctx.shadowBlur = 15; 
+      ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
       ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-      ctx.shadowBlur = 5;
-      ctx.shadowColor = "white";
       ctx.fill();
-      ctx.shadowBlur = 0;
+      ctx.shadowBlur = 0; // 重置以免影響效能
     }
     update() {
-      // 1. 閃爍效果
+      // 閃爍邏輯
       this.opacity += this.pulseSpeed;
-      if (this.opacity > 1 || this.opacity < 0.2) this.pulseSpeed = -this.pulseSpeed;
+      if (this.opacity > 1 || this.opacity < 0.4) this.pulseSpeed = -this.pulseSpeed;
 
-      // 2. 滑鼠磁場排斥邏輯
+      // 滑鼠磁場互動
       let dx = mouse.x - this.x;
       let dy = mouse.y - this.y;
       let distance = Math.sqrt(dx*dx + dy*dy);
@@ -3251,7 +3256,6 @@ musicToggle.addEventListener("click", () => {
         this.x -= directionX;
         this.y -= directionY;
       } else {
-        // 磁場離開後，緩慢回到原位
         if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 20;
         if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 20;
       }
@@ -3259,25 +3263,27 @@ musicToggle.addEventListener("click", () => {
     }
   }
 
-  // 爆破粒子
+  // 爆破粒子 (維持原樣，但顏色調亮一點)
   class BoomParticle {
     constructor(x, y) {
       this.x = x; 
       this.y = y;
       this.size = Math.random() * 4 + 2;
-      this.speedX = Math.random() * 10 - 5; // 向四面八方炸開
-      this.speedY = Math.random() * 10 - 5;
-      this.color = `hsl(${Math.random()*60 + 200}, 100%, 70%)`; // 藍紫色系
+      this.speedX = Math.random() * 12 - 6; 
+      this.speedY = Math.random() * 12 - 6;
+      this.color = `hsl(${Math.random()*60 + 200}, 100%, 80%)`; // 亮度調高到 80%
       this.life = 100;
     }
     update() {
       this.x += this.speedX;
       this.y += this.speedY;
-      this.life -= 2; // 漸漸消失
-      this.size *= 0.95; // 漸漸變小
+      this.life -= 2;
+      this.size *= 0.95;
       
       ctx.save();
       ctx.globalAlpha = this.life / 100;
+      ctx.shadowBlur = 10; // 爆破也要發光
+      ctx.shadowColor = this.color;
       ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -3288,8 +3294,8 @@ musicToggle.addEventListener("click", () => {
 
   function initParticles() {
     particles = [];
-    // 密集亮點：根據螢幕大小決定數量
-    let count = (width * height) / 5000;
+    // 修改：星星數量加倍！原本除以 5000，現在除以 3500 (數字越小星星越多)
+    let count = (width * height) / 3500;
     for(let i=0; i<count; i++) particles.push(new Star());
   }
 
@@ -3297,7 +3303,6 @@ musicToggle.addEventListener("click", () => {
     ctx.clearRect(0, 0, width, height);
     particles.forEach(p => p.update());
     
-    // 處理爆破粒子
     for(let i=0; i<explosionParticles.length; i++){
       explosionParticles[i].update();
       if(explosionParticles[i].life <= 0) {
@@ -3308,18 +3313,14 @@ musicToggle.addEventListener("click", () => {
     requestAnimationFrame(animate);
   }
 
-  // === 這是給您呼叫的函數 ===
   window.triggerExplosion = function() {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    // 產生 100 顆爆破粒子
-    for(let i=0; i<100; i++) {
+    for(let i=0; i<120; i++) {
       explosionParticles.push(new BoomParticle(centerX, centerY));
     }
-    
-    // 同時讓背景星塵往上飄 (模擬信件打開氣流)
     particles.forEach(p => {
-       p.baseY -= 100 + Math.random() * 100; // 永久改變基準位置，往上飛
+       p.baseY -= 150 + Math.random() * 100; 
     });
   };
 
