@@ -1585,10 +1585,127 @@
         border: none;
         display: block;
       }
+      /* --- 宇宙背景與特效畫布 --- */
+#cosmicCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 確保在所有內容最底層 */
+  pointer-events: none; /* 讓滑鼠點擊能穿透畫布 */
+  background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); /* 深邃宇宙底色 */
+}
+
+/* --- (選項) 宇宙風格信封質感升級 --- */
+/* 若您希望信封變成宇宙藍金色，請加入這段；若想保留原本米色則忽略 */
+.envelope-body {
+  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%) !important;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.2) !important;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.envelope-flap {
+  border-top-color: #34495e !important; /* 信封蓋顏色 */
+}
+.envelope-pocket {
+  border-left-color: #2c3e50 !important;
+  border-right-color: #243342 !important;
+  border-bottom-color: #2c3e50 !important;
+}
+/* ==================== 修正：針對您原本的 .letter-paper 進行宇宙化 ==================== */
+
+/* 1. 信紙本體：由米色改為深邃星空 */
+.letter-paper {
+  background: linear-gradient(135deg, #16222A 0%, #3A6073 100%) !important; /* 深藍宇宙漸層 */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0 30px rgba(0, 198, 255, 0.15), inset 0 0 60px rgba(0,0,0,0.6) !important;
+  color: #ecf0f1 !important; /* 全域文字變亮白 */
+}
+
+/* 2. 覆蓋原本的 Shirley 背景圖 (若您希望保留原本背景圖可刪除此段，但建議變暗以凸顯文字) */
+.letter-paper::before {
+  opacity: 0.05 !important; /* 讓原本的背景圖變得極淡，融入星空 */
+  mix-blend-mode: overlay;
+}
+
+/* 3. 信件內容文字 */
+.letter-content {
+  color: #e0e0e0 !important; /* 銀灰色文字 */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.letter-p strong {
+  color: #f1c40f !important; /* "Hi there!" 強調色改為金色星光 */
+  text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+}
+
+/* 中文翻譯文字：稍微調暗一點的藍灰色，保持層次 */
+.cn-text {
+  color: #95a5a6 !important; 
+}
+
+/* 4. 那個黃色的提示框 (If you log in...)：改為半透明深色玻璃感 */
+.letter-p[style*="background"] {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(241, 196, 15, 0.3) !important;
+  color: #ddd !important;
+}
+
+.highlight-box {
+  background: linear-gradient(90deg, #d4af37, #f1c40f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* 5. 按鈕區域 */
+.btn-visitor {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #bdc3c7 !important;
+}
+.btn-visitor:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+.btn-login {
+  background: linear-gradient(90deg, #d4af37, #f1c40f) !important; /* 金色漸層 */
+  border: none !important;
+  color: #000 !important; /* 深色文字對比 */
+  font-weight: 700 !important;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+}
+.btn-login:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* 6. 登錄表單 (原本是白底，改為深色半透明) */
+#auth-form-container {
+  background: rgba(18, 28, 38, 0.95) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #fff;
+}
+
+.google-btn {
+  background: #fff !important; /* Google 按鈕保持白色較好辨識，或可改深色 */
+  color: #333 !important;
+}
+
+.input-group input {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+.input-group input:focus {
+  border-color: #f1c40f !important;
+}
     </style>
   </head>
 
   <body>
+    <canvas id="cosmicCanvas"></canvas>
     <!-- in-app browser warning -->
     <div id="in-app-browser-warning">
       <div class="arrow-hint">↗</div>
@@ -2461,6 +2578,7 @@ function showLoggedOutUI() {
 
 /* ==================== Intro / Envelope ==================== */
 window.openLetter = () => {
+triggerExplosion(); // <--- 加這一行在您的信封開啟事件中
   const windchime = document.getElementById("windchime");
   windchime.volume = 0.5;
   windchime.play().catch(() => {});
@@ -3065,6 +3183,149 @@ musicToggle.addEventListener("click", () => {
   }
   isPlaying = !isPlaying;
 });
+/* ==================== 宇宙特效外掛系統 ==================== */
+(function() {
+  const canvas = document.getElementById("cosmicCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let width, height;
+  let particles = [];
+  let explosionParticles = [];
+
+  // 滑鼠磁場設定
+  let mouse = { x: null, y: null, radius: 150 }; // radius 為磁場半徑
+
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    initParticles();
+  }
+  window.addEventListener('resize', resize);
+
+  class Star {
+    constructor() {
+      this.init();
+    }
+    init() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.baseX = this.x; // 記住原始位置
+      this.baseY = this.y;
+      this.size = Math.random() * 2; // 顆粒大小
+      this.density = (Math.random() * 30) + 1; // 質量，影響被推開的程度
+      this.opacity = Math.random() * 0.8 + 0.2;
+      this.pulseSpeed = 0.02;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.shadowBlur = 5;
+      ctx.shadowColor = "white";
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    update() {
+      // 1. 閃爍效果
+      this.opacity += this.pulseSpeed;
+      if (this.opacity > 1 || this.opacity < 0.2) this.pulseSpeed = -this.pulseSpeed;
+
+      // 2. 滑鼠磁場排斥邏輯
+      let dx = mouse.x - this.x;
+      let dy = mouse.y - this.y;
+      let distance = Math.sqrt(dx*dx + dy*dy);
+      
+      if (distance < mouse.radius) {
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+        const maxDistance = mouse.radius;
+        const force = (maxDistance - distance) / maxDistance;
+        const directionX = forceDirectionX * force * this.density;
+        const directionY = forceDirectionY * force * this.density;
+        
+        this.x -= directionX;
+        this.y -= directionY;
+      } else {
+        // 磁場離開後，緩慢回到原位
+        if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 20;
+        if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 20;
+      }
+      this.draw();
+    }
+  }
+
+  // 爆破粒子
+  class BoomParticle {
+    constructor(x, y) {
+      this.x = x; 
+      this.y = y;
+      this.size = Math.random() * 4 + 2;
+      this.speedX = Math.random() * 10 - 5; // 向四面八方炸開
+      this.speedY = Math.random() * 10 - 5;
+      this.color = `hsl(${Math.random()*60 + 200}, 100%, 70%)`; // 藍紫色系
+      this.life = 100;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life -= 2; // 漸漸消失
+      this.size *= 0.95; // 漸漸變小
+      
+      ctx.save();
+      ctx.globalAlpha = this.life / 100;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    // 密集亮點：根據螢幕大小決定數量
+    let count = (width * height) / 5000;
+    for(let i=0; i<count; i++) particles.push(new Star());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => p.update());
+    
+    // 處理爆破粒子
+    for(let i=0; i<explosionParticles.length; i++){
+      explosionParticles[i].update();
+      if(explosionParticles[i].life <= 0) {
+        explosionParticles.splice(i, 1);
+        i--;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // === 這是給您呼叫的函數 ===
+  window.triggerExplosion = function() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    // 產生 100 顆爆破粒子
+    for(let i=0; i<100; i++) {
+      explosionParticles.push(new BoomParticle(centerX, centerY));
+    }
+    
+    // 同時讓背景星塵往上飄 (模擬信件打開氣流)
+    particles.forEach(p => {
+       p.baseY -= 100 + Math.random() * 100; // 永久改變基準位置，往上飛
+    });
+  };
+
+  resize();
+  animate();
+})();
 </script>
   </body>
 </html>
