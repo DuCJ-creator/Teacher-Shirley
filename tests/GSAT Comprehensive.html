@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirley's GSAT Comprehensive Practice</title>
+    <style>
+        /* 學術高級配色方案 */
+        :root {
+            --primary-color: #1A3760; /* 深藍色，學術、專業 */
+            --secondary-color: #F4F7F9; /* 淺灰色背景 */
+            --text-color: #333333; /* 標準黑文字 */
+            --light-blue: #007BFF; /* 輔助亮藍色 */
+            --border-color: #E0E6EB;
+            --success-color: #28A745; 
+            --error-color: #DC3545; 
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --dark-background: #0D213F; /* 極深藍用於標頭背景 */
+            --header-light-color: #A0C2FF; /* 標頭文字高亮色 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif, 'Noto Sans TC', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            min-height: 100vh;
+        }
+
+        /* 標頭：玻璃擬態背景 */
+        .header {
+            background-color: var(--dark-background); 
+            padding: 40px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            font-weight: 800;
+            /* 文字凸顯效果 */
+            text-shadow: 0 0 5px var(--header-light-color), 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .header h1 span {
+             color: var(--header-light-color); /* 凸顯 Practice */
+        }
+
+        .subtitle {
+            font-size: 1em;
+            color: #C0C0C0;
+            margin-top: 10px;
+        }
+        
+        /* 總入口/題組選擇區域：玻璃框效果 (Glassmorphism) */
+        .quiz-selector-bar {
+            background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+            backdrop-filter: blur(8px); /* 磨砂玻璃效果 */
+            border-radius: 8px;
+            max-width: 1400px;
+            margin: -30px auto 20px; /* 向上疊加到標頭下方 */
+            padding: 18px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            
+            /* 內容佈局 */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative; /* 確保陰影和疊加效果正確 */
+            z-index: 10;
+            color: white; /* 內部文字為白色 */
+        }
+
+        .quiz-selector-controls label {
+            font-weight: bold;
+            color: white; /* 標籤為白色 */
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+        
+        #quiz-selector {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.2); /* 選擇框也半透明 */
+            color: var(--text-color); /* 選擇框內文字深色 */
+            font-size: 1em;
+            cursor: pointer;
+            min-width: 250px;
+        }
+        
+        #score-display {
+             font-weight: bold; 
+             color: var(--header-light-color); /* 分數凸顯 */
+             font-size: 1.2em;
+        }
+
+
+        /* 核心容器 - 響應式佈局 */
+        .quiz-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0px auto 20px;
+            padding: 0 15px;
+            gap: 20px;
+            z-index: 5;
+            position: relative; 
+        }
+
+        /* 左右分欄樣式 */
+        .pane {
+            flex: 1; 
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--box-shadow);
+            overflow-y: auto; 
+            max-height: calc(100vh - 180px); 
+        }
+        
+        .reading-pane {
+            position: sticky; 
+            top: 20px;
+        }
+        
+        .pane-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        /* 閱讀篇章樣式 */
+        #passage-content p {
+            margin-bottom: 1em;
+            text-align: justify;
+            line-height: 1.8;
+            text-indent: 2em; 
+        }
+
+        /* 題目區域樣式 */
+        .header-tools {
+            display: none; 
+        }
+        
+        /* 單個題目 */
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #EEEEEE; 
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .question-options label {
+            font-size: 0.95em;
+        }
+        
+        /* 批改按鈕 (底部) */
+        .submit-container {
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+            text-align: right; 
+        }
+
+        .submit-btn {
+            background-color: var(--light-blue); 
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .correct { background-color: #EBF7E5; border-left: 5px solid var(--success-color); }
+        .incorrect { background-color: #FEE7E8; border-left: 5px solid var(--error-color); }
+        .correct-answer-mark { color: var(--success-color); }
+        .blank-link { color: var(--light-blue); }
+
+        /* 手機適應性 (RWD) */
+        @media (max-width: 992px) {
+            .quiz-container { flex-direction: column; margin: 10px auto; }
+            .pane { max-height: none; overflow-y: visible; position: static; padding: 15px; }
+            .quiz-selector-bar { 
+                margin: 10px auto; 
+                flex-direction: column; 
+                align-items: flex-start; 
+                border-radius: 8px;
+                backdrop-filter: none; /* 手機上移除玻璃效果以簡化佈局 */
+                background-color: white;
+                color: var(--text-color);
+            }
+            .quiz-selector-controls label { color: var(--primary-color); }
+            #score-display { color: var(--primary-color); margin-top: 10px; }
+            .submit-container { text-align: center; }
+            .submit-btn { width: 100%; }
+            .quiz-selector-controls { margin-bottom: 10px; }
+            #quiz-selector { width: 100%; min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Shirley's GSAT <span style="font-weight: 300;">Comprehensive Practice</span></h1>
+        <p class="subtitle">Advanced Interactive Practice Engine (with acknowledgement of CEEC)</p>
+    </header>
+
+    <div class="quiz-selector-bar">
+        <div class="quiz-selector-controls">
+            <label for="quiz-selector">選擇題組:</label>
+            <select id="quiz-selector">
+                <option value="">請先載入...</option>
+            </select>
+        </div>
+        <span id="score-display">得分: 0 / 0</span>
+    </div>
+
+    <main id="quiz-container" class="quiz-container">
+        <div id="reading-pane" class="pane reading-pane">
+            <h2 class="pane-title">📝 閱讀篇章</h2>
+            <div id="passage-content">
+                <p>正在載入文章...</p>
+            </div>
+        </div>
+
+        <div id="questions-pane" class="pane questions-pane">
+            <div class="header-tools">
+            </div>
+            <h2 class="pane-title">🎯 題目列表</h2>
+            <form id="quiz-form">
+                <p>請從上方選擇一個題組開始練習。</p>
+            </form>
+            
+            <div class="submit-container">
+                <button id="submit-btn" class="submit-btn" disabled>批改與查看答案</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 0.85em;">&copy; Teacher Shirley's Study Tools</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const jsonUrl = 'https://ducj-creator.github.io/Teacher-Shirley/tests/gsat%20conprehensive.json';
+            const passageContent = document.getElementById('passage-content');
+            const quizForm = document.getElementById('quiz-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const scoreDisplay = document.getElementById('score-display');
+            const quizSelector = document.getElementById('quiz-selector');
+            
+            let allQuizzes = {}; 
+            let currentQuizId = null;
+            let isGraded = false;
+
+            // --- 核心資料結構轉換邏輯：從您的平鋪陣列中分組 ---
+            function organizeQuizData(rawArray) {
+                const quizzes = {};
+                let currentPassageId = null;
+                let currentPassageText = '';
+                let currentQuestions = [];
+
+                if (!Array.isArray(rawArray)) return {};
+
+                rawArray.forEach(item => {
+                    const hasPassageId = item.passage_id && item.passage_id.trim() !== '';
+                    const hasQuestionId = item.question_id !== undefined && item.question_id !== null;
+
+                    if (hasPassageId && item.Text) {
+                        if (currentPassageId && currentQuestions.length > 0) {
+                            quizzes[currentPassageId] = {
+                                passage: currentPassageText,
+                                questions: currentQuestions
+                            };
+                        }
+                        
+                        currentPassageId = item.passage_id;
+                        currentPassageText = item.Text;
+                        currentQuestions = [];
+                    } 
+                    
+                    if (hasQuestionId) {
+                        const options = {};
+                        if (item.option_A) options.A = item.option_A;
+                        if (item.option_B) options.B = item.option_B;
+                        if (item.option_C) options.C = item.option_C;
+                        if (item.option_D) options.D = item.option_D;
+
+                        currentQuestions.push({
+                            question_id: item.question_id,
+                            stem: `${item.question_id}.`, 
+                            options: options,
+                            correct_answer: item.correct_answer 
+                        });
+                    }
+                });
+
+                if (currentPassageId && currentQuestions.length > 0) {
+                    quizzes[currentPassageId] = {
+                        passage: currentPassageText,
+                        questions: currentQuestions
+                    };
+                }
+
+                return quizzes;
+            }
+
+            // 載入 JSON 資料
+            async function loadQuizData() {
+                try {
+                    const response = await fetch(jsonUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const rawArray = await response.json(); 
+                    
+                    allQuizzes = organizeQuizData(rawArray);
+
+                    const quizIds = Object.keys(allQuizzes);
+                    if (quizIds.length > 0) {
+                        populateSelector(quizIds);
+                        loadQuiz(quizIds[0]);
+                    } else {
+                        throw new Error('JSON 資料解析後沒有發現可用的題組。');
+                    }
+                    
+                } catch (error) {
+                    passageContent.innerHTML = `<p style="color: var(--error-color);">錯誤：載入或解析測驗資料失敗。</p><p>請檢查您的 JSON 檔案結構。錯誤詳情: ${error.message}</p>`;
+                    console.error('Error loading quiz data:', error);
+                    quizSelector.innerHTML = '<option value="">載入失敗</option>';
+                    submitBtn.disabled = true;
+                }
+            }
+            
+            // 填充題組選擇器
+            function populateSelector(quizIds) {
+                quizSelector.innerHTML = ''; 
+                quizIds.forEach(id => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = `題組 ${id}`;
+                    quizSelector.appendChild(option);
+                });
+            }
+
+            // 載入特定的題組
+            function loadQuiz(quizId) {
+                currentQuizId = quizId;
+                const quizData = allQuizzes[quizId];
+                
+                isGraded = false;
+                submitBtn.textContent = '批改與查看答案';
+                clearSavedAnswers(); 
+
+                renderPassage(quizData.passage);
+                renderQuestions(quizData.questions);
+                updateScoreDisplay(0, quizData.questions.length);
+                quizSelector.value = quizId;
+                submitBtn.disabled = false;
+            }
+
+            // 綁定題組選擇事件
+            quizSelector.addEventListener('change', (e) => {
+                const newQuizId = e.target.value;
+                if (newQuizId) {
+                    loadQuiz(newQuizId);
+                }
+            });
+
+
+            // --- UI 渲染和互動邏輯 ---
+
+            function renderPassage(passageText) {
+                const formattedText = passageText.replace(
+                    /\[(\d{1,3})\]/g, 
+                    (match, qid) => `<a href="#q${qid}" class="blank-link" data-qid="${qid}">[${qid}]</a>`
+                );
+                passageContent.innerHTML = `<p>${formattedText.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
+            }
+
+            function renderQuestions(questions) {
+                if (!questions || questions.length === 0) {
+                    quizForm.innerHTML = '<p>此題組沒有題目。</p>';
+                    return;
+                }
+                
+                let questionHTML = '';
+                questions.forEach(q => {
+                    const qid = q.question_id;
+                    const savedAnswer = localStorage.getItem(`${currentQuizId}_q${qid}_answer`);
+                    let gradedClass = '';
+                    if (isGraded) {
+                         gradedClass = savedAnswer === q.correct_answer ? 'correct' : 'incorrect';
+                    }
+
+                    questionHTML += `
+                        <div class="question ${gradedClass}" id="q${qid}" data-correct-answer="${q.correct_answer}">
+                            <p class="question-stem"><strong>${q.stem || qid}</strong></p>
+                            <div class="question-options">
+                                ${Object.entries(q.options || {}).map(([key, value]) => `
+                                    <label>
+                                        <input type="radio" name="q${qid}" value="${key}" 
+                                               ${isGraded ? 'disabled' : ''} 
+                                               ${(savedAnswer && key === savedAnswer) ? 'checked' : ''}
+                                               >
+                                        ${key}. ${value}
+                                    </label>
+                                `).join('')}
+                            </div>
+                            <div class="feedback feedback-message" id="feedback-q${qid}">
+                                ${isGraded ? renderFeedback(q, savedAnswer) : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                quizForm.innerHTML = questionHTML;
+                
+                if (!isGraded) {
+                    quizForm.querySelectorAll('input[type="radio"]').forEach(input => {
+                        input.addEventListener('change', (e) => {
+                            localStorage.setItem(`${currentQuizId}_${e.target.name}_answer`, e.target.value); 
+                        });
+                    });
+                }
+            }
+            
+            function renderFeedback(q, userAnswer) {
+                if (userAnswer === q.correct_answer) {
+                    return '<span class="correct-answer-mark">✅ 答對了！</span>';
+                } else if (userAnswer) {
+                    return `<span style="color: var(--error-color);">❌ 答錯了。</span> 正確答案是 <span class="correct-answer-mark">${q.correct_answer}</span>`;
+                } else {
+                    return `<span style="color: var(--error-color);">未作答。</span> 正確答案是 <span class="correct-answer-mark">${q.correct_answer}</span>`;
+                }
+            }
+
+            function updateScoreDisplay(correctCount, totalCount) {
+                scoreDisplay.textContent = `得分: ${correctCount} / ${totalCount}`;
+            }
+            
+            function clearSavedAnswers() {
+                const quizData = allQuizzes[currentQuizId];
+                if (quizData && quizData.questions) {
+                    quizData.questions.forEach(q => {
+                        localStorage.removeItem(`${currentQuizId}_q${q.question_id}_answer`);
+                    });
+                }
+            }
+
+            // 批改按鈕事件處理
+            submitBtn.addEventListener('click', () => {
+                if (!currentQuizId || submitBtn.disabled) return;
+                
+                if (isGraded) {
+                    loadQuiz(currentQuizId); 
+                } else {
+                    gradeQuiz(true); 
+                    isGraded = true;
+                    submitBtn.textContent = '重新作答';
+                }
+            });
+
+            // 批改邏輯
+            function gradeQuiz(updateUI) {
+                const quizData = allQuizzes[currentQuizId];
+                if (!quizData) return;
+                
+                let correctCount = 0;
+                const totalCount = quizData.questions.length;
+
+                quizData.questions.forEach(q => {
+                    const userAnswer = localStorage.getItem(`${currentQuizId}_q${q.question_id}_answer`);
+                    if (userAnswer === q.correct_answer) {
+                        correctCount++;
+                    }
+
+                    if (updateUI) {
+                        const questionElement = document.getElementById(`q${q.question_id}`);
+                        const feedbackElement = document.getElementById(`feedback-q${q.question_id}`);
+                        
+                        document.querySelectorAll(`input[name="q${q.question_id}"]`).forEach(input => input.disabled = true);
+
+                        questionElement.classList.remove('correct', 'incorrect');
+                        questionElement.classList.add(userAnswer === q.correct_answer ? 'correct' : 'incorrect');
+                        feedbackElement.innerHTML = renderFeedback(q, userAnswer);
+                    }
+                });
+
+                updateScoreDisplay(correctCount, totalCount);
+            }
+            
+            // 處理文章中的連結點擊
+            passageContent.addEventListener('click', (event) => {
+                if (event.target.classList.contains('blank-link')) {
+                    event.preventDefault(); 
+                    const qid = event.target.dataset.qid;
+                    const targetQuestion = document.getElementById(`q${qid}`);
+                    
+                    if (targetQuestion) {
+                        targetQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        targetQuestion.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.6)';
+                        setTimeout(() => {
+                            targetQuestion.style.boxShadow = 'var(--box-shadow)';
+                        }, 500);
+                    }
+                }
+            });
+            
+            // 啟動測驗
+            loadQuizData();
+        });
+    </script>
+</body>
+</html>
