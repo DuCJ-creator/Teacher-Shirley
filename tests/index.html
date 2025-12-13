@@ -322,13 +322,36 @@
         </button>
       </div>
       <div class="tools-grid">
-        <div class="vocab-card" style="cursor: default; opacity: 0.8;">
+        <div class="vocab-card" onclick="openSection('section-gsat', 'GSAT 學測英文')">
           <div class="card-icon">💯</div>
           <div class="card-title">GSAT 學測英文</div>
+          <div class="card-desc">詞彙與綜合測驗練習</div>
         </div>
       </div>
     </div>
 
+    <div id="section-gsat" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="openSection('section-tw', 'TESTS in TW 台灣考試專區')">
+          <span>←</span> Back to TESTS in TW
+        </button>
+      </div>
+      <div class="tools-grid">
+        
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" class="vocab-card">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">GSAT Vocab詞彙題</div>
+          <div class="card-desc">學測詞彙題練習</div>
+        </a>
+        
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/GSAT%20Comprehensive.html" class="vocab-card">
+          <div class="card-icon">🧐</div>
+          <div class="card-title">GSAT 綜合測驗</div>
+          <div class="card-desc">學測綜合測驗練習</div>
+        </a>
+
+      </div>
+    </div>
     <div id="section-intl" class="section hidden">
       <div class="section-header">
         <button class="section-back-btn" onclick="openSection('section-home', '考試練練工作坊')">
