@@ -24,12 +24,18 @@
             padding: 0;
         }
 
+        /* V15.0: 確保 HTML 和 Body 可以正常滾動 */
+        html, body {
+            height: 100%;
+            min-height: 100vh; /* 確保至少有一個視窗高度 */
+        }
+
         body {
             font-family: 'Times New Roman', serif, 'Noto Sans TC', sans-serif;
             line-height: 1.7;
             color: var(--text-color);
             background-color: var(--secondary-color);
-            min-height: 100vh;
+            /* 移除 min-height: 100vh; 因為已經在 body/html 設置了 */
         }
         
         .header {
@@ -116,11 +122,20 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             box-shadow: var(--box-shadow);
+            
+            /* 左側欄位的滾動設定 */
             overflow-y: auto; 
-            max-height: calc(100vh - 180px); 
+            max-height: calc(100vh - 180px); /* 限制左側高度，讓其內部滾動 */
         }
         
+        .questions-pane {
+             /* 右側欄位：允許其內容延伸，觸發頁面滾動 */
+             max-height: none; 
+             overflow-y: visible;
+        }
+
         .reading-pane {
+            /* V15.0: 確保左側固定在滾動頁面時不會移動 */
             position: sticky; 
             top: 20px;
         }
@@ -145,26 +160,45 @@
             text-indent: 0;
             line-height: 1.7;
         }
-
-        /* 移除 V12.0 的 .options-inline 樣式 */
         
-        .question {
-            margin-bottom: 25px;
+        /* 獨立選項列表樣式 (分兩欄，緊湊顯示) */
+        .options-list-container {
+            border: 1px solid var(--border-color);
             padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: var(--secondary-color);
+        }
+        .options-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 分成兩欄 */
+            gap: 5px 15px; /* 行間距和欄間距 */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.95em;
+        }
+        .options-list li {
+            line-height: 1.3; /* 緊湊行高 */
+        }
+
+        /* 題目樣式調整，移除多餘空間 */
+        .question {
+            margin-bottom: 15px; /* 題目間距縮小 */
+            padding: 12px;
             border: 1px solid #EEEEEE; 
             border-radius: 6px;
-            transition: all 0.3s;
         }
         .question-options label {
             display: inline-block; 
-            margin-right: 15px;
+            margin-right: 12px; /* 選項間距縮小 */
             font-size: 0.95em;
         }
         
         .submit-container {
             padding: 20px 0;
             border-top: 1px solid var(--border-color);
-            margin-top: 30px;
+            margin-top: 20px; 
             text-align: right; 
         }
 
@@ -192,6 +226,7 @@
         @media (max-width: 992px) {
             .quiz-container { flex-direction: column; margin: 10px auto; }
             .pane { max-height: none; overflow-y: visible; position: static; padding: 15px; }
+            .options-list { grid-template-columns: 1fr; }
             .quiz-selector-bar { 
                 margin: 10px auto; 
                 flex-direction: column; 
@@ -237,6 +272,13 @@
 
         <div id="questions-pane" class="pane questions-pane">
             <h2 class="pane-title">🎯 題目列表</h2>
+            
+            <div id="options-list-container" class="options-list-container" style="display:none;">
+                <p style="font-weight: bold; margin-bottom: 8px;">選項列表 (A-J):</p>
+                <ul id="options-list" class="options-list">
+                    </ul>
+            </div>
+            
             <form id="quiz-form">
                 請從上方選擇一個題組開始練習。
             </form>
@@ -259,6 +301,8 @@
             const submitBtn = document.getElementById('submit-btn');
             const scoreDisplay = document.getElementById('score-display');
             const quizSelector = document.getElementById('quiz-selector');
+            const optionsListContainer = document.getElementById('options-list-container');
+            const optionsList = document.getElementById('options-list');
             
             let allQuizzes = {}; 
             let currentQuizId = null;
@@ -368,7 +412,10 @@
                 submitBtn.textContent = '批改與查看答案';
                 clearSavedAnswers(); 
 
-                renderPassage(quizData.passage);
+                const { passageText, optionsText } = extractOptions(quizData.passage);
+                
+                renderPassage(passageText);
+                renderOptionsList(optionsText); 
                 renderQuestions(quizData.questions, quizData.options); 
                 updateScoreDisplay(0, quizData.questions.length);
                 quizSelector.value = quizId;
@@ -382,36 +429,35 @@
                 }
             });
 
+            // V14.0 提取選項
+            function extractOptions(fullText) {
+                const optionRegex = /(\s*\([A-J]\)\s*.*)+$/i; 
+                
+                const match = fullText.match(optionRegex);
+                
+                if (match) {
+                    const optionsText = match[0].trim();
+                    const passageText = fullText.substring(0, fullText.length - match[0].length).trim();
+                    return { passageText, optionsText };
+                }
+                
+                return { passageText: fullText, optionsText: null };
+            }
 
-            // **V13.0 關鍵修正：修復換行與選項排版**
+            // V14.0 渲染文章
             function renderPassage(passageText) {
                 
-                // 1. 強力清理多餘空白：將 JSON 中的多個空白、制表符 (\t) 替換為單一空格。
-                //    (這是為了避免 JSON 中的格式化空白影響排版)
                 let formattedText = passageText.trim()
                     .replace(/\s+/g, ' '); 
 
-                // 2. 將連續的 \n\n (或更多) 視為一個新的段落
                 formattedText = formattedText.replace(/\\n\s*\\n+/g, '</p><p>'); 
-
-                // 3. 在遇到選項 (如 (A) 或 [A]) 開頭時，**強制插入換行符 <br>** //    並在選項之前加上兩個空格，確保與文章主體區分。
-                //    (我們不使用 <p>/</p> 而是 <br> 來避免選項之間的間距過大)
-                //    匹配: (A) (B) (C)... 或 [A] [B] [C]...
-                formattedText = formattedText.replace(
-                    /(\s\([A-J]\)|\s\[[A-J]\])/g, 
-                    '<br><br> &nbsp; $1' 
-                );
-
-                // 4. 將文章主體中的單一 \n 替換為單一空格 (確保文章主體連續)
                 formattedText = formattedText.replace(/\\n/g, ' '); 
 
-                // 5. 將文章中的 [QID] 替換為可點擊連結
                 formattedText = formattedText.replace(
                     /\[(\d{1,3})\]/g, 
                     (match, qid) => `<a href="#q${qid}" class="blank-link" data-qid="${qid}">[${qid}]</a>`
                 );
                 
-                // 6. 用 <p> 包裹整個內容
                 if (formattedText) {
                     if (!formattedText.startsWith('<p>')) {
                          formattedText = '<p>' + formattedText;
@@ -419,14 +465,41 @@
                     if (!formattedText.endsWith('</p>')) {
                          formattedText = formattedText + '</p>';
                     }
+                } else {
+                    formattedText = '<p>文章內容載入錯誤。</p>';
                 }
 
                 passageContent.innerHTML = formattedText;
             }
 
+            // V14.0 渲染選項列表
+            function renderOptionsList(optionsText) {
+                optionsList.innerHTML = '';
+                
+                if (!optionsText) {
+                    optionsListContainer.style.display = 'none';
+                    return;
+                }
+                
+                optionsListContainer.style.display = 'block';
+                
+                const optionItems = optionsText.match(/\([A-J]\)[^()]+/g);
+                
+                if (optionItems) {
+                    optionItems.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item.trim().replace(/\s+/g, ' ');
+                        optionsList.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement('li');
+                    li.textContent = optionsText.trim().replace(/\s+/g, ' ');
+                    optionsList.appendChild(li);
+                }
+            }
+
 
             function renderQuestions(questions, availableOptionKeys) {
-                // (其餘函數保持不變) ...
                 if (!questions || questions.length === 0) {
                     quizForm.innerHTML = '此題組沒有題目。';
                     return;
