@@ -275,6 +275,22 @@
             let currentQuizId = null;
             let isGraded = false;
 
+            // *** 新增：分數回報給月光寶盒函式 ***
+            function reportScoreToMoonlight(correctCount) {
+                // 檢查是否有父視窗，並且正確題數大於 0 才發送
+                if (window.opener && correctCount > 0) {
+                    window.opener.postMessage({
+                        type: "LUNAR_MISSION_RESULT",
+                        correct: correctCount // 傳送正確題數
+                    }, "*"); 
+                    
+                    alert(`✅ 已將 ${correctCount} 題的回報點數發送至月光寶盒！請回月光寶盒頁面查看紀錄。`);
+                    // 如果需要，可以取消註解下一行以自動關閉任務視窗
+                    // window.close(); 
+                }
+            }
+            // *** 結束新增 ***
+
             // --- 核心資料結構轉換邏輯：從您的平鋪陣列中分組 ---
             function organizeQuizData(rawArray) {
                 const quizzes = {};
@@ -509,6 +525,12 @@
                 });
 
                 updateScoreDisplay(correctCount, totalCount);
+
+                // *** 關鍵新增：批改後回報分數 ***
+                if (updateUI) {
+                    reportScoreToMoonlight(correctCount);
+                }
+                // *** 結束關鍵新增 ***
             }
             
             // 處理文章中的連結點擊
