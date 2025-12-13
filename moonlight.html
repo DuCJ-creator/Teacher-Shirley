@@ -417,7 +417,7 @@
           <div class="moon-phase" id="moon-emoji">🌑</div>
           <div class="moon-stats">
             <div class="stat">目前月光點數：<b id="moon-total">0</b> pts</div>
-            <div class="stat">本輪滿月進度：<b id="moon-cycle">0</b> / 300</div>
+            <div class="stat" id="cycle-progress-stat">本輪滿月進度：<b id="moon-cycle">0</b> / 300</div>
             <div class="progress-wrap"><div class="progress-bar" id="moon-progress"></div></div>
             <div class="stat">月相階段：<b id="moon-phase-text">New Moon</b></div>
           </div>
@@ -557,17 +557,17 @@
       setMissionStarted(missionStarted);
     }
 
+    // *** 簡化後的月相判斷邏輯：達到 Full Moon 後就鎖定，直到下次循環開始 (p=0) ***
     function phaseByPercent(p){
       if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
       if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
       if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
       if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
-      if (p < 0.62) return {emoji:"🌕", text:"Full Moon / 滿月"};
-      if (p < 0.75) return {emoji:"🌖", text:"Waning Gibbous / 虧凸月"};
-      if (p < 0.88) return {emoji:"🌗", text:"Last Quarter / 下弦月"};
-      return {emoji:"🌘", text:"Waning Crescent / 殘月"};
+      // p >= 0.50 之後全部顯示為 Full Moon (滿月)，符合您的需求
+      return {emoji:"🌕", text:"Full Moon / 滿月 (本輪已達成)"}; 
     }
-    function isFullMoonPercent(p){ return p >= 0.50 && p < 0.62; }
+    
+    function isFullMoonPercent(p){ return p >= 0.50; } // 50% 以上皆視為 Full Moon 狀態
 
     function burstStars(){
       const layer = document.getElementById("burst-layer");
@@ -595,16 +595,26 @@
 
     function renderMoonUI(){
       const totalEl = document.getElementById("moon-total");
-      const cycleEl = document.getElementById("moon-cycle");
       const barEl   = document.getElementById("moon-progress");
       const emojiEl = document.getElementById("moon-emoji");
       const phaseEl = document.getElementById("moon-phase-text");
       const glassBox = document.getElementById("glass-box");
+      const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
+      
+      const totalGlow = moonData.totalGlow || 0;
+      const cycleGlowValue = moonData.cycleGlow || 0;
+      
+      // 計算當前是第幾個循環 (滿月)
+      const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
+      
+      totalEl.innerText = totalGlow;
 
-      totalEl.innerText = moonData.totalGlow || 0;
-      cycleEl.innerText = moonData.cycleGlow || 0;
+      // 更新循環進度顯示 (包含當前是第幾輪)
+      if (cycleProgressStatEl) {
+          cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
+      }
 
-      const percent = Math.min((moonData.cycleGlow || 0) / MOON_CYCLE, 1);
+      const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
       barEl.style.width = `${percent*100}%`;
 
       const phase = phaseByPercent(percent);
