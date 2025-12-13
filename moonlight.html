@@ -262,7 +262,18 @@
       100%{transform:translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg); opacity:0;}
     }
 
-    .moon-ui{ display:flex; align-items:center; gap:14px; position:relative; z-index:1; }
+    /* 調整 moon-ui 樣式讓它靠右 */
+    .moon-ui-wrap{
+      display:flex; justify-content:flex-end;
+      width:100%;
+      position:relative; z-index:1;
+      /* 確保 moon-ui-wrap 位於 crystal 下方（如果 crystal 是絕對定位） */
+    }
+    .moon-ui{
+      /* 限制最大寬度，避免在桌面版被拉太寬，讓 crystal 還有足夠空間 */
+      max-width: clamp(280px, 80%, 400px);
+      display:flex; align-items:center; gap:14px;
+    }
     .moon-phase{
       font-size:2.9rem; width:52px; text-align:center;
       filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)) drop-shadow(0 0 18px rgba(126,214,255,0.35));
@@ -402,13 +413,15 @@
       <div class="burst-layer" id="burst-layer"></div>
       <div class="lunar-crystal" aria-hidden="true"></div>
 
-      <div class="card moon-ui">
-        <div class="moon-phase" id="moon-emoji">🌑</div>
-        <div class="moon-stats">
-          <div class="stat">目前月光點數：<b id="moon-total">0</b> pts</div>
-          <div class="stat">本輪滿月進度：<b id="moon-cycle">0</b> / 300</div>
-          <div class="progress-wrap"><div class="progress-bar" id="moon-progress"></div></div>
-          <div class="stat">月相階段：<b id="moon-phase-text">New Moon</b></div>
+      <div class="moon-ui-wrap">
+        <div class="card moon-ui">
+          <div class="moon-phase" id="moon-emoji">🌑</div>
+          <div class="moon-stats">
+            <div class="stat">目前月光點數：<b id="moon-total">0</b> pts</div>
+            <div class="stat">本輪滿月進度：<b id="moon-cycle">0</b> / 300</div>
+            <div class="progress-wrap"><div class="progress-bar" id="moon-progress"></div></div>
+            <div class="stat">月相階段：<b id="moon-phase-text">New Moon</b></div>
+          </div>
         </div>
       </div>
     </div>
@@ -494,7 +507,8 @@
       { title: "Mission 1: GSAT 真題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
       { title: "Mission 2: iVocab 考題", url: "https://ivocab-quiz.vercel.app/" },
       { title: "Mission 3: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
-      { title: "Mission 4: (以後有新的再增加)", url: "" }
+      // 需求 1: 升級代碼 Mission 4
+      { title: "Mission 4: GSAT 綜合測驗", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/GSAT%20Comprehensive.html" }
     ];
 
     let currentUser = null;
