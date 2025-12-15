@@ -389,7 +389,7 @@
       }, 1200);
     }
 
-    // --- 關鍵修改：Results 顯示所有選項 ---
+    // --- 關鍵修改：修正了這裡的 Syntax Error ---
     function showResults() {
       document.getElementById('quiz-screen').classList.add('hidden');
       document.getElementById('results-screen').classList.remove('hidden');
@@ -453,13 +453,12 @@
       document.getElementById('score-display').innerText = `${correct} / ${totalQ}`;
       const msg = correct === totalQ ? 'Perfect!' : (correct >= Math.ceil(totalQ*0.6) ? 'Great Job!' : 'Lets Review.');
       document.getElementById('score-message').innerText = msg;
-    }
     
-   // ↓↓↓ 只要加入這段，把分數傳給月光寶盒 ↓↓↓
+      // ↓↓↓ 只要加入這段，把分數傳給月光寶盒 ↓↓↓
       if (window.opener) {
           window.opener.postMessage({ type: "LUNAR_MISSION_RESULT", correct: correct }, "*");
       }
-    }
+    } // 這裡的括號正確關閉了 showResults
 
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
