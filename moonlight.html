@@ -629,6 +629,7 @@
       renderLogs();
     }
 
+    // [修改] 顯示詳細的 Log，包含來源與正確題數
     function renderLogs(){
       const box = document.getElementById("moon-log-box");
       box.innerHTML = "";
@@ -637,17 +638,31 @@
         box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
         return;
       }
+      
       logs.slice().reverse().slice(0,30).forEach(l=>{
         const div = document.createElement("div");
         div.className = "log-item";
-        const time = new Date(l.time).toLocaleString();
+        
+        const dateObj = new Date(l.time);
+        const timeStr = `${dateObj.getMonth()+1}/${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
+        
         const sign = l.type === "redeem" ? "−" : "+";
         const badge = l.type === "redeem" ? "🎁" : "🌙";
+        
+        // 優先讀取 source，若無則用預設文字
+        let sourceName = l.source || (l.type === "redeem" ? "月光兌換" : "一般任務");
+        const detailInfo = l.type === "earn" ? `(✅${l.correct||0})` : "";
+
         div.innerHTML = `
-          <div>${badge} ${sign}<b>${l.glow}</b> pts
-            <span style="color:#aaa;">(${l.type === "redeem" ? "兌換" : "✅"+(l.correct||0)})</span>
-          </div>
-          <div class="log-time">${time}</div>`;
+          <div style="width:100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+               <span>${badge} ${sign}<b>${l.glow}</b> pts</span>
+               <span class="log-time">${timeStr}</span>
+            </div>
+            <div style="font-size:0.8rem; color:#7ed6ff; margin-top:2px; opacity:0.9;">
+               ${sourceName} ${detailInfo}
+            </div>
+          </div>`;
         box.appendChild(div);
       });
     }
@@ -692,6 +707,7 @@
       return false;
     }
 
+    // [修改] 接收 mission 參數並存入 source
     window.addEventListener("message", async (event) => {
       if (!isAllowedOrigin(event.origin)) return;
       const data = event.data || {};
@@ -699,6 +715,9 @@
 
       const correctVal = parseInt(data.correct) || 0;
       if (correctVal <= 0) return;
+
+      // 優先讀取 data.mission (配合 GSAT)，其次 data.title
+      const missionTitle = data.mission || data.title || "Lunar Mission"; 
 
       if(!missionStarted){
         alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
@@ -722,7 +741,8 @@
         correct: correctVal,
         wrong: 0,
         glow,
-        type: "earn"
+        type: "earn",
+        source: missionTitle // 儲存來源
       };
 
       await updateDoc(userRef, {
@@ -732,7 +752,7 @@
         activityLogs: arrayUnion({
           date: new Date().toISOString(),
           type: "Lunar Glow",
-          detail: `Collected ${glow} pts (✅${correctVal})`
+          detail: `Collected ${glow} pts from ${missionTitle}`
         })
       });
 
@@ -741,9 +761,10 @@
       moonData.logs.push(logEntry);
       renderMoonUI();
 
-      alert(`🌕 任務完成！\n自動收集 ${glow} 點月光（✅${correctVal}）`);
+      alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
     });
 
+    // [修改] 兌換時加入 source 標記
     async function redeemGlow(){
       const sel = document.getElementById("redeemAmount");
       const amt = parseInt(sel?.value || "", 10);
@@ -773,7 +794,8 @@
       const logEntry = {
         time: new Date().toISOString(),
         glow: amt,
-        type: "redeem"
+        type: "redeem",
+        source: "月光兌換"
       };
 
       await updateDoc(userRef, {
