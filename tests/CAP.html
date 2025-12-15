@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Shirley's CAP Practice</title>
+  <title>Shirley's CAP Practice (Robust)</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
 
   <style>
-    /* --- 配色方案 (Fresh Tech) --- */
+    /* --- CSS 樣式維持不變 --- */
     :root {
       --bg-color: #F0F4F8;
       --text-main: #334155;
@@ -31,31 +31,24 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
-      overscroll-behavior: none; /* 防止手機上下拉動橡皮筋效果 */
+      overscroll-behavior: none;
     }
 
     h1, h2, h3 { font-family: 'Quicksand', sans-serif; }
 
-    #tsparticles {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 0; pointer-events: none;
-    }
+    #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
-    /* 響應式卡片設計：手機版邊距優化 */
     .clean-card {
       background: var(--card-bg);
       border-radius: 24px;
       box-shadow: 0 10px 40px rgba(0, 180, 216, 0.1);
       z-index: 10;
       border: 1px solid rgba(255,255,255,0.8);
-      width: 92%; /* 手機版佔寬 92% */
-      max-width: 48rem; /* 電腦版最大寬度 */
-      margin: 20px auto;
+      width: 92%; max-width: 48rem; margin: 20px auto;
     }
 
     .highlight-text { color: var(--primary-color); font-weight: 800; }
 
-    /* 選項按鈕：手機版觸控優化 */
     .option-btn {
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       background: #f8fafc;
@@ -63,17 +56,14 @@
       color: var(--text-main);
       border-radius: 12px;
       font-weight: 600;
-      min-height: 3.5rem; /* 增加點擊區域 */
+      min-height: 3.5rem;
       font-size: 1rem;
     }
 
-    /* 僅在支援 hover 的設備上啟用 hover 效果 (避免手機點擊殘留) */
     @media (hover: hover) {
       .option-btn:hover {
-        background: #e0f2fe;
-        border-color: var(--primary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 180, 216, 0.15);
+        background: #e0f2fe; border-color: var(--primary-color);
+        transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 180, 216, 0.15);
       }
     }
 
@@ -106,6 +96,20 @@
     .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .tag-blue { background: #e0f2fe; color: #0284c7; }
     .tag-orange { background: #ffedd5; color: #c2410c; }
+    
+    /* 錯誤訊息區塊 */
+    #error-log {
+        display: none;
+        margin-top: 20px;
+        padding: 10px;
+        background: #fee2e2;
+        border: 1px solid #ef4444;
+        color: #991b1b;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        text-align: left;
+        white-space: pre-wrap;
+    }
   </style>
 </head>
 
@@ -138,11 +142,13 @@
       <button onclick="initiateQuizLoad()" class="btn-primary w-full md:w-auto px-10 py-3 md:py-4 text-sm md:text-base font-bold tracking-wider uppercase">
         Start Quiz
       </button>
+
+      <div id="error-log"></div>
     </div>
 
     <div id="loading-screen" class="hidden absolute inset-0 flex flex-col items-center justify-center z-20 bg-white/95 backdrop-blur-sm rounded-[24px]">
       <div class="loader mb-4"></div>
-      <p class="text-base font-bold text-gray-700">Loading...</p>
+      <p class="text-base font-bold text-gray-700" id="loading-text">Loading Questions...</p>
     </div>
 
     <div id="quiz-screen" class="hidden fade-in w-full">
@@ -171,7 +177,7 @@
       </div>
 
       <div id="options-container" class="grid grid-cols-1 gap-2 md:gap-3">
-        </div>
+      </div>
     </div>
 
     <div id="results-screen" class="hidden fade-in w-full">
@@ -204,6 +210,17 @@
   </div>
 
   <script>
+    // --- 內建備用數據 (根據您的截圖輸入) ---
+    // 這是為了防止網路讀取失敗時的備案
+    const FALLBACK_CSV_DATA = `Year,No.,Question,Option A,Option B,Option C,Option D,Correct Answer
+103,21,I have to catch the bus right now, ______ I'll miss my brother's birthday party.,and,because,or,until,C
+103,22,Oliver______ with joy when he saw his favorite band. He kept saying loudly "I love you guys!",waited,shouted,listened,agreed,B
+103,23,Ms. Lee is a(n)______ businesswoman. Just now in her shop she gave me back the wallet I left on the table last week.,famous,honest,important,smart,B
+103,24,Lexie______ reading maps. Even with a map she still cannot find her way when she is in a foreign city.,is careful about,is good at,has fun,has trouble,D
+103,25,More and more cows on this farm are getting sick. The problem is so______ that the farm will be closed from tomorrow on.,heavy,popular,serious,strong,C
+103,26,Some songs are forgotten very quickly. A really good song can pass the test of ______ and be remembered for many many years.,knowledge,sound,time,weather,C
+103,27,I'm not sure if Kevin______ this morning but if he does I'll tell him that you called.,will come in,comes in,has come in,came in,A`;
+
     // --- 粒子設定 ---
     function initParticles() {
       const isMobile = window.innerWidth < 768;
@@ -254,72 +271,106 @@
     function initiateQuizLoad() {
       const startScreen = document.getElementById('start-screen');
       const loadingScreen = document.getElementById('loading-screen');
+      const errorLog = document.getElementById('error-log');
       
       startScreen.classList.add('hidden');
       loadingScreen.classList.remove('hidden');
+      errorLog.style.display = 'none'; // 重置錯誤訊息
 
-      // 加上時間戳記防止快取
-      const url = CSV_URL + "?v=" + Date.now();
+      console.log("Attempting to fetch CSV from URL...");
+      document.getElementById('loading-text').innerText = "Connecting to Database...";
 
-      PapaParse.parse(url, {
+      PapaParse.parse(CSV_URL, {
         download: true,
         header: true,
         skipEmptyLines: true,
-        // 【關鍵修復】: 強制去除標題前後空白，並移除 BOM 隱藏字元
-        transformHeader: function(header) {
-          return header.trim().replace(/^\ufeff/, '');
-        },
+        transformHeader: h => h.trim().replace(/^\ufeff/, ''), // 去除 BOM 和空白
         complete: function(results) {
-            console.log("CSV Loaded:", results); // 在 Console 顯示讀取結果以便除錯
-
-            try {
-                if (!results.data || results.data.length === 0) {
-                    throw new Error("CSV 檔案是空的");
-                }
-
-                allQuestions = results.data.map((row, index) => {
-                    // 安全檢查：確保欄位存在
-                    if (!row['Question'] || !row['Correct Answer']) {
-                        return null; // 跳過無效行
-                    }
-                    return {
-                        originalIndex: index,
-                        // 根據您的截圖，欄位名稱是 Year 和 No.
-                        code: (row['Year'] && row['No.']) ? `${row['Year']}-${row['No.']}` : `Q${index+1}`,
-                        text: row['Question'],
-                        options: [row['Option A'], row['Option B'], row['Option C'], row['Option D']],
-                        correctAnswer: row['Correct Answer'].trim(), // 去除答案可能的空白
-                    };
-                }).filter(q => q !== null);
-
-                // 檢查是否成功解析出題目
-                if (allQuestions.length === 0) {
-                    console.error("Available Headers:", results.meta.fields);
-                    throw new Error("讀取失敗：找不到 Question 或 Correct Answer 欄位。請按 F12 查看 Console。");
-                }
-
-                // 一切正常，隱藏 Loading 並開始
-                loadingScreen.classList.add('hidden');
-                startActualQuiz();
-
-            } catch (err) {
-                loadingScreen.classList.add('hidden');
-                alert("系統錯誤: " + err.message);
-                startScreen.classList.remove('hidden'); // 回到開始畫面
+            console.log("Online CSV Download Complete", results);
+            if (results.data && results.data.length > 0) {
+                processData(results.data);
+            } else {
+                console.warn("Online CSV was empty. Using Fallback.");
+                useFallbackData("Online CSV Empty");
             }
         },
         error: function(err) {
-          loadingScreen.classList.add('hidden');
-          alert("無法下載 CSV: " + err.message);
-          startScreen.classList.remove('hidden');
+            console.error("Online CSV Failed (likely CORS or Network)", err);
+            // 關鍵修改：網路失敗時，不報錯，直接使用備用數據
+            document.getElementById('loading-text').innerText = "Network blocked, using local data...";
+            setTimeout(() => useFallbackData("Network Error (CORS/Offline)"), 500);
         }
       });
+    }
+
+    // 使用備用數據的函數
+    function useFallbackData(reason) {
+        console.log("Switching to Fallback Data due to:", reason);
+        
+        PapaParse.parse(FALLBACK_CSV_DATA, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                console.log("Fallback Data Parsed", results);
+                if(results.data && results.data.length > 0) {
+                    processData(results.data);
+                } else {
+                    showFatalError("Fallback data also failed. Please check code.");
+                }
+            },
+            error: function(err) {
+                showFatalError("Critical Internal Error: " + err.message);
+            }
+        });
+    }
+
+    function processData(rawData) {
+        try {
+            allQuestions = rawData.map((row, index) => {
+                // 寬容模式：如果找不到 exact key，嘗試 trim 後的 key
+                const getVal = (key) => row[key] || row[key.trim()] || "";
+                
+                const qText = getVal('Question');
+                const qAns = getVal('Correct Answer');
+                
+                if (!qText || !qAns) return null;
+
+                return {
+                    originalIndex: index,
+                    code: (getVal('Year') && getVal('No.')) ? `${getVal('Year')}-${getVal('No.')}` : `Q${index+1}`,
+                    text: qText,
+                    options: [getVal('Option A'), getVal('Option B'), getVal('Option C'), getVal('Option D')],
+                    correctAnswer: qAns.trim().toUpperCase(),
+                };
+            }).filter(q => q !== null);
+
+            if (allQuestions.length === 0) {
+                throw new Error("No valid questions found in data.");
+            }
+
+            document.getElementById('loading-screen').classList.add('hidden');
+            startActualQuiz();
+
+        } catch (e) {
+            showFatalError("Data Processing Error: " + e.message);
+        }
+    }
+
+    function showFatalError(msg) {
+        const loadingScreen = document.getElementById('loading-screen');
+        const startScreen = document.getElementById('start-screen');
+        const errorLog = document.getElementById('error-log');
+        
+        loadingScreen.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+        
+        errorLog.style.display = 'block';
+        errorLog.innerText = "⚠️ 加載失敗 (Load Failed)\n" + msg + "\n\n如果您是在電腦直接打開此檔案，這是正常現象(CORS)。但備用數據應該要能運作。";
     }
 
     function startActualQuiz() {
       let pool = [...allQuestions];
       shuffleArray(pool);
-      // 如果題目少於 10 題，就只取現有的數量
       const limit = Math.min(pool.length, QUESTION_LIMIT);
       currentSession.questions = pool.slice(0, limit);
       currentSession.userAnswers = new Array(currentSession.questions.length).fill(null);
@@ -358,9 +409,7 @@
       
       qData.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        // 加入 touch-manipulation 優化手機點擊
         btn.className = `option-btn w-full text-left p-3 md:p-4 flex items-center group relative overflow-hidden touch-manipulation`;
-        // 防止選項 undefined
         const safeOpt = opt || ""; 
         
         btn.innerHTML = `
@@ -404,7 +453,6 @@
         const letter = letters[idx];
         if (letter === qData.correctAnswer) btn.classList.add('correct');
         else if (idx === choiceIdx) btn.classList.add('incorrect');
-        
         if (letter === qData.correctAnswer && choiceIdx === null) {
              btn.classList.add('correct');
         }
