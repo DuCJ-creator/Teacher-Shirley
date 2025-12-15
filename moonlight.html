@@ -557,16 +557,17 @@
     }
 
     // *** 簡化後的月相判斷邏輯：達到 Full Moon 後就鎖定，直到下次循環開始 (p=0) ***
-    function phaseByPercent(p){
-      if (p < 0.12) return {emoji:"🌑", text:"New Moon / 新月"};
-      if (p < 0.25) return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
-      if (p < 0.38) return {emoji:"🌓", text:"First Quarter / 上弦月"};
-      if (p < 0.50) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
-      // p >= 0.50 之後全部顯示為 Full Moon (滿月)，符合您的需求
-      return {emoji:"🌕", text:"Full Moon / 滿月 (本輪已達成)"}; 
+function getPhaseByValue(val){
+      if (val <= 30)  return {emoji:"🌑", text:"New Moon / 新月"};
+      if (val <= 60)  return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
+      if (val <= 120) return {emoji:"🌓", text:"First Quarter / 上弦月"};
+      if (val <= 200) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
+      // 201 - 300 (包含以上)
+      return {emoji:"🌕", text:"Full Moon / 滿月"}; 
     }
     
-    function isFullMoonPercent(p){ return p >= 0.50; } // 50% 以上皆視為 Full Moon 狀態
+    // [修正] 當數值進入 201-300 區間時，視為滿月狀態 (觸發發光特效)
+    function isFullMoonState(val){ return val > 200; } 
 
     function burstStars(){
       const layer = document.getElementById("burst-layer");
@@ -603,24 +604,27 @@
       const totalGlow = moonData.totalGlow || 0;
       const cycleGlowValue = moonData.cycleGlow || 0;
       
-      // 計算當前是第幾個循環 (滿月)
+      // 計算當前是第幾個循環
       const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
       
       totalEl.innerText = totalGlow;
 
-      // 更新循環進度顯示 (包含當前是第幾輪)
+      // 更新循環進度顯示
       if (cycleProgressStatEl) {
           cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
       }
 
+      // 進度條長度維持用百分比計算
       const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
       barEl.style.width = `${percent*100}%`;
 
-      const phase = phaseByPercent(percent);
+      // [修正] 這裡改用數值 (cycleGlowValue) 直接判斷月相
+      const phase = getPhaseByValue(cycleGlowValue);
       emojiEl.innerText = phase.emoji;
       phaseEl.innerText = phase.text;
 
-      const nowIsFull = isFullMoonPercent(percent);
+      // [修正] 判斷是否進入滿月區間 ( > 200 )
+      const nowIsFull = isFullMoonState(cycleGlowValue);
       if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
 
       if (nowIsFull && !prevIsFull) burstStars();
