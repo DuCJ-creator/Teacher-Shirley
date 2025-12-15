@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Shirley's CAP Practice</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,297 +12,240 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
 
   <style>
-    /* --- 初中生活力風格定義 (Fresh Tech / Energetic) --- */
+    /* --- 配色方案 (Fresh Tech) --- */
     :root {
-      --bg-color: #F0F4F8;         /* 淺灰藍背景 */
-      --text-main: #334155;        /* 深藍灰文字 */
-      --text-light: #64748b;       /* 淺灰文字 */
-      --primary-color: #00B4D8;    /* 主色調：天藍 */
-      --primary-dark: #0096C7;     /* 主色調深色 (Hover用) */
-      --accent-pop: #FCA311;       /* 點綴色：活力橙 */
-      --card-bg: #ffffff;          /* 卡片背景：純白 */
-      --success: #10b981;          /* 正確綠 */
-      --error: #ef4444;            /* 錯誤紅 */
+      --bg-color: #F0F4F8;
+      --text-main: #334155;
+      --primary-color: #00B4D8;
+      --primary-dark: #0096C7;
+      --accent-pop: #FCA311;
+      --card-bg: #ffffff;
+      --success: #10b981;
+      --error: #ef4444;
     }
 
     body {
-      font-family: 'Nunito', sans-serif; /* 使用圓潤親切的字體 */
+      font-family: 'Nunito', sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      /* 防止手機上下拉動時的橡皮筋效果 */
+      overscroll-behavior: none; 
     }
 
-    h1, h2, h3 {
-      font-family: 'Quicksand', sans-serif; /* 標題字體 */
-    }
+    h1, h2, h3 { font-family: 'Quicksand', sans-serif; }
 
     #tsparticles {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none; /* 讓點擊穿透 */
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
     }
 
-    /* 現代懸浮卡片 (Modern Clean Card) */
+    /* 響應式卡片設計 */
     .clean-card {
       background: var(--card-bg);
-      border-radius: 24px; /* 更圓潤的邊角 */
-      box-shadow: 0 10px 40px rgba(0, 180, 216, 0.1); /* 帶有藍色調的輕柔陰影 */
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 180, 216, 0.1);
       z-index: 10;
-      border: 1px solid rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.8);
+      /* 關鍵：使用 w-11/12 讓手機版有邊距，md:w-full 讓電腦版正常 */
+      width: 92%; 
+      max-width: 48rem; /* max-w-3xl */
     }
 
-    /* 重點文字效果 */
-    .highlight-text {
-      color: var(--primary-color);
-      font-weight: 800;
-    }
+    .highlight-text { color: var(--primary-color); font-weight: 800; }
 
-    /* 選項按鈕樣式 - 活潑 */
+    /* 按鈕樣式優化 */
     .option-btn {
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       background: #f8fafc;
       border: 2px solid #e2e8f0;
       color: var(--text-main);
-      border-radius: 12px; /* 圓角按鈕 */
+      border-radius: 12px;
       font-weight: 600;
+      /* 手機版增加點擊區域 */
+      min-height: 3.5rem; 
     }
 
-    .option-btn:hover {
-      background: #e0f2fe; /* 淺藍背景 */
-      border-color: var(--primary-color);
-      transform: translateY(-3px); /* 向上浮動效果 */
-      box-shadow: 0 4px 12px rgba(0, 180, 216, 0.15);
+    @media (hover: hover) {
+      .option-btn:hover {
+        background: #e0f2fe;
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 180, 216, 0.15);
+      }
     }
 
-    /* 選中與對錯樣式 */
-    .option-btn.selected {
-      border-color: var(--primary-color);
-      background: #e0f2fe;
-    }
-    
-    .option-btn.correct {
-      background-color: #d1fae5 !important; /* 淺綠背景 */
-      border-color: var(--success) !important;
-      color: #065f46 !important;
-    }
-    
-    .option-btn.incorrect {
-      background-color: #fee2e2 !important; /* 淺紅背景 */
-      border-color: var(--error) !important;
-      color: #991b1b !important;
-    }
+    .option-btn.selected { border-color: var(--primary-color); background: #e0f2fe; }
+    .option-btn.correct { background-color: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; }
+    .option-btn.incorrect { background-color: #fee2e2 !important; border-color: var(--error) !important; color: #991b1b !important; }
 
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     
     .timer-line { transition: width 1s linear; }
-    
-    /* 淡入動畫 */
-    .fade-in { animation: fadeIn 0.6s ease-out; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .fade-in { animation: fadeIn 0.4s ease-out; } /* 加快動畫速度 */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Loading Spinner 修改為藍色 */
     .loader {
-      border: 3px solid #e2e8f0;
-      border-left-color: var(--primary-color);
-      border-radius: 50%;
-      width: 48px; height: 48px;
-      animation: spin 1s linear infinite;
+      border: 3px solid #e2e8f0; border-left-color: var(--primary-color);
+      border-radius: 50%; width: 40px; height: 40px;
+      animation: spin 0.8s linear infinite; /* 加快旋轉 */
     }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    /* 主要按鈕樣式 */
     .btn-primary {
-      background-color: var(--primary-color);
-      color: white;
-      border-radius: 50px;
-      box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
-      border: none;
-      transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+      background-color: var(--primary-color); color: white;
+      border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3); border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 180, 216, 0.4);
-    }
-
-    /* 標籤樣式 */
-    .tag {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
+    .btn-primary:active { transform: scale(0.95); } /* 手機點擊回饋 */
+    
+    .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .tag-blue { background: #e0f2fe; color: #0284c7; }
     .tag-orange { background: #ffedd5; color: #c2410c; }
   </style>
 </head>
 
-<body class="flex items-center justify-center p-4">
-  <div id="tsparticles"></div>
+<body class="flex items-center justify-center p-0 md:p-4 h-[100vh] w-full"> <div id="tsparticles"></div>
 
-  <div id="app-container" class="w-full max-w-3xl clean-card p-8 md:p-12 relative min-h-[600px] flex flex-col justify-center">
+  <div id="app-container" class="clean-card p-6 md:p-12 relative flex flex-col justify-center min-h-[500px] md:min-h-[600px]">
 
-    <div id="start-screen" class="text-center fade-in px-4">
+    <div id="start-screen" class="text-center fade-in px-2 md:px-4">
       <div class="mb-6">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 text-[#00B4D8] mb-4">
-            <i class="fas fa-rocket text-3xl"></i>
+        <div class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-50 text-[#00B4D8] mb-2">
+            <i class="fas fa-rocket text-2xl md:text-3xl"></i>
         </div>
       </div>
       
-      <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-tight text-gray-800">
+      <h1 class="text-3xl md:text-5xl font-bold mb-3 tracking-tight text-gray-800">
         Shirley's <span class="highlight-text">CAP Practice</span>
       </h1>
-      <p class="text-gray-500 mb-8 font-medium">Ready to challenge yourself?</p>
+      <p class="text-gray-500 mb-6 font-medium text-sm md:text-base">Ready to challenge yourself?</p>
       
-      <div class="flex justify-center gap-4 mb-10">
-          <span class="tag tag-blue"><i class="fas fa-list-ul mr-2"></i>10 Questions</span>
-          <span class="tag tag-orange"><i class="fas fa-stopwatch mr-2"></i>30s Limit</span>
+      <div class="flex justify-center gap-3 mb-8">
+          <span class="tag tag-blue"><i class="fas fa-list-ul mr-1"></i>10 Qs</span>
+          <span class="tag tag-orange"><i class="fas fa-stopwatch mr-1"></i>30s</span>
       </div>
 
-      <p class="text-[11px] text-gray-400 mb-10 font-mono bg-gray-50 inline-block px-3 py-1 rounded-lg">
-        SOURCE: CAP RCPET DATABASE
+      <p class="text-[10px] text-gray-400 mb-8 font-mono bg-gray-50 inline-block px-3 py-1 rounded-lg">
+        SOURCE: CAP RCPET
       </p>
 
-      <button onclick="initiateQuizLoad()" class="btn-primary px-10 py-4 text-base font-bold tracking-wider uppercase">
-        Start Quiz <i class="fas fa-arrow-right ml-2"></i>
+      <button onclick="initiateQuizLoad()" class="btn-primary w-full md:w-auto px-10 py-3 md:py-4 text-sm md:text-base font-bold tracking-wider uppercase">
+        Start Quiz
       </button>
     </div>
 
     <div id="loading-screen" class="hidden absolute inset-0 flex flex-col items-center justify-center z-20 bg-white/95 backdrop-blur-sm rounded-[24px]">
-      <div class="loader mb-6"></div>
-      <p class="text-lg font-bold text-gray-700">Loading Questions</p>
-      <p id="loading-sub" class="text-sm text-gray-400 mt-1">Getting things ready...</p>
+      <div class="loader mb-4"></div>
+      <p class="text-base font-bold text-gray-700">Loading...</p>
     </div>
 
     <div id="quiz-screen" class="hidden fade-in w-full">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex justify-between items-center mb-4 md:mb-6">
         <div>
-          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Question</span>
-          <span class="text-2xl font-bold text-gray-800">
+          <span class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Question</span>
+          <span class="text-xl md:text-2xl font-bold text-gray-800">
             <span id="q-current" class="text-[#00B4D8]">1</span><span class="text-gray-300 mx-1">/</span>10
           </span>
         </div>
         <div class="text-right">
-          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Time</span>
-          <div class="flex items-center justify-end text-[#FCA311] font-bold text-xl font-mono">
+          <span class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Time</span>
+          <div class="flex items-center justify-end text-[#FCA311] font-bold text-lg md:text-xl font-mono">
             <i class="far fa-clock mr-2"></i> <span id="timer-text">30</span>
           </div>
         </div>
       </div>
 
-      <div class="w-full h-2 bg-gray-100 rounded-full mb-8 overflow-hidden">
+      <div class="w-full h-1.5 md:h-2 bg-gray-100 rounded-full mb-6 md:mb-8 overflow-hidden">
         <div id="timer-bar" class="h-full bg-[#FCA311] w-full timer-line rounded-full"></div>
       </div>
 
-      <div class="mb-8">
-        <span id="q-code" class="inline-block mb-3 text-[11px] text-gray-400 font-bold bg-gray-100 px-2 py-1 rounded">CODE: --</span>
-        <h2 id="q-text" class="text-xl md:text-2xl font-bold leading-relaxed text-gray-700">Initializing...</h2>
+      <div class="mb-6 md:mb-8">
+        <span id="q-code" class="inline-block mb-2 md:mb-3 text-[10px] text-gray-400 font-bold bg-gray-100 px-2 py-1 rounded">CODE: --</span>
+        <h2 id="q-text" class="text-lg md:text-2xl font-bold leading-relaxed text-gray-700">Initializing...</h2>
       </div>
 
-      <div id="options-container" class="grid grid-cols-1 gap-3">
+      <div id="options-container" class="grid grid-cols-1 gap-2 md:gap-3">
         </div>
     </div>
 
     <div id="results-screen" class="hidden fade-in w-full">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-50 text-[#00B4D8] mb-4 shadow-sm">
-                <i class="fas fa-trophy text-4xl"></i>
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 text-[#00B4D8] mb-4">
+                <i class="fas fa-trophy text-3xl"></i>
             </div>
-            <h2 class="text-3xl font-bold mb-2 text-gray-800">Quiz Completed!</h2>
+            <h2 class="text-2xl md:text-3xl font-bold mb-1 text-gray-800">Completed!</h2>
             
-            <div class="my-6">
-                <span id="score-display" class="text-6xl font-extrabold text-[#00B4D8]">--/10</span>
+            <div class="my-4">
+                <span id="score-display" class="text-5xl md:text-6xl font-extrabold text-[#00B4D8]">--/10</span>
             </div>
-            <p id="score-message" class="text-sm font-bold text-gray-500 uppercase tracking-wide bg-gray-100 py-2 px-4 rounded-full inline-block"></p>
+            <p id="score-message" class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wide bg-gray-100 py-1.5 px-3 rounded-full inline-block"></p>
             
-            <div class="mt-8">
-                <button onclick="window.location.reload()" class="btn-primary px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                   <i class="fas fa-redo mr-2"></i> Try Again
+            <div class="mt-6">
+                <button onclick="window.location.reload()" class="btn-primary w-full md:w-auto px-8 py-3 text-sm font-bold uppercase tracking-wide">
+                   Try Again
                 </button>
             </div>
         </div>
 
-        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 pb-2 border-b border-gray-100">
-            Review Your Answers
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 pb-2 border-b border-gray-100">
+            Review
         </div>
         
-        <div id="feedback-list" class="custom-scrollbar max-h-[300px] overflow-y-auto pr-2 space-y-3">
-            </div>
+        <div id="feedback-list" class="custom-scrollbar max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 space-y-3">
+        </div>
     </div>
     
   </div>
 
   <script>
-    // --- 粒子設定：清新、互動、活力 (Fresh Tech) ---
+    // --- 粒子設定 ---
     function initParticles() {
+      // 檢測螢幕寬度，如果是手機，減少粒子數量以提升效能
+      const isMobile = window.innerWidth < 768;
+      
       try {
         tsParticles.load({
           id: "tsparticles",
           options: {
-            background: { opacity: 0 }, // 背景透明，由 CSS body 控制顏色
+            background: { opacity: 0 },
             particles: {
                 number: {
-                    value: 60,
+                    value: isMobile ? 30 : 60, // 手機版減少粒子數量
                     density: { enable: true, value_area: 800 }
                 },
-                color: { value: "#00B4D8" }, // 粒子顏色：主色調藍色
+                color: { value: "#00B4D8" },
                 shape: { type: "circle" },
-                opacity: {
-                    value: 0.6,
-                    random: false
-                },
-                size: {
-                    value: 4,
-                    random: true
-                },
+                opacity: { value: 0.6 },
+                size: { value: 4, random: true },
                 line_linked: {
                     enable: true,
                     distance: 150,
-                    color: "#90e0ef", // 連線顏色：淺藍
+                    color: "#90e0ef",
                     opacity: 0.4,
                     width: 1
                 },
                 move: {
                     enable: true,
-                    speed: 2.5, // 速度加快，更有活力
+                    speed: 2.5,
                     direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false
+                    out_mode: "out"
                 }
             },
             interactivity: {
                 detect_on: "canvas",
                 events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse" // 滑鼠互動：排斥效果
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
+                    // 手機版關閉 hover 效果，避免干擾觸控
+                    onhover: { enable: !isMobile, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
                     resize: true
                 },
                 modes: {
-                    repulse: {
-                        distance: 100,
-                        duration: 0.4
-                    }
+                    repulse: { distance: 100, duration: 0.4 }
                 }
             },
             retina_detect: true
@@ -312,7 +255,7 @@
     }
     document.addEventListener('DOMContentLoaded', initParticles);
 
-    // --- 邏輯核心 (完全保留原有邏輯) ---
+    // --- 邏輯核心 ---
     const CSV_URL = 'https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20PP.csv';
     const QUESTION_LIMIT = 10;
     const TIME_LIMIT = 30; 
@@ -351,10 +294,9 @@
             };
           }).filter(q => q.text && q.correctAnswer);
 
-          setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-            startActualQuiz();
-          }, 800);
+          // 【關鍵修正】: 移除 setTimeout 延遲，解析完成直接開始
+          loadingScreen.classList.add('hidden');
+          startActualQuiz();
         },
         error: function(err) {
           alert("Load Error: " + err.message); window.location.reload();
@@ -402,11 +344,11 @@
       
       qData.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        // 選項按鈕結構
-        btn.className = `option-btn w-full text-left p-4 flex items-center group relative overflow-hidden`;
+        // 選項按鈕增加 touch-action manipulation 優化觸控
+        btn.className = `option-btn w-full text-left p-3 md:p-4 flex items-center group relative overflow-hidden touch-manipulation`;
         btn.innerHTML = `
-          <span class="font-bold text-sm text-[#00B4D8] bg-blue-50 w-8 h-8 flex items-center justify-center rounded-full mr-4 group-hover:bg-[#00B4D8] group-hover:text-white transition-colors">${letters[idx]}</span>
-          <span class="flex-1 text-base font-medium text-gray-600 group-hover:text-gray-800">${opt}</span>
+          <span class="font-bold text-xs md:text-sm text-[#00B4D8] bg-blue-50 w-6 h-6 md:w-8 md:h-8 flex shrink-0 items-center justify-center rounded-full mr-3 md:mr-4 group-hover:bg-[#00B4D8] group-hover:text-white transition-colors">${letters[idx]}</span>
+          <span class="flex-1 text-sm md:text-base font-medium text-gray-600 group-hover:text-gray-800 leading-snug">${opt}</span>
         `;
         btn.onclick = () => handleAnswer(idx);
         optsContainer.appendChild(btn);
@@ -451,7 +393,7 @@
         }
       });
 
-      setTimeout(() => loadQuestion(qIndex + 1), 1200);
+      setTimeout(() => loadQuestion(qIndex + 1), 1000); // 稍微縮短換題等待時間
     }
 
     function showResults() {
@@ -468,24 +410,23 @@
         if (isOk) correct++;
 
         const div = document.createElement('div');
-        // 檢討卡片樣式 - 清新版
-        div.className = `p-4 mb-2 rounded-xl border-l-4 ${isOk ? 'border-emerald-400 bg-emerald-50' : 'border-rose-400 bg-rose-50'}`;
+        div.className = `p-3 md:p-4 mb-2 rounded-xl border-l-4 ${isOk ? 'border-emerald-400 bg-emerald-50' : 'border-rose-400 bg-rose-50'}`;
         
         const highlightedText = q.text.replace(/_{2,}/g, `<span class="text-[#00B4D8] font-bold border-b-2 border-[#00B4D8] px-1">${q.correctAnswer}</span>`);
 
         div.innerHTML = `
-          <div class="flex justify-between text-[11px] font-bold mb-2 text-gray-400">
+          <div class="flex justify-between text-[10px] md:text-[11px] font-bold mb-2 text-gray-400">
             <span>${q.code}</span>
             <span class="${isOk?'text-emerald-500':'text-rose-500'} bg-white px-2 py-0.5 rounded shadow-sm">${isOk?'CORRECT':ans}</span>
           </div>
-          <p class="text-sm font-medium text-gray-700 leading-relaxed">${highlightedText}</p>
+          <p class="text-xs md:text-sm font-medium text-gray-700 leading-relaxed">${highlightedText}</p>
           ${!isOk ? `<p class="text-xs text-emerald-600 mt-2 font-bold bg-white inline-block px-2 py-1 rounded border border-emerald-100"><i class="fas fa-check mr-1"></i>Answer: ${q.correctAnswer}</p>` : ''}
         `;
         list.appendChild(div);
       });
 
       document.getElementById('score-display').innerText = `${correct} / ${QUESTION_LIMIT}`;
-      const msg = correct === 10 ? 'Perfect Score! Amazing!' : (correct >= 6 ? 'Great Job! Keep it up!' : 'Good Effort! Lets Review.');
+      const msg = correct === 10 ? 'Perfect!' : (correct >= 6 ? 'Great Job!' : 'Lets Review.');
       document.getElementById('score-message').innerText = msg;
     }
 
