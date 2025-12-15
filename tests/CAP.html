@@ -454,21 +454,11 @@
       const msg = correct === totalQ ? 'Perfect!' : (correct >= Math.ceil(totalQ*0.6) ? 'Great Job!' : 'Lets Review.');
       document.getElementById('score-message').innerText = msg;
     }
-    // --- 新增: 月光寶盒連線 (傳送分數) ---
-      // ---------------------------------------------
-      try {
-        // 檢查是否有父視窗 (window.opener) 且它不是自己
-        if (window.opener && window.opener !== window) {
-            console.log("Sending score to Moonlight:", correct);
-            window.opener.postMessage({
-                type: "LUNAR_MISSION_RESULT",
-                correct: correct
-            }, "*"); // "*" 允許傳送到任何網域，若要更安全可改為 Moonlight 的網域
-        }
-      } catch (e) {
-        console.error("Moonlight connection failed:", e);
+    
+   // ↓↓↓ 只要加入這段，把分數傳給月光寶盒 ↓↓↓
+      if (window.opener) {
+          window.opener.postMessage({ type: "LUNAR_MISSION_RESULT", correct: correct }, "*");
       }
-      // ---------------------------------------------
     }
 
     function shuffleArray(arr) {
