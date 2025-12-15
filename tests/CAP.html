@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Shirley's CAP Practice (Robust)</title>
+  <title>Shirley's CAP Practice</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
 
   <style>
-    /* --- CSS 樣式維持不變 --- */
+    /* --- Fresh Tech 配色方案 --- */
     :root {
       --bg-color: #F0F4F8;
       --text-main: #334155;
@@ -49,6 +49,7 @@
 
     .highlight-text { color: var(--primary-color); font-weight: 800; }
 
+    /* 按鈕樣式 */
     .option-btn {
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       background: #f8fafc;
@@ -96,20 +97,6 @@
     .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .tag-blue { background: #e0f2fe; color: #0284c7; }
     .tag-orange { background: #ffedd5; color: #c2410c; }
-    
-    /* 錯誤訊息區塊 */
-    #error-log {
-        display: none;
-        margin-top: 20px;
-        padding: 10px;
-        background: #fee2e2;
-        border: 1px solid #ef4444;
-        color: #991b1b;
-        font-size: 0.8rem;
-        border-radius: 8px;
-        text-align: left;
-        white-space: pre-wrap;
-    }
   </style>
 </head>
 
@@ -139,16 +126,15 @@
         SOURCE: CAP RCPET
       </p>
 
-      <button onclick="initiateQuizLoad()" class="btn-primary w-full md:w-auto px-10 py-3 md:py-4 text-sm md:text-base font-bold tracking-wider uppercase">
+      <button onclick="loadData()" class="btn-primary w-full md:w-auto px-10 py-3 md:py-4 text-sm md:text-base font-bold tracking-wider uppercase">
         Start Quiz
       </button>
-
-      <div id="error-log"></div>
     </div>
 
     <div id="loading-screen" class="hidden absolute inset-0 flex flex-col items-center justify-center z-20 bg-white/95 backdrop-blur-sm rounded-[24px]">
       <div class="loader mb-4"></div>
-      <p class="text-base font-bold text-gray-700" id="loading-text">Loading Questions...</p>
+      <p class="text-base font-bold text-gray-700">Loading System...</p>
+      <p id="loading-sub" class="text-sm text-gray-400 mt-2">Connecting...</p>
     </div>
 
     <div id="quiz-screen" class="hidden fade-in w-full">
@@ -193,68 +179,54 @@
             <p id="score-message" class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wide bg-gray-100 py-1.5 px-3 rounded-full inline-block"></p>
             
             <div class="mt-6">
-                <button onclick="window.location.reload()" class="btn-primary w-full md:w-auto px-8 py-3 text-sm font-bold uppercase tracking-wide">
+                <button onclick="startQuiz()" class="btn-primary w-full md:w-auto px-8 py-3 text-sm font-bold uppercase tracking-wide">
                    Try Again
                 </button>
             </div>
         </div>
 
         <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 pb-2 border-b border-gray-100">
-            Review
+            Review (Detailed Analysis)
         </div>
         
-        <div id="feedback-list" class="custom-scrollbar max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 space-y-3">
+        <div id="feedback-list" class="custom-scrollbar max-h-[350px] overflow-y-auto pr-2 space-y-3">
         </div>
     </div>
     
   </div>
 
   <script>
-    // --- 內建備用數據 (根據您的截圖輸入) ---
-    // 這是為了防止網路讀取失敗時的備案
-    const FALLBACK_CSV_DATA = `Year,No.,Question,Option A,Option B,Option C,Option D,Correct Answer
-103,21,I have to catch the bus right now, ______ I'll miss my brother's birthday party.,and,because,or,until,C
-103,22,Oliver______ with joy when he saw his favorite band. He kept saying loudly "I love you guys!",waited,shouted,listened,agreed,B
-103,23,Ms. Lee is a(n)______ businesswoman. Just now in her shop she gave me back the wallet I left on the table last week.,famous,honest,important,smart,B
-103,24,Lexie______ reading maps. Even with a map she still cannot find her way when she is in a foreign city.,is careful about,is good at,has fun,has trouble,D
-103,25,More and more cows on this farm are getting sick. The problem is so______ that the farm will be closed from tomorrow on.,heavy,popular,serious,strong,C
-103,26,Some songs are forgotten very quickly. A really good song can pass the test of ______ and be remembered for many many years.,knowledge,sound,time,weather,C
-103,27,I'm not sure if Kevin______ this morning but if he does I'll tell him that you called.,will come in,comes in,has come in,came in,A`;
-
     // --- 粒子設定 ---
-    function initParticles() {
+    async function initParticles() {
       const isMobile = window.innerWidth < 768;
       try {
-        tsParticles.load({
-          id: "tsparticles",
-          options: {
-            background: { opacity: 0 },
-            particles: {
-                number: { value: isMobile ? 30 : 60, density: { enable: true, value_area: 800 } },
-                color: { value: "#00B4D8" },
-                shape: { type: "circle" },
-                opacity: { value: 0.6 },
-                size: { value: 4, random: true },
-                line_linked: { enable: true, distance: 150, color: "#90e0ef", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2.5, direction: "none", out_mode: "out" }
+        await tsParticles.load("tsparticles", {
+          particles: {
+            number: { value: isMobile ? 30 : 60, density: { enable: true, value_area: 800 } },
+            color: { value: "#00B4D8" },
+            shape: { type: "circle" },
+            opacity: { value: 0.6 },
+            size: { value: 4, random: true },
+            line_linked: { enable: true, distance: 150, color: "#90e0ef", opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 2.5, direction: "none", out_mode: "out" }
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: !isMobile, mode: "repulse" },
+              onclick: { enable: true, mode: "push" },
+              resize: true
             },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: !isMobile, mode: "repulse" },
-                    onclick: { enable: true, mode: "push" },
-                    resize: true
-                },
-                modes: { repulse: { distance: 100, duration: 0.4 } }
-            },
-            retina_detect: true
-          }
+            modes: { repulse: { distance: 100, duration: 0.4 } }
+          },
+          retina_detect: true,
+          background: { color: "transparent" }
         });
       } catch(e){}
     }
     document.addEventListener('DOMContentLoaded', initParticles);
 
-    // --- 邏輯核心 ---
+    // --- 核心邏輯 ---
     const CSV_URL = 'https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20PP.csv';
     const QUESTION_LIMIT = 10;
     const TIME_LIMIT = 30; 
@@ -268,71 +240,34 @@
       timeLeft: TIME_LIMIT
     };
 
-    function initiateQuizLoad() {
-      const startScreen = document.getElementById('start-screen');
-      const loadingScreen = document.getElementById('loading-screen');
-      const errorLog = document.getElementById('error-log');
-      
-      startScreen.classList.add('hidden');
-      loadingScreen.classList.remove('hidden');
-      errorLog.style.display = 'none'; // 重置錯誤訊息
+    async function loadData() {
+        const startScreen = document.getElementById('start-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingSub = document.getElementById('loading-sub');
 
-      console.log("Attempting to fetch CSV from URL...");
-      document.getElementById('loading-text').innerText = "Connecting to Database...";
+        startScreen.classList.add('hidden');
+        loadingScreen.classList.remove('hidden');
 
-      PapaParse.parse(CSV_URL, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: h => h.trim().replace(/^\ufeff/, ''), // 去除 BOM 和空白
-        complete: function(results) {
-            console.log("Online CSV Download Complete", results);
-            if (results.data && results.data.length > 0) {
-                processData(results.data);
-            } else {
-                console.warn("Online CSV was empty. Using Fallback.");
-                useFallbackData("Online CSV Empty");
-            }
-        },
-        error: function(err) {
-            console.error("Online CSV Failed (likely CORS or Network)", err);
-            // 關鍵修改：網路失敗時，不報錯，直接使用備用數據
-            document.getElementById('loading-text').innerText = "Network blocked, using local data...";
-            setTimeout(() => useFallbackData("Network Error (CORS/Offline)"), 500);
-        }
-      });
-    }
+        const url = CSV_URL + "?v=" + Date.now(); 
 
-    // 使用備用數據的函數
-    function useFallbackData(reason) {
-        console.log("Switching to Fallback Data due to:", reason);
-        
-        PapaParse.parse(FALLBACK_CSV_DATA, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                console.log("Fallback Data Parsed", results);
-                if(results.data && results.data.length > 0) {
-                    processData(results.data);
-                } else {
-                    showFatalError("Fallback data also failed. Please check code.");
-                }
-            },
-            error: function(err) {
-                showFatalError("Critical Internal Error: " + err.message);
-            }
-        });
-    }
-
-    function processData(rawData) {
         try {
-            allQuestions = rawData.map((row, index) => {
-                // 寬容模式：如果找不到 exact key，嘗試 trim 後的 key
-                const getVal = (key) => row[key] || row[key.trim()] || "";
-                
+            loadingSub.textContent = "Fetching data...";
+            const response = await fetch(url, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            loadingSub.textContent = "Parsing CSV...";
+            const csvText = await response.text();
+            const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+
+            allQuestions = results.data.map((row, index) => {
+                const getVal = (key) => {
+                    const foundKey = Object.keys(row).find(k => k.trim() === key);
+                    return foundKey ? row[foundKey] : "";
+                };
+
                 const qText = getVal('Question');
                 const qAns = getVal('Correct Answer');
-                
+
                 if (!qText || !qAns) return null;
 
                 return {
@@ -340,35 +275,28 @@
                     code: (getVal('Year') && getVal('No.')) ? `${getVal('Year')}-${getVal('No.')}` : `Q${index+1}`,
                     text: qText,
                     options: [getVal('Option A'), getVal('Option B'), getVal('Option C'), getVal('Option D')],
-                    correctAnswer: qAns.trim().toUpperCase(),
+                    correctAnswer: qAns.trim().toUpperCase()
                 };
             }).filter(q => q !== null);
 
-            if (allQuestions.length === 0) {
-                throw new Error("No valid questions found in data.");
-            }
+            if (allQuestions.length === 0) throw new Error("Parsed data is empty.");
 
-            document.getElementById('loading-screen').classList.add('hidden');
-            startActualQuiz();
+            loadingScreen.classList.add('hidden');
+            startQuiz();
 
-        } catch (e) {
-            showFatalError("Data Processing Error: " + e.message);
+        } catch (err) {
+            console.error("Load failed:", err);
+            loadingScreen.innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-lg font-bold text-gray-700">Data Load Error</p>
+                    <p class="text-sm text-gray-500 mt-2">${err.message}</p>
+                    <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-gray-200 rounded">Reload</button>
+                </div>
+            `;
         }
     }
 
-    function showFatalError(msg) {
-        const loadingScreen = document.getElementById('loading-screen');
-        const startScreen = document.getElementById('start-screen');
-        const errorLog = document.getElementById('error-log');
-        
-        loadingScreen.classList.add('hidden');
-        startScreen.classList.remove('hidden');
-        
-        errorLog.style.display = 'block';
-        errorLog.innerText = "⚠️ 加載失敗 (Load Failed)\n" + msg + "\n\n如果您是在電腦直接打開此檔案，這是正常現象(CORS)。但備用數據應該要能運作。";
-    }
-
-    function startActualQuiz() {
+    function startQuiz() {
       let pool = [...allQuestions];
       shuffleArray(pool);
       const limit = Math.min(pool.length, QUESTION_LIMIT);
@@ -376,6 +304,7 @@
       currentSession.userAnswers = new Array(currentSession.questions.length).fill(null);
       currentSession.currentIndex = 0;
 
+      document.getElementById('results-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
       loadQuestion(0);
     }
@@ -385,11 +314,6 @@
       currentSession.currentIndex = index;
       currentSession.timeLeft = TIME_LIMIT;
 
-      if (index >= currentSession.questions.length) {
-        showResults();
-        return;
-      }
-      
       const qData = currentSession.questions[index];
       
       document.getElementById('q-current').innerText = index + 1;
@@ -401,7 +325,11 @@
       timerBar.style.transition = 'none';
       timerBar.style.width = '100%';
       void timerBar.offsetWidth; 
-      timerBar.style.transition = 'width 1s linear';
+      
+      setTimeout(() => {
+          timerBar.style.transition = `width ${TIME_LIMIT}s linear`;
+          timerBar.style.width = '0%';
+      }, 50);
       
       const optsContainer = document.getElementById('options-container');
       optsContainer.innerHTML = '';
@@ -424,18 +352,15 @@
     }
     
     function startTimer() {
-      const timerBar = document.getElementById('timer-bar');
       const timerText = document.getElementById('timer-text');
-      const update = () => {
+      currentSession.timer = setInterval(() => {
         currentSession.timeLeft--;
         timerText.innerText = `${currentSession.timeLeft}`;
-        timerBar.style.width = `${(currentSession.timeLeft / TIME_LIMIT) * 100}%`;
-        
         if (currentSession.timeLeft <= 0) {
+          clearInterval(currentSession.timer);
           handleAnswer(null); 
         }
-      };
-      currentSession.timer = setInterval(update, 1000);
+      }, 1000);
     }
     
     function handleAnswer(choiceIdx) {
@@ -453,14 +378,18 @@
         const letter = letters[idx];
         if (letter === qData.correctAnswer) btn.classList.add('correct');
         else if (idx === choiceIdx) btn.classList.add('incorrect');
-        if (letter === qData.correctAnswer && choiceIdx === null) {
-             btn.classList.add('correct');
-        }
       });
 
-      setTimeout(() => loadQuestion(qIndex + 1), 800);
+      setTimeout(() => {
+          if (qIndex + 1 < currentSession.questions.length) {
+              loadQuestion(qIndex + 1);
+          } else {
+              showResults();
+          }
+      }, 1200);
     }
 
+    // --- 關鍵修改：Results 顯示所有選項 ---
     function showResults() {
       document.getElementById('quiz-screen').classList.add('hidden');
       document.getElementById('results-screen').classList.remove('hidden');
@@ -470,22 +399,52 @@
       list.innerHTML = '';
 
       currentSession.questions.forEach((q, i) => {
-        const ans = currentSession.userAnswers[i];
+        const ans = currentSession.userAnswers[i]; // 使用者選的 A, B, C, D
         const isOk = ans === q.correctAnswer;
         if (isOk) correct++;
 
         const div = document.createElement('div');
-        div.className = `p-3 md:p-4 mb-2 rounded-xl border-l-4 ${isOk ? 'border-emerald-400 bg-emerald-50' : 'border-rose-400 bg-rose-50'}`;
+        div.className = `p-4 mb-3 rounded-xl border-l-4 ${isOk ? 'border-emerald-400 bg-emerald-50' : 'border-rose-400 bg-rose-50'}`;
         
+        // 題目文字，正確答案填空
         const highlightedText = q.text.replace(/_{2,}/g, `<span class="text-[#00B4D8] font-bold border-b-2 border-[#00B4D8] px-1">${q.correctAnswer}</span>`);
+
+        // 生成選項列表 HTML
+        const optionsHtml = q.options.map((opt, optIdx) => {
+            const letter = ['A', 'B', 'C', 'D'][optIdx];
+            const isCorrectOption = letter === q.correctAnswer;
+            const isSelectedOption = letter === ans;
+
+            // 預設樣式
+            let itemClass = "bg-white/60 border-transparent text-gray-400"; 
+            let icon = `<span class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-100 text-xs mr-2">${letter}</span>`;
+
+            // 樣式判斷邏輯
+            if (isCorrectOption) {
+                // 這是正確答案：綠色，打勾
+                itemClass = "bg-emerald-100/80 border-emerald-200 text-emerald-800 font-bold shadow-sm";
+                icon = `<span class="w-5 h-5 flex items-center justify-center rounded-full bg-emerald-600 text-white text-xs mr-2"><i class="fas fa-check"></i></span>`;
+            } else if (isSelectedOption && !isOk) {
+                // 這是使用者選錯的：紅色，打叉
+                itemClass = "bg-rose-100/80 border-rose-200 text-rose-800 shadow-sm";
+                icon = `<span class="w-5 h-5 flex items-center justify-center rounded-full bg-rose-500 text-white text-xs mr-2"><i class="fas fa-times"></i></span>`;
+            }
+
+            return `<div class="p-2 rounded border ${itemClass} text-xs md:text-sm flex items-center transition-colors">
+                        ${icon} ${opt || '(No text)'}
+                    </div>`;
+        }).join('');
 
         div.innerHTML = `
           <div class="flex justify-between text-[10px] md:text-[11px] font-bold mb-2 text-gray-400">
             <span>${q.code}</span>
-            <span class="${isOk?'text-emerald-500':'text-rose-500'} bg-white px-2 py-0.5 rounded shadow-sm">${isOk?'CORRECT':ans}</span>
+            <span class="${isOk?'text-emerald-600':'text-rose-600'} bg-white px-2 py-0.5 rounded shadow-sm border border-gray-100">${isOk ? 'CORRECT' : 'YOUR ANSWER: ' + ans}</span>
           </div>
-          <p class="text-xs md:text-sm font-medium text-gray-700 leading-relaxed">${highlightedText}</p>
-          ${!isOk ? `<p class="text-xs text-emerald-600 mt-2 font-bold bg-white inline-block px-2 py-1 rounded border border-emerald-100"><i class="fas fa-check mr-1"></i>Answer: ${q.correctAnswer}</p>` : ''}
+          <p class="text-sm font-medium text-gray-700 leading-relaxed mb-3">${highlightedText}</p>
+          
+          <div class="grid grid-cols-1 gap-1.5 pl-2 border-l-2 border-gray-200/50">
+            ${optionsHtml}
+          </div>
         `;
         list.appendChild(div);
       });
