@@ -31,8 +31,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
-      /* 防止手機上下拉動時的橡皮筋效果 */
-      overscroll-behavior: none; 
+      overscroll-behavior: none; /* 防止手機上下拉動橡皮筋效果 */
     }
 
     h1, h2, h3 { font-family: 'Quicksand', sans-serif; }
@@ -42,21 +41,21 @@
       z-index: 0; pointer-events: none;
     }
 
-    /* 響應式卡片設計 */
+    /* 響應式卡片設計：手機版邊距優化 */
     .clean-card {
       background: var(--card-bg);
       border-radius: 24px;
       box-shadow: 0 10px 40px rgba(0, 180, 216, 0.1);
       z-index: 10;
       border: 1px solid rgba(255,255,255,0.8);
-      /* 關鍵：使用 w-11/12 讓手機版有邊距，md:w-full 讓電腦版正常 */
-      width: 92%; 
-      max-width: 48rem; /* max-w-3xl */
+      width: 92%; /* 手機版佔寬 92% */
+      max-width: 48rem; /* 電腦版最大寬度 */
+      margin: 20px auto;
     }
 
     .highlight-text { color: var(--primary-color); font-weight: 800; }
 
-    /* 按鈕樣式優化 */
+    /* 選項按鈕：手機版觸控優化 */
     .option-btn {
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       background: #f8fafc;
@@ -64,10 +63,11 @@
       color: var(--text-main);
       border-radius: 12px;
       font-weight: 600;
-      /* 手機版增加點擊區域 */
-      min-height: 3.5rem; 
+      min-height: 3.5rem; /* 增加點擊區域 */
+      font-size: 1rem;
     }
 
+    /* 僅在支援 hover 的設備上啟用 hover 效果 (避免手機點擊殘留) */
     @media (hover: hover) {
       .option-btn:hover {
         background: #e0f2fe;
@@ -86,13 +86,13 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     
     .timer-line { transition: width 1s linear; }
-    .fade-in { animation: fadeIn 0.4s ease-out; } /* 加快動畫速度 */
+    .fade-in { animation: fadeIn 0.4s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     .loader {
       border: 3px solid #e2e8f0; border-left-color: var(--primary-color);
       border-radius: 50%; width: 40px; height: 40px;
-      animation: spin 0.8s linear infinite; /* 加快旋轉 */
+      animation: spin 0.8s linear infinite;
     }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -101,7 +101,7 @@
       border-radius: 50px; box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3); border: none;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:active { transform: scale(0.95); } /* 手機點擊回饋 */
+    .btn-primary:active { transform: scale(0.95); }
     
     .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .tag-blue { background: #e0f2fe; color: #0284c7; }
@@ -109,7 +109,8 @@
   </style>
 </head>
 
-<body class="flex items-center justify-center p-0 md:p-4 h-[100vh] w-full"> <div id="tsparticles"></div>
+<body class="flex items-center justify-center p-0 md:p-4 min-h-[100vh] w-full">
+  <div id="tsparticles"></div>
 
   <div id="app-container" class="clean-card p-6 md:p-12 relative flex flex-col justify-center min-h-[500px] md:min-h-[600px]">
 
@@ -205,48 +206,29 @@
   <script>
     // --- 粒子設定 ---
     function initParticles() {
-      // 檢測螢幕寬度，如果是手機，減少粒子數量以提升效能
       const isMobile = window.innerWidth < 768;
-      
       try {
         tsParticles.load({
           id: "tsparticles",
           options: {
             background: { opacity: 0 },
             particles: {
-                number: {
-                    value: isMobile ? 30 : 60, // 手機版減少粒子數量
-                    density: { enable: true, value_area: 800 }
-                },
+                number: { value: isMobile ? 30 : 60, density: { enable: true, value_area: 800 } },
                 color: { value: "#00B4D8" },
                 shape: { type: "circle" },
                 opacity: { value: 0.6 },
                 size: { value: 4, random: true },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#90e0ef",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2.5,
-                    direction: "none",
-                    out_mode: "out"
-                }
+                line_linked: { enable: true, distance: 150, color: "#90e0ef", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2.5, direction: "none", out_mode: "out" }
             },
             interactivity: {
                 detect_on: "canvas",
                 events: {
-                    // 手機版關閉 hover 效果，避免干擾觸控
                     onhover: { enable: !isMobile, mode: "repulse" },
                     onclick: { enable: true, mode: "push" },
                     resize: true
                 },
-                modes: {
-                    repulse: { distance: 100, duration: 0.4 }
-                }
+                modes: { repulse: { distance: 100, duration: 0.4 } }
             },
             retina_detect: true
           }
@@ -276,30 +258,60 @@
       startScreen.classList.add('hidden');
       loadingScreen.classList.remove('hidden');
 
+      // 加上時間戳記防止快取
       const url = CSV_URL + "?v=" + Date.now();
 
       PapaParse.parse(url, {
-        download: true, header: true, skipEmptyLines: true,
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        // 【關鍵修復】: 強制去除標題前後空白，並移除 BOM 隱藏字元
+        transformHeader: function(header) {
+          return header.trim().replace(/^\ufeff/, '');
+        },
         complete: function(results) {
-          if (!results.data || results.data.length === 0) {
-            alert("No data found."); window.location.reload(); return;
-          }
-          allQuestions = results.data.map((row, index) => {
-            return {
-              originalIndex: index,
-              code: `${row['Year']}-${row['No.']}`,
-              text: row['Question'],
-              options: [row['Option A'], row['Option B'], row['Option C'], row['Option D']],
-              correctAnswer: row['Correct Answer'],
-            };
-          }).filter(q => q.text && q.correctAnswer);
+            console.log("CSV Loaded:", results); // 在 Console 顯示讀取結果以便除錯
 
-          // 【關鍵修正】: 移除 setTimeout 延遲，解析完成直接開始
-          loadingScreen.classList.add('hidden');
-          startActualQuiz();
+            try {
+                if (!results.data || results.data.length === 0) {
+                    throw new Error("CSV 檔案是空的");
+                }
+
+                allQuestions = results.data.map((row, index) => {
+                    // 安全檢查：確保欄位存在
+                    if (!row['Question'] || !row['Correct Answer']) {
+                        return null; // 跳過無效行
+                    }
+                    return {
+                        originalIndex: index,
+                        // 根據您的截圖，欄位名稱是 Year 和 No.
+                        code: (row['Year'] && row['No.']) ? `${row['Year']}-${row['No.']}` : `Q${index+1}`,
+                        text: row['Question'],
+                        options: [row['Option A'], row['Option B'], row['Option C'], row['Option D']],
+                        correctAnswer: row['Correct Answer'].trim(), // 去除答案可能的空白
+                    };
+                }).filter(q => q !== null);
+
+                // 檢查是否成功解析出題目
+                if (allQuestions.length === 0) {
+                    console.error("Available Headers:", results.meta.fields);
+                    throw new Error("讀取失敗：找不到 Question 或 Correct Answer 欄位。請按 F12 查看 Console。");
+                }
+
+                // 一切正常，隱藏 Loading 並開始
+                loadingScreen.classList.add('hidden');
+                startActualQuiz();
+
+            } catch (err) {
+                loadingScreen.classList.add('hidden');
+                alert("系統錯誤: " + err.message);
+                startScreen.classList.remove('hidden'); // 回到開始畫面
+            }
         },
         error: function(err) {
-          alert("Load Error: " + err.message); window.location.reload();
+          loadingScreen.classList.add('hidden');
+          alert("無法下載 CSV: " + err.message);
+          startScreen.classList.remove('hidden');
         }
       });
     }
@@ -307,7 +319,9 @@
     function startActualQuiz() {
       let pool = [...allQuestions];
       shuffleArray(pool);
-      currentSession.questions = pool.slice(0, QUESTION_LIMIT);
+      // 如果題目少於 10 題，就只取現有的數量
+      const limit = Math.min(pool.length, QUESTION_LIMIT);
+      currentSession.questions = pool.slice(0, limit);
       currentSession.userAnswers = new Array(currentSession.questions.length).fill(null);
       currentSession.currentIndex = 0;
 
@@ -344,11 +358,14 @@
       
       qData.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        // 選項按鈕增加 touch-action manipulation 優化觸控
+        // 加入 touch-manipulation 優化手機點擊
         btn.className = `option-btn w-full text-left p-3 md:p-4 flex items-center group relative overflow-hidden touch-manipulation`;
+        // 防止選項 undefined
+        const safeOpt = opt || ""; 
+        
         btn.innerHTML = `
           <span class="font-bold text-xs md:text-sm text-[#00B4D8] bg-blue-50 w-6 h-6 md:w-8 md:h-8 flex shrink-0 items-center justify-center rounded-full mr-3 md:mr-4 group-hover:bg-[#00B4D8] group-hover:text-white transition-colors">${letters[idx]}</span>
-          <span class="flex-1 text-sm md:text-base font-medium text-gray-600 group-hover:text-gray-800 leading-snug">${opt}</span>
+          <span class="flex-1 text-sm md:text-base font-medium text-gray-600 group-hover:text-gray-800 leading-snug">${safeOpt}</span>
         `;
         btn.onclick = () => handleAnswer(idx);
         optsContainer.appendChild(btn);
@@ -393,7 +410,7 @@
         }
       });
 
-      setTimeout(() => loadQuestion(qIndex + 1), 1000); // 稍微縮短換題等待時間
+      setTimeout(() => loadQuestion(qIndex + 1), 800);
     }
 
     function showResults() {
@@ -425,8 +442,9 @@
         list.appendChild(div);
       });
 
-      document.getElementById('score-display').innerText = `${correct} / ${QUESTION_LIMIT}`;
-      const msg = correct === 10 ? 'Perfect!' : (correct >= 6 ? 'Great Job!' : 'Lets Review.');
+      const totalQ = currentSession.questions.length;
+      document.getElementById('score-display').innerText = `${correct} / ${totalQ}`;
+      const msg = correct === totalQ ? 'Perfect!' : (correct >= Math.ceil(totalQ*0.6) ? 'Great Job!' : 'Lets Review.');
       document.getElementById('score-message').innerText = msg;
     }
 
