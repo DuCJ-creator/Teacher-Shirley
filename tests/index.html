@@ -125,7 +125,6 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 5vw, 2.8rem);
       font-weight: 600;
-      /* 這裡調整為適合 "Workshop" 的色調，稍微偏藍/金，區別於 Vocab Wonderland */
       background: linear-gradient(120deg, #5b7c99, #c2b290, #5b7c99);
       background-size: 200% 200%;
       -webkit-background-clip: text;
@@ -164,11 +163,9 @@
 
     .section {
       padding: 0 2rem;
-      /* 預設區塊都有動畫 */
       animation: fadeInUp 0.8s ease backwards;
     }
 
-    /* 隱藏區塊 */
     .hidden {
       display: none !important;
     }
@@ -179,7 +176,6 @@
       gap: 1.5rem;
     }
 
-    /* 內頁上方的返回按鈕容器 */
     .section-header {
       display: flex;
       align-items: center;
@@ -202,7 +198,6 @@
       transform: translateX(-5px);
     }
 
-    /* 卡片樣式 */
     .vocab-card {
       background: var(--surface);
       backdrop-filter: blur(10px);
@@ -329,10 +324,33 @@
           <div class="card-desc">學測測不倒</div>
         </div>
 
-        <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP.html" class="vocab-card">
+        <div class="vocab-card" onclick="openSection('section-cap', 'CAP 會考英文')">
           <div class="card-icon">A++</div>
           <div class="card-title">CAP考古題</div>
           <div class="card-desc">會考我會考</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="section-cap" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="openSection('section-tw', 'TESTS in TW 台灣考試專區')">
+          <span>←</span> Back to TESTS in TW
+        </button>
+      </div>
+      <div class="tools-grid">
+        
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html" class="vocab-card">
+          <div class="card-icon">📚</div>
+          <div class="card-title">CAP Grammar</div>
+          <div class="card-desc">CAP考古題文法點匯總</div>
+        </a>
+        
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" class="vocab-card">
+          <div class="card-icon">📝</div>
+          <div class="card-title">CAP Practice</div>
+          <div class="card-desc">CAP考古題練習(詞彙&文法)</div>
         </a>
 
       </div>
