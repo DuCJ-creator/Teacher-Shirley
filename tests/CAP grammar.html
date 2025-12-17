@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirley's CAP Grammar 文法我會考</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #2d3436;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --primary-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #4834d4;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            color: #535c68;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Grid System */
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            padding-bottom: 50px;
+        }
+
+        @media (max-width: 1024px) { .grid-view { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .grid-view { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 2.2rem; } }
+        @media (max-width: 480px) { .grid-view { grid-template-columns: 1fr; } }
+
+        /* Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 240px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.25);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-no {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: 800;
+            font-family: 'Fredoka', sans-serif;
+            background: rgba(255,255,255,0.6);
+            padding: 4px 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .card-icon {
+            font-size: 3.8rem; /* 稍微再加大一點圖標 */
+            margin: 10px 0 20px 0;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* 更有彈性的動畫 */
+        }
+
+        .card:hover .card-icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3436;
+            position: relative;
+            padding-bottom: 12px;
+            z-index: 1;
+            line-height: 1.3;
+        }
+
+        .wavy-underline {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 6px;
+            background-size: 20px auto;
+            animation: waveMove 1s infinite linear;
+            opacity: 0; 
+            transition: opacity 0.3s;
+        }
+        .card:hover .wavy-underline { opacity: 1; }
+
+        @keyframes waveMove {
+            0% { background-position-x: 0; }
+            100% { background-position-x: -20px; }
+        }
+
+        /* --- Detail Overlay (翻頁模式) --- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .detail-container {
+            width: 95%;
+            max-width: 900px;
+            height: auto;
+            min-height: 60vh;
+            max-height: 90vh;
+            background: #fff;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .detail-header {
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.9);
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .detail-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-btn:hover { transform: rotate(90deg) scale(1.1); }
+
+        /* Slider Area */
+        .slider-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            position: relative;
+            background: radial-gradient(circle at center, #fdfdfd 0%, #f1f2f6 100%);
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #eee;
+            color: #555;
+            font-size: 1.5rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .nav-btn:hover {
+            background: #fff;
+            transform: scale(1.1);
+            color: #ff6b6b;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* The Big Sentence Card */
+        .sentence-card {
+            flex: 1;
+            margin: 0 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 350px;
+            animation: fadeIn 0.4s ease;
+            position: relative;
+        }
+
+        .sentence-meta {
+            background: #dfe6e9;
+            color: #2d3436;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 35px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            border: 2px solid #fff;
+        }
+
+        .big-sentence {
+            font-size: 2.4rem;
+            line-height: 1.4;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .big-sentence { font-size: 1.8rem; }
+            .sentence-meta { font-size: 1.2rem; padding: 8px 16px; }
+            .slider-wrapper { padding: 10px; }
+            .sentence-card { margin: 0 10px; padding: 20px; min-height: 300px; }
+            .nav-btn { width: 45px; height: 45px; font-size: 1.2rem; }
+        }
+
+        .page-indicator {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            color: #888;
+            font-weight: 600;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+
+        .big-speak-btn {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .big-speak-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+        }
+        .big-speak-btn:active { transform: scale(0.95); }
+
+        #loading { text-align: center; font-size: 1.5rem; color: #4834d4; margin-top: 50px; font-weight: bold; }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <header>
+        <h1>Shirley's CAP Grammar</h1>
+        <p class="subtitle">✨ 文法我會考 ‧ 考題學英文 ✨</p>
+    </header>
+
+    <div class="container">
+        <div id="loading"><i class="fas fa-spinner fa-spin"></i> 正在載入可愛的卡片...</div>
+        <div id="grid-container" class="grid-view">
+            </div>
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div class="detail-container">
+            <div class="detail-header">
+                <div class="detail-title" id="detail-title">Grammar Point</div>
+                <button class="close-btn" onclick="closeOverlay()"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="slider-wrapper">
+                <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+                
+                <div class="sentence-card" id="sentence-card-content">
+                    </div>
+
+                <button class="nav-btn" id="next-btn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+                
+                <div class="page-indicator" id="page-indicator">1 / 10</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Config ---
+        const csvUrl = 'https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.csv';
+        let grammarData = {}; 
+        
+        // --- Expanded Cute Styles Library (35+ Icons) ---
+        const styles = [
+            // Original styles kept
+            { icon: 'fa-star', gradient: 'linear-gradient(45deg, #ff9a9e, #fad0c4)', color: '#ff9a9e' },
+            { icon: 'fa-bolt', gradient: 'linear-gradient(45deg, #a18cd1, #fbc2eb)', color: '#a18cd1' },
+            { icon: 'fa-feather', gradient: 'linear-gradient(45deg, #84fab0, #8fd3f4)', color: '#4facfe' },
+            { icon: 'fa-paper-plane', gradient: 'linear-gradient(45deg, #fccb90, #d57eeb)', color: '#d57eeb' },
+            { icon: 'fa-gem', gradient: 'linear-gradient(45deg, #e0c3fc, #8ec5fc)', color: '#8ec5fc' },
+            { icon: 'fa-crown', gradient: 'linear-gradient(45deg, #ffecd2, #fcb69f)', color: '#fcb69f' },
+            { icon: 'fa-lightbulb', gradient: 'linear-gradient(45deg, #f093fb, #f5576c)', color: '#f5576c' },
+            { icon: 'fa-rocket', gradient: 'linear-gradient(45deg, #4facfe, #00f2fe)', color: '#00f2fe' },
+            // New Cute & Varied Icons
+            { icon: 'fa-cat', gradient: 'linear-gradient(45deg, #f6d365, #fda085)', color: '#fda085' }, // 貓咪
+            { icon: 'fa-dog', gradient: 'linear-gradient(45deg, #d299c2, #fef9d7)', color: '#d299c2' }, // 狗狗
+            { icon: 'fa-paw', gradient: 'linear-gradient(45deg, #89f7fe, #66a6ff)', color: '#66a6ff' }, // 腳印
+            { icon: 'fa-ice-cream', gradient: 'linear-gradient(45deg, #ffc3a0, #ffafbd)', color: '#ffafbd' }, // 冰淇淋
+            { icon: 'fa-cookie-bite', gradient: 'linear-gradient(45deg, #c471ed, #f64f59)', color: '#f64f59' }, // 餅乾
+            { icon: 'fa-apple-alt', gradient: 'linear-gradient(45deg, #ff0844, #ffb199)', color: '#ff0844' }, // 蘋果
+            { icon: 'fa-leaf', gradient: 'linear-gradient(45deg, #00d2ff, #3a7bd5)', color: '#3a7bd5' }, // 葉子
+            { icon: 'fa-seedling', gradient: 'linear-gradient(45deg, #43e97b, #38f9d7)', color: '#43e97b' }, // 幼苗
+            { icon: 'fa-frog', gradient: 'linear-gradient(45deg, #96deda, #50c9c3)', color: '#50c9c3' }, // 青蛙
+            { icon: 'fa-gamepad', gradient: 'linear-gradient(45deg, #7F00FF, #E100FF)', color: '#E100FF' }, // 遊戲手把
+            { icon: 'fa-headphones-alt', gradient: 'linear-gradient(45deg, #4facfe, #00f2fe)', color: '#00f2fe' }, // 耳機
+            { icon: 'fa-camera-retro', gradient: 'linear-gradient(45deg, #f093fb, #f5576c)', color: '#f5576c' }, // 相機
+            { icon: 'fa-bicycle', gradient: 'linear-gradient(45deg, #00c6fb, #005bea)', color: '#005bea' }, // 腳踏車
+            { icon: 'fa-plane-arrival', gradient: 'linear-gradient(45deg, #5ee7df, #b490ca)', color: '#b490ca' }, // 飛機
+            { icon: 'fa-umbrella-beach', gradient: 'linear-gradient(45deg, #f83600, #f9d423)', color: '#f9d423' }, // 海灘傘
+            { icon: 'fa-mug-hot', gradient: 'linear-gradient(45deg, #e65c00, #F9D423)', color: '#e65c00' }, // 熱馬克杯
+            { icon: 'fa-puzzle-piece', gradient: 'linear-gradient(45deg, #a8edea, #fed6e3)', color: '#ff9a9e' }, // 拼圖
+            { icon: 'fa-wand-magic-sparkles', gradient: 'linear-gradient(45deg, #e0c3fc, #8ec5fc)', color: '#e0c3fc' }, // 魔法棒
+            { icon: 'fa-hat-wizard', gradient: 'linear-gradient(45deg, #6a11cb, #2575fc)', color: '#6a11cb' }, // 巫師帽
+            { icon: 'fa-meteor', gradient: 'linear-gradient(45deg, #ff416c, #ff4b2b)', color: '#ff416c' }, // 流星
+            { icon: 'fa-book-open', gradient: 'linear-gradient(45deg, #a1c4fd, #c2e9fb)', color: '#a1c4fd' }, // 書本
+            { icon: 'fa-graduation-cap', gradient: 'linear-gradient(45deg, #30cfd0, #330867)', color: '#30cfd0' }, // 學士帽
+            { icon: 'fa-glasses', gradient: 'linear-gradient(45deg, #fa709a, #fee140)', color: '#fa709a' }, // 眼鏡
+            { icon: 'fa-heart', gradient: 'linear-gradient(45deg, #ff5858, #f09819)', color: '#ff5858' }, // 愛心
+            { icon: 'fa-cloud-sun', gradient: 'linear-gradient(45deg, #4facfe, #00f2fe)', color: '#00f2fe' }, // 雲朵太陽
+            { icon: 'fa-rainbow', gradient: 'linear-gradient(45deg, #ff9a9e, #fecfef, #a18cd1, #84fab0)', color: '#a18cd1' } // 彩虹
+        ];
+
+        // State for Slider
+        let currentSentences = [];
+        let currentIndex = 0;
+        let currentColor = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            fetchData();
+        });
+
+        function fetchData() {
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    processData(results.data);
+                },
+                error: function(err) {
+                    document.getElementById('loading').innerHTML = "😕 讀取資料失敗，請檢查網路連線。";
+                }
+            });
+        }
+
+        function processData(data) {
+            grammarData = {};
+            
+            data.forEach(row => {
+                let rawNo = row['No.'] || row['No'] || row['no.'] || '';
+                let no = rawNo.trim(); 
+
+                if(!row.Grammar || !row.Sentence) return;
+                
+                const grammarName = row.Grammar.trim();
+                
+                if (!grammarData[grammarName]) {
+                    grammarData[grammarName] = {
+                        no: no, 
+                        list: []
+                    };
+                }
+
+                grammarData[grammarName].list.push({
+                    year: row.Year || 'N/A',
+                    question: row.Question || '#',
+                    sentence: row.Sentence
+                });
+            });
+
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('grid-container');
+            document.getElementById('loading').style.display = 'none';
+            container.innerHTML = '';
+
+            // 為了讓樣式分配更均勻，我們先打亂樣式陣列
+            let shuffledStyles = [...styles].sort(() => Math.random() - 0.5);
+            let styleIndex = 0;
+
+            for (const [grammar, data] of Object.entries(grammarData)) {
+                // 循環使用打亂後的樣式
+                const style = shuffledStyles[styleIndex % shuffledStyles.length];
+                styleIndex++;
+                
+                const displayNo = data.no ? `No. ${data.no}` : '';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openDetail(grammar, data.list, style.color);
+
+                const iconStyle = `background: ${style.gradient}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;`;
+                const waveUrl = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 4'%3E%3Cpath fill='none' stroke='${encodeURIComponent(style.color)}' stroke-width='1' d='M0 3.5c5 0 5-3 10-3s5 3 10 3 5-3 10-3 5 3 10 3'/%3E%3C/svg%3E`;
+
+                card.innerHTML = `
+                    <div class="card-no">${displayNo}</div>
+                    <i class="fas ${style.icon} card-icon" style="${iconStyle}"></i>
+                    <div class="card-title">
+                        ${grammar}
+                        <div class="wavy-underline" style="background-image: url(\"${waveUrl}\")"></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        // --- Slider Logic ---
+
+        function openDetail(grammar, sentences, themeColor) {
+            currentSentences = sentences;
+            currentIndex = 0;
+            currentColor = themeColor;
+
+            const title = document.getElementById('detail-title');
+            title.innerText = grammar;
+            title.style.color = themeColor;
+
+            updateSlide();
+            
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        function updateSlide() {
+            const content = document.getElementById('sentence-card-content');
+            const item = currentSentences[currentIndex];
+            const indicator = document.getElementById('page-indicator');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentSentences.length - 1;
+
+            indicator.innerText = `${currentIndex + 1} / ${currentSentences.length}`;
+
+            content.style.animation = 'none';
+            content.offsetHeight; 
+            content.style.animation = 'fadeIn 0.4s ease';
+            content.style.borderTop = `5px solid ${currentColor}`;
+
+            content.innerHTML = `
+                <div class="sentence-meta">${item.year} - Q.${item.question}</div>
+                <div class="big-sentence">${item.sentence}</div>
+                <button class="big-speak-btn" onclick="speakText('${item.sentence.replace(/'/g, "\\'")}')" style="background: ${currentColor}">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            `;
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentIndex + direction;
+            if (newIndex >= 0 && newIndex < currentSentences.length) {
+                currentIndex = newIndex;
+                window.speechSynthesis.cancel();
+                updateSlide();
+            }
+        }
+
+        function closeOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+            window.speechSynthesis.cancel();
+        }
+
+        function speakText(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('overlay').style.display === 'flex') {
+                if (e.key === 'ArrowLeft') changeSlide(-1);
+                if (e.key === 'ArrowRight') changeSlide(1);
+                if (e.key === 'Escape') closeOverlay();
+            }
+        });
+
+        // --- Particles ---
+        function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = Math.random() * 8 + 2;
+                    this.speedX = Math.random() * 2 - 1;
+                    this.speedY = Math.random() * 2 - 1;
+                    this.color = `hsl(${Math.random() * 360}, 70%, 80%)`;
+                    this.life = 100;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.size *= 0.95;
+                    this.life -= 2;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.life / 100;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                for (let i = 0; i < 2; i++) particles.push(new Particle(e.x, e.y));
+            });
+            
+            window.addEventListener('touchmove', (e) => {
+                const t = e.touches[0];
+                for (let i = 0; i < 2; i++) particles.push(new Particle(t.clientX, t.clientY));
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].life <= 0) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        document.getElementById('overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeOverlay();
+        });
+    </script>
+</body>
+</html>
