@@ -2786,20 +2786,49 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 /* ==================== Auth state ==================== */
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-  sessionStorage.removeItem("ts_redirecting"); // ✅ 加這行
-  currentUser = user;
-  showLoggedInUI();
-    
-    await loadCSVData();
-    await loadUserData(user.uid);
-    renderDailyContent(getTodayMMDD());
-  } else {
-    currentUser = null;
-    showLoggedOutUI();
-  }
-});
+onAuthStateChanged(auth, (user) => {
+      // 👇 這裡改成了你原本就有的 ID "greeting-name"
+      const titleEl = document.getElementById("greeting-name");
+
+      if (user) {
+        // --- 登入成功 ---
+        currentUser = user;
+
+        // ✨ 自動換名字 ✨
+        if (titleEl) {
+           // 抓取名字，轉成大寫
+           const name = user.displayName ? user.displayName.toUpperCase() : "STUDENT";
+           // 更新標題文字
+           titleEl.innerText = `WELCOME ${name} TO SHIRLEY'S MOON BASE`;
+        }
+
+        // --- 以下維持原本邏輯 ---
+        loadData(user.uid);
+        if(user.photoURL){
+          document.getElementById("user-avatar").src = user.photoURL;
+        }
+        document.getElementById("login-btn").style.display = "none";
+        document.getElementById("user-info").style.display = "flex";
+        document.getElementById("user-name").innerText = user.displayName || "Student";
+        
+      } else {
+        // --- 未登入 / 登出 ---
+        currentUser = null;
+
+        // ✨ 恢復原本標題 ✨
+        if (titleEl) {
+            titleEl.innerText = "WELCOME TO SHIRLEY'S MOON BASE";
+        }
+
+        // --- 以下維持原本邏輯 ---
+        document.getElementById("login-btn").style.display = "block";
+        document.getElementById("user-info").style.display = "none";
+        document.getElementById("streak-days").innerText = "0";
+        document.getElementById("total-checkins").innerText = "0";
+        renderCalendar([]);
+        renderCardBag([]);
+      }
+    });
 
 /* ==================== Firestore helpers ==================== */
 async function trackActivity(type, detail) {
