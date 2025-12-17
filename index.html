@@ -2787,16 +2787,36 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 /* ==================== Auth state ==================== */
 onAuthStateChanged(auth, async (user) => {
+  // 👇 1. 先抓取標題元素 (ID 是 greeting-name)
+  const titleEl = document.getElementById("greeting-name");
+
   if (user) {
-  sessionStorage.removeItem("ts_redirecting"); // ✅ 加這行
-  currentUser = user;
-  showLoggedInUI();
+    // --- 登入狀態 ---
+    sessionStorage.removeItem("ts_redirecting"); // ✅ 原本的保留
+    currentUser = user;
+
+    // ✨【新增這段】如果有名字，就改成 WELCOME [NAME] ... ✨
+    if (titleEl) {
+       // 如果有名字就轉大寫，沒有就顯示 STUDENT
+       const name = user.displayName ? user.displayName.toUpperCase() : "STUDENT";
+       titleEl.innerText = `WELCOME ${name} TO SHIRLEY'S MOON BASE`;
+    }
+
+    showLoggedInUI();
     
     await loadCSVData();
     await loadUserData(user.uid);
     renderDailyContent(getTodayMMDD());
+
   } else {
+    // --- 未登入狀態 ---
     currentUser = null;
+
+    // ✨【新增這段】登出時，把標題改回原本的樣子 ✨
+    if (titleEl) {
+        titleEl.innerText = "Welcome to Shirley's Moon Base";
+    }
+
     showLoggedOutUI();
   }
 });
