@@ -222,7 +222,6 @@
 
 <body class="flex items-center justify-center p-4 relative">
 
-  <!-- ✅ Lunar badge container -->
   <div id="lunar-badge" class="lunar-badge">🌙 請從月光寶盒進入</div>
 
   <div id="tsparticles"></div>
@@ -439,14 +438,20 @@
             throw new Error("CSV parse error: " + results.errors[0].message);
           }
 
+          // ✅ 修正：現在選項也會被去除空白，避免比對錯誤
           allQuestions = results.data
             .filter(row => row.length >= 7)
             .map((row, index) => ({
               originalIndex: index,
-              code: row[0],
-              text: row[1],
-              options: [row[2], row[3], row[4], row[5]],
-              correctAnswer: row[6].trim()
+              code: row[0]?.trim(),
+              text: row[1]?.trim(),
+              options: [
+                (row[2] || "").trim(),
+                (row[3] || "").trim(),
+                (row[4] || "").trim(),
+                (row[5] || "").trim()
+              ],
+              correctAnswer: (row[6] || "").trim()
             }));
 
           // ✅ 成功 → 切到 start screen
