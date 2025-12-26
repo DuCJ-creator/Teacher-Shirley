@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GSAT 學測英文閱讀測驗中心</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            /* GSAT 風格：沈穩、學術、專注 (Indigo & Slate) */
+            --primary: #4338ca; /* 靛青色 */
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a; /* 深岩灰 */
+            --accent: #f59e0b; /* 重點標示黃 */
+            --bg: #f8fafc; /* 極淺灰背景 */
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --success: #059669;
+            --error: #dc2626;
+            --radius: 8px; /* 圓角稍微銳利一點，比較成熟 */
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Welcome Screen --- */
+        #welcome-screen, #result-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.4s ease;
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 480px;
+            width: 85%;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        h1 { margin: 0 0 0.5rem 0; color: var(--primary); font-size: 1.8rem; letter-spacing: -0.5px; }
+        .subtitle { color: #64748b; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5; }
+
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 學測通常年份較少，改為兩欄更穩重 */
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover { background: #3730a3; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-year {
+            background: var(--surface);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 15px;
+        }
+        .btn-year:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(67, 56, 202, 0.2);
+        }
+
+        /* --- Main Interface --- */
+        #app-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background: var(--surface);
+            padding: 0 1.2rem;
+            height: 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo-text { font-weight: 700; color: var(--secondary); font-size: 1.1rem; }
+        .year-tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Split View Layout */
+        .split-view {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        /* Left: PDF Viewer */
+        .pdf-section {
+            flex: 1.3; /* PDF 區域稍微大一點 */
+            display: flex;
+            flex-direction: column;
+            background: #525252;
+            position: relative;
+        }
+
+        .pdf-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        /* Right: Quiz Area */
+        .quiz-container {
+            flex: 0.7;
+            background: var(--bg);
+            border-left: 1px solid #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .question-list {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .question-item {
+            background: var(--surface);
+            padding: 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: border-color 0.2s;
+        }
+        
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.8rem;
+        }
+
+        .q-number {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+        }
+
+        .option-label {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .option-label input { position: absolute; opacity: 0; }
+
+        .bubble {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #64748b;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover .bubble {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .option-label input:checked ~ .bubble {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(67, 56, 202, 0.3);
+        }
+
+        /* Results Styling */
+        .question-item.correct { border: 1px solid var(--success); background-color: #f0fdf4; }
+        .question-item.wrong { border: 1px solid var(--error); background-color: #fef2f2; }
+        
+        .tag-correct { color: var(--success); font-weight: bold; font-size: 0.9rem; background: #d1fae5; padding: 2px 8px; border-radius: 4px;}
+        .tag-wrong { color: var(--error); font-weight: bold; font-size: 0.9rem; background: #fee2e2; padding: 2px 8px; border-radius: 4px;}
+        
+        .correct-ans-display {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            padding: 1.5rem;
+            background: var(--surface);
+            border-top: 1px solid #e2e8f0;
+            margin-top: auto; /* Push to bottom if content is short */
+            position: sticky;
+            bottom: 0;
+            z-index: 5;
+            box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            background: var(--secondary);
+            box-shadow: 0 4px 6px rgba(15, 23, 42, 0.3);
+        }
+        .btn-submit:hover { background: #1e293b; }
+
+        @keyframes slideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .split-view { flex-direction: column; }
+            .pdf-section { height: 45vh; flex: none; border-bottom: 2px solid #cbd5e1; }
+            .quiz-container { flex: 1; border-left: none; }
+            .options { gap: 0.5rem; }
+            .bubble { height: 38px; font-size: 0.9rem; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 1.5rem; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="card">
+            <h1>🎓 GSAT 學測英文閱讀</h1>
+            <p class="subtitle">請選擇年份開始作答<br>資料來源：https://www.ceec.edu.tw</p>
+            
+            <div id="loading-msg" style="color:white; background:rgba(255,255,255,0.2); padding:6px 14px; border-radius:20px; font-size:0.85rem; display:inline-block; margin-bottom:20px;">
+                正在連線至題庫資料庫...
+            </div>
+
+            <div class="year-grid" id="year-buttons" style="opacity: 0.5; pointer-events: none;">
+                <button class="btn btn-year" onclick="startTest(111)">111 </button>
+                <button class="btn btn-year" onclick="startTest(112)">112 </button>
+                <button class="btn btn-year" onclick="startTest(113)">113 </button>
+                <button class="btn btn-year" onclick="startTest(114)">114 </button>
+            </div>
+            
+            <p id="error-msg" style="color:#fca5a5; font-size:0.8rem; display:none; margin-top:15px;">
+                ⚠️ 無法讀取資料，請檢查網路連線。
+            </p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <header>
+            <div class="header-left">
+                <span class="logo-text">GSAT Reading</span>
+                <span class="year-tag" id="current-year-display">114</span>
+            </div>
+            <button class="btn" style="background:transparent; color:#64748b; border:1px solid #cbd5e1; font-size:0.85rem; padding:6px 14px;" onclick="location.reload()">
+                ✕ 結束
+            </button>
+        </header>
+
+        <div class="split-view">
+            <div class="pdf-section">
+                <div class="pdf-container">
+                    <iframe id="pdf-frame" src=""></iframe>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div id="quiz-loading" style="text-align:center; color:#64748b; padding:40px; display:none;">
+                    試卷準備中...
+                </div>
+                
+                <div class="question-list" id="question-list">
+                    </div>
+
+                <div class="submit-section" id="submit-area" style="display:none;">
+                    <button class="btn btn-submit" onclick="submitQuiz()">交卷核對答案</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-screen" style="display:none; background: rgba(15, 23, 42, 0.95);">
+        <div class="card">
+            <h1>測驗完成</h1>
+            <h2 id="score-display" style="font-size:3rem; color:var(--primary); margin:1rem 0;">--</h2>
+            <p id="result-comment" style="color:#475569;">正在計算...</p>
+            <div style="display:flex; gap:12px; justify-content:center; margin-top:20px;">
+                <button class="btn" onclick="reviewAnswers()">檢討錯題</button>
+                <button class="btn" style="background:#475569;" onclick="location.reload()">回首頁</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 設定 GSAT 資料庫路徑
+        const baseUrl = "https://ducj-creator.github.io/Teacher-Shirley/tests/asset/";
+        const csvUrl = baseUrl + "gsat%20reading%20answer.csv";
+        
+        let currentYear = '';
+        let answerKey = {}; // 結構: { "111": { 35: "A", 36: "B"... } }
+        let currentQuestionRange = { start: 1, end: 1 };
+
+        // 頁面載入時抓取 CSV
+        document.addEventListener('DOMContentLoaded', () => {
+            Papa.parse(csvUrl, {
+                download: true,
+                header: false, // 採用矩陣讀取模式
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processMatrixCSV(results.data);
+                    
+                    // 解鎖介面
+                    document.getElementById('loading-msg').style.display = 'none';
+                    const grid = document.getElementById('year-buttons');
+                    grid.style.opacity = '1';
+                    grid.style.pointerEvents = 'auto';
+                },
+                error: function(err) {
+                    console.error("CSV Loading Error:", err);
+                    document.getElementById('loading-msg').textContent = "連線失敗";
+                    document.getElementById('error-msg').style.display = 'block';
+                }
+            });
+        });
+
+        // 矩陣 CSV 解析器
+        function processMatrixCSV(data) {
+            // data[0] 是標題列 (年份)，例如: ["", "114", "113", "112", "111"]
+            const headers = data[0];
+            const yearMap = {}; // ColIndex -> Year String
+
+            // 1. 識別年份欄位
+            headers.forEach((col, index) => {
+                let y = col.toString().trim();
+                // 只要是數字就視為年份
+                if (y && !isNaN(parseInt(y))) {
+                    yearMap[index] = y; 
+                    if (!answerKey[y]) answerKey[y] = {}; 
+                }
+            });
+
+            console.log("Detected Years:", yearMap);
+
+            // 2. 讀取每一列 (Row)
+            for (let i = 1; i < data.length; i++) {
+                const row = data[i];
+                // 第一欄位通常是題號
+                const qNumStr = row[0];
+                
+                if (!qNumStr) continue;
+                const qNum = parseInt(qNumStr);
+                
+                if (isNaN(qNum)) continue;
+
+                // 3. 填入各年份的答案
+                for (const [colIndex, year] of Object.entries(yearMap)) {
+                    const answer = row[colIndex];
+                    if (answer && answer.trim()) {
+                        answerKey[year][qNum] = answer.trim().toUpperCase();
+                    }
+                }
+            }
+            
+            console.log("Parsed Answer Key:", answerKey);
+        }
+
+        // 啟動測驗
+        function startTest(year) {
+            currentYear = year.toString();
+            
+            // 防呆：確認是否有該年答案
+            if (!answerKey[currentYear]) {
+                alert(`尚未建立 ${year} 年的答案資料，請稍後再試。`);
+                return;
+            }
+
+            // 自動計算起始與結束題號 (例如 CSV 中該年只有 35~60 題)
+            const questions = Object.keys(answerKey[currentYear]).map(Number);
+            
+            if (questions.length === 0) {
+                 alert(`${year} 年目前沒有題目資料。`);
+                 return;
+            }
+
+            const minQ = Math.min(...questions); // 自動偵測起始題 (e.g., 35)
+            const maxQ = Math.max(...questions);
+            currentQuestionRange = { start: minQ, end: maxQ };
+
+            // UI 切換
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'flex';
+            document.getElementById('current-year-display').textContent = `${year} 學測`;
+
+            // 載入 PDF (直接使用 iframe)
+            const pdfUrl = `${baseUrl}${year}%20gsat%20reading.pdf`;
+            document.getElementById('pdf-frame').src = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+
+            // 生成題卡
+            generateQuestions(minQ, maxQ);
+        }
+
+        // 動態生成題目列表
+        function generateQuestions(start, end) {
+            const list = document.getElementById('question-list');
+            list.innerHTML = '';
+            document.getElementById('submit-area').style.display = 'block';
+
+            for (let i = start; i <= end; i++) {
+                // 如果某題號在 CSV 沒答案 (例如跳題)，則不顯示
+                if (!answerKey[currentYear][i]) continue; 
+
+                const div = document.createElement('div');
+                div.className = 'question-item';
+                div.id = `q-item-${i}`;
+                div.innerHTML = `
+                    <div class="q-header">
+                        <span class="q-number">Question ${i}</span>
+                        <span id="res-tag-${i}"></span>
+                    </div>
+                    <div class="options">
+                        <label class="option-label"><input type="radio" name="q${i}" value="A"><span class="bubble">A</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="B"><span class="bubble">B</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="C"><span class="bubble">C</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="D"><span class="bubble">D</span></label>
+                    </div>
+                    <div id="correct-display-${i}" class="correct-ans-display" style="display:none;"></div>
+                `;
+                list.appendChild(div);
+            }
+        }
+
+        // 交卷邏輯
+        function submitQuiz() {
+            let correctCount = 0;
+            let questionCount = 0; 
+            let start = currentQuestionRange.start;
+            let end = currentQuestionRange.end;
+
+            for (let i = start; i <= end; i++) {
+                const correctAns = answerKey[currentYear][i];
+                if (!correctAns) continue;
+
+                questionCount++;
+
+                const radios = document.getElementsByName(`q${i}`);
+                let userAns = null;
+                for (let r of radios) {
+                    if (r.checked) userAns = r.value;
+                    r.disabled = true; // 鎖定不可再改
+                }
+
+                const itemDiv = document.getElementById(`q-item-${i}`);
+                const tagSpan = document.getElementById(`res-tag-${i}`);
+                const correctDisplay = document.getElementById(`correct-display-${i}`);
+
+                if (userAns === correctAns) {
+                    correctCount++;
+                    itemDiv.classList.add('correct');
+                    tagSpan.className = 'tag-correct';
+                    tagSpan.textContent = 'Correct';
+                } else {
+                    itemDiv.classList.add('wrong');
+                    tagSpan.className = 'tag-wrong';
+                    tagSpan.textContent = userAns ? 'Incorrect' : 'Missed';
+                    correctDisplay.style.display = 'block';
+                    correctDisplay.textContent = `Correct Answer: ${correctAns}`;
+                }
+            }
+
+            // 計算分數
+            let finalScore = 0;
+            if (questionCount > 0) {
+                finalScore = Math.round((correctCount / questionCount) * 100);
+            }
+
+            // 顯示結果 Modal
+            const resultScreen = document.getElementById('result-screen');
+            const scoreDisplay = document.getElementById('score-display');
+            const commentDisplay = document.getElementById('result-comment');
+
+            scoreDisplay.textContent = `${finalScore}%`;
+
+            if (finalScore === 100) {
+                commentDisplay.textContent = "Excellent! Perfect Score!";
+                triggerConfetti();
+            } else if (finalScore >= 85) {
+                commentDisplay.textContent = "Great job! Top tier performance.";
+                triggerConfetti();
+            } else if (finalScore >= 70) {
+                commentDisplay.textContent = "Good work. Keep reviewing the tough ones.";
+            } else {
+                commentDisplay.textContent = "Keep practicing. Analyze your mistakes.";
+            }
+
+            resultScreen.style.display = 'flex';
+        }
+
+        // 檢討錯題 (關閉 Modal)
+        function reviewAnswers() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('submit-area').style.display = 'none'; // 隱藏交卷按鈕
+            
+            // 自動滾動到第一題
+            const firstQ = document.getElementById(`q-item-${currentQuestionRange.start}`);
+            if(firstQ) firstQ.scrollIntoView({behavior: "smooth"});
+        }
+
+        // 慶祝特效
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
