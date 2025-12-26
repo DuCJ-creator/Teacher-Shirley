@@ -1791,6 +1791,79 @@
 .input-group input:focus {
   border-color: #f1c40f !important;
 }
+
+      /* ========================================= */
+  /* MOBILE RESPONSIVE FIX (手機版修復)   */
+  /* ========================================= */
+  @media screen and (max-width: 768px) {
+    
+    /* 1. 調整主容器，允許捲動 */
+    body {
+      overflow-y: auto !important; /* 允許垂直滑動 */
+      overflow-x: hidden; /* 禁止左右滑動 */
+    }
+
+    /* 2. 重置所有星球容器的位置 */
+    /* 這裡列出了所有可能的星球 class 或 id，確保它們被抓取 */
+    .planet-link, 
+    #mercury, #venus, #earth, #mars, #jupiter, #saturn, #uranus, #neptune, #sun, #moon-btn {
+      position: relative !important; /* 取消絕對定位 */
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: none !important; /* 取消旋轉或偏移 */
+      
+      /* 改為直排列表樣式 */
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      
+      /* 設定統一大小與間距 */
+      width: 80% !important; /* 寬度佔螢幕 80% */
+      max-width: 300px;
+      height: auto !important;
+      margin: 15px auto !important; /* 上下留白，左右置中 */
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.6); /* 加一點背景底色確保文字清楚 */
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    /* 3. 特殊處理 Earth 內部的 Moon */
+    /* 如果 Moon 是包在 Earth 裡面的，把它拉出來顯示 */
+    #earth {
+      display: flex !important;
+      flex-direction: column;
+      height: auto !important;
+    }
+    
+    /* 4. 調整文字大小 */
+    .planet-label, h2, h3 {
+      font-size: 1.2rem !important;
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* 5. 確保標題不會被蓋住 */
+    .header-title, .main-title {
+      position: relative !important;
+      margin-top: 80px; /* 避開頂部 */
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* 6. 隱藏不必要的裝飾軌道 (如果有的話) */
+    .orbit-ring, .orbit-path {
+      display: none !important;
+    }
+  }
+      
     </style>
   </head>
 
