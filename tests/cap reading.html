@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CAP會考英文閱讀測驗中心</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #15803d; /* 深綠色 */
+            --secondary: #F59E0B; /* 活潑黃 */
+            --bg: #F0FDF4; 
+            --surface: #ffffff;
+            --text-main: #1F2937;
+            --success: #10B981;
+            --error: #EF4444;
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        a { color: #666; text-decoration: none; border-bottom: 1px dashed #999; }
+        a:hover { color: var(--primary); border-bottom-style: solid; }
+
+        /* --- Welcome Screen --- */
+        #welcome-screen, #result-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #4ade80 0%, #166534 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        h1 { margin-bottom: 0.5rem; color: var(--primary); font-size: 1.8rem; }
+        .subtitle { color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
+
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        .btn-year {
+            background: var(--surface);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-year:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- Main Interface --- */
+        #app-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background: var(--surface);
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .header-title {
+            font-weight: bold;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .year-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* Split View Layout */
+        .split-view {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            padding: 0.8rem;
+            gap: 0.8rem;
+            background: #ecfdf5;
+        }
+
+        /* Left: PDF Viewer */
+        .pdf-section {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid #d1fae5;
+            overflow: hidden;
+        }
+
+        .pdf-toolbar {
+            padding: 6px 12px;
+            background: #d1fae5;
+            border-bottom: 1px solid #10b981;
+            text-align: right;
+        }
+
+        .pdf-link {
+            font-size: 0.8rem;
+            color: #064e3b;
+            font-weight: bold;
+        }
+
+        .pdf-container {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Right: Quiz Area */
+        .quiz-container {
+            flex: 0.8;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid #d1fae5;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex-grow: 1;
+        }
+
+        .question-item {
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .q-number {
+            font-weight: bold;
+            color: #334155;
+            font-size: 1.05rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .option-label {
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .option-label input { position: absolute; opacity: 0; }
+
+        .bubble {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #64748b;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover .bubble {
+            background: #ecfdf5;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .option-label input:checked ~ .bubble {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        }
+
+        /* Results Styling */
+        .question-item.correct { background-color: #f0fdf4; border: 2px solid var(--success); }
+        .question-item.wrong { background-color: #fef2f2; border: 2px solid var(--error); }
+        .tag-correct { color: var(--success); font-weight: bold; font-size: 0.9rem; }
+        .tag-wrong { color: var(--error); font-weight: bold; font-size: 0.9rem; }
+        
+        .correct-ans-display {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #e5e7eb;
+            font-size: 0.9rem;
+            color: var(--error);
+            font-weight: bold;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f1f5f9;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            background: var(--secondary);
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
+        }
+        .btn-submit:hover { background: #d97706; }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .split-view { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
+            .pdf-section { height: 45vh; flex: none; }
+            .quiz-container { flex: 1; }
+            .options { grid-template-columns: repeat(4, 1fr); }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="card">
+            <h1>📖 CAP會考英文閱讀測驗</h1>
+            <p class="subtitle">請選擇年份開始作答<br>資料來源：Teacher Shirley GitHub</p>
+            
+            <div id="loading-msg" style="color:white; background:rgba(0,0,0,0.2); padding:5px 10px; border-radius:20px; font-size:0.9rem; display:inline-block; margin-bottom:15px;">
+                正在連線至題庫資料庫...
+            </div>
+
+            <div class="year-grid" id="year-buttons" style="opacity: 0.5; pointer-events: none;">
+                <button class="btn btn-year" onclick="startTest(110)">110 年</button>
+                <button class="btn btn-year" onclick="startTest(111)">111 年</button>
+                <button class="btn btn-year" onclick="startTest(112)">112 年</button>
+                <button class="btn btn-year" onclick="startTest(113)">113 年</button>
+                <button class="btn btn-year" onclick="startTest(114)">114 年</button>
+            </div>
+            <p id="error-msg" style="color:#fee2e2; font-size:0.8rem; display:none; margin-top:10px;">
+                ⚠️ 無法讀取資料。請檢查網路或 CSV 檔案格式。
+            </p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <header>
+            <div class="header-title">
+                <span class="year-badge" id="current-year-display">110 CAP</span>
+                <span>閱讀題本</span>
+            </div>
+            <button class="btn" style="background:#64748b; font-size:0.85rem; padding:8px 16px;" onclick="location.reload()">退出測驗</button>
+        </header>
+
+        <div class="split-view">
+            <div class="pdf-section">
+                <div class="pdf-toolbar">
+                    <a id="pdf-new-tab" href="#" target="_blank" class="pdf-link">📄 手機無法滑動？點此開啟 PDF</a>
+                </div>
+                <div class="pdf-container">
+                    <iframe id="pdf-frame" src=""></iframe>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div id="quiz-loading" style="text-align:center; color:#666; padding:20px; display:none;">產生試卷中...</div>
+                
+                <div class="question-list" id="question-list">
+                    </div>
+
+                <div class="submit-section" id="submit-area" style="display:none;">
+                    <button class="btn btn-submit" onclick="submitQuiz()">交卷核算分數</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-screen" style="display:none; background: rgba(0,0,0,0.85);">
+        <div class="card">
+            <h1>測驗結果</h1>
+            <h2 id="score-display">--</h2>
+            <p id="result-comment">做得好！</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button class="btn" onclick="reviewAnswers()">查看錯題詳解</button>
+                <button class="btn" style="background:#64748b;" onclick="location.reload()">回首頁</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = "https://ducj-creator.github.io/Teacher-Shirley/tests/asset/";
+        const csvUrl = baseUrl + "cap%20reading%20answer.csv";
+        
+        let currentYear = '';
+        let answerKey = {}; // 結構: { "110": { 15: "A", 16: "B"... } }
+        let currentQuestionRange = { start: 1, end: 1 };
+
+        // 初始化：載入 CSV
+        document.addEventListener('DOMContentLoaded', () => {
+            // 使用 header: false 模式，將 CSV 讀取為「二維陣列」(矩陣)
+            Papa.parse(csvUrl, {
+                download: true,
+                header: false, 
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processMatrixCSV(results.data);
+                    
+                    // 啟用按鈕
+                    document.getElementById('loading-msg').style.display = 'none';
+                    const grid = document.getElementById('year-buttons');
+                    grid.style.opacity = '1';
+                    grid.style.pointerEvents = 'auto';
+                },
+                error: function(err) {
+                    console.error("CSV Loading Error:", err);
+                    document.getElementById('loading-msg').textContent = "資料載入失敗";
+                    document.getElementById('error-msg').style.display = 'block';
+                }
+            });
+        });
+
+        // 處理表格型 CSV (Row 0=年份, Col 0=題號)
+        function processMatrixCSV(data) {
+            // data[0] 是標題列，例如: ["", "114", "113", "112", "111", "110"]
+            const headers = data[0];
+            const yearMap = {}; // 紀錄每一欄對應的年份，例如: { 1: "114", 5: "110" }
+
+            // 1. 掃描第一列，找出每一欄對應的年份
+            headers.forEach((col, index) => {
+                let y = col.toString().trim();
+                // 如果是數字 (如 "110")，則記錄下來
+                if (y && !isNaN(parseInt(y))) {
+                    yearMap[index] = y; 
+                    if (!answerKey[y]) answerKey[y] = {}; // 初始化該年份的答案物件
+                }
+            });
+
+            console.log("偵測到的年份欄位:", yearMap);
+
+            // 2. 從第二列開始往下讀 (每一列代表一個題號)
+            for (let i = 1; i < data.length; i++) {
+                const row = data[i];
+                // 假設第一欄 (Index 0) 永遠是題號
+                const qNumStr = row[0];
+                
+                if (!qNumStr) continue;
+                const qNum = parseInt(qNumStr);
+                
+                // 如果題號不是數字，跳過
+                if (isNaN(qNum)) continue;
+
+                // 3. 根據 yearMap，抓取該列每一格的答案
+                for (const [colIndex, year] of Object.entries(yearMap)) {
+                    const answer = row[colIndex];
+                    if (answer && answer.trim()) {
+                        // 存入全域變數
+                        answerKey[year][qNum] = answer.trim().toUpperCase();
+                    }
+                }
+            }
+            
+            console.log("解析完成的答案庫:", answerKey);
+        }
+
+        // 開始測驗
+        function startTest(year) {
+            currentYear = year.toString();
+            
+            // 檢查該年份是否有資料
+            if (!answerKey[currentYear]) {
+                alert(`錯誤：系統找不到 ${year} 年的答案資料。\n請確認 CSV 檔案中是否有包含 ${year} 的欄位。`);
+                return;
+            }
+
+            // 計算該年份的起始與結束題號
+            const questions = Object.keys(answerKey[currentYear]).map(Number);
+            
+            if (questions.length === 0) {
+                 alert(`${year} 年目前沒有題目資料 (欄位是空的)。`);
+                 return;
+            }
+
+            const minQ = Math.min(...questions);
+            const maxQ = Math.max(...questions);
+            currentQuestionRange = { start: minQ, end: maxQ };
+
+            // 切換畫面
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'flex';
+            document.getElementById('current-year-display').textContent = `${year} CAP Reading`;
+
+            // 載入 PDF
+            const pdfUrl = `${baseUrl}${year}%20cap%20reading.pdf`;
+            document.getElementById('pdf-new-tab').href = pdfUrl;
+            document.getElementById('pdf-frame').src = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+
+            // 生成題目
+            generateQuestions(minQ, maxQ);
+        }
+
+        // 生成答題卡
+        function generateQuestions(start, end) {
+            const list = document.getElementById('question-list');
+            list.innerHTML = '';
+            document.getElementById('submit-area').style.display = 'block';
+
+            for (let i = start; i <= end; i++) {
+                // 如果中間有跳號 (例如某些題號沒答案)，這裡可以加判斷，但通常會考是連續的
+                if (!answerKey[currentYear][i]) continue; 
+
+                const div = document.createElement('div');
+                div.className = 'question-item';
+                div.id = `q-item-${i}`;
+                div.innerHTML = `
+                    <div class="q-header">
+                        <span class="q-number">第 ${i} 題</span>
+                        <span id="res-tag-${i}"></span>
+                    </div>
+                    <div class="options">
+                        <label class="option-label"><input type="radio" name="q${i}" value="A"><span class="bubble">A</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="B"><span class="bubble">B</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="C"><span class="bubble">C</span></label>
+                        <label class="option-label"><input type="radio" name="q${i}" value="D"><span class="bubble">D</span></label>
+                    </div>
+                    <div id="correct-display-${i}" class="correct-ans-display"></div>
+                `;
+                list.appendChild(div);
+            }
+        }
+
+        // 提交與計分
+        function submitQuiz() {
+            let correctCount = 0;
+            let questionCount = 0; // 實際計算有作答欄位的題目數
+            let start = currentQuestionRange.start;
+            let end = currentQuestionRange.end;
+
+            for (let i = start; i <= end; i++) {
+                // 確保該題有正確答案資料
+                const correctAns = answerKey[currentYear][i];
+                if (!correctAns) continue;
+
+                questionCount++;
+
+                const radios = document.getElementsByName(`q${i}`);
+                let userAns = null;
+                for (let r of radios) {
+                    if (r.checked) userAns = r.value;
+                    r.disabled = true; // 鎖定
+                }
+
+                const itemDiv = document.getElementById(`q-item-${i}`);
+                const tagSpan = document.getElementById(`res-tag-${i}`);
+                const correctDisplay = document.getElementById(`correct-display-${i}`);
+
+                if (userAns === correctAns) {
+                    correctCount++;
+                    itemDiv.classList.add('correct');
+                    tagSpan.className = 'tag-correct';
+                    tagSpan.textContent = '✓ 正確';
+                } else {
+                    itemDiv.classList.add('wrong');
+                    tagSpan.className = 'tag-wrong';
+                    tagSpan.textContent = userAns ? '✗ 錯誤' : '未作答';
+                    correctDisplay.textContent = `正確答案: ${correctAns}`;
+                }
+            }
+
+            // 計算分數
+            let finalScore = 0;
+            if (questionCount > 0) {
+                finalScore = Math.round((correctCount / questionCount) * 100);
+            }
+
+            // 顯示結果
+            const resultScreen = document.getElementById('result-screen');
+            const scoreDisplay = document.getElementById('score-display');
+            const commentDisplay = document.getElementById('result-comment');
+
+            scoreDisplay.textContent = `${finalScore} 分`;
+
+            if (finalScore === 100) {
+                commentDisplay.textContent = "太神了！閱讀理解滿分！🎉";
+                triggerConfetti();
+            } else if (finalScore >= 80) {
+                commentDisplay.textContent = "優秀！閱讀能力很強！💪";
+                triggerConfetti();
+            } else if (finalScore >= 60) {
+                commentDisplay.textContent = "及格了，再多讀幾篇會更好！👍";
+            } else {
+                commentDisplay.textContent = "別氣餒，多練習閱讀速度與單字！📚";
+            }
+
+            resultScreen.style.display = 'flex';
+        }
+
+        function reviewAnswers() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('submit-area').style.display = 'none';
+        }
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
