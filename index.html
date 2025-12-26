@@ -1791,78 +1791,109 @@
 .input-group input:focus {
   border-color: #f1c40f !important;
 }
-
-      /* ========================================= */
-  /* MOBILE RESPONSIVE FIX (手機版修復)   */
-  /* ========================================= */
-  @media screen and (max-width: 768px) {
-    
-    /* 1. 調整主容器，允許捲動 */
-    body {
-      overflow-y: auto !important; /* 允許垂直滑動 */
-      overflow-x: hidden; /* 禁止左右滑動 */
-    }
-
-    /* 2. 重置所有星球容器的位置 */
-    /* 這裡列出了所有可能的星球 class 或 id，確保它們被抓取 */
-    .planet-link, 
-    #mercury, #venus, #earth, #mars, #jupiter, #saturn, #uranus, #neptune, #sun, #moon-btn {
-      position: relative !important; /* 取消絕對定位 */
-      top: auto !important;
-      left: auto !important;
-      right: auto !important;
-      bottom: auto !important;
-      transform: none !important; /* 取消旋轉或偏移 */
       
-      /* 改為直排列表樣式 */
-      display: flex !important;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      
-      /* 設定統一大小與間距 */
-      width: 80% !important; /* 寬度佔螢幕 80% */
-      max-width: 300px;
-      height: auto !important;
-      margin: 15px auto !important; /* 上下留白，左右置中 */
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.6); /* 加一點背景底色確保文字清楚 */
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    }
-
-    /* 3. 特殊處理 Earth 內部的 Moon */
-    /* 如果 Moon 是包在 Earth 裡面的，把它拉出來顯示 */
-    #earth {
-      display: flex !important;
-      flex-direction: column;
-      height: auto !important;
-    }
-    
-    /* 4. 調整文字大小 */
-    .planet-label, h2, h3 {
-      font-size: 1.2rem !important;
-      position: relative !important;
-      top: auto !important;
-      left: auto !important;
-      transform: none !important;
-      text-align: center;
-      width: 100%;
-    }
-
-    /* 5. 確保標題不會被蓋住 */
-    .header-title, .main-title {
-      position: relative !important;
-      margin-top: 80px; /* 避開頂部 */
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    /* 6. 隱藏不必要的裝飾軌道 (如果有的話) */
-    .orbit-ring, .orbit-path {
-      display: none !important;
-    }
+/* MOBILE RESPONSIVE FIX V2 (修正版)      */
+/* ========================================= */
+@media screen and (max-width: 768px) {
+  
+  /* 1. 太陽系容器改為直向排列，並允許滑動 */
+  .solar-system {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    height: auto !important;
+    min-height: 100vh;
+    padding-top: 120px; /* 避開標題 */
+    padding-bottom: 80px;
+    overflow-y: auto !important; /* 允許上下滑動 */
+    overflow-x: hidden !important; /* 禁止左右滑動 */
+    transform: none !important; /* 取消整體縮放 */
   }
+
+  /* 2. 隱藏背景軌道圈圈，手機上看才不會亂 */
+  .orbit-track {
+    display: none !important;
+  }
+
+  /* 3. 重置所有星球容器 (關鍵修正：使用 .planet-spot) */
+  .planet-spot, 
+  .mars-container,
+  .moon-wrapper {
+    position: relative !important; /* 取消絕對定位 */
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important; /* 取消偏移 */
+    margin: 15px auto !important; /* 上下留白 */
+    
+    /* 卡片樣式 */
+    width: 85% !important;
+    max-width: 340px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    
+    /* 增加一點背景讓它們看起來像按鈕 */
+    background: rgba(20, 30, 48, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  /* 4. 修正星球內部的圖片層 */
+  .static-planet-wrapper,
+  .mars-wrapper {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    animation: none !important; /* 手機上停止自轉，避免誤觸 */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 5. 調整星球圖片大小 */
+  .planet-visual, .planet-moon {
+    width: 80px !important; 
+    height: 80px !important;
+    margin-bottom: 15px; /* 圖文間距 */
+    box-shadow: 0 0 15px rgba(255,255,255,0.4); /* 增加一點光暈 */
+  }
+
+  /* 6. 強制顯示星球下方的文字 (原本手機版可能被隱藏) */
+  .planet-info, .moon-info {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    display: block !important;
+    width: 100% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  /* 7. 修正文字顏色與大小 */
+  .p-name {
+    font-size: 1.4rem !important;
+    margin-bottom: 5px !important;
+    color: #fff !important;
+  }
+  .p-poem-cn, .p-poem-en {
+    color: #ddd !important;
+  }
+}
       
     </style>
   </head>
