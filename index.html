@@ -3427,4 +3427,154 @@ musicToggle.addEventListener("click", () => {
 })();
 </script>
   </body>
+  <script>
+// 1. 定義一個超級寬容的日期比對器
+function isSameDay(dateStr1, dateStr2) {
+    const d1 = new Date(dateStr1);
+    const d2 = new Date(dateStr2);
+    // 只要 年、月、日 一樣，就視為同一天 (忽略時間與格式差異)
+    return d1.getFullYear() === d2.getFullYear() &&
+           d1.getMonth() === d2.getMonth() &&
+           d1.getDate() === d2.getDate();
+}
+
+// 2. 重新定義渲染函數 (覆蓋舊邏輯)
+window.renderBagCalendar = function() {
+    const grid = document.getElementById('bag-calendar-grid');
+    const monthLabel = document.getElementById('cal-display-month');
+    
+    // 如果找不到日曆元素，就停止
+    if(!grid || !monthLabel) return;
+
+    // 清空舊格子
+    grid.innerHTML = "";
+    
+    // === 關鍵修正：讀取並正規化資料 ===
+    let rawData = [];
+    try {
+        const stored = localStorage.getItem('checkInHistory');
+        if (stored) rawData = JSON.parse(stored);
+    } catch(e) { console.error("读取错误", e); }
+    
+    console.log("目前資料庫裡的紀錄:", rawData); // 您可以在 F12 console 看到這個
+
+    // 準備日曆參數
+    // 如果全域變數 currentViewDate 沒定義，就用今天
+    if (typeof window.currentViewDate === 'undefined') {
+        window.currentViewDate = new Date();
+    }
+    
+    const year = window.currentViewDate.getFullYear();
+    const month = window.currentViewDate.getMonth();
+    const today = new Date();
+
+    // 更新標題
+    const mNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    monthLabel.textContent = `${mNames[month]} ${year}`;
+
+    // 星期標頭
+    const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    days.forEach(d => {
+        const h = document.createElement('div');
+        h.textContent = d;
+        h.style.color = '#bbb'; 
+        h.style.fontSize = '0.6rem';
+        grid.appendChild(h);
+    });
+
+    // 計算排版
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // 填補空白
+    for(let i=0; i<firstDayIndex; i++) grid.appendChild(document.createElement('div'));
+
+    // 填補日期
+    for(let d=1; d<=daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.textContent = d;
+        cell.style.aspectRatio = "1/1";
+        cell.style.display = "flex";
+        cell.style.alignItems = "center";
+        cell.style.justifyContent = "center";
+        cell.style.borderRadius = "50%";
+        cell.style.position = "relative";
+        cell.style.cursor = "default"; // 預設游標
+        
+        // 這是這個格子的「標準時間物件」
+        const cellDateObj = new Date(year, month, d);
+        // 格式化成 YYYY-MM-DD 僅供顯示用
+        const displayDateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+
+        // 1. 標記今天
+        if (isSameDay(cellDateObj, today)) {
+            cell.style.border = "2px solid #e67e22";
+            cell.style.fontWeight = "bold";
+        }
+
+        // 2. 標記有卡片 (使用寬容比對)
+        // 檢查 rawData 裡有沒有任何一筆資料跟這個格子是同一天
+        const matchFound = rawData.some(historyDateStr => isSameDay(historyDateStr, cellDateObj));
+
+        if (matchFound) {
+            cell.style.backgroundColor = "#ffe58f"; // 金色底
+            cell.style.color = "#d46b08";
+            cell.style.fontWeight = "bold";
+            cell.style.cursor = "pointer"; // 手指游標
+            
+            // 星星
+            const star = document.createElement('span');
+            star.textContent = "★";
+            star.style.position = "absolute";
+            star.style.fontSize = "0.6rem";
+            star.style.top = "-2px";
+            star.style.right = "-2px";
+            cell.appendChild(star);
+
+            // 點擊顯示詳情
+            cell.onclick = function() {
+                const infoBox = document.getElementById('selected-card-info');
+                infoBox.style.display = 'block';
+                document.getElementById('card-date-display').innerText = `📅 ${displayDateStr}`;
+                document.getElementById('card-content-display').innerText = "✨ 這裡珍藏了一張卡片！";
+            };
+        }
+
+        grid.appendChild(cell);
+    }
+    
+    // 除錯訊息 (顯示在日曆下方，確認有沒有讀到資料)
+    let statusDiv = document.getElementById('cal-debug-status');
+    if(!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'cal-debug-status';
+        statusDiv.style.fontSize = '0.7rem';
+        statusDiv.style.color = '#aaa';
+        statusDiv.style.marginTop = '5px';
+        statusDiv.style.textAlign = 'center';
+        grid.parentNode.appendChild(statusDiv);
+    }
+    statusDiv.innerText = `System Status: Loaded ${rawData.length} cards.`;
+}
+
+// 3. 攔截並連結舊的按鈕功能
+// 當原本的 handleCheckIn 跑完後，它會試著呼叫 renderCardBag，我們把它導向到這裡
+window.renderCardBag = function() {
+    window.renderBagCalendar();
+    // 同時更新總天數顯示
+    const history = JSON.parse(localStorage.getItem('checkInHistory')) || [];
+    const totalEl = document.getElementById('total-days');
+    if(totalEl) totalEl.innerText = history.length;
+};
+
+// 4. 定義月份切換 (如果之前沒定義好)
+window.changeCalMonth = function(offset) {
+    if (typeof window.currentViewDate === 'undefined') window.currentViewDate = new Date();
+    window.currentViewDate.setMonth(window.currentViewDate.getMonth() + offset);
+    renderBagCalendar();
+};
+
+// 5. 頁面載入後，立刻執行一次
+setTimeout(window.renderBagCalendar, 500);
+</script>
 </html>
