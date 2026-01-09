@@ -180,6 +180,8 @@
   height: auto;  /* 移除原本的 min-height，改為自動 */
   min-height: 0; /* 防止內容撐開導致溢出 */
   width: 100%;
+  position: relative;
+  overflow: visible; /* 關鍵：改成 visible，避免邊緣切掉水星 */
 }
 
 /* 修改 .solar-system */
@@ -291,41 +293,6 @@
 .static-planet-wrapper:hover {
   transform: scale(1.15); /* Hover 放大效果 */
   z-index: 100;
-}
-
-/* === 各星球座標 (四散排列，距離依比例) === */
-
-/* 水星 (內圈，左上) - 距離近 */
-.pos-mercury {
-  top: 50%;
-  left: 50%;
-  /* 關鍵修改：使用 vmin 讓它隨螢幕縮放，保持在畫面內 */
-  transform: translate(-50%, 32vmin) translate(-50%, -50%);
-  margin-top: 0; /* 移除多餘的 pixel 邊距 */
-  z-index: 20;   /* 確保層級夠高，不會被背景蓋住 */
-}
-
-/* 火星 (內圈，右下) - 距離近，與水星對稱 */
-.pos-mars {
-  transform: translate(14vmin, 12vmin);
-}
-
-/* 木星 (中圈，右上) - 距離中等 */
-.pos-jupiter {
-  top: 50%;
-  left: 50%;
-  transform: translate(42vmin, 0) translate(-50%, -50%);
-  margin-left: 0;
-  z-index: 20;
-}
-
-/* 土星 (外圈，左下) - 距離最遠 */
-.pos-saturn {
-  top: 50%;
-  left: 50%;
-  transform: translate(-42vmin, 0) translate(-50%, -50%);
-  margin-left: 0;
-  z-index: 20;
 }
 
 /* === 手機版優化 === */
