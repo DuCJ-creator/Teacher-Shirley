@@ -2263,7 +2263,110 @@
                 "></div>
         </div>
 
-    </div> </div> ```
+    </div> </div> ```<div class="member-dashboard" style="display: flex; gap: 20px; align-items: flex-start; max-width: 1200px; margin: 0 auto; height: 100%;">
+    
+    <div class="profile-panel" 
+         style="
+            flex: 0 0 280px;         /* 固定寬度 */
+            width: 280px; 
+            min-width: 280px;
+            max-height: 85vh;        /* 限制最大高度 */
+            overflow-y: auto;        /* ⚠️ 關鍵：內容太多時出現卷軸，不會不見 */
+            padding-right: 5px;      /* 預留捲軸空間 */
+         ">
+        
+        <div class="streak-ring">
+            <div class="streak-num" id="streak-days">0</div>
+            <div style="font-size: 0.7rem">Days Streak</div>
+        </div>
+
+        <div style="margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+            Total Check-ins: <strong id="total-days">0</strong>
+        </div>
+
+        <div id="calendar-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(7, 1fr);
+              gap: 3px;
+              font-size: 0.7rem;
+              margin-bottom: 10px;
+            "></div>
+
+        <div style="margin-top: 15px; text-align: left; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px;">
+            <div style="
+                font-size: 0.85rem;
+                font-weight: bold;
+                margin-bottom: 8px;
+                color: var(--text-light);
+                border-bottom: 1px dashed rgba(0,0,0,0.1);
+                padding-bottom: 5px;
+              ">
+                🃏 月光寶盒 (Card Bag)
+            </div>
+            <div id="card-bag-list" style="min-height: 40px;"></div>
+        </div>
+
+        <button id="checkin-btn"
+            class="checkin-btn"
+            style="width: 100%; margin-top: 15px;" 
+            onclick="handleCheckIn()">
+            Daily Check-in
+        </button>
+
+        <div style="width: 100%; display: flex; justify-content: center; margin-top: 15px; margin-bottom: 5px;">
+            <div onclick="window.open('https://ducj-creator.github.io/bestlot.html', '_blank');"
+                 role="button"
+                 style="
+                    background: linear-gradient(135deg, #d4af37 0%, #f7e98e 45%, #c5a028 60%, #e6c152 100%);
+                    color: #4a3b15;
+                    border: 1px solid #b8860b;
+                    box-shadow: 0 4px 10px rgba(218, 165, 32, 0.4);
+                    border-radius: 50px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px 15px;
+                    width: 100%;
+                    font-weight: 800;
+                    font-size: 0.95rem;
+                    cursor: pointer !important;
+                    user-select: none;
+                    transition: all 0.3s ease;">
+                 <span style="font-size: 1.3em; margin-right: 6px;">🥠</span> 
+                 今日上上籤
+            </div>
+        </div>
+
+    </div> <div class="content-panel" style="flex: 1; min-width: 0;">
+        
+        <div class="data-card word-card" style="width: 100%;">
+            <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px;">
+                Word of the Day <span id="word-date"></span>
+            </span>
+
+            <div style="display: flex; gap: 10px; align-items: baseline; margin-top: 5px;">
+                <span class="the-word" id="wotd-word" style="font-size: 2.5rem;">Wait...</span>
+                <span id="wotd-pos" style="background: var(--accent); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; transform: translateY(-5px);"></span>
+            </div>
+
+            <div id="wotd-meaning" style="font-family: 'Noto Sans TC'; font-weight: bold; color: var(--accent); margin: 5px 0 15px 0; font-size: 1.3rem;"></div>
+            <div id="wotd-ipa" style="font-style: italic; color: var(--text-light); font-size: 1rem; margin-bottom: 15px;"></div>
+
+            <div style="background: rgba(0, 0, 0, 0.03); padding: 15px; border-radius: 12px;">
+                <div id="wotd-sentence-e" style="font-style: italic; margin-bottom: 8px; font-size: 1.1rem;"></div>
+                <div id="wotd-sentence-c" style="font-size: 1rem; color: var(--text-light)"></div>
+            </div>
+        </div>
+
+        <div class="data-card quote-card" style="width: 100%; margin-top: 20px;">
+            <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px;">Daily Quote</span>
+            <div id="qotd-text" style="font-family: 'Playfair Display'; font-size: 1.5rem; margin: 20px 0; line-height: 1.5;"></div>
+            <div id="qotd-trans" style="font-size: 1rem; color: var(--text-light)"></div>
+            <div id="qotd-author" style="text-align: right; font-weight: bold; color: var(--accent); margin-top: 15px; font-size: 1.1rem;"></div>
+        </div>
+
+    </div> </div>
       
     <div class="profile-panel">
         
