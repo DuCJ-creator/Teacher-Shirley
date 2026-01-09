@@ -297,7 +297,12 @@
 
 /* 水星 (內圈，左上) - 距離近 */
 .pos-mercury {
-  transform: translate(-12vmin, -14vmin);
+  top: 50%;
+  left: 50%;
+  /* 關鍵修改：使用 vmin 讓它隨螢幕縮放，保持在畫面內 */
+  transform: translate(-50%, 32vmin) translate(-50%, -50%);
+  margin-top: 0; /* 移除多餘的 pixel 邊距 */
+  z-index: 20;   /* 確保層級夠高，不會被背景蓋住 */
 }
 
 /* 火星 (內圈，右下) - 距離近，與水星對稱 */
@@ -307,12 +312,20 @@
 
 /* 木星 (中圈，右上) - 距離中等 */
 .pos-jupiter {
-  transform: translate(25vmin, -20vmin);
+  top: 50%;
+  left: 50%;
+  transform: translate(42vmin, 0) translate(-50%, -50%);
+  margin-left: 0;
+  z-index: 20;
 }
 
 /* 土星 (外圈，左下) - 距離最遠 */
 .pos-saturn {
-  transform: translate(-30vmin, 28vmin);
+  top: 50%;
+  left: 50%;
+  transform: translate(-42vmin, 0) translate(-50%, -50%);
+  margin-left: 0;
+  z-index: 20;
 }
 
 /* === 手機版優化 === */
