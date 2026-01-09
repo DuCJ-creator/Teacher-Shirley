@@ -83,11 +83,9 @@
         font-family: "Exo 2", "Noto Serif TC", serif;
         line-height: 1.6;
         transition: color 0.5s, background 0.5s;
-        display: flex;        /* 啟用彈性佈局 */
-  flex-direction: column; /* 垂直排列：上標題、下星球 */
-  height: 100vh;        /* 強制高度為螢幕高度，不多也不少 */
-  overflow: hidden;     /* 隱藏捲軸 */
-}
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
 
       #particle-canvas {
         position: fixed;
@@ -141,8 +139,7 @@
         position: relative;
         z-index: 10;
         text-align: center;
-        flex-shrink: 0; /* 防止標題被壓縮 */
-}
+      }
 
       .main-title {
         font-family: "Cinzel Decorative", cursive;
@@ -167,36 +164,15 @@
       }
 
       /* ==================== UNIVERSE VIEW ==================== */
-    /* 修改 #universe-view */
-#universe-view {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  position: relative;
-  overflow: hidden;
-
-  /* === 修改高度設定 === */
-  flex-grow: 1;  /* 關鍵：自動佔據剩下的所有空間 */
-  height: auto;  /* 移除原本的 min-height，改為自動 */
-  min-height: 0; /* 防止內容撐開導致溢出 */
-  width: 100%;
-  position: relative;
-  overflow: visible; /* 關鍵：改成 visible，避免邊緣切掉水星 */
-}
-
-/* 修改 .solar-system */
-.solar-system {
-  position: relative;
-  width: 100%;
-  
-  /* === 修改高度設定 === */
-  height: 100%; /* 關鍵：只要填滿父容器(#universe-view)即可，不要設 100vh */
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+      #universe-view {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        min-height: 85vh;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
 
       #universe-view.active {
         display: block;
@@ -293,6 +269,28 @@
 .static-planet-wrapper:hover {
   transform: scale(1.15); /* Hover 放大效果 */
   z-index: 100;
+}
+
+/* === 各星球座標 (四散排列，距離依比例) === */
+
+/* 水星 (內圈，左上) - 距離近 */
+.pos-mercury {
+  transform: translate(-12vmin, -14vmin);
+}
+
+/* 火星 (內圈，右下) - 距離近，與水星對稱 */
+.pos-mars {
+  transform: translate(14vmin, 12vmin);
+}
+
+/* 木星 (中圈，右上) - 距離中等 */
+.pos-jupiter {
+  transform: translate(25vmin, -20vmin);
+}
+
+/* 土星 (外圈，左下) - 距離最遠 */
+.pos-saturn {
+  transform: translate(-30vmin, 28vmin);
 }
 
 /* === 手機版優化 === */
