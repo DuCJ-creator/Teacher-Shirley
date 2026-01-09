@@ -2290,29 +2290,39 @@
             Daily Check-in
           </button>
 
-          <div
-       <div onclick="window.open('https://ducj-creator.github.io/bestlot.html', '_blank');"
-       role="button"
-       style="
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        color: white;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 20px;
-        margin-top: 10px;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        cursor: pointer !important;
-        position: relative;
-        z-index: 2147483647; /* 宇宙最高層級 */
-        pointer-events: auto !important;
-        user-select: none;">
-    <span style="font-size: 1.2em; margin-right: 8px;">🥠</span> 今日上上籤 (Best Lot)
+         <div style="width: 100%; display: flex; justify-content: center; margin-top: 10px;">
+    <div onclick="window.open('https://ducj-creator.github.io/bestlot.html', '_blank');"
+         role="button"
+         style="
+            /* --- 高級流金配色 --- */
+            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            color: #3b2f0e; /* 深褐金文字，比白色更有質感 */
+            border: 1px solid #B38728;
+            box-shadow: 0 4px 15px rgba(218, 165, 32, 0.5); /* 金色光暈 */
+            
+            /* --- 形狀與排版修正 --- */
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 25px;
+            font-weight: 800; /* 字體加粗 */
+            font-family: 'Cinzel Decorative', serif; /* 如果你有引用這個字體，會很搭 */
+            letter-spacing: 1px;
+            
+            /* --- 功能強制設定 --- */
+            cursor: pointer !important;
+            position: relative;
+            z-index: 99999;
+            pointer-events: auto !important;
+            user-select: none;
+            text-decoration: none;
+            transition: transform 0.2s ease;">
+            
+        <span style="font-size: 1.3em; margin-right: 8px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">🥠</span> 
+        今日上上籤
     </div>
-          </div>
-        </div>
+</div>
 
         <div class="content-panel">
           <div class="data-card word-card">
