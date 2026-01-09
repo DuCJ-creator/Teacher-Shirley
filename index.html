@@ -2099,72 +2099,80 @@
       </h3>
 
 <div class="member-dashboard" style="
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 2rem; 
-    align-items: start; 
-    width: 100%; 
-    max-width: 1200px; 
-    margin: 0 auto;">
+    display: grid !important; 
+    grid-template-columns: 320px 1fr !important; /* 左欄固定寬度，右欄自動填滿 */
+    gap: 30px !important; 
+    align-items: start !important; 
+    width: 100% !important; 
+    max-width: 1200px !important; 
+    margin: 20px auto !important;
+    position: relative;
+    z-index: 10;">
 
-  <div class="profile-panel" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+  <div class="profile-panel" style="
+      grid-column: 1 / 2; /* 強制在第一欄 */
+      background: rgba(255,255,255,0.9); 
+      padding: 25px; 
+      border-radius: 16px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;">
     
     <div class="streak-ring">
       <div class="streak-num" id="streak-days">0</div>
       <div style="font-size: 0.7rem">Days Streak</div>
     </div>
 
-    <div style="margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+    <div style="margin-bottom: 0.5rem; font-size: 0.9rem; text-align: center;">
       Total Check-ins: <strong id="total-days">0</strong>
-    </div>
-
-    <div id="calendar-grid" style="
-          display: grid; 
-          grid-template-columns: repeat(7, 1fr); 
-          gap: 3px; 
-          font-size: 0.7rem; 
-          margin-bottom: 15px;">
     </div>
 
     <div class="calendar-bag-section" style="
         border-top: 1px solid #eee; 
         padding-top: 15px; 
-        margin-bottom: 15px;">
+        width: 100%;">
         
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <div style="font-size: 0.9rem; font-weight: bold; color: #555;">🃏 Card Bag</div>
-        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
-          <button type="button" onclick="window.changeCalMonth(-1)" style="cursor: pointer; background: none; border: none; font-weight: bold; padding: 5px;">&#10094;</button>
-          <span id="cal-display-month" style="min-width: 80px; text-align: center; font-weight: 600;">Loading</span>
-          <button type="button" onclick="window.changeCalMonth(1)" style="cursor: pointer; background: none; border: none; font-weight: bold; padding: 5px;">&#10095;</button>
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <button type="button" onclick="window.changeCalMonth(-1)" style="cursor: pointer; background: #f0f0f0; border: none; border-radius: 4px; padding: 2px 8px; font-weight: bold;">&lt;</button>
+          <span id="cal-display-month" style="min-width: 80px; text-align: center; font-weight: 600; font-size: 0.85rem;">Loading</span>
+          <button type="button" onclick="window.changeCalMonth(1)" style="cursor: pointer; background: #f0f0f0; border: none; border-radius: 4px; padding: 2px 8px; font-weight: bold;">&gt;</button>
         </div>
       </div>
 
       <div id="bag-calendar-grid" style="
           display: grid; 
           grid-template-columns: repeat(7, 1fr); 
-          gap: 5px; 
+          gap: 6px; 
           text-align: center; 
           font-size: 0.75rem; 
-          background: #f9f9f9; 
+          background: #fafafa; 
           padding: 10px; 
-          border-radius: 8px;">
+          border-radius: 12px;
+          min-height: 200px;">
       </div>
 
       <div id="selected-card-info" style="
           margin-top: 10px; 
-          padding: 8px; 
+          padding: 10px; 
           background: #fffbe6; 
           border: 1px solid #ffe58f; 
-          border-radius: 6px; 
+          border-radius: 8px; 
           font-size: 0.85rem; 
-          display: none;">
-          <strong id="card-date-display" style="color: #d48806;"></strong><br>
-          <span id="card-content-display"></span>
+          display: none;
+          animation: fadeIn 0.3s ease;">
+          <div style="display:flex; align-items:center; gap:5px; margin-bottom:4px;">
+            <span style="font-size:1.2em;">🎴</span>
+            <strong id="card-date-display" style="color: #d48806;"></strong>
+          </div>
+          <span id="card-content-display" style="color:#666;"></span>
       </div>
     </div>
 
-    <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()" style="width: 100%; margin-bottom: 15px;">
+    <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()" style="width: 100%;">
       Daily Check-in
     </button>
 
@@ -2192,14 +2200,17 @@
       </div>
     </div>
 
-  </div> <div class="content-panel" style="display: flex; flex-direction: column; gap: 20px;">
-    
-    <div class="data-card word-card">
+  </div> <div class="content-panel" style="
+      grid-column: 2 / 3; /* 強制在第二欄 */
+      display: flex; 
+      flex-direction: column; 
+      gap: 25px;
+      min-width: 0;"> <div class="data-card word-card">
       <span style="font-size: 0.7rem; text-transform: uppercase; color: #888; letter-spacing: 1px;">
         Word of the Day <span id="word-date"></span>
       </span>
       <div style="display: flex; gap: 10px; align-items: baseline; margin-top: 5px;">
-        <span class="the-word" id="wotd-word">Loading...</span>
+        <span class="the-word" id="wotd-word">Wait...</span>
         <span id="wotd-pos" style="background: var(--accent, #e67e22); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.75rem;"></span>
       </div>
       <div id="wotd-meaning" style="font-weight: bold; color: var(--accent, #e67e22); margin: 5px 0; font-size: 1.1rem;"></div>
@@ -2217,7 +2228,12 @@
       <div id="qotd-author" style="text-align: right; font-weight: bold; color: var(--accent, #e67e22); margin-top: 10px;"></div>
     </div>
 
-    <section id="moonlight-embed" class="moonlight-embed" style="width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <section id="moonlight-embed" class="moonlight-embed" style="
+        width: 100%; 
+        border-radius: 16px; 
+        overflow: hidden; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        background: white;">
       <iframe id="moonlightFrame" src="https://ducj-creator.github.io/Teacher-Shirley/moonlight.html"
         title="Moonlight Box" loading="lazy" frameborder="0" 
         style="width: 100%; height: 500px; display: block;"
@@ -2226,66 +2242,90 @@
   
   </div> </div> <script>
 (function(){
-  // 1. 設定變數
   let currentViewDate = new Date();
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  // 2. 定義全域切換函數 (確保按鈕按了有反應)
+  // 定義切換月份函數 (掛載到 window 確保按鈕按了有反應)
   window.changeCalMonth = function(offset) {
     currentViewDate.setMonth(currentViewDate.getMonth() + offset);
     renderBagCalendar();
   };
 
-  // 3. 渲染日曆主程式
+  // 🕵️‍♂️ 偵探函數：找出真正的打卡紀錄 Key
+  function findRealHistoryData() {
+    // 1. 先試試看最可能的名稱
+    const candidates = ['checkInHistory', 'checkins', 'checkIns', 'history', 'streakData', 'daily_checkins'];
+    for(let key of candidates) {
+        let raw = localStorage.getItem(key);
+        if(raw) {
+            try { return JSON.parse(raw); } catch(e){}
+        }
+    }
+    // 2. 如果都沒有，掃描所有儲存空間，找看起來像日期的陣列
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        let val = localStorage.getItem(key);
+        if (val && val.includes('202') && val.includes('[')) { // 簡單特徵判斷
+            try {
+                let parsed = JSON.parse(val);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    console.log("找到疑似舊資料:", key); // 為了除錯
+                    return parsed;
+                }
+            } catch(e) {}
+        }
+    }
+    return []; // 真的找不到就回傳空陣列
+  }
+
+  // 格式化日期，讓不同寫法的日期都能比對 (例: 2024/1/1 == 2024-01-01)
+  function normalizeDate(d) {
+    let dateObj = new Date(d);
+    if(isNaN(dateObj.getTime())) return d; // 如果不是日期就不動
+    return dateObj.getFullYear() + '-' + 
+           String(dateObj.getMonth()+1).padStart(2, '0') + '-' + 
+           String(dateObj.getDate()).padStart(2, '0');
+  }
+
   function renderBagCalendar() {
     const grid = document.getElementById('bag-calendar-grid');
     const monthLabel = document.getElementById('cal-display-month');
     
-    // 安全檢查：如果找不到元素就停止，避免報錯
     if(!grid || !monthLabel) return;
 
-    // 清空網格
     grid.innerHTML = "";
     
-    // 讀取歷史資料 (嘗試修復資料讀取問題)
-    let history = [];
-    try {
-      const stored = localStorage.getItem('checkInHistory');
-      if (stored) {
-        history = JSON.parse(stored);
-      }
-    } catch (e) {
-      console.error("讀取歷史紀錄失敗:", e);
-    }
+    // 取得資料 (使用偵探函數)
+    let rawHistory = findRealHistoryData();
+    // 把所有日期都標準化成 YYYY-MM-DD 格式
+    let historySet = new Set(rawHistory.map(d => normalizeDate(d)));
 
     const year = currentViewDate.getFullYear();
     const month = currentViewDate.getMonth();
     const today = new Date();
+    const todayStr = normalizeDate(today);
 
-    // 更新標題
     monthLabel.textContent = `${monthNames[month]} ${year}`;
 
-    // 加入星期標頭
+    // 星期標頭
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     days.forEach(d => {
       const header = document.createElement('div');
       header.textContent = d;
       header.style.color = '#bbb';
       header.style.fontSize = '0.6rem';
+      header.style.paddingBottom = '4px';
       grid.appendChild(header);
     });
 
-    // 計算日期
+    // 計算空白與天數
     const firstDayIndex = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // 填補空白
     for (let i = 0; i < firstDayIndex; i++) {
-      const empty = document.createElement('div');
-      grid.appendChild(empty);
+      grid.appendChild(document.createElement('div'));
     }
 
-    // 填補日子
     for (let d = 1; d <= daysInMonth; d++) {
       const cell = document.createElement('div');
       cell.textContent = d;
@@ -2293,34 +2333,33 @@
       cell.style.display = "flex";
       cell.style.alignItems = "center";
       cell.style.justifyContent = "center";
-      cell.style.cursor = "pointer";
       cell.style.borderRadius = "50%";
       cell.style.position = "relative";
+      cell.style.cursor = "default";
+      cell.style.transition = "all 0.2s";
       
-      // 產生日字串 (確保格式為 YYYY-MM-DD)
-      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const currentStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       
-      // 樣式：今天
-      if (year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
+      // 標記今天
+      if (currentStr === todayStr) {
         cell.style.border = "2px solid #e67e22";
         cell.style.fontWeight = "bold";
       }
 
-      // 樣式：有卡片 (檢查歷史紀錄)
-      // 注意：這裡做了一個寬容檢查，防止日期格式差異 (例如 2024-1-1 vs 2024-01-01)
-      const hasRecord = history.includes(dateStr) || history.some(h => new Date(h).toDateString() === new Date(dateStr).toDateString());
-
-      if (hasRecord) {
-        cell.style.backgroundColor = "#ffe58f"; // 金色背景
+      // 標記有紀錄的日子
+      if (historySet.has(currentStr)) {
+        cell.style.backgroundColor = "#ffe58f"; 
         cell.style.color = "#d46b08";
         cell.style.fontWeight = "bold";
+        cell.style.cursor = "pointer";
+        cell.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
         
-        // 星星標記
+        // 星星
         const star = document.createElement('span');
         star.textContent = "★";
         star.style.position = "absolute";
         star.style.fontSize = "0.6rem";
-        star.style.top = "-2px";
+        star.style.top = "-4px";
         star.style.right = "-2px";
         cell.appendChild(star);
 
@@ -2331,8 +2370,8 @@
            const contentDisplay = document.getElementById('card-content-display');
            
            infoBox.style.display = 'block';
-           dateDisplay.textContent = `📅 ${dateStr}`;
-           contentDisplay.textContent = "✨ 這裡珍藏了一張卡片！";
+           dateDisplay.textContent = `${currentStr}`;
+           contentDisplay.textContent = "✨ 這裡珍藏了一張月光卡片！";
         };
       }
 
@@ -2340,8 +2379,8 @@
     }
   }
 
-  // 4. 初始執行
-  setTimeout(renderBagCalendar, 100); // 稍微延遲確保 HTML 載入
+  // 初始執行
+  setTimeout(renderBagCalendar, 100);
 })();
 </script>
 
