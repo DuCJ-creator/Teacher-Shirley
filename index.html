@@ -2098,204 +2098,155 @@
         Welcome to Shirley's Moon Base
       </h3>
 
-      <div class="member-dashboard">
-        <div class="profile-panel">
-          <div class="streak-ring">
-            <div class="streak-num" id="streak-days">0</div>
-            <div style="font-size: 0.7rem">Days Streak</div>
-          </div>
-
-          <div style="margin-bottom: 1rem; font-size: 0.9rem">
-            Total Check-ins: <strong id="total-days">0</strong>
-          </div>
-
-          <div
-            id="calendar-grid"
-            style="
-              display: grid;
-              grid-template-columns: repeat(7, 1fr);
-              gap: 3px;
-              font-size: 0.7rem;
-              margin-bottom: 10px;
-            "
-          ></div>
-
-          <!-- card bag -->
-          <div style="margin-top: 12px; text-align: left">
-            <div
-              style="
-                font-size: 0.8rem;
-                font-weight: bold;
-                margin-bottom: 6px;
-                color: var(--text-light);
-              "
-            >
-              🃏 Card Bag / 卡袋收藏
-            </div>
-            <div id="card-bag-list"></div>
-          </div>
-
-          <button
-            id="checkin-btn"
-            class="checkin-btn"
-            onclick="handleCheckIn()"
-          >
-            Daily Check-in
-          </button>
-
-          <div
-            style="
-              margin-top: 1rem;
-              cursor: pointer;
-              text-decoration: underline;
-              font-size: 0.8rem;
-              color: var(--text-light);
-            "
-           <div style="width: 100%; display: flex; justify-content: center; margin-top: 15px; margin-bottom: 5px;">
-    <div onclick="window.open('https://ducj-creator.github.io/bestlot.html', '_blank');"
-         role="button"
-         style="
-            background: linear-gradient(135deg, #d4af37 0%, #f7e98e 45%, #c5a028 60%, #e6c152 100%);
-            color: #4a3b15;
-            border: 1px solid #b8860b;
-            box-shadow: 0 4px 10px rgba(218, 165, 32, 0.4);
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 15px;
-            width: 100%;
-            font-weight: 800;
-            font-size: 0.95rem;
-            cursor: pointer !important;
-            user-select: none;
-            transition: all 0.3s ease;">
-         <span style="font-size: 1.3em; margin-right: 6px;">🥠</span> 
-         今日上上籤
+<div class="member-dashboard" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+  
+  <div class="profile-panel">
+    <div class="streak-ring">
+      <div class="streak-num" id="streak-days">0</div>
+      <div style="font-size: 0.7rem">Days Streak</div>
     </div>
-</div>
 
-        <div class="content-panel">
-          <div class="data-card word-card">
-            <span
-              style="
-                font-size: 0.7rem;
-                text-transform: uppercase;
-                color: var(--text-light);
-                letter-spacing: 1px;
-              "
-            >
-              Word of the Day <span id="word-date"></span>
-            </span>
+    <div style="margin-bottom: 1rem; font-size: 0.9rem">
+      Total Check-ins: <strong id="total-days">0</strong>
+    </div>
 
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                align-items: baseline;
-                margin-top: 5px;
-              "
-            >
-              <span class="the-word" id="wotd-word">Wait...</span>
-              <span
-                id="wotd-pos"
-                style="
-                  background: var(--accent);
-                  color: white;
-                  padding: 1px 6px;
-                  border-radius: 4px;
-                  font-size: 0.75rem;
-                "
-              ></span>
-            </div>
+    <div id="calendar-grid" style="
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          gap: 3px;
+          font-size: 0.7rem;
+          margin-bottom: 10px;
+        "></div>
 
-            <div
-              id="wotd-meaning"
-              style="
-                font-family: 'Noto Sans TC';
-                font-weight: bold;
-                color: var(--accent);
-                margin: 5px 0;
-                font-size: 1.1rem;
-              "
-            ></div>
+    <div style="margin-top: 12px; text-align: left">
+      <div style="
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: var(--text-light);
+          ">
+        🃏 Card Bag / 卡袋收藏
+      </div>
+      <div id="card-bag-list"></div>
+    </div>
 
-            <div
-              id="wotd-ipa"
-              style="
-                font-style: italic;
-                color: var(--text-light);
-                font-size: 0.9rem;
-                margin-bottom: 10px;
-              "
-            ></div>
+    <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">
+      Daily Check-in
+    </button>
 
-            <div
-              style="
-                background: rgba(0, 0, 0, 0.03);
-                padding: 10px;
-                border-radius: 8px;
-              "
-            >
-              <div id="wotd-sentence-e" style="font-style: italic; margin-bottom: 4px"></div>
-              <div
-                id="wotd-sentence-c"
-                style="font-size: 0.9rem; color: var(--text-light)"
-              ></div>
-            </div>
-          </div>
-
-          <div class="data-card quote-card">
-            <span
-              style="
-                font-size: 0.7rem;
-                text-transform: uppercase;
-                color: var(--text-light);
-                letter-spacing: 1px;
-              "
-              >Daily Quote</span
-            >
-
-            <div
-              id="qotd-text"
-              style="
-                font-family: 'Playfair Display';
-                font-size: 1.3rem;
-                margin: 15px 0;
-                line-height: 1.4;
-              "
-            ></div>
-
-            <div
-              id="qotd-trans"
-              style="font-size: 0.95rem; color: var(--text-light)"
-            ></div>
-
-            <div
-              id="qotd-author"
-              style="
-                text-align: right;
-                font-weight: bold;
-                color: var(--accent);
-                margin-top: 10px;
-              "
-            ></div>
-          </div>
-
-          <!-- ✅ Moonlight Box Embed 移到 member-terminal 內 -->
-          <section id="moonlight-embed" class="moonlight-embed">
-            <iframe
-              id="moonlightFrame"
-              src="https://ducj-creator.github.io/Teacher-Shirley/moonlight.html"
-              title="Moonlight Box"
-              loading="lazy"
-              frameborder="0"
-              allow="clipboard-read; clipboard-write"
-            ></iframe>
-          </section>
+    <div style="
+          margin-top: 1rem;
+          cursor: pointer;
+          text-decoration: underline;
+          font-size: 0.8rem;
+          color: var(--text-light);
+        ">
+      <div style="width: 100%; display: flex; justify-content: center; margin-top: 15px; margin-bottom: 5px;">
+        <div onclick="window.open('https://ducj-creator.github.io/bestlot.html', '_blank');" role="button" style="
+              background: linear-gradient(135deg, #d4af37 0%, #f7e98e 45%, #c5a028 60%, #e6c152 100%);
+              color: #4a3b15;
+              border: 1px solid #b8860b;
+              box-shadow: 0 4px 10px rgba(218, 165, 32, 0.4);
+              border-radius: 50px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              padding: 10px 15px;
+              width: 100%;
+              font-weight: 800;
+              font-size: 0.95rem;
+              cursor: pointer !important;
+              user-select: none;
+              transition: all 0.3s ease;">
+          <span style="font-size: 1.3em; margin-right: 6px;">🥠</span>
+          今日上上籤
         </div>
       </div>
     </div>
+  </div> <div class="content-panel">
+    
+    <div class="data-card word-card">
+      <span style="
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 1px;
+          ">
+        Word of the Day <span id="word-date"></span>
+      </span>
+
+      <div style="
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            margin-top: 5px;
+          ">
+        <span class="the-word" id="wotd-word">Wait...</span>
+        <span id="wotd-pos" style="
+              background: var(--accent);
+              color: white;
+              padding: 1px 6px;
+              border-radius: 4px;
+              font-size: 0.75rem;
+            "></span>
+      </div>
+
+      <div id="wotd-meaning" style="
+            font-family: 'Noto Sans TC';
+            font-weight: bold;
+            color: var(--accent);
+            margin: 5px 0;
+            font-size: 1.1rem;
+          "></div>
+
+      <div id="wotd-ipa" style="
+            font-style: italic;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+          "></div>
+
+      <div style="
+            background: rgba(0, 0, 0, 0.03);
+            padding: 10px;
+            border-radius: 8px;
+          ">
+        <div id="wotd-sentence-e" style="font-style: italic; margin-bottom: 4px"></div>
+        <div id="wotd-sentence-c" style="font-size: 0.9rem; color: var(--text-light)"></div>
+      </div>
+    </div>
+
+    <div class="data-card quote-card">
+      <span style="
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 1px;
+          ">Daily Quote</span>
+
+      <div id="qotd-text" style="
+            font-family: 'Playfair Display';
+            font-size: 1.3rem;
+            margin: 15px 0;
+            line-height: 1.4;
+          "></div>
+
+      <div id="qotd-trans" style="font-size: 0.95rem; color: var(--text-light)"></div>
+
+      <div id="qotd-author" style="
+            text-align: right;
+            font-weight: bold;
+            color: var(--accent);
+            margin-top: 10px;
+          "></div>
+    </div>
+
+    <section id="moonlight-embed" class="moonlight-embed">
+      <iframe id="moonlightFrame" src="https://ducj-creator.github.io/Teacher-Shirley/moonlight.html"
+        title="Moonlight Box" loading="lazy" frameborder="0" allow="clipboard-read; clipboard-write"></iframe>
+    </section>
+  
+  </div> </div> ```
 
     <!-- card modal -->
     <div id="card-modal">
