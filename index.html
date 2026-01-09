@@ -2126,9 +2126,126 @@
             color: var(--text-light);
           ">
         🃏 Card Bag / 卡袋收藏
-      </div>
-      <div id="card-bag-list"></div>
+<div class="calendar-panel" style="margin-top: 12px; text-align: left; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+    <div style="font-size: 0.8rem; font-weight: bold; color: var(--text-light);">
+      🃏 Card Bag
     </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem;">
+      <button onclick="changeMonth(-1)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold; padding:0;">&#10094;</button>
+      <span id="cal-month-title" style="font-weight: 600; min-width: 70px; text-align: center;">Loading</span>
+      <button onclick="changeMonth(1)" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:bold; padding:0;">&#10095;</button>
+    </div>
+  </div>
+
+  <div id="calendar-grid-view" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-size: 0.7rem;">
+    <div style="color:#aaa;">Su</div><div style="color:#aaa;">Mo</div><div style="color:#aaa;">Tu</div>
+    <div style="color:#aaa;">We</div><div style="color:#aaa;">Th</div><div style="color:#aaa;">Fr</div><div style="color:#aaa;">Sa</div>
+    </div>
+
+  <div id="card-detail-popup" style="display:none; margin-top:8px; padding:8px; background:#fff; border-left:3px solid #d4af37; font-size:0.8rem;">
+    <div id="detail-date" style="font-weight:bold; color:#d4af37;"></div>
+    <div id="detail-text" style="color:#555;"></div>
+  </div>
+
+  <style>
+    .cal-cell {
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+    .cal-cell:hover { background-color: rgba(0,0,0,0.05); }
+    .cal-cell.today { border: 1px solid var(--accent); font-weight: bold; }
+    .cal-cell.has-card { 
+      background-color: #fcefd0; 
+      color: #8a6d3b; 
+      font-weight: bold;
+    }
+    .cal-cell.has-card::after {
+      content: '•';
+      position: absolute;
+      bottom: -2px;
+      color: #d4af37;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <script>
+    let currentCalDate = new Date();
+
+    function initCalendar() {
+      renderCalendar();
+    }
+
+    function changeMonth(step) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + step);
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid-view');
+      const title = document.getElementById('cal-month-title');
+      const history = JSON.parse(localStorage.getItem('checkInHistory') || '[]'); // 讀取打卡紀錄
+      
+      // 清空舊格子（保留前7個星期標頭）
+      while(grid.children.length > 7) { grid.removeChild(grid.lastChild); }
+
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const today = new Date();
+
+      // 更新標題
+      title.innerText = new Date(year, month).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+      // 計算空白與天數
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // 填補前面的空白
+      for(let i=0; i<firstDay; i++) {
+        grid.appendChild(document.createElement('div'));
+      }
+
+      // 填補日期
+      for(let d=1; d<=daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-cell';
+        cell.innerText = d;
+        
+        // 格式化日期字串 YYYY-MM-DD
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+
+        // 標記今天
+        if(year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
+          cell.classList.add('today');
+        }
+
+        // 標記有卡片的日子
+        if(history.includes(dateStr)) {
+          cell.classList.add('has-card');
+          cell.onclick = () => showCardDetail(dateStr);
+        }
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function showCardDetail(date) {
+      const popup = document.getElementById('card-detail-popup');
+      popup.style.display = 'block';
+      document.getElementById('detail-date').innerText = `📅 ${date}`;
+      document.getElementById('detail-text').innerText = "✨ You collected a memory card!";
+    }
+
+    // 啟動日曆
+    initCalendar();
+  </script>
+</div>
 
     <button id="checkin-btn" class="checkin-btn" onclick="handleCheckIn()">
       Daily Check-in
