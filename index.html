@@ -83,9 +83,11 @@
         font-family: "Exo 2", "Noto Serif TC", serif;
         line-height: 1.6;
         transition: color 0.5s, background 0.5s;
-        min-height: 100vh;
-        overflow-x: hidden;
-      }
+        display: flex;        /* 啟用彈性佈局 */
+  flex-direction: column; /* 垂直排列：上標題、下星球 */
+  height: 100vh;        /* 強制高度為螢幕高度，不多也不少 */
+  overflow: hidden;     /* 隱藏捲軸 */
+}
 
       #particle-canvas {
         position: fixed;
@@ -139,7 +141,8 @@
         position: relative;
         z-index: 10;
         text-align: center;
-      }
+        flex-shrink: 0; /* 防止標題被壓縮 */
+}
 
       .main-title {
         font-family: "Cinzel Decorative", cursive;
@@ -164,15 +167,34 @@
       }
 
       /* ==================== UNIVERSE VIEW ==================== */
-      #universe-view {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.8s ease;
-        min-height: 85vh;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-      }
+    /* 修改 #universe-view */
+#universe-view {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  position: relative;
+  overflow: hidden;
+
+  /* === 修改高度設定 === */
+  flex-grow: 1;  /* 關鍵：自動佔據剩下的所有空間 */
+  height: auto;  /* 移除原本的 min-height，改為自動 */
+  min-height: 0; /* 防止內容撐開導致溢出 */
+  width: 100%;
+}
+
+/* 修改 .solar-system */
+.solar-system {
+  position: relative;
+  width: 100%;
+  
+  /* === 修改高度設定 === */
+  height: 100%; /* 關鍵：只要填滿父容器(#universe-view)即可，不要設 100vh */
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
       #universe-view.active {
         display: block;
