@@ -692,44 +692,33 @@ function getPhaseByValue(val){
 
 async function loadMoonData(uid){
   const userRef = doc(db, "users", uid);
+  const snap = await getDoc(userRef);
 
-  // 使用監聽模式
-  onSnapshot(userRef, (snap) => {
-    if (!snap.exists()){
-      // 資料不存在時才初始化
-      setDoc(userRef, {
-        moonGlowTotal: 0,
-        moonGlowCycle: 0,
-        moonGlowLogs: []
-      }, {merge:true});
-      moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-    } else {
-      const d = snap.data();
-      // 指向原始欄位 moonGlowTotal
-      const total = d.moonGlowTotal || 0;
-      moonData.totalGlow = total;
-      moonData.cycleGlow = recomputeCycleFromTotal(total);
-      moonGlowLogs = d.moonGlowLogs || []; // 確保同步到全域變數
-      moonData.logs = moonGlowLogs;
-    }
-    
-    // 關鍵：在資料更新後，必須手動觸發一次 UI 渲染與 Mission 狀態設定
+  if (!snap.exists()){
+    // 如果沒資料，初始化原始欄位
+    await setDoc(userRef, {
+      moonGlowTotal: 0,
+      moonGlowCycle: 0,
+      moonGlowLogs: []
+    }, {merge:true});
+    moonData = {totalGlow:0, cycleGlow:0, logs:[]};
     renderMoonUI();
-    renderMissions(); // 確保 Mission 清單重新產生
-    setMissionStarted(missionStarted); 
-  });
-}
+    renderMissions(); // 確保渲染
+    return;
+  }
 
-    const d = snap.data();
-    const total = d.moonGlowTotal || 0;
-    
-    // 完全保留您原本的賦值與計算邏輯
-    moonData.totalGlow = total;
-    moonData.cycleGlow = recomputeCycleFromTotal(total); 
-    moonData.logs = d.moonGlowLogs || [];
-    
-    renderMoonUI();
-  });
+  const d = snap.data();
+  // 核心修正：讀取您最原始的欄位 moonGlowTotal
+  const total = d.moonGlowTotal || 0;
+  
+  moonData.totalGlow = total;
+  // 使用您原本的計算邏輯
+  moonData.cycleGlow = recomputeCycleFromTotal(total);
+  moonData.logs = d.moonGlowLogs || [];
+  
+  // 渲染 UI
+  renderMoonUI();
+  renderMissions(); // 確保 Mission 清單出現
 }
 
     window.startLunarMission = function(event){
