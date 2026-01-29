@@ -515,13 +515,13 @@
 
     const MOON_CYCLE = 300;
 
-const MISSIONS = [
-  { title: "Mission 1: GSAT學測字彙考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
-  { title: "Mission 2: iVocab 字彙選擇題", url: "https://ivocab-quiz.vercel.app/" },
-  { title: "Mission 3: iVocab Reader 閱讀理解", url: "https://ducj-creator.github.io/iVocab-Readers/" },
-  { title: "Mission 4: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
-  { title: "Mission 5: CAP會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" }
-];
+    const MISSIONS = [
+      { title: "Mission 1: GSAT學測字彙考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
+      { title: "Mission 2: iVocab 字彙選擇題", url: "https://ivocab-quiz.vercel.app/" },
+      { title: "Mission 3: iVocab Reader 閱讀理解", url: "https://ducj-creator.github.io/iVocab-Readers/" }
+      { title: "Mission 4: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
+      { title: "Mission 5: CAP會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" }
+    ];
 
     let currentUser = null;
     let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
@@ -690,36 +690,28 @@ function getPhaseByValue(val){
       return t % MOON_CYCLE;
     }
 
-async function loadMoonData(uid){
-  const userRef = doc(db, "users", uid);
-  const snap = await getDoc(userRef);
+    async function loadMoonData(uid){
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
 
-  if (!snap.exists()){
-    // 如果沒資料，初始化原始欄位
-    await setDoc(userRef, {
-      moonGlowTotal: 0,
-      moonGlowCycle: 0,
-      moonGlowLogs: []
-    }, {merge:true});
-    moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-    renderMoonUI();
-    renderMissions(); // 確保渲染
-    return;
-  }
+      if (!snap.exists()){
+        await setDoc(userRef, {
+          moonGlowTotal: 0,
+          moonGlowCycle: 0,
+          moonGlowLogs: []
+        }, {merge:true});
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        renderMoonUI();
+        return;
+      }
 
-  const d = snap.data();
-  // 核心修正：讀取您最原始的欄位 moonGlowTotal
-  const total = d.moonGlowTotal || 0;
-  
-  moonData.totalGlow = total;
-  // 使用您原本的計算邏輯
-  moonData.cycleGlow = recomputeCycleFromTotal(total);
-  moonData.logs = d.moonGlowLogs || [];
-  
-  // 渲染 UI
-  renderMoonUI();
-  renderMissions(); // 確保 Mission 清單出現
-}
+      const d = snap.data();
+      const total = d.moonGlowTotal || 0;
+      moonData.totalGlow = total;
+      moonData.cycleGlow = recomputeCycleFromTotal(total);
+      moonData.logs = d.moonGlowLogs || [];
+      renderMoonUI();
+    }
 
     window.startLunarMission = function(event){
       event.preventDefault();
