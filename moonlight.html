@@ -506,7 +506,7 @@
       setPersistence, browserLocalPersistence
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import {
-      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -526,11 +526,13 @@
 
     const MOON_CYCLE = 300;
 
+    // 更新 MISSIONS 陣列，添加 Mission 5
     const MISSIONS = [
       { title: "Mission 1: GSAT 真題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
       { title: "Mission 2: iVocab 考題", url: "https://ivocab-quiz.vercel.app/" },
       { title: "Mission 3: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
-      { title: "Mission 4: CAP 會考", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" }
+      { title: "Mission 4: CAP 會考", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" },
+      { title: "Mission 5: iVocab Reader 閱讀理解", url: "https://ducj-creator.github.io/iVocab-Readers/" }
     ];
 
     let currentUser = null;
@@ -728,7 +730,7 @@
       return false;
     }
 
-    // 接收 mission 參數並存入 source
+    // [修改] 接收 mission 參數並存入 source
     window.addEventListener("message", async (event) => {
       if (!isAllowedOrigin(event.origin)) return;
       const data = event.data || {};
@@ -785,7 +787,7 @@
       alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
     });
 
-    // 兌換時加入 source 標記
+    // [修改] 兌換時加入 source 標記
     async function redeemGlow(){
       const sel = document.getElementById("redeemAmount");
       const amt = parseInt(sel?.value || "", 10);
