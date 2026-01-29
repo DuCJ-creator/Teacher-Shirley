@@ -4,38 +4,422 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>🌙 月光寶盒 | Teacher Shirley</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Exo+2:wght@300;400;500;700&family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root { --bg: radial-gradient(circle at 50% 15%, #0b1333, #05060d); --surface: rgba(255,255,255,0.06); --surface-2: rgba(255,255,255,0.10); --border: rgba(255,255,255,0.15); --text: #ecf0f1; --text-dim: #b2bec3; --accent: #f1c40f; --accent-2: #7ed6ff; --danger: #ff7675; --good: #55efc4; --glow-soft: 0 0 18px rgba(126,214,255,0.25); --glow-strong: 0 0 28px rgba(241,196,15,0.35); }
+    :root {
+      --bg: radial-gradient(circle at 50% 15%, #0b1333, #05060d);
+      --surface: rgba(255,255,255,0.06);
+      --surface-2: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.15);
+      --text: #ecf0f1;
+      --text-dim: #b2bec3;
+      --accent: #f1c40f;
+      --accent-2: #7ed6ff;
+      --danger: #ff7675;
+      --good: #55efc4;
+      --glow-soft: 0 0 18px rgba(126,214,255,0.25);
+      --glow-strong: 0 0 28px rgba(241,196,15,0.35);
+    }
     *{box-sizing:border-box;}
-    body{ margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:'Exo 2','Noto Sans TC',sans-serif; display:flex; flex-direction:column; align-items:center; padding:24px 14px; position:relative; overflow-x:hidden; }
-    header{ text-align:center; margin-top:10px; margin-bottom:16px; position:relative; }
-    h1{ font-family:'Cinzel Decorative',cursive; font-weight:900; letter-spacing:1px; margin:0 0 6px 0; font-size:clamp(1.6rem,4vw,2.4rem); text-shadow: 0 0 18px rgba(241,196,15,0.45), 0 0 40px rgba(126,214,255,0.25); animation: titleGlow 3.8s ease-in-out infinite alternate; }
-    .subtitle{ color:var(--text-dim); font-size:0.95rem; }
-    .panel{ width:100%; max-width:860px; background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow: 0 15px 40px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.03); backdrop-filter: blur(10px) saturate(120%); margin-bottom:14px; position:relative; overflow:hidden; }
-    .card{ background:rgba(255,255,255,0.07); border:1px dashed rgba(255,255,255,0.22); border-radius:14px; padding:14px; box-shadow: var(--glow-soft); position:relative; overflow:hidden; }
-    .glass-box{ position: relative; border-radius: 20px; padding: 16px; background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 12px 38px rgba(0,0,0,0.62), inset 0 0 0 1px rgba(255,255,255,0.10), inset 0 0 0 8px rgba(255,255,255,0.02), inset 0 0 22px rgba(126,214,255,0.12); backdrop-filter: blur(12px) saturate(155%); overflow: hidden; transition: 0.6s ease; }
-    .moon-ui-wrap{ display:flex; justify-content:flex-end; width:100%; position:relative; z-index:1; }
-    .moon-ui{ max-width: clamp(280px, 80%, 400px); display:flex; align-items:center; gap:14px; }
-    .moon-phase{ font-size:2.9rem; width:52px; text-align:center; filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)) drop-shadow(0 0 18px rgba(126,214,255,0.35)); }
-    .progress-wrap{ background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; height:12px; border:1px solid var(--border); }
-    .progress-bar{ height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-2)); transition:width 0.6s ease; }
-    .task-list a{ display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(0,0,0,0.25); border:1px solid var(--border); text-decoration:none; color:var(--text); margin-bottom:8px; cursor:pointer; }
-    .task-list a.locked{ opacity: .45; filter: grayscale(0.4); pointer-events: none; }
-    .start-mission-panel{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin:6px auto 14px; position:relative; z-index:2; }
-    .start-mission-btn{ padding:10px 18px; font-size:18px; border-radius:999px; border:none; cursor:pointer; background: linear-gradient(135deg,#ffe08a,#ffd36a); box-shadow:0 6px 14px rgba(0,0,0,.18); }
-    .redeem-btn{ padding:10px 16px; border-radius:10px; border:none; cursor:pointer; font-weight:800; background:linear-gradient(135deg,#7ed6ff,#ffe08a); color:#071021; }
+    body{
+      margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+      font-family:'Exo 2','Noto Sans TC',sans-serif;
+      display:flex; flex-direction:column; align-items:center;
+      padding:24px 14px;
+      position:relative;
+      overflow-x:hidden;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed; inset:-10%;
+      background-repeat:repeat;
+      pointer-events:none;
+      z-index:-2;
+      opacity:0.9;
+      animation: starDrift 120s linear infinite;
+      transform: translateZ(0);
+    }
+    body::before{
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.9), transparent 60%),
+        radial-gradient(1px 1px at 35% 62%, rgba(180,220,255,0.8), transparent 60%),
+        radial-gradient(1px 1px at 78% 24%, rgba(255,255,255,0.85), transparent 60%),
+        radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.7), transparent 60%),
+        radial-gradient(1px 1px at 55% 40%, rgba(220,240,255,0.8), transparent 60%);
+      background-size: 220px 220px;
+      animation: starTwinkle 5.5s ease-in-out infinite alternate, starDrift 160s linear infinite;
+      z-index:-2;
+    }
+    body::after{
+      background-image:
+        radial-gradient(2px 2px at 15% 70%, rgba(255,255,255,0.85), transparent 70%),
+        radial-gradient(2px 2px at 68% 18%, rgba(126,214,255,0.9), transparent 70%),
+        radial-gradient(2px 2px at 82% 55%, rgba(241,196,15,0.9), transparent 75%);
+      background-size: 420px 420px;
+      filter: blur(0.2px);
+      opacity:0.6;
+      animation: starTwinkle 7.5s ease-in-out infinite alternate, starDrift 240s linear infinite reverse;
+      z-index:-1;
+    }
+
+    @keyframes starTwinkle{
+      0%{opacity:0.45; filter:drop-shadow(0 0 0 rgba(255,255,255,0));}
+      100%{opacity:1; filter:drop-shadow(0 0 6px rgba(255,255,255,0.35));}
+    }
+    @keyframes starDrift{
+      0%{transform:translateY(0px);}
+      100%{transform:translateY(120px);}
+    }
+
+    header{
+      text-align:center;
+      margin-top:10px; margin-bottom:16px;
+      position:relative;
+    }
+    h1{
+      font-family:'Cinzel Decorative',cursive;
+      font-weight:900; letter-spacing:1px;
+      margin:0 0 6px 0;
+      font-size:clamp(1.6rem,4vw,2.4rem);
+      text-shadow:
+        0 0 18px rgba(241,196,15,0.45),
+        0 0 40px rgba(126,214,255,0.25);
+      animation: titleGlow 3.8s ease-in-out infinite alternate;
+    }
+    @keyframes titleGlow{
+      from{filter:drop-shadow(0 0 0px rgba(241,196,15,0));}
+      to{filter:drop-shadow(0 0 14px rgba(241,196,15,0.6));}
+    }
+
+    .subtitle{
+      color:var(--text-dim);
+      font-size:0.95rem;
+    }
+
+    .panel{
+      width:100%; max-width:860px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:
+        0 15px 40px rgba(0,0,0,0.55),
+        inset 0 0 0 1px rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px) saturate(120%);
+      margin-bottom:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(120px 80px at 20% 10%, rgba(126,214,255,0.10), transparent 60%),
+        radial-gradient(140px 90px at 85% 30%, rgba(241,196,15,0.10), transparent 65%),
+        radial-gradient(180px 120px at 50% 90%, rgba(255,255,255,0.06), transparent 70%);
+      animation: nebulaMove 14s ease-in-out infinite alternate;
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+    @keyframes nebulaMove{
+      0%{transform:translateY(0) rotate(0deg);}
+      100%{transform:translateY(6%) rotate(2deg);}
+    }
+
+    .row{display:flex; gap:12px; flex-wrap:wrap;}
+    .col{flex:1; min-width:260px;}
+
+    .card{
+      background:rgba(255,255,255,0.07);
+      border:1px dashed rgba(255,255,255,0.22);
+      border-radius:14px; padding:14px;
+      box-shadow: var(--glow-soft);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: conic-gradient(
+        from 150deg,
+        transparent 0%,
+        rgba(126,214,255,0.35) 18%,
+        rgba(241,196,15,0.35) 30%,
+        transparent 55%
+      );
+      filter: blur(10px);
+      opacity:0.45;
+      animation: rimSpin 8s linear infinite;
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+    @keyframes rimSpin{to{transform:rotate(360deg);} }
+
+    .card h3{
+      margin:0 0 8px 0;
+      font-size:1.05rem; letter-spacing:0.5px;
+      color:var(--accent);
+      text-shadow: 0 0 10px rgba(241,196,15,0.55);
+      position:relative;
+      z-index:1;
+    }
+
+    .glass-box{
+      position: relative;
+      border-radius: 20px;
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow:
+        0 12px 38px rgba(0,0,0,0.62),
+        inset 0 0 0 1px rgba(255,255,255,0.10),
+        inset 0 0 0 8px rgba(255,255,255,0.02),
+        inset 0 0 22px rgba(126,214,255,0.12);
+      backdrop-filter: blur(12px) saturate(155%);
+      overflow: hidden;
+      transition: 0.6s ease;
+    }
+
+    .glass-box .corner{
+      position:absolute;
+      width:72px; height:72px; pointer-events:none;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.9), transparent 70%);
+      opacity:0.18;
+      filter: blur(6px);
+      mix-blend-mode:screen;
+    }
+    .glass-box .c-tl{top:-22px; left:-22px;}
+    .glass-box .c-tr{top:-22px; right:-22px;}
+    .glass-box .c-bl{bottom:-22px; left:-22px;}
+    .glass-box .c-br{bottom:-22px; right:-22px;}
+
+    .glass-box::before{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        linear-gradient(120deg,
+          transparent 25%,
+          rgba(255,255,255,0.20) 35%,
+          transparent 55%);
+      transform: translateX(-35%) rotate(8deg);
+      animation: glassSweep 6.5s ease-in-out infinite;
+      pointer-events:none;
+      mix-blend-mode: screen;
+      opacity:0.75;
+    }
+    @keyframes glassSweep{
+      0%   {transform: translateX(-45%) rotate(8deg);}
+      50%  {transform: translateX(10%) rotate(8deg);}
+      100% {transform: translateX(45%) rotate(8deg);}
+    }
+
+    .glass-box::after{
+      content:"";
+      position:absolute; inset:-20%;
+      background:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.9), transparent 60%),
+        radial-gradient(1px 1px at 30% 80%, rgba(126,214,255,0.9), transparent 60%),
+        radial-gradient(1px 1px at 70% 30%, rgba(241,196,15,0.9), transparent 60%),
+        radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.8), transparent 60%);
+      background-size: 180px 180px;
+      animation: dustFloat 9s ease-in-out infinite alternate;
+      pointer-events:none;
+      opacity:0.5;
+      mix-blend-mode: screen;
+    }
+    @keyframes dustFloat{
+      from{transform:translateY(0);}
+      to{transform:translateY(6%);}
+    }
+
+    .glass-box.full-moon{
+      box-shadow:
+        0 14px 60px rgba(0,0,0,0.65),
+        0 0 40px rgba(241,196,15,0.55),
+        0 0 70px rgba(126,214,255,0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.16),
+        inset 0 0 0 8px rgba(255,255,255,0.04),
+        inset 0 0 26px rgba(241,196,15,0.25);
+      border-color: rgba(241,196,15,0.65);
+      animation: fullGlowPulse 2.2s ease-in-out infinite alternate;
+    }
+    @keyframes fullGlowPulse{
+      from{filter:brightness(1);}
+      to{filter:brightness(1.12);}
+    }
+
+    .burst-layer{ position:absolute; inset:0; pointer-events:none; z-index:3; }
+    .burst-star{
+      position:absolute; font-size:14px; opacity:0;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.65));
+      animation: starBurst 1.8s ease-out forwards;
+    }
+    @keyframes starBurst{
+      0%{transform:translate(0,0) scale(0.4) rotate(0deg); opacity:0;}
+      15%{opacity:1;}
+      100%{transform:translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg); opacity:0;}
+    }
+
+    .moon-ui-wrap{
+      display:flex; justify-content:flex-end;
+      width:100%;
+      position:relative; z-index:1;
+    }
+    .moon-ui{
+      max-width: clamp(280px, 80%, 400px);
+      display:flex; align-items:center; gap:14px;
+    }
+    .moon-phase{
+      font-size:2.9rem; width:52px; text-align:center;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)) drop-shadow(0 0 18px rgba(126,214,255,0.35));
+      animation: moonFloat 3.4s ease-in-out infinite alternate;
+    }
+    @keyframes moonFloat{ from{transform:translateY(0);} to{transform:translateY(-4px);} }
+
+    .moon-stats{ 
+        display:flex; flex-direction:column; 
+        gap:6px; width:100%; position:relative; 
+        z-index:1; padding-right: 60px;
+    }
+    .progress-wrap{
+      background:rgba(255,255,255,0.08);
+      border-radius:999px; overflow:hidden; height:12px;
+      border:1px solid var(--border);
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+    }
+    .progress-bar{
+      height:100%; width:0%;
+      background:linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition:width 0.6s ease;
+      box-shadow: 0 0 10px rgba(241,196,15,0.85), 0 0 20px rgba(126,214,255,0.6);
+      position:relative;
+    }
+    .progress-bar::after{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(12px 8px at 20% 50%, rgba(255,255,255,0.8), transparent 60%),
+        radial-gradient(14px 10px at 60% 50%, rgba(255,255,255,0.7), transparent 60%),
+        radial-gradient(10px 7px at 85% 50%, rgba(255,255,255,0.6), transparent 60%);
+      mix-blend-mode:screen;
+      animation: barSparkle 1.8s ease-in-out infinite alternate;
+      opacity:0.7;
+    }
+    @keyframes barSparkle{ from{transform:translateX(-8%); opacity:0.35;} to{transform:translateX(8%); opacity:0.9;} }
+
+    .stat{ font-size:0.9rem; color:var(--text-dim); position:relative; z-index:1; }
+    .stat b{ color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25); }
+
+    .lunar-crystal{
+      position:absolute; right: 15px; top: 50%; transform: translateY(-50%);
+      width:54px; height:54px; border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(126,214,255,0.85), transparent 55%),
+        linear-gradient(145deg, rgba(241,196,15,0.25), rgba(126,214,255,0.15));
+      border:1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 0 14px rgba(126,214,255,0.55), inset 0 0 10px rgba(255,255,255,0.25);
+      backdrop-filter: blur(4px);
+      display:flex; align-items:center; justify-content:center;
+      z-index:2;
+      animation: crystalFloat 3.2s ease-in-out infinite alternate;
+    }
+    .lunar-crystal::before{ content:"💎"; font-size:20px; filter: drop-shadow(0 0 6px rgba(255,255,255,0.9)); }
+    .lunar-crystal::after{
+      content:"🎁"; position:absolute; bottom:-8px; right:-8px;
+      font-size:14px; opacity:0.9;
+      filter: drop-shadow(0 0 6px rgba(241,196,15,0.7));
+    }
+    @keyframes crystalFloat{
+      from{transform:translate(0,-50%) translateY(0);}
+      to{transform:translate(0,-50%) translateY(-4px);}
+    }
+
+    .task-list a{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px; border-radius:10px;
+      background:rgba(0,0,0,0.25);
+      border:1px solid var(--border);
+      text-decoration:none; color:var(--text);
+      margin-bottom:8px; transition:0.2s;
+      cursor:pointer; position:relative; z-index:1;
+    }
+    .task-list a:hover{
+      transform:translateY(-2px);
+      border-color:var(--accent);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55), 0 0 18px rgba(241,196,15,0.25);
+    }
+    .task-list a.locked {
+      opacity: 0.45;
+      filter: grayscale(0.4);
+      pointer-events: none; /* 關鍵：鎖定時不可點擊 */
+    }
+    .task-tag{ font-size:0.8rem; color:var(--text-dim); }
+
+    .hint{ font-size:0.85rem; color:var(--text-dim); line-height:1.6; margin-top:6px; position:relative; z-index:1; }
+
+    .log-box{ max-height:260px; overflow:auto; padding-right:6px; position:relative; z-index:1; }
+    .log-item{
+      padding:8px 10px; border-radius:8px;
+      background:rgba(0,0,0,0.25); border:1px solid var(--border);
+      margin-bottom:6px; font-size:0.9rem;
+      display:flex; justify-content:space-between; gap:8px;
+      box-shadow: 0 0 8px rgba(126,214,255,0.12);
+    }
+    .log-time{color:var(--text-dim); font-size:0.8rem;}
+
+    footer{ margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8; position:relative; z-index:1; }
+
+    .start-mission-panel{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:8px; margin:6px auto 14px; position:relative; z-index:2;
+    }
+    .start-mission-btn{
+      padding:10px 18px; font-size:18px; border-radius:999px; border:none; cursor:pointer;
+      background: linear-gradient(135deg,#ffe08a,#ffd36a);
+      box-shadow:0 6px 14px rgba(0,0,0,.18);
+    }
+    .start-mission-btn:active{ transform: translateY(1px); }
+    .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
+
+    .redeem-wrap{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1; }
+    .redeem-select{
+      flex:1; min-width:170px;
+      background:rgba(0,0,0,0.35); border:1px solid var(--border);
+      color:var(--text); padding:10px 12px; border-radius:10px;
+      font-size:16px; outline:none; appearance:none;
+    }
+    .redeem-btn{
+      padding:10px 16px; border-radius:10px; border:none; cursor:pointer;
+      font-weight:800; letter-spacing:1px;
+      background:linear-gradient(135deg,#7ed6ff,#ffe08a);
+      color:#071021;
+      box-shadow:0 6px 14px rgba(0,0,0,.25), 0 0 18px rgba(126,214,255,0.35);
+    }
+    .redeem-btn:active{transform:translateY(1px);}
+    .redeem-note{ font-size:12px; color:var(--text-dim); margin-top:6px; position:relative; z-index:1; }
   </style>
 </head>
+
 <body>
   <header>
     <h1>🌙 月光寶盒</h1>
     <div class="subtitle">Lunar Glow Cache — 專注練習 → 收集月光 → 點亮滿月循環</div>
   </header>
+
   <section class="panel">
     <div class="glass-box" id="glass-box">
+      <i class="corner c-tl"></i><i class="corner c-tr"></i>
+      <i class="corner c-bl"></i><i class="corner c-br"></i>
+      <div class="burst-layer" id="burst-layer"></div>
+      <div class="lunar-crystal" aria-hidden="true"></div>
+
       <div class="moon-ui-wrap">
         <div class="card moon-ui">
           <div class="moon-phase" id="moon-emoji">🌑</div>
@@ -49,33 +433,62 @@
       </div>
     </div>
   </section>
-  <section class="panel">
-    <div class="card">
+
+  <section class="panel row">
+    <div class="col card">
       <h3>🚀 Lunar Missions（月光任務）</h3>
       <div id="startMissionPanel" class="start-mission-panel">
         <button id="startMissionBtn" class="start-mission-btn">🚀 Start Mission</button>
+        <div class="start-mission-hint">請先開始任務，才會開放月光收集與任務入口</div>
       </div>
       <div class="task-list" id="mission-list"></div>
+      <div class="hint">完成任務後 <b>任務頁會自動回報正確題數</b>，系統即時收集月光。</div>
     </div>
   </section>
+
   <section class="panel card">
-    <h3>🎁 月光兌換</h3>
-    <div style="display:flex; gap:8px;">
-      <select id="redeemAmount" style="flex:1; padding:10px; border-radius:10px;">
+    <h3>🎁 月光兌換（Redeem Lunar Glow）</h3>
+    <div class="redeem-wrap">
+      <select id="redeemAmount" class="redeem-select">
+        <option value="">選擇兌換數值</option>
         <option value="100">100 pts</option>
         <option value="300">300 pts</option>
+        <option value="600">600 pts</option>
+        <option value="900">900 pts</option>
+        <option value="1200">1200 pts</option>
+        <option value="1500">1500 pts</option>
       </select>
       <button id="redeemBtn" class="redeem-btn">兌換扣除</button>
     </div>
+    <div class="redeem-note">兌換後會直接扣除月光，滿月進度以「目前總月光 % 300」自動計算。</div>
   </section>
-  <div id="login-hint" style="display:none; color:var(--danger); text-align:center;">請先回主站登入</div>
+
+  <section class="panel card">
+    <h3>📜 Recent Lunar Logs（最近收集）</h3>
+    <div class="log-box" id="moon-log-box"></div>
+    <div id="login-hint" style="display:none; color:var(--danger); margin-top:10px;">
+      你目前尚未登入，無法保存紀錄。請回主站登入後再使用月光寶盒。<br>
+      <a href="https://ducj-creator.github.io/Teacher-Shirley/" style="color:#7ed6ff;text-decoration:underline;">回主站登入</a>
+    </div>
+  </section>
+
+  <footer>© Teacher Shirley’s ET Platform 2025</footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-    const firebaseConfig = { apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8", authDomain: "teacher-shirley.firebaseapp.com", projectId: "teacher-shirley" };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCta1_RddjhYBA437cl8Wg1kGW_bsVimK8",
+      authDomain: "teacher-shirley.firebaseapp.com",
+      databaseURL: "https://teacher-shirley-default-rtdb.firebaseio.com",
+      projectId: "teacher-shirley",
+      storageBucket: "teacher-shirley.firebasestorage.app",
+      messagingSenderId: "534843195436",
+      appId: "1:534843195436:web:f1f873e6f6e8c257ce9189"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -96,47 +509,276 @@
     function setMissionStarted(v) {
       missionStarted = v;
       sessionStorage.setItem("missionStarted", v ? "1" : "0");
-      document.getElementById("startMissionPanel").style.display = v ? "none" : "flex";
-      document.querySelectorAll("#mission-list a").forEach(a => a.classList.toggle("locked", !v));
-    }
-
-    function renderMissions() {
-      const listEl = document.getElementById("mission-list");
-      listEl.innerHTML = "";
-      MISSIONS.forEach(m => {
-        const a = document.createElement("a");
-        a.href = m.url;
-        a.target = "_blank";
-        a.className = "locked";
-        a.innerHTML = `<div>${m.title}</div><div class="task-tag">開啟任務</div>`;
-        listEl.appendChild(a);
+      const panel = document.getElementById("startMissionPanel");
+      if(panel) panel.style.display = v ? "none" : "flex";
+      
+      // 確保這裡正確操作 locked 類別
+      document.querySelectorAll("#mission-list a").forEach(a => {
+        if (v) {
+          a.classList.remove("locked");
+        } else {
+          a.classList.add("locked");
+        }
       });
     }
 
-    async function loadMoonData(uid) {
-      const snap = await getDoc(doc(db, "users", uid));
-      if (snap.exists()) {
-        const d = snap.data();
-        moonData.totalGlow = d.moonGlowTotal || 0;
-        moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
-        document.getElementById("moon-total").innerText = moonData.totalGlow;
-        document.getElementById("moon-progress").style.width = `${(moonData.cycleGlow / MOON_CYCLE) * 100}%`;
-      }
-    }
-
-    document.getElementById("startMissionBtn").onclick = () => setMissionStarted(true);
-
-    onAuthStateChanged(auth, async (user) => {
-      currentUser = user;
-      if (user) {
-        await loadMoonData(user.uid);
-        setMissionStarted(missionStarted);
-      } else {
-        document.getElementById("login-hint").style.display = "block";
+    document.addEventListener("click", (e) => {
+      if(e.target?.id === "startMissionBtn"){
+        setMissionStarted(true);
       }
     });
 
-    renderMissions();
+    function renderMissions() {
+      const listEl = document.getElementById("mission-list");
+      if (!listEl) return;
+      listEl.innerHTML = "";
+      MISSIONS.forEach(m => {
+        const a = document.createElement("a");
+        if (m.url && m.url.trim() !== "") {
+          a.href = m.url;
+          a.target = "_blank"; // 確保新視窗開啟
+          a.innerHTML = `<div>${m.title}</div><div class="task-tag">開啟任務</div>`;
+        } else {
+          a.href = "javascript:void(0)";
+          a.onclick = (e) => { e.preventDefault(); alert(`${m.title} 尚未開放`); };
+          a.innerHTML = `<div>${m.title}</div><div class="task-tag">尚未開放</div>`;
+        }
+        listEl.appendChild(a);
+      });
+      // 渲染完後立即套用目前的鎖定狀態
+      setMissionStarted(missionStarted);
+    }
+
+    function getPhaseByValue(val) {
+      if (val <= 30)  return {emoji:"🌑", text:"New Moon / 新月"};
+      if (val <= 60)  return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
+      if (val <= 120) return {emoji:"🌓", text:"First Quarter / 上弦月"};
+      if (val <= 200) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
+      return {emoji:"🌕", text:"Full Moon / 滿月"};
+    }
+    
+    function isFullMoonState(val){ return val > 200; } 
+
+    function burstStars() {
+      const layer = document.getElementById("burst-layer");
+      if (!layer) return;
+      const stars = ["✨","⭐","🌟","💫"];
+      for (let i=0;i<18;i++){
+        const s = document.createElement("span");
+        s.className = "burst-star";
+        s.innerText = stars[Math.floor(Math.random()*stars.length)];
+        const angle = Math.random()*Math.PI*2;
+        const dist  = 70 + Math.random()*100;
+        s.style.left = "50%"; s.style.top = "50%";
+        s.style.setProperty("--dx", `${Math.cos(angle)*dist}px`);
+        s.style.setProperty("--dy", `${Math.sin(angle)*dist}px`);
+        s.style.fontSize = `${10 + Math.random()*10}px`;
+        s.style.animationDelay = `${Math.random()*0.25}s`;
+        layer.appendChild(s);
+        s.addEventListener("animationend", ()=> s.remove());
+      }
+    }
+
+    let prevIsFull = false;
+    function renderMoonUI() {
+      const totalEl = document.getElementById("moon-total");
+      const barEl   = document.getElementById("moon-progress");
+      const emojiEl = document.getElementById("moon-emoji");
+      const phaseEl = document.getElementById("moon-phase-text");
+      const glassBox = document.getElementById("glass-box");
+      const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
+
+      const totalGlow = moonData.totalGlow || 0;
+      const cycleGlowValue = moonData.cycleGlow || 0;
+      const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
+      
+      totalEl.innerText = totalGlow;
+      if (cycleProgressStatEl) {
+          cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
+      }
+
+      const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
+      barEl.style.width = `${percent*100}%`;
+
+      const phase = getPhaseByValue(cycleGlowValue);
+      emojiEl.innerText = phase.emoji;
+      phaseEl.innerText = phase.text;
+
+      const nowIsFull = isFullMoonState(cycleGlowValue);
+      if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
+      if (nowIsFull && !prevIsFull) burstStars();
+      prevIsFull = nowIsFull;
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const box = document.getElementById("moon-log-box");
+      if(!box) return;
+      box.innerHTML = "";
+      const logs = moonData.logs || [];
+      if (logs.length === 0){
+        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
+        return;
+      }
+      logs.slice().reverse().slice(0,30).forEach(l => {
+        const div = document.createElement("div");
+        div.className = "log-item";
+        const dateObj = new Date(l.time);
+        const timeStr = `${dateObj.getMonth()+1}/${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
+        const sign = l.type === "redeem" ? "−" : "+";
+        const badge = l.type === "redeem" ? "🎁" : "🌙";
+        let sourceName = l.source || (l.type === "redeem" ? "月光兌換" : "一般任務");
+        const detailInfo = l.type === "earn" ? `(✅${l.correct||0})` : "";
+        div.innerHTML = `
+          <div style="width:100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+               <span>${badge} ${sign}<b>${l.glow}</b> pts</span>
+               <span class="log-time">${timeStr}</span>
+            </div>
+            <div style="font-size:0.8rem; color:#7ed6ff; margin-top:2px; opacity:0.9;">
+               ${sourceName} ${detailInfo}
+            </div>
+          </div>`;
+        box.appendChild(div);
+      });
+    }
+
+    function recomputeCycleFromTotal(total) {
+      const t = Math.max(0, total || 0);
+      return t % MOON_CYCLE;
+    }
+
+    async function loadMoonData(uid) {
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      if (!snap.exists()){
+        await setDoc(userRef, { moonGlowTotal: 0, moonGlowCycle: 0, moonGlowLogs: [] }, {merge:true});
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        renderMoonUI(); return;
+      }
+      const d = snap.data();
+      moonData.totalGlow = d.moonGlowTotal || 0;
+      moonData.cycleGlow = recomputeCycleFromTotal(moonData.totalGlow);
+      moonData.logs = d.moonGlowLogs || [];
+      renderMoonUI();
+    }
+
+    function isAllowedOrigin(origin) {
+      if (!origin) return false;
+      return origin === "https://ducj-creator.github.io" || origin.endsWith(".vercel.app");
+    }
+
+    window.addEventListener("message", async (event) => {
+      if (!isAllowedOrigin(event.origin)) return;
+      const data = event.data || {};
+      if (data.type !== "LUNAR_MISSION_RESULT") return;
+
+      const correctVal = parseInt(data.correct) || 0;
+      if (correctVal <= 0) return;
+
+      // 檢查即時的 sessionStorage 狀態
+      const currentStatus = sessionStorage.getItem("missionStarted") === "1";
+      if(!currentStatus){
+        alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
+        return;
+      }
+
+      if (!currentUser){
+        alert("請先回主站登入，才能記錄月光 🌙");
+        return;
+      }
+
+      const glow = correctVal;
+      const missionTitle = data.mission || data.title || "Lunar Mission"; 
+      const userRef = doc(db, "users", currentUser.uid);
+
+      const newTotal = (moonData.totalGlow || 0) + glow;
+      const newCycle = recomputeCycleFromTotal(newTotal);
+      const logEntry = { time: new Date().toISOString(), correct: correctVal, glow, type: "earn", source: missionTitle };
+
+      await updateDoc(userRef, {
+        moonGlowTotal: newTotal,
+        moonGlowCycle: newCycle,
+        moonGlowLogs: arrayUnion(logEntry),
+        activityLogs: arrayUnion({ date: new Date().toISOString(), type: "Lunar Glow", detail: `Collected ${glow} pts from ${missionTitle}` })
+      });
+
+      moonData.totalGlow = newTotal;
+      moonData.cycleGlow = newCycle;
+      moonData.logs.push(logEntry);
+      renderMoonUI();
+      alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光`);
+    });
+
+    async function redeemGlow() {
+      const sel = document.getElementById("redeemAmount");
+      const amt = parseInt(sel?.value || "", 10);
+      if (!currentUser){ alert("請先登入主站，才能兌換月光 🌙"); return; }
+      if (!missionStarted){ alert("請先按 Start Mission 才能使用兌換功能 🌙"); return; }
+      if (!amt){ alert("請先選擇兌換數值"); return; }
+      if (amt > (moonData.totalGlow || 0)){ alert(`月光不足 🌙\n目前只有 ${moonData.totalGlow || 0} pts`); return; }
+
+      const userRef = doc(db, "users", currentUser.uid);
+      const newTotal = (moonData.totalGlow || 0) - amt;
+      const newCycle = recomputeCycleFromTotal(newTotal);
+      const logEntry = { time: new Date().toISOString(), glow: amt, type: "redeem", source: "月光兌換" };
+
+      await updateDoc(userRef, {
+        moonGlowTotal: newTotal,
+        moonGlowCycle: newCycle,
+        moonGlowLogs: arrayUnion(logEntry),
+        activityLogs: arrayUnion({ date: new Date().toISOString(), type: "Redeem Lunar Glow", detail: `Redeemed ${amt} pts` })
+      });
+
+      moonData.totalGlow = newTotal;
+      moonData.cycleGlow = newCycle;
+      moonData.logs.push(logEntry);
+      renderMoonUI();
+      sel.value = "";
+      alert(`🎁 已兌換成功！\n扣除 ${amt} 點月光`);
+    }
+
+    document.addEventListener("click", (e) => {
+      if(e.target?.id === "redeemBtn") redeemGlow();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      const hint = document.getElementById("login-hint");
+      if (!currentUser) {
+        if(hint) hint.style.display = "block";
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        renderMoonUI();
+        setMissionStarted(false);
+      } else {
+        if(hint) hint.style.display = "none";
+        await loadMoonData(currentUser.uid);
+        // 載入完數據後，根據 sessionStorage 的記憶狀態解鎖
+        setMissionStarted(sessionStorage.getItem("missionStarted") === "1");
+      }
+    });
+
+    function init() {
+      renderMissions();
+      renderMoonUI();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  </script>
+
+  <script>
+    function sendHeight() {
+      const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({ type: "moonlightHeight", height: h }, "*");
+    }
+    window.addEventListener("load", sendHeight);
+    window.addEventListener("resize", sendHeight);
+    const mo = new MutationObserver(sendHeight);
+    mo.observe(document.body, { childList: true, subtree: true });
   </script>
 </body>
 </html>
