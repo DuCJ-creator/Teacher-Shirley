@@ -723,24 +723,49 @@
       window.open(event.currentTarget.href, "_blank");
     };
 
+    // 修正：允許更多來源，特別是 iVocab Reader
     function isAllowedOrigin(origin){
       if (!origin) return false;
-      if (origin === "https://ducj-creator.github.io") return true;
-      if (origin.endsWith(".vercel.app")) return true;
-      return false;
+      // 允許的來源列表
+      const allowedOrigins = [
+        "https://ducj-creator.github.io",
+        "https://ducj-creator.github.io/Teacher-Shirley",
+        "https://ivocab-quiz.vercel.app",
+        "https://shirley-ai-reading.vercel.app",
+        "https://ducj-creator.github.io/iVocab-Readers",
+        "http://localhost"  // 本地開發也允許
+      ];
+      
+      // 檢查是否匹配任何允許的來源
+      return allowedOrigins.some(allowed => origin.startsWith(allowed));
     }
 
-    // [修改] 接收 mission 參數並存入 source
+    // [修改] 接收 mission 參數並存入 source - 添加調試信息
     window.addEventListener("message", async (event) => {
-      if (!isAllowedOrigin(event.origin)) return;
+      console.log("月光寶盒收到消息:", event.origin, event.data);
+      
+      if (!isAllowedOrigin(event.origin)) {
+        console.log("來源不允許:", event.origin);
+        return;
+      }
+      
       const data = event.data || {};
-      if (data.type !== "LUNAR_MISSION_RESULT") return;
+      console.log("消息數據:", data);
+      
+      if (data.type !== "LUNAR_MISSION_RESULT") {
+        console.log("消息類型不匹配:", data.type);
+        return;
+      }
 
       const correctVal = parseInt(data.correct) || 0;
-      if (correctVal <= 0) return;
+      if (correctVal <= 0) {
+        console.log("正確題數為0或無效");
+        return;
+      }
 
       // 優先讀取 data.mission (配合 GSAT)，其次 data.title
       const missionTitle = data.mission || data.title || "Lunar Mission"; 
+      console.log("任務標題:", missionTitle);
 
       if(!missionStarted){
         alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
@@ -768,23 +793,29 @@
         source: missionTitle // 儲存來源
       };
 
-      await updateDoc(userRef, {
-        moonGlowTotal: newTotal,
-        moonGlowCycle: newCycle,
-        moonGlowLogs: arrayUnion(logEntry),
-        activityLogs: arrayUnion({
-          date: new Date().toISOString(),
-          type: "Lunar Glow",
-          detail: `Collected ${glow} pts from ${missionTitle}`
-        })
-      });
+      try {
+        await updateDoc(userRef, {
+          moonGlowTotal: newTotal,
+          moonGlowCycle: newCycle,
+          moonGlowLogs: arrayUnion(logEntry),
+          activityLogs: arrayUnion({
+            date: new Date().toISOString(),
+            type: "Lunar Glow",
+            detail: `Collected ${glow} pts from ${missionTitle}`
+          })
+        });
 
-      moonData.totalGlow = newTotal;
-      moonData.cycleGlow = newCycle;
-      moonData.logs.push(logEntry);
-      renderMoonUI();
+        moonData.totalGlow = newTotal;
+        moonData.cycleGlow = newCycle;
+        moonData.logs.push(logEntry);
+        renderMoonUI();
 
-      alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
+        console.log(`成功收集 ${glow} 點月光，來源: ${missionTitle}`);
+        alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
+      } catch (error) {
+        console.error("更新月光數據時出錯:", error);
+        alert("收集月光時出錯，請稍後再試");
+      }
     });
 
     // [修改] 兌換時加入 source 標記
