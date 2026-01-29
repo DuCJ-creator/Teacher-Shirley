@@ -390,11 +390,50 @@
     .start-mission-btn:active{ transform: translateY(1px); }
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
-    .task-list a.locked{
-      opacity: .45;
-      filter: grayscale(0.4);
-      pointer-events: none;
-    }
+    /* 修正：提升任務清單可讀性與視覺對比 */
+.task-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12); /* 提高背景亮度讓層次分明 */
+  border: 1px solid rgba(126, 214, 255, 0.3);
+  text-decoration: none;
+  color: #ffffff !important; /* 強制文字為純白 */
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.task-list a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #f1c40f; /* 懸停時邊框變金色 */
+  transform: translateY(-2px);
+}
+
+.task-tag {
+  font-size: 0.85rem;
+  color: #f1c40f; /* 「開啟任務」改為亮金色 */
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
+}
+
+/* 修正：鎖定狀態也需保持基本可見度 */
+.task-list a.locked {
+  opacity: 0.45;
+  filter: grayscale(1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3) !important;
+  pointer-events: none;
+}
+
+.task-tag {
+  font-size: 0.85rem;
+  color: var(--accent-2); /* 使用亮藍色引導點擊 */
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(126, 214, 255, 0.4);
+}
 
     .redeem-wrap{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1; }
     .redeem-select{
@@ -609,45 +648,45 @@ function getPhaseByValue(val){
 
     let prevIsFull = false;
 
-    function renderMoonUI(){
-      const totalEl = document.getElementById("moon-total");
-      const barEl   = document.getElementById("moon-progress");
-      const emojiEl = document.getElementById("moon-emoji");
-      const phaseEl = document.getElementById("moon-phase-text");
-      const glassBox = document.getElementById("glass-box");
-      const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
+function renderMoonUI(){
+  const totalEl = document.getElementById("moon-total");
+  const barEl   = document.getElementById("moon-progress");
+  const emojiEl = document.getElementById("moon-emoji");
+  const phaseEl = document.getElementById("moon-phase-text");
+  const glassBox = document.getElementById("glass-box");
+  const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
 
-      const totalGlow = moonData.totalGlow || 0;
-      const cycleGlowValue = moonData.cycleGlow || 0;
+  // 核心修正：強制由總分推算循環數值，確保與 Log 絕對同步
+  const totalGlow = moonData.totalGlow || 0;
+  const cycleGlowValue = totalGlow % MOON_CYCLE; 
+  const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
 
-      // 計算當前是第幾個循環
-      const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
+  if (totalEl) totalEl.innerText = totalGlow;
 
-      totalEl.innerText = totalGlow;
+  // 更新顯示：第幾個循環
+  if (cycleProgressStatEl) {
+    cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
+  }
 
-      // 更新循環進度顯示
-      if (cycleProgressStatEl) {
-          cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
-      }
+  // 進度條：依據即時計算的 cycleGlowValue 渲染
+  const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
+  if (barEl) barEl.style.width = `${percent * 100}%`;
 
-      // 進度條長度維持用百分比計算
-      const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
-      barEl.style.width = `${percent*100}%`;
+  // 月相判斷：同樣依據即時計算值
+  const phase = getPhaseByValue(cycleGlowValue);
+  if (emojiEl) emojiEl.innerText = phase.emoji;
+  if (phaseEl) phaseEl.innerText = phase.text;
 
-      // [修正] 這裡改用數值 (cycleGlowValue) 直接判斷月相
-      const phase = getPhaseByValue(cycleGlowValue);
-      emojiEl.innerText = phase.emoji;
-      phaseEl.innerText = phase.text;
+  // 滿月特效判斷
+  const nowIsFull = isFullMoonState(cycleGlowValue);
+  if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
 
-      // [修正] 判斷是否進入滿月區間 ( > 200 )
-      const nowIsFull = isFullMoonState(cycleGlowValue);
-      if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
+  // 只有在剛進入滿月狀態時觸發星星噴發
+  if (nowIsFull && !prevIsFull) burstStars();
+  prevIsFull = nowIsFull;
 
-      if (nowIsFull && !prevIsFull) burstStars();
-      prevIsFull = nowIsFull;
-
-      renderLogs();
-    }
+  renderLogs();
+}
 
     // [修改] 顯示詳細的 Log，包含來源與正確題數
     function renderLogs(){
