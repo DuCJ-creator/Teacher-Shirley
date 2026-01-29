@@ -390,34 +390,27 @@
     .start-mission-btn:active{ transform: translateY(1px); }
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
-/* 修正：提升任務清單可見度，確保文字為白色，不再是紫色 */
 .task-list a {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.15) !important; /* 提高背景對比 */
-  border: 1px solid rgba(126, 214, 255, 0.4) !important;
+  background: rgba(0, 0, 0, 0.4) !important; /* 加深背景 */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   text-decoration: none !important;
-  color: #ffffff !important; /* 強制改為純白 */
+  color: #ffffff !important; /* 修改這行：強制改為純白 */
   margin-bottom: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: 0.3s;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
-.task-list a:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  border-color: #f1c40f !important;
-  transform: translateY(-2px);
-}
-
-/* 修正：任務內的標籤改為亮黃色 */
 .task-tag {
   font-size: 0.85rem;
-  color: #f1c40f !important; 
+  color: #f1c40f !important; /* 修改這行：標籤改為亮黃色較清楚 */
   font-weight: 800;
-  text-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
 }
 
 /* 鎖定狀態 */
@@ -685,24 +678,24 @@ function renderMoonUI(){
 
 async function loadMoonData(uid){
   const userRef = doc(db, "users", uid);
-  const snap = await getDoc(userRef);
-
-  if (!snap.exists()){
-    await setDoc(userRef, {
-      moonGlowTotal: 0,
-      moonGlowLogs: [] // 移除 moonGlowCycle 的初始化，統一由 Total 計算
-    }, {merge:true});
-    moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-  } else {
-    const d = snap.data();
-    // 讀取最原始的總分
-    const total = d.moonGlowTotal || 0;
-    moonData.totalGlow = total;
-    // 透過 recomputeCycleFromTotal 重新校正因 Mission 移動產生的落差
-    moonData.cycleGlow = recomputeCycleFromTotal(total);
-    moonData.logs = d.moonGlowLogs || [];
+  try {
+    const snap = await getDoc(userRef);
+    if (snap.exists()){
+      const data = snap.data();
+      // 核心修正：確保讀取的欄位是 moonGlowTotal，並存入 moonData 變數
+      moonData.totalGlow = data.moonGlowTotal || 0;
+      // 如果您的 logs 也消失了，請加入這行
+      moonData.logs = data.moonGlowLogs || []; 
+    } else {
+      await setDoc(userRef, { moonGlowTotal: 0, moonGlowLogs: [] }, { merge: true });
+      moonData.totalGlow = 0;
+      moonData.logs = [];
+    }
+    // 讀取完畢後，必須執行您剛才貼給我的這段函數來刷新畫面
+    renderMoonUI(); 
+  } catch (err) {
+    console.error("載入失敗:", err);
   }
-  renderMoonUI();
 }
 
     window.startLunarMission = function(event){
