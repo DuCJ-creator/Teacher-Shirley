@@ -390,30 +390,32 @@
     .start-mission-btn:active{ transform: translateY(1px); }
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
+/* 請找到約 254 行與 330 行重複出現的地方，統一修改為這段 */
 .task-list a {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
   padding: 12px 16px !important;
   border-radius: 12px !important;
-  /* 使用深色背景襯托白字 */
-  background: rgba(0, 0, 0, 0.5) !important; 
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: rgba(0, 0, 0, 0.45) !important; /* 加深背景，白字才清楚 */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   text-decoration: none !important;
-  /* 這裡強制設定為白色 */
-  color: #ffffff !important; 
+  color: #ffffff !important; /* 強制改為純白 */
+  margin-bottom: 10px !important;
+  transition: 0.3s !important;
 }
 
-/* 確保滑鼠移上去時也不會變回紫色 */
-.task-list a:hover, .task-list a:visited, .task-list a:active {
-  color: #ffffff !important;
+/* 移除任何可能導致變紫色的 hover 或 visited 設定 */
+.task-list a:hover {
   background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--accent) !important;
 }
 
-/* 標籤改為亮黃色，避開紫色系 */
+/* 強制將標籤改為亮黃色，避開紫色變數 */
 .task-tag {
   color: #f1c40f !important;
   font-weight: 800 !important;
+  text-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
 }
 
 /* 鎖定狀態 */
@@ -653,18 +655,19 @@ function renderMoonUI(){
 
   const totalGlow = moonData.totalGlow || 0;
   // 關鍵點：由總分動態推算循環進度 (300 點一輪)
-  const cycleGlowValue = totalGlow % MOON_CYCLE; 
+ const cycleGlowValue = totalGlow % MOON_CYCLE; 
   const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
 
   if (totalEl) totalEl.innerText = totalGlow;
 
+  // 更新文字描述
   if (cycleProgressStatEl) {
     cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
   }
 
+  // 更新進度條
   const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
   if (barEl) barEl.style.width = `${percent * 100}%`;
-
   const phase = getPhaseByValue(cycleGlowValue);
   if (emojiEl) emojiEl.innerText = phase.emoji;
   if (phaseEl) phaseEl.innerText = phase.text;
@@ -685,20 +688,22 @@ async function loadMoonData(uid) {
     if (snap.exists()) {
       const data = snap.data();
       
-      // 關鍵點：無論點數是從哪個 Mission 來的，Firebase 都會存放在 moonGlowTotal
-      // 我們強制讀取這個總分
+      // 核心修正：直接讀取 moonGlowTotal，這是 Mission 1-4 共用的總分欄位
       const total = data.moonGlowTotal || 0;
       
+      // 更新全域變數
       moonData.totalGlow = total;
-      // 根據總分自動推算循環進度 (300點一輪)
-      moonData.cycleGlow = total % 300; 
+      
+      // 重要：強制重算本輪進度，這會恢復 Mission 1-4 累積後的進度條
+      moonData.cycleGlow = total % MOON_CYCLE; 
+      
       moonData.logs = data.moonGlowLogs || [];
     } else {
       await setDoc(userRef, { moonGlowTotal: 0, moonGlowLogs: [] }, { merge: true });
       moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
     }
     
-    // 讀取完畢後，強制執行您原有的 render 函數刷新 UI
+    // 讀取完畢後，立即刷新 UI
     renderMoonUI();
     
   } catch (err) {
