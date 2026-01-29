@@ -390,42 +390,41 @@
     .start-mission-btn:active{ transform: translateY(1px); }
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
-    /* 修正：提升任務清單可讀性與視覺對比 */
+/* 修正：提升任務清單可見度，確保文字為白色，不再是紫色 */
 .task-list a {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.12); /* 提高背景亮度讓層次分明 */
-  border: 1px solid rgba(126, 214, 255, 0.3);
-  text-decoration: none;
-  color: #ffffff !important; /* 強制文字為純白 */
+  background: rgba(255, 255, 255, 0.15) !important; /* 提高背景對比 */
+  border: 1px solid rgba(126, 214, 255, 0.4) !important;
+  text-decoration: none !important;
+  color: #ffffff !important; /* 強制改為純白 */
   margin-bottom: 10px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .task-list a:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #f1c40f; /* 懸停時邊框變金色 */
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: #f1c40f !important;
   transform: translateY(-2px);
 }
 
+/* 修正：任務內的標籤改為亮黃色 */
 .task-tag {
   font-size: 0.85rem;
-  color: #f1c40f; /* 「開啟任務」改為亮金色 */
+  color: #f1c40f !important; 
   font-weight: 800;
   text-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
 }
 
-/* 修正：鎖定狀態也需保持基本可見度 */
+/* 鎖定狀態 */
 .task-list a.locked {
-  opacity: 0.45;
+  opacity: 0.4;
   filter: grayscale(1);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.3) !important;
-  pointer-events: none;
+  color: rgba(255,255,255,0.3) !important;
 }
 
 .task-tag {
@@ -648,6 +647,7 @@ function getPhaseByValue(val){
 
     let prevIsFull = false;
 
+// 修正：強制由總積分推算所有 UI 數值，確保 1/29 之前的累積能正確顯示
 function renderMoonUI(){
   const totalEl = document.getElementById("moon-total");
   const barEl   = document.getElementById("moon-progress");
@@ -656,103 +656,54 @@ function renderMoonUI(){
   const glassBox = document.getElementById("glass-box");
   const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
 
-  // 核心修正：強制由總分推算循環數值，確保與 Log 絕對同步
   const totalGlow = moonData.totalGlow || 0;
+  // 關鍵點：由總分動態推算循環進度 (300 點一輪)
   const cycleGlowValue = totalGlow % MOON_CYCLE; 
   const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
 
   if (totalEl) totalEl.innerText = totalGlow;
 
-  // 更新顯示：第幾個循環
   if (cycleProgressStatEl) {
     cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
   }
 
-  // 進度條：依據即時計算的 cycleGlowValue 渲染
   const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
   if (barEl) barEl.style.width = `${percent * 100}%`;
 
-  // 月相判斷：同樣依據即時計算值
   const phase = getPhaseByValue(cycleGlowValue);
   if (emojiEl) emojiEl.innerText = phase.emoji;
   if (phaseEl) phaseEl.innerText = phase.text;
 
-  // 滿月特效判斷
   const nowIsFull = isFullMoonState(cycleGlowValue);
   if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
 
-  // 只有在剛進入滿月狀態時觸發星星噴發
   if (nowIsFull && !prevIsFull) burstStars();
   prevIsFull = nowIsFull;
 
   renderLogs();
 }
 
-    // [修改] 顯示詳細的 Log，包含來源與正確題數
-    function renderLogs(){
-      const box = document.getElementById("moon-log-box");
-      box.innerHTML = "";
-      const logs = moonData.logs || [];
-      if (logs.length === 0){
-        box.innerHTML = `<div class="hint">目前還沒有月光紀錄。</div>`;
-        return;
-      }
+async function loadMoonData(uid){
+  const userRef = doc(db, "users", uid);
+  const snap = await getDoc(userRef);
 
-      logs.slice().reverse().slice(0,30).forEach(l=>{
-        const div = document.createElement("div");
-        div.className = "log-item";
-
-        const dateObj = new Date(l.time);
-        const timeStr = `${dateObj.getMonth()+1}/${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
-
-        const sign = l.type === "redeem" ? "−" : "+";
-        const badge = l.type === "redeem" ? "🎁" : "🌙";
-
-        // 優先讀取 source，若無則用預設文字
-        let sourceName = l.source || (l.type === "redeem" ? "月光兌換" : "一般任務");
-        const detailInfo = l.type === "earn" ? `(✅${l.correct||0})` : "";
-
-        div.innerHTML = `
-          <div style="width:100%;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-               <span>${badge} ${sign}<b>${l.glow}</b> pts</span>
-               <span class="log-time">${timeStr}</span>
-            </div>
-            <div style="font-size:0.8rem; color:#7ed6ff; margin-top:2px; opacity:0.9;">
-               ${sourceName} ${detailInfo}
-            </div>
-          </div>`;
-        box.appendChild(div);
-      });
-    }
-
-    function recomputeCycleFromTotal(total){
-      const t = Math.max(0, total || 0);
-      return t % MOON_CYCLE;
-    }
-
-    async function loadMoonData(uid){
-      const userRef = doc(db, "users", uid);
-      const snap = await getDoc(userRef);
-
-      if (!snap.exists()){
-        await setDoc(userRef, {
-          moonGlowTotal: 0,
-          moonGlowCycle: 0,
-          moonGlowLogs: []
-        }, {merge:true});
-        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-        renderMoonUI();
-        return;
-      }
-
-      const d = snap.data();
-      const total = d.moonGlowTotal || 0;
-      moonData.totalGlow = total;
-      moonData.cycleGlow = recomputeCycleFromTotal(total);
-      moonData.logs = d.moonGlowLogs || [];
-      renderMoonUI();
-    }
+  if (!snap.exists()){
+    await setDoc(userRef, {
+      moonGlowTotal: 0,
+      moonGlowLogs: [] // 移除 moonGlowCycle 的初始化，統一由 Total 計算
+    }, {merge:true});
+    moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+  } else {
+    const d = snap.data();
+    // 讀取最原始的總分
+    const total = d.moonGlowTotal || 0;
+    moonData.totalGlow = total;
+    // 透過 recomputeCycleFromTotal 重新校正因 Mission 移動產生的落差
+    moonData.cycleGlow = recomputeCycleFromTotal(total);
+    moonData.logs = d.moonGlowLogs || [];
+  }
+  renderMoonUI();
+}
 
     window.startLunarMission = function(event){
       event.preventDefault();
