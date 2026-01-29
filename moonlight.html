@@ -280,6 +280,7 @@
     }
     @keyframes moonFloat{ from{transform:translateY(0);} to{transform:translateY(-4px);} }
 
+    .moon-stats{ display:flex; flex-direction:column; gap:6px; width:100%; position:relative; z-index:1; }
     .moon-stats{ 
         display:flex; 
         flex-direction:column; 
@@ -317,12 +318,14 @@
     .stat{ font-size:0.9rem; color:var(--text-dim); position:relative; z-index:1; }
     .stat b{ color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25); }
 
+    .lunar-crystal{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
 .lunar-crystal{
       position:absolute; 
       right: 15px; /* 修改：改為靠右對齊 (數值可依喜好微調，如 10px 或 20px) */
       top: 50%; 
       transform: translateY(-50%); /* 修改：只保留垂直置中，移除水平位移 */
-
+      
       width:54px; height:54px; border-radius:16px;
       /* 下面這幾行保持不變，直接複製原本的即可 */
       background:
@@ -518,11 +521,8 @@
     const MISSIONS = [
       { title: "Mission 1: GSAT 真題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
       { title: "Mission 2: iVocab 考題", url: "https://ivocab-quiz.vercel.app/" },
-      { title: "Mission 1: GSAT學測字彙考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
-      { title: "Mission 2: iVocab 字彙選擇題", url: "https://ivocab-quiz.vercel.app/" },
       { title: "Mission 3: Topic Reading 素養閱讀", url: "https://shirley-ai-reading.vercel.app/" },
       { title: "Mission 4: CAP 會考", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" }
-      { title: "Mission 4: CAP會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" }
     ];
 
     let currentUser = null;
