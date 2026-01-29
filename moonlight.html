@@ -693,29 +693,30 @@ function getPhaseByValue(val){
 async function loadMoonData(uid){
   const userRef = doc(db, "users", uid);
 
-  // 使用 onSnapshot 監聽，確保 Mission 3 提交後寶盒會自動跳動
-  onSnapshot(userRef, async (snap) => {
+  // 使用監聽模式
+  onSnapshot(userRef, (snap) => {
     if (!snap.exists()){
-      // 只有完全沒資料時才進行初始化，避免覆蓋舊資料
-      await setDoc(userRef, {
+      // 資料不存在時才初始化
+      setDoc(userRef, {
         moonGlowTotal: 0,
         moonGlowCycle: 0,
         moonGlowLogs: []
       }, {merge:true});
-      return;
+      moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+    } else {
+      const d = snap.data();
+      // 指向原始欄位 moonGlowTotal
+      const total = d.moonGlowTotal || 0;
+      moonData.totalGlow = total;
+      moonData.cycleGlow = recomputeCycleFromTotal(total);
+      moonGlowLogs = d.moonGlowLogs || []; // 確保同步到全域變數
+      moonData.logs = moonGlowLogs;
     }
-
-    const d = snap.data();
-    // 關鍵修正：讀取您原本的欄位名稱 moonGlowTotal
-    const total = d.moonGlowTotal || 0;
     
-    // 將資料填入您頁面邏輯使用的 moonData 變數
-    moonData.totalGlow = total;
-    // 使用您原本的週期計算函數
-    moonData.cycleGlow = recomputeCycleFromTotal(total); 
-    moonData.logs = d.moonGlowLogs || [];
-    
+    // 關鍵：在資料更新後，必須手動觸發一次 UI 渲染與 Mission 狀態設定
     renderMoonUI();
+    renderMissions(); // 確保 Mission 清單重新產生
+    setMissionStarted(missionStarted); 
   });
 }
 
