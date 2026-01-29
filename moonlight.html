@@ -448,36 +448,48 @@
     .redeem-btn:active{transform:translateY(1px);}
     .redeem-note{ font-size:12px; color:var(--text-dim); margin-top:6px; position:relative; z-index:1; }
 
-      /* 強力覆蓋：確保所有任務連結統一為白字深底 */
-.task-list a, 
-#mission-list a {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 12px 16px !important;
-  margin-bottom: 10px !important;
-  background: rgba(0, 0, 0, 0.5) !important; /* 深色背景襯托白字 */
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important; /* 強制純白 */
-  text-decoration: none !important;
-  border-radius: 12px !important;
-  transition: 0.3s !important;
-}
+     /* ===== 任務列表：最終唯一版本（取代舊的強制區塊） ===== */
 
-/* 確保滑過或點選後依然是白色 */
-.task-list a:hover, 
-.task-list a:active, 
-.task-list a:visited {
+.task-list a,
+.task-list a:visited,
+.task-list a:hover,
+.task-list a:active {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 12px;
+  margin-bottom: 8px;
+
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
   color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: #f1c40f !important;
+  text-decoration: none !important;
+
+  /* 關鍵：阻斷玻璃與 nebula 的混色 */
+  mix-blend-mode: normal !important;
 }
 
-/* 標籤改為亮黃色，避開紫色變數 */
+.task-list a:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.55),
+    0 0 18px rgba(241,196,15,0.25);
+}
+
+.task-list a.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
 .task-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
   color: #f1c40f !important;
-  font-weight: 800 !important;
-  font-size: 0.85rem !important;
 }
   </style>
 </head>
@@ -714,28 +726,35 @@ function renderMoonUI(){
 }
 
 async function loadMoonData(uid) {
+  async function loadMoonData(uid){
   const userRef = doc(db, "users", uid);
-  try {
-    const snap = await getDoc(userRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      
-      // 核心修正：直接讀取 moonGlowTotal，這包含所有 Mission 1-4 的累積
-      const total = data.moonGlowTotal || 0;
-      
-      moonData.totalGlow = total;
-      // 強制推算：確保 1/29 之前的分數會正確反映在進度條上
-      // 每 300 點一輪，不論欄位紀錄為何，以總分為準
-      moonData.cycleGlow = total % MOON_CYCLE; 
-      
-      moonData.logs = data.moonGlowLogs || [];
-    } else {
-      await setDoc(userRef, { moonGlowTotal: 0, moonGlowLogs: [] }, { merge: true });
-      moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
-    }
-    
-    // 立即更新 UI，恢復積分顯示
+  const snap = await getDoc(userRef);
+
+  if(!snap.exists()){
+    await setDoc(userRef,{ moonGlowTotal:0, moonGlowLogs:[] },{ merge:true });
     renderMoonUI();
+    return;
+  }
+
+  const data = snap.data();
+  const logs = data.moonGlowLogs || [];
+
+  let total = 0;
+  logs.forEach(l=>{
+    if(l.type === "earn")   total += l.glow || 0;
+    if(l.type === "redeem") total -= l.glow || 0;
+  });
+
+  moonData.totalGlow = Math.max(total,0);
+  moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+  moonData.logs = logs;
+
+  await updateDoc(userRef,{
+    moonGlowTotal: moonData.totalGlow
+  });
+
+  renderMoonUI();
+}
     
   } catch (err) {
     console.error("月光數據加載失敗:", err);
