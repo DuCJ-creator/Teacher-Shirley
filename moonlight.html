@@ -280,7 +280,6 @@
     }
     @keyframes moonFloat{ from{transform:translateY(0);} to{transform:translateY(-4px);} }
 
-    .moon-stats{ display:flex; flex-direction:column; gap:6px; width:100%; position:relative; z-index:1; }
     .moon-stats{ 
         display:flex; 
         flex-direction:column; 
@@ -319,15 +318,12 @@
     .stat b{ color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25); }
 
     .lunar-crystal{
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-.lunar-crystal{
       position:absolute; 
-      right: 15px; /* 修改：改為靠右對齊 (數值可依喜好微調，如 10px 或 20px) */
+      right: 15px; /* 修改：改為靠右對齊 */
       top: 50%; 
       transform: translateY(-50%); /* 修改：只保留垂直置中，移除水平位移 */
       
       width:54px; height:54px; border-radius:16px;
-      /* 下面這幾行保持不變，直接複製原本的即可 */
       background:
         radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), transparent 45%),
         radial-gradient(circle at 70% 70%, rgba(126,214,255,0.85), transparent 55%),
@@ -348,21 +344,39 @@
       to{transform:translate(-50%,-50%) translateY(-4px);}
     }
 
-    .task-list a{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:10px 12px; border-radius:10px;
-      background:rgba(0,0,0,0.25);
-      border:1px solid var(--border);
-      text-decoration:none; color:var(--text);
-      margin-bottom:8px; transition:0.2s;
-      cursor:pointer; position:relative; z-index:1;
+    /* 簡化後的 task-list 樣式 */
+    .task-list a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      margin-bottom: 8px;
+      transition: 0.2s;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      mix-blend-mode: normal;
     }
-    .task-list a:hover{
-      transform:translateY(-2px);
-      border-color:var(--accent);
+    .task-list a:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
       box-shadow: 0 4px 14px rgba(0,0,0,0.55), 0 0 18px rgba(241,196,15,0.25);
     }
-    .task-tag{ font-size:0.8rem; color:var(--text-dim); }
+    .task-list a.locked {
+      opacity: 0.4;
+      filter: grayscale(1);
+      pointer-events: none;
+    }
+    .task-tag { 
+      font-size: 0.8rem; 
+      font-weight: 700;
+      color: #f1c40f !important; /* 改為亮黃色 */
+    }
 
     .hint{ font-size:0.85rem; color:var(--text-dim); line-height:1.6; margin-top:6px; position:relative; z-index:1; }
 
@@ -390,47 +404,6 @@
     .start-mission-btn:active{ transform: translateY(1px); }
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
-/* 請找到約 254 行與 330 行重複出現的地方，統一修改為這段 */
-.task-list a {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 12px 16px !important;
-  border-radius: 12px !important;
-  background: rgba(0, 0, 0, 0.45) !important; /* 加深背景，白字才清楚 */
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  text-decoration: none !important;
-  color: #ffffff !important; /* 強制改為純白 */
-  margin-bottom: 10px !important;
-  transition: 0.3s !important;
-}
-
-/* 移除任何可能導致變紫色的 hover 或 visited 設定 */
-.task-list a:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: var(--accent) !important;
-}
-
-/* 強制將標籤改為亮黃色，避開紫色變數 */
-.task-tag {
-  color: #f1c40f !important;
-  font-weight: 800 !important;
-  text-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
-}
-
-/* 鎖定狀態 */
-.task-list a.locked {
-  opacity: 0.4;
-  filter: grayscale(1);
-  color: rgba(255,255,255,0.3) !important;
-}
-
-.task-tag {
-  font-size: 0.85rem;
-  color: #f1c40f !important; /* 改為亮黃色 */
-  font-weight: 800;
-}
-
     .redeem-wrap{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1; }
     .redeem-select{
       flex:1; min-width:170px;
@@ -447,50 +420,6 @@
     }
     .redeem-btn:active{transform:translateY(1px);}
     .redeem-note{ font-size:12px; color:var(--text-dim); margin-top:6px; position:relative; z-index:1; }
-
-     /* ===== 任務列表：最終唯一版本（取代舊的強制區塊） ===== */
-
-.task-list a,
-.task-list a:visited,
-.task-list a:hover,
-.task-list a:active {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 10px 12px;
-  margin-bottom: 8px;
-
-  background: rgba(0,0,0,0.25);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-
-  color: #ffffff !important;
-  text-decoration: none !important;
-
-  /* 關鍵：阻斷玻璃與 nebula 的混色 */
-  mix-blend-mode: normal !important;
-}
-
-.task-list a:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.55),
-    0 0 18px rgba(241,196,15,0.25);
-}
-
-.task-list a.locked {
-  opacity: 0.4;
-  filter: grayscale(1);
-  pointer-events: none;
-}
-
-.task-tag {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #f1c40f !important;
-}
   </style>
 </head>
 
@@ -568,7 +497,7 @@
     </div>
   </section>
 
-  <footer>© Teacher Shirley’s ET Platform 2025</footer>
+  <footer>© Teacher Shirley's ET Platform 2025</footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
@@ -652,7 +581,7 @@
     }
 
     // *** 簡化後的月相判斷邏輯：達到 Full Moon 後就鎖定，直到下次循環開始 (p=0) ***
-function getPhaseByValue(val){
+    function getPhaseByValue(val){
       if (val <= 30)  return {emoji:"🌑", text:"New Moon / 新月"};
       if (val <= 60)  return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
       if (val <= 120) return {emoji:"🌓", text:"First Quarter / 上弦月"};
@@ -688,78 +617,104 @@ function getPhaseByValue(val){
 
     let prevIsFull = false;
 
-// 修正：強制由總積分推算所有 UI 數值，確保 1/29 之前的累積能正確顯示
-function renderMoonUI(){
-  const totalEl = document.getElementById("moon-total");
-  const barEl   = document.getElementById("moon-progress");
-  const emojiEl = document.getElementById("moon-emoji");
-  const phaseEl = document.getElementById("moon-phase-text");
-  const glassBox = document.getElementById("glass-box");
-  const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
+    // 修正：強制由總積分推算所有 UI 數值，確保 1/29 之前的累積能正確顯示
+    function renderMoonUI(){
+      const totalEl = document.getElementById("moon-total");
+      const barEl   = document.getElementById("moon-progress");
+      const emojiEl = document.getElementById("moon-emoji");
+      const phaseEl = document.getElementById("moon-phase-text");
+      const glassBox = document.getElementById("glass-box");
+      const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
 
-  const totalGlow = moonData.totalGlow || 0;
-  // 關鍵點：由總分動態推算循環進度 (300 點一輪)
- const cycleGlowValue = totalGlow % MOON_CYCLE; 
-  const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
+      const totalGlow = moonData.totalGlow || 0;
+      // 關鍵點：由總分動態推算循環進度 (300 點一輪)
+      const cycleGlowValue = totalGlow % MOON_CYCLE; 
+      const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
 
-  if (totalEl) totalEl.innerText = totalGlow;
+      if (totalEl) totalEl.innerText = totalGlow;
 
-  // 更新文字描述
-  if (cycleProgressStatEl) {
-    cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
-  }
+      // 更新文字描述
+      if (cycleProgressStatEl) {
+        cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
+      }
 
-  // 更新進度條
-  const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
-  if (barEl) barEl.style.width = `${percent * 100}%`;
-  const phase = getPhaseByValue(cycleGlowValue);
-  if (emojiEl) emojiEl.innerText = phase.emoji;
-  if (phaseEl) phaseEl.innerText = phase.text;
+      // 更新進度條
+      const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
+      if (barEl) barEl.style.width = `${percent * 100}%`;
+      const phase = getPhaseByValue(cycleGlowValue);
+      if (emojiEl) emojiEl.innerText = phase.emoji;
+      if (phaseEl) phaseEl.innerText = phase.text;
 
-  const nowIsFull = isFullMoonState(cycleGlowValue);
-  if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
+      const nowIsFull = isFullMoonState(cycleGlowValue);
+      if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
 
-  if (nowIsFull && !prevIsFull) burstStars();
-  prevIsFull = nowIsFull;
+      if (nowIsFull && !prevIsFull) burstStars();
+      prevIsFull = nowIsFull;
 
-  renderLogs();
-}
+      renderLogs();
+    }
 
-async function loadMoonData(uid) {
-  async function loadMoonData(uid){
-  const userRef = doc(db, "users", uid);
-  const snap = await getDoc(userRef);
+    // 修正 loadMoonData 函數的語法錯誤
+    async function loadMoonData(uid) {
+      try {
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
 
-  if(!snap.exists()){
-    await setDoc(userRef,{ moonGlowTotal:0, moonGlowLogs:[] },{ merge:true });
-    renderMoonUI();
-    return;
-  }
+        if(!snap.exists()){
+          await setDoc(userRef,{ moonGlowTotal:0, moonGlowLogs:[] },{ merge:true });
+          renderMoonUI();
+          return;
+        }
 
-  const data = snap.data();
-  const logs = data.moonGlowLogs || [];
+        const data = snap.data();
+        const logs = data.moonGlowLogs || [];
 
-  let total = 0;
-  logs.forEach(l=>{
-    if(l.type === "earn")   total += l.glow || 0;
-    if(l.type === "redeem") total -= l.glow || 0;
-  });
+        let total = 0;
+        logs.forEach(l=>{
+          if(l.type === "earn")   total += l.glow || 0;
+          if(l.type === "redeem") total -= l.glow || 0;
+        });
 
-  moonData.totalGlow = Math.max(total,0);
-  moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
-  moonData.logs = logs;
+        moonData.totalGlow = Math.max(total,0);
+        moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+        moonData.logs = logs;
 
-  await updateDoc(userRef,{
-    moonGlowTotal: moonData.totalGlow
-  });
+        await updateDoc(userRef,{
+          moonGlowTotal: moonData.totalGlow
+        });
 
-  renderMoonUI();
-}
-    
-  } catch (err) {
-    console.error("月光數據加載失敗:", err);
-  }
-}
+        renderMoonUI();
+      } catch (err) {
+        console.error("月光數據加載失敗:", err);
+      }
+    }
+
+    function renderLogs(){
+      const logBox = document.getElementById("moon-log-box");
+      if(!logBox) return;
+      logBox.innerHTML = "";
+      const logs = [...(moonData.logs || [])].reverse().slice(0, 12);
+      logs.forEach(l=>{
+        const div = document.createElement("div");
+        div.className = "log-item";
+        const time = new Date(l.time).toLocaleString("zh-TW",{ hour12:false });
+        const sign = l.type === "earn" ? "+" : "-";
+        const color = l.type === "earn" ? "#55efc4" : "#ff7675";
+        const source = l.source || "任務";
+        div.innerHTML = `<div>${source} <span style="color:${color}">${sign}${l.glow}</span></div><div class="log-time">${time}</div>`;
+        logBox.appendChild(div);
+      });
+      if(logs.length===0){
+        const empty = document.createElement("div");
+        empty.className = "log-item";
+        empty.innerHTML = `<div>尚無收集紀錄</div><div class="log-time">--</div>`;
+        logBox.appendChild(empty);
+      }
+    }
+
+    function recomputeCycleFromTotal(total){
+      return total % MOON_CYCLE;
+    }
 
     window.startLunarMission = function(event){
       event.preventDefault();
@@ -773,7 +728,7 @@ async function loadMoonData(uid) {
       return false;
     }
 
-    // [修改] 接收 mission 參數並存入 source
+    // 接收 mission 參數並存入 source
     window.addEventListener("message", async (event) => {
       if (!isAllowedOrigin(event.origin)) return;
       const data = event.data || {};
@@ -830,7 +785,7 @@ async function loadMoonData(uid) {
       alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
     });
 
-    // [修改] 兌換時加入 source 標記
+    // 兌換時加入 source 標記
     async function redeemGlow(){
       const sel = document.getElementById("redeemAmount");
       const amt = parseInt(sel?.value || "", 10);
@@ -888,18 +843,18 @@ async function loadMoonData(uid) {
       if(e.target?.id === "redeemBtn") redeemGlow();
     });
 
- onAuthStateChanged(auth, async (user) => {
-  currentUser = user || null;
-  if (!currentUser) {
-    document.getElementById("login-hint").style.display = "block";
-    moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
-    renderMoonUI();
-    return;
-  }
-  document.getElementById("login-hint").style.display = "none";
-  // 呼叫修正後的加載函數，恢復所有積分
-  await loadMoonData(currentUser.uid); 
-});
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      if (!currentUser) {
+        document.getElementById("login-hint").style.display = "block";
+        moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
+        renderMoonUI();
+        return;
+      }
+      document.getElementById("login-hint").style.display = "none";
+      // 呼叫修正後的加載函數，恢復所有積分
+      await loadMoonData(currentUser.uid); 
+    });
 
     function init(){
       renderMissions();
