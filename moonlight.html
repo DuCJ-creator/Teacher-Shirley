@@ -422,9 +422,8 @@
 
 .task-tag {
   font-size: 0.85rem;
-  color: var(--accent-2); /* 使用亮藍色引導點擊 */
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(126, 214, 255, 0.4);
+  color: #f1c40f !important; /* 改為亮黃色 */
+  font-weight: 800;
 }
 
     .redeem-wrap{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1; }
@@ -676,25 +675,31 @@ function renderMoonUI(){
   renderLogs();
 }
 
-async function loadMoonData(uid){
+async function loadMoonData(uid) {
   const userRef = doc(db, "users", uid);
   try {
     const snap = await getDoc(userRef);
-    if (snap.exists()){
+    if (snap.exists()) {
       const data = snap.data();
-      // 核心修正：確保讀取的欄位是 moonGlowTotal，並存入 moonData 變數
+      
+      // 核心修正：讀取總積分並存入 moonData
+      // 確保無論之前是在哪個 Mission 獲得的點數，只要存在 moonGlowTotal 都會被讀取
       moonData.totalGlow = data.moonGlowTotal || 0;
-      // 如果您的 logs 也消失了，請加入這行
-      moonData.logs = data.moonGlowLogs || []; 
+      
+      // 自動根據總積分計算目前的循環進度 (每 300 點一輪)
+      moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+      
+      moonData.logs = data.moonGlowLogs || [];
     } else {
+      // 若是新用戶，初始化資料
       await setDoc(userRef, { moonGlowTotal: 0, moonGlowLogs: [] }, { merge: true });
-      moonData.totalGlow = 0;
-      moonData.logs = [];
+      moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
     }
-    // 讀取完畢後，必須執行您剛才貼給我的這段函數來刷新畫面
-    renderMoonUI(); 
+    
+    // 修改完畢後，立即執行渲染刷新畫面
+    renderMoonUI();
   } catch (err) {
-    console.error("載入失敗:", err);
+    console.error("載入積分失敗:", err);
   }
 }
 
