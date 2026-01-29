@@ -693,18 +693,30 @@ function getPhaseByValue(val){
 async function loadMoonData(uid){
   const userRef = doc(db, "users", uid);
 
-  // 將 getDoc 改為 onSnapshot 達成自動收集感應
+  // 使用監聽模式，確保資料同步
   onSnapshot(userRef, async (snap) => {
     if (!snap.exists()){
+      // 如果完全沒資料才初始化
       await setDoc(userRef, {
         moonGlowTotal: 0,
         moonGlowCycle: 0,
         moonGlowLogs: []
       }, {merge:true});
-      moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-      renderMoonUI();
       return;
     }
+
+    const d = snap.data();
+    // 關鍵：確保讀取的是 moonGlowTotal 而不是 moonData.totalGlow
+    const total = d.moonGlowTotal || 0;
+    
+    // 將資料填入您頁面使用的變數 moonData
+    moonData.totalGlow = total;
+    moonData.cycleGlow = recomputeCycleFromTotal(total); 
+    moonData.logs = d.moonGlowLogs || [];
+    
+    renderMoonUI();
+  });
+}
 
     const d = snap.data();
     const total = d.moonGlowTotal || 0;
