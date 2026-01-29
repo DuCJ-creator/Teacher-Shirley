@@ -391,26 +391,29 @@
     .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
 
 .task-list a {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.4) !important; /* 加深背景 */
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  /* 使用深色背景襯托白字 */
+  background: rgba(0, 0, 0, 0.5) !important; 
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   text-decoration: none !important;
-  color: #ffffff !important; /* 修改這行：強制改為純白 */
-  margin-bottom: 10px;
-  transition: 0.3s;
-  cursor: pointer;
-  position: relative;
-  z-index: 1;
+  /* 這裡強制設定為白色 */
+  color: #ffffff !important; 
 }
 
+/* 確保滑鼠移上去時也不會變回紫色 */
+.task-list a:hover, .task-list a:visited, .task-list a:active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 標籤改為亮黃色，避開紫色系 */
 .task-tag {
-  font-size: 0.85rem;
-  color: #f1c40f !important; /* 修改這行：標籤改為亮黃色較清楚 */
-  font-weight: 800;
+  color: #f1c40f !important;
+  font-weight: 800 !important;
 }
 
 /* 鎖定狀態 */
@@ -682,24 +685,24 @@ async function loadMoonData(uid) {
     if (snap.exists()) {
       const data = snap.data();
       
-      // 核心修正：讀取總積分並存入 moonData
-      // 確保無論之前是在哪個 Mission 獲得的點數，只要存在 moonGlowTotal 都會被讀取
-      moonData.totalGlow = data.moonGlowTotal || 0;
+      // 關鍵點：無論點數是從哪個 Mission 來的，Firebase 都會存放在 moonGlowTotal
+      // 我們強制讀取這個總分
+      const total = data.moonGlowTotal || 0;
       
-      // 自動根據總積分計算目前的循環進度 (每 300 點一輪)
-      moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
-      
+      moonData.totalGlow = total;
+      // 根據總分自動推算循環進度 (300點一輪)
+      moonData.cycleGlow = total % 300; 
       moonData.logs = data.moonGlowLogs || [];
     } else {
-      // 若是新用戶，初始化資料
       await setDoc(userRef, { moonGlowTotal: 0, moonGlowLogs: [] }, { merge: true });
       moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
     }
     
-    // 修改完畢後，立即執行渲染刷新畫面
+    // 讀取完畢後，強制執行您原有的 render 函數刷新 UI
     renderMoonUI();
+    
   } catch (err) {
-    console.error("載入積分失敗:", err);
+    console.error("Firebase 讀取失敗:", err);
   }
 }
 
