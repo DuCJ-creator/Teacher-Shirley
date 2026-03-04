@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crack TOEIC with Shirley</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #2d3436; --accent: #0984e3; --bg: #ffffff; --light: #f4f7f6; --border: #e0e0e0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--primary); margin: 0; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-weight: 300; letter-spacing: -1px; font-size: 2.2rem; margin-bottom: 20px; }
+        .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; background: var(--light); padding: 25px; border-radius: 12px; font-size: 0.85rem; border: 1px solid var(--border); }
+
+        nav { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; transition: 0.3s; cursor: pointer; }
+        nav a:hover { color: var(--accent); }
+
+        section { display: none; animation: fadeIn 0.4s ease; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Listening Lab */
+        .listening-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+        .note-pad { width: 100%; height: 120px; margin-top: 15px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; resize: none; background: #fffde7; box-sizing: border-box; }
+        .scantron { background: var(--light); padding: 15px; border-radius: 8px; height: 450px; overflow-y: auto; border: 1px solid var(--border); }
+        .scantron-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }
+        .scantron-row span { font-size: 0.75rem; font-weight: bold; width: 30px; }
+        .btn-group { display: flex; gap: 4px; }
+        .ans-btn { width: 25px; height: 25px; font-size: 0.7rem; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 3px; }
+        .ans-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Practice UI */
+        .q-card { background: var(--light); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        button.opt { background: white; border: 1px solid var(--border); padding: 12px; border-radius: 8px; cursor: pointer; text-align: left; font-family: inherit; font-size: 0.9rem; transition: all 0.2s; }
+        button.opt:hover { border-color: var(--accent); background: #f0f7ff; }
+        .correct { background: #d4edda !important; border-color: #28a745 !important; font-weight: 600; }
+        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
+        .explanation { font-size: 0.85rem; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; color: #555; display: none; }
+
+        .btn-main { display: block; width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; margin-top: 20px; transition: 0.3s; }
+        .btn-main:hover { background: var(--accent); }
+        iframe { width: 100%; border-radius: 12px; border: 1px solid var(--border); aspect-ratio: 16/9; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Crack TOEIC with Shirley</h1>
+        <div class="intro-grid">
+            <div>
+                <strong>LISTENING (45 MIN)</strong><br>
+                Part 1: Photographs (6 q's)<br>
+                Part 2: Question-Response (25 q's)<br>
+                Part 3: Conversations (39 q's)<br>
+                Part 4: Talks (30 q's)
+            </div>
+            <div>
+                <strong>READING (75 MIN)</strong><br>
+                Part 5: Incomplete Sentences (30 q's)<br>
+                Part 6: Text Completion (16 q's)<br>
+                Part 7: Reading Passages (54 q's)<br>
+                <em>Total Score Range: 10 – 990</em>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a onclick="showSection('listening')">LISTENING LAB</a>
+        <a onclick="showSection('gapfill')">SHUFFLE PRACTICE</a>
+        <a href="https://ducj-creator.github.io/Shirley-Grammar/TOEIC%20vocab" target="_blank">VOCABULARY</a>
+    </nav>
+
+    <section id="listening" class="active">
+        <div class="listening-grid">
+            <div>
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLW7CVuExKeAnn8oqCe6dPRp-zSF-XNiT6" allowfullscreen></iframe>
+                <textarea class="note-pad" placeholder="Draft your notes or keyword transcriptions here..."></textarea>
+            </div>
+            <div>
+                <div style="font-size: 0.8rem; margin-bottom: 10px; font-weight: bold;">ANSWER PAD (A-D)</div>
+                <div class="scantron" id="scantron-body"></div>
+                <button class="btn-main" style="padding: 10px; font-size: 0.7rem; margin-top: 10px;" onclick="clearScantron()">RESET PAD</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="gapfill">
+        <div id="quiz-container"></div>
+        <button class="btn-main" onclick="generateQuiz()">GENERATE 10 RANDOM DRILLS</button>
+    </section>
+</div>
+
+<script>
+    // NAVIGATION LOGIC
+    function showSection(id) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'gapfill') generateQuiz();
+    }
+
+    // ANSWER PAD LOGIC
+    const scantronBody = document.getElementById('scantron-body');
+    for (let i = 1; i <= 100; i++) {
+        const row = document.createElement('div');
+        row.className = 'scantron-row';
+        row.innerHTML = `<span>${i}</span><div class="btn-group">
+            ${['A','B','C','D'].map(letter => `<button class="ans-btn" onclick="selectAns(this)">${letter}</button>`).join('')}
+        </div>`;
+        scantronBody.appendChild(row);
+    }
+
+    function selectAns(btn) {
+        const buttons = btn.parentElement.querySelectorAll('.ans-btn');
+        buttons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function clearScantron() {
+        document.querySelectorAll('.ans-btn').forEach(b => b.classList.remove('selected'));
+    }
+
+    // QUESTION BANK (100 QUESTIONS)
+    const questionBank = [
+        // PART 5 & 6 CONTENT (Sourced from provided PDF & Practice Materials)
+        { q: "Customer reviews indicate that many modern mobile devices are often unnecessarily _______.", o: ["complication", "complicates", "complicate", "complicated"], c: 3, e: "Adjective form required after 'are'." },
+        { q: "Jamal Nawzad has received top performance reviews _______ he joined the department.", o: ["despite", "except", "since", "during"], c: 2, e: "'Since' indicates a starting point in time." },
+        { q: "The shipment was delayed _______ a clerical error in the logistics department.", o: ["because", "due to", "since", "as"], c: 1, e: "'Due to' is a preposition for noun phrases." },
+        { q: "The manager plans to _______ the research team by hiring three more specialists.", o: ["expand", "occupy", "inform", "respond"], c: 0, e: "To increase size = expand." },
+        { q: "Please provide a _______ estimate of the costs involved in the renovation.", o: ["reason", "reasonably", "reasonable", "reasoning"], c: 2, e: "Adjective 'reasonable' modifies 'estimate'." },
+        { q: "The Gidley Institute ______ to increase its funding for environmental projects.", o: ["intends", "intent", "intention", "intending"], c: 0, e: "Third-person singular verb 'intends'." },
+        { q: "The software update will be ______ implemented across all departments next Monday.", o: ["full", "fully", "fullness", "filling"], c: 1, e: "Adverb 'fully' modifies the verb 'implemented'." },
+        { q: "Mr. Phan mentioned in his e-mail that he received the ______ item.", o: ["wrongly", "wronged", "wrong", "wrongs"], c: 2, e: "Adjective 'wrong' describes the item." },
+        { q: "All employees are ______ to attend the safety workshop this Thursday.", o: ["required", "requirement", "requiring", "requires"], c: 0, e: "Passive construction 'are required'." },
+        { q: "The new Caspian Blue shade is ______ than the previous Stormy Blue.", o: ["dark", "darker", "darkest", "darkly"], c: 1, e: "Comparative form used with 'than'." },
+        { q: "Ms. Walters _______ the bank's proposal before the meeting adjourned.", o: ["accept", "accepting", "accepted", "accepts"], c: 2, e: "Past tense required for completed action." },
+        { q: "The ______ of the new system has improved office efficiency.", o: ["install", "installation", "installed", "installer"], c: 1, e: "Noun 'installation' acts as the subject." },
+        { q: "Please ensure that all documents are signed _______.", o: ["proper", "properly", "property", "propriety"], c: 1, e: "Adverb 'properly' modifies the verb 'signed'." },
+        { q: "The committee will ______ the results of the survey next week.", o: ["announce", "announcement", "announced", "announcing"], c: 0, e: "Base verb needed after modal 'will'." },
+        { q: "The budget ______ for the upcoming fiscal year was approved yesterday.", o: ["propose", "proposal", "proposed", "proposing"], c: 1, e: "Noun 'proposal' is the subject." },
+        { q: "The marketing team is ______ for the increase in sales.", o: ["response", "responsible", "responsibly", "responsibility"], c: 1, e: "Adjective 'responsible' follows 'is'." },
+        { q: "We are ______ looking for a new office space in the downtown area.", o: ["current", "currently", "currency", "currents"], c: 1, e: "Adverb 'currently' modifies 'looking'." },
+        { q: "The technicians worked ______ to restore power to the building.", o: ["quick", "quickly", "quickness", "quicken"], c: 1, e: "Adverb 'quickly' modifies 'worked'." },
+        { q: "An ______ amount of time was spent on the research phase.", o: ["excessive", "excess", "excessively", "exceed"], c: 0, e: "Adjective 'excessive' modifies 'amount'." },
+        { q: "The CEO ______ the staff for their hard work during the transition.", o: ["thank", "thanks", "thanked", "thanking"], c: 2, e: "Past tense 'thanked' for a completed action." },
+        { q: "The ______ between the two companies was signed last Friday.", o: ["agree", "agreement", "agreeable", "agreed"], c: 1, e: "Noun 'agreement' is needed." },
+        { q: "She handles customer complaints with great ______.", o: ["patient", "patiently", "patience", "patients"], c: 2, e: "Noun 'patience' follows 'great'." },
+        { q: "The ______ will be sent to your email address shortly.", o: ["confirm", "confirmed", "confirming", "confirmation"], c: 3, e: "Noun 'confirmation' is the subject." },
+        { q: "He is the most ______ candidate for the position.", o: ["qualify", "qualified", "qualification", "qualifying"], c: 1, e: "Adjective 'qualified' modifies 'candidate'." },
+        { q: "The report must be completed ______ the end of the day.", o: ["by", "at", "on", "to"], c: 0, e: "Preposition 'by' indicates a deadline." },
+        { q: "The office is ______ located near the train station.", o: ["convenient", "conveniently", "convenience", "convene"], c: 1, e: "Adverb 'conveniently' modifies 'located'." },
+        { q: "The ______ cost of the project was higher than expected.", o: ["initiate", "initial", "initially", "initiation"], c: 1, e: "Adjective 'initial' modifies 'cost'." },
+        { q: "Please ______ the attached file for more details.", o: ["review", "reviewer", "reviewed", "reviewing"], c: 0, e: "Imperative verb 'review'." },
+        { q: "The ______ for the new project is very tight.", o: ["deadline", "deadly", "deaden", "deadlines"], c: 0, e: "Noun 'deadline' is needed." },
+        { q: "They have ______ decided to move forward with the plan.", o: ["final", "finalize", "finally", "finality"], c: 2, e: "Adverb 'finally' modifies 'decided'." },
+        { q: "The ______ of the product has been delayed due to technical issues.", o: ["launch", "launched", "launching", "launcher"], c: 0, e: "Noun 'launch' is the subject." },
+        { q: "He is known for his ______ and dedication to his work.", o: ["reliable", "reliably", "reliability", "reliance"], c: 2, e: "Noun 'reliability' is needed." },
+        { q: "The ______ of the meeting was to discuss the new policy.", o: ["purpose", "purposely", "purposed", "purposing"], c: 0, e: "Noun 'purpose' is needed." },
+        { q: "She was ______ promoted to senior manager.", o: ["recent", "recently", "recency", "recentness"], c: 1, e: "Adverb 'recently' modifies 'promoted'." },
+        { q: "The ______ for the scholarship are very strict.", o: ["require", "requirement", "requirements", "requiring"], c: 2, e: "Plural noun 'requirements'." },
+        { q: "He _______ the offer because the salary was too low.", o: ["decline", "declining", "declined", "declines"], c: 2, e: "Past tense 'declined'." },
+        { q: "The ______ of the team is essential for success.", o: ["unite", "unity", "unified", "uniting"], c: 1, e: "Noun 'unity' is needed." },
+        { q: "The ______ results will be published in the newsletter.", o: ["survey", "surveyed", "surveying", "surveys"], c: 0, e: "Adjective-like noun 'survey'." },
+        { q: "The company is ______ expanding its operations overseas.", o: ["active", "actively", "activity", "activist"], c: 1, e: "Adverb 'actively' modifies 'expanding'." },
+        { q: "Please ______ the instructions carefully before starting.", o: ["read", "reader", "reading", "reads"], c: 0, e: "Imperative verb 'read'." },
+        { q: "The ______ of the car was damaged in the accident.", o: ["exterior", "externally", "externalize", "externality"], c: 0, e: "Noun 'exterior' is needed." },
+        { q: "He is ______ for the coordination of the event.", o: ["responsibility", "responsible", "responsibly", "responsive"], c: 1, e: "Adjective 'responsible'." },
+        { q: "The ______ of the new library will begin next month.", o: ["construct", "construction", "constructed", "constructing"], c: 1, e: "Noun 'construction' is needed." },
+        { q: "They are ______ to reach an agreement by tomorrow.", o: ["hope", "hopeful", "hopefully", "hoping"], c: 3, e: "Present continuous 'are hoping'." },
+        { q: "The ______ of the problem took several hours.", o: ["analyze", "analysis", "analytical", "analyst"], c: 1, e: "Noun 'analysis' is needed." },
+        { q: "Please ______ your name and address on the form.", o: ["write", "writer", "writing", "written"], c: 0, e: "Imperative verb 'write'." },
+        { q: "The ______ of the film was very moving.", o: ["ending", "end", "ended", "ends"], c: 0, e: "Noun 'ending' is needed." },
+        { q: "She is a very ______ and hard-working employee.", "o": ["capability", "capable", "capably", "capacity"], "c": 1, "e": "Adjective 'capable' modifies 'employee'." },
+        { q: "The ______ for the new building were approved.", o: ["plan", "plans", "planning", "planned"], c: 1, e: "Plural noun 'plans'." },
+        { q: "He ______ to the manager about the noise.", o: ["complain", "complained", "complaint", "complaining"], c: 1, e: "Past tense 'complained'." },
+        { q: "The ______ of the data is crucial for the report.", o: ["accurate", "accurately", "accuracy", "accuracies"], c: 2, e: "Noun 'accuracy' is needed." },
+        { q: "Please ______ the lights before you leave.", o: ["off", "turn off", "turning off", "turned off"], c: 1, e: "Phrasal verb 'turn off'." },
+        { q: "The ______ of the factory will increase next year.", o: ["produce", "production", "productive", "productively"], c: 1, e: "Noun 'production' is needed." },
+        { q: "She is ______ about her new job.", o: ["excite", "excited", "exciting", "excitement"], c: 1, e: "Adjective 'excited' for feelings." },
+        { q: "The ______ for the position is very competitive.", o: ["salary", "salaries", "salaried", "salaring"], c: 0, e: "Noun 'salary' is needed." },
+        { q: "Please ______ your seatbelts for takeoff.", o: ["fast", "fasten", "fastening", "fastened"], c: 1, e: "Verb 'fasten'." },
+        { q: "The ______ of the book was very informative.", o: ["content", "contents", "contented", "contention"], c: 0, e: "Noun 'content' is needed." },
+        { q: "He ______ the car into the garage.", o: ["drive", "drove", "driving", "drives"], c: 1, e: "Past tense 'drove'." },
+        { q: "The ______ of the water was tested yesterday.", o: ["pure", "purity", "purely", "purify"], c: 1, e: "Noun 'purity' is needed." },
+        { q: "Please ______ the door when you leave.", o: ["lock", "locker", "locking", "locked"], c: 0, e: "Imperative verb 'lock'." },
+        { q: "The ______ for the marathon is very long.", o: ["route", "routed", "routing", "routes"], c: 0, e: "Noun 'route' is needed." },
+        { q: "She ______ a letter to her friend.", o: ["write", "wrote", "writing", "writes"], c: 1, e: "Past tense 'wrote'." },
+        { q: "The ______ of the painting is very impressive.", o: ["size", "sized", "sizing", "sizes"], c: 0, e: "Noun 'size' is needed." },
+        { q: "Please ______ the volume of the radio.", o: ["low", "lower", "lowering", "lowered"], c: 1, e: "Verb 'lower'." },
+        { q: "The ______ of the group was very strong.", o: ["leader", "leadership", "leading", "leads"], c: 1, e: "Noun 'leadership' is needed." },
+        { q: "He ______ the cake into eight pieces.", o: ["cut", "cuts", "cutting", "cutter"], c: 0, e: "Past tense 'cut'." },
+        { q: "The ______ of the cake was very sweet.", o: ["taste", "tasty", "tasting", "tastes"], c: 0, e: "Noun 'taste' is needed." },
+        { q: "Please ______ the paper in half.", o: ["fold", "folder", "folding", "folded"], c: 0, e: "Imperative verb 'fold'." },
+        { q: "The ______ of the sun was very bright.", o: ["light", "lighted", "lighting", "lights"], c: 0, e: "Noun 'light' is needed." },
+        { q: "He ______ the ball to his brother.", o: ["throw", "threw", "throwing", "throws"], c: 1, e: "Past tense 'threw'." },
+        { q: "The ______ of the room was very cold.", o: ["temp", "temperature", "temperate", "temps"], c: 1, e: "Noun 'temperature' is needed." },
+        { q: "Please ______ your hands before eating.", o: ["wash", "washer", "washing", "washed"], c: 0, e: "Imperative 'wash'." },
+        { q: "The ______ of the mountain was very high.", o: ["peak", "peaked", "peaking", "peaks"], c: 0, e: "Noun 'peak' is needed." },
+        { q: "He ______ the window to let in some air.", o: ["open", "opened", "opening", "opens"], c: 1, e: "Past tense 'opened'." },
+        { q: "The ______ of the sea was very calm.", o: ["surface", "surfaced", "surfacing", "surfaces"], c: 0, e: "Noun 'surface' is needed." },
+        { q: "Please ______ the plant every day.", o: ["water", "watered", "watering", "waters"], c: 0, e: "Imperative 'water'." },
+        { q: "The ______ of the dog was very loud.", o: ["bark", "barked", "barking", "barks"], c: 0, e: "Noun 'bark' is needed." },
+        { q: "He ______ the book on the table.", o: ["put", "puts", "putting", "putter"], c: 0, e: "Past tense 'put'." },
+        { q: "The ______ of the bell was very clear.", o: ["sound", "sounded", "sounding", "sounds"], c: 0, e: "Noun 'sound' is needed." },
+        { q: "Please ______ the window if it rains.", o: ["close", "closer", "closing", "closed"], c: 0, e: "Imperative 'close'." },
+        { q: "The ______ of the coffee was very strong.", o: ["smell", "smelled", "smelling", "smells"], c: 0, e: "Noun 'smell' is needed." },
+        { q: "He ______ the race in record time.", o: ["run", "ran", "running", "runs"], c: 1, e: "Past tense 'ran'." },
+        { q: "The ______ of the sky was very blue.", o: ["color", "colored", "coloring", "colors"], c: 0, e: "Noun 'color' is needed." },
+        { q: "Please ______ the floor after you finish.", o: ["sweep", "swept", "sweeping", "sweeps"], c: 0, e: "Imperative 'sweep'." },
+        { q: "The ______ of the wind was very strong.", o: ["force", "forced", "forcing", "forces"], c: 0, e: "Noun 'force' is needed." },
+        { q: "He ______ the news on the television.", o: ["watch", "watched", "watching", "watches"], c: 1, e: "Past tense 'watched'." },
+        { q: "The ______ of the grass was very green.", o: ["shade", "shaded", "shading", "shades"], c: 0, e: "Noun 'shade' is needed." },
+        { q: "Please ______ the door quietly.", o: ["shut", "shuts", "shutting", "shutter"], c: 0, e: "Imperative 'shut'." },
+        { q: "The ______ of the fire was very warm.", o: ["heat", "heated", "heating", "heats"], c: 0, e: "Noun 'heat' is needed." },
+        { q: "He ______ the letter in the mailbox.", o: ["mail", "mailed", "mailing", "mails"], c: 1, e: "Past tense 'mailed'." },
+        { q: "The ______ of the ice was very cold.", o: ["feel", "feeling", "feels", "felt"], c: 0, e: "Noun 'feel' is needed." },
+        { q: "Please ______ the phone when it rings.", o: ["answer", "answered", "answering", "answers"], c: 0, e: "Imperative 'answer'." },
+        { q: "The ______ of the music was very loud.", o: ["volume", "volumed", "voluming", "volumes"], c: 0, e: "Noun 'volume' is needed." },
+        { q: "He ______ the door with a key.", o: ["unlock", "unlocked", "unlocking", "unlocks"], c: 1, e: "Past tense 'unlocked'." },
+        { q: "The ______ of the wood was very rough.", o: ["texture", "textured", "texturing", "textures"], c: 0, e: "Noun 'texture' is needed." },
+        { q: "Please ______ the TV after 10 PM.", o: ["off", "turn off", "turning off", "turns off"], c: 1, e: "Verb phrase 'turn off'." },
+        { q: "The ______ of the bird was very beautiful.", o: ["song", "sing", "sang", "sung"], c: 0, e: "Noun 'song' is needed." },
+        { q: "He ______ the mountain in three days.", o: ["climb", "climbed", "climbing", "climbs"], c: 1, e: "Past tense 'climbed'." },
+        { q: "The ______ of the rain was very heavy.", o: ["fall", "fell", "falling", "falls"], c: 0, e: "Noun 'fall' is needed." },
+        { q: "Please ______ the lights when you leave.", o: ["out", "turn out", "turning out", "turned out"], c: 1, e: "Verb phrase 'turn out'." }
+    ];
+
+    function generateQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        const shuffled = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 10);
+        
+        shuffled.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <p><strong>${index + 1}.</strong> ${item.q}</p>
+                <div class="options">
+                    ${item.o.map((opt, i) => `<button class="opt" onclick="check(this, ${i}, ${item.c}, '${item.e}')">
+                        ${['A','B','C','D'][i]}. ${opt}
+                    </button>`).join('')}
+                </div>
+                <div class="explanation"></div>
+            `;
+            container.appendChild(card);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function check(btn, selected, correct, info) {
+        const parent = btn.parentElement;
+        const explanation = parent.nextElementSibling;
+        const opts = parent.querySelectorAll('button');
+        
+        opts.forEach(b => b.disabled = true);
+        explanation.style.display = 'block';
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            explanation.innerHTML = `<span style="color:#28a745">✓ Correct!</span><br>${info}`;
+        } else {
+            btn.classList.add('wrong');
+            opts[correct].classList.add('correct');
+            explanation.innerHTML = `<span style="color:#dc3545">✗ Incorrect.</span><br>${info}`;
+        }
+    }
+
+    window.onload = () => {
+        // Scantron is built by the loop above
+    };
+</script>
+</body>
+</html>
