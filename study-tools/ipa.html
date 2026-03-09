@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPA — International Phonetic Alphabet</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0D1117;
+  --deep: #111827;
+  --panel: #161D2B;
+  --card: #1C2535;
+  --card-hover: #222E42;
+  --border: rgba(255,255,255,0.07);
+  --border-lit: rgba(255,255,255,0.14);
+  --text: #E8EDF5;
+  --muted: #7A8BA8;
+  --faint: #3A4A60;
+
+  --cyan:    #38BDF8;
+  --violet:  #A78BFA;
+  --emerald: #34D399;
+  --amber:   #FBBF24;
+  --rose:    #FB7185;
+  --sky:     #7DD3FC;
+
+  --cyan-dim:    rgba(56,189,248,0.12);
+  --violet-dim:  rgba(167,139,250,0.12);
+  --emerald-dim: rgba(52,211,153,0.12);
+  --amber-dim:   rgba(251,191,36,0.12);
+  --rose-dim:    rgba(251,113,133,0.12);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--ink);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid dot background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(56,189,248,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glow blob */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px; left: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(167,139,250,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  z-index: 10;
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.header-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+header h1 span {
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header .subtitle {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* ── MAIN ── */
+#chart-page {
+  position: relative;
+  z-index: 1;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.8rem;
+  margin-bottom: 2.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.legend-pip {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Section headers */
+.section-block { margin-bottom: 3rem; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.section-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--faint);
+  margin-left: auto;
+}
+
+/* ── PHONEME CARDS ── */
+.phone-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.phone-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1.05rem;
+  min-width: 90px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.phone-card:hover {
+  background: var(--card-hover);
+  border-color: var(--border-lit);
+  transform: translateY(-2px);
+}
+.phone-card:hover::before { opacity: 1; }
+
+.phone-card .sym {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  font-weight: 400;
+}
+.phone-card .ex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+/* Category color theming */
+.cat-close-vowel   { --cat: var(--cyan);    --cat-dim: var(--cyan-dim); }
+.cat-mid-vowel     { --cat: var(--violet);  --cat-dim: var(--violet-dim); }
+.cat-open-vowel    { --cat: var(--emerald); --cat-dim: var(--emerald-dim); }
+.cat-diphthong     { --cat: var(--amber);   --cat-dim: var(--amber-dim); }
+.cat-plosive       { --cat: var(--rose);    --cat-dim: var(--rose-dim); }
+.cat-fricative     { --cat: var(--violet);  --cat-dim: var(--violet-dim); }
+.cat-affricate     { --cat: var(--cyan);    --cat-dim: var(--cyan-dim); }
+.cat-nasal         { --cat: var(--emerald); --cat-dim: var(--emerald-dim); }
+.cat-approximant   { --cat: var(--amber);   --cat-dim: var(--amber-dim); }
+
+.phone-card .sym   { color: var(--cat); }
+.phone-card::before { background: var(--cat); }
+.phone-card:hover  { background: var(--cat-dim); border-color: var(--cat); }
+
+.section-tag {
+  background: var(--cat-dim, rgba(56,189,248,0.1));
+  color: var(--cat, var(--cyan));
+}
+
+/* ── STUDY OVERLAY ── */
+#study-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 8, 15, 0.75);
+  backdrop-filter: blur(6px);
+}
+#study-overlay.visible {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+#study-panel {
+  background: var(--panel);
+  border: 1px solid var(--border-lit);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+  animation: slideUp 0.28s ease;
+  position: relative;
+}
+
+/* Scrollbar */
+#study-panel::-webkit-scrollbar { width: 4px; }
+#study-panel::-webkit-scrollbar-track { background: transparent; }
+#study-panel::-webkit-scrollbar-thumb { background: var(--faint); border-radius: 2px; }
+
+/* Study header */
+.s-header {
+  padding: 2.5rem 2.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: start;
+  position: relative;
+}
+
+.s-symbol-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.s-symbol-big {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 6rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.s-ipa-bracket {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.s-info {}
+.s-cat-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  margin-bottom: 0.7rem;
+}
+.s-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.s-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.audio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1.5px solid;
+  border-radius: 8px;
+  padding: 0.55rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+.audio-btn:hover { transform: translateY(-1px); }
+.audio-btn.playing { opacity: 0.7; }
+.audio-btn svg { width: 13px; height: 13px; }
+
+.study-close {
+  position: absolute;
+  top: 1.2rem; right: 1.4rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+.study-close:hover { color: var(--text); border-color: var(--border-lit); }
+
+/* Study body */
+.s-body { padding: 2rem 2.5rem 2.5rem; }
+
+.s-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+}
+@media(max-width:580px){
+  .s-grid { grid-template-columns: 1fr; }
+  .s-header { grid-template-columns: 1fr; }
+  .s-symbol-wrap { flex-direction: row; gap: 1rem; }
+  .s-symbol-big { font-size: 4rem; }
+  .s-body { padding: 1.5rem; }
+}
+
+.s-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.3rem 1.4rem;
+}
+.s-card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.tongue-svg { width: 100%; max-width: 210px; display: block; margin: 0 auto; }
+
+/* Pronunciation steps */
+.p-steps { list-style: none; counter-reset: ps; }
+.p-steps li {
+  counter-increment: ps;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 0.7rem;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.p-steps li::before {
+  content: counter(ps);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* Clusters */
+.clusters-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.cluster-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.8rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 0.55rem;
+  flex-wrap: wrap;
+}
+.cluster-letters {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+.cluster-examples { display: flex; flex-wrap: wrap; gap: 0.45rem; flex: 1; }
+
+.word-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.16s;
+  color: var(--text);
+}
+.word-chip:hover { border-color: var(--border-lit); background: var(--card-hover); }
+.word-chip .pi { font-size: 0.6rem; opacity: 0.5; }
+.word-chip:hover .pi { opacity: 1; }
+
+/* Nav */
+.s-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.nav-btn:hover { color: var(--text); border-color: var(--border-lit); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; }
+.s-progress {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--faint);
+}
+
+/* Category-aware accents inside panel */
+.accent-close-vowel   { --accent: var(--cyan);    --accent-dim: var(--cyan-dim); }
+.accent-mid-vowel     { --accent: var(--violet);  --accent-dim: var(--violet-dim); }
+.accent-open-vowel    { --accent: var(--emerald); --accent-dim: var(--emerald-dim); }
+.accent-diphthong     { --accent: var(--amber);   --accent-dim: var(--amber-dim); }
+.accent-plosive       { --accent: var(--rose);    --accent-dim: var(--rose-dim); }
+.accent-fricative     { --accent: var(--violet);  --accent-dim: var(--violet-dim); }
+.accent-affricate     { --accent: var(--cyan);    --accent-dim: var(--cyan-dim); }
+.accent-nasal         { --accent: var(--emerald); --accent-dim: var(--emerald-dim); }
+.accent-approximant   { --accent: var(--amber);   --accent-dim: var(--amber-dim); }
+
+#study-panel .s-symbol-big   { color: var(--accent, var(--cyan)); }
+#study-panel .s-cat-tag      { background: var(--accent-dim, var(--cyan-dim)); color: var(--accent, var(--cyan)); }
+#study-panel .s-card-label   { color: var(--accent, var(--cyan)); }
+#study-panel .clusters-label { color: var(--accent, var(--cyan)); }
+#study-panel .cluster-letters{ color: var(--accent, var(--cyan)); }
+#study-panel .audio-btn      { border-color: var(--accent, var(--cyan)); color: var(--accent, var(--cyan)); }
+#study-panel .audio-btn:hover{ background: var(--accent-dim, var(--cyan-dim)); }
+#study-panel .p-steps li::before { background: var(--accent-dim, var(--cyan-dim)); color: var(--accent, var(--cyan)); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Shirley's International Phonetic Alphabet Class</div>
+  <h1>IPA <span>Reference</span> Chart</h1>
+  <p class="subtitle">Click any symbol to open its study unit</p>
+</header>
+
+<div id="chart-page">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-pip" style="background:var(--cyan)"></div>Close Vowels</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--violet)"></div>Mid Vowels</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--emerald)"></div>Open Vowels</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--amber)"></div>Diphthongs</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--rose)"></div>Plosives</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--violet)"></div>Fricatives</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--cyan)"></div>Affricates</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--emerald)"></div>Nasals</div>
+    <div class="legend-item"><div class="legend-pip" style="background:var(--amber)"></div>Approximants</div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-close-vowel">
+      <span class="section-tag">Vowels</span>
+      <span class="section-title">Close Vowels</span>
+      <span class="section-count" id="count-close-vowel"></span>
+    </div>
+    <div class="phone-grid" id="grid-close-vowel"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-mid-vowel">
+      <span class="section-tag">Vowels</span>
+      <span class="section-title">Mid Vowels</span>
+      <span class="section-count" id="count-mid-vowel"></span>
+    </div>
+    <div class="phone-grid" id="grid-mid-vowel"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-open-vowel">
+      <span class="section-tag">Vowels</span>
+      <span class="section-title">Open Vowels</span>
+      <span class="section-count" id="count-open-vowel"></span>
+    </div>
+    <div class="phone-grid" id="grid-open-vowel"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-diphthong">
+      <span class="section-tag">Vowels</span>
+      <span class="section-title">Diphthongs</span>
+      <span class="section-count" id="count-diphthong"></span>
+    </div>
+    <div class="phone-grid" id="grid-diphthong"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-plosive">
+      <span class="section-tag">Consonants</span>
+      <span class="section-title">Plosives</span>
+      <span class="section-count" id="count-plosive"></span>
+    </div>
+    <div class="phone-grid" id="grid-plosive"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-fricative">
+      <span class="section-tag">Consonants</span>
+      <span class="section-title">Fricatives</span>
+      <span class="section-count" id="count-fricative"></span>
+    </div>
+    <div class="phone-grid" id="grid-fricative"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-affricate">
+      <span class="section-tag">Consonants</span>
+      <span class="section-title">Affricates</span>
+      <span class="section-count" id="count-affricate"></span>
+    </div>
+    <div class="phone-grid" id="grid-affricate"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-nasal">
+      <span class="section-tag">Consonants</span>
+      <span class="section-title">Nasals</span>
+      <span class="section-count" id="count-nasal"></span>
+    </div>
+    <div class="phone-grid" id="grid-nasal"></div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head cat-approximant">
+      <span class="section-tag">Consonants</span>
+      <span class="section-title">Approximants &amp; Laterals</span>
+      <span class="section-count" id="count-approximant"></span>
+    </div>
+    <div class="phone-grid" id="grid-approximant"></div>
+  </div>
+
+</div>
+
+<!-- STUDY OVERLAY -->
+<div id="study-overlay">
+  <div id="study-panel">
+    <button class="study-close" onclick="closeStudy()">✕</button>
+
+    <div class="s-header">
+      <div class="s-symbol-wrap">
+        <div class="s-symbol-big" id="s-sym"></div>
+        <div class="s-ipa-bracket" id="s-bracket"></div>
+      </div>
+      <div class="s-info">
+        <span class="s-cat-tag" id="s-cat"></span>
+        <div class="s-name" id="s-name"></div>
+        <div class="s-desc" id="s-desc"></div>
+        <button class="audio-btn" id="audio-btn" onclick="playSymbolAudio()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Play example word
+        </button>
+      </div>
+    </div>
+
+    <div class="s-body">
+      <div class="s-grid">
+        <div class="s-card">
+          <div class="s-card-label">Mouth &amp; Tongue Position</div>
+          <svg class="tongue-svg" id="tongue-svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="s-card">
+          <div class="s-card-label">How to Pronounce</div>
+          <ol class="p-steps" id="p-steps"></ol>
+        </div>
+      </div>
+
+      <div class="clusters-section">
+        <div class="clusters-label">Spellings &amp; Example Words — click to hear</div>
+        <div id="clusters-list"></div>
+      </div>
+
+      <div class="s-nav">
+        <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">← Prev</button>
+        <span class="s-progress" id="s-progress"></span>
+        <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── IPA DATA ────────────────────────────────────────────────────────────────
+const phonemes = [
+  // ── CLOSE VOWELS ──
+  { id:0, sym:'iː', cat:'close-vowel', catLabel:'Close Front Vowel', name:'Long Close Front Unrounded',
+    desc:'The highest and most forward vowel in English. Tongue arches toward the hard palate, lips spread.',
+    example:'fleece',
+    pronunciation:[
+      'Spread your lips wide into a firm smile.',
+      'Raise your tongue tip high and push it toward your front teeth.',
+      'Hold sustained tension — keep the tongue position firm.',
+      'Sustain the sound with your vocal cords fully vibrating.',
+    ],
+    tongue:'high-front-tense',
+    clusters:[
+      { letters:'ee', examples:['fleece','feet','see','tree'] },
+      { letters:'ea', examples:['beach','meat','read','leaf'] },
+      { letters:'ie / ei', examples:['belief','receive','ceiling'] },
+      { letters:'e_e', examples:['theme','these','compete'] },
+    ]
+  },
+  { id:1, sym:'ɪ', cat:'close-vowel', catLabel:'Near-Close Front Vowel', name:'Short Near-Close Front Unrounded',
+    desc:'A lax, shorter version of /iː/. Tongue is high-front but relaxed.',
+    example:'kit',
+    pronunciation:[
+      'Relax from the /iː/ position — don\'t force the smile.',
+      'Tongue stays high-front but without tension.',
+      'Lips are loosely spread, jaw slightly lower.',
+      'Produce a quick, unstressed "ih" quality.',
+    ],
+    tongue:'high-front-lax',
+    clusters:[
+      { letters:'i', examples:['kit','bit','ship','list'] },
+      { letters:'y (final, unstressed)', examples:['happy','city','baby'] },
+      { letters:'e (unstressed)', examples:['needed','jacket','village'] },
+    ]
+  },
+  { id:2, sym:'uː', cat:'close-vowel', catLabel:'Close Back Vowel', name:'Long Close Back Rounded',
+    desc:'A high back vowel with strongly rounded, protruded lips.',
+    example:'goose',
+    pronunciation:[
+      'Push your lips forward into a tight circle.',
+      'Raise the back of your tongue high toward the soft palate.',
+      'Maintain strong lip rounding throughout.',
+      'Sustain the sound: a long, resonant "oo".',
+    ],
+    tongue:'high-back-tense',
+    clusters:[
+      { letters:'oo', examples:['goose','moon','food','cool'] },
+      { letters:'ue / ui', examples:['blue','fruit','clue','suit'] },
+      { letters:'ew / oo', examples:['grew','threw','through'] },
+      { letters:'u_e', examples:['tube','rude','flute'] },
+    ]
+  },
+  { id:3, sym:'ʊ', cat:'close-vowel', catLabel:'Near-Close Back Vowel', name:'Short Near-Close Back Rounded',
+    desc:'A lax, brief high back vowel. Lips are rounded but relaxed.',
+    example:'foot',
+    pronunciation:[
+      'Loosely round your lips — not as tense as /uː/.',
+      'Raise the back of your tongue, but without strain.',
+      'Keep everything loose and short.',
+      'Think "uh" with slight lip rounding: "ʊ".',
+    ],
+    tongue:'high-back-lax',
+    clusters:[
+      { letters:'oo', examples:['foot','book','cook','look'] },
+      { letters:'u', examples:['full','pull','push','bush'] },
+      { letters:'ould', examples:['could','would','should'] },
+    ]
+  },
+
+  // ── MID VOWELS ──
+  { id:4, sym:'e', cat:'mid-vowel', catLabel:'Close-Mid Front Vowel', name:'Close-Mid Front Unrounded',
+    desc:'A tense mid-front vowel. Used in many European languages; in English appears in diphthongs.',
+    example:'dress',
+    pronunciation:[
+      'Open your jaw to a mid position.',
+      'Spread your lips moderately wide.',
+      'Tongue is mid-height, pushed toward the front.',
+      'Produce a clean "eh" — shorter and tenser than /ɛ/.',
+    ],
+    tongue:'mid-front',
+    clusters:[
+      { letters:'e', examples:['dress','bed','red','next'] },
+      { letters:'ea', examples:['bread','dead','meant'] },
+      { letters:'a (before n/ny)', examples:['many','any'] },
+    ]
+  },
+  { id:5, sym:'ɛ', cat:'mid-vowel', catLabel:'Open-Mid Front Vowel', name:'Open-Mid Front Unrounded',
+    desc:'A more open mid-front vowel. Jaw drops lower than for /e/.',
+    example:'bed',
+    pronunciation:[
+      'Lower your jaw to a mid-open position.',
+      'Spread lips wide in a relaxed horizontal stretch.',
+      'Tongue lies mid-front in the mouth.',
+      'Say "eh" with the mouth slightly more open than /e/.',
+    ],
+    tongue:'mid-front-open',
+    clusters:[
+      { letters:'e', examples:['bed','pet','ten','when'] },
+      { letters:'ea', examples:['head','dead','thread'] },
+      { letters:'ai (French origin)', examples:['questionnaire'] },
+    ]
+  },
+  { id:6, sym:'ə', cat:'mid-vowel', catLabel:'Mid Central Vowel', name:'Schwa — The Unstressed Vowel',
+    desc:'The most common vowel in English. Occurs only in unstressed syllables. Completely neutral.',
+    example:'about',
+    pronunciation:[
+      'Let your jaw, tongue and lips all relax completely.',
+      'There is no specific tongue or lip position.',
+      'Simply breathe through an open, neutral mouth.',
+      'Produce the shortest possible "uh" — barely a sound.',
+    ],
+    tongue:'schwa',
+    clusters:[
+      { letters:'a (unstressed)', examples:['about','around','ago'] },
+      { letters:'e (unstressed)', examples:['the','open','over'] },
+      { letters:'o (unstressed)', examples:['police','lemon','bottom'] },
+      { letters:'u (unstressed)', examples:['supply','support'] },
+    ]
+  },
+  { id:7, sym:'ɜː', cat:'mid-vowel', catLabel:'Open-Mid Central Vowel', name:'Long Open-Mid Central — The ER Sound',
+    desc:'A long central vowel with r-coloring in American English, or pure mid-central in British English.',
+    example:'nurse',
+    pronunciation:[
+      'Open your jaw to a mid-open, relaxed position.',
+      'Tongue is in the central part of the mouth — not raised.',
+      'Lips are neutral and unrounded.',
+      'Sustain the sound; in American English, add a slight curl of the tongue tip.',
+    ],
+    tongue:'mid-central-long',
+    clusters:[
+      { letters:'ir', examples:['bird','girl','shirt','first'] },
+      { letters:'er', examples:['her','nerve','serve','fern'] },
+      { letters:'ur', examples:['turn','burn','nurse','hurt'] },
+      { letters:'ear', examples:['learn','earth','heard'] },
+      { letters:'or (after w)', examples:['word','world','worse'] },
+    ]
+  },
+  { id:8, sym:'ɔː', cat:'mid-vowel', catLabel:'Open-Mid Back Vowel', name:'Long Open-Mid Back Rounded',
+    desc:'A long back vowel with moderately rounded lips. The "aw" sound.',
+    example:'thought',
+    pronunciation:[
+      'Round your lips into a medium, relaxed circle.',
+      'Drop your jaw to a mid-open position.',
+      'Raise the back of your tongue slightly.',
+      'Sustain the sound: a long, resonant "aw".',
+    ],
+    tongue:'mid-back-rounded',
+    clusters:[
+      { letters:'aw', examples:['thought','law','saw','draw'] },
+      { letters:'au', examples:['caught','fault','pause','cause'] },
+      { letters:'al', examples:['call','tall','walk','ball'] },
+      { letters:'or', examples:['form','cord','horse','more'] },
+    ]
+  },
+  { id:9, sym:'o', cat:'mid-vowel', catLabel:'Close-Mid Back Vowel', name:'Close-Mid Back Rounded',
+    desc:'A mid-to-high back rounded vowel. Appears in many diphthongs in English.',
+    example:'cloth',
+    pronunciation:[
+      'Round your lips into a firm O shape.',
+      'Raise the back of the tongue toward the velum.',
+      'Hold tension in the lips.',
+      'Produce a clean "oh" without the glide.',
+    ],
+    tongue:'close-mid-back',
+    clusters:[
+      { letters:'o', examples:['cloth','on','lot','hot'] },
+      { letters:'a (after w/qu)', examples:['want','was','wash','quality'] },
+    ]
+  },
+
+  // ── OPEN VOWELS ──
+  { id:10, sym:'æ', cat:'open-vowel', catLabel:'Near-Open Front Vowel', name:'Near-Open Front Unrounded',
+    desc:'A very open, front vowel. Distinctive in American English. Jaw drops, lips stretch wide.',
+    example:'trap',
+    pronunciation:[
+      'Drop your jaw as far as comfortable.',
+      'Stretch your lips very wide horizontally.',
+      'Tongue lies flat and low at the front of the mouth.',
+      'Say a flat, bright "aah" — tense and spread.',
+    ],
+    tongue:'low-front',
+    clusters:[
+      { letters:'a', examples:['trap','cat','man','black','hand'] },
+    ]
+  },
+  { id:11, sym:'ʌ', cat:'open-vowel', catLabel:'Open-Mid Back Vowel', name:'Open-Mid Back Unrounded',
+    desc:'A short, stressed central-back vowel. Found in stressed syllables in English.',
+    example:'strut',
+    pronunciation:[
+      'Jaw drops to a mid-open position.',
+      'Tongue is in the lower-central part of the mouth.',
+      'Lips are unrounded and neutral.',
+      'Produce a short, sharp "uh" — the sound of "strut".',
+    ],
+    tongue:'open-mid-back',
+    clusters:[
+      { letters:'u', examples:['strut','run','cup','fun','but'] },
+      { letters:'o', examples:['come','love','money','some','done'] },
+      { letters:'ou', examples:['young','double','trouble','country'] },
+    ]
+  },
+  { id:12, sym:'ɑː', cat:'open-vowel', catLabel:'Open Back Vowel', name:'Long Open Back Unrounded',
+    desc:'A long, open back vowel. Mouth wide open, tongue low and retracted.',
+    example:'palm',
+    pronunciation:[
+      'Open your mouth as wide as possible — like a doctor checkup.',
+      'Let the tongue lie completely flat, retracted slightly.',
+      'Do not round your lips at all.',
+      'Sustain a deep, open "ahh".',
+    ],
+    tongue:'low-back',
+    clusters:[
+      { letters:'a (before lm / lf)', examples:['palm','calm','half','bath'] },
+      { letters:'ar', examples:['car','far','start','park','heart'] },
+      { letters:'o (AmE)', examples:['lot','stop','hot','clock'] },
+    ]
+  },
+  { id:13, sym:'ɒ', cat:'open-vowel', catLabel:'Open Back Rounded Vowel', name:'Open Back Rounded',
+    desc:'A short, open back vowel with slight lip rounding. Primarily in British English.',
+    example:'lot',
+    pronunciation:[
+      'Open your mouth wide, jaw dropped.',
+      'Apply very light, relaxed lip rounding.',
+      'Tongue is low and retracted.',
+      'Produce a short, open "o" — shorter than /ɑː/.',
+    ],
+    tongue:'low-back-rounded',
+    clusters:[
+      { letters:'o', examples:['lot','hot','stop','clock','body'] },
+      { letters:'a (after w)', examples:['want','what','watch','wash'] },
+    ]
+  },
+
+  // ── DIPHTHONGS ──
+  { id:14, sym:'eɪ', cat:'diphthong', catLabel:'Diphthong', name:'FACE — Close-Mid to Close Diphthong',
+    desc:'Glides from mid-front /e/ up to near-close /ɪ/. A rising, front diphthong.',
+    example:'face',
+    pronunciation:[
+      'Start with lips in a mid-spread "eh" position.',
+      'Begin the vowel sound.',
+      'Smoothly raise your tongue and jaw closes slightly.',
+      'End near the /ɪ/ position — a gentle glide upward.',
+    ],
+    tongue:'diphthong-ei',
+    clusters:[
+      { letters:'a_e', examples:['face','name','late','make','cake'] },
+      { letters:'ai / ay', examples:['pain','rain','day','play','say'] },
+      { letters:'ei / ey', examples:['vein','they','prey','eight'] },
+    ]
+  },
+  { id:15, sym:'aɪ', cat:'diphthong', catLabel:'Diphthong', name:'PRICE — Open to Close Diphthong',
+    desc:'Glides from open /a/ up to near-close /ɪ/. A wide, rising diphthong.',
+    example:'price',
+    pronunciation:[
+      'Start with your mouth wide open for a low "ah".',
+      'Begin the vowel with full jaw drop.',
+      'Smoothly raise tongue and close jaw toward /ɪ/.',
+      'The glide is wide — from low-open to high-front.',
+    ],
+    tongue:'diphthong-ai',
+    clusters:[
+      { letters:'i_e', examples:['price','time','like','fire','kite'] },
+      { letters:'igh', examples:['light','night','right','tight'] },
+      { letters:'y', examples:['fly','sky','cry','try','my'] },
+      { letters:'ie', examples:['tie','pie','lie','die'] },
+    ]
+  },
+  { id:16, sym:'ɔɪ', cat:'diphthong', catLabel:'Diphthong', name:'CHOICE — Back to Front Diphthong',
+    desc:'Glides from open-mid back /ɔ/ to near-close front /ɪ/. A diagonal diphthong.',
+    example:'choice',
+    pronunciation:[
+      'Begin with lips rounded in a mid "aw" position.',
+      'Tongue starts in the back, mid-height.',
+      'Glide tongue forward and upward toward /ɪ/.',
+      'Lips unround as you move to the front position.',
+    ],
+    tongue:'diphthong-oi',
+    clusters:[
+      { letters:'oi', examples:['choice','coin','voice','noise','oil'] },
+      { letters:'oy', examples:['boy','joy','toy','royal','enjoy'] },
+    ]
+  },
+  { id:17, sym:'aʊ', cat:'diphthong', catLabel:'Diphthong', name:'MOUTH — Open to Close-Back Diphthong',
+    desc:'Glides from open /a/ to near-close back /ʊ/. Jaw closes as lips round.',
+    example:'mouth',
+    pronunciation:[
+      'Start with a wide open, low "ah" position.',
+      'Begin voicing the open vowel.',
+      'Close the jaw and round your lips toward /ʊ/.',
+      'The glide moves from open-front to close-back.',
+    ],
+    tongue:'diphthong-au',
+    clusters:[
+      { letters:'ou', examples:['mouth','out','loud','sound','found'] },
+      { letters:'ow', examples:['now','how','cow','down','flower'] },
+    ]
+  },
+  { id:18, sym:'əʊ', cat:'diphthong', catLabel:'Diphthong', name:'GOAT — Mid to Close-Back Diphthong',
+    desc:'Glides from schwa /ə/ to near-close back /ʊ/. The British English "oh".',
+    example:'goat',
+    pronunciation:[
+      'Begin with the neutral schwa position.',
+      'Jaw and lips are relaxed and central.',
+      'Smoothly round and raise your lips toward /ʊ/.',
+      'The glide is gentle — from neutral to back-rounded.',
+    ],
+    tongue:'diphthong-ou',
+    clusters:[
+      { letters:'o_e', examples:['goat','home','phone','note','bone'] },
+      { letters:'oa', examples:['coat','road','boat','load'] },
+      { letters:'ow', examples:['know','show','flow','grow'] },
+      { letters:'o', examples:['go','so','no','open','hotel'] },
+    ]
+  },
+  { id:19, sym:'ɪə', cat:'diphthong', catLabel:'Diphthong', name:'NEAR — Centring Diphthong',
+    desc:'Glides from near-close /ɪ/ toward schwa /ə/. A centring diphthong.',
+    example:'near',
+    pronunciation:[
+      'Begin with a high-front /ɪ/ position.',
+      'Lips spread, tongue high and forward.',
+      'Glide back toward the central schwa position.',
+      'The jaw opens slightly and the tongue centralizes.',
+    ],
+    tongue:'diphthong-ia',
+    clusters:[
+      { letters:'ear / ere', examples:['near','hear','here','beer','fear'] },
+      { letters:'eer', examples:['deer','steer','cheer','peer'] },
+    ]
+  },
+  { id:20, sym:'eə', cat:'diphthong', catLabel:'Diphthong', name:'SQUARE — Centring Diphthong',
+    desc:'Glides from mid-front /e/ toward schwa /ə/. Another centring diphthong.',
+    example:'square',
+    pronunciation:[
+      'Begin with a mid-front "eh" position.',
+      'Lips are spread horizontally.',
+      'Glide toward the neutral, central schwa.',
+      'The jaw opens slightly, lips relax from the spread.',
+    ],
+    tongue:'diphthong-ea',
+    clusters:[
+      { letters:'are / air', examples:['square','care','there','fair','pair'] },
+      { letters:'ear', examples:['bear','wear','swear','pear'] },
+    ]
+  },
+  { id:21, sym:'ʊə', cat:'diphthong', catLabel:'Diphthong', name:'CURE — Centring Diphthong',
+    desc:'Glides from near-close back /ʊ/ toward schwa /ə/.',
+    example:'cure',
+    pronunciation:[
+      'Begin with a lax, rounded /ʊ/ position.',
+      'Lips are loosely rounded, tongue high-back.',
+      'Glide lips into relaxed, neutral position.',
+      'Tongue moves to central as you approach schwa.',
+    ],
+    tongue:'diphthong-ua',
+    clusters:[
+      { letters:'ure', examples:['cure','pure','sure','tour','poor'] },
+      { letters:'oor / ual', examples:['poor','actual','usual'] },
+    ]
+  },
+
+  // ── PLOSIVES ──
+  { id:22, sym:'p', cat:'plosive', catLabel:'Voiceless Bilabial Plosive', name:'Voiceless Bilabial Stop',
+    desc:'Both lips press together, air builds up, then releases — no vocal vibration.',
+    example:'pen',
+    pronunciation:[
+      'Press both lips firmly together.',
+      'Build air pressure behind the closure.',
+      'Do NOT vibrate your vocal cords.',
+      'Release suddenly: a burst of air — "p".',
+    ],
+    tongue:'bilabial-stop',
+    clusters:[
+      { letters:'p', examples:['pen','top','speak','open','cup'] },
+      { letters:'pp', examples:['happy','appear','apply'] },
+    ]
+  },
+  { id:23, sym:'b', cat:'plosive', catLabel:'Voiced Bilabial Plosive', name:'Voiced Bilabial Stop',
+    desc:'Like /p/ but with vocal cords vibrating throughout.',
+    example:'bed',
+    pronunciation:[
+      'Press both lips firmly together.',
+      'Build air pressure behind the closure.',
+      'Vibrate your vocal cords — feel the buzz in your throat.',
+      'Release both lips: "b".',
+    ],
+    tongue:'bilabial-stop',
+    clusters:[
+      { letters:'b', examples:['bed','big','rob','able','club'] },
+      { letters:'bb', examples:['rabbit','bubble','cabbage'] },
+    ]
+  },
+  { id:24, sym:'t', cat:'plosive', catLabel:'Voiceless Alveolar Plosive', name:'Voiceless Alveolar Stop',
+    desc:'Tongue tip contacts the alveolar ridge, air is blocked then released sharply.',
+    example:'ten',
+    pronunciation:[
+      'Raise your tongue tip firmly to the alveolar ridge.',
+      'Block all airflow completely.',
+      'No vocal cord vibration.',
+      'Release the tongue sharply with a burst: "t".',
+    ],
+    tongue:'alveolar-stop',
+    clusters:[
+      { letters:'t', examples:['ten','top','sit','water','left'] },
+      { letters:'tt', examples:['butter','little','letter','sitting'] },
+      { letters:'ed (past tense after voiceless)', examples:['walked','talked','stopped'] },
+    ]
+  },
+  { id:25, sym:'d', cat:'plosive', catLabel:'Voiced Alveolar Plosive', name:'Voiced Alveolar Stop',
+    desc:'Like /t/ but with full voicing. The voiced counterpart.',
+    example:'dog',
+    pronunciation:[
+      'Raise your tongue tip to the alveolar ridge.',
+      'Block all airflow.',
+      'Vibrate your vocal cords throughout.',
+      'Release the tongue: "d".',
+    ],
+    tongue:'alveolar-stop',
+    clusters:[
+      { letters:'d', examples:['dog','did','bed','under','read'] },
+      { letters:'dd', examples:['addition','middle','muddy','ladder'] },
+      { letters:'ed (past tense after voiced)', examples:['loved','used','lived'] },
+    ]
+  },
+  { id:26, sym:'k', cat:'plosive', catLabel:'Voiceless Velar Plosive', name:'Voiceless Velar Stop',
+    desc:'Back of tongue presses the velum (soft palate). Air then releases without voice.',
+    example:'cat',
+    pronunciation:[
+      'Raise the back of your tongue to the soft palate.',
+      'Block airflow at the back of the mouth.',
+      'No vocal cord vibration.',
+      'Release the back-of-tongue contact: "k".',
+    ],
+    tongue:'velar-stop',
+    clusters:[
+      { letters:'k', examples:['cat','king','sky','book','back'] },
+      { letters:'c', examples:['cat','coat','cut','class','act'] },
+      { letters:'ck', examples:['rock','black','duck','trick'] },
+      { letters:'ch', examples:['school','echo','stomach','chaos'] },
+    ]
+  },
+  { id:27, sym:'ɡ', cat:'plosive', catLabel:'Voiced Velar Plosive', name:'Voiced Velar Stop',
+    desc:'Like /k/ but with vocal cord vibration. A deep, back-of-throat stop.',
+    example:'get',
+    pronunciation:[
+      'Raise the back of your tongue to the soft palate.',
+      'Block airflow at the back of the mouth.',
+      'Vibrate your vocal cords — feel the buzz.',
+      'Release the tongue: a voiced back stop "g".',
+    ],
+    tongue:'velar-stop',
+    clusters:[
+      { letters:'g', examples:['get','go','big','again','dog'] },
+      { letters:'gg', examples:['egg','bigger','luggage','foggy'] },
+      { letters:'gh', examples:['ghost','ghastly'] },
+    ]
+  },
+
+  // ── FRICATIVES ──
+  { id:28, sym:'f', cat:'fricative', catLabel:'Voiceless Labiodental Fricative', name:'Voiceless Labiodental Fricative',
+    desc:'Upper teeth press the lower lip; air forced through the gap creates friction.',
+    example:'fish',
+    pronunciation:[
+      'Place your upper front teeth against your lower lip.',
+      'Allow air to squeeze through the narrow gap.',
+      'No vocal cord vibration — voiceless.',
+      'Sustain the hissing friction: "fff".',
+    ],
+    tongue:'labiodental',
+    clusters:[
+      { letters:'f', examples:['fish','find','left','after','safe'] },
+      { letters:'ff', examples:['off','effect','offer','coffee'] },
+      { letters:'ph', examples:['phone','photo','phrase','elephant'] },
+      { letters:'gh', examples:['rough','laugh','enough','cough'] },
+    ]
+  },
+  { id:29, sym:'v', cat:'fricative', catLabel:'Voiced Labiodental Fricative', name:'Voiced Labiodental Fricative',
+    desc:'Like /f/ but with vocal cords vibrating. A buzzing labial friction.',
+    example:'voice',
+    pronunciation:[
+      'Place your upper front teeth against your lower lip.',
+      'Allow air to squeeze through the gap.',
+      'Vibrate your vocal cords — feel the buzzing.',
+      'Sustain the voiced friction: "vvv".',
+    ],
+    tongue:'labiodental',
+    clusters:[
+      { letters:'v', examples:['voice','very','give','love','live'] },
+      { letters:'f (in "of")', examples:['of'] },
+    ]
+  },
+  { id:30, sym:'θ', cat:'fricative', catLabel:'Voiceless Dental Fricative', name:'Voiceless Dental Fricative',
+    desc:'Tongue placed between teeth; air flows around it without voice.',
+    example:'think',
+    pronunciation:[
+      'Gently place your tongue tip between your upper and lower teeth.',
+      'Do not seal — leave space for air to flow around the tongue.',
+      'No vocal cord vibration.',
+      'Breathe out: a soft, breathy friction — "th".',
+    ],
+    tongue:'dental-unvoiced',
+    clusters:[
+      { letters:'th (voiceless)', examples:['think','thank','path','health','mouth','tooth'] },
+    ]
+  },
+  { id:31, sym:'ð', cat:'fricative', catLabel:'Voiced Dental Fricative', name:'Voiced Dental Fricative',
+    desc:'Like /θ/ but with vocal cords fully vibrating. The voiced "th".',
+    example:'this',
+    pronunciation:[
+      'Place your tongue tip gently between your teeth.',
+      'Allow air to flow around the tongue.',
+      'Vibrate your vocal cords — the key distinction from /θ/.',
+      'Sustain the buzzing dental friction: "ðð".',
+    ],
+    tongue:'dental-voiced',
+    clusters:[
+      { letters:'th (voiced)', examples:['this','that','them','though','breathe','other'] },
+    ]
+  },
+  { id:32, sym:'s', cat:'fricative', catLabel:'Voiceless Alveolar Fricative', name:'Voiceless Alveolar Fricative',
+    desc:'Tongue near the alveolar ridge; air hisses through a narrow channel.',
+    example:'see',
+    pronunciation:[
+      'Place your tongue close to the alveolar ridge, leaving a narrow gap.',
+      'Direct the airstream through the groove in your tongue.',
+      'No vocal cord vibration.',
+      'Sustain the sharp hiss: "sss".',
+    ],
+    tongue:'alveolar-fricative',
+    clusters:[
+      { letters:'s', examples:['see','sit','best','class','us'] },
+      { letters:'c (soft)', examples:['city','face','dance','circle'] },
+      { letters:'sc', examples:['science','scene','scissors'] },
+    ]
+  },
+  { id:33, sym:'z', cat:'fricative', catLabel:'Voiced Alveolar Fricative', name:'Voiced Alveolar Fricative',
+    desc:'Like /s/ but with vocal cords vibrating. A buzzing alveolar hiss.',
+    example:'zoo',
+    pronunciation:[
+      'Place your tongue near the alveolar ridge.',
+      'Leave a narrow channel for air to flow through.',
+      'Vibrate your vocal cords throughout.',
+      'Sustain the buzzing sound: "zzz".',
+    ],
+    tongue:'alveolar-fricative',
+    clusters:[
+      { letters:'z', examples:['zoo','zone','zero','amazing'] },
+      { letters:'s (voiced)', examples:['dogs','loves','runs','was','his'] },
+      { letters:'x', examples:['xylophone','example'] },
+    ]
+  },
+  { id:34, sym:'ʃ', cat:'fricative', catLabel:'Voiceless Postalveolar Fricative', name:'Voiceless Postalveolar Fricative',
+    desc:'Tongue arches toward the post-alveolar region. The hushing "sh" sound.',
+    example:'ship',
+    pronunciation:[
+      'Curl your tongue tip upward toward the post-alveolar region.',
+      'Spread the tongue slightly wider than for /s/.',
+      'Force air over the tongue surface.',
+      'Produce the "shh" hushing sound — no voicing.',
+    ],
+    tongue:'postalveolar-unvoiced',
+    clusters:[
+      { letters:'sh', examples:['ship','show','fish','wish','wash'] },
+      { letters:'s / ss', examples:['sure','sugar','pressure','session'] },
+      { letters:'ti / ci', examples:['nation','special','social','mention'] },
+      { letters:'ch', examples:['chef','machine','chauffeur'] },
+    ]
+  },
+  { id:35, sym:'ʒ', cat:'fricative', catLabel:'Voiced Postalveolar Fricative', name:'Voiced Postalveolar Fricative',
+    desc:'Like /ʃ/ but voiced. The rare, luxurious "zh" sound.',
+    example:'measure',
+    pronunciation:[
+      'Curl your tongue toward the post-alveolar region.',
+      'Allow air to flow over the tongue surface.',
+      'Vibrate your vocal cords fully.',
+      'Sustain the buzzing "zh" friction.',
+    ],
+    tongue:'postalveolar-voiced',
+    clusters:[
+      { letters:'s / si', examples:['measure','pleasure','vision','decision','television'] },
+      { letters:'ge / g', examples:['beige','genre','prestige'] },
+    ]
+  },
+  { id:36, sym:'h', cat:'fricative', catLabel:'Voiceless Glottal Fricative', name:'Voiceless Glottal Fricative',
+    desc:'A simple exhalation of air — no place of articulation. The throat is the "instrument".',
+    example:'hat',
+    pronunciation:[
+      'Open your mouth and throat freely.',
+      'No specific tongue or lip position needed.',
+      'Simply exhale audibly without voicing.',
+      'The following vowel shape is anticipated immediately.',
+    ],
+    tongue:'glottal',
+    clusters:[
+      { letters:'h', examples:['hat','house','behind','behind','who'] },
+      { letters:'wh (some dialects)', examples:['which','where','when','why','what'] },
+    ]
+  },
+
+  // ── AFFRICATES ──
+  { id:37, sym:'tʃ', cat:'affricate', catLabel:'Voiceless Postalveolar Affricate', name:'Voiceless Postalveolar Affricate',
+    desc:'A stop and fricative fused together. Tongue blocks, then releases into /ʃ/.',
+    example:'church',
+    pronunciation:[
+      'Raise tongue to the post-alveolar region — block airflow.',
+      'Build up pressure behind the tongue.',
+      'No voicing.',
+      'Release the tongue suddenly into a /ʃ/ — the two merge: "ch".',
+    ],
+    tongue:'affricate-unvoiced',
+    clusters:[
+      { letters:'ch', examples:['church','chair','lunch','teach','rich'] },
+      { letters:'tch', examples:['catch','watch','match','stretch'] },
+      { letters:'t (before ure/ion)', examples:['nature','picture','question'] },
+    ]
+  },
+  { id:38, sym:'dʒ', cat:'affricate', catLabel:'Voiced Postalveolar Affricate', name:'Voiced Postalveolar Affricate',
+    desc:'Like /tʃ/ but fully voiced. Stop fused with /ʒ/.',
+    example:'judge',
+    pronunciation:[
+      'Raise tongue to the post-alveolar region — block airflow.',
+      'Build pressure behind the tongue closure.',
+      'Vibrate your vocal cords.',
+      'Release into a /ʒ/ — the voiced affricate: "dʒ".',
+    ],
+    tongue:'affricate-voiced',
+    clusters:[
+      { letters:'j', examples:['judge','jump','just','job','enjoy'] },
+      { letters:'g (soft)', examples:['page','age','change','danger'] },
+      { letters:'dge', examples:['edge','bridge','hedge','lodge'] },
+    ]
+  },
+
+  // ── NASALS ──
+  { id:39, sym:'m', cat:'nasal', catLabel:'Voiced Bilabial Nasal', name:'Voiced Bilabial Nasal',
+    desc:'Lips close, oral passage blocked; sound resonates through the nasal cavity.',
+    example:'man',
+    pronunciation:[
+      'Press both lips firmly together.',
+      'Block the oral passage completely.',
+      'Keep the velum (soft palate) lowered to open the nasal passage.',
+      'Vibrate vocal cords; sound exits the nose: "mmm".',
+    ],
+    tongue:'nasal-bilabial',
+    clusters:[
+      { letters:'m', examples:['man','make','time','come','swim'] },
+      { letters:'mm', examples:['summer','hammer','grammar','swimming'] },
+      { letters:'mb (silent b)', examples:['lamb','bomb','climb','thumb'] },
+    ]
+  },
+  { id:40, sym:'n', cat:'nasal', catLabel:'Voiced Alveolar Nasal', name:'Voiced Alveolar Nasal',
+    desc:'Tongue tip blocks at the alveolar ridge; sound exits through the nose.',
+    example:'no',
+    pronunciation:[
+      'Press your tongue tip firmly to the alveolar ridge.',
+      'Block the oral passage.',
+      'Lower the velum to open the nasal cavity.',
+      'Vibrate vocal cords; sound resonates through the nose: "nnn".',
+    ],
+    tongue:'nasal-alveolar',
+    clusters:[
+      { letters:'n', examples:['no','nice','ten','any','under'] },
+      { letters:'nn', examples:['dinner','running','tennis','funny'] },
+      { letters:'kn (silent k)', examples:['know','knee','knock','knife'] },
+    ]
+  },
+  { id:41, sym:'ŋ', cat:'nasal', catLabel:'Voiced Velar Nasal', name:'Voiced Velar Nasal',
+    desc:'Back of tongue contacts soft palate; nasal resonance at the back of the mouth.',
+    example:'sing',
+    pronunciation:[
+      'Raise the back of your tongue to the soft palate.',
+      'Block the oral passage at the very back.',
+      'Tongue tip rests at the bottom of your mouth.',
+      'Vibrate cords; sound exits the nose: "ŋŋ".',
+    ],
+    tongue:'nasal-velar',
+    clusters:[
+      { letters:'ng', examples:['sing','ring','long','bring','song'] },
+      { letters:'n (before k/g)', examples:['think','bank','finger','anger'] },
+    ]
+  },
+
+  // ── APPROXIMANTS ──
+  { id:42, sym:'l', cat:'approximant', catLabel:'Voiced Alveolar Lateral Approximant', name:'Lateral Approximant',
+    desc:'Tongue touches the alveolar ridge; air flows around the sides of the tongue.',
+    example:'let',
+    pronunciation:[
+      'Raise your tongue tip to the alveolar ridge.',
+      'Do not block the airflow — let air flow around the sides.',
+      'Vibrate your vocal cords.',
+      'At word ends, the tongue may not fully contact: "dark l".',
+    ],
+    tongue:'lateral',
+    clusters:[
+      { letters:'l', examples:['let','love','feel','old','fly'] },
+      { letters:'ll', examples:['tall','bell','fall','well','fill'] },
+    ]
+  },
+  { id:43, sym:'r', cat:'approximant', catLabel:'Voiced Alveolar Approximant', name:'Alveolar Approximant',
+    desc:'Tongue curls back slightly; no contact made. The American "r".',
+    example:'red',
+    pronunciation:[
+      'Slightly round your lips.',
+      'Curl or bunch your tongue — either tip curls back OR bunches up.',
+      'The tongue does NOT touch anything.',
+      'Vibrate vocal cords: a smooth, continuous "r".',
+    ],
+    tongue:'retroflex',
+    clusters:[
+      { letters:'r', examples:['red','run','road','three','very'] },
+      { letters:'rr', examples:['sorry','carry','mirror','arrange'] },
+      { letters:'wr (silent w)', examples:['write','wrong','wrap','wrist'] },
+    ]
+  },
+  { id:44, sym:'j', cat:'approximant', catLabel:'Voiced Palatal Approximant', name:'Palatal Approximant',
+    desc:'Tongue arches toward the hard palate; air flows freely. The "y" glide.',
+    example:'yes',
+    pronunciation:[
+      'Raise the middle of your tongue toward the hard palate.',
+      'Do not let the tongue touch — leave a gap.',
+      'Vibrate your vocal cords.',
+      'Immediately glide into the following vowel.',
+    ],
+    tongue:'palatal',
+    clusters:[
+      { letters:'y', examples:['yes','you','year','yet','yellow'] },
+      { letters:'u / ew (after some consonants)', examples:['use','few','cube','cute','view'] },
+    ]
+  },
+  { id:45, sym:'w', cat:'approximant', catLabel:'Voiced Labial-Velar Approximant', name:'Labial-Velar Approximant',
+    desc:'Lips round tightly while the tongue bunches toward the velum. A bilabial-velar glide.',
+    example:'wet',
+    pronunciation:[
+      'Round your lips tightly — almost as if to whistle.',
+      'Simultaneously raise the back of your tongue toward the velum.',
+      'Vibrate your vocal cords.',
+      'Quickly release into the following vowel.',
+    ],
+    tongue:'bilabial-approximant',
+    clusters:[
+      { letters:'w', examples:['wet','way','word','twin','swim'] },
+      { letters:'wh (voiced)', examples:['where','when','what','which'] },
+      { letters:'u / o (after q)', examples:['queen','quick','quiet','quote'] },
+    ]
+  },
+];
+
+// ─── TONGUE DIAGRAMS ──────────────────────────────────────────────────────────
+function drawTongueDiagram(type, accent) {
+  const col = accent || '#38BDF8';
+  const colDim = col + '33';
+  const colMid = col + '88';
+
+  // Base sagittal profile
+  const base = `
+    <g>
+      <path d="M40,20 Q60,10 90,12 Q130,14 155,35 Q170,55 168,90 Q165,130 150,160 Q130,185 100,192 Q70,195 50,180 Q30,160 28,130 Q25,90 35,55 Z"
+        fill="#1C2535" stroke="#3A4A60" stroke-width="1.5"/>
+      <path d="M55,45 Q80,28 115,35 Q140,42 155,65" stroke="#4A5A70" stroke-width="2" fill="none"/>
+      <rect x="72" y="45" width="8" height="11" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="82" y="44" width="8" height="12" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="92" y="44" width="8" height="12" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="102" y="45" width="8" height="11" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="72" y="78" width="8" height="10" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="82" y="79" width="8" height="10" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="92" y="79" width="8" height="10" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <rect x="102" y="78" width="8" height="10" rx="2" fill="#2A3548" stroke="#3A4A60" stroke-width="1"/>
+      <path d="M62,63 Q76,57 90,60 Q104,57 118,63" stroke="#6A3030" fill="none" stroke-width="1.5"/>
+      <path d="M62,63 Q76,71 90,68 Q104,71 118,63" stroke="#6A3030" fill="none" stroke-width="1.5"/>
+      <path d="M55,130 Q70,110 100,108 Q130,108 145,120 Q148,140 140,155 Q120,170 90,168 Q65,162 55,148 Z"
+        fill="#3A2525" stroke="#6A3030" stroke-width="1.2"/>
+      <path d="M85,108 Q95,90 100,108" fill="none" stroke="#6A3030" stroke-width="1.2"/>
+      <path d="M148,140 Q160,155 158,175" stroke="#3A4A60" stroke-width="1.2" fill="none"/>
+      <path d="M140,155 Q145,165 143,185" stroke="#3A4A60" stroke-width="1.2" fill="none"/>
+      <path d="M115,12 Q120,5 130,8 Q138,5 140,12" stroke="#3A4A60" fill="none" stroke-width="1.2"/>
+      <circle cx="120" cy="14" r="2.5" fill="#1C2535" stroke="#3A4A60" stroke-width="1"/>
+      <circle cx="135" cy="14" r="2.5" fill="#1C2535" stroke="#3A4A60" stroke-width="1"/>
+    </g>`;
+
+  const overlays = {
+    'high-front-tense': `<path d="M80,65 Q100,52 120,55 Q132,58 133,72 Q130,88 115,92 Q90,94 80,80 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="108" y="48" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">HIGH FRONT</text>
+      <line x1="108" y1="50" x2="106" y2="57" stroke="${col}" stroke-width="1"/>`,
+    'high-front-lax': `<path d="M83,70 Q102,58 120,61 Q130,65 130,78 Q127,92 112,96 Q88,97 83,83 Z" fill="${colDim}" stroke="${colMid}" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="108" y="52" font-size="8.5" fill="${colMid}" font-family="JetBrains Mono" text-anchor="middle">HIGH FRONT (lax)</text>`,
+    'high-back-tense': `<path d="M115,78 Q138,66 155,70 Q165,78 162,93 Q158,108 142,112 Q120,114 115,98 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="140" y="62" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">HIGH BACK</text>`,
+    'high-back-lax': `<path d="M118,82 Q140,70 155,74 Q163,82 160,96 Q156,110 140,114 Q118,116 118,100 Z" fill="${colDim}" stroke="${colMid}" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="140" y="66" font-size="8.5" fill="${colMid}" font-family="JetBrains Mono" text-anchor="middle">HIGH BACK (lax)</text>`,
+    'mid-front': `<path d="M80,90 Q100,78 118,80 Q128,84 128,98 Q125,112 110,115 Q88,116 80,104 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="108" y="72" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">MID FRONT</text>`,
+    'mid-front-open': `<path d="M76,96 Q98,84 118,86 Q128,90 127,105 Q124,118 108,121 Q85,122 76,108 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="104" y="78" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">OPEN MID FRONT</text>`,
+    'schwa': `<path d="M88,100 Q110,90 126,94 Q135,100 133,114 Q129,127 113,130 Q90,131 88,116 Z" fill="${colDim}" stroke="${colMid}" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="112" y="85" font-size="8.5" fill="${colMid}" font-family="JetBrains Mono" text-anchor="middle">NEUTRAL</text>`,
+    'mid-central-long': `<path d="M86,96 Q108,86 126,90 Q136,96 134,110 Q130,124 114,127 Q90,128 86,113 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <path d="M86,96 Q91,84 100,82" fill="none" stroke="${col}" stroke-width="2"/>
+      <text x="110" y="80" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">CENTRAL + CURL</text>`,
+    'mid-back-rounded': `<path d="M110,105 Q130,95 148,98 Q158,104 156,118 Q152,132 138,136 Q118,138 110,124 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <ellipse cx="88" cy="63" rx="16" ry="7" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <text x="88" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LIPS ROUND</text>`,
+    'close-mid-back': `<path d="M112,95 Q132,85 150,88 Q160,95 157,108 Q153,122 138,126 Q116,128 112,112 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <ellipse cx="88" cy="63" rx="14" ry="6" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>`,
+    'low-front': `<path d="M62,118 Q90,108 114,112 Q126,118 126,132 Q123,148 104,152 Q78,153 62,140 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="96" y="104" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LOW FRONT</text>`,
+    'open-mid-back': `<path d="M105,120 Q128,110 148,114 Q158,120 156,135 Q152,150 136,153 Q115,155 105,140 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="132" y="104" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">OPEN MID</text>`,
+    'low-back': `<path d="M110,120 Q132,110 150,114 Q160,120 158,136 Q154,150 138,154 Q118,156 110,140 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="136" y="105" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LOW BACK</text>`,
+    'low-back-rounded': `<path d="M110,120 Q132,110 150,114 Q160,120 158,136 Q154,150 138,154 Q118,156 110,140 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <ellipse cx="88" cy="63" rx="15" ry="7" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>`,
+    'diphthong-ei': `<path d="M80,90 Q100,78 118,80 Q128,84 128,98 Q125,112 110,115 Q88,116 80,104 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M104,90 Q100,68 106,58" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="106,54 103,62 109,61" fill="${col}"/>
+      <text x="118" y="52" font-size="8.5" fill="${col}" font-family="JetBrains Mono">GLIDE ↑</text>`,
+    'diphthong-ai': `<path d="M62,118 Q90,108 114,112 Q126,118 126,132 Q123,148 104,152 Q78,153 62,140 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M96,110 Q94,86 100,68 Q105,60 110,58" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="110,54 107,62 113,61" fill="${col}"/>
+      <text x="118" y="52" font-size="8.5" fill="${col}" font-family="JetBrains Mono">GLIDE ↑</text>`,
+    'diphthong-oi': `<path d="M112,100 Q132,90 148,94 Q158,100 156,114 Q152,128 138,132 Q118,134 112,118 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M135,92 Q112,80 96,70 Q88,64 84,62" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="84,58 81,66 87,65" fill="${col}"/>`,
+    'diphthong-au': `<path d="M62,118 Q90,108 114,112 Q126,118 126,132 Q123,148 104,152 Q78,153 62,140 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M96,112 Q120,106 142,100 Q152,98 158,100" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="160,100 154,97 155,103" fill="${col}"/>`,
+    'diphthong-ou': `<path d="M88,100 Q110,90 126,94 Q135,100 133,114 Q129,127 113,130 Q90,131 88,116 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M110,104 Q132,100 148,96 Q156,94 160,98" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="162,98 156,95 157,101" fill="${col}"/>`,
+    'diphthong-ia': `<path d="M83,70 Q102,58 120,61 Q130,65 130,78 Q127,92 112,96 Q88,97 83,83 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M104,88 Q102,100 106,112 Q108,120 106,126" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="106,130 103,122 109,122" fill="${col}"/>`,
+    'diphthong-ea': `<path d="M80,90 Q100,78 118,80 Q128,84 128,98 Q125,112 110,115 Q88,116 80,104 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M104,108 Q104,116 106,124" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="106,128 103,120 109,120" fill="${col}"/>`,
+    'diphthong-ua': `<path d="M118,82 Q140,70 155,74 Q163,82 160,96 Q156,110 140,114 Q118,116 118,100 Z" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M130,105 Q118,110 108,116" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="4,2"/>
+      <polygon points="104,118 110,112 114,117" fill="${col}"/>`,
+    'bilabial-stop': `<line x1="55" y1="63" x2="118" y2="63" stroke="${col}" stroke-width="4" stroke-linecap="round"/>
+      <text x="88" y="54" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LIPS CLOSED</text>`,
+    'alveolar-stop': `<path d="M78,60 Q100,52 118,55" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M88,72 Q95,60 104,60" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="100" y="45" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">TONGUE→RIDGE</text>`,
+    'velar-stop': `<path d="M130,80 Q145,70 155,75 Q158,80 155,88 Q148,92 136,90 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="144" y="65" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">BACK CLOSURE</text>`,
+    'labiodental': `<line x1="60" y1="72" x2="90" y2="58" stroke="${col}" stroke-width="2.5" stroke-linecap="round"/>
+      <text x="88" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">TEETH→LIP</text>`,
+    'dental-unvoiced': `<rect x="72" y="63" width="25" height="6" rx="2" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M80,68 Q90,60 105,63" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="90" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">TONGUE BETWEEN</text>`,
+    'dental-voiced': `<rect x="72" y="63" width="25" height="6" rx="2" fill="${colDim}" stroke="${col}" stroke-width="1.5"/>
+      <path d="M80,68 Q90,60 105,63" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="90" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">TONGUE BETWEEN ♪</text>`,
+    'alveolar-fricative': `<path d="M78,62 Q100,54 118,56" fill="none" stroke="${col}" stroke-width="2" stroke-dasharray="3,2"/>
+      <path d="M88,72 Q95,62 104,62" fill="none" stroke="${col}" stroke-width="2"/>
+      <text x="100" y="46" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">NARROW GAP</text>`,
+    'postalveolar-unvoiced': `<path d="M82,60 Q100,50 118,53" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <path d="M88,72 Q98,58 112,57" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="100" y="43" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">POST-ALVEOLAR</text>`,
+    'postalveolar-voiced': `<path d="M82,60 Q100,50 118,53" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <path d="M88,72 Q98,58 112,57" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="100" y="43" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">POST-ALVEOLAR ♪</text>`,
+    'glottal': `<ellipse cx="150" cy="155" rx="10" ry="14" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <text x="150" y="142" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">OPEN THROAT</text>`,
+    'affricate-unvoiced': `<path d="M80,60 Q100,50 118,53" fill="none" stroke="${col}" stroke-width="3"/>
+      <path d="M84,72 Q98,56 114,57" fill="none" stroke="${col}" stroke-width="2" stroke-dasharray="3,2"/>
+      <text x="100" y="43" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">STOP → FRIC</text>`,
+    'affricate-voiced': `<path d="M80,60 Q100,50 118,53" fill="none" stroke="${col}" stroke-width="3"/>
+      <path d="M84,72 Q98,56 114,57" fill="none" stroke="${col}" stroke-width="2" stroke-dasharray="3,2"/>
+      <text x="100" y="43" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">STOP → FRIC ♪</text>`,
+    'nasal-bilabial': `<line x1="55" y1="63" x2="118" y2="63" stroke="${col}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M118,14 Q130,8 140,14" stroke="${col}" stroke-width="3" fill="none"/>
+      <text x="88" y="38" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">NASAL ↑</text>`,
+    'nasal-alveolar': `<path d="M78,62 Q100,54 118,56" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <path d="M88,72 Q95,62 104,62" fill="none" stroke="${col}" stroke-width="2"/>
+      <path d="M118,14 Q130,8 140,14" stroke="${col}" stroke-width="3" fill="none"/>
+      <text x="100" y="38" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">NASAL ↑</text>`,
+    'nasal-velar': `<path d="M130,80 Q145,70 155,75 Q158,80 155,88 Q148,92 136,90 Z" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <path d="M118,14 Q130,8 140,14" stroke="${col}" stroke-width="3" fill="none"/>
+      <text x="100" y="66" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">BACK NASAL ↑</text>`,
+    'lateral': `<path d="M82,66 Q95,60 108,62" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <path d="M70,72 Q68,65 75,62" stroke="${col}" stroke-width="2" fill="none"/>
+      <path d="M108,62 Q118,60 122,62" stroke="${col}" stroke-width="2" fill="none"/>
+      <text x="100" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LATERAL AIRFLOW</text>`,
+    'retroflex': `<path d="M85,72 Q95,60 108,58 Q110,52 106,50" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="100" y="43" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">TONGUE CURLS BACK</text>`,
+    'palatal': `<path d="M100,68 Q122,52 142,55" fill="none" stroke="${col}" stroke-width="2.5"/>
+      <text x="122" y="44" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">PALATE APPROACH</text>`,
+    'bilabial-approximant': `<ellipse cx="88" cy="63" rx="18" ry="8" fill="${colDim}" stroke="${col}" stroke-width="2"/>
+      <path d="M130,88 Q145,78 155,82" fill="none" stroke="${col}" stroke-width="2"/>
+      <text x="88" y="50" font-size="8.5" fill="${col}" font-family="JetBrains Mono" text-anchor="middle">LIPS ROUND + VELAR</text>`,
+  };
+
+  return base + (overlays[type] || '');
+}
+
+// ─── ACCENT COLOR MAP ─────────────────────────────────────────────────────────
+const CAT_COLOR = {
+  'close-vowel':   '#38BDF8',
+  'mid-vowel':     '#A78BFA',
+  'open-vowel':    '#34D399',
+  'diphthong':     '#FBBF24',
+  'plosive':       '#FB7185',
+  'fricative':     '#A78BFA',
+  'affricate':     '#38BDF8',
+  'nasal':         '#34D399',
+  'approximant':   '#FBBF24',
+};
+
+// ─── RENDER CHART ─────────────────────────────────────────────────────────────
+function renderChart() {
+  const grids = {};
+  phonemes.forEach(p => {
+    const gridId = 'grid-' + p.cat;
+    if (!grids[gridId]) grids[gridId] = document.getElementById(gridId);
+    const grid = grids[gridId];
+    if (!grid) return;
+
+    const card = document.createElement('div');
+    card.className = `phone-card cat-${p.cat}`;
+    card.innerHTML = `<div class="sym">${p.sym}</div><div class="ex">${p.example}</div>`;
+    card.addEventListener('click', () => openStudy(p.id));
+    grid.appendChild(card);
+  });
+
+  // Counts
+  const cats = [...new Set(phonemes.map(p => p.cat))];
+  cats.forEach(cat => {
+    const countEl = document.getElementById('count-' + cat);
+    if (countEl) {
+      const n = phonemes.filter(p => p.cat === cat).length;
+      countEl.textContent = n + ' symbols';
+    }
+  });
+}
+
+// ─── STUDY UNIT ───────────────────────────────────────────────────────────────
+let currentId = 0;
+
+function openStudy(id) {
+  currentId = id;
+  renderStudy(phonemes[id]);
+  document.getElementById('study-overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStudy() {
+  document.getElementById('study-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function navigate(dir) {
+  const newId = currentId + dir;
+  if (newId < 0 || newId >= phonemes.length) return;
+  currentId = newId;
+  renderStudy(phonemes[newId]);
+  document.getElementById('study-panel').scrollTop = 0;
+}
+
+function renderStudy(p) {
+  const accent = CAT_COLOR[p.cat] || '#38BDF8';
+  const accentCls = 'accent-' + p.cat;
+
+  // Apply accent class to panel
+  const panel = document.getElementById('study-panel');
+  panel.className = accentCls;
+
+  document.getElementById('s-sym').textContent = p.sym;
+  document.getElementById('s-bracket').textContent = '[ ' + p.sym + ' ]';
+  document.getElementById('s-cat').textContent = p.catLabel;
+  document.getElementById('s-name').textContent = p.name;
+  document.getElementById('s-desc').textContent = p.desc;
+
+  // Tongue SVG
+  document.getElementById('tongue-svg').innerHTML = drawTongueDiagram(p.tongue, accent);
+
+  // Steps
+  document.getElementById('p-steps').innerHTML = p.pronunciation.map(s => `<li>${s}</li>`).join('');
+
+  // Clusters
+  document.getElementById('clusters-list').innerHTML = p.clusters.map(c => `
+    <div class="cluster-row">
+      <div class="cluster-letters">${c.letters}</div>
+      <div class="cluster-examples">
+        ${c.examples.map(w => `<span class="word-chip" onclick="speakWord(this,'${w}')">${w}<span class="pi">▶</span></span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('s-progress').textContent = (p.id + 1) + ' / ' + phonemes.length;
+  document.getElementById('prev-btn').disabled = p.id === 0;
+  document.getElementById('next-btn').disabled = p.id === phonemes.length - 1;
+}
+
+// ─── TTS ──────────────────────────────────────────────────────────────────────
+function speak(text, btn, rate) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US';
+  utt.rate = rate || 0.85;
+  if (btn) {
+    btn.classList.add('playing');
+    utt.onend = () => btn.classList.remove('playing');
+    utt.onerror = () => btn.classList.remove('playing');
+  }
+  window.speechSynthesis.speak(utt);
+}
+
+function playSymbolAudio() {
+  const p = phonemes[currentId];
+  const btn = document.getElementById('audio-btn');
+  speak(p.example, btn, 0.85);
+}
+
+function speakWord(el, word) {
+  speak(word, el, 0.85);
+}
+
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+document.getElementById('study-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeStudy();
+});
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('study-overlay').classList.contains('visible')) return;
+  if (e.key === 'Escape') closeStudy();
+  if (e.key === 'ArrowRight') navigate(1);
+  if (e.key === 'ArrowLeft') navigate(-1);
+});
+
+renderChart();
+</script>
+</body>
+</html>
