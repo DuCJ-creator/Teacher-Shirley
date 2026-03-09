@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KK Phonics — Interactive Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --parchment: #EDE5D0;
+    --warm-brown: #4A3728;
+    --mid-brown: #7A5C44;
+    --accent-teal: #2E7D6E;
+    --accent-gold: #C4933F;
+    --accent-rust: #B85C38;
+    --accent-blue: #3B6BA5;
+    --light-teal: #E8F4F1;
+    --light-gold: #FDF3E3;
+    --shadow: rgba(74,55,40,0.12);
+    --shadow-strong: rgba(74,55,40,0.22);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--cream);
+    color: var(--warm-brown);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3.5rem 2rem 2.5rem;
+    background: linear-gradient(180deg, #3B2A1E 0%, #4A3728 60%, transparent 100%);
+  }
+  header .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+  }
+  header h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    color: var(--cream);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  header h1 em {
+    font-style: italic;
+    color: #D4B483;
+  }
+  header .subtitle {
+    margin-top: 0.9rem;
+    font-size: 1.15rem;
+    color: rgba(245,240,232,0.65);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── CHART PAGE ── */
+  #chart-page {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--accent-teal);
+    margin-bottom: 0.9rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--accent-teal);
+  }
+
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    color: var(--warm-brown);
+    margin-bottom: 1.4rem;
+    font-style: italic;
+  }
+
+  /* Phone grid */
+  .phone-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 3rem;
+  }
+
+  .phone-card {
+    position: relative;
+    background: white;
+    border: 1.5px solid rgba(74,55,40,0.14);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    min-width: 88px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: 0 2px 8px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .phone-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--shadow-strong);
+    border-color: var(--accent-teal);
+  }
+  .phone-card .symbol {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--warm-brown);
+  }
+  .phone-card .example-word {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid-brown);
+    opacity: 0.8;
+    letter-spacing: 0.04em;
+  }
+  .phone-card .type-dot {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* color coding */
+  .vowel-short .type-dot { background: var(--accent-blue); }
+  .vowel-long .type-dot { background: var(--accent-teal); }
+  .vowel-diphthong .type-dot { background: var(--accent-gold); }
+  .consonant-voiced .type-dot { background: var(--accent-rust); }
+  .consonant-unvoiced .type-dot { background: #888; }
+
+  .phone-card.vowel-short { border-left: 3px solid var(--accent-blue); }
+  .phone-card.vowel-long { border-left: 3px solid var(--accent-teal); }
+  .phone-card.vowel-diphthong { border-left: 3px solid var(--accent-gold); }
+  .phone-card.consonant-voiced { border-left: 3px solid var(--accent-rust); }
+  .phone-card.consonant-unvoiced { border-left: 3px solid #888; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    padding: 1rem 1.4rem;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(74,55,40,0.1);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--mid-brown);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── STUDY UNIT (modal-style overlay) ── */
+  #study-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(30,20,12,0.55);
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.2s ease;
+  }
+  #study-overlay.visible { display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+
+  #study-panel {
+    background: var(--cream);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 820px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+    animation: slideUp 0.3s ease;
+    position: relative;
+  }
+
+  .study-header {
+    background: linear-gradient(135deg, #3B2A1E 0%, #5A3E2B 100%);
+    border-radius: 20px 20px 0 0;
+    padding: 2.5rem 2.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .study-symbol-big {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 5.5rem;
+    color: var(--accent-gold);
+    line-height: 1;
+    flex-shrink: 0;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .study-header-info { flex: 1; }
+  .study-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    color: rgba(245,240,232,0.55);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .study-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.7rem;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+  .study-desc {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .study-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.4rem;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: var(--cream);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .study-close:hover { background: rgba(255,255,255,0.22); }
+
+  .study-body { padding: 2rem 2.5rem 2.5rem; }
+
+  /* Two-column layout */
+  .study-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media(max-width:600px) { .study-grid { grid-template-columns: 1fr; } }
+
+  .study-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid rgba(74,55,40,0.1);
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+
+  .study-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-teal);
+    margin-bottom: 0.9rem;
+  }
+
+  /* Tongue diagram */
+  .tongue-diagram {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  /* Audio button */
+  .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-teal);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.6rem 1.3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(46,125,110,0.3);
+  }
+  .audio-btn:hover { background: #256359; transform: translateY(-1px); box-shadow: 0 5px 16px rgba(46,125,110,0.35); }
+  .audio-btn:active { transform: translateY(0); }
+  .audio-btn svg { width: 14px; height: 14px; }
+  .audio-btn.playing { background: var(--accent-rust); }
+  .audio-btn.loading { opacity: 0.7; cursor: wait; }
+
+  /* Letter clusters */
+  .clusters-section { margin-bottom: 2rem; }
+  .clusters-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+    margin-bottom: 1rem;
+  }
+  .cluster-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.2rem;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+    border: 1px solid rgba(74,55,40,0.08);
+    flex-wrap: wrap;
+  }
+  .cluster-letters {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--accent-rust);
+    font-weight: 500;
+    min-width: 80px;
+  }
+  .cluster-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
+  }
+  .example-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--light-teal);
+    border-radius: 20px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.95rem;
+    color: var(--warm-brown);
+    cursor: pointer;
+    transition: all 0.18s;
+    border: 1px solid transparent;
+  }
+  .example-chip:hover { background: var(--accent-teal); color: white; border-color: transparent; }
+  .example-chip .play-icon { font-size: 0.7rem; opacity: 0.7; }
+  .example-chip:hover .play-icon { opacity: 1; }
+
+  /* Navigation buttons */
+  .study-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(74,55,40,0.1);
+  }
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: 1.5px solid rgba(74,55,40,0.2);
+    color: var(--mid-brown);
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .progress-indicator {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mid-brown);
+    opacity: 0.6;
+  }
+
+  /* Pronunciation steps */
+  .pronunc-steps { list-style: none; counter-reset: steps; }
+  .pronunc-steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin-bottom: 0.65rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--warm-brown);
+  }
+  .pronunc-steps li::before {
+    content: counter(steps);
+    background: var(--accent-gold);
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Scrollbar */
+  #study-panel::-webkit-scrollbar { width: 5px; }
+  #study-panel::-webkit-scrollbar-track { background: transparent; }
+  #study-panel::-webkit-scrollbar-thumb { background: rgba(74,55,40,0.2); border-radius: 3px; }
+
+  /* Divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(74,55,40,0.18), transparent);
+    margin: 2.5rem 0;
+  }
+
+  /* Responsive */
+  @media(max-width: 600px) {
+    .study-header { padding: 2rem 1.5rem 1.5rem; flex-direction: column; gap: 1rem; }
+    .study-symbol-big { font-size: 4rem; }
+    .study-body { padding: 1.5rem; }
+    #study-panel { max-height: 95vh; }
+    .cluster-row { gap: 0.6rem; }
+  }
+
+  /* Chart page sections */
+  .chart-section { margin-bottom: 2.8rem; }
+  .hint-text {
+    font-size: 0.88rem;
+    color: var(--mid-brown);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">American English Phonetics</div>
+  <h1><em>KK Phonics</em> Interactive Chart</h1>
+  <p class="subtitle">Click any symbol to begin your study unit</p>
+</header>
+
+<div id="chart-page">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-blue)"></div>Short Vowel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-teal)"></div>Long Vowel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-gold)"></div>Diphthong</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent-rust)"></div>Voiced Consonant</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#888"></div>Unvoiced Consonant</div>
+  </div>
+
+  <!-- VOWELS -->
+  <div class="chart-section">
+    <div class="section-label">Vowels · 母音</div>
+    <div class="section-title">Short & Long Vowels</div>
+    <p class="hint-text">Tap a symbol to explore tongue position, pronunciation, and example words</p>
+    <div class="phone-grid" id="vowels-grid"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="chart-section">
+    <div class="section-label">Vowels · 母音</div>
+    <div class="section-title">Diphthongs</div>
+    <div class="phone-grid" id="diphthongs-grid"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- CONSONANTS -->
+  <div class="chart-section">
+    <div class="section-label">Consonants · 子音</div>
+    <div class="section-title">Voiced Consonants</div>
+    <div class="phone-grid" id="voiced-grid"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="chart-section">
+    <div class="section-label">Consonants · 子音</div>
+    <div class="section-title">Unvoiced Consonants</div>
+    <div class="phone-grid" id="unvoiced-grid"></div>
+  </div>
+
+</div>
+
+<!-- STUDY OVERLAY -->
+<div id="study-overlay">
+  <div id="study-panel">
+    <button class="study-close" id="close-btn" onclick="closeStudy()">✕</button>
+
+    <div class="study-header">
+      <div class="study-symbol-big" id="s-symbol"></div>
+      <div class="study-header-info">
+        <div class="study-category" id="s-category"></div>
+        <div class="study-name" id="s-name"></div>
+        <div class="study-desc" id="s-desc"></div>
+        <div style="margin-top:1.2rem">
+          <button class="audio-btn" id="symbol-audio-btn" onclick="playSymbolAudio()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Play Pronunciation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-body">
+
+      <div class="study-grid">
+        <!-- Tongue position diagram -->
+        <div class="study-card">
+          <div class="study-card-title">Mouth & Tongue Position</div>
+          <svg class="tongue-diagram" id="tongue-svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <!-- Pronunciation guide -->
+        <div class="study-card">
+          <div class="study-card-title">How to Pronounce</div>
+          <ol class="pronunc-steps" id="pronunc-steps"></ol>
+        </div>
+      </div>
+
+      <!-- Letters & clusters -->
+      <div class="clusters-section">
+        <div class="clusters-title">Letters &amp; Clusters — click words to hear them</div>
+        <div id="clusters-list"></div>
+      </div>
+
+      <div class="study-nav">
+        <button class="nav-btn" id="prev-btn" onclick="navigateStudy(-1)">← Previous</button>
+        <span class="progress-indicator" id="progress-text"></span>
+        <button class="nav-btn" id="next-btn" onclick="navigateStudy(1)">Next →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const phonemes = [
+  // SHORT VOWELS
+  { id:0, symbol:'ɪ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Short I Sound',
+    desc:'A lax, short vowel. The tongue is high and front, but relaxed.',
+    pronunciation:['Relax your jaw and open it slightly.','Place your tongue high in your mouth, just behind your top teeth.','Keep your lips spread loosely — do not tense them.','Produce a short, quick sound: not quite "ee", softer.'],
+    clusters:[
+      { letters:'i', examples:['it','in','big','ship','hit'] },
+      { letters:'y (unstressed)', examples:['city','happy','baby'] }
+    ],
+    tongue:'short-i', example:'it'
+  },
+  { id:1, symbol:'i', type:'vowel-long', category:'Long Vowel · 長母音', name:'The Long EE Sound',
+    desc:'A tense, high front vowel. Tongue pushes forward and upward.',
+    pronunciation:['Spread your lips wide into a smile position.','Raise your tongue high toward the roof of your mouth.','Hold the position and sustain the sound: "eeee".','Keep tension in your tongue throughout.'],
+    clusters:[
+      { letters:'ee', examples:['feed','seen','feet','deer'] },
+      { letters:'ea', examples:['tea','sea','bean','beach'] },
+      { letters:'ie', examples:['relief','chief','piece'] },
+      { letters:'ei', examples:['ceiling','receipt'] },
+      { letters:'e_e', examples:['these','theme','complete'] }
+    ],
+    tongue:'long-ee', example:'feed'
+  },
+  { id:2, symbol:'ɛ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Short E Sound',
+    desc:'Mid-front vowel. Mouth opens moderately, lips spread.',
+    pronunciation:['Lower your jaw to a mid-open position.','Spread your lips horizontally — a neutral smile.','Place your tongue mid-front in your mouth.','Say a short "eh" as in "bed".'],
+    clusters:[
+      { letters:'e', examples:['bed','pen','left','best'] },
+      { letters:'ea', examples:['bread','dead','pleasure'] },
+      { letters:'a (before n)', examples:['many','any'] }
+    ],
+    tongue:'mid-front', example:'bed'
+  },
+  { id:3, symbol:'e', type:'vowel-long', category:'Long Vowel · 長母音', name:'The Long A Sound',
+    desc:'A diphthongized vowel gliding from [ɛ] to [ɪ]. A two-part motion.',
+    pronunciation:['Start with your mouth mid-open, lips spread.','Begin saying "eh" then glide upward toward "ee".','Your jaw rises slightly during the sound.','This is a two-stage sound: "EH-ee".'],
+    clusters:[
+      { letters:'ai', examples:['plain','train','wait'] },
+      { letters:'ay', examples:['play','day','say'] },
+      { letters:'a_e', examples:['mate','cake','late'] },
+      { letters:'ey', examples:['prey','they'] },
+      { letters:'ea', examples:['break','steak'] }
+    ],
+    tongue:'long-a', example:'play'
+  },
+  { id:4, symbol:'æ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Flat A Sound',
+    desc:'Low front vowel, wide open mouth. Very distinctive in American English.',
+    pronunciation:['Open your mouth wide, jaw drops significantly.','Spread your lips very wide — as if smiling broadly.','Tongue lies flat and low in your mouth.','Say "aah" but with lips stretched: "aæ".'],
+    clusters:[
+      { letters:'a', examples:['mad','cat','black','lamp','bad'] }
+    ],
+    tongue:'low-front', example:'cat'
+  },
+  { id:5, symbol:'ɑ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Ah Sound',
+    desc:'Low back vowel. Mouth opens wide, tongue stays low and back.',
+    pronunciation:['Open your mouth wide like a doctor checkup.','Relax your tongue flat at the bottom of your mouth.','Round your lips very slightly.','Produce a deep, open "ah" sound.'],
+    clusters:[
+      { letters:'a', examples:['wash','father','palm'] },
+      { letters:'o', examples:['stop','hot','clock','rock'] }
+    ],
+    tongue:'low-back', example:'stop'
+  },
+  { id:6, symbol:'ɔ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Aw Sound',
+    desc:'Mid-back rounded vowel. Lips form a circle, tongue pulls back.',
+    pronunciation:['Round your lips into a medium O shape.','Raise your tongue slightly toward the back of your mouth.','The sound is between "ah" and "oh".','Think of saying "aw" as in surprise.'],
+    clusters:[
+      { letters:'al', examples:['call','tall','walk','ball'] },
+      { letters:'au', examples:['author','caught','fault'] },
+      { letters:'aw', examples:['law','saw','draw'] },
+      { letters:'ough', examples:['bought','thought','brought'] }
+    ],
+    tongue:'mid-back', example:'law'
+  },
+  { id:7, symbol:'o', type:'vowel-long', category:'Long Vowel · 長母音', name:'The Long O Sound',
+    desc:'A gliding vowel moving from [ɔ] toward [ʊ]. Two-part motion.',
+    pronunciation:['Round your lips into a relaxed O shape.','Begin with a mid-back position like "aw".','Then glide your lips forward and more rounded toward "oo".','Your jaw rises slightly: "OH-oo".'],
+    clusters:[
+      { letters:'oa', examples:['coat','boat','road'] },
+      { letters:'ow', examples:['flow','know','snow'] },
+      { letters:'o_e', examples:['phone','hope','bone'] },
+      { letters:'oe', examples:['poet','toe'] },
+      { letters:'ough', examples:['although','though'] }
+    ],
+    tongue:'long-o', example:'coat'
+  },
+  { id:8, symbol:'ʊ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Short OO Sound',
+    desc:'High back vowel, relaxed. Unlike the long oo, this is loose and brief.',
+    pronunciation:['Bring your lips slightly forward, loosely rounded.','Raise your tongue toward the back of your mouth.','Keep everything relaxed — no tension.','Say a short, soft "oo" — like "should".'],
+    clusters:[
+      { letters:'u', examples:['full','pull','bull'] },
+      { letters:'oo', examples:['book','cook','foot','look'] },
+      { letters:'ou', examples:['could','would','should'] }
+    ],
+    tongue:'high-back-lax', example:'book'
+  },
+  { id:9, symbol:'u', type:'vowel-long', category:'Long Vowel · 長母音', name:'The Long OO Sound',
+    desc:'High back vowel, tense and prolonged. Lips push forward.',
+    pronunciation:['Push your lips forward into a tight circle.','Raise your tongue high and back in your mouth.','Hold tension and sustain: "oooo".','Think of the sound in "moon" or "blue".'],
+    clusters:[
+      { letters:'oo', examples:['moon','food','cool','pool'] },
+      { letters:'ui', examples:['suit','fruit','juice'] },
+      { letters:'ue', examples:['clue','blue','true'] },
+      { letters:'ew', examples:['chew','new','flew'] },
+      { letters:'u_e', examples:['mute','tune','crude'] }
+    ],
+    tongue:'high-back-tense', example:'moon'
+  },
+  { id:10, symbol:'ʌ', type:'vowel-short', category:'Short Vowel · 短母音', name:'The Short U Sound',
+    desc:'Mid-central vowel in stressed syllables. Jaw drops, tongue is neutral.',
+    pronunciation:['Let your jaw drop to a neutral mid position.','Your tongue lies flat and central — no raising or lowering.','Lips are relaxed and neutral, not rounded.','Say a short "uh" sound as in "bug".'],
+    clusters:[
+      { letters:'u', examples:['bug','run','cup','fun'] },
+      { letters:'o', examples:['color','honey','money','come'] }
+    ],
+    tongue:'mid-central', example:'bug'
+  },
+  { id:11, symbol:'ə', type:'vowel-short', category:'Reduced Vowel · 弱化音', name:'The Schwa Sound',
+    desc:'The most common vowel in English — the unstressed, reduced "uh".',
+    pronunciation:['Completely relax your mouth and tongue.','Jaw is in the most natural, unstressed position.','No lip rounding, no tongue movement.','Say the quickest, laziest "uh" possible.'],
+    clusters:[
+      { letters:'a (unstressed)', examples:['ago','about','around'] },
+      { letters:'e (unstressed)', examples:['together','the','open'] },
+      { letters:'o (unstressed)', examples:['command','police','lemon'] }
+    ],
+    tongue:'schwa', example:'ago'
+  },
+  { id:12, symbol:'ɚ', type:'vowel-short', category:'R-Colored Vowel · 捲舌音', name:'The Short R-Colored Vowel',
+    desc:'An unstressed r-colored vowel. Tongue curls up and back.',
+    pronunciation:['Begin with a neutral, relaxed vowel position.','Curl your tongue tip backward and upward.','Hold the curl while producing a soft "uh" sound.','Do not tense too much — keep it light.'],
+    clusters:[
+      { letters:'er (unstressed)', examples:['better','water','letter'] },
+      { letters:'ar (unstressed)', examples:['familiar','dollar'] },
+      { letters:'or (unstressed)', examples:['color','doctor'] },
+      { letters:'ure', examples:['nature','picture','future'] }
+    ],
+    tongue:'r-colored', example:'better'
+  },
+  { id:13, symbol:'ɝ', type:'vowel-long', category:'R-Colored Vowel · 捲舌音', name:'The Long R-Colored Vowel',
+    desc:'A stressed r-colored vowel — longer and more emphatic than ɚ.',
+    pronunciation:['Open your mouth to a mid-open position.','Curl your tongue tip backward and upward with more force.','Hold the curl and sustain the sound: "errr".','This appears in stressed syllables — really emphasize it.'],
+    clusters:[
+      { letters:'ir', examples:['bird','girl','shirt','first'] },
+      { letters:'er', examples:['her','fern','serve'] },
+      { letters:'ur', examples:['turn','burn','nurse'] },
+      { letters:'ear', examples:['learn','early','earth'] }
+    ],
+    tongue:'r-colored-stressed', example:'bird'
+  },
+  // DIPHTHONGS
+  { id:14, symbol:'aɪ', type:'vowel-diphthong', category:'Diphthong · 雙母音', name:'The AI Diphthong',
+    desc:'Glides from a low open [a] up to a high [ɪ]. Two distinct movements.',
+    pronunciation:['Open your mouth wide for a big "ah" sound.','While sustaining, raise your jaw and tongue upward.','End with a high, front [ɪ] position.','The sound glides: "AH-ee" smoothly.'],
+    clusters:[
+      { letters:'i', examples:['child','find','mind','wild'] },
+      { letters:'ie', examples:['tie','pie','die','lie'] },
+      { letters:'igh', examples:['light','night','right','sight'] },
+      { letters:'i_e', examples:['fire','fine','bike','kite'] },
+      { letters:'y', examples:['fly','sky','cry','my'] }
+    ],
+    tongue:'diphthong-ai', example:'light'
+  },
+  { id:15, symbol:'aʊ', type:'vowel-diphthong', category:'Diphthong · 雙母音', name:'The AU Diphthong',
+    desc:'Glides from low open [a] to rounded [ʊ]. Jaw closes, lips round.',
+    pronunciation:['Start with your mouth wide open for "ah".','While sustaining, close your jaw and round your lips.','End with a high back, rounded position.','The sound glides: "AH-oo" as in "how".'],
+    clusters:[
+      { letters:'ou', examples:['loud','out','found','sound'] },
+      { letters:'ow', examples:['flower','how','now','down'] }
+    ],
+    tongue:'diphthong-au', example:'loud'
+  },
+  { id:16, symbol:'ɔɪ', type:'vowel-diphthong', category:'Diphthong · 雙母音', name:'The OI Diphthong',
+    desc:'Glides from mid-back rounded [ɔ] up to front [ɪ]. Unique English sound.',
+    pronunciation:['Begin with lips rounded in an "aw" position.','Tongue starts mid-back in your mouth.','Glide your tongue forward and upward.','End near a high front position: "AW-ee".'],
+    clusters:[
+      { letters:'oy', examples:['joy','boy','toy','enjoy'] },
+      { letters:'oi', examples:['noise','coin','voice','oil'] }
+    ],
+    tongue:'diphthong-oi', example:'joy'
+  },
+  // VOICED CONSONANTS
+  { id:17, symbol:'b', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The B Sound',
+    desc:'Voiced bilabial stop. Both lips close tightly, then release with voice.',
+    pronunciation:['Press both lips tightly together.','Build up air pressure behind your lips.','Vibrate your vocal cords (voiced).','Release the lips suddenly: "b".'],
+    clusters:[
+      { letters:'b', examples:['basic','back','boat','able'] },
+      { letters:'bb', examples:['bubble','rabbit','robber'] }
+    ],
+    tongue:'bilabial-stop', example:'basic'
+  },
+  { id:18, symbol:'d', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The D Sound',
+    desc:'Voiced alveolar stop. Tongue tip touches the ridge behind your top teeth.',
+    pronunciation:['Raise your tongue tip to the alveolar ridge.','Press firmly to block airflow.','Vibrate your vocal cords.','Release the tongue quickly: "d".'],
+    clusters:[
+      { letters:'d', examples:['dinner','dog','ride','under'] },
+      { letters:'dd', examples:['addition','middle','muddy'] }
+    ],
+    tongue:'alveolar-stop', example:'dog'
+  },
+  { id:19, symbol:'g', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The G Sound',
+    desc:'Voiced velar stop. Back of tongue touches the soft palate.',
+    pronunciation:['Raise the back of your tongue to the soft palate.','Block airflow completely at the back.','Vibrate your vocal cords.','Release the back of the tongue: "g".'],
+    clusters:[
+      { letters:'g', examples:['grammar','go','begin','dog'] },
+      { letters:'gg', examples:['luggage','bigger','foggy'] }
+    ],
+    tongue:'velar-stop', example:'go'
+  },
+  { id:20, symbol:'v', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The V Sound',
+    desc:'Voiced labiodental fricative. Upper teeth touch lower lip while air flows.',
+    pronunciation:['Place your upper front teeth on your lower lip.','Allow air to squeeze through the gap.','Vibrate your vocal cords throughout.','Sustain the buzzing friction sound: "vvv".'],
+    clusters:[
+      { letters:'v', examples:['vegetable','very','ever','five'] },
+      { letters:'f (in "of")', examples:['of'] }
+    ],
+    tongue:'labiodental', example:'very'
+  },
+  { id:21, symbol:'z', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The Z Sound',
+    desc:'Voiced alveolar fricative. Air forced through a narrow gap, vibrating.',
+    pronunciation:['Place tongue near the alveolar ridge, leaving a small gap.','Force air through the narrow passage.','Vibrate your vocal cords — feel the buzzing.','Sustain the sound: "zzz".'],
+    clusters:[
+      { letters:'z', examples:['zoo','zero','zone','lazy'] },
+      { letters:'s (voiced)', examples:['pause','dogs','loves'] }
+    ],
+    tongue:'alveolar-fricative', example:'zoo'
+  },
+  { id:22, symbol:'ð', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The TH (Voiced) Sound',
+    desc:'Voiced dental fricative. Tongue between teeth, air flows, cords vibrate.',
+    pronunciation:['Gently place your tongue tip between your teeth.','Do NOT block the air — let it flow around the tongue.','Vibrate your vocal cords (this is the key!).','Sustain the buzzing sound: "ðð".'],
+    clusters:[
+      { letters:'th (voiced)', examples:['this','that','them','though','breathe'] }
+    ],
+    tongue:'dental-voiced', example:'this'
+  },
+  { id:23, symbol:'ʒ', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The ZH Sound',
+    desc:'Voiced postalveolar fricative. Like "sh" but voiced. A luxurious buzz.',
+    pronunciation:['Curl your tongue slightly upward toward the palate.','Allow air to flow over the tongue surface.','Vibrate your vocal cords.','Sustain: "zhh" — like the S in "pleasure".'],
+    clusters:[
+      { letters:'si / sion', examples:['television','vision','decision'] },
+      { letters:'sure', examples:['pleasure','measure','treasure'] }
+    ],
+    tongue:'postalveolar-voiced', example:'pleasure'
+  },
+  { id:24, symbol:'dʒ', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The DJ Sound',
+    desc:'Voiced postalveolar affricate. Combines a stop and fricative with voice.',
+    pronunciation:['Raise your tongue to the palate (stop position).','Block airflow briefly.','Release into a "zh" fricative while voicing.','The sound is "d+zh" merged: "dʒ".'],
+    clusters:[
+      { letters:'j', examples:['enjoy','job','jump','juice'] },
+      { letters:'ge', examples:['change','age','strange'] },
+      { letters:'dge', examples:['judge','bridge','hedge'] },
+      { letters:'gi / gy', examples:['apologize','gym','giant'] }
+    ],
+    tongue:'affricate-voiced', example:'jump'
+  },
+  { id:25, symbol:'l', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The L Sound',
+    desc:'Voiced lateral approximant. Air flows around the sides of the tongue.',
+    pronunciation:['Raise your tongue tip to the alveolar ridge.','Let air flow out around the sides of your tongue.','Vibrate your vocal cords.','Note: at end of words, tongue may not fully touch.'],
+    clusters:[
+      { letters:'l', examples:['lend','love','along','film'] },
+      { letters:'ll', examples:['fall','tell','ball','spell'] }
+    ],
+    tongue:'lateral', example:'love'
+  },
+  { id:26, symbol:'r', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The R Sound',
+    desc:'Voiced retroflex approximant. American R — tongue curls back.',
+    pronunciation:['Slightly pucker or round your lips.','Curl your tongue tip upward and backward.','Do not let the tongue touch anything — it hovers.','Vibrate cords and produce the smooth "r" sound.'],
+    clusters:[
+      { letters:'r', examples:['romantic','ride','run','friend'] },
+      { letters:'rr', examples:['mirror','sorry','carry'] }
+    ],
+    tongue:'retroflex', example:'run'
+  },
+  { id:27, symbol:'m', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The M Sound',
+    desc:'Voiced bilabial nasal. Lips close, sound resonates through the nose.',
+    pronunciation:['Press both lips together firmly.','Do not release — keep the seal.','Vibrate your cords and direct sound through your nose.','Sustain the nasal hum: "mmm".'],
+    clusters:[
+      { letters:'m', examples:['moon','make','time','come'] },
+      { letters:'mm', examples:['community','summer','hammer'] }
+    ],
+    tongue:'nasal-bilabial', example:'moon'
+  },
+  { id:28, symbol:'n', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The N Sound',
+    desc:'Voiced alveolar nasal. Tongue blocks at the ridge, sound exits the nose.',
+    pronunciation:['Press your tongue tip to the alveolar ridge.','Block the oral passage completely.','Vibrate your cords and direct air through your nose.','Sustain: "nnn".'],
+    clusters:[
+      { letters:'n', examples:['clean','name','know','any'] },
+      { letters:'nn', examples:['tennis','dinner','running'] }
+    ],
+    tongue:'nasal-alveolar', example:'name'
+  },
+  { id:29, symbol:'ŋ', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The NG Sound',
+    desc:'Voiced velar nasal. Back of tongue touches soft palate, nose resonates.',
+    pronunciation:['Raise the back of your tongue to the soft palate.','Block the oral passage at the back.','Keep your tongue tip resting at the bottom.','Hum through the nose: "ŋŋŋ".'],
+    clusters:[
+      { letters:'ng', examples:['long','sing','ring','bring'] },
+      { letters:'nk', examples:['thank','think','drink','bank'] }
+    ],
+    tongue:'nasal-velar', example:'sing'
+  },
+  { id:30, symbol:'j', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The Y Sound',
+    desc:'Voiced palatal approximant. Tongue near palate, air flows freely.',
+    pronunciation:['Raise the middle of your tongue toward the hard palate.','Do not touch — leave a gap for air.','Vibrate your cords.','Begin the sound, then immediately move to the next vowel.'],
+    clusters:[
+      { letters:'y', examples:['young','yes','year','yellow'] }
+    ],
+    tongue:'palatal', example:'yes'
+  },
+  { id:31, symbol:'w', type:'consonant-voiced', category:'Voiced Consonant · 有聲子音', name:'The W Sound',
+    desc:'Voiced bilabial/velar approximant. Lips round tightly then release.',
+    pronunciation:['Round your lips tightly as if to whistle.','Raise the back of your tongue toward the velum.','Vibrate your vocal cords.','Quickly move into the following vowel.'],
+    clusters:[
+      { letters:'w', examples:['world','way','water','wait'] },
+      { letters:'wh', examples:['who','whole','whose'] },
+      { letters:'o (initial)', examples:['one','once'] }
+    ],
+    tongue:'bilabial-approximant', example:'way'
+  },
+  // UNVOICED CONSONANTS
+  { id:32, symbol:'p', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The P Sound',
+    desc:'Voiceless bilabial stop. Like [b] but with no vocal cord vibration.',
+    pronunciation:['Press both lips tightly together.','Build up air pressure behind the closure.','Do NOT vibrate your vocal cords.','Release lips with a puff of air: "p".'],
+    clusters:[
+      { letters:'p', examples:['keep','part','speak','upon'] },
+      { letters:'pp', examples:['application','happy','upper'] }
+    ],
+    tongue:'bilabial-stop', example:'part'
+  },
+  { id:33, symbol:'t', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The T Sound',
+    desc:'Voiceless alveolar stop. Tongue tip to ridge, released with a crisp puff.',
+    pronunciation:['Raise your tongue tip firmly to the alveolar ridge.','Block all airflow.','Do NOT vibrate your vocal cords.','Release sharply with a burst of air: "t".'],
+    clusters:[
+      { letters:'t', examples:['table','time','eight','return'] },
+      { letters:'tt', examples:['letter','butter','kitten'] }
+    ],
+    tongue:'alveolar-stop', example:'time'
+  },
+  { id:34, symbol:'k', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The K Sound',
+    desc:'Voiceless velar stop. Back of tongue meets soft palate, then releases.',
+    pronunciation:['Raise the back of your tongue to the soft palate.','Block airflow completely at the back of the mouth.','Do NOT vibrate your vocal cords.','Release with a back-of-throat burst: "k".'],
+    clusters:[
+      { letters:'k', examples:['king','keep','sky','book'] },
+      { letters:'c', examples:['accept','cat','cost','back'] },
+      { letters:'ck', examples:['rock','black','duck','luck'] },
+      { letters:'ch', examples:['schedule','school','echo'] }
+    ],
+    tongue:'velar-stop', example:'king'
+  },
+  { id:35, symbol:'h', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The H Sound',
+    desc:'Voiceless glottal fricative. Simply exhale air through an open vocal tract.',
+    pronunciation:['Open your mouth and throat freely.','Do not place tongue or lips in any special position.','Simply exhale air audibly — no voice.','The shape of the following vowel is adopted immediately.'],
+    clusters:[
+      { letters:'h', examples:['heaven','help','behind','who'] },
+      { letters:'wh', examples:['when','where','why','what'] }
+    ],
+    tongue:'glottal', example:'help'
+  },
+  { id:36, symbol:'f', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The F Sound',
+    desc:'Voiceless labiodental fricative. Teeth on lip, air squeezed through.',
+    pronunciation:['Place your upper front teeth on your lower lip.','Force air through the narrow gap.','Do NOT vibrate your vocal cords.','Sustain the hissing friction: "fff".'],
+    clusters:[
+      { letters:'f', examples:['family','friend','after','life'] },
+      { letters:'ff', examples:['effect','office','offer'] },
+      { letters:'gh', examples:['cough','laugh','enough'] },
+      { letters:'ph', examples:['phase','phone','photo'] }
+    ],
+    tongue:'labiodental', example:'friend'
+  },
+  { id:37, symbol:'s', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The S Sound',
+    desc:'Voiceless alveolar fricative. Air hisses through a narrow tongue gap.',
+    pronunciation:['Place your tongue close to the alveolar ridge — leave a small gap.','Direct air through the narrow channel.','Do NOT vibrate your vocal cords.','Sustain the hiss: "sss".'],
+    clusters:[
+      { letters:'s', examples:['see','say','best','us'] },
+      { letters:'c (soft)', examples:['city','face','circle','dance'] },
+      { letters:'sc', examples:['school','scene','science'] }
+    ],
+    tongue:'alveolar-fricative', example:'see'
+  },
+  { id:38, symbol:'θ', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The TH (Unvoiced) Sound',
+    desc:'Voiceless dental fricative. Like [ð] but whispered, no vocal cord vibration.',
+    pronunciation:['Gently place your tongue tip between your teeth.','Allow air to flow continuously around the tongue.','Do NOT vibrate your vocal cords — just breathe.','Sustain: a soft, breathy "th".'],
+    clusters:[
+      { letters:'th (unvoiced)', examples:['health','thank','think','tooth','path'] }
+    ],
+    tongue:'dental-unvoiced', example:'think'
+  },
+  { id:39, symbol:'ʃ', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The SH Sound',
+    desc:'Voiceless postalveolar fricative. A hushing sound.',
+    pronunciation:['Curl your tongue upward toward the palate.','Spread the tongue slightly wider than for [s].','Force air over the surface of your tongue.','Make the "shh" hushing sound.'],
+    clusters:[
+      { letters:'sh', examples:['fish','show','she','wash'] },
+      { letters:'c / s', examples:['special','sure','sugar'] },
+      { letters:'tion', examples:['action','nation','station'] }
+    ],
+    tongue:'postalveolar-unvoiced', example:'fish'
+  },
+  { id:40, symbol:'tʃ', type:'consonant-unvoiced', category:'Unvoiced Consonant · 無聲子音', name:'The CH Sound',
+    desc:'Voiceless postalveolar affricate. Stop + fricative combined: "t+sh".',
+    pronunciation:['Raise your tongue to the palate — block airflow.','Do not voice — no vibration.','Release suddenly into a "sh" friction.','The sound merges: "t+sh" → "ch".'],
+    clusters:[
+      { letters:'ch', examples:['lunch','church','chair','teach'] },
+      { letters:'tch', examples:['catch','watch','match','stretch'] },
+      { letters:'ture', examples:['adventure','picture','nature','future'] }
+    ],
+    tongue:'affricate-unvoiced', example:'church'
+  }
+];
+
+// ─── TONGUE SVG DIAGRAMS ─────────────────────────────────────────────────────
+function drawTongueDiagram(type) {
+  // Simplified sagittal cross-section SVG
+  const profiles = {
+    default: `
+      <g stroke="#7A5C44" fill="none" stroke-width="1.5">
+        <!-- Outer head profile -->
+        <path d="M40,20 Q60,10 90,12 Q130,14 155,35 Q170,55 168,90 Q165,130 150,160 Q130,185 100,192 Q70,195 50,180 Q30,160 28,130 Q25,90 35,55 Z" stroke="#C4933F" fill="#FDF3E3" stroke-width="2"/>
+        <!-- Palate/roof -->
+        <path d="M55,45 Q80,28 115,35 Q140,42 155,65" stroke="#4A3728" stroke-width="2" fill="none"/>
+        <!-- Teeth upper -->
+        <rect x="72" y="45" width="8" height="12" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="82" y="44" width="8" height="13" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="92" y="44" width="8" height="13" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="102" y="45" width="8" height="12" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <!-- Teeth lower -->
+        <rect x="72" y="78" width="8" height="11" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="82" y="79" width="8" height="11" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="92" y="79" width="8" height="11" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <rect x="102" y="78" width="8" height="11" rx="2" fill="#fff" stroke="#ccc" stroke-width="1"/>
+        <!-- Lips -->
+        <path d="M62,63 Q76,56 90,60 Q104,56 118,63" stroke="#B85C38" fill="none" stroke-width="2"/>
+        <path d="M62,63 Q76,72 90,68 Q104,72 118,63" stroke="#B85C38" fill="none" stroke-width="2"/>
+        <!-- Tongue base neutral -->
+        <path d="M55,130 Q70,110 100,108 Q130,108 145,120 Q148,140 140,155 Q120,170 90,168 Q65,162 55,148 Z" fill="#E8A090" stroke="#B85C38" stroke-width="1.5"/>
+        <path d="M85,108 Q95,90 100,108" fill="none" stroke="#B85C38" stroke-width="1.5"/>
+        <!-- Throat -->
+        <path d="M148,140 Q160,155 158,175" stroke="#7A5C44" stroke-width="1.5" fill="none"/>
+        <path d="M140,155 Q145,165 143,185" stroke="#7A5C44" stroke-width="1.5" fill="none"/>
+        <!-- Nose -->
+        <path d="M115,12 Q120,5 130,8 Q138,5 140,12" stroke="#7A5C44" fill="none" stroke-width="1.5"/>
+        <circle cx="120" cy="14" r="3" fill="#EDE5D0" stroke="#7A5C44" stroke-width="1"/>
+        <circle cx="135" cy="14" r="3" fill="#EDE5D0" stroke="#7A5C44" stroke-width="1"/>
+      </g>`,
+  };
+
+  // Tongue positions for each category
+  const tongueOverlays = {
+    'short-i': `<path d="M85,75 Q100,62 118,63 Q128,65 130,80 Q128,95 115,100 Q95,102 85,90 Z" fill="rgba(59,107,165,0.5)" stroke="#3B6BA5" stroke-width="2"/>
+                <text x="110" y="60" font-size="9" fill="#3B6BA5" font-family="DM Mono" text-anchor="middle">HIGH-FRONT</text>
+                <line x1="110" y1="62" x2="108" y2="68" stroke="#3B6BA5" stroke-width="1.2"/>`,
+    'long-ee': `<path d="M80,65 Q100,52 120,55 Q132,58 133,72 Q130,88 115,92 Q90,94 80,80 Z" fill="rgba(46,125,110,0.5)" stroke="#2E7D6E" stroke-width="2"/>
+                <text x="110" y="50" font-size="9" fill="#2E7D6E" font-family="DM Mono" text-anchor="middle">HIGH-FRONT</text>
+                <line x1="110" y1="52" x2="108" y2="58" stroke="#2E7D6E" stroke-width="1.2"/>`,
+    'mid-front': `<path d="M80,90 Q100,78 118,80 Q128,84 128,98 Q125,112 110,115 Q88,116 80,104 Z" fill="rgba(59,107,165,0.4)" stroke="#3B6BA5" stroke-width="2"/>
+                <text x="110" y="74" font-size="9" fill="#3B6BA5" font-family="DM Mono" text-anchor="middle">MID-FRONT</text>
+                <line x1="110" y1="76" x2="108" y2="82" stroke="#3B6BA5" stroke-width="1.2"/>`,
+    'long-a': `<path d="M78,88 Q100,76 120,78 Q130,82 130,96 Q127,110 112,113 Q88,114 78,102 Z" fill="rgba(46,125,110,0.4)" stroke="#2E7D6E" stroke-width="2"/>
+                <path d="M90,75 Q100,65 108,75" fill="none" stroke="#2E7D6E" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="130" y="70" font-size="9" fill="#2E7D6E" font-family="DM Mono">GLIDE↑</text>`,
+    'low-front': `<path d="M65,118 Q92,108 115,112 Q128,118 128,132 Q125,148 105,152 Q78,154 65,140 Z" fill="rgba(59,107,165,0.45)" stroke="#3B6BA5" stroke-width="2"/>
+                <text x="100" y="104" font-size="9" fill="#3B6BA5" font-family="DM Mono" text-anchor="middle">LOW-FRONT</text>
+                <line x1="100" y1="106" x2="98" y2="112" stroke="#3B6BA5" stroke-width="1.2"/>`,
+    'low-back': `<path d="M108,118 Q128,108 148,112 Q158,118 157,134 Q154,150 138,154 Q118,156 108,142 Z" fill="rgba(74,55,40,0.3)" stroke="#4A3728" stroke-width="2"/>
+                <text x="135" y="104" font-size="9" fill="#4A3728" font-family="DM Mono" text-anchor="middle">LOW-BACK</text>
+                <line x1="135" y1="106" x2="133" y2="112" stroke="#4A3728" stroke-width="1.2"/>`,
+    'mid-back': `<path d="M110,105 Q130,95 148,98 Q158,104 156,118 Q152,132 138,136 Q118,138 110,124 Z" fill="rgba(196,147,63,0.45)" stroke="#C4933F" stroke-width="2"/>
+                <text x="135" y="91" font-size="9" fill="#C4933F" font-family="DM Mono" text-anchor="middle">MID-BACK</text>
+                <line x1="135" y1="93" x2="133" y2="99" stroke="#C4933F" stroke-width="1.2"/>`,
+    'long-o': `<path d="M110,100 Q130,90 148,94 Q158,100 156,114 Q152,128 138,132 Q118,134 110,120 Z" fill="rgba(46,125,110,0.4)" stroke="#2E7D6E" stroke-width="2"/>
+                <path d="M108,100 Q100,88 108,100" fill="none" stroke="#2E7D6E" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="138" y="85" font-size="9" fill="#2E7D6E" font-family="DM Mono">GLIDE→</text>`,
+    'high-back-lax': `<path d="M112,90 Q133,80 150,84 Q160,90 158,104 Q154,118 140,122 Q120,124 112,110 Z" fill="rgba(59,107,165,0.4)" stroke="#3B6BA5" stroke-width="2"/>
+                <text x="138" y="76" font-size="9" fill="#3B6BA5" font-family="DM Mono" text-anchor="middle">HIGH-BACK</text>`,
+    'high-back-tense': `<path d="M115,80 Q138,68 155,72 Q165,80 162,95 Q158,110 142,114 Q120,116 115,100 Z" fill="rgba(46,125,110,0.5)" stroke="#2E7D6E" stroke-width="2"/>
+                <text x="142" y="64" font-size="9" fill="#2E7D6E" font-family="DM Mono" text-anchor="middle">HIGH-BACK</text>`,
+    'mid-central': `<path d="M88,100 Q110,90 128,94 Q138,100 136,114 Q132,128 115,132 Q92,134 88,118 Z" fill="rgba(59,107,165,0.35)" stroke="#3B6BA5" stroke-width="2"/>
+                <text x="112" y="86" font-size="9" fill="#3B6BA5" font-family="DM Mono" text-anchor="middle">CENTRAL</text>`,
+    'schwa': `<path d="M88,100 Q110,92 126,96 Q134,102 132,115 Q128,128 112,131 Q90,132 88,118 Z" fill="rgba(74,55,40,0.25)" stroke="#7A5C44" stroke-width="1.5" stroke-dasharray="4,2"/>
+                <text x="112" y="87" font-size="9" fill="#7A5C44" font-family="DM Mono" text-anchor="middle">NEUTRAL</text>`,
+    'r-colored': `<path d="M95,108 Q115,98 132,102 Q140,108 138,122 Q134,136 118,140 Q96,140 95,125 Z" fill="rgba(184,92,56,0.35)" stroke="#B85C38" stroke-width="2"/>
+                <path d="M95,108 Q100,98 110,100" fill="none" stroke="#B85C38" stroke-width="2"/>
+                <text x="118" y="94" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">RETROFLEX</text>`,
+    'r-colored-stressed': `<path d="M90,100 Q112,88 132,92 Q142,100 140,116 Q136,130 118,134 Q92,135 90,118 Z" fill="rgba(184,92,56,0.45)" stroke="#B85C38" stroke-width="2"/>
+                <path d="M90,100 Q95,88 108,90" fill="none" stroke="#B85C38" stroke-width="2"/>
+                <text x="118" y="84" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">RETROFLEX↑</text>`,
+    'diphthong-ai': `<path d="M65,118 Q92,108 115,112 Q128,118 128,132 Q125,148 105,152 Q78,154 65,140 Z" fill="rgba(196,147,63,0.35)" stroke="#C4933F" stroke-width="2"/>
+                <path d="M100,110 Q95,85 105,68 Q112,60 118,62" fill="none" stroke="#C4933F" stroke-width="2.5" stroke-dasharray="4,2"/>
+                <text x="125" y="60" font-size="9" fill="#C4933F" font-family="DM Mono">GLIDE↑</text>
+                <polygon points="118,58 115,65 121,64" fill="#C4933F"/>`,
+    'diphthong-au': `<path d="M65,118 Q92,108 115,112 Q128,118 128,132 Q125,148 105,152 Q78,154 65,140 Z" fill="rgba(196,147,63,0.35)" stroke="#C4933F" stroke-width="2"/>
+                <path d="M100,110 Q118,105 138,102 Q148,102 152,110" fill="none" stroke="#C4933F" stroke-width="2.5" stroke-dasharray="4,2"/>
+                <text x="150" y="98" font-size="9" fill="#C4933F" font-family="DM Mono">GLIDE</text>
+                <polygon points="152,110 148,103 155,104" fill="#C4933F"/>`,
+    'diphthong-oi': `<path d="M110,100 Q130,90 148,94 Q158,100 156,114 Q152,128 138,132 Q118,134 110,120 Z" fill="rgba(196,147,63,0.35)" stroke="#C4933F" stroke-width="2"/>
+                <path d="M135,90 Q115,80 98,72 Q90,68 86,66" fill="none" stroke="#C4933F" stroke-width="2.5" stroke-dasharray="4,2"/>
+                <text x="80" y="62" font-size="9" fill="#C4933F" font-family="DM Mono">GLIDE↑</text>`,
+    'bilabial-stop': `<line x1="55" y1="63" x2="118" y2="63" stroke="#B85C38" stroke-width="4" stroke-linecap="round"/>
+                <text x="90" y="55" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">LIPS CLOSED</text>
+                <text x="90" y="175" font-size="9" fill="#4A3728" font-family="DM Mono" text-anchor="middle">TONGUE: NEUTRAL</text>`,
+    'alveolar-stop': `<path d="M78,60 Q100,52 118,55" fill="none" stroke="#B85C38" stroke-width="3" stroke-linecap="round"/>
+                <path d="M88,72 Q95,60 104,60" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <text x="100" y="46" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">TONGUE→RIDGE</text>`,
+    'velar-stop': `<path d="M130,80 Q145,70 155,75 Q158,80 155,88 Q148,92 136,90 Z" fill="rgba(184,92,56,0.5)" stroke="#B85C38" stroke-width="2"/>
+                <text x="145" y="65" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">BACK CLOSURE</text>`,
+    'labiodental': `<line x1="60" y1="73" x2="90" y2="58" stroke="#B85C38" stroke-width="2.5" stroke-linecap="round"/>
+                <text x="88" y="50" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">TEETH→LIP</text>`,
+    'alveolar-fricative': `<path d="M78,62 Q100,54 118,56" fill="none" stroke="#B85C38" stroke-width="2" stroke-dasharray="3,2"/>
+                <path d="M88,72 Q95,62 104,62" fill="none" stroke="#B85C38" stroke-width="2"/>
+                <text x="100" y="48" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">NARROW GAP</text>`,
+    'dental-voiced': `<path d="M80,68 Q90,60 105,63" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <rect x="72" y="63" width="25" height="6" rx="2" fill="rgba(184,92,56,0.4)" stroke="#B85C38" stroke-width="1.5"/>
+                <text x="90" y="50" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">TH: TONGUE BETWEEN</text>`,
+    'dental-unvoiced': `<path d="M80,68 Q90,60 105,63" fill="none" stroke="#888" stroke-width="2.5"/>
+                <rect x="72" y="63" width="25" height="6" rx="2" fill="rgba(136,136,136,0.4)" stroke="#888" stroke-width="1.5"/>
+                <text x="90" y="50" font-size="9" fill="#888" font-family="DM Mono" text-anchor="middle">TH: TONGUE BETWEEN</text>`,
+    'postalveolar-voiced': `<path d="M82,60 Q100,50 118,53" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <path d="M88,72 Q98,58 110,57" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <text x="100" y="43" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">POST-ALVEOLAR</text>`,
+    'postalveolar-unvoiced': `<path d="M82,60 Q100,50 118,53" fill="none" stroke="#888" stroke-width="2.5"/>
+                <path d="M88,72 Q98,58 110,57" fill="none" stroke="#888" stroke-width="2.5"/>
+                <text x="100" y="43" font-size="9" fill="#888" font-family="DM Mono" text-anchor="middle">POST-ALVEOLAR</text>`,
+    'affricate-voiced': `<path d="M80,60 Q100,50 118,53" fill="none" stroke="#B85C38" stroke-width="3"/>
+                <path d="M84,72 Q98,56 114,57" fill="none" stroke="#B85C38" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="100" y="43" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">STOP + FRICATIVE</text>`,
+    'affricate-unvoiced': `<path d="M80,60 Q100,50 118,53" fill="none" stroke="#888" stroke-width="3"/>
+                <path d="M84,72 Q98,56 114,57" fill="none" stroke="#888" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="100" y="43" font-size="9" fill="#888" font-family="DM Mono" text-anchor="middle">STOP + FRICATIVE</text>`,
+    'lateral': `<path d="M82,66 Q95,60 108,62" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <path d="M70,72 Q68,65 75,62" stroke="#B85C38" stroke-width="2" fill="none"/>
+                <text x="100" y="50" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">LATERAL FLOW</text>`,
+    'retroflex': `<path d="M85,72 Q95,60 108,58 Q110,52 106,50" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <text x="100" y="43" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">CURL BACK</text>`,
+    'nasal-bilabial': `<line x1="55" y1="63" x2="118" y2="63" stroke="#B85C38" stroke-width="4" stroke-linecap="round"/>
+                <path d="M118,14 Q130,8 140,14" stroke="#2E7D6E" stroke-width="3" fill="none"/>
+                <text x="90" y="40" font-size="9" fill="#2E7D6E" font-family="DM Mono" text-anchor="middle">NASAL RESONANCE</text>`,
+    'nasal-alveolar': `<path d="M78,62 Q100,54 118,56" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <path d="M88,72 Q95,62 104,62" fill="none" stroke="#B85C38" stroke-width="2"/>
+                <path d="M118,14 Q130,8 140,14" stroke="#2E7D6E" stroke-width="3" fill="none"/>
+                <text x="100" y="40" font-size="9" fill="#2E7D6E" font-family="DM Mono" text-anchor="middle">NASAL RESONANCE</text>`,
+    'nasal-velar': `<path d="M130,80 Q145,70 155,75 Q158,80 155,88 Q148,92 136,90 Z" fill="rgba(46,125,110,0.4)" stroke="#2E7D6E" stroke-width="2"/>
+                <path d="M118,14 Q130,8 140,14" stroke="#2E7D6E" stroke-width="3" fill="none"/>
+                <text x="100" y="65" font-size="9" fill="#2E7D6E" font-family="DM Mono" text-anchor="middle">NASAL RESONANCE</text>`,
+    'palatal': `<path d="M100,68 Q120,52 140,55" fill="none" stroke="#B85C38" stroke-width="2.5"/>
+                <text x="120" y="44" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">PALATE APPROACH</text>`,
+    'bilabial-approximant': `<ellipse cx="88" cy="63" rx="18" ry="8" fill="rgba(184,92,56,0.25)" stroke="#B85C38" stroke-width="2"/>
+                <text x="88" y="50" font-size="9" fill="#B85C38" font-family="DM Mono" text-anchor="middle">LIPS ROUND</text>`,
+    'glottal': `<ellipse cx="150" cy="155" rx="10" ry="15" fill="rgba(136,136,136,0.3)" stroke="#888" stroke-width="2"/>
+                <text x="150" y="142" font-size="9" fill="#888" font-family="DM Mono" text-anchor="middle">OPEN THROAT</text>`,
+  };
+
+  const overlay = tongueOverlays[type] || tongueOverlays['default'] || '';
+  return (profiles.default || '') + (overlay || '');
+}
+
+// ─── Phoneme TTS strings ──────────────────────────────────────────────────────
+// Each entry is a carefully chosen TTS string that isolates just the sound.
+// Strategy: use a minimal carrier word or syllable that begins/ends cleanly,
+// then strip surrounding sounds via rate/pitch tricks. For vowels we use
+// "h + vowel + silent schwa" patterns; for consonants we isolate onset/coda.
+const PHONEME_TTS = {
+  // Vowels — spoken as isolated vowel sound held briefly
+  'ɪ':  { text: 'ih',          rate: 0.7,  pitch: 1.0 },  // short i — "ih"
+  'i':  { text: 'ee',          rate: 0.7,  pitch: 1.0 },  // long ee
+  'ɛ':  { text: 'eh',          rate: 0.7,  pitch: 1.0 },  // short e
+  'e':  { text: 'ay',          rate: 0.7,  pitch: 1.0 },  // long a / "ay"
+  'æ':  { text: 'aah',         rate: 0.7,  pitch: 1.0 },  // flat a — "aah" with spread
+  'ɑ':  { text: 'ah',          rate: 0.7,  pitch: 1.0 },  // open ah
+  'ɔ':  { text: 'aw',          rate: 0.7,  pitch: 1.0 },  // aw sound
+  'o':  { text: 'oh',          rate: 0.7,  pitch: 1.0 },  // long o
+  'ʊ':  { text: 'uh',          rate: 0.65, pitch: 1.0 },  // short oo — lax
+  'u':  { text: 'oo',          rate: 0.65, pitch: 1.0 },  // long oo
+  'ʌ':  { text: 'uh',          rate: 0.75, pitch: 0.95 }, // short u (stressed)
+  'ə':  { text: 'uh',          rate: 0.9,  pitch: 0.9 },  // schwa — quick, unstressed
+  'ɚ':  { text: 'er',          rate: 0.75, pitch: 1.0 },  // unstressed r-vowel
+  'ɝ':  { text: 'ur',          rate: 0.65, pitch: 1.0 },  // stressed r-vowel
+  // Diphthongs
+  'aɪ': { text: 'eye',         rate: 0.65, pitch: 1.0 },  // ai
+  'aʊ': { text: 'ow',          rate: 0.65, pitch: 1.0 },  // ow
+  'ɔɪ': { text: 'oy',          rate: 0.65, pitch: 1.0 },  // oi
+  // Voiced consonants — isolated by putting between two neutralizing vowels,
+  // then spoken very slowly so the consonant is clearly heard
+  'b':  { text: 'buh',         rate: 0.65, pitch: 1.0 },
+  'd':  { text: 'duh',         rate: 0.65, pitch: 1.0 },
+  'g':  { text: 'guh',         rate: 0.65, pitch: 1.0 },
+  'v':  { text: 'vvv',         rate: 0.55, pitch: 1.0 },
+  'z':  { text: 'zzz',         rate: 0.55, pitch: 1.0 },
+  'ð':  { text: 'th',          rate: 0.5,  pitch: 1.0 },  // voiced th — "thee" minus the vowel
+  'ʒ':  { text: 'zhh',         rate: 0.5,  pitch: 1.0 },  // like measure start
+  'dʒ': { text: 'juh',         rate: 0.6,  pitch: 1.0 },
+  'l':  { text: 'lll',         rate: 0.55, pitch: 1.0 },
+  'r':  { text: 'rrr',         rate: 0.55, pitch: 1.0 },
+  'm':  { text: 'mmm',         rate: 0.55, pitch: 1.0 },
+  'n':  { text: 'nnn',         rate: 0.55, pitch: 1.0 },
+  'ŋ':  { text: 'ing',         rate: 0.6,  pitch: 1.0 },  // ng — heard at coda of "ing"
+  'j':  { text: 'yuh',         rate: 0.65, pitch: 1.0 },
+  'w':  { text: 'wuh',         rate: 0.65, pitch: 1.0 },
+  // Unvoiced consonants
+  'p':  { text: 'puh',         rate: 0.65, pitch: 1.0 },
+  't':  { text: 'tuh',         rate: 0.65, pitch: 1.0 },
+  'k':  { text: 'kuh',         rate: 0.65, pitch: 1.0 },
+  'h':  { text: 'hhh',         rate: 0.55, pitch: 1.0 },
+  'f':  { text: 'fff',         rate: 0.55, pitch: 1.0 },
+  's':  { text: 'sss',         rate: 0.55, pitch: 1.0 },
+  'θ':  { text: 'th',          rate: 0.5,  pitch: 1.0 },  // unvoiced th — breathed
+  'ʃ':  { text: 'shh',         rate: 0.5,  pitch: 1.0 },
+  'tʃ': { text: 'ch',          rate: 0.6,  pitch: 1.0 },
+};
+
+function speak(text, btn, rate, pitch) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US';
+  utt.rate = rate || 0.85;
+  utt.pitch = pitch || 1.0;
+  if (btn) {
+    btn.classList.add('playing');
+    utt.onend = () => btn.classList.remove('playing');
+    utt.onerror = () => btn.classList.remove('playing');
+  }
+  window.speechSynthesis.speak(utt);
+}
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let currentIdx = 0;
+let allPhonemes = phonemes;
+
+// ─── RENDER CHART ────────────────────────────────────────────────────────────
+function renderChart() {
+  const containers = {
+    'vowel-short': document.getElementById('vowels-grid'),
+    'vowel-long': document.getElementById('vowels-grid'),
+    'vowel-diphthong': document.getElementById('diphthongs-grid'),
+    'consonant-voiced': document.getElementById('voiced-grid'),
+    'consonant-unvoiced': document.getElementById('unvoiced-grid'),
+  };
+
+  phonemes.forEach(p => {
+    const el = document.createElement('div');
+    el.className = `phone-card ${p.type}`;
+    el.innerHTML = `
+      <div class="type-dot"></div>
+      <div class="symbol">[${p.symbol}]</div>
+      <div class="example-word">${p.example}</div>
+    `;
+    el.addEventListener('click', () => openStudy(p.id));
+    containers[p.type].appendChild(el);
+  });
+}
+
+// ─── OPEN STUDY UNIT ─────────────────────────────────────────────────────────
+function openStudy(id) {
+  currentIdx = id;
+  renderStudy(phonemes[id]);
+  document.getElementById('study-overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStudy() {
+  document.getElementById('study-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function navigateStudy(dir) {
+  const newIdx = currentIdx + dir;
+  if (newIdx < 0 || newIdx >= phonemes.length) return;
+  currentIdx = newIdx;
+  renderStudy(phonemes[newIdx]);
+  document.getElementById('study-panel').scrollTop = 0;
+}
+
+function renderStudy(p) {
+  document.getElementById('s-symbol').textContent = `[${p.symbol}]`;
+  document.getElementById('s-category').textContent = p.category;
+  document.getElementById('s-name').textContent = p.name;
+  document.getElementById('s-desc').textContent = p.desc;
+
+  // Tongue SVG
+  const svg = document.getElementById('tongue-svg');
+  svg.innerHTML = drawTongueDiagram(p.tongue);
+
+  // Pronunciation steps
+  const steps = document.getElementById('pronunc-steps');
+  steps.innerHTML = p.pronunciation.map(s => `<li>${s}</li>`).join('');
+
+  // Clusters
+  const clustersList = document.getElementById('clusters-list');
+  clustersList.innerHTML = p.clusters.map(c => `
+    <div class="cluster-row">
+      <div class="cluster-letters">${c.letters}</div>
+      <div class="cluster-examples">
+        ${c.examples.map(w => `
+          <span class="example-chip" onclick="speakWord(this, '${w}')">
+            ${w} <span class="play-icon">▶</span>
+          </span>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  // Progress
+  document.getElementById('progress-text').textContent = `${p.id + 1} / ${phonemes.length}`;
+  document.getElementById('prev-btn').disabled = p.id === 0;
+  document.getElementById('next-btn').disabled = p.id === phonemes.length - 1;
+}
+
+function playSymbolAudio() {
+  const p = phonemes[currentIdx];
+  const btn = document.getElementById('symbol-audio-btn');
+  speak(p.example, btn, 0.85, 1.0);
+}
+
+function speakWord(el, word) {
+  speak(word, el, 0.85, 1.0);
+}
+
+// ─── CLOSE ON BACKDROP CLICK ──────────────────────────────────────────────────
+document.getElementById('study-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeStudy();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  const overlay = document.getElementById('study-overlay');
+  if (!overlay.classList.contains('visible')) return;
+  if (e.key === 'Escape') closeStudy();
+  if (e.key === 'ArrowRight') navigateStudy(1);
+  if (e.key === 'ArrowLeft') navigateStudy(-1);
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderChart();
+</script>
+</body>
+</html>
