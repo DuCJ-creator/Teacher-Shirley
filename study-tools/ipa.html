@@ -536,12 +536,34 @@ header .subtitle {
 #study-panel .audio-btn      { border-color: var(--accent, var(--cyan)); color: var(--accent, var(--cyan)); }
 #study-panel .audio-btn:hover{ background: var(--accent-dim, var(--cyan-dim)); }
 #study-panel .p-steps li::before { background: var(--accent-dim, var(--cyan-dim)); color: var(--accent, var(--cyan)); }
+
+/* Bilingual styles */
+.name-tw {
+  display: block;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  letter-spacing: 0.03em;
+}
+.step-en { display: block; }
+.step-tw {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+  line-height: 1.55;
+  font-style: italic;
+  opacity: 0.85;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-eyebrow">Shirley's International Phonetic Alphabet Class</div>
+  <div class="header-eyebrow">International Phonetic Alphabet · 1888</div>
   <h1>IPA <span>Reference</span> Chart</h1>
   <p class="subtitle">Click any symbol to open its study unit</p>
 </header>
@@ -695,6 +717,7 @@ header .subtitle {
 const phonemes = [
   // ── CLOSE VOWELS ──
   { id:0, sym:'iː', cat:'close-vowel', catLabel:'Close Front Vowel', name:'Long Close Front Unrounded',
+    nameTW:'長音 iː（高前展唇母音）',
     desc:'The highest and most forward vowel in English. Tongue arches toward the hard palate, lips spread.',
     example:'fleece',
     pronunciation:[
@@ -703,6 +726,7 @@ const phonemes = [
       'Hold sustained tension — keep the tongue position firm.',
       'Sustain the sound with your vocal cords fully vibrating.',
     ],
+    pronunciationTW:['嘴唇向兩側大幅展開，呈緊實的微笑狀。','舌頭高高頂起，朝上顎前方用力推去。','維持緊繃狀態，持續發出「一—」。','整個過程保持舌頭張力。'],
     tongue:'high-front-tense',
     clusters:[
       { letters:'ee', examples:['fleece','feet','see','tree'] },
@@ -712,6 +736,7 @@ const phonemes = [
     ]
   },
   { id:1, sym:'ɪ', cat:'close-vowel', catLabel:'Near-Close Front Vowel', name:'Short Near-Close Front Unrounded',
+    nameTW:'短音 ɪ（鬆弛的「一」）',
     desc:'A lax, shorter version of /iː/. Tongue is high-front but relaxed.',
     example:'kit',
     pronunciation:[
@@ -720,6 +745,7 @@ const phonemes = [
       'Lips are loosely spread, jaw slightly lower.',
       'Produce a quick, unstressed "ih" quality.',
     ],
+    pronunciationTW:['從 iː 的位置放鬆，不用力微笑。','舌頭保持偏高偏前，但不緊繃。','嘴唇自然展開，下巴略微下降。','發出快速、輕鬆的「一」，比 iː 更短更鬆。'],
     tongue:'high-front-lax',
     clusters:[
       { letters:'i', examples:['kit','bit','ship','list'] },
@@ -728,6 +754,7 @@ const phonemes = [
     ]
   },
   { id:2, sym:'uː', cat:'close-vowel', catLabel:'Close Back Vowel', name:'Long Close Back Rounded',
+    nameTW:'長音 uː（高後圓唇母音）',
     desc:'A high back vowel with strongly rounded, protruded lips.',
     example:'goose',
     pronunciation:[
@@ -736,6 +763,7 @@ const phonemes = [
       'Maintain strong lip rounding throughout.',
       'Sustain the sound: a long, resonant "oo".',
     ],
+    pronunciationTW:['嘴唇向前突出，圍成緊實的圓形。','舌根高高頂起，朝軟顎後方推去。','全程保持強力的圓唇狀態。','持續發出共鳴飽滿的「烏—」音。'],
     tongue:'high-back-tense',
     clusters:[
       { letters:'oo', examples:['goose','moon','food','cool'] },
@@ -745,6 +773,7 @@ const phonemes = [
     ]
   },
   { id:3, sym:'ʊ', cat:'close-vowel', catLabel:'Near-Close Back Vowel', name:'Short Near-Close Back Rounded',
+    nameTW:'短音 ʊ（鬆弛的「烏」）',
     desc:'A lax, brief high back vowel. Lips are rounded but relaxed.',
     example:'foot',
     pronunciation:[
@@ -753,6 +782,7 @@ const phonemes = [
       'Keep everything loose and short.',
       'Think "uh" with slight lip rounding: "ʊ".',
     ],
+    pronunciationTW:['嘴唇稍微圓起，但不用力。','舌根往後上方提起，但不緊繃。','全身放鬆，保持輕盈。','發出短促、輕柔的「烏」，如 should。'],
     tongue:'high-back-lax',
     clusters:[
       { letters:'oo', examples:['foot','book','cook','look'] },
@@ -763,6 +793,7 @@ const phonemes = [
 
   // ── MID VOWELS ──
   { id:4, sym:'e', cat:'mid-vowel', catLabel:'Close-Mid Front Vowel', name:'Close-Mid Front Unrounded',
+    nameTW:'半閉前不圓唇母音 e',
     desc:'A tense mid-front vowel. Used in many European languages; in English appears in diphthongs.',
     example:'dress',
     pronunciation:[
@@ -771,6 +802,7 @@ const phonemes = [
       'Tongue is mid-height, pushed toward the front.',
       'Produce a clean "eh" — shorter and tenser than /ɛ/.',
     ],
+    pronunciationTW:['下巴降到中間位置。','嘴唇適度向兩側展開。','舌頭在口腔中前方，高度適中。','發出乾淨的「欸」，比 ɛ 更短更緊。'],
     tongue:'mid-front',
     clusters:[
       { letters:'e', examples:['dress','bed','red','next'] },
@@ -779,6 +811,7 @@ const phonemes = [
     ]
   },
   { id:5, sym:'ɛ', cat:'mid-vowel', catLabel:'Open-Mid Front Vowel', name:'Open-Mid Front Unrounded',
+    nameTW:'半開前不圓唇母音 ɛ',
     desc:'A more open mid-front vowel. Jaw drops lower than for /e/.',
     example:'bed',
     pronunciation:[
@@ -787,6 +820,7 @@ const phonemes = [
       'Tongue lies mid-front in the mouth.',
       'Say "eh" with the mouth slightly more open than /e/.',
     ],
+    pronunciationTW:['下巴降到半開位置。','嘴唇輕鬆向兩側展開。','舌頭在口腔中前方。','發出比 e 更開的「欸」，如 bed。'],
     tongue:'mid-front-open',
     clusters:[
       { letters:'e', examples:['bed','pet','ten','when'] },
@@ -795,6 +829,7 @@ const phonemes = [
     ]
   },
   { id:6, sym:'ə', cat:'mid-vowel', catLabel:'Mid Central Vowel', name:'Schwa — The Unstressed Vowel',
+    nameTW:'央中母音 ə（弱化音）',
     desc:'The most common vowel in English. Occurs only in unstressed syllables. Completely neutral.',
     example:'about',
     pronunciation:[
@@ -803,6 +838,7 @@ const phonemes = [
       'Simply breathe through an open, neutral mouth.',
       'Produce the shortest possible "uh" — barely a sound.',
     ],
+    pronunciationTW:['嘴巴、舌頭、嘴唇全部完全放鬆。','下巴在最自然輕鬆的位置。','不需要任何特定嘴形或舌位。','發出最輕、最短、最隨意的「厄」。'],
     tongue:'schwa',
     clusters:[
       { letters:'a (unstressed)', examples:['about','around','ago'] },
@@ -812,6 +848,7 @@ const phonemes = [
     ]
   },
   { id:7, sym:'ɜː', cat:'mid-vowel', catLabel:'Open-Mid Central Vowel', name:'Long Open-Mid Central — The ER Sound',
+    nameTW:'長音 ɜː（捲舌或中央化的「兒」音）',
     desc:'A long central vowel with r-coloring in American English, or pure mid-central in British English.',
     example:'nurse',
     pronunciation:[
@@ -820,6 +857,7 @@ const phonemes = [
       'Lips are neutral and unrounded.',
       'Sustain the sound; in American English, add a slight curl of the tongue tip.',
     ],
+    pronunciationTW:['嘴巴半開，完全放鬆。','舌頭置於口腔中央，不上不下。','嘴唇自然放鬆，不圓起。','持續發音；美式英語可微微捲舌。'],
     tongue:'mid-central-long',
     clusters:[
       { letters:'ir', examples:['bird','girl','shirt','first'] },
@@ -830,6 +868,7 @@ const phonemes = [
     ]
   },
   { id:8, sym:'ɔː', cat:'mid-vowel', catLabel:'Open-Mid Back Vowel', name:'Long Open-Mid Back Rounded',
+    nameTW:'長音 ɔː（圓唇的「喔」）',
     desc:'A long back vowel with moderately rounded lips. The "aw" sound.',
     example:'thought',
     pronunciation:[
@@ -838,6 +877,7 @@ const phonemes = [
       'Raise the back of your tongue slightly.',
       'Sustain the sound: a long, resonant "aw".',
     ],
+    pronunciationTW:['嘴唇圍成適中、放鬆的圓形。','下巴降到半開位置。','舌根微微上提。','持續發出共鳴飽滿的「喔—」音。'],
     tongue:'mid-back-rounded',
     clusters:[
       { letters:'aw', examples:['thought','law','saw','draw'] },
@@ -847,6 +887,7 @@ const phonemes = [
     ]
   },
   { id:9, sym:'o', cat:'mid-vowel', catLabel:'Close-Mid Back Vowel', name:'Close-Mid Back Rounded',
+    nameTW:'半閉後圓唇母音 o',
     desc:'A mid-to-high back rounded vowel. Appears in many diphthongs in English.',
     example:'cloth',
     pronunciation:[
@@ -855,6 +896,7 @@ const phonemes = [
       'Hold tension in the lips.',
       'Produce a clean "oh" without the glide.',
     ],
+    pronunciationTW:['嘴唇圍成緊實的「O」形。','舌根高高朝軟顎方向提起。','維持唇部張力。','發出乾淨的「喔」，不帶滑音。'],
     tongue:'close-mid-back',
     clusters:[
       { letters:'o', examples:['cloth','on','lot','hot'] },
@@ -864,6 +906,7 @@ const phonemes = [
 
   // ── OPEN VOWELS ──
   { id:10, sym:'æ', cat:'open-vowel', catLabel:'Near-Open Front Vowel', name:'Near-Open Front Unrounded',
+    nameTW:'近開前不圓唇母音 æ',
     desc:'A very open, front vowel. Distinctive in American English. Jaw drops, lips stretch wide.',
     example:'trap',
     pronunciation:[
@@ -872,12 +915,14 @@ const phonemes = [
       'Tongue lies flat and low at the front of the mouth.',
       'Say a flat, bright "aah" — tense and spread.',
     ],
+    pronunciationTW:['下巴盡量往下打開。','嘴唇大幅向兩側拉寬，像誇張的笑容。','舌頭平放在口腔前下方。','發出扁平明亮的「啊」，嘴角用力向外拉。'],
     tongue:'low-front',
     clusters:[
       { letters:'a', examples:['trap','cat','man','black','hand'] },
     ]
   },
   { id:11, sym:'ʌ', cat:'open-vowel', catLabel:'Open-Mid Back Vowel', name:'Open-Mid Back Unrounded',
+    nameTW:'半開後不圓唇母音 ʌ',
     desc:'A short, stressed central-back vowel. Found in stressed syllables in English.',
     example:'strut',
     pronunciation:[
@@ -886,6 +931,7 @@ const phonemes = [
       'Lips are unrounded and neutral.',
       'Produce a short, sharp "uh" — the sound of "strut".',
     ],
+    pronunciationTW:['下巴降到自然中間位置。','舌頭在口腔中央偏下，不上不下。','嘴唇放鬆，不圓起。','發出短促有力的「厄」，如 strut。'],
     tongue:'open-mid-back',
     clusters:[
       { letters:'u', examples:['strut','run','cup','fun','but'] },
@@ -894,6 +940,7 @@ const phonemes = [
     ]
   },
   { id:12, sym:'ɑː', cat:'open-vowel', catLabel:'Open Back Vowel', name:'Long Open Back Unrounded',
+    nameTW:'長音 ɑː（寬開後不圓唇母音）',
     desc:'A long, open back vowel. Mouth wide open, tongue low and retracted.',
     example:'palm',
     pronunciation:[
@@ -902,6 +949,7 @@ const phonemes = [
       'Do not round your lips at all.',
       'Sustain a deep, open "ahh".',
     ],
+    pronunciationTW:['嘴巴盡量張大，像被醫生檢查喉嚨。','舌頭完全放平，稍微往後縮。','嘴唇完全不圓起。','持續發出深沉開闊的「啊—」音。'],
     tongue:'low-back',
     clusters:[
       { letters:'a (before lm / lf)', examples:['palm','calm','half','bath'] },
@@ -910,6 +958,7 @@ const phonemes = [
     ]
   },
   { id:13, sym:'ɒ', cat:'open-vowel', catLabel:'Open Back Rounded Vowel', name:'Open Back Rounded',
+    nameTW:'短音 ɒ（開後圓唇母音）',
     desc:'A short, open back vowel with slight lip rounding. Primarily in British English.',
     example:'lot',
     pronunciation:[
@@ -918,6 +967,7 @@ const phonemes = [
       'Tongue is low and retracted.',
       'Produce a short, open "o" — shorter than /ɑː/.',
     ],
+    pronunciationTW:['嘴巴大開，下巴往下。','嘴唇非常輕微地、放鬆地圓起。','舌頭低平，稍微往後縮。','發出短促的「喔」，比 ɑː 更短更圓。'],
     tongue:'low-back-rounded',
     clusters:[
       { letters:'o', examples:['lot','hot','stop','clock','body'] },
@@ -927,6 +977,7 @@ const phonemes = [
 
   // ── DIPHTHONGS ──
   { id:14, sym:'eɪ', cat:'diphthong', catLabel:'Diphthong', name:'FACE — Close-Mid to Close Diphthong',
+    nameTW:'雙母音 eɪ（「欸—一」）',
     desc:'Glides from mid-front /e/ up to near-close /ɪ/. A rising, front diphthong.',
     example:'face',
     pronunciation:[
@@ -935,6 +986,7 @@ const phonemes = [
       'Smoothly raise your tongue and jaw closes slightly.',
       'End near the /ɪ/ position — a gentle glide upward.',
     ],
+    pronunciationTW:['從中前方「欸」的嘴唇展開位置開始。','開始發音。','舌頭順暢地往上滑，下巴微微上升。','結束在接近 ɪ 的位置，是一個柔和的上滑音。'],
     tongue:'diphthong-ei',
     clusters:[
       { letters:'a_e', examples:['face','name','late','make','cake'] },
@@ -943,6 +995,7 @@ const phonemes = [
     ]
   },
   { id:15, sym:'aɪ', cat:'diphthong', catLabel:'Diphthong', name:'PRICE — Open to Close Diphthong',
+    nameTW:'雙母音 aɪ（「啊—一」）',
     desc:'Glides from open /a/ up to near-close /ɪ/. A wide, rising diphthong.',
     example:'price',
     pronunciation:[
@@ -951,6 +1004,7 @@ const phonemes = [
       'Smoothly raise tongue and close jaw toward /ɪ/.',
       'The glide is wide — from low-open to high-front.',
     ],
+    pronunciationTW:['嘴巴大開，從低位的「啊」開始。','以下巴大開的姿勢開始發音。','舌頭和下巴順暢地往上滑向 ɪ。','滑行幅度大，從低前到高前。'],
     tongue:'diphthong-ai',
     clusters:[
       { letters:'i_e', examples:['price','time','like','fire','kite'] },
@@ -960,6 +1014,7 @@ const phonemes = [
     ]
   },
   { id:16, sym:'ɔɪ', cat:'diphthong', catLabel:'Diphthong', name:'CHOICE — Back to Front Diphthong',
+    nameTW:'雙母音 ɔɪ（「喔—一」）',
     desc:'Glides from open-mid back /ɔ/ to near-close front /ɪ/. A diagonal diphthong.',
     example:'choice',
     pronunciation:[
@@ -968,6 +1023,7 @@ const phonemes = [
       'Glide tongue forward and upward toward /ɪ/.',
       'Lips unround as you move to the front position.',
     ],
+    pronunciationTW:['嘴唇圓起，從「喔」位置開始。','舌頭從口腔後方中間高度出發。','往前上方滑向 ɪ 的位置。','嘴唇在滑行過程中逐漸展開。'],
     tongue:'diphthong-oi',
     clusters:[
       { letters:'oi', examples:['choice','coin','voice','noise','oil'] },
@@ -975,6 +1031,7 @@ const phonemes = [
     ]
   },
   { id:17, sym:'aʊ', cat:'diphthong', catLabel:'Diphthong', name:'MOUTH — Open to Close-Back Diphthong',
+    nameTW:'雙母音 aʊ（「啊—烏」）',
     desc:'Glides from open /a/ to near-close back /ʊ/. Jaw closes as lips round.',
     example:'mouth',
     pronunciation:[
@@ -983,6 +1040,7 @@ const phonemes = [
       'Close the jaw and round your lips toward /ʊ/.',
       'The glide moves from open-front to close-back.',
     ],
+    pronunciationTW:['嘴巴大開，從「啊」開始。','以大開的姿勢開始發音。','下巴上升，嘴唇圓起，朝 ʊ 方向滑去。','從開前移動到閉後，嘴唇圓起。'],
     tongue:'diphthong-au',
     clusters:[
       { letters:'ou', examples:['mouth','out','loud','sound','found'] },
@@ -990,6 +1048,7 @@ const phonemes = [
     ]
   },
   { id:18, sym:'əʊ', cat:'diphthong', catLabel:'Diphthong', name:'GOAT — Mid to Close-Back Diphthong',
+    nameTW:'雙母音 əʊ（「厄—烏」）',
     desc:'Glides from schwa /ə/ to near-close back /ʊ/. The British English "oh".',
     example:'goat',
     pronunciation:[
@@ -998,6 +1057,7 @@ const phonemes = [
       'Smoothly round and raise your lips toward /ʊ/.',
       'The glide is gentle — from neutral to back-rounded.',
     ],
+    pronunciationTW:['從中央弱化音 ə 的自然位置開始。','下巴和嘴唇保持放鬆、中立。','嘴唇順暢地圓起，朝 ʊ 方向移動。','滑行輕柔，從中央到後圓唇。'],
     tongue:'diphthong-ou',
     clusters:[
       { letters:'o_e', examples:['goat','home','phone','note','bone'] },
@@ -1007,6 +1067,7 @@ const phonemes = [
     ]
   },
   { id:19, sym:'ɪə', cat:'diphthong', catLabel:'Diphthong', name:'NEAR — Centring Diphthong',
+    nameTW:'雙母音 ɪə（「一—厄」向心雙母音）',
     desc:'Glides from near-close /ɪ/ toward schwa /ə/. A centring diphthong.',
     example:'near',
     pronunciation:[
@@ -1015,6 +1076,7 @@ const phonemes = [
       'Glide back toward the central schwa position.',
       'The jaw opens slightly and the tongue centralizes.',
     ],
+    pronunciationTW:['從高前方 ɪ 的位置開始。','嘴唇展開，舌頭偏高偏前。','往中央的弱化音 ə 位置滑去。','下巴微微打開，舌頭朝中央移動。'],
     tongue:'diphthong-ia',
     clusters:[
       { letters:'ear / ere', examples:['near','hear','here','beer','fear'] },
@@ -1022,6 +1084,7 @@ const phonemes = [
     ]
   },
   { id:20, sym:'eə', cat:'diphthong', catLabel:'Diphthong', name:'SQUARE — Centring Diphthong',
+    nameTW:'雙母音 eə（「欸—厄」向心雙母音）',
     desc:'Glides from mid-front /e/ toward schwa /ə/. Another centring diphthong.',
     example:'square',
     pronunciation:[
@@ -1030,6 +1093,7 @@ const phonemes = [
       'Glide toward the neutral, central schwa.',
       'The jaw opens slightly, lips relax from the spread.',
     ],
+    pronunciationTW:['從中前方「欸」的位置開始。','嘴唇橫向展開。','往中央的弱化音 ə 位置滑去。','下巴微微打開，嘴唇從展開位置放鬆。'],
     tongue:'diphthong-ea',
     clusters:[
       { letters:'are / air', examples:['square','care','there','fair','pair'] },
@@ -1037,6 +1101,7 @@ const phonemes = [
     ]
   },
   { id:21, sym:'ʊə', cat:'diphthong', catLabel:'Diphthong', name:'CURE — Centring Diphthong',
+    nameTW:'雙母音 ʊə（「烏—厄」向心雙母音）',
     desc:'Glides from near-close back /ʊ/ toward schwa /ə/.',
     example:'cure',
     pronunciation:[
@@ -1045,6 +1110,7 @@ const phonemes = [
       'Glide lips into relaxed, neutral position.',
       'Tongue moves to central as you approach schwa.',
     ],
+    pronunciationTW:['從鬆弛圓唇的 ʊ 位置開始。','嘴唇輕輕圓起，舌頭偏高偏後。','嘴唇順暢滑入放鬆的中立位置。','舌頭朝中央移動，接近 ə。'],
     tongue:'diphthong-ua',
     clusters:[
       { letters:'ure', examples:['cure','pure','sure','tour','poor'] },
@@ -1054,6 +1120,7 @@ const phonemes = [
 
   // ── PLOSIVES ──
   { id:22, sym:'p', cat:'plosive', catLabel:'Voiceless Bilabial Plosive', name:'Voiceless Bilabial Stop',
+    nameTW:'無聲雙唇塞音 p',
     desc:'Both lips press together, air builds up, then releases — no vocal vibration.',
     example:'pen',
     pronunciation:[
@@ -1062,6 +1129,7 @@ const phonemes = [
       'Do NOT vibrate your vocal cords.',
       'Release suddenly: a burst of air — "p".',
     ],
+    pronunciationTW:['雙唇緊緊閉合。','在唇後方積聚氣壓。','不振動聲帶（無聲）。','瞬間爆開雙唇，噴出一股氣：「p」。'],
     tongue:'bilabial-stop',
     clusters:[
       { letters:'p', examples:['pen','top','speak','open','cup'] },
@@ -1069,6 +1137,7 @@ const phonemes = [
     ]
   },
   { id:23, sym:'b', cat:'plosive', catLabel:'Voiced Bilabial Plosive', name:'Voiced Bilabial Stop',
+    nameTW:'有聲雙唇塞音 b',
     desc:'Like /p/ but with vocal cords vibrating throughout.',
     example:'bed',
     pronunciation:[
@@ -1077,6 +1146,7 @@ const phonemes = [
       'Vibrate your vocal cords — feel the buzz in your throat.',
       'Release both lips: "b".',
     ],
+    pronunciationTW:['雙唇緊緊閉合。','在唇後方積聚氣壓。','振動聲帶，感受喉嚨震動。','瞬間爆開雙唇，發出「b」音。'],
     tongue:'bilabial-stop',
     clusters:[
       { letters:'b', examples:['bed','big','rob','able','club'] },
@@ -1084,6 +1154,7 @@ const phonemes = [
     ]
   },
   { id:24, sym:'t', cat:'plosive', catLabel:'Voiceless Alveolar Plosive', name:'Voiceless Alveolar Stop',
+    nameTW:'無聲齒齦塞音 t',
     desc:'Tongue tip contacts the alveolar ridge, air is blocked then released sharply.',
     example:'ten',
     pronunciation:[
@@ -1092,6 +1163,7 @@ const phonemes = [
       'No vocal cord vibration.',
       'Release the tongue sharply with a burst: "t".',
     ],
+    pronunciationTW:['舌尖用力頂住上齒齦。','完全封住氣流。','不振動聲帶（無聲）。','舌尖迅速離開，爆出清脆的「t」音。'],
     tongue:'alveolar-stop',
     clusters:[
       { letters:'t', examples:['ten','top','sit','water','left'] },
@@ -1100,6 +1172,7 @@ const phonemes = [
     ]
   },
   { id:25, sym:'d', cat:'plosive', catLabel:'Voiced Alveolar Plosive', name:'Voiced Alveolar Stop',
+    nameTW:'有聲齒齦塞音 d',
     desc:'Like /t/ but with full voicing. The voiced counterpart.',
     example:'dog',
     pronunciation:[
@@ -1108,6 +1181,7 @@ const phonemes = [
       'Vibrate your vocal cords throughout.',
       'Release the tongue: "d".',
     ],
+    pronunciationTW:['舌尖頂住上齒齦。','完全封住氣流。','振動聲帶。','舌尖迅速離開，發出「d」音。'],
     tongue:'alveolar-stop',
     clusters:[
       { letters:'d', examples:['dog','did','bed','under','read'] },
@@ -1116,6 +1190,7 @@ const phonemes = [
     ]
   },
   { id:26, sym:'k', cat:'plosive', catLabel:'Voiceless Velar Plosive', name:'Voiceless Velar Stop',
+    nameTW:'無聲軟顎塞音 k',
     desc:'Back of tongue presses the velum (soft palate). Air then releases without voice.',
     example:'cat',
     pronunciation:[
@@ -1124,6 +1199,7 @@ const phonemes = [
       'No vocal cord vibration.',
       'Release the back-of-tongue contact: "k".',
     ],
+    pronunciationTW:['舌根頂住軟顎（口腔後方）。','完全封住口腔後方氣流。','不振動聲帶（無聲）。','舌根瞬間鬆開，爆出「k」音。'],
     tongue:'velar-stop',
     clusters:[
       { letters:'k', examples:['cat','king','sky','book','back'] },
@@ -1133,6 +1209,7 @@ const phonemes = [
     ]
   },
   { id:27, sym:'ɡ', cat:'plosive', catLabel:'Voiced Velar Plosive', name:'Voiced Velar Stop',
+    nameTW:'有聲軟顎塞音 ɡ',
     desc:'Like /k/ but with vocal cord vibration. A deep, back-of-throat stop.',
     example:'get',
     pronunciation:[
@@ -1141,6 +1218,7 @@ const phonemes = [
       'Vibrate your vocal cords — feel the buzz.',
       'Release the tongue: a voiced back stop "g".',
     ],
+    pronunciationTW:['舌根頂住軟顎。','完全封住口腔後方氣流。','振動聲帶，感受震動。','舌根鬆開，發出有聲的「g」音。'],
     tongue:'velar-stop',
     clusters:[
       { letters:'g', examples:['get','go','big','again','dog'] },
@@ -1151,6 +1229,7 @@ const phonemes = [
 
   // ── FRICATIVES ──
   { id:28, sym:'f', cat:'fricative', catLabel:'Voiceless Labiodental Fricative', name:'Voiceless Labiodental Fricative',
+    nameTW:'無聲唇齒摩擦音 f',
     desc:'Upper teeth press the lower lip; air forced through the gap creates friction.',
     example:'fish',
     pronunciation:[
@@ -1159,6 +1238,7 @@ const phonemes = [
       'No vocal cord vibration — voiceless.',
       'Sustain the hissing friction: "fff".',
     ],
+    pronunciationTW:['上排牙齒輕碰下嘴唇。','氣流從縫隙中擠出。','不振動聲帶（無聲）。','持續發出「f—」摩擦嘶嘶聲。'],
     tongue:'labiodental',
     clusters:[
       { letters:'f', examples:['fish','find','left','after','safe'] },
@@ -1168,6 +1248,7 @@ const phonemes = [
     ]
   },
   { id:29, sym:'v', cat:'fricative', catLabel:'Voiced Labiodental Fricative', name:'Voiced Labiodental Fricative',
+    nameTW:'有聲唇齒摩擦音 v',
     desc:'Like /f/ but with vocal cords vibrating. A buzzing labial friction.',
     example:'voice',
     pronunciation:[
@@ -1176,6 +1257,7 @@ const phonemes = [
       'Vibrate your vocal cords — feel the buzzing.',
       'Sustain the voiced friction: "vvv".',
     ],
+    pronunciationTW:['上排牙齒輕碰下嘴唇。','氣流從縫隙中擠出。','振動聲帶，感受嗡嗡震動。','持續發出有振動感的「v—」音。'],
     tongue:'labiodental',
     clusters:[
       { letters:'v', examples:['voice','very','give','love','live'] },
@@ -1183,6 +1265,7 @@ const phonemes = [
     ]
   },
   { id:30, sym:'θ', cat:'fricative', catLabel:'Voiceless Dental Fricative', name:'Voiceless Dental Fricative',
+    nameTW:'無聲齒間摩擦音 θ',
     desc:'Tongue placed between teeth; air flows around it without voice.',
     example:'think',
     pronunciation:[
@@ -1191,12 +1274,14 @@ const phonemes = [
       'No vocal cord vibration.',
       'Breathe out: a soft, breathy friction — "th".',
     ],
+    pronunciationTW:['舌尖輕輕放在上下排牙齒之間。','不要封住氣流，讓氣繞舌頭流出。','不振動聲帶（無聲）。','發出輕柔的吐氣咬舌音。'],
     tongue:'dental-unvoiced',
     clusters:[
       { letters:'th (voiceless)', examples:['think','thank','path','health','mouth','tooth'] },
     ]
   },
   { id:31, sym:'ð', cat:'fricative', catLabel:'Voiced Dental Fricative', name:'Voiced Dental Fricative',
+    nameTW:'有聲齒間摩擦音 ð',
     desc:'Like /θ/ but with vocal cords fully vibrating. The voiced "th".',
     example:'this',
     pronunciation:[
@@ -1205,12 +1290,14 @@ const phonemes = [
       'Vibrate your vocal cords — the key distinction from /θ/.',
       'Sustain the buzzing dental friction: "ðð".',
     ],
+    pronunciationTW:['舌尖輕輕放在上下排牙齒之間。','讓氣流繞舌頭流出。','振動聲帶（這是與 θ 的關鍵差異！）。','持續發出有振動的咬舌摩擦音「ð—」。'],
     tongue:'dental-voiced',
     clusters:[
       { letters:'th (voiced)', examples:['this','that','them','though','breathe','other'] },
     ]
   },
   { id:32, sym:'s', cat:'fricative', catLabel:'Voiceless Alveolar Fricative', name:'Voiceless Alveolar Fricative',
+    nameTW:'無聲齒齦摩擦音 s',
     desc:'Tongue near the alveolar ridge; air hisses through a narrow channel.',
     example:'see',
     pronunciation:[
@@ -1219,6 +1306,7 @@ const phonemes = [
       'No vocal cord vibration.',
       'Sustain the sharp hiss: "sss".',
     ],
+    pronunciationTW:['舌頭接近上齒齦，留出極窄的縫隙。','氣流通過狹窄通道形成摩擦。','不振動聲帶（無聲）。','持續發出尖銳的嘶嘶聲「s—」。'],
     tongue:'alveolar-fricative',
     clusters:[
       { letters:'s', examples:['see','sit','best','class','us'] },
@@ -1227,6 +1315,7 @@ const phonemes = [
     ]
   },
   { id:33, sym:'z', cat:'fricative', catLabel:'Voiced Alveolar Fricative', name:'Voiced Alveolar Fricative',
+    nameTW:'有聲齒齦摩擦音 z',
     desc:'Like /s/ but with vocal cords vibrating. A buzzing alveolar hiss.',
     example:'zoo',
     pronunciation:[
@@ -1235,6 +1324,7 @@ const phonemes = [
       'Vibrate your vocal cords throughout.',
       'Sustain the buzzing sound: "zzz".',
     ],
+    pronunciationTW:['舌頭接近上齒齦，留出窄縫。','氣流通過狹窄通道。','振動聲帶，感受嗡嗡震動。','持續發出有振動的嘶嘶聲「z—」。'],
     tongue:'alveolar-fricative',
     clusters:[
       { letters:'z', examples:['zoo','zone','zero','amazing'] },
@@ -1243,6 +1333,7 @@ const phonemes = [
     ]
   },
   { id:34, sym:'ʃ', cat:'fricative', catLabel:'Voiceless Postalveolar Fricative', name:'Voiceless Postalveolar Fricative',
+    nameTW:'無聲後齒齦摩擦音 ʃ',
     desc:'Tongue arches toward the post-alveolar region. The hushing "sh" sound.',
     example:'ship',
     pronunciation:[
@@ -1251,6 +1342,7 @@ const phonemes = [
       'Force air over the tongue surface.',
       'Produce the "shh" hushing sound — no voicing.',
     ],
+    pronunciationTW:['舌面向上捲，靠近後齒齦區域。','舌頭比發 s 時略寬。','氣流在舌面上流過形成摩擦。','發出「噓—」的嘶嘶聲，無聲。'],
     tongue:'postalveolar-unvoiced',
     clusters:[
       { letters:'sh', examples:['ship','show','fish','wish','wash'] },
@@ -1260,6 +1352,7 @@ const phonemes = [
     ]
   },
   { id:35, sym:'ʒ', cat:'fricative', catLabel:'Voiced Postalveolar Fricative', name:'Voiced Postalveolar Fricative',
+    nameTW:'有聲後齒齦摩擦音 ʒ',
     desc:'Like /ʃ/ but voiced. The rare, luxurious "zh" sound.',
     example:'measure',
     pronunciation:[
@@ -1268,6 +1361,7 @@ const phonemes = [
       'Vibrate your vocal cords fully.',
       'Sustain the buzzing "zh" friction.',
     ],
+    pronunciationTW:['舌面向上捲，靠近後齒齦區域。','氣流在舌面上流過。','振動聲帶。','持續發出有振動的「ʒ—」摩擦音，如 pleasure。'],
     tongue:'postalveolar-voiced',
     clusters:[
       { letters:'s / si', examples:['measure','pleasure','vision','decision','television'] },
@@ -1275,6 +1369,7 @@ const phonemes = [
     ]
   },
   { id:36, sym:'h', cat:'fricative', catLabel:'Voiceless Glottal Fricative', name:'Voiceless Glottal Fricative',
+    nameTW:'無聲聲門摩擦音 h',
     desc:'A simple exhalation of air — no place of articulation. The throat is the "instrument".',
     example:'hat',
     pronunciation:[
@@ -1283,6 +1378,7 @@ const phonemes = [
       'Simply exhale audibly without voicing.',
       'The following vowel shape is anticipated immediately.',
     ],
+    pronunciationTW:['嘴巴和喉嚨自然打開。','不需要特定舌頭或嘴唇位置。','只需有聲地呼氣，不振動聲帶。','立刻接著發後面的母音，借用其嘴形。'],
     tongue:'glottal',
     clusters:[
       { letters:'h', examples:['hat','house','behind','behind','who'] },
@@ -1292,6 +1388,7 @@ const phonemes = [
 
   // ── AFFRICATES ──
   { id:37, sym:'tʃ', cat:'affricate', catLabel:'Voiceless Postalveolar Affricate', name:'Voiceless Postalveolar Affricate',
+    nameTW:'無聲後齒齦塞擦音 tʃ',
     desc:'A stop and fricative fused together. Tongue blocks, then releases into /ʃ/.',
     example:'church',
     pronunciation:[
@@ -1300,6 +1397,7 @@ const phonemes = [
       'No voicing.',
       'Release the tongue suddenly into a /ʃ/ — the two merge: "ch".',
     ],
+    pronunciationTW:['舌面頂住後齒齦區域，封住氣流。','在舌頭後方積聚氣壓。','不振動聲帶（無聲）。','瞬間鬆開，滑入 ʃ 摩擦音，兩音合一：「ch」。'],
     tongue:'affricate-unvoiced',
     clusters:[
       { letters:'ch', examples:['church','chair','lunch','teach','rich'] },
@@ -1308,6 +1406,7 @@ const phonemes = [
     ]
   },
   { id:38, sym:'dʒ', cat:'affricate', catLabel:'Voiced Postalveolar Affricate', name:'Voiced Postalveolar Affricate',
+    nameTW:'有聲後齒齦塞擦音 dʒ',
     desc:'Like /tʃ/ but fully voiced. Stop fused with /ʒ/.',
     example:'judge',
     pronunciation:[
@@ -1316,6 +1415,7 @@ const phonemes = [
       'Vibrate your vocal cords.',
       'Release into a /ʒ/ — the voiced affricate: "dʒ".',
     ],
+    pronunciationTW:['舌面頂住後齒齦區域，封住氣流。','在舌頭後方積聚氣壓。','振動聲帶。','瞬間鬆開，滑入 ʒ 摩擦音：有聲的「dʒ」。'],
     tongue:'affricate-voiced',
     clusters:[
       { letters:'j', examples:['judge','jump','just','job','enjoy'] },
@@ -1326,6 +1426,7 @@ const phonemes = [
 
   // ── NASALS ──
   { id:39, sym:'m', cat:'nasal', catLabel:'Voiced Bilabial Nasal', name:'Voiced Bilabial Nasal',
+    nameTW:'有聲雙唇鼻音 m',
     desc:'Lips close, oral passage blocked; sound resonates through the nasal cavity.',
     example:'man',
     pronunciation:[
@@ -1334,6 +1435,7 @@ const phonemes = [
       'Keep the velum (soft palate) lowered to open the nasal passage.',
       'Vibrate vocal cords; sound exits the nose: "mmm".',
     ],
+    pronunciationTW:['雙唇緊緊閉合。','封住口腔通道。','軟顎下降，打開鼻腔通道。','振動聲帶，氣流從鼻腔共鳴而出：「m—」。'],
     tongue:'nasal-bilabial',
     clusters:[
       { letters:'m', examples:['man','make','time','come','swim'] },
@@ -1342,6 +1444,7 @@ const phonemes = [
     ]
   },
   { id:40, sym:'n', cat:'nasal', catLabel:'Voiced Alveolar Nasal', name:'Voiced Alveolar Nasal',
+    nameTW:'有聲齒齦鼻音 n',
     desc:'Tongue tip blocks at the alveolar ridge; sound exits through the nose.',
     example:'no',
     pronunciation:[
@@ -1350,6 +1453,7 @@ const phonemes = [
       'Lower the velum to open the nasal cavity.',
       'Vibrate vocal cords; sound resonates through the nose: "nnn".',
     ],
+    pronunciationTW:['舌尖用力頂住上齒齦。','封住口腔通道。','軟顎下降，打開鼻腔通道。','振動聲帶，氣流從鼻腔共鳴而出：「n—」。'],
     tongue:'nasal-alveolar',
     clusters:[
       { letters:'n', examples:['no','nice','ten','any','under'] },
@@ -1358,6 +1462,7 @@ const phonemes = [
     ]
   },
   { id:41, sym:'ŋ', cat:'nasal', catLabel:'Voiced Velar Nasal', name:'Voiced Velar Nasal',
+    nameTW:'有聲軟顎鼻音 ŋ',
     desc:'Back of tongue contacts soft palate; nasal resonance at the back of the mouth.',
     example:'sing',
     pronunciation:[
@@ -1366,6 +1471,7 @@ const phonemes = [
       'Tongue tip rests at the bottom of your mouth.',
       'Vibrate cords; sound exits the nose: "ŋŋ".',
     ],
+    pronunciationTW:['舌根頂住軟顎。','封住口腔後方通道。','舌尖平放在口腔底部。','振動聲帶，氣流從鼻腔出去：「ŋ—」鼻音。'],
     tongue:'nasal-velar',
     clusters:[
       { letters:'ng', examples:['sing','ring','long','bring','song'] },
@@ -1375,6 +1481,7 @@ const phonemes = [
 
   // ── APPROXIMANTS ──
   { id:42, sym:'l', cat:'approximant', catLabel:'Voiced Alveolar Lateral Approximant', name:'Lateral Approximant',
+    nameTW:'有聲齒齦邊音 l',
     desc:'Tongue touches the alveolar ridge; air flows around the sides of the tongue.',
     example:'let',
     pronunciation:[
@@ -1383,6 +1490,7 @@ const phonemes = [
       'Vibrate your vocal cords.',
       'At word ends, the tongue may not fully contact: "dark l".',
     ],
+    pronunciationTW:['舌尖頂住上齒齦。','不要封住氣流，讓氣從舌頭兩側流出。','振動聲帶。','字尾時舌尖可能不完全接觸，形成「暗 l」。'],
     tongue:'lateral',
     clusters:[
       { letters:'l', examples:['let','love','feel','old','fly'] },
@@ -1390,6 +1498,7 @@ const phonemes = [
     ]
   },
   { id:43, sym:'r', cat:'approximant', catLabel:'Voiced Alveolar Approximant', name:'Alveolar Approximant',
+    nameTW:'有聲齒齦近音 r',
     desc:'Tongue curls back slightly; no contact made. The American "r".',
     example:'red',
     pronunciation:[
@@ -1398,6 +1507,7 @@ const phonemes = [
       'The tongue does NOT touch anything.',
       'Vibrate vocal cords: a smooth, continuous "r".',
     ],
+    pronunciationTW:['嘴唇稍微圓起。','舌尖向後上方捲或舌面隆起，但不碰觸任何部位。','舌頭懸空，不接觸口腔任何位置。','振動聲帶，發出流暢連續的「r」音。'],
     tongue:'retroflex',
     clusters:[
       { letters:'r', examples:['red','run','road','three','very'] },
@@ -1406,6 +1516,7 @@ const phonemes = [
     ]
   },
   { id:44, sym:'j', cat:'approximant', catLabel:'Voiced Palatal Approximant', name:'Palatal Approximant',
+    nameTW:'有聲硬顎近音 j',
     desc:'Tongue arches toward the hard palate; air flows freely. The "y" glide.',
     example:'yes',
     pronunciation:[
@@ -1414,6 +1525,7 @@ const phonemes = [
       'Vibrate your vocal cords.',
       'Immediately glide into the following vowel.',
     ],
+    pronunciationTW:['舌面中部向上靠近硬顎。','不要讓舌頭貼住，留有空隙讓氣流通過。','振動聲帶。','立刻滑向下一個母音，如 yes。'],
     tongue:'palatal',
     clusters:[
       { letters:'y', examples:['yes','you','year','yet','yellow'] },
@@ -1421,6 +1533,7 @@ const phonemes = [
     ]
   },
   { id:45, sym:'w', cat:'approximant', catLabel:'Voiced Labial-Velar Approximant', name:'Labial-Velar Approximant',
+    nameTW:'有聲雙唇軟顎近音 w',
     desc:'Lips round tightly while the tongue bunches toward the velum. A bilabial-velar glide.',
     example:'wet',
     pronunciation:[
@@ -1429,6 +1542,7 @@ const phonemes = [
       'Vibrate your vocal cords.',
       'Quickly release into the following vowel.',
     ],
+    pronunciationTW:['嘴唇緊緊圓起，像要吹口哨。','舌根同時朝軟顎方向提起。','振動聲帶。','迅速滑向下一個母音。'],
     tongue:'bilabial-approximant',
     clusters:[
       { letters:'w', examples:['wet','way','word','twin','swim'] },
@@ -1661,14 +1775,16 @@ function renderStudy(p) {
   document.getElementById('s-sym').textContent = p.sym;
   document.getElementById('s-bracket').textContent = '[ ' + p.sym + ' ]';
   document.getElementById('s-cat').textContent = p.catLabel;
-  document.getElementById('s-name').textContent = p.name;
+  document.getElementById('s-name').innerHTML = p.name + '<span class="name-tw">' + (p.nameTW||'') + '</span>';
   document.getElementById('s-desc').textContent = p.desc;
 
   // Tongue SVG
   document.getElementById('tongue-svg').innerHTML = drawTongueDiagram(p.tongue, accent);
 
   // Steps
-  document.getElementById('p-steps').innerHTML = p.pronunciation.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('p-steps').innerHTML = p.pronunciation.map((s,i) =>
+    `<li><span class="step-en">${s}</span><span class="step-tw">${(p.pronunciationTW&&p.pronunciationTW[i])||''}</span></li>`
+  ).join('');
 
   // Clusters
   document.getElementById('clusters-list').innerHTML = p.clusters.map(c => `
