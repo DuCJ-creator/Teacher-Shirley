@@ -28,6 +28,9 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            /* Prevent iOS bounce scroll from causing layout issues */
+            position: fixed;
+            width: 100%;
         }
 
         a { color: #666; text-decoration: none; border-bottom: 1px dashed #999; }
@@ -77,6 +80,8 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             font-weight: bold;
+            touch-action: manipulation; /* prevents iOS 300ms tap delay */
+            -webkit-appearance: none;
         }
         .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
@@ -184,6 +189,7 @@
             border: 1px solid #e2e8f0;
             padding: 1rem;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
             display: flex;
             flex-direction: column;
         }
@@ -218,6 +224,7 @@
             text-align: center;
             cursor: pointer;
             position: relative;
+            touch-action: manipulation;
         }
 
         .option-label input { position: absolute; opacity: 0; }
@@ -251,13 +258,19 @@
             text-align: center;
             padding-top: 1rem;
             border-top: 2px solid #f1f5f9;
+            /* Ensure button is always reachable on iPad/iOS */
+            flex-shrink: 0;
+            padding-bottom: env(safe-area-inset-bottom, 0);
         }
 
         .btn-submit {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             font-size: 1.1rem;
             background: var(--secondary);
+            touch-action: manipulation; /* prevents iOS double-tap delay */
+            cursor: pointer;
+            -webkit-appearance: none;  /* fixes iOS button rendering */
         }
 
         @keyframes popIn {
@@ -321,7 +334,7 @@
             <div class="quiz-container">
                 <div class="question-list" id="question-list"></div>
                 <div class="submit-section" id="submit-area" style="display:none;">
-                    <button class="btn btn-submit" onclick="submitQuiz()">交卷核算分數</button>
+                    <button class="btn btn-submit" id="submit-btn">交卷核算分數</button>
                 </div>
             </div>
         </div>
@@ -349,6 +362,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchAnswers();
+            // Use addEventListener instead of inline onclick for reliable iOS/iPad tap handling
+            document.getElementById('submit-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                submitQuiz();
+            });
         });
 
         function fetchAnswers() {
