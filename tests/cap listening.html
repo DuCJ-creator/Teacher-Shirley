@@ -45,7 +45,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 9999;
             transition: opacity 0.5s;
         }
 
@@ -346,8 +346,8 @@
             <h2 id="score-display">--</h2>
             <p id="result-comment">做得好！</p>
             <div style="display:flex; gap:10px; justify-content:center;">
-                <button class="btn" onclick="reviewAnswers()">查看錯題詳解</button>
-                <button class="btn" style="background:#64748b;" onclick="location.reload()">回首頁</button>
+                <button class="btn" id="review-btn">查看錯題詳解</button>
+                <button class="btn" style="background:#64748b;" id="home-btn">回首頁</button>
             </div>
         </div>
     </div>
@@ -358,14 +358,25 @@
         
         let currentYear = '';
         let answerKey = {}; 
-        const TOTAL_QUESTIONS = 21; 
+        const TOTAL_QUESTIONS = 21;
+
+        // Track user selections in JS — do NOT rely on r.checked at submit time
+        // because iOS Safari with position:fixed body can lose radio checked state
+        let userSelections = {};
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchAnswers();
-            // Use addEventListener instead of inline onclick for reliable iOS/iPad tap handling
             document.getElementById('submit-btn').addEventListener('click', function(e) {
                 e.preventDefault();
                 submitQuiz();
+            });
+            document.getElementById('review-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                reviewAnswers();
+            });
+            document.getElementById('home-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                location.reload();
             });
         });
 
@@ -396,6 +407,7 @@
 
         function startTest(year) {
             currentYear = year.toString();
+            userSelections = {}; // reset selections for new test
             
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
@@ -406,14 +418,9 @@
             audioPlayer.src = `${baseUrl}${year}%20cap%20listening.mp3`;
             audioPlayer.load();
 
-            // PDF - 修正手機滾動問題
+            // PDF
             const pdfUrl = `${baseUrl}${year}%20cap%20listening.pdf`;
-            
-            // 方法 A: 直接連結 (給 "在新視窗開啟" 使用)
             document.getElementById('pdf-new-tab').href = pdfUrl;
-
-            // 方法 B: 透過 Google Docs Viewer 嵌入 (解決 iframe 滾動問題)
-            // embedded=true 模式會將 PDF 轉為 HTML/圖片流
             const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
             document.getElementById('pdf-frame').src = googleViewerUrl;
 
@@ -442,6 +449,14 @@
                     <div id="correct-display-${i}" class="correct-ans-display"></div>
                 `;
                 list.appendChild(div);
+
+                // Store selection in JS object on change — reliable on all iOS versions
+                const qNum = i;
+                div.querySelectorAll(`input[name="q${i}"]`).forEach(function(radio) {
+                    radio.addEventListener('change', function() {
+                        if (this.checked) userSelections[qNum] = this.value;
+                    });
+                });
             }
         }
 
@@ -452,12 +467,11 @@
             document.getElementById('main-audio').pause();
 
             for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
-                const radios = document.getElementsByName(`q${i}`);
-                let userAns = null;
-                for (let r of radios) {
-                    if (r.checked) userAns = r.value;
-                    r.disabled = true;
-                }
+                // Use JS-tracked selection instead of reading r.checked (unreliable on iOS)
+                const userAns = userSelections[i] || null;
+
+                // Visually disable radio buttons
+                document.getElementsByName(`q${i}`).forEach(function(r) { r.disabled = true; });
 
                 const itemDiv = document.getElementById(`q-item-${i}`);
                 const tagSpan = document.getElementById(`res-tag-${i}`);
@@ -506,6 +520,9 @@
         function reviewAnswers() {
             document.getElementById('result-screen').style.display = 'none';
             document.getElementById('submit-area').style.display = 'none';
+            // Scroll quiz panel back to top so user can see the reviewed answers
+            const quizContainer = document.querySelector('.quiz-container');
+            if (quizContainer) quizContainer.scrollTop = 0;
         }
 
         function triggerConfetti() {
