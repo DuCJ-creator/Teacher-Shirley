@@ -28,6 +28,9 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            /* Prevent iOS bounce scroll from causing layout issues */
+            position: fixed;
+            width: 100%;
         }
 
         /* --- Welcome Screen --- */
@@ -74,6 +77,8 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             font-weight: bold;
+            touch-action: manipulation;
+            -webkit-appearance: none;
         }
         .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
@@ -160,6 +165,7 @@
             border: 1px solid #d1fae5;
             padding: 1rem;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
             display: flex;
             flex-direction: column;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -203,6 +209,7 @@
             text-align: center;
             cursor: pointer;
             position: relative;
+            touch-action: manipulation;
         }
 
         .option-label input { position: absolute; opacity: 0; }
@@ -253,6 +260,8 @@
             margin-top: 2rem;
             padding-top: 1rem;
             border-top: 2px solid #f1f5f9;
+            flex-shrink: 0;
+            padding-bottom: env(safe-area-inset-bottom, 0);
         }
         
         .btn-submit {
@@ -261,6 +270,9 @@
             font-size: 1.1rem;
             background: var(--secondary);
             box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-appearance: none;
         }
         .btn-submit:hover { background: #d97706; }
 
@@ -326,7 +338,7 @@
                     </div>
 
                 <div class="submit-section" id="submit-area" style="display:none;">
-                    <button class="btn btn-submit" onclick="submitQuiz()">交卷核算分數</button>
+                    <button class="btn btn-submit" id="submit-btn">交卷核算分數</button>
                 </div>
             </div>
         </div>
@@ -354,6 +366,12 @@
 
         // 初始化：載入 CSV
         document.addEventListener('DOMContentLoaded', () => {
+            // Use addEventListener instead of inline onclick for reliable iOS/iPad tap handling
+            document.getElementById('submit-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                submitQuiz();
+            });
+
             // 使用 header: false 模式，將 CSV 讀取為「二維陣列」(矩陣)
             Papa.parse(csvUrl, {
                 download: true,
