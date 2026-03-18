@@ -219,18 +219,8 @@
 
         .options { display: flex; gap: 0.5rem; }
 
-        .option-label {
+        .opt-btn {
             flex: 1;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            touch-action: manipulation;
-        }
-
-        .option-label input { position: absolute; opacity: 0; }
-
-        .bubble {
-            display: block;
             padding: 8px 0;
             border: 2px solid #e5e7eb;
             border-radius: 8px;
@@ -238,13 +228,20 @@
             color: #64748b;
             background: #f8fafc;
             font-size: 0.9rem;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
 
-        .option-label input:checked ~ .bubble {
+        .opt-btn.selected {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
+
+        .opt-btn:disabled { cursor: default; opacity: 0.85; }
+        .opt-btn.selected:disabled { opacity: 1; }
 
         /* Results */
         .question-item.correct { background-color: #f0fdf4; border-color: var(--success); }
@@ -442,19 +439,24 @@
                         <span id="res-tag-${i}" class="result-tag"></span>
                     </div>
                     <div class="options">
-                        <label class="option-label"><input type="radio" name="q${i}" value="A"><span class="bubble">A</span></label>
-                        <label class="option-label"><input type="radio" name="q${i}" value="B"><span class="bubble">B</span></label>
-                        <label class="option-label"><input type="radio" name="q${i}" value="C"><span class="bubble">C</span></label>
+                        <button class="opt-btn" data-q="${i}" data-v="A">A</button>
+                        <button class="opt-btn" data-q="${i}" data-v="B">B</button>
+                        <button class="opt-btn" data-q="${i}" data-v="C">C</button>
                     </div>
                     <div id="correct-display-${i}" class="correct-ans-display"></div>
                 `;
                 list.appendChild(div);
 
-                // Store selection in JS object on change — reliable on all iOS versions
-                const qNum = i;
-                div.querySelectorAll(`input[name="q${i}"]`).forEach(function(radio) {
-                    radio.addEventListener('change', function() {
-                        if (this.checked) userSelections[qNum] = this.value;
+                // Wire up each option button — plain buttons, no hidden inputs
+                div.querySelectorAll('.opt-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const q = parseInt(this.dataset.q);
+                        const v = this.dataset.v;
+                        // Deselect siblings
+                        div.querySelectorAll('.opt-btn').forEach(function(b) { b.classList.remove('selected'); });
+                        // Select this one and record
+                        this.classList.add('selected');
+                        userSelections[q] = v;
                     });
                 });
             }
@@ -467,13 +469,14 @@
             document.getElementById('main-audio').pause();
 
             for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
-                // Use JS-tracked selection instead of reading r.checked (unreliable on iOS)
                 const userAns = userSelections[i] || null;
 
-                // Visually disable radio buttons
-                document.getElementsByName(`q${i}`).forEach(function(r) { r.disabled = true; });
-
+                // Disable all option buttons for this question
                 const itemDiv = document.getElementById(`q-item-${i}`);
+                if (itemDiv) {
+                    itemDiv.querySelectorAll('.opt-btn').forEach(function(b) { b.disabled = true; });
+                }
+
                 const tagSpan = document.getElementById(`res-tag-${i}`);
                 const correctDisplay = document.getElementById(`correct-display-${i}`);
 
