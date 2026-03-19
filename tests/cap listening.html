@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CAP會考英文聽力測驗中心</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -351,18 +350,21 @@
 
     <script>
         const baseUrl = "https://ducj-creator.github.io/Teacher-Shirley/tests/asset/";
-        const csvUrl = baseUrl + "cap%20listening%20answer.csv";
-        
-        let currentYear = '';
-        let answerKey = {}; 
-        const TOTAL_QUESTIONS = 21;
 
-        // Track user selections in JS — do NOT rely on r.checked at submit time
-        // because iOS Safari with position:fixed body can lose radio checked state
+        let currentYear = '';
+        const TOTAL_QUESTIONS = 21;
         let userSelections = {};
 
+        // Answers embedded directly — no network request needed
+        const answerKey = {
+            "114": {1:"A",2:"C",3:"C",4:"B",5:"A",6:"B",7:"A",8:"B",9:"C",10:"A",11:"B",12:"B",13:"A",14:"C",15:"A",16:"A",17:"B",18:"C",19:"B",20:"B",21:"C"},
+            "113": {1:"C",2:"C",3:"B",4:"C",5:"A",6:"C",7:"A",8:"B",9:"A",10:"C",11:"B",12:"A",13:"B",14:"B",15:"A",16:"A",17:"C",18:"B",19:"A",20:"B",21:"C"},
+            "112": {1:"C",2:"A",3:"B",4:"C",5:"C",6:"B",7:"A",8:"B",9:"C",10:"B",11:"C",12:"C",13:"B",14:"A",15:"A",16:"A",17:"B",18:"A",19:"C",20:"C",21:"A"},
+            "111": {1:"B",2:"C",3:"B",4:"B",5:"C",6:"B",7:"A",8:"B",9:"A",10:"B",11:"C",12:"A",13:"B",14:"A",15:"A",16:"A",17:"A",18:"C",19:"A",20:"C",21:"A"},
+            "110": {1:"B",2:"C",3:"B",4:"B",5:"A",6:"B",7:"A",8:"C",9:"A",10:"B",11:"A",12:"C",13:"A",14:"C",15:"C",16:"C",17:"C",18:"A",19:"C",20:"A",21:"A"}
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
-            fetchAnswers();
             document.getElementById('submit-btn').addEventListener('click', function(e) {
                 e.preventDefault();
                 submitQuiz();
@@ -376,31 +378,6 @@
                 location.reload();
             });
         });
-
-        function fetchAnswers() {
-            Papa.parse(csvUrl, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) { processCSV(results.data); }
-            });
-        }
-
-        function processCSV(data) {
-            data.forEach(row => {
-                let y = row['Year'] || row['year'] || row['YEAR'];
-                let n = row['No'] || row['no'] || row['Number'];
-                let a = row['Answer'] || row['answer'] || row['Ans'];
-
-                if (y && n && a) {
-                    y = y.toString().trim();
-                    n = parseInt(n);
-                    a = a.toString().trim().toUpperCase();
-                    if (!answerKey[y]) answerKey[y] = {};
-                    answerKey[y][n] = a;
-                }
-            });
-        }
 
         function startTest(year) {
             currentYear = year.toString();
