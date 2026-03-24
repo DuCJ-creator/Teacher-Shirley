@@ -1,433 +1,830 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shirley's Lunar Glow Redeem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  min-height:100vh;
+  background:#111114;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:24px 16px 40px;
+  font-family:'Nunito',sans-serif;
+}
+#app{
+  width:100%;
+  max-width:480px;
+  background:#1a1a1e;
+  border-radius:24px;
+  overflow:hidden;
+  color:#f0e6ff;
+  position:relative;
+  padding-bottom:32px;
+}
+#app::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(ellipse 70% 30% at 50% 0%,rgba(140,80,255,0.12) 0%,transparent 65%),
+    radial-gradient(1.5px 1.5px at 7% 9%,rgba(255,255,255,0.55) 0%,transparent 100%),
+    radial-gradient(1px 1px at 20% 6%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 4%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 65% 11%,rgba(255,255,255,0.35) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 83% 7%,rgba(255,255,255,0.45) 0%,transparent 100%),
+    radial-gradient(1px 1px at 55% 16%,rgba(255,255,255,0.28) 0%,transparent 100%),
+    radial-gradient(1px 1px at 30% 22%,rgba(255,255,255,0.22) 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 18%,rgba(255,255,255,0.3) 0%,transparent 100%);
+}
+canvas#cel{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:50;border-radius:24px;
+}
 
-  #lgr {
-    font-family:'Nunito',sans-serif;
-    background:#1c1c1e;
-    min-height:540px;
-    border-radius:22px;
-    overflow:hidden;
-    color:#f0e6ff;
-    position:relative;
-    padding:0 0 32px;
-  }
-  #lgr::before {
-    content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-    background-image:
-      radial-gradient(ellipse 60% 28% at 50% 0%,rgba(160,100,255,0.12) 0%,transparent 70%),
-      radial-gradient(1.5px 1.5px at 8% 10%,rgba(255,255,255,0.6) 0%,transparent 100%),
-      radial-gradient(1px 1px at 22% 7%,rgba(255,255,255,0.4) 0%,transparent 100%),
-      radial-gradient(1.5px 1.5px at 48% 5%,rgba(255,255,255,0.5) 0%,transparent 100%),
-      radial-gradient(1px 1px at 68% 13%,rgba(255,255,255,0.35) 0%,transparent 100%),
-      radial-gradient(1.5px 1.5px at 85% 8%,rgba(255,255,255,0.45) 0%,transparent 100%),
-      radial-gradient(1px 1px at 37% 17%,rgba(255,255,255,0.28) 0%,transparent 100%),
-      radial-gradient(1px 1px at 78% 20%,rgba(255,255,255,0.32) 0%,transparent 100%);
-  }
+/* ── HEADER ── */
+.hdr{
+  position:relative;z-index:1;text-align:center;
+  padding:28px 24px 18px;
+  border-bottom:1px solid rgba(255,215,80,0.14);
+}
+.moon-icon{
+  font-size:36px;display:block;margin-bottom:6px;
+  animation:mpulse 3s ease-in-out infinite;
+}
+@keyframes mpulse{
+  0%,100%{text-shadow:0 0 12px rgba(255,215,80,0.4);}
+  50%{text-shadow:0 0 26px rgba(255,215,80,1),0 0 50px rgba(255,170,30,0.35);}
+}
+.hdr h1{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:#ffd97a;margin-bottom:4px;
+}
+.hdr p{font-size:12.5px;color:rgba(200,175,240,0.65);}
 
-  #celebration-canvas {
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    pointer-events:none;z-index:10;border-radius:22px;
-  }
+/* ── STEP DOTS ── */
+.dots{
+  position:relative;z-index:1;
+  display:flex;justify-content:center;gap:8px;padding:16px 0 0;
+}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.14);transition:all .3s;}
+.dot.on{background:#ffd97a;width:26px;border-radius:4px;box-shadow:0 0 8px rgba(255,215,80,0.55);}
 
-  .lgr-header {
-    position:relative;z-index:1;text-align:center;
-    padding:26px 24px 18px;
-    border-bottom:1px solid rgba(255,215,100,0.15);
-  }
-  .lgr-moon{font-size:30px;display:block;margin-bottom:5px;animation:moonpulse 3s ease-in-out infinite;}
-  @keyframes moonpulse{0%,100%{text-shadow:0 0 10px rgba(255,215,80,0.5);}50%{text-shadow:0 0 22px rgba(255,215,80,1),0 0 40px rgba(255,180,40,0.4);}}
-  .lgr-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#ffd97a;margin:0 0 3px;}
-  .lgr-subtitle{font-size:12px;color:rgba(200,180,240,0.7);margin:0;}
+/* ── PAGE WRAPPER ── */
+.pg{position:relative;z-index:1;padding:18px 20px 0;}
+.slbl{
+  text-align:center;font-size:10.5px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,215,100,0.5);margin-bottom:16px;
+}
 
-  .lgr-dots{position:relative;z-index:1;display:flex;justify-content:center;gap:8px;padding:14px 0 0;}
-  .lgr-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all 0.3s;}
-  .lgr-dot.active{background:#ffd97a;width:24px;border-radius:4px;box-shadow:0 0 8px rgba(255,215,80,0.6);}
+/* ── STEP 1: POINTS GRID ── */
+.pts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;}
+.ptb{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,215,100,0.18);
+  border-radius:14px;padding:14px 6px;
+  text-align:center;cursor:pointer;transition:all .22s;
+}
+.ptb:hover{
+  background:rgba(255,215,100,0.09);
+  border-color:rgba(255,215,100,0.5);
+  transform:translateY(-2px);
+}
+.ptb.sel{
+  background:rgba(255,215,100,0.14);
+  border-color:#ffd97a;
+  box-shadow:0 0 14px rgba(255,215,80,0.22);
+}
+.ptb-num{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:#ffd97a;
+  display:block;line-height:1;
+}
+.ptb-lbl{
+  font-size:10px;font-weight:700;color:rgba(200,175,240,0.55);
+  letter-spacing:.5px;margin-top:3px;display:block;
+}
+.ptb-st{font-size:9px;margin-top:4px;opacity:.5;color:#ffd97a;}
 
-  .lgr-content{position:relative;z-index:1;padding:18px 18px 0;}
-  .lgr-step-label{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,215,100,0.55);margin-bottom:14px;}
+/* ── BUTTONS ── */
+.btn-gold{
+  display:block;width:100%;margin-top:18px;padding:14px 18px;
+  background:transparent;border:2px solid #ffd97a;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  color:#ffd97a;cursor:pointer;transition:all .25s;
+  letter-spacing:.8px;text-transform:uppercase;
+  position:relative;overflow:hidden;
+}
+.btn-gold:hover:not(:disabled){
+  background:rgba(255,215,80,0.1);
+  transform:translateY(-2px);
+  box-shadow:0 0 22px rgba(255,215,80,0.32),0 4px 16px rgba(0,0,0,0.4);
+}
+.btn-gold:disabled{opacity:.28;cursor:not-allowed;}
 
-  .lgr-pts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
-  .lgr-pts-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,100,0.18);border-radius:14px;padding:13px 6px;text-align:center;cursor:pointer;transition:all 0.22s;}
-  .lgr-pts-btn:hover{background:rgba(255,215,100,0.09);border-color:rgba(255,215,100,0.5);transform:translateY(-2px);}
-  .lgr-pts-btn.sel{background:rgba(255,215,100,0.14);border-color:#ffd97a;box-shadow:0 0 14px rgba(255,215,80,0.22);}
-  .lgr-pts-num{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:#ffd97a;display:block;line-height:1;}
-  .lgr-pts-lbl{font-size:10px;font-weight:700;color:rgba(200,180,240,0.6);letter-spacing:0.5px;margin-top:2px;display:block;}
-  .lgr-pts-stars{font-size:9px;margin-top:3px;opacity:0.5;color:#ffd97a;}
+.btn-purple{
+  display:block;width:100%;margin-top:16px;padding:15px 18px;
+  background:linear-gradient(135deg,#9b4dff 0%,#6a1fd1 100%);
+  border:none;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  color:#fff;cursor:pointer;transition:all .25s;
+  letter-spacing:.8px;text-transform:uppercase;
+  box-shadow:0 4px 20px rgba(120,40,220,0.45),inset 0 1px 0 rgba(255,255,255,0.15);
+  position:relative;overflow:hidden;
+}
+.btn-purple::after{
+  content:'';position:absolute;top:-50%;left:-60%;
+  width:40%;height:200%;background:rgba(255,255,255,0.1);
+  transform:skewX(-20deg);transition:left .45s;
+}
+.btn-purple:hover::after{left:130%;}
+.btn-purple:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 28px rgba(120,40,220,0.58);
+}
+.btn-purple:disabled{opacity:.3;cursor:not-allowed;}
 
-  .btn-proceed{
-    display:block;width:100%;margin-top:16px;padding:14px 20px;
-    background:transparent;border:2px solid #ffd97a;border-radius:50px;
-    font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#ffd97a;
-    cursor:pointer;transition:all 0.25s;letter-spacing:0.8px;text-transform:uppercase;
-    position:relative;overflow:hidden;
-  }
-  .btn-proceed::before{content:'';position:absolute;inset:0;background:rgba(255,215,80,0);transition:background 0.25s;}
-  .btn-proceed:hover:not(:disabled)::before{background:rgba(255,215,80,0.12);}
-  .btn-proceed:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 20px rgba(255,215,80,0.35),0 4px 16px rgba(0,0,0,0.4);}
-  .btn-proceed:disabled{opacity:0.28;cursor:not-allowed;}
+.btn-again{
+  display:block;width:100%;padding:13px 18px;
+  background:transparent;border:2px solid rgba(155,90,255,0.6);
+  border-radius:50px;
+  font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:800;
+  color:#c89eff;cursor:pointer;transition:all .25s;
+  letter-spacing:.8px;text-transform:uppercase;
+  box-shadow:0 0 14px rgba(130,55,255,0.18);
+}
+.btn-again:hover{
+  background:rgba(130,55,255,0.15);border-color:#b06aff;
+  color:#e0c0ff;transform:translateY(-2px);
+  box-shadow:0 0 24px rgba(130,55,255,0.35);
+}
 
-  .lgr-back-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:5px 11px;color:rgba(200,180,240,0.65);font-family:'Nunito',sans-serif;font-size:12px;cursor:pointer;margin-bottom:13px;transition:all 0.18s;}
-  .lgr-back-btn:hover{background:rgba(255,255,255,0.05);color:#f0e6ff;}
-  .lgr-pts-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,215,80,0.1);border:1px solid rgba(255,215,80,0.35);border-radius:20px;padding:4px 13px;font-size:13px;font-weight:700;color:#ffd97a;margin-bottom:14px;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  background:none;border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;padding:6px 12px;
+  color:rgba(200,175,240,0.62);font-family:'Nunito',sans-serif;
+  font-size:12px;cursor:pointer;margin-bottom:14px;transition:all .18s;
+}
+.back-btn:hover{background:rgba(255,255,255,0.06);color:#f0e6ff;}
 
-  .lgr-draw-zone{display:flex;flex-direction:column;align-items:center;padding:4px 0 4px;}
-  .lgr-spinning-orbs{display:flex;gap:10px;margin-bottom:14px;}
-  .lgr-orb{width:13px;height:13px;border-radius:50%;background:rgba(160,100,255,0.25);border:1px solid rgba(160,100,255,0.4);transition:all 0.15s;}
-  .lgr-orb.lit{background:#b06aff;box-shadow:0 0 10px rgba(160,80,255,0.75);border-color:#d4aaff;}
+.pts-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,215,80,0.1);border:1px solid rgba(255,215,80,0.32);
+  border-radius:20px;padding:4px 14px;
+  font-size:13px;font-weight:700;color:#ffd97a;margin-bottom:14px;
+}
 
-  .lgr-envelope-wrap{position:relative;cursor:pointer;margin-bottom:16px;}
-  .lgr-envelope{width:156px;height:116px;border-radius:14px;background:rgba(60,35,110,0.6);border:2px solid rgba(160,100,255,0.45);position:relative;overflow:hidden;transition:transform 0.28s,box-shadow 0.28s;display:flex;align-items:center;justify-content:center;}
-  .lgr-envelope-wrap:hover .lgr-envelope{transform:translateY(-5px) scale(1.04);box-shadow:0 12px 30px rgba(130,60,230,0.4);}
-  .lgr-envelope-shimmer{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 9px,rgba(255,255,255,0.025) 9px,rgba(255,255,255,0.025) 18px);}
-  .lgr-envelope-icon{font-size:38px;position:relative;z-index:1;animation:floatq 2.5s ease-in-out infinite;}
-  @keyframes floatq{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-  .lgr-mystery-label{font-size:12px;font-weight:700;color:rgba(200,180,240,0.65);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
-  .lgr-mystery-hint{font-size:11.5px;color:rgba(190,170,220,0.4);text-align:center;line-height:1.45;max-width:210px;}
+/* ── GASHAPON MACHINE ── */
+.gasha-wrap{display:flex;flex-direction:column;align-items:center;padding:4px 0 0;}
 
-  .btn-reveal{
-    display:block;width:100%;margin-top:16px;padding:15px 20px;
-    background:linear-gradient(135deg,#9b4dff 0%,#6a1fd1 100%);
-    border:none;border-radius:50px;
-    font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#fff;
-    cursor:pointer;transition:all 0.25s;letter-spacing:0.8px;text-transform:uppercase;
-    box-shadow:0 4px 18px rgba(120,40,220,0.45),inset 0 1px 0 rgba(255,255,255,0.15);
-    position:relative;overflow:hidden;
-  }
-  .btn-reveal::after{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:rgba(255,255,255,0.12);transform:skewX(-20deg);transition:left 0.45s;}
-  .btn-reveal:hover::after{left:130%;}
-  .btn-reveal:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(120,40,220,0.6),inset 0 1px 0 rgba(255,255,255,0.2);}
-  .btn-reveal:disabled{opacity:0.3;cursor:not-allowed;}
+.machine-outer{position:relative;width:230px;margin-bottom:10px;}
 
-  .lgr-spinning-anim{display:none;flex-direction:column;align-items:center;padding:24px 0 12px;}
-  .lgr-spinning-anim.show{display:flex;animation:fadein 0.3s ease;}
-  .lgr-spin-ring{width:78px;height:78px;border-radius:50%;border:3px solid rgba(160,100,255,0.18);border-top-color:#b06aff;border-right-color:#ffd97a;animation:spin 0.85s linear infinite;margin-bottom:13px;}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .lgr-spin-text{font-size:13px;color:rgba(200,175,240,0.65);animation:pulse 0.8s ease-in-out infinite alternate;}
-  @keyframes pulse{from{opacity:0.45}to{opacity:1}}
+.m-globe-frame{
+  position:absolute;top:-64px;left:50%;transform:translateX(-50%);
+  width:148px;height:116px;
+  border-radius:74px 74px 0 0;
+  background:rgba(160,210,255,0.06);
+  border:3px solid #5a3fa0;border-bottom:none;
+  overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:4px;
+}
+.m-globe-inner{
+  width:116px;height:92px;border-radius:58px 58px 0 0;
+  background:rgba(180,220,255,0.04);
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  position:relative;overflow:hidden;padding:6px 4px 2px;gap:3px;align-content:flex-end;
+}
+.m-globe-shine{
+  position:absolute;top:10px;left:16px;width:26px;height:16px;
+  background:rgba(255,255,255,0.14);border-radius:50%;
+  transform:rotate(-25deg);pointer-events:none;
+}
+.cap-pill{
+  width:22px;height:30px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;border:1.5px solid rgba(255,255,255,0.2);
+  transition:opacity .3s,transform .3s;flex-shrink:0;
+}
 
-  .lgr-success-zone{display:none;}
-  .lgr-success-zone.show{display:block;animation:fadein 0.5s ease;}
-  @keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.m-neck{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  width:62px;height:14px;
+  background:linear-gradient(90deg,#3a2a70,#5a3fa0,#3a2a70);
+  border-left:3px solid #5a3fa0;border-right:3px solid #5a3fa0;
+  z-index:1;
+}
 
-  .lgr-gift-deco{text-align:center;margin-bottom:10px;height:52px;display:flex;align-items:center;justify-content:center;gap:14px;}
-  .lgr-gift-deco .deco-item{font-size:22px;animation:floatdeco 3s ease-in-out infinite;opacity:0.8;}
-  .lgr-gift-deco .deco-item:nth-child(1){animation-delay:0s;}
-  .lgr-gift-deco .deco-item:nth-child(2){font-size:32px;opacity:1;animation-delay:0.4s;}
-  .lgr-gift-deco .deco-item:nth-child(3){animation-delay:0.8s;}
-  @keyframes floatdeco{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.m-body{
+  background:linear-gradient(160deg,#2e2040 0%,#1e1530 100%);
+  border:3px solid #5a3fa0;border-radius:16px 16px 8px 8px;
+  width:230px;height:200px;position:relative;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,0.05),0 10px 28px rgba(0,0,0,0.55);
+}
+.m-label{
+  position:absolute;top:14px;left:0;width:100%;
+  text-align:center;font-size:9.5px;font-weight:800;
+  letter-spacing:1.8px;text-transform:uppercase;
+  color:rgba(255,215,80,0.7);
+}
+.m-slot{
+  position:absolute;bottom:56px;left:50%;transform:translateX(-50%);
+  width:82px;height:44px;background:#0d0a18;
+  border-radius:10px;border:2.5px solid #5a3fa0;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.slot-cap{
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;border:2px solid rgba(255,255,255,0.18);
+  opacity:0;transform:scale(0) translateY(-30px);
+}
+.slot-cap.drop{animation:capDrop .55s cubic-bezier(.22,.68,0,1.4) forwards;}
+@keyframes capDrop{
+  0%{opacity:0;transform:scale(0.4) translateY(-40px);}
+  60%{opacity:1;transform:scale(1.15) translateY(4px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+.m-coin-area{
+  position:absolute;bottom:11px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.m-coin-slot{
+  width:36px;height:7px;background:#0d0a18;
+  border-radius:4px;border:2px solid #5a3fa0;
+}
+.m-coin-lbl{font-size:8.5px;font-weight:700;letter-spacing:.7px;color:rgba(200,175,240,0.4);text-transform:uppercase;}
 
-  .lgr-reveal-card{
-    background:rgba(255,255,255,0.05);border:2px solid rgba(160,100,255,0.5);
-    border-radius:18px;padding:22px 16px 18px;text-align:center;margin-bottom:14px;
-    box-shadow:0 0 30px rgba(140,80,255,0.18),inset 0 1px 0 rgba(255,255,255,0.07);
-    position:relative;overflow:hidden;
-  }
-  .lgr-reveal-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 12px,rgba(255,255,255,0.015) 12px,rgba(255,255,255,0.015) 24px);pointer-events:none;}
-  .lgr-reveal-icon{font-size:50px;display:block;margin-bottom:10px;animation:popIn 0.55s cubic-bezier(0.175,0.885,0.32,1.275);}
-  @keyframes popIn{0%{transform:scale(0) rotate(-15deg);opacity:0}60%{transform:scale(1.18) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-  .lgr-reveal-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:#e8d8ff;line-height:1.45;margin-bottom:6px;position:relative;}
-  .lgr-reveal-pts{font-size:11.5px;color:rgba(255,215,80,0.65);font-weight:700;letter-spacing:0.5px;position:relative;}
+/* Crank */
+.m-crank-wrap{
+  position:absolute;right:-46px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  cursor:pointer;
+}
+.m-crank-shaft{
+  width:10px;height:54px;
+  background:linear-gradient(180deg,#7a5abf,#4a2e90);
+  border-radius:5px;border:1.5px solid #9b7ae0;
+}
+.m-crank-arm{
+  width:44px;height:10px;
+  background:linear-gradient(90deg,#9b7ae0,#7a5abf);
+  border-radius:5px;border:1.5px solid #c0a0ff;
+  margin-top:-2px;transform-origin:4px 5px;
+  transition:transform .12s;
+}
+.m-crank-knob{
+  width:20px;height:20px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#ffcf6b,#e07020);
+  border:2.5px solid #ffd97a;
+  margin-left:24px;margin-top:-5px;
+  box-shadow:0 0 10px rgba(255,180,60,0.55);
+}
+.m-crank-wrap:hover .m-crank-arm{transform:rotate(20deg);}
+.m-crank-wrap:hover .m-crank-knob{box-shadow:0 0 18px rgba(255,180,60,0.9);}
+.spinning .m-crank-arm{animation:crankSpin .22s linear infinite;}
+@keyframes crankSpin{to{transform:rotate(360deg);}}
 
-  .lgr-ribbon{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:10px;}
-  .lgr-ribbon-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,80,0.35));}
-  .lgr-ribbon-line.r{background:linear-gradient(90deg,rgba(255,215,80,0.35),transparent);}
-  .lgr-ribbon-star{font-size:14px;color:#ffd97a;opacity:0.8;}
+/* Tray */
+.m-tray{
+  width:230px;height:38px;
+  background:linear-gradient(160deg,#2e2040,#1e1530);
+  border:3px solid #5a3fa0;border-top:none;
+  border-radius:0 0 16px 16px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.tray-opening{
+  width:72px;height:22px;background:#0d0a18;
+  border-radius:0 0 10px 10px;border:2px solid #5a3fa0;border-top:none;
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.tray-capsule{font-size:18px;opacity:0;transform:scale(0);}
+.tray-capsule.appear{animation:trayPop .5s .25s cubic-bezier(.175,.885,.32,1.4) forwards;}
+@keyframes trayPop{
+  0%{opacity:0;transform:scale(0);}
+  70%{opacity:1;transform:scale(1.25);}
+  100%{opacity:1;transform:scale(1);}
+}
 
-  .lgr-congrats-title{font-family:'Playfair Display',serif;font-size:17px;color:#ffd97a;text-align:center;margin-bottom:4px;}
-  .lgr-congrats-msg{font-size:12px;color:rgba(200,175,240,0.65);text-align:center;line-height:1.5;margin-bottom:16px;}
+.crank-hint{
+  font-size:11.5px;color:rgba(200,175,240,0.48);
+  text-align:center;margin-top:10px;
+  animation:blnk 1.8s ease-in-out infinite;
+}
+@keyframes blnk{0%,100%{opacity:.45}50%{opacity:1}}
 
-  .btn-again{
-    display:block;width:100%;padding:13px 20px;
-    background:transparent;border:2px solid rgba(160,100,255,0.65);border-radius:50px;
-    font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#c89eff;
-    cursor:pointer;transition:all 0.25s;letter-spacing:0.8px;text-transform:uppercase;
-    box-shadow:0 0 14px rgba(140,60,255,0.18);
-  }
-  .btn-again:hover{background:rgba(140,60,255,0.15);border-color:#b06aff;color:#e0c0ff;transform:translateY(-2px);box-shadow:0 0 22px rgba(140,60,255,0.35);}
+@keyframes machineShake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-5px);}
+  40%{transform:translateX(5px);}
+  60%{transform:translateX(-3px);}
+  80%{transform:translateX(3px);}
+}
+.shake{animation:machineShake .35s ease;}
 
-  .hidden{display:none!important;}
+/* ── RESULT ── */
+.result-zone{display:none;}
+.result-zone.show{display:block;animation:fadein .5s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.gift-deco{
+  text-align:center;height:50px;
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin-bottom:10px;
+}
+.deco-i{font-size:22px;animation:fdeco 3s ease-in-out infinite;opacity:.82;}
+.deco-i:nth-child(1){animation-delay:0s;}
+.deco-i:nth-child(2){font-size:30px;opacity:1;animation-delay:.4s;}
+.deco-i:nth-child(3){animation-delay:.8s;}
+@keyframes fdeco{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-8px) rotate(4deg);}}
+
+.reveal-card{
+  background:rgba(255,255,255,0.04);
+  border:2px solid rgba(155,90,255,0.5);
+  border-radius:18px;padding:22px 16px 18px;
+  text-align:center;margin-bottom:14px;
+  box-shadow:0 0 30px rgba(130,70,255,0.15),inset 0 1px 0 rgba(255,255,255,0.06);
+  position:relative;overflow:hidden;
+}
+.reveal-card::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(135deg,transparent,transparent 12px,rgba(255,255,255,0.013) 12px,rgba(255,255,255,0.013) 24px);
+  pointer-events:none;
+}
+.reveal-icon{
+  font-size:52px;display:block;margin-bottom:10px;
+  animation:popin .55s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes popin{
+  0%{transform:scale(0) rotate(-15deg);opacity:0;}
+  60%{transform:scale(1.18) rotate(3deg);}
+  100%{transform:scale(1) rotate(0);opacity:1;}
+}
+.reveal-name{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:600;color:#e8d8ff;
+  line-height:1.45;margin-bottom:6px;position:relative;
+}
+.reveal-pts{
+  font-size:11.5px;color:rgba(255,215,80,0.62);
+  font-weight:700;letter-spacing:.5px;position:relative;
+}
+.ribbon-div{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:10px;}
+.rib-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,80,0.33));}
+.rib-line.r{background:linear-gradient(90deg,rgba(255,215,80,0.33),transparent);}
+.rib-star{font-size:13px;color:#ffd97a;opacity:.75;}
+.cong-title{font-family:'Playfair Display',serif;font-size:17px;color:#ffd97a;text-align:center;margin-bottom:5px;}
+.cong-msg{font-size:12px;color:rgba(200,175,240,0.62);text-align:center;line-height:1.55;margin-bottom:16px;}
+
+.hidden{display:none !important;}
 </style>
+</head>
+<body>
 
-<canvas id="celebration-canvas"></canvas>
+<canvas id="cel"></canvas>
 
-<div id="lgr">
-  <div class="lgr-header">
-    <span class="lgr-moon">🌙</span>
-    <h1 class="lgr-title">Shirley's Lunar Glow Redeem</h1>
-    <p class="lgr-subtitle">Spend your points — let the moonlight decide your fate ✨</p>
+<div id="app">
+  <div class="hdr">
+    <span class="moon-icon">🌙</span>
+    <h1>Shirley's Lunar Glow Redeem</h1>
+    <p>Insert your points · Turn the crank · Claim your reward ✨</p>
   </div>
-  <div class="lgr-dots">
-    <div class="lgr-dot active" id="d1"></div>
-    <div class="lgr-dot" id="d2"></div>
-    <div class="lgr-dot" id="d3"></div>
+
+  <div class="dots">
+    <div class="dot on" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
   </div>
-  <div class="lgr-content">
+
+  <div class="pg">
+
+    <!-- STEP 1 -->
     <div id="s1">
-      <div class="lgr-step-label">Step 1 — Choose your points</div>
-      <div class="lgr-pts-grid" id="pts-grid"></div>
-      <button class="btn-proceed" id="next-btn" disabled onclick="goStep2()">✦ Proceed to Lucky Draw ✦</button>
+      <div class="slbl">Step 1 — Choose your points</div>
+      <div class="pts-grid" id="pts-grid">
+        <!-- filled by JS -->
+      </div>
+      <button class="btn-gold" id="next-btn" disabled onclick="goStep2()">✦ Insert Points into Machine ✦</button>
     </div>
+
+    <!-- STEP 2 -->
     <div id="s2" class="hidden">
-      <button class="lgr-back-btn" onclick="goStep1()">← Back</button>
-      <div id="badge" class="lgr-pts-badge"></div>
-      <div class="lgr-step-label">Step 2 — Lucky draw</div>
-      <div id="draw-idle" class="lgr-draw-zone">
-        <div class="lgr-spinning-orbs" id="orbs"></div>
-        <div class="lgr-envelope-wrap" onclick="startDraw()">
-          <div class="lgr-envelope">
-            <div class="lgr-envelope-shimmer"></div>
-            <span class="lgr-envelope-icon">🎁</span>
+      <button class="back-btn" onclick="goStep1()">← Back</button>
+      <div id="badge" class="pts-badge"></div>
+      <div class="slbl">Step 2 — Turn the Crank!</div>
+
+      <div id="gasha-idle" class="gasha-wrap">
+        <div style="position:relative;padding-top:68px;">
+          <div class="machine-outer" id="machine-el">
+            <div class="m-globe-frame">
+              <div class="m-globe-inner" id="globe-inner">
+                <div class="m-globe-shine"></div>
+              </div>
+            </div>
+            <div class="m-neck"></div>
+            <div class="m-body">
+              <div class="m-label">Lunar Glow ✦</div>
+              <div class="m-slot">
+                <div class="slot-cap" id="slot-cap"></div>
+              </div>
+              <div class="m-coin-area">
+                <div class="m-coin-slot"></div>
+                <div class="m-coin-lbl">★ pts inserted ★</div>
+              </div>
+              <div class="m-crank-wrap" id="crank-wrap" onclick="turnCrank()">
+                <div class="m-crank-shaft"></div>
+                <div class="m-crank-arm" id="crank-arm"></div>
+                <div class="m-crank-knob"></div>
+              </div>
+            </div>
+            <div class="m-tray">
+              <div class="tray-opening">
+                <div class="tray-capsule" id="tray-cap"></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="lgr-mystery-label">Mystery reward awaits</div>
-        <div class="lgr-mystery-hint">Your reward is hidden — tap the gift or press the button!</div>
+        <div class="crank-hint" id="crank-hint">← Turn the crank to dispense!</div>
+        <button class="btn-purple" id="draw-btn" onclick="turnCrank()">🎰 Turn the Crank!</button>
       </div>
-      <div id="draw-spinning" class="lgr-spinning-anim">
-        <div class="lgr-spin-ring"></div>
-        <span class="lgr-spin-text">The moon is choosing your reward…</span>
-      </div>
-      <div id="draw-result" class="lgr-success-zone">
-        <div class="lgr-gift-deco">
-          <span class="deco-item">🎀</span>
-          <span class="deco-item">🎁</span>
-          <span class="deco-item">🎊</span>
+
+      <!-- Result -->
+      <div id="draw-result" class="result-zone">
+        <div class="gift-deco">
+          <span class="deco-i">🎀</span>
+          <span class="deco-i">🎁</span>
+          <span class="deco-i">🎊</span>
         </div>
-        <div class="lgr-reveal-card">
-          <span class="lgr-reveal-icon" id="res-icon"></span>
-          <div class="lgr-reveal-name" id="res-name"></div>
-          <div class="lgr-reveal-pts" id="res-pts"></div>
+        <div class="reveal-card">
+          <span class="reveal-icon" id="res-icon"></span>
+          <div class="reveal-name" id="res-name"></div>
+          <div class="reveal-pts" id="res-pts"></div>
         </div>
-        <div class="lgr-ribbon">
-          <div class="lgr-ribbon-line"></div>
-          <span class="lgr-ribbon-star">✦</span>
-          <div class="lgr-ribbon-line r"></div>
+        <div class="ribbon-div">
+          <div class="rib-line"></div>
+          <span class="rib-star">✦</span>
+          <div class="rib-line r"></div>
         </div>
-        <div class="lgr-congrats-title" id="congrats-title"></div>
-        <div class="lgr-congrats-msg">Show this screen to Teacher Shirley to claim your reward!</div>
+        <div class="cong-title" id="cong-title"></div>
+        <div class="cong-msg">Show this screen to Teacher Shirley to claim your reward!</div>
         <button class="btn-again" onclick="restart()">🌙 Draw Again</button>
       </div>
-      <button id="draw-btn" class="btn-reveal" onclick="startDraw()">✨ Reveal My Reward ✨</button>
+
     </div>
   </div>
 </div>
 
 <script>
-const PTS=[100,300,600,900,1200,1500];
-const STARS=['✦','✦✦','✦✦✦','✦✦✦✦','✦✦✦✦✦','✦✦✦✦✦✦'];
-const PRIZES={
-  100:[{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"},{icon:'🍬',name:'A candy'},{icon:'📎',name:'A clip'},{icon:'🍀',name:'Lucky nothing'},{icon:'📝',name:'Homework waiver (max 3 questions)'},{icon:'😴',name:'Sleep in class 3 min, no punishment!'}],
-  300:[{icon:'🍀',name:'Lucky 2 points'},{icon:'🍪',name:'A cookie'},{icon:'✏️',name:'A pen or pencil'},{icon:'📝',name:'Homework waiver (max 5 questions)'},{icon:'😴',name:'Sleep in class 5 min, no punishment!'},{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"}],
-  600:[{icon:'🍬',name:'Two candies'},{icon:'🍀',name:'Lucky 4 points'},{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"},{icon:'📝',name:'Homework waiver (max 8 questions)'},{icon:'📓',name:'A notebook'},{icon:'⭐',name:'Test score rise: 50 → 60 (non-formal tests)'}],
-  900:[{icon:'🍪',name:'Two cookies'},{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"},{icon:'🍀',name:'Lucky 6 points'},{icon:'🧆',name:'A savory snack'},{icon:'📝',name:'Homework waiver (max 10 questions)'},{icon:'🌟',name:'A wish card'},{icon:'⭐',name:'Test score rise: 60 → 70 (non-formal tests)'}],
-  1200:[{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"},{icon:'🍀',name:'Lucky 8 points'},{icon:'🧋',name:'Milk tea (of Shirley's choice)'},{icon:'⭐',name:'Test score rise: 70 → 80 (non-formal tests)'},{icon:'🧆',name:'Two savory snacks'},{icon:'📝',name:'Homework waiver'}],
-  1500:[{icon:'😄',name:"Teacher Shirley's smile when she's angry with you"},{icon:'🍀',name:'Lucky 10 points'},{icon:'🧋',name:'Milk tea (of Shirley's choice)'},{icon:'⭐',name:'Test score rise: 80 → 90 (non-formal tests)'},{icon:'🧆',name:'Two savory snacks'},{icon:'📝',name:'Homework waiver'},{icon:'🌟',name:'Two wish cards'}]
+const PTS = [100, 300, 600, 900, 1200, 1500];
+const STARS = ['✦', '✦✦', '✦✦✦', '✦✦✦✦', '✦✦✦✦✦', '✦✦✦✦✦✦'];
+const PRIZES = {
+  100: [
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"},
+    {icon:'🍬', name:'A candy'},
+    {icon:'📎', name:'A clip'},
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'📝', name:'Homework waiver (max 3 questions)'},
+    {icon:'😴', name:'Sleep in class 3 min, no punishment!'}
+  ],
+  300: [
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'🍪', name:'A cookie'},
+    {icon:'✏️', name:'A pen or pencil'},
+    {icon:'📝', name:'Homework waiver (max 5 questions)'},
+    {icon:'😴', name:'Sleep in class 5 min, no punishment!'},
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"}
+  ],
+  600: [
+    {icon:'🍬', name:'Two candies'},
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"},
+    {icon:'📝', name:'Homework waiver (max 8 questions)'},
+    {icon:'📓', name:'A notebook'},
+    {icon:'⭐', name:'Test score rise: 50 → 60 (non-formal tests)'}
+  ],
+  900: [
+    {icon:'🍪', name:'Two cookies'},
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"},
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'🧆', name:'A savory snack'},
+    {icon:'📝', name:'Homework waiver (max 10 questions)'},
+    {icon:'🌟', name:'A wish card'},
+    {icon:'⭐', name:'Test score rise: 60 → 70 (non-formal tests)'}
+  ],
+  1200: [
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"},
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'🧋', name:'Milk tea (under $60)'},
+    {icon:'⭐', name:'Test score rise: 70 → 80 (non-formal tests)'},
+    {icon:'🧆', name:'Two savory snacks'},
+    {icon:'📝', name:'Homework waiver'}
+  ],
+  1500: [
+    {icon:'😄', name:"Teacher Shirley's smile when she's angry with you"},
+    {icon:'🍀', name:'Lucky nothing'},
+    {icon:'🧋', name:'Milk tea (under $80)'},
+    {icon:'⭐', name:'Test score rise: 80 → 90 (non-formal tests)'},
+    {icon:'🧆', name:'Two savory snacks'},
+    {icon:'📝', name:'Homework waiver'},
+    {icon:'🌟', name:'Two wish cards'}
+  ]
 };
-const CONGRATS=['You lucky star! 🌟','The moon has chosen wisely! 🌙','Fortune favours you tonight! ✨','What a wonderful reward! 🎉','The stars aligned for you! 💫'];
-let selPts=null;
+const CONGRATS = [
+  'You lucky star! 🌟',
+  'The moon has chosen wisely! 🌙',
+  'Fortune favours you tonight! ✨',
+  'What a wonderful reward! 🎉',
+  'The stars aligned for you! 💫'
+];
+const CAP_COLORS = ['#ff6eb4','#7ad7ff','#b06aff','#ffd97a','#7aff9e','#ff9f7a','#ff5fa0','#5effd8'];
 
-function renderPts(){
-  document.getElementById('pts-grid').innerHTML=PTS.map((p,i)=>`
-    <div class="lgr-pts-btn" id="pb${p}" onclick="selPt(${p})">
-      <span class="lgr-pts-num">${p}</span>
-      <span class="lgr-pts-lbl">pts</span>
-      <div class="lgr-pts-stars">${STARS[i]}</div>
-    </div>`).join('');
+let selPts = null;
+let cranking = false;
+
+// ── Render points grid ──
+function renderPts() {
+  var grid = document.getElementById('pts-grid');
+  var html = '';
+  for (var i = 0; i < PTS.length; i++) {
+    var p = PTS[i];
+    html += '<div class="ptb" id="pb' + p + '" onclick="selPt(' + p + ')">'
+          + '<span class="ptb-num">' + p + '</span>'
+          + '<span class="ptb-lbl">pts</span>'
+          + '<div class="ptb-st">' + STARS[i] + '</div>'
+          + '</div>';
+  }
+  grid.innerHTML = html;
 }
-function selPt(p){
-  if(selPts) document.getElementById('pb'+selPts)?.classList.remove('sel');
-  selPts=p;
-  document.getElementById('pb'+p).classList.add('sel');
-  document.getElementById('next-btn').disabled=false;
+
+function selPt(p) {
+  if (selPts) {
+    var old = document.getElementById('pb' + selPts);
+    if (old) old.classList.remove('sel');
+  }
+  selPts = p;
+  document.getElementById('pb' + p).classList.add('sel');
+  document.getElementById('next-btn').disabled = false;
 }
-function setDot(n){document.querySelectorAll('.lgr-dot').forEach((d,i)=>d.classList.toggle('active',i+1===n));}
-function goStep1(){document.getElementById('s1').classList.remove('hidden');document.getElementById('s2').classList.add('hidden');setDot(1);resetDraw();}
-function goStep2(){
-  document.getElementById('s1').classList.add('hidden');document.getElementById('s2').classList.remove('hidden');setDot(2);
-  document.getElementById('badge').textContent='🌙 '+selPts+' points';
-  renderOrbs();resetDraw();
+
+function setDot(n) {
+  var dots = document.querySelectorAll('.dot');
+  for (var i = 0; i < dots.length; i++) {
+    dots[i].classList.toggle('on', i + 1 === n);
+  }
 }
-function renderOrbs(){
-  document.getElementById('orbs').innerHTML=PRIZES[selPts].map((_,i)=>`<div class="lgr-orb" id="orb${i}"></div>`).join('');
+
+function fillGlobe() {
+  var list = PRIZES[selPts];
+  var inner = document.getElementById('globe-inner');
+  var html = '<div class="m-globe-shine"></div>';
+  for (var i = 0; i < list.length; i++) {
+    var c = CAP_COLORS[i % CAP_COLORS.length];
+    html += '<div class="cap-pill" id="gpill' + i + '" style="background:' + c + '33;border-color:' + c + '66;color:' + c + '">●</div>';
+  }
+  inner.innerHTML = html;
 }
-function resetDraw(){
-  document.getElementById('draw-idle').style.display='flex';
-  document.getElementById('draw-spinning').classList.remove('show');
+
+function goStep1() {
+  document.getElementById('s1').classList.remove('hidden');
+  document.getElementById('s2').classList.add('hidden');
+  setDot(1);
+  cranking = false;
+}
+
+function goStep2() {
+  document.getElementById('s1').classList.add('hidden');
+  document.getElementById('s2').classList.remove('hidden');
+  setDot(2);
+  document.getElementById('badge').textContent = '🌙 ' + selPts + ' pts inserted';
+
+  // Reset machine view
+  document.getElementById('gasha-idle').style.display = 'flex';
   document.getElementById('draw-result').classList.remove('show');
-  const db=document.getElementById('draw-btn');
-  db.classList.remove('hidden');db.disabled=false;
-  stopCelebration();
-  if(selPts) renderOrbs();
+  document.getElementById('draw-btn').classList.remove('hidden');
+  document.getElementById('draw-btn').disabled = false;
+
+  var sc = document.getElementById('slot-cap');
+  sc.className = 'slot-cap';
+  sc.textContent = '';
+  sc.style.background = '';
+  sc.style.borderColor = '';
+
+  var tc = document.getElementById('tray-cap');
+  tc.className = 'tray-capsule';
+  tc.textContent = '';
+
+  document.getElementById('crank-hint').textContent = '← Turn the crank to dispense!';
+  document.getElementById('crank-wrap').classList.remove('spinning');
+  cranking = false;
+  fillGlobe();
 }
-function startDraw(){
-  document.getElementById('draw-idle').style.display='none';
-  document.getElementById('draw-spinning').classList.add('show');
-  document.getElementById('draw-btn').classList.add('hidden');
-  const list=PRIZES[selPts];
-  let idx=0;
-  const iv=setInterval(()=>{
-    document.querySelectorAll('.lgr-orb').forEach(o=>o.classList.remove('lit'));
-    document.getElementById('orb'+idx)?.classList.add('lit');
-    idx=(idx+1)%list.length;
-  },110);
-  setTimeout(()=>{
-    clearInterval(iv);
-    document.querySelectorAll('.lgr-orb').forEach(o=>o.classList.remove('lit'));
-    showResult(list[Math.floor(Math.random()*list.length)]);
-  },2400);
+
+function turnCrank() {
+  if (cranking) return;
+  cranking = true;
+  document.getElementById('draw-btn').disabled = true;
+  document.getElementById('crank-hint').textContent = 'Dispensing…';
+
+  var list = PRIZES[selPts];
+  var winner = list[Math.floor(Math.random() * list.length)];
+  var capColor = CAP_COLORS[Math.floor(Math.random() * CAP_COLORS.length)];
+  var crankWrap = document.getElementById('crank-wrap');
+  var machine = document.getElementById('machine-el');
+
+  crankWrap.classList.add('spinning');
+
+  // Shake at 420ms
+  setTimeout(function() {
+    machine.classList.add('shake');
+    setTimeout(function() { machine.classList.remove('shake'); }, 380);
+  }, 420);
+
+  // Remove last capsule from globe at 550ms
+  setTimeout(function() {
+    var pills = document.querySelectorAll('.cap-pill');
+    if (pills.length > 0) {
+      var last = pills[pills.length - 1];
+      last.style.opacity = '0';
+      last.style.transform = 'scale(0)';
+      setTimeout(function() { if (last.parentNode) last.parentNode.removeChild(last); }, 300);
+    }
+  }, 550);
+
+  // Capsule drops into slot window at 950ms
+  setTimeout(function() {
+    var sc = document.getElementById('slot-cap');
+    sc.textContent = winner.icon;
+    sc.style.background = capColor + '33';
+    sc.style.borderColor = capColor + '88';
+    sc.className = 'slot-cap drop';
+  }, 950);
+
+  // Stop crank, capsule appears in tray at 1650ms
+  setTimeout(function() {
+    crankWrap.classList.remove('spinning');
+    var tc = document.getElementById('tray-cap');
+    tc.textContent = winner.icon;
+    tc.className = 'tray-capsule appear';
+  }, 1650);
+
+  // Show result at 2300ms
+  setTimeout(function() {
+    showResult(winner);
+  }, 2300);
 }
-function showResult(prize){
-  document.getElementById('draw-spinning').classList.remove('show');
+
+function showResult(prize) {
+  document.getElementById('gasha-idle').style.display = 'none';
   document.getElementById('draw-result').classList.add('show');
   document.getElementById('draw-btn').classList.add('hidden');
-  document.getElementById('res-icon').textContent=prize.icon;
-  document.getElementById('res-name').textContent=prize.name;
-  document.getElementById('res-pts').textContent=selPts+' points redeemed';
-  document.getElementById('congrats-title').textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
+  document.getElementById('res-icon').textContent = prize.icon;
+  document.getElementById('res-name').textContent = prize.name;
+  document.getElementById('res-pts').textContent = selPts + ' points redeemed';
+  document.getElementById('cong-title').textContent = CONGRATS[Math.floor(Math.random() * CONGRATS.length)];
   setDot(3);
   startCelebration();
 }
-function restart(){selPts=null;document.getElementById('next-btn').disabled=true;renderPts();goStep1();}
+
+function restart() {
+  selPts = null;
+  document.getElementById('next-btn').disabled = true;
+  renderPts();
+  stopCelebration();
+  goStep1();
+}
+
+// ── Init ──
 renderPts();
 
-const canvas=document.getElementById('celebration-canvas');
-const ctx=canvas.getContext('2d');
-let particles=[];
-let fireworks=[];
-let animId=null;
-let celebrating=false;
+// ── Fireworks + Confetti ──
+var canvas = document.getElementById('cel');
+var ctx = canvas.getContext('2d');
+var parts = [], fws = [], animId = null, celebrating = false;
+var CC2 = ['#ffd97a','#ff6eb4','#7ad7ff','#b06aff','#7aff9e','#ff9f7a','#fff176','#5effd8'];
 
-function resizeCanvas(){
-  const r=document.getElementById('lgr').getBoundingClientRect();
-  canvas.width=r.width||320;
-  canvas.height=r.height||540;
-  canvas.style.width=r.width+'px';
-  canvas.style.height=r.height+'px';
+function resizeCel() {
+  var r = document.getElementById('app').getBoundingClientRect();
+  canvas.width = r.width || 380;
+  canvas.height = r.height || 600;
+  canvas.style.position = 'fixed';
+  canvas.style.top = r.top + 'px';
+  canvas.style.left = r.left + 'px';
+  canvas.style.width = r.width + 'px';
+  canvas.style.height = r.height + 'px';
+  canvas.style.borderRadius = '24px';
 }
 
-const CONFETTI_COLORS=['#ffd97a','#ff6eb4','#7ad7ff','#b06aff','#7aff9e','#ff9f7a','#fff176','#ff5fa0','#5effd8'];
-const SHAPES=['rect','circle','ribbon'];
-
-function makeConfettiParticle(cx){
-  const x = cx !== undefined ? cx : Math.random()*canvas.width;
+function mkConf() {
+  var shapes = ['rect','circle','ribbon'];
   return {
-    type:'confetti',
-    shape:SHAPES[Math.floor(Math.random()*SHAPES.length)],
-    x, y:Math.random()*canvas.height*0.3,
-    vx:(Math.random()-0.5)*4,
-    vy:Math.random()*3+1.5,
-    rot:Math.random()*360,
-    rotV:(Math.random()-0.5)*8,
-    w:Math.random()*10+5,
-    h:Math.random()*5+3,
-    color:CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)],
-    alpha:1, life:1
+    shape: shapes[Math.floor(Math.random() * 3)],
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height * 0.2,
+    vx: (Math.random() - 0.5) * 4,
+    vy: Math.random() * 3 + 1.5,
+    rot: Math.random() * 360,
+    rv: (Math.random() - 0.5) * 8,
+    w: Math.random() * 10 + 5,
+    h: Math.random() * 5 + 3,
+    color: CC2[Math.floor(Math.random() * CC2.length)],
+    alpha: 1
   };
 }
-
-function makeFirework(x,y){
-  return {type:'fw',x,y,phase:'rise',vy:-(Math.random()*6+8),vx:(Math.random()-0.5)*1.5,color:CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)],alpha:1,trail:[]};
+function mkFW(x, y) {
+  return {type:'fw', x:x, y:y, vy:-(Math.random()*6+8), vx:(Math.random()-0.5)*1.5, color:CC2[Math.floor(Math.random()*CC2.length)], trail:[]};
+}
+function mkSpark(x, y, c) {
+  var a = Math.random() * Math.PI * 2, s = Math.random() * 6 + 2;
+  return {type:'sp', x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, color:c, alpha:1, size:Math.random()*3+1.5};
 }
 
-function makeSpark(x,y,color){
-  const angle=Math.random()*Math.PI*2;
-  const speed=Math.random()*6+2;
-  return {type:'spark',x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,color,alpha:1,size:Math.random()*3+1.5,gravity:0.18};
-}
+var cTimer, fTimer, eTimer;
 
-function makeStarburst(x,y,color){
-  const sparks=[];
-  const count=Math.floor(Math.random()*8+10);
-  for(let i=0;i<count;i++) sparks.push(makeSpark(x,y,color));
-  return sparks;
-}
+function startCelebration() {
+  if (celebrating) return;
+  celebrating = true;
+  resizeCel();
+  parts = []; fws = [];
+  for (var i = 0; i < 90; i++) parts.push(mkConf());
 
-let confettiTimer=null;
-let fireworkTimer=null;
-let celebrationEnd=null;
-
-function startCelebration(){
-  if(celebrating) return;
-  celebrating=true;
-  resizeCanvas();
-  particles=[];fireworks=[];
-
-  for(let i=0;i<80;i++) particles.push(makeConfettiParticle());
-
-  const spawnFW=()=>{
-    if(!celebrating) return;
-    const x=canvas.width*0.2+Math.random()*canvas.width*0.6;
-    const y=canvas.height*0.6+Math.random()*canvas.height*0.2;
-    fireworks.push(makeFirework(x,y));
-    fireworkTimer=setTimeout(spawnFW,Math.random()*700+300);
-  };
+  function spawnFW() {
+    if (!celebrating) return;
+    fws.push(mkFW(canvas.width * 0.15 + Math.random() * canvas.width * 0.7, canvas.height * 0.5 + Math.random() * canvas.height * 0.25));
+    fTimer = setTimeout(spawnFW, Math.random() * 650 + 280);
+  }
   spawnFW();
 
-  const spawnConfetti=()=>{
-    if(!celebrating) return;
-    for(let i=0;i<6;i++) particles.push(makeConfettiParticle());
-    confettiTimer=setTimeout(spawnConfetti,180);
-  };
-  confettiTimer=setTimeout(spawnConfetti,400);
-
-  celebrationEnd=setTimeout(stopCelebration,7000);
-  animId=requestAnimationFrame(celebrationLoop);
+  function spawnC() {
+    if (!celebrating) return;
+    for (var i = 0; i < 7; i++) parts.push(mkConf());
+    cTimer = setTimeout(spawnC, 170);
+  }
+  cTimer = setTimeout(spawnC, 250);
+  eTimer = setTimeout(stopCelebration, 7000);
+  animId = requestAnimationFrame(celLoop);
 }
 
-function stopCelebration(){
-  celebrating=false;
-  clearTimeout(confettiTimer);
-  clearTimeout(fireworkTimer);
-  clearTimeout(celebrationEnd);
-  if(animId){cancelAnimationFrame(animId);animId=null;}
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles=[];fireworks=[];
+function stopCelebration() {
+  celebrating = false;
+  clearTimeout(cTimer); clearTimeout(fTimer); clearTimeout(eTimer);
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  parts = []; fws = [];
 }
 
-function celebrationLoop(){
-  if(!celebrating){ctx.clearRect(0,0,canvas.width,canvas.height);return;}
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+function celLoop() {
+  if (!celebrating) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  for(let i=fireworks.length-1;i>=0;i--){
-    const fw=fireworks[i];
-    if(fw.type==='fw'){
-      fw.trail.push({x:fw.x,y:fw.y,alpha:fw.alpha});
-      if(fw.trail.length>8) fw.trail.shift();
-      fw.trail.forEach((t,ti)=>{
-        ctx.beginPath();ctx.arc(t.x,t.y,2.5*(ti/fw.trail.length),0,Math.PI*2);
-        ctx.fillStyle=`rgba(255,255,220,${t.alpha*(ti/fw.trail.length)*0.5})`;ctx.fill();
-      });
-      fw.x+=fw.vx; fw.y+=fw.vy; fw.vy+=0.25;
-      ctx.beginPath();ctx.arc(fw.x,fw.y,3,0,Math.PI*2);
-      ctx.fillStyle=fw.color; ctx.fill();
-      if(fw.vy>=0){
-        const sparks=makeStarburst(fw.x,fw.y,fw.color);
-        for(let k=0;k<3;k++){
-          const c2=CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
-          sparks.push(...makeStarburst(fw.x,fw.y,c2));
-        }
-        fireworks.splice(i,1,...sparks);
+  for (var i = fws.length - 1; i >= 0; i--) {
+    var f = fws[i];
+    if (f.type === 'fw') {
+      f.trail.push({x:f.x, y:f.y, a:f.alpha});
+      if (f.trail.length > 8) f.trail.shift();
+      for (var t = 0; t < f.trail.length; t++) {
+        var tr = f.trail[t];
+        ctx.beginPath(); ctx.arc(tr.x, tr.y, 2.5 * (t / f.trail.length), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,210,' + (tr.a * (t / f.trail.length) * 0.42) + ')';
+        ctx.fill();
       }
-    } else if(fw.type==='spark'){
-      fw.x+=fw.vx; fw.y+=fw.vy; fw.vy+=fw.gravity; fw.alpha-=0.022;
-      if(fw.alpha<=0){fireworks.splice(i,1);continue;}
-      ctx.beginPath();ctx.arc(fw.x,fw.y,fw.size,0,Math.PI*2);
-      ctx.fillStyle=fw.color; ctx.globalAlpha=fw.alpha; ctx.fill(); ctx.globalAlpha=1;
+      f.x += f.vx; f.y += f.vy; f.vy += 0.25;
+      ctx.beginPath(); ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = f.color; ctx.fill();
+      if (f.vy >= 0) {
+        var sp = [];
+        for (var k = 0; k < 14; k++) sp.push(mkSpark(f.x, f.y, f.color));
+        for (var k = 0; k < 8; k++) sp.push(mkSpark(f.x, f.y, CC2[Math.floor(Math.random() * CC2.length)]));
+        fws.splice.apply(fws, [i, 1].concat(sp));
+      }
+    } else if (f.type === 'sp') {
+      f.x += f.vx; f.y += f.vy; f.vy += 0.18; f.alpha -= 0.022;
+      if (f.alpha <= 0) { fws.splice(i, 1); continue; }
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+      ctx.fillStyle = f.color; ctx.globalAlpha = f.alpha; ctx.fill(); ctx.globalAlpha = 1;
     }
   }
 
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.rot+=p.rotV; p.alpha-=0.004;
-    if(p.y>canvas.height+20||p.alpha<=0){particles.splice(i,1);continue;}
-    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.globalAlpha=p.alpha;
-    ctx.fillStyle=p.color;
-    if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.w/2,0,Math.PI*2);ctx.fill();}
-    else if(p.shape==='ribbon'){ctx.fillRect(-p.w/2,-p.h/6,p.w,p.h/3);ctx.fillRect(-p.w/6,-p.h/2,p.w/3,p.h);}
-    else{ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);}
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var p = parts[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.rot += p.rv; p.alpha -= 0.004;
+    if (p.y > canvas.height + 20 || p.alpha <= 0) { parts.splice(i, 1); continue; }
+    ctx.save();
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180); ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    if (p.shape === 'circle') { ctx.beginPath(); ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2); ctx.fill(); }
+    else if (p.shape === 'ribbon') { ctx.fillRect(-p.w/2, -p.h/6, p.w, p.h/3); ctx.fillRect(-p.w/6, -p.h/2, p.w/3, p.h); }
+    else { ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); }
     ctx.restore();
   }
 
-  animId=requestAnimationFrame(celebrationLoop);
+  animId = requestAnimationFrame(celLoop);
 }
 </script>
+</body>
+</html>
