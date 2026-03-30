@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shirley's Consonant Blends 子音組合 | 互動閃卡平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans TC', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #f7f9fc 0%, #eef2f5 100%);
+            color: #1a2c3e;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 頁首 */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #2b5e7a, #1e3b4a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #4a627a;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* 搜尋區 */
+        .search-section {
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            pointer-events: none;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 60px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            font-family: inherit;
+            border: 1px solid #dce5ec;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #6c9ebf;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 首字母檢索欄 */
+        .alpha-filter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .alpha-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            color: #2c5a74;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            font-family: monospace;
+        }
+
+        .alpha-btn:hover {
+            background: #e1f0f7;
+            transform: scale(1.05);
+        }
+
+        .alpha-btn.active {
+            background: #2b5e7a;
+            color: white;
+            box-shadow: 0 4px 12px rgba(43, 94, 122, 0.3);
+        }
+
+        /* 卡片網格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* 閃卡容器 - 支援 3D 翻轉 */
+        .flashcard-container {
+            background: transparent;
+            perspective: 1500px;
+            height: auto;
+            min-height: 380px;
+        }
+
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 28px;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            backface-visibility: hidden;
+            border-radius: 28px;
+            background: white;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e9f0f5;
+        }
+
+        .card-front {
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: #fefef7;
+            overflow-y: auto;
+        }
+
+        /* 翻轉指示 */
+        .flip-hint {
+            font-size: 0.7rem;
+            color: #9bb7cc;
+            margin-top: 0.8rem;
+            text-align: center;
+            border-top: 1px dashed #e2edf2;
+            padding-top: 0.8rem;
+        }
+
+        .blend-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f5e7a;
+            margin-bottom: 0.75rem;
+            border-left: 5px solid #4b9bc1;
+            padding-left: 16px;
+        }
+
+        .sample-area {
+            flex: 1;
+        }
+
+        .sample-label {
+            font-weight: 600;
+            color: #1f5e7a;
+            margin: 0.8rem 0 0.5rem 0;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .word-chip {
+            display: inline-block;
+            background: #f0f6fa;
+            padding: 6px 12px;
+            border-radius: 30px;
+            margin: 0.3rem 0.3rem;
+            font-size: 0.9rem;
+            color: #1e4660;
+        }
+
+        .word-item-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #ecf3f8;
+        }
+
+        .word-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .word-en {
+            font-weight: 600;
+            color: #1e4660;
+            font-size: 1rem;
+        }
+
+        .word-zh {
+            color: #5e7e9c;
+            font-size: 0.9rem;
+        }
+
+        .speaker-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            border-radius: 30px;
+            transition: all 0.1s;
+            color: #4b9bc1;
+        }
+
+        .speaker-btn:hover {
+            background: #e1f0f7;
+            transform: scale(1.05);
+        }
+
+        .word-count-badge {
+            font-size: 0.7rem;
+            background: #eef2f7;
+            padding: 4px 10px;
+            border-radius: 40px;
+            color: #3b6f8c;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        /* 模態框 (list view) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1.5rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 2rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 1.8rem;
+            border-bottom: 2px solid #eaf0f5;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f5e7a;
+        }
+
+        .close-modal {
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #7f8c8d;
+        }
+
+        .word-list-modal {
+            padding: 1rem 1.8rem 2rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 2rem;
+            color: #6b8dab;
+        }
+
+        @media (max-width: 680px) {
+            body { padding: 1rem; }
+            .alpha-btn { width: 38px; height: 38px; font-size: 0.9rem; }
+            .blend-title { font-size: 1.8rem; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: #7f9ab5;
+        }
+
+        .view-list-btn {
+            background: #eef2f7;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 40px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #2b5e7a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🎴 Shirley's Consonant Blends 子音組合</h1>
+        <p>閃卡翻轉模式 · 完整單字 · 發音喇叭 · 首字母檢索</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜尋子音組合 或 單字 (例如: bl, bridge, graph)..." autocomplete="off">
+        </div>
+        <div id="alphaFilter" class="alpha-filter"></div>
+    </div>
+
+    <div id="cardsGrid" class="grid"></div>
+    <footer>💡 點擊卡片正面可翻轉查看剩餘單字 · 點擊喇叭圖示 🔊 聽發音 · 「清單檢視」看完整列表</footer>
+</div>
+
+<div id="wordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalBlendTitle">-</h2>
+            <button class="close-modal" id="closeModalBtn">✕</button>
+        </div>
+        <div id="modalWordList" class="word-list-modal"></div>
+    </div>
+</div>
+
+<script>
+    // ======================= 完整資料庫 =======================
+    const blendsData = [
+        { blend: "bl-", allWords: ["blab","胡扯","black","黑色","bled","流血(過去式)","bless","祝福","blip","短暫信號","bliss","極樂","blob","一滴","block","街區","blog","部落格","blot","污漬","bluff","虛張聲勢"] },
+        { blend: "br-", allWords: ["brad","布拉德釘","brag","吹噓","bran","麩皮","brash","鹵莽的","brass","黃銅","brat","頑童","bred","飼養(past)","brick","磚塊","bridge","橋樑","brig","雙桅船","brim","邊緣","Brock","布洛克","broth","肉湯","brush","刷子"] },
+        { blend: "ch-", allWords: ["chat","聊天","chin","下巴","chop","砍","chip","晶片","chum","好友","check","檢查","chick","小雞"] },
+        { blend: "-ch", allWords: ["rich","富有的","such","如此的","much","許多","ranch","牧場","bench","長椅","quench","解渴","finch","雀鳥","inch","英吋","pinch","捏","conch","海螺","bunch","一串","hunch","直覺","lunch","午餐","munch","用力嚼","punch","拳打"] },
+        { blend: "-ck", allWords: ["black","黑色","block","街區","brick","磚塊","check","檢查","chick","小雞","clock","時鐘","cluck","咯咯叫","crack","裂縫","flick","輕彈","flock","羊群","knock","敲擊","pluck","摘","prick","刺","quack","鴨叫","quick","快速","shack","小屋","shock","震驚","slack","鬆弛","snack","點心","stack","堆疊","stick","棍子","stuck","卡住","thick","厚的","track","軌道","truck","卡車","wreck","失事"] },
+        { blend: "cl-", allWords: ["clack","咔噠聲","clad","穿著","clam","蛤蜊","clap","拍手","class","班級","click","點擊","cliff","懸崖","clip","夾子","clock","時鐘","clod","土塊","clog","堵塞","clot","血塊","cloth","布料","club","俱樂部","clutch","離合器"] },
+        { blend: "cr-", allWords: ["crab","螃蟹","crack","裂縫","crag","峭壁","cram","填塞","crash","墜毀","crass","粗魯","crib","嬰兒床","crick","抽筋","crop","作物","cross","十字","crud","汙垢","crush","壓碎","crutch","拐杖","crux","關鍵"] },
+        { blend: "-ct", allWords: ["fact","事實","pact","條約","tact","圓滑","sect","教派","duct","導管"] },
+        { blend: "-dge", allWords: ["bridge","橋樑","pledge","誓言","grudge","怨恨","sludge","污泥","trudge","跋涉","badge","徽章","edge","邊緣","lodge","小屋","judge","法官"] },
+        { blend: "dr-", allWords: ["drab","單調","drag","拖曳","drat","可惡","dress","洋裝","drill","鑽孔","drip","水滴","drop","掉落","drug","藥物","drum","鼓"] },
+        { blend: "fl-", allWords: ["flab","贅肉","flan","果撻","flag","旗幟","flap","拍打","flat","公寓","flax","亞麻","fled","逃離","flex","彎曲","flip","翻轉","flit","輕飛","flog","鞭打","flop","重摔","flub","搞砸","fluff","絨毛","flick","輕彈","flock","羊群"] },
+        { blend: "fr-", allWords: ["Fred","佛瑞德","fresh","新鮮","fret","煩惱","fridge","冰箱","frizz","捲曲","frock","連衣裙","frog","青蛙","froth","泡沫"] },
+        { blend: "-ft", allWords: ["raft","木筏","shaft","軸","heft","重量","left","左邊","theft","偷竊","gift","禮物","lift","舉起","rift","裂縫","shift","轉變","sift","篩選","loft","閣樓","soft","柔軟"] },
+        { blend: "gl-", allWords: ["glad","高興","glam","魅力","glass","玻璃","glen","峽谷","glib","油腔滑調","glob","團狀","glop","糊狀物","gloss","光澤","glug","咕嚕聲","glum","陰沉","glut","過剩"] },
+        { blend: "gr-", allWords: ["grab","抓住","grad","畢業生","gram","公克","gran","奶奶","grass","草","grid","網格","grim","嚴峻","grin","露齒笑","grip","緊握","grit","勇氣","grub","幼蟲","grudge","怨恨","gruff","粗啞"] },
+        { blend: "kn-", allWords: ["knob","圓鈕","knit","編織","knot","結","knee","膝蓋","knock","敲擊","knife","刀子"] },
+        { blend: "-lf", allWords: ["elf","精靈","shelf","架子","self","自我","golf","高爾夫","Rolf","羅夫","gulf","海灣"] },
+        { blend: "-lk", allWords: ["elk","麋鹿","milk","牛奶","silk","絲綢","bulk","大量","hulk","龐然大物","sulk","生悶氣"] },
+        { blend: "-lp", allWords: ["help","幫助","kelp","海帶","yelp","尖叫","whelp","幼犬","gulp","吞嚥","pulp","果肉"] },
+        { blend: "-lt", allWords: ["belt","皮帶","felt","感覺","melt","融化","pelt","投擲","welt","鞭痕","kilt","蘇格蘭裙","quilt","棉被","silt","淤泥","tilt","傾斜","wilt","枯萎"] },
+        { blend: "-mb", allWords: ["bomb","炸彈","climb","攀爬","comb","梳子","crumb","麵包屑","dumb","愚蠢","lamb","羔羊","limb","肢體","numb","麻木","plumb","鉛垂","thumb","拇指","tomb","墳墓"] },
+        { blend: "-mp", allWords: ["camp","露營","champ","冠軍","damp","潮濕","lamp","燈","ramp","斜坡","limp","跛行","wimp","懦夫","pomp","盛況","romp","嬉鬧","bump","碰撞","dump","傾倒","hump","駝峰","jump","跳躍","lump","腫塊","sump","集水坑","thump","重擊"] },
+        { blend: "-nd", allWords: ["and","和","band","樂隊","hand","手","land","土地","sand","沙子","bend","彎曲","lend","借出","mend","修理","send","寄送","tend","傾向","vend","販賣","wind","風","bond","債券","fond","喜愛","fund","基金"] },
+        { blend: "-ng", allWords: ["bang","重擊聲","clang","鏗鏘聲","fang","尖牙","gang","幫派","hang","懸掛","pang","劇痛","rang","響起","sang","唱歌","slang","俚語","sprang","跳","twang","弦聲","bring","帶來","cling","緊抓","ding","叮噹","fling","拋","king","國王","ping","乒乓","ring","鈴聲","sing","唱歌","sling","吊索","spring","春天","thing","事物","wing","翅膀","bong","嗡鳴","gong","鑼","Hong Kong","香港","long","長的","pong","臭味","prong","尖頭","song","歌曲","strong","強壯","throng","人群","wrong","錯誤","clung","緊握","flung","拋","hung","懸掛","lung","肺","rung","橫檔","slung","投擲","sprung","彈跳","strung","串起","stung","刺","sung","唱","swung","搖擺","wrung","擰"] },
+        { blend: "-nk", allWords: ["blank","空白","clank","叮噹","crank","曲柄","drank","喝","hank","一束","plank","木板","prank","惡作劇","rank","排名","sank","下沉","shrank","縮小","tank","坦克","thank","感謝","blink","眨眼","clink","叮噹","brink","邊緣","drink","喝","ink","墨水","plink","叮咚","mink","貂皮","rink","溜冰場","sink","下沉","shrink","縮小","pink","粉紅","think","思考","bonk","碰撞","clonk","咚聲","conk","鼻子","honk","喇叭","zonk","擊倒","bunk","鋪位","chunk","大塊","dunk","浸泡","drunk","喝醉","hunk","大塊","plunk","撲通","skunk","臭鼬","junk","垃圾","sunk","下沉","trunk","樹幹","stunk","發臭"] },
+        { blend: "-nt", allWords: ["ant","螞蟻","chant","吟誦","pant","喘息","rant","咆哮","bent","彎曲","dent","凹痕","lent","借出","pent","關閉","rent","租金","sent","寄送","tent","帳篷","vent","通風口","went","去","font","字體","bunt","觸擊","hunt","打獵","punt","平底船","runt","小個子","quint","五胞胎"] },
+        { blend: "ph-", allWords: ["phone","電話","photo","照片","dolphin","海豚","phonics","自然發音","alphabet","字母表","elephant","大象","orphan","孤兒","nephew","姪子","graph","圖表","trophy","獎盃","phase","階段","phrase","片語","sphere","球體"] },
+        { blend: "pl-", allWords: ["plan","計劃","plat","地塊","pled","抵押","pledge","誓言","plod","沉重行走","plop","撲通","plot","情節","pluck","摘","plug","插頭","plum","李子","plus","加上","plush","豪華"] },
+        { blend: "pr-", allWords: ["pram","嬰兒車","prep","準備","press","按壓","prick","刺","prim","拘謹","prod","刺戳","prof","教授","prom","舞會","prop","支撐"] },
+        { blend: "-pt", allWords: ["rapt","專注","kept","保留","wept","哭泣"] },
+        { blend: "sc-", allWords: ["scab","痂","scam","詐騙","scan","掃描","scat","走開","scuff","磨損","scum","浮渣"] },
+        { blend: "scr-", allWords: ["scram","快走","scrap","碎片","scratch","抓傷","script","腳本","scrod","小鱈魚","scrub","擦洗","scrunch","壓碎"] },
+        { blend: "sh-", allWords: ["shad","西鯡魚","shell","貝殼","ship","船","shop","商店","shot","射擊","shock","震驚","shut","關閉"] },
+        { blend: "-sh", allWords: ["bash","猛擊","cash","現金","dish","盤子","fish","魚","mash","搗碎","rush","衝刺","wish","願望"] },
+        { blend: "shr-", allWords: ["shred","撕碎","shrill","尖銳","shrimp","蝦","shrink","縮小","shrub","灌木","shrug","聳肩","shrunk","縮小"] },
+        { blend: "sk-", allWords: ["sketch","草圖","skid","打滑","skiff","小船","skill","技能","skim","撇去","skin","皮膚","skip","跳過","skit","短劇","skull","頭骨"] },
+        { blend: "-sk", allWords: ["ask","問","mask","面具","task","任務","desk","書桌","disk","磁碟","risk","風險","husk","外殼","tusk","長牙"] },
+        { blend: "sl-", allWords: ["slab","厚板","slag","礦渣","slack","鬆弛","slam","砰關","slap","摑掌","slash","猛砍","slat","板條","sled","雪橇","slick","光滑","slid","滑動","slim","苗條","slip","滑倒","slit","裂縫","slob","邋遢","slop","濺出","slot","投幣口","sloth","樹懶","sludge","污泥","slug","蛞蝓","slum","貧民窟"] },
+        { blend: "sm-", allWords: ["smack","拍打","smash","粉碎","smell","氣味","Smith","史密斯","smock","罩衫","smog","煙霧","smudge","污跡","smug","自滿"] },
+        { blend: "sn-", allWords: ["snack","點心","snag","障礙","snap","折斷","snatch","搶奪","sniff","嗅","snip","剪斷","snob","勢利眼","snot","鼻涕","snub","冷落","snuff","鼻煙","snug","舒適"] },
+        { blend: "sp-", allWords: ["spam","垃圾郵件","span","跨度","spat","爭吵","speck","斑點","sped","加速","spell","拼寫","spin","旋轉","spill","溢出","spit","吐","spot","地點","spud","馬鈴薯","spun","紡"] },
+        { blend: "-sp", allWords: ["gasp","喘息","rasp","銼刀","lisp","口齒不清","wisp","小束","cusp","尖端"] },
+        { blend: "spl-", allWords: ["splash","濺潑","splint","夾板","split","分裂"] },
+        { blend: "spr-", allWords: ["sprig","小枝","spring","春天","sprint","衝刺"] },
+        { blend: "squ-", allWords: ["squib","爆竹","squid","魷魚","squint","瞇眼","squish","壓扁"] },
+        { blend: "st-", allWords: ["stab","刺傷","stack","堆疊","stag","雄鹿","staff","員工","stash","藏匿","stat","數據","stem","莖","step","步驟","stick","棍子","stiff","僵硬","still","仍然","stitch","縫合","stock","庫存","stop","停止","stub","殘端","stuck","卡住","stun","昏迷","stuff","東西"] },
+        { blend: "-st", allWords: ["cast","投擲","fast","快速","last","最後","mast","桅杆","past","過去","vast","廣闊","best","最好","chest","胸膛","fest","節日","jest","玩笑","lest","以免","nest","巢","pest","害蟲","quest","探索","test","測試","vest","背心","west","西方","zest","熱情","fist","拳頭","list","清單"] },
+        { blend: "str-", allWords: ["strand","海灘","strap","皮帶","stretch","伸展","strict","嚴格","strip","脫衣","struck","擊打","strum","彈奏"] },
+        { blend: "sw-", allWords: ["swam","游泳","swell","腫脹","swig","大口喝","swill","泔水","swim","游泳","switch","開關","swum","游泳"] },
+        { blend: "th-", allWords: ["than","比","then","那時","thin","瘦","this","這個","thud","砰聲","theft","偷竊","throb","悸動"] },
+        { blend: "-th", allWords: ["bath","洗澡","math","數學","moth","飛蛾","path","路徑","with","和","cloth","布料"] },
+        { blend: "thr-", allWords: ["thrash","痛打","thrift","節儉","thrill","興奮","throb","跳動","thrust","猛推"] },
+        { blend: "tr-", allWords: ["track","軌道","tram","電車","trash","垃圾","trap","陷阱","trek","跋涉","trick","詭計","trill","顫音","trim","修剪","trip","旅行","trod","踩","trot","小跑","truck","卡車","trudge","跋涉"] },
+        { blend: "tw-", allWords: ["twig","細枝","twin","雙胞胎","twix","兩者之間"] },
+        { blend: "wh-", allWords: ["whip","鞭子","whisk","攪拌","whelp","幼犬","when","何時","whit","一點","whiz","專家"] },
+        { blend: "-xt", allWords: ["next","下一個","text","文字"] }
+    ];
+
+    // 輔助: 將 allWords 轉成 [{word, meaning}]
+    function getWordPairs(item) {
+        const arr = item.allWords;
+        const pairs = [];
+        for (let i = 0; i < arr.length; i += 2) {
+            if (i+1 < arr.length) pairs.push({ word: arr[i], meaning: arr[i+1] });
+        }
+        return pairs;
+    }
+
+    // 發音功能
+    function speakWord(word) {
+        if (!window.speechSynthesis) return;
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // 首字母檢索邏輯
+    let currentFilter = "";
+    function setAlphaFilter(letter) {
+        currentFilter = letter;
+        document.querySelectorAll('.alpha-btn').forEach(btn => {
+            if (btn.dataset.letter === letter) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        renderCards(document.getElementById('searchInput').value);
+    }
+
+    function renderCards(searchText = "") {
+        const grid = document.getElementById("cardsGrid");
+        const lowerSearch = searchText.toLowerCase();
+        let filtered = blendsData.filter(item => {
+            const blendMatch = item.blend.toLowerCase().includes(lowerSearch);
+            const wordMatch = getWordPairs(item).some(p => p.word.toLowerCase().includes(lowerSearch));
+            if (!blendMatch && !wordMatch) return false;
+            if (currentFilter && currentFilter !== "ALL") {
+                const firstChar = item.blend.replace(/[^a-z]/gi, '')[0]?.toUpperCase();
+                return firstChar === currentFilter;
+            }
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results">✨ 沒有找到相符的子音組合，試試其他關鍵字～ ✨</div>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(item => {
+            const pairs = getWordPairs(item);
+            const frontSample = pairs.slice(0, 6);
+            const backWords = pairs.slice(6);
+            const hasBack = backWords.length > 0;
+            const totalCount = pairs.length;
+
+            return `
+                <div class="flashcard-container">
+                    <div class="flashcard" data-blend="${item.blend}">
+                        <div class="card-front">
+                            <div class="blend-title">${item.blend}</div>
+                            <div class="sample-area">
+                                <div class="sample-label">📖 前頁例詞</div>
+                                <div>${frontSample.map(p => `<span class="word-chip">${p.word}</span>`).join('')}</div>
+                                <div class="word-count-badge">📚 共 ${totalCount} 個單字</div>
+                                <button class="view-list-btn" data-blend="${item.blend}">📋 清單檢視 (完整列表)</button>
+                            </div>
+                            <div class="flip-hint">✨ 點擊卡片翻轉 → 查看剩餘單字 ✨</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="blend-title" style="font-size:1.8rem;">${item.blend} <span style="font-size:0.9rem;">後頁單字</span></div>
+                            ${hasBack ? backWords.map(p => `
+                                <div class="word-item-list">
+                                    <div class="word-left">
+                                        <span class="word-en">${p.word}</span>
+                                        <button class="speaker-btn" data-word="${p.word}">🔊</button>
+                                        <span class="word-zh">${p.meaning}</span>
+                                    </div>
+                                </div>
+                            `).join('') : '<div style="padding:1rem; text-align:center; color:#9aaebf;">✨ 後頁暫無更多單字 ✨</div>'}
+                            <div class="flip-hint" style="margin-top:1rem;">↺ 點擊翻回正面</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // 綁定翻轉事件
+        document.querySelectorAll('.flashcard').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.classList.contains('speaker-btn') || e.target.classList.contains('view-list-btn')) return;
+                card.classList.toggle('flipped');
+            });
+        });
+        // 綁定發音按鈕
+        document.querySelectorAll('.speaker-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const word = btn.getAttribute('data-word');
+                if (word) speakWord(word);
+            });
+        });
+        // 綁定「清單檢視」按鈕 (modal)
+        document.querySelectorAll('.view-list-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const blendName = btn.getAttribute('data-blend');
+                openModal(blendName);
+            });
+        });
+    }
+
+    function openModal(blendKey) {
+        const item = blendsData.find(b => b.blend === blendKey);
+        if (!item) return;
+        const pairs = getWordPairs(item);
+        const modal = document.getElementById("wordModal");
+        document.getElementById("modalBlendTitle").innerHTML = `${item.blend} 完整單字表`;
+        const container = document.getElementById("modalWordList");
+        container.innerHTML = pairs.map(p => `
+            <div class="word-item-list" style="display:flex; justify-content:space-between;">
+                <div class="word-left">
+                    <span class="word-en">${p.word}</span>
+                    <button class="speaker-btn" data-word="${p.word}">🔊</button>
+                    <span class="word-zh">${p.meaning}</span>
+                </div>
+            </div>
+        `).join('');
+        // 重新綁定模態框內發音
+        container.querySelectorAll('.speaker-btn').forEach(btn => {
+            btn.addEventListener('click', () => speakWord(btn.getAttribute('data-word')));
+        });
+        modal.style.display = "flex";
+    }
+
+    function closeModal() { document.getElementById("wordModal").style.display = "none"; }
+
+    // 建立字母過濾欄 (只顯示子音字母)
+function buildAlphaBar() {
+    const allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const vowels = ['A', 'E', 'I', 'O', 'U'];  // 母音字母
+    const consonants = allLetters.filter(letter => !vowels.includes(letter));  // 只保留子音
+    const container = document.getElementById("alphaFilter");
+    container.innerHTML = `<button class="alpha-btn" data-letter="ALL">ALL</button>` + 
+        consonants.map(l => `<button class="alpha-btn" data-letter="${l}">${l}</button>`).join('');
+    
+    document.querySelectorAll('.alpha-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const letter = btn.dataset.letter;
+            if (letter === "ALL") currentFilter = "";
+            else currentFilter = letter;
+            setAlphaFilter(currentFilter === "" ? "ALL" : currentFilter);
+            document.getElementById('searchInput').value = '';
+        });
+    });
+}
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+    window.addEventListener("click", (e) => { if (e.target === document.getElementById("wordModal")) closeModal(); });
+    document.getElementById("searchInput").addEventListener("input", (e) => { 
+        currentFilter = "";
+        document.querySelectorAll('.alpha-btn').forEach(btn => btn.classList.remove('active'));
+        renderCards(e.target.value);
+    });
+    buildAlphaBar();
+    renderCards();
+</script>
+</body>
+</html>
