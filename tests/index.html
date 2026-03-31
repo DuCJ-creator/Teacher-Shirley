@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
   
   <style>
-    /* --- 核心樣式變數 (與原版完全一致) --- */
+    /* --- 核心樣式變數 --- */
     :root {
       --bg: #faf9f6;
       --surface: rgba(255, 255, 255, 0.65);
@@ -47,7 +47,6 @@
       overflow-x: hidden;
     }
 
-    /* ✨ 粒子特效 Canvas */
     #particle-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -67,7 +66,6 @@
       z-index: 10;
     }
 
-    /* 頂部按鈕樣式 */
     .nav-btn {
       text-decoration: none;
       color: var(--text);
@@ -294,19 +292,16 @@
 
     <div id="section-home" class="section">
       <div class="tools-grid">
-        
         <div class="vocab-card" onclick="openSection('section-tw', 'TESTS in TW 台灣考試專區')">
           <div class="card-icon">🇹🇼</div>
           <div class="card-title">TESTS in TW</div>
           <div class="card-desc">台灣考試專區</div>
         </div>
-
         <div class="vocab-card" onclick="openSection('section-intl', 'International Tests 國際考試專區')">
           <div class="card-icon">🌏</div>
           <div class="card-title">International Tests</div>
           <div class="card-desc">國際考試專區</div>
         </div>
-
       </div>
     </div>
 
@@ -317,19 +312,16 @@
         </button>
       </div>
       <div class="tools-grid">
-        
         <div class="vocab-card" onclick="openSection('section-gsat', 'GSAT 學測英文')">
           <div class="card-icon">💯</div>
           <div class="card-title">GSAT考古題</div>
           <div class="card-desc">學測測不倒</div>
         </div>
-
         <div class="vocab-card" onclick="openSection('section-cap', 'CAP 會考英文')">
           <div class="card-icon">A++</div>
           <div class="card-title">CAP考古題</div>
           <div class="card-desc">會考我會考</div>
         </div>
-
       </div>
     </div>
 
@@ -340,31 +332,26 @@
         </button>
       </div>
       <div class="tools-grid">
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html" class="vocab-card">
           <div class="card-icon">📚</div>
           <div class="card-title">CAP Grammar</div>
           <div class="card-desc">CAP考古題文法點匯總</div>
         </a>
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" class="vocab-card">
           <div class="card-icon">📝</div>
           <div class="card-title">CAP Practice</div>
           <div class="card-desc">CAP考古題練習(詞彙&文法)</div>
         </a>
-
          <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html" class="vocab-card">
           <div class="card-icon">👂</div>
           <div class="card-title">CAP Listening</div>
           <div class="card-desc">CAP考古題練習(聽力)</div>
         </a>
-
-         <a href=" https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html" class="vocab-card">
+         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html" class="vocab-card">
           <div class="card-icon">📜</div>
           <div class="card-title">CAP Reading</div>
           <div class="card-desc">CAP考古題練習(閱讀)</div>
         </a>
-
       </div>
     </div>
 
@@ -375,55 +362,48 @@
         </button>
       </div>
       <div class="tools-grid">
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" class="vocab-card">
           <div class="card-icon">😄</div>
           <div class="card-title">GSAT Vocab</div>
           <div class="card-desc">詞彙題練習</div>
         </a>
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/GSAT%20Comprehensive.html" class="vocab-card">
           <div class="card-icon">🧐</div> 
           <div class="card-title">GSAT Comprehensive</div>
           <div class="card-desc">綜合測驗練習</div>
         </a>
-
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/GSAT%20cloze.html" class="vocab-card">
           <div class="card-icon">🤔</div>
           <div class="card-title">GSAT Cloze</div>
           <div class="card-desc">文意選填練習</div>
         </a>
-
          <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/gsat%20reading.html" class="vocab-card">
           <div class="card-icon">😫</div>
           <div class="card-title">GSAT Reading</div>
           <div class="card-desc">閱讀理解練習</div>
         </a>
-
       </div>
     </div>
+
     <div id="section-intl" class="section hidden">
-  <div class="section-header">
-    <button class="section-back-btn" onclick="openSection('section-home', '考試練練工作坊')">
-      <span>←</span> Back to Home
-    </button>
-  </div>
-  <div class="tools-grid">
-    
-    <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/toeic.html" class="vocab-card">
-      <div class="card-icon">📈</div>
-      <div class="card-title">TOEIC</div>
-      <div class="card-desc">多益測驗練習資源</div>
-    </a>
-
-    <div class="vocab-card" onclick="openSection('section-toefl-jr', 'TOEFL Junior 初級托福')">
-      <div class="card-icon">🦅</div>
-      <div class="card-title">TOEFL Junior</div>
-      <div class="card-desc">初級托福練習資源</div>
+      <div class="section-header">
+        <button class="section-back-btn" onclick="openSection('section-home', '考試練練工作坊')">
+          <span>←</span> Back to Home
+        </button>
+      </div>
+      <div class="tools-grid">
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/toeic.html" class="vocab-card">
+          <div class="card-icon">📈</div>
+          <div class="card-title">TOEIC</div>
+          <div class="card-desc">多益測驗練習資源</div>
+        </a>
+        <div class="vocab-card" onclick="openSection('section-toefl-jr', 'TOEFL Junior 初級托福')">
+          <div class="card-icon">🦅</div>
+          <div class="card-title">TOEFL Junior</div>
+          <div class="card-desc">初級托福練習資源</div>
+        </div>
+      </div>
     </div>
-
-  </div>
-</div>
 
     <div id="section-toefl-jr" class="section hidden">
       <div class="section-header">
@@ -432,13 +412,32 @@
         </button>
       </div>
       <div class="tools-grid">
-        
+        <div class="vocab-card" onclick="openSection('section-toefl-lrl', 'TOEFL Junior L/R/L')">
+          <div class="card-icon">📖</div>
+          <div class="card-title">TOEFL Junior L/R/L</div>
+          <div class="card-desc">初級托福聽/讀/文法</div>
+        </div>
+
         <div class="vocab-card" onclick="openSection('section-toefl-writing', 'TOEFL Junior Writing')">
           <div class="card-icon">✍️</div>
           <div class="card-title">TOEFL Junior Writing</div>
           <div class="card-desc">初級托福寫作練習 Task 1-4</div>
         </div>
+      </div>
+    </div>
 
+    <div id="section-toefl-lrl" class="section hidden">
+      <div class="section-header">
+        <button class="section-back-btn" onclick="openSection('section-toefl-jr', 'TOEFL Junior 初級托福')">
+          <span>←</span> Back to TOEFL Junior
+        </button>
+      </div>
+      <div class="tools-grid">
+        <a href="https://ducj-creator.github.io/toefl-junior-vocab-master/" class="vocab-card">
+          <div class="card-icon">🅰️</div>
+          <div class="card-title">TOEFL Junior Vocab</div>
+          <div class="card-desc">初級托福詞彙</div>
+        </a>
       </div>
     </div>
 
@@ -449,63 +448,44 @@
         </button>
       </div>
       <div class="tools-grid">
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/TFJW1.html" class="vocab-card">
           <div class="card-icon">📝</div>
           <div class="card-title">Writing Task 1</div>
           <div class="card-desc">TOEFL Junior Writing Task 1</div>
         </a>
-        
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/TFJW2.html" class="vocab-card">
           <div class="card-icon">📝</div>
           <div class="card-title">Writing Task 2</div>
           <div class="card-desc">TOEFL Junior Writing Task 2</div>
         </a>
-
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/TFJW3.html" class="vocab-card">
           <div class="card-icon">📝</div>
           <div class="card-title">Writing Task 3</div>
           <div class="card-desc">TOEFL Junior Writing Task 3</div>
         </a>
-
         <a href="https://ducj-creator.github.io/Teacher-Shirley/tests/TFJW4.html" class="vocab-card">
           <div class="card-icon">📝</div>
           <div class="card-title">Writing Task 4</div>
           <div class="card-desc">TOEFL Junior Writing Task 4</div>
         </a>
-
       </div>
     </div>
 
   </div>
 
   <script>
-    // ----------------------------------------
-    // 頁面切換邏輯 (Page Navigation Logic)
-    // ----------------------------------------
     const pageSubtitle = document.getElementById('page-subtitle');
     const allSections = document.querySelectorAll('.section');
 
-    /**
-     * 切換顯示的區塊
-     * @param {string} targetId - 目標區塊的 ID
-     * @param {string} subtitleText - 頁面副標題文字
-     */
     function openSection(targetId, subtitleText) {
-      // 1. 隱藏所有區塊
       allSections.forEach(sec => sec.classList.add('hidden'));
-
-      // 2. 顯示目標區塊
       const targetSection = document.getElementById(targetId);
       if(targetSection) {
         targetSection.classList.remove('hidden');
-        // 重播動畫
         targetSection.style.animation = 'none';
-        targetSection.offsetHeight; /* trigger reflow */
+        targetSection.offsetHeight; 
         targetSection.style.animation = 'fadeInUp 0.6s ease backwards';
       }
-
-      // 3. 更新副標題 (淡入淡出效果)
       if (subtitleText) {
         pageSubtitle.style.opacity = 0;
         setTimeout(() => {
@@ -513,14 +493,10 @@
             pageSubtitle.style.opacity = 1;
         }, 200);
       }
-      
-      // 4. 滾動到頂部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ----------------------------------------
-    // ✨ 粒子特效與主題邏輯 (Particle & Theme)
-    // ----------------------------------------
+    // 粒子特效
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -585,7 +561,6 @@
       requestAnimationFrame(animateParticles);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const isDark = document.documentElement.classList.contains('dark');
-      // 稍微調整粒子顏色以適應考試主題
       const particleColor = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(91, 124, 153, 0.4)'; 
       const lineColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(91, 124, 153, 0.1)';
 
@@ -611,21 +586,14 @@
     initParticles();
     animateParticles();
 
-    // ----------------------------------------
-    // 主題功能
-    // ----------------------------------------
     const html = document.getElementById('htmlRoot');
     const toggleBtn = document.getElementById('themeToggle');
-    
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      html.classList.add('dark');
-    }
+    if (savedTheme === 'dark') html.classList.add('dark');
 
     toggleBtn.addEventListener('click', () => {
       html.classList.toggle('dark');
-      const isDark = html.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
     });
   </script>
 </body>
