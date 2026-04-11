@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>🌙 月光寶盒 | Teacher Shirley</title>
+  <title>🌙 月光寶盒 | Pet Sanctuary</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,11 @@
       --accent-2: #7ed6ff;
       --danger: #ff7675;
       --good: #55efc4;
-
+      --pet-common: #55efc4;
+      --pet-rare: #74b9ff;
+      --pet-precious: #a29bfe;
+      --pet-unique: #fd79a8;
+      --pet-legendary: #fdcb6e;
       --glow-soft: 0 0 18px rgba(126,214,255,0.25);
       --glow-strong: 0 0 28px rgba(241,196,15,0.35);
     }
@@ -35,8 +39,7 @@
       overflow-x:hidden;
     }
 
-    body::before,
-    body::after{
+    body::before, body::after{
       content:"";
       position:fixed; inset:-10%;
       background-repeat:repeat;
@@ -78,9 +81,10 @@
       100%{transform:translateY(120px);}
     }
 
+    /* ── HEADER ── */
     header{
       text-align:center; margin-top:10px; margin-bottom:16px;
-      position:relative;
+      position:relative; width:100%; max-width:860px;
     }
     h1{
       font-family:'Cinzel Decorative',cursive;
@@ -95,19 +99,35 @@
       from{filter:drop-shadow(0 0 0px rgba(241,196,15,0));}
       to{filter:drop-shadow(0 0 14px rgba(241,196,15,0.6));}
     }
+    .subtitle{ color:var(--text-dim); font-size:0.95rem; }
 
-    .subtitle{
-      color:var(--text-dim); font-size:0.95rem;
+    /* ── TABS ── */
+    .tab-nav{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+      width:100%; max-width:860px; margin-bottom:14px;
     }
+    .tab-btn{
+      background:rgba(255,255,255,0.07); border:1px solid var(--border);
+      color:var(--text-dim); padding:8px 18px; border-radius:30px;
+      font-family:'Exo 2',sans-serif; font-size:0.9rem; font-weight:600;
+      cursor:pointer; transition:all 0.2s; letter-spacing:0.5px;
+    }
+    .tab-btn:hover{ border-color:var(--accent-2); color:var(--text); }
+    .tab-btn.active{
+      background:linear-gradient(135deg, rgba(126,214,255,0.2), rgba(241,196,15,0.15));
+      border-color:var(--accent); color:var(--accent);
+      box-shadow: 0 0 14px rgba(241,196,15,0.3);
+    }
+    .tab-content{ display:none; width:100%; max-width:860px; }
+    .tab-content.active{ display:block; }
 
+    /* ── PANEL ── */
     .panel{
-      width:100%; max-width:860px;
+      width:100%;
       background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
       border:1px solid var(--border);
       border-radius:18px; padding:18px;
-      box-shadow:
-        0 15px 40px rgba(0,0,0,0.55),
-        inset 0 0 0 1px rgba(255,255,255,0.03);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.03);
       backdrop-filter: blur(10px) saturate(120%);
       margin-bottom:14px;
       position:relative;
@@ -156,68 +176,50 @@
       pointer-events:none;
       mix-blend-mode:screen;
     }
-    @keyframes rimSpin{to{transform:rotate(360deg);} }
+    @keyframes rimSpin{to{transform:rotate(360deg);}}
 
     .card h3{
       margin:0 0 8px 0; font-size:1.05rem; letter-spacing:0.5px;
       color:var(--accent);
       text-shadow: 0 0 10px rgba(241,196,15,0.55);
-      position:relative;
-      z-index:1;
+      position:relative; z-index:1;
     }
 
+    /* ── GLASS BOX ── */
     .glass-box{
       position: relative;
       border-radius: 20px;
       padding: 16px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
       border: 1px solid rgba(255,255,255,0.25);
-      box-shadow:
-        0 12px 38px rgba(0,0,0,0.62),
-        inset 0 0 0 1px rgba(255,255,255,0.10),
-        inset 0 0 0 8px rgba(255,255,255,0.02),
-        inset 0 0 22px rgba(126,214,255,0.12);
+      box-shadow: 0 12px 38px rgba(0,0,0,0.62), inset 0 0 0 1px rgba(255,255,255,0.10), inset 0 0 22px rgba(126,214,255,0.12);
       backdrop-filter: blur(12px) saturate(155%);
       overflow: hidden;
       transition: 0.6s ease;
     }
-
     .glass-box .corner{
       position:absolute; width:72px; height:72px; pointer-events:none;
       background: radial-gradient(circle at center, rgba(255,255,255,0.9), transparent 70%);
-      opacity:0.18;
-      filter: blur(6px);
-      mix-blend-mode:screen;
+      opacity:0.18; filter: blur(6px); mix-blend-mode:screen;
     }
     .glass-box .c-tl{top:-22px; left:-22px;}
     .glass-box .c-tr{top:-22px; right:-22px;}
     .glass-box .c-bl{bottom:-22px; left:-22px;}
     .glass-box .c-br{bottom:-22px; right:-22px;}
-
     .glass-box::before{
-      content:"";
-      position:absolute; inset:-40%;
-      background:
-        linear-gradient(120deg,
-          transparent 25%,
-          rgba(255,255,255,0.20) 35%,
-          transparent 55%);
+      content:""; position:absolute; inset:-40%;
+      background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.20) 35%, transparent 55%);
       transform: translateX(-35%) rotate(8deg);
       animation: glassSweep 6.5s ease-in-out infinite;
-      pointer-events:none;
-      mix-blend-mode: screen;
-      opacity:0.75;
+      pointer-events:none; mix-blend-mode: screen; opacity:0.75;
     }
     @keyframes glassSweep{
-      0%   {transform: translateX(-45%) rotate(8deg);}
-      50%  {transform: translateX(10%) rotate(8deg);}
-      100% {transform: translateX(45%) rotate(8deg);}
+      0%{transform: translateX(-45%) rotate(8deg);}
+      50%{transform: translateX(10%) rotate(8deg);}
+      100%{transform: translateX(45%) rotate(8deg);}
     }
-
     .glass-box::after{
-      content:"";
-      position:absolute; inset:-20%;
+      content:""; position:absolute; inset:-20%;
       background:
         radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.9), transparent 60%),
         radial-gradient(1px 1px at 30% 80%, rgba(126,214,255,0.9), transparent 60%),
@@ -225,30 +227,16 @@
         radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.8), transparent 60%);
       background-size: 180px 180px;
       animation: dustFloat 9s ease-in-out infinite alternate;
-      pointer-events:none;
-      opacity:0.5;
-      mix-blend-mode: screen;
+      pointer-events:none; opacity:0.5; mix-blend-mode: screen;
     }
-    @keyframes dustFloat{
-      from{transform:translateY(0);}
-      to{transform:translateY(6%);}
-    }
+    @keyframes dustFloat{ from{transform:translateY(0);} to{transform:translateY(6%);} }
 
     .glass-box.full-moon{
-      box-shadow:
-        0 14px 60px rgba(0,0,0,0.65),
-        0 0 40px rgba(241,196,15,0.55),
-        0 0 70px rgba(126,214,255,0.45),
-        inset 0 0 0 1px rgba(255,255,255,0.16),
-        inset 0 0 0 8px rgba(255,255,255,0.04),
-        inset 0 0 26px rgba(241,196,15,0.25);
+      box-shadow: 0 14px 60px rgba(0,0,0,0.65), 0 0 40px rgba(241,196,15,0.55), 0 0 70px rgba(126,214,255,0.45), inset 0 0 0 1px rgba(255,255,255,0.16), inset 0 0 26px rgba(241,196,15,0.25);
       border-color: rgba(241,196,15,0.65);
       animation: fullGlowPulse 2.2s ease-in-out infinite alternate;
     }
-    @keyframes fullGlowPulse{
-      from{filter:brightness(1);}
-      to{filter:brightness(1.12);}
-    }
+    @keyframes fullGlowPulse{ from{filter:brightness(1);} to{filter:brightness(1.12);} }
 
     .burst-layer{ position:absolute; inset:0; pointer-events:none; z-index:3; }
     .burst-star{
@@ -262,14 +250,11 @@
       100%{transform:translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg); opacity:0;}
     }
 
-    /* 調整 moon-ui 樣式讓它靠右 */
     .moon-ui-wrap{
       display:flex; justify-content:flex-end;
-      width:100%;
-      position:relative; z-index:1;
+      width:100%; position:relative; z-index:1;
     }
     .moon-ui{
-      /* 限制最大寬度，避免在桌面版被拉太寬，讓 crystal 還有足夠空間 */
       max-width: clamp(280px, 80%, 400px);
       display:flex; align-items:center; gap:14px;
     }
@@ -280,20 +265,13 @@
     }
     @keyframes moonFloat{ from{transform:translateY(0);} to{transform:translateY(-4px);} }
 
-    .moon-stats{ 
-        display:flex; 
-        flex-direction:column; 
-        gap:6px; 
-        width:100%; 
-        position:relative; 
-        z-index:1; 
-        padding-right: 60px; /* 新增：預留右邊空間給水晶盒子 */
+    .moon-stats{
+      display:flex; flex-direction:column; gap:6px;
+      width:100%; position:relative; z-index:1; padding-right:60px;
     }
     .progress-wrap{
-      background:rgba(255,255,255,0.08);
-      border-radius:999px; overflow:hidden; height:12px;
-      border:1px solid var(--border);
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; height:12px;
+      border:1px solid var(--border); box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
     }
     .progress-bar{
       height:100%; width:0%;
@@ -318,11 +296,7 @@
     .stat b{ color:var(--text); font-size:1.05rem; text-shadow:0 0 8px rgba(126,214,255,0.25); }
 
     .lunar-crystal{
-      position:absolute; 
-      right: 15px; /* 修改：改為靠右對齊 */
-      top: 50%; 
-      transform: translateY(-50%); /* 修改：只保留垂直置中，移除水平位移 */
-      
+      position:absolute; right:15px; top:50%; transform:translateY(-50%);
       width:54px; height:54px; border-radius:16px;
       background:
         radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), transparent 45%),
@@ -340,46 +314,24 @@
       font-size:14px; opacity:0.9; filter: drop-shadow(0 0 6px rgba(241,196,15,0.7));
     }
     @keyframes crystalFloat{
-      from{transform:translate(-50%,-50%) translateY(0);}
-      to{transform:translate(-50%,-50%) translateY(-4px);}
+      from{transform:translateY(-50%) translateY(0);}
+      to{transform:translateY(-50%) translateY(-4px);}
     }
 
-    /* 簡化後的 task-list 樣式 */
-    .task-list a {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      margin-bottom: 8px;
-      transition: 0.2s;
-      cursor: pointer;
-      position: relative;
-      z-index: 1;
-      mix-blend-mode: normal;
+    /* ── MISSIONS ── */
+    .task-list a{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px; border-radius:10px;
+      background:rgba(0,0,0,0.25); border:1px solid var(--border);
+      text-decoration:none; color:var(--text);
+      margin-bottom:8px; transition:0.2s; cursor:pointer;
+      position:relative; z-index:1; mix-blend-mode:normal;
     }
-    .task-list a:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.55), 0 0 18px rgba(241,196,15,0.25);
-    }
-    .task-list a.locked {
-      opacity: 0.4;
-      filter: grayscale(1);
-      pointer-events: none;
-    }
-    .task-tag { 
-      font-size: 0.8rem; 
-      font-weight: 700;
-      color: #f1c40f !important; /* 改為亮黃色 */
-    }
+    .task-list a:hover{ transform:translateY(-2px); border-color:var(--accent); box-shadow:0 4px 14px rgba(0,0,0,0.55), 0 0 18px rgba(241,196,15,0.25); }
+    .task-list a.locked{ opacity:0.4; filter:grayscale(1); pointer-events:none; }
+    .task-tag{ font-size:0.8rem; font-weight:700; color:#f1c40f !important; }
 
     .hint{ font-size:0.85rem; color:var(--text-dim); line-height:1.6; margin-top:6px; position:relative; z-index:1; }
-
     .log-box{ max-height:260px; overflow:auto; padding-right:6px; position:relative; z-index:1; }
     .log-item{
       padding:8px 10px; border-radius:8px;
@@ -388,9 +340,7 @@
       display:flex; justify-content:space-between; gap:8px;
       box-shadow: 0 0 8px rgba(126,214,255,0.12);
     }
-    .log-time{color:var(--text-dim); font-size:0.8rem;}
-
-    footer{ margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8; position:relative; z-index:1; }
+    .log-time{ color:var(--text-dim); font-size:0.8rem; }
 
     .start-mission-panel{
       display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -398,107 +348,440 @@
     }
     .start-mission-btn{
       padding:10px 18px; font-size:18px; border-radius:999px; border:none; cursor:pointer;
-      background: linear-gradient(135deg,#ffe08a,#ffd36a);
+      background:linear-gradient(135deg,#ffe08a,#ffd36a);
       box-shadow:0 6px 14px rgba(0,0,0,.18);
     }
-    .start-mission-btn:active{ transform: translateY(1px); }
-    .start-mission-hint{ font-size:13px; opacity:.85; color: var(--text-dim); text-align:center; }
+    .start-mission-hint{ font-size:13px; opacity:.85; color:var(--text-dim); text-align:center; }
 
-    .redeem-wrap{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1; }
-    .redeem-select{
-      flex:1; min-width:170px;
-      background:rgba(0,0,0,0.35); border:1px solid var(--border);
-      color:var(--text); padding:10px 12px; border-radius:10px;
-      font-size:16px; outline:none; appearance:none;
+    /* ── PET SANCTUARY STYLES ── */
+    .pet-section-title{
+      font-family:'Cinzel Decorative',cursive;
+      font-size:1.2rem; font-weight:700;
+      color:var(--accent-2);
+      text-shadow:0 0 14px rgba(126,214,255,0.5);
+      margin:0 0 12px 0; position:relative; z-index:1;
     }
-    .redeem-btn{
-      padding:10px 16px; border-radius:10px; border:none; cursor:pointer;
-      font-weight:800; letter-spacing:1px;
-      background:linear-gradient(135deg,#7ed6ff,#ffe08a);
+
+    /* Tier badges */
+    .tier-badge{
+      display:inline-flex; align-items:center; gap:5px;
+      padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;
+      letter-spacing:0.5px;
+    }
+    .tier-common{ background:rgba(85,239,196,0.15); border:1px solid rgba(85,239,196,0.5); color:var(--pet-common); }
+    .tier-rare{ background:rgba(116,185,255,0.15); border:1px solid rgba(116,185,255,0.5); color:var(--pet-rare); }
+    .tier-precious{ background:rgba(162,155,254,0.15); border:1px solid rgba(162,155,254,0.5); color:var(--pet-precious); }
+    .tier-unique{ background:rgba(253,121,168,0.15); border:1px solid rgba(253,121,168,0.5); color:var(--pet-unique); }
+    .tier-legendary{ background:rgba(253,203,110,0.2); border:1px solid rgba(253,203,110,0.6); color:var(--pet-legendary); box-shadow:0 0 10px rgba(253,203,110,0.25); }
+
+    /* Adopt grid */
+    .adopt-grid{
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;
+      margin-bottom:16px;
+    }
+    .adopt-card{
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
+      border-radius:16px; padding:14px 10px; text-align:center;
+      cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
+    }
+    .adopt-card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(241,196,15,0.5);
+      box-shadow:0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(241,196,15,0.2);
+    }
+    .adopt-card.locked-tier{
+      opacity:0.5; cursor:not-allowed;
+      filter:grayscale(0.6);
+    }
+    .adopt-card.locked-tier:hover{ transform:none; }
+    .adopt-card .pet-icon{ font-size:2.8rem; margin-bottom:6px; display:block; line-height:1; }
+    .adopt-card .pet-name{ font-size:0.85rem; font-weight:600; color:var(--text); margin-bottom:5px; }
+    .adopt-card .pet-cost{
+      font-size:0.78rem; color:var(--accent); font-weight:700;
+    }
+    .adopt-card .lock-overlay{
+      position:absolute; inset:0; background:rgba(0,0,0,0.5);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.5rem; border-radius:16px;
+    }
+
+    /* My Pet display */
+    .my-pet-display{
+      display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start;
+    }
+    .pet-avatar-wrap{
+      width:140px; height:140px; flex-shrink:0;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:20px;
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+    }
+    .pet-avatar-wrap.alive{ border-color:rgba(85,239,196,0.4); box-shadow:0 0 20px rgba(85,239,196,0.15); }
+    .pet-avatar-wrap.dying{ border-color:rgba(255,118,117,0.6); box-shadow:0 0 20px rgba(255,118,117,0.2); animation:dangerPulse 1.2s ease-in-out infinite; }
+    .pet-avatar-wrap.dead{ border-color:rgba(255,255,255,0.1); filter:grayscale(1); opacity:0.6; }
+    @keyframes dangerPulse{ 0%,100%{box-shadow:0 0 20px rgba(255,118,117,0.2);} 50%{box-shadow:0 0 30px rgba(255,118,117,0.5);} }
+
+    .pet-big-emoji{
+      font-size:4.5rem; line-height:1;
+      animation:petBounce 2s ease-in-out infinite;
+      position:relative; z-index:1;
+    }
+    @keyframes petBounce{ 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-8px) scale(1.05);} }
+    .pet-avatar-wrap.dying .pet-big-emoji{ animation:petWobble 0.5s ease-in-out infinite; }
+    @keyframes petWobble{ 0%,100%{transform:rotate(-5deg);} 50%{transform:rotate(5deg);} }
+    .pet-avatar-wrap.dead .pet-big-emoji{ animation:none; filter:grayscale(1); }
+
+    .pet-info-wrap{ flex:1; min-width:200px; }
+    .pet-name-display{
+      font-family:'Cinzel Decorative',cursive;
+      font-size:1.1rem; color:var(--accent); margin-bottom:8px;
+      text-shadow:0 0 10px rgba(241,196,15,0.4);
+    }
+    .pet-stage-wrap{ margin-bottom:10px; }
+    .pet-stage-label{ font-size:0.8rem; color:var(--text-dim); margin-bottom:4px; }
+    .stage-bar-wrap{
+      background:rgba(255,255,255,0.08); border-radius:999px;
+      height:10px; overflow:hidden; border:1px solid var(--border);
+    }
+    .stage-bar{
+      height:100%; background:linear-gradient(90deg,#a29bfe,#fd79a8);
+      transition:width 0.8s ease;
+      box-shadow:0 0 8px rgba(162,155,254,0.6);
+    }
+    .pet-health-info{ font-size:0.85rem; color:var(--text-dim); margin-top:6px; }
+    .pet-health-info span{ color:var(--text); font-weight:700; }
+
+    .pet-weekly-drain{
+      background:rgba(255,118,117,0.1); border:1px solid rgba(255,118,117,0.3);
+      border-radius:10px; padding:8px 12px; font-size:0.82rem; color:#ff7675;
+      margin-top:10px; position:relative; z-index:1;
+    }
+
+    .no-pet-message{
+      text-align:center; padding:30px 20px;
+      color:var(--text-dim); font-size:0.95rem; position:relative; z-index:1;
+    }
+    .no-pet-message .egg-icon{ font-size:3.5rem; display:block; margin-bottom:12px; animation:eggPulse 2s ease-in-out infinite; }
+    @keyframes eggPulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+    /* Food shop */
+    .food-grid{
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px;
+      position:relative; z-index:1;
+    }
+    .food-card{
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
+      border-radius:14px; padding:12px 8px; text-align:center;
+      cursor:pointer; transition:all 0.2s; position:relative;
+    }
+    .food-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(85,239,196,0.4);
+      box-shadow:0 6px 18px rgba(0,0,0,0.35);
+    }
+    .food-card.cant-afford{ opacity:0.45; cursor:not-allowed; }
+    .food-card.cant-afford:hover{ transform:none; }
+    .food-icon{ font-size:2rem; display:block; margin-bottom:4px; }
+    .food-name{ font-size:0.8rem; color:var(--text); font-weight:600; margin-bottom:4px; }
+    .food-cost{ font-size:0.78rem; color:var(--accent); font-weight:700; }
+    .food-tier-label{ font-size:0.7rem; color:var(--text-dim); margin-bottom:5px; }
+    .food-effect{
+      font-size:0.7rem; color:var(--good);
+      background:rgba(85,239,196,0.1); border-radius:6px; padding:2px 6px; margin-top:4px;
+    }
+
+    /* Pet stages display */
+    .stages-row{
+      display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1;
+    }
+    .stage-chip{
+      padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600;
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
+      color:var(--text-dim);
+    }
+    .stage-chip.current{
+      background:rgba(162,155,254,0.2); border-color:rgba(162,155,254,0.5);
+      color:var(--pet-precious); font-weight:800;
+    }
+    .stage-chip.completed{
+      background:rgba(85,239,196,0.1); border-color:rgba(85,239,196,0.3);
+      color:var(--pet-common);
+    }
+
+    /* Tier sections in adopt */
+    .tier-section{ margin-bottom:20px; position:relative; z-index:1; }
+    .tier-header{
+      display:flex; align-items:center; gap:10px; margin-bottom:10px;
+      padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .tier-cost-label{ font-size:0.82rem; color:var(--text-dim); margin-left:auto; }
+
+    /* ── ACTION BUTTONS ── */
+    .action-btn{
+      padding:10px 18px; border-radius:12px; border:none; cursor:pointer;
+      font-family:'Exo 2',sans-serif; font-weight:700; font-size:0.9rem;
+      transition:all 0.2s; letter-spacing:0.5px;
+    }
+    .action-btn:active{ transform:scale(0.97); }
+    .action-btn.primary{
+      background:linear-gradient(135deg,#7ed6ff,#74b9ff);
       color:#071021;
-      box-shadow:0 6px 14px rgba(0,0,0,.25), 0 0 18px rgba(126,214,255,0.35);
+      box-shadow:0 4px 14px rgba(126,214,255,0.35);
     }
-    .redeem-btn:active{transform:translateY(1px);}
-    .redeem-note{ font-size:12px; color:var(--text-dim); margin-top:6px; position:relative; z-index:1; }
+    .action-btn.primary:hover{ box-shadow:0 6px 20px rgba(126,214,255,0.5); }
+    .action-btn.golden{
+      background:linear-gradient(135deg,#ffe08a,#f1c40f);
+      color:#071021;
+      box-shadow:0 4px 14px rgba(241,196,15,0.35);
+    }
+    .action-btn.danger{
+      background:linear-gradient(135deg,#ff7675,#d63031);
+      color:#fff;
+      box-shadow:0 4px 14px rgba(255,118,117,0.35);
+    }
+    .action-btn:disabled{
+      opacity:0.4; cursor:not-allowed; box-shadow:none;
+    }
+
+    /* ── TOAST / POPUP ── */
+    #toast{
+      position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+      background:linear-gradient(135deg,rgba(126,214,255,0.95),rgba(241,196,15,0.9));
+      color:#071021; border-radius:20px; padding:11px 22px;
+      font-size:0.9rem; font-weight:700;
+      z-index:9999; opacity:0; transition:opacity 0.3s;
+      pointer-events:none; max-width:90vw; text-align:center;
+      box-shadow:0 4px 20px rgba(126,214,255,0.4);
+      font-family:'Exo 2',sans-serif;
+    }
+    #toast.show{ opacity:1; }
+
+    /* ── MODAL ── */
+    .modal-overlay{
+      position:fixed; inset:0; background:rgba(5,6,13,0.8);
+      z-index:200; display:none; align-items:center; justify-content:center;
+      padding:1rem; backdrop-filter:blur(4px);
+    }
+    .modal-overlay.open{ display:flex; }
+    .modal-box{
+      background:linear-gradient(180deg, rgba(20,30,70,0.98), rgba(10,15,40,0.98));
+      border:1px solid rgba(126,214,255,0.3);
+      border-radius:20px; max-width:600px; width:100%;
+      max-height:90vh; overflow-y:auto; padding:1.5rem;
+      box-shadow:0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(126,214,255,0.15);
+    }
+    .modal-title{
+      font-family:'Cinzel Decorative',cursive;
+      font-size:1.1rem; color:var(--accent-2);
+      margin-bottom:14px; padding-bottom:10px;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    .modal-close-btn{
+      float:right; background:rgba(255,255,255,0.1); border:none;
+      color:var(--text); cursor:pointer; border-radius:8px;
+      padding:4px 10px; font-size:1rem;
+    }
+
+    /* Adopt modal pet grid */
+    .modal-pet-grid{
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:8px;
+      margin:12px 0;
+    }
+    .modal-pet-opt{
+      border:1px solid rgba(255,255,255,0.12); border-radius:12px;
+      padding:8px 4px; text-align:center; cursor:pointer;
+      transition:all 0.15s; background:rgba(255,255,255,0.04);
+    }
+    .modal-pet-opt:hover{ border-color:rgba(241,196,15,0.4); background:rgba(241,196,15,0.07); }
+    .modal-pet-opt.selected{ border-color:var(--accent); background:rgba(241,196,15,0.12); }
+    .modal-pet-opt .opt-emoji{ font-size:1.8rem; display:block; }
+    .modal-pet-opt .opt-name{ font-size:0.72rem; color:var(--text-dim); margin-top:3px; }
+
+    footer{ margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8; position:relative; z-index:1; }
+
+    /* Death overlay */
+    .death-overlay{
+      position:fixed; inset:0; z-index:500;
+      background:rgba(5,6,13,0.9); display:none;
+      align-items:center; justify-content:center;
+      flex-direction:column; gap:16px;
+      backdrop-filter:blur(6px);
+    }
+    .death-overlay.show{ display:flex; }
+    .death-message{
+      text-align:center; padding:2rem;
+      background:rgba(20,10,10,0.9);
+      border:1px solid rgba(255,118,117,0.4);
+      border-radius:20px; max-width:380px;
+    }
+    .death-icon{ font-size:4rem; display:block; margin-bottom:12px; }
+    .death-title{ font-family:'Cinzel Decorative',cursive; font-size:1.4rem; color:#ff7675; margin-bottom:8px; }
+    .death-text{ color:var(--text-dim); font-size:0.9rem; line-height:1.6; }
+
+    /* Floating feed popup */
+    .feed-popup{
+      position:fixed; pointer-events:none;
+      font-size:1.6rem; z-index:999;
+      animation:feedFloat 1.5s ease-out forwards;
+    }
+    @keyframes feedFloat{
+      0%{ opacity:1; transform:translateY(0) scale(1); }
+      100%{ opacity:0; transform:translateY(-80px) scale(1.4); }
+    }
+
+    /* Paw decoration */
+    .paw-deco{
+      position:absolute; pointer-events:none; opacity:0.06;
+      font-size:6rem;
+    }
+
+    /* Alive days badge */
+    .alive-badge{
+      display:inline-flex; align-items:center; gap:4px;
+      background:rgba(85,239,196,0.1); border:1px solid rgba(85,239,196,0.3);
+      border-radius:20px; padding:3px 10px; font-size:0.78rem; color:var(--good);
+      font-weight:700; margin-top:6px;
+    }
   </style>
 </head>
-
 <body>
+
   <header>
-    <h1>🌙 月光寶盒</h1>
-    <div class="subtitle">Lunar Glow Cache — 專注練習 → 收集月光 → 點亮滿月循環</div>
+    <h1>🌙 月光寶盒 · 🐾 Pet Sanctuary</h1>
+    <div class="subtitle">Lunar Glow Cache — Earn moonlight · Adopt pets · Watch them grow 🌱</div>
   </header>
 
-  <section class="panel">
-    <div class="glass-box" id="glass-box">
-      <i class="corner c-tl"></i><i class="corner c-tr"></i>
-      <i class="corner c-bl"></i><i class="corner c-br"></i>
-      <div class="burst-layer" id="burst-layer"></div>
-      <div class="lunar-crystal" aria-hidden="true"></div>
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('moon')">🌙 Moonlight</button>
+    <button class="tab-btn" onclick="switchTab('pet')">🐾 My Pet</button>
+    <button class="tab-btn" onclick="switchTab('adopt')">🥚 Adopt</button>
+    <button class="tab-btn" onclick="switchTab('food')">🌿 Food Shop</button>
+  </div>
 
-      <div class="moon-ui-wrap">
-        <div class="card moon-ui">
-          <div class="moon-phase" id="moon-emoji">🌑</div>
-          <div class="moon-stats">
-            <div class="stat">目前月光點數：<b id="moon-total">0</b> pts</div>
-            <div class="stat" id="cycle-progress-stat">本輪滿月進度：<b id="moon-cycle">0</b> / 300</div>
-            <div class="progress-wrap"><div class="progress-bar" id="moon-progress"></div></div>
-            <div class="stat">月相階段：<b id="moon-phase-text">New Moon</b></div>
+  <!-- ═══ TAB: MOON ═══ -->
+  <div class="tab-content active" id="tab-moon">
+
+    <section class="panel">
+      <div class="glass-box" id="glass-box">
+        <i class="corner c-tl"></i><i class="corner c-tr"></i>
+        <i class="corner c-bl"></i><i class="corner c-br"></i>
+        <div class="burst-layer" id="burst-layer"></div>
+        <div class="lunar-crystal" aria-hidden="true"></div>
+        <div class="moon-ui-wrap">
+          <div class="card moon-ui">
+            <div class="moon-phase" id="moon-emoji">🌑</div>
+            <div class="moon-stats">
+              <div class="stat">Total Moonlight：<b id="moon-total">0</b> pts</div>
+              <div class="stat" id="cycle-progress-stat">Lunar Cycle：<b id="moon-cycle">0</b> / 300</div>
+              <div class="progress-wrap"><div class="progress-bar" id="moon-progress"></div></div>
+              <div class="stat">Phase：<b id="moon-phase-text">New Moon</b></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="panel row">
-    <div class="col card">
-      <h3>🚀 Lunar Missions（月光任務）</h3>
-
-      <div id="startMissionPanel" class="start-mission-panel">
-        <button id="startMissionBtn" class="start-mission-btn">🚀 Start Mission</button>
-        <div class="start-mission-hint">請先開始任務，才會開放月光收集與任務入口</div>
+    <section class="panel row">
+      <div class="col card">
+        <h3>🚀 Lunar Missions</h3>
+        <div id="startMissionPanel" class="start-mission-panel">
+          <button id="startMissionBtn" class="start-mission-btn">🚀 Start Mission</button>
+          <div class="start-mission-hint">Start a mission to unlock collection & task portals</div>
+        </div>
+        <div class="task-list" id="mission-list"></div>
+        <div class="hint">Complete missions → moonlight auto-collected by correct answers.</div>
       </div>
+    </section>
 
-      <div class="task-list" id="mission-list"></div>
+    <section class="panel card">
+      <h3>📜 Recent Lunar Logs</h3>
+      <div class="log-box" id="moon-log-box"></div>
+      <div class="hint" id="login-hint" style="display:none;">
+        Not logged in. Return to main site to log in and save your moonlight.
+        <a href="https://ducj-creator.github.io/Teacher-Shirley/" style="color:#7ed6ff;text-decoration:underline;">Main Site →</a>
+      </div>
+    </section>
 
-      <div class="hint">
-        完成任務後 <b>任務頁會自動回報正確題數</b>，系統即時收集月光。
+  </div>
+
+  <!-- ═══ TAB: MY PET ═══ -->
+  <div class="tab-content" id="tab-pet">
+
+    <section class="panel" id="pet-panel">
+      <span class="paw-deco" style="bottom:-20px;right:-20px;">🐾</span>
+      <div class="pet-section-title">🐾 My Companion</div>
+      <div id="pet-display-area">
+        <!-- filled by renderPetDisplay() -->
+      </div>
+    </section>
+
+    <section class="panel card" id="pet-stages-panel">
+      <h3>🌱 Growth Journey</h3>
+      <div class="stages-row" id="stages-row">
+        <!-- filled by renderStages() -->
+      </div>
+      <div class="hint" style="margin-top:8px;">Feed your pet better food to grow faster! Weekly upkeep costs <b style="color:var(--danger)">50 pts</b>. Pet dies when moonlight hits 0.</div>
+    </section>
+
+  </div>
+
+  <!-- ═══ TAB: ADOPT ═══ -->
+  <div class="tab-content" id="tab-adopt">
+
+    <section class="panel">
+      <div class="pet-section-title">🥚 Adoption Center</div>
+      <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Spend moonlight to adopt a companion. Higher-tier pets require more points but are rarer and more majestic. Weekly drain: <b style="color:var(--danger)">50 pts</b>.</div>
+
+      <div id="adopt-tiers">
+        <!-- filled by renderAdoptTiers() -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ═══ TAB: FOOD SHOP ═══ -->
+  <div class="tab-content" id="tab-food">
+
+    <section class="panel">
+      <div class="pet-section-title">🍃 Food Shop</div>
+      <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Redeem moonlight for food. Higher-grade food = faster growth. Each feeding restores health & advances your pet's stage.</div>
+      <div class="food-grid" id="food-grid">
+        <!-- filled by renderFoodShop() -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ═══ MODAL: Adopt confirm ═══ -->
+  <div class="modal-overlay" id="adoptModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeModal('adoptModal')">✕</button>
+      <div class="modal-title" id="adoptModalTitle">Choose a Pet</div>
+      <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:10px;" id="adoptModalSub"></p>
+      <div class="modal-pet-grid" id="adoptModalGrid"></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button class="action-btn golden" style="flex:1" onclick="confirmAdoptPet()">🐾 Adopt this Pet</button>
+        <button class="action-btn" style="background:rgba(255,255,255,0.1);color:var(--text);" onclick="closeModal('adoptModal')">Cancel</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="panel card">
-    <h3>🎁 月光兌換（Redeem Lunar Glow）</h3>
-    <div class="redeem-wrap">
-      <select id="redeemAmount" class="redeem-select">
-        <option value="">選擇兌換數值</option>
-        <option value="100">100 pts</option>
-        <option value="300">300 pts</option>
-        <option value="600">600 pts</option>
-        <option value="900">900 pts</option>
-        <option value="1200">1200 pts</option>
-        <option value="1500">1500 pts</option>
-      </select>
-      <button id="redeemBtn" class="redeem-btn">兌換扣除</button>
+  <!-- ═══ DEATH overlay ═══ -->
+  <div class="death-overlay" id="deathOverlay">
+    <div class="death-message">
+      <span class="death-icon">💀</span>
+      <div class="death-title">Your pet has passed away...</div>
+      <div class="death-text" id="deathText">Without enough moonlight, your pet could not survive. Visit the Adoption Center to find a new companion.</div>
+      <button class="action-btn golden" style="margin-top:16px;width:100%;" onclick="document.getElementById('deathOverlay').classList.remove('show');switchTab('adopt')">🥚 Go Adopt a New Pet</button>
     </div>
-    <div class="redeem-note">
-      兌換後會直接扣除月光，滿月進度以「目前總月光 % 300」自動計算。
-    </div>
-  </section>
+  </div>
 
-  <section class="panel card">
-    <h3>📜 Recent Lunar Logs（最近收集）</h3>
-    <div class="log-box" id="moon-log-box"></div>
-    <div class="hint" id="login-hint" style="display:none;">
-      你目前尚未登入，無法保存紀錄。請回主站登入後再使用月光寶盒。<br>
-      <a href="https://ducj-creator.github.io/Teacher-Shirley/" style="color:#7ed6ff;text-decoration:underline;">
-        回主站登入
-      </a>
-    </div>
-  </section>
+  <div id="toast"></div>
+  <footer>© Teacher Shirley's ET Platform 2025 · Pet Sanctuary Edition</footer>
 
-  <footer>© Teacher Shirley's ET Platform 2025</footer>
-
+  <!-- ═══════════════════════════════ FIREBASE ═══════════════════════════════ -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import {
@@ -506,7 +789,7 @@
       setPersistence, browserLocalPersistence
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import {
-      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment
+      getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -526,7 +809,6 @@
 
     const MOON_CYCLE = 300;
 
-    // 更新 MISSIONS 陣列，添加 Mission 5
     const MISSIONS = [
       { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
       { title: "Mission 2: iVocab詞彙選擇題", url: "https://ivocab-quiz.vercel.app/" },
@@ -535,387 +817,680 @@
       { title: "Mission 5: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/" }
     ];
 
+    // ═══ PET DEFINITIONS ═══
+    const PET_TIERS = [
+      {
+        id:'common', label:'Common', cost:100, count:20, color:'var(--pet-common)',
+        pets:[
+          {id:'hamster',n:'Hamster',emoji:'🐹'},
+          {id:'rabbit',n:'Rabbit',emoji:'🐰'},
+          {id:'chick',n:'Baby Chick',emoji:'🐥'},
+          {id:'cat',n:'Cat',emoji:'🐱'},
+          {id:'dog',n:'Dog',emoji:'🐶'},
+          {id:'duck',n:'Duck',emoji:'🦆'},
+          {id:'frog',n:'Frog',emoji:'🐸'},
+          {id:'turtle',n:'Turtle',emoji:'🐢'},
+          {id:'mouse',n:'Mouse',emoji:'🐭'},
+          {id:'hedgehog',n:'Hedgehog',emoji:'🦔'},
+          {id:'snail',n:'Snail',emoji:'🐌'},
+          {id:'butterfly',n:'Butterfly',emoji:'🦋'},
+          {id:'bee',n:'Bee',emoji:'🐝'},
+          {id:'ladybug',n:'Ladybug',emoji:'🐞'},
+          {id:'fish',n:'Fish',emoji:'🐟'},
+          {id:'goldfish',n:'Goldfish',emoji:'🐠'},
+          {id:'crab',n:'Crab',emoji:'🦀'},
+          {id:'parrot',n:'Parrot',emoji:'🦜'},
+          {id:'owl',n:'Owl',emoji:'🦉'},
+          {id:'penguin',n:'Penguin',emoji:'🐧'},
+        ]
+      },
+      {
+        id:'rare', label:'Rare', cost:300, count:10, color:'var(--pet-rare)',
+        pets:[
+          {id:'fox',n:'Fox',emoji:'🦊'},
+          {id:'raccoon',n:'Raccoon',emoji:'🦝'},
+          {id:'koala',n:'Koala',emoji:'🐨'},
+          {id:'panda',n:'Panda',emoji:'🐼'},
+          {id:'deer',n:'Deer',emoji:'🦌'},
+          {id:'flamingo',n:'Flamingo',emoji:'🦩'},
+          {id:'axolotl',n:'Axolotl',emoji:'🦎'},
+          {id:'capybara',n:'Capybara',emoji:'🦫'},
+          {id:'sloth',n:'Sloth',emoji:'🦥'},
+          {id:'otter',n:'Otter',emoji:'🦦'},
+        ]
+      },
+      {
+        id:'precious', label:'Precious', cost:500, count:10, color:'var(--pet-precious)',
+        pets:[
+          {id:'redpanda',n:'Red Panda',emoji:'🦊'},
+          {id:'tiger',n:'Tiger Cub',emoji:'🐯'},
+          {id:'lion',n:'Lion Cub',emoji:'🦁'},
+          {id:'elephant',n:'Elephant',emoji:'🐘'},
+          {id:'giraffe',n:'Giraffe',emoji:'🦒'},
+          {id:'zebra',n:'Zebra',emoji:'🦓'},
+          {id:'dolphin',n:'Dolphin',emoji:'🐬'},
+          {id:'whale',n:'Whale',emoji:'🐳'},
+          {id:'seal',n:'Seal',emoji:'🦭'},
+          {id:'octopus',n:'Octopus',emoji:'🐙'},
+        ]
+      },
+      {
+        id:'unique', label:'Unique', cost:800, count:5, color:'var(--pet-unique)',
+        pets:[
+          {id:'polarbear',n:'Polar Bear',emoji:'🐻‍❄️'},
+          {id:'narwhal',n:'Narwhal',emoji:'🦄'},
+          {id:'eagle',n:'Eagle',emoji:'🦅'},
+          {id:'shark',n:'Great Shark',emoji:'🦈'},
+          {id:'phoenix',n:'Phoenix',emoji:'🦚'},
+        ]
+      },
+      {
+        id:'legendary', label:'Legendary', cost:1000, count:1, color:'var(--pet-legendary)',
+        pets:[
+          {id:'dragon',n:'Dragon',emoji:'🐉'},
+        ]
+      },
+    ];
+
+    // Stage thresholds: food points accumulated
+    const STAGES = [
+      {name:'🥚 Egg',min:0},
+      {name:'🐣 Hatch',min:30},
+      {name:'🍼 Baby',min:80},
+      {name:'🌱 Infant',min:160},
+      {name:'🌿 Toddler',min:280},
+      {name:'🌳 Child',min:440},
+      {name:'⚡ Teenager',min:660},
+      {name:'🌟 Adult',min:940},
+    ];
+
+    const FOOD_TIERS = [
+      {
+        id:'common', label:'Common Food', cost:50, growthPts:5, color:'var(--pet-common)',
+        items:[
+          {name:'Cabbage',emoji:'🥬'},{name:'Carrot',emoji:'🥕'},
+          {name:'Leaves',emoji:'🍃'},{name:'Apple',emoji:'🍎'},
+        ]
+      },
+      {
+        id:'rare', label:'Rare Food', cost:100, growthPts:12, color:'var(--pet-rare)',
+        items:[
+          {name:'Beans',emoji:'🫘'},{name:'Cucumber',emoji:'🥒'},
+          {name:'Strawberry',emoji:'🍓'},{name:'Insects',emoji:'🐛'},
+        ]
+      },
+      {
+        id:'precious', label:'Precious Food', cost:200, growthPts:25, color:'var(--pet-precious)',
+        items:[
+          {name:'Blueberries',emoji:'🫐'},{name:'Grapes',emoji:'🍇'},
+          {name:'Tomato',emoji:'🍅'},{name:'Egg',emoji:'🥚'},
+        ]
+      },
+      {
+        id:'hi-protein', label:'Hi-Protein Food', cost:300, growthPts:45, color:'var(--pet-unique)',
+        items:[
+          {name:'Fish',emoji:'🐟'},{name:'Shrimp',emoji:'🍤'},
+          {name:'Chicken',emoji:'🍗'},{name:'Beef',emoji:'🥩'},{name:'Cranberry',emoji:'🍒'},
+        ]
+      },
+      {
+        id:'superfood', label:'Super Food', cost:500, growthPts:80, color:'var(--pet-legendary)',
+        items:[
+          {name:'Salmon',emoji:'🐠'},{name:'Lobster',emoji:'🦞'},
+          {name:'Lamb',emoji:'🍖'},{name:'Turkey',emoji:'🦃'},{name:'Durian',emoji:'🍈'},
+        ]
+      },
+    ];
+
+    // ═══ STATE ═══
     let currentUser = null;
     let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
-
+    let petData = null; // { id, name, emoji, tier, tierId, adoptedAt, growthPts, stageIndex, alive, lastDrainTime, deadPets:[] }
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
 
-    function setMissionStarted(v){
-      missionStarted = v;
-      sessionStorage.setItem("missionStarted", v ? "1" : "0");
+    let pendingAdoptTierId = null;
+    let selectedAdoptPetId = null;
 
-      const panel = document.getElementById("startMissionPanel");
-      if(panel) panel.style.display = v ? "none" : "flex";
+    // ═══ WEEKLY DRAIN ═══
+    function checkWeeklyDrain() {
+      if (!petData || !petData.alive) return;
+      const now = Date.now();
+      const lastDrain = petData.lastDrainTime || petData.adoptedAt || now;
+      const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+      const weeksPassed = Math.floor((now - lastDrain) / msPerWeek);
+      if (weeksPassed < 1) return;
 
-      document.querySelectorAll("#mission-list a").forEach(a=>{
-        a.classList.toggle("locked", !v);
-      });
+      const drain = weeksPassed * 50;
+      moonData.totalGlow = Math.max(0, moonData.totalGlow - drain);
+      petData.lastDrainTime = lastDrain + weeksPassed * msPerWeek;
+
+      if (moonData.totalGlow <= 0 && petData.alive) {
+        killPet("Your moonlight ran out. Your pet couldn't survive without energy.");
+      }
+      savePetLocal();
     }
 
-    document.addEventListener("click", (e)=>{
-      if(e.target?.id === "startMissionBtn"){
-        setMissionStarted(true);
+    function killPet(reason) {
+      if (!petData) return;
+      petData.alive = false;
+      const deceased = { id: petData.id, name: petData.name, emoji: petData.emoji, diedAt: Date.now() };
+      if (!petData.deadPets) petData.deadPets = [];
+      petData.deadPets.push(deceased);
+      savePetLocal();
+      document.getElementById('deathText').textContent = reason || "Your pet has passed away...";
+      document.getElementById('deathOverlay').classList.add('show');
+      renderPetDisplay();
+    }
+
+    // ═══ LOCAL STORAGE ═══
+    function savePetLocal() {
+      localStorage.setItem('moonlight_pet_v1', JSON.stringify(petData));
+    }
+    function loadPetLocal() {
+      const raw = localStorage.getItem('moonlight_pet_v1');
+      if (raw) petData = JSON.parse(raw);
+    }
+
+    // ═══ TAB SWITCHING ═══
+    window.switchTab = function(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tab === 'moon' ? 'moonlight' : tab === 'pet' ? 'my pet' : tab === 'adopt' ? 'adopt' : 'food')) {
+          btn.classList.add('active');
+        }
+      });
+      if (tab === 'pet') { checkWeeklyDrain(); renderPetDisplay(); renderStages(); }
+      if (tab === 'adopt') renderAdoptTiers();
+      if (tab === 'food') renderFoodShop();
+    };
+
+    // ═══ RENDER PET DISPLAY ═══
+    window.renderPetDisplay = function() {
+      const area = document.getElementById('pet-display-area');
+      if (!petData || !petData.id) {
+        area.innerHTML = `
+          <div class="no-pet-message">
+            <span class="egg-icon">🥚</span>
+            <p>You haven't adopted a pet yet!</p>
+            <p style="font-size:0.82rem;margin-top:6px;margin-bottom:16px;">Visit the <b style="color:var(--accent-2)">Adoption Center</b> to choose your companion.</p>
+            <button class="action-btn golden" onclick="switchTab('adopt')">🥚 Go Adopt a Pet</button>
+          </div>`;
+        return;
       }
+
+      const stage = STAGES[petData.stageIndex || 0];
+      const nextStage = STAGES[(petData.stageIndex || 0) + 1];
+      const stagePct = nextStage
+        ? Math.min(100, Math.round(((petData.growthPts || 0) - stage.min) / (nextStage.min - stage.min) * 100))
+        : 100;
+      const tier = PET_TIERS.find(t => t.id === petData.tierId) || PET_TIERS[0];
+      const isAlive = petData.alive !== false;
+      const isDying = moonData.totalGlow < 100 && isAlive;
+
+      area.innerHTML = `
+        <div class="my-pet-display">
+          <div class="pet-avatar-wrap ${isAlive ? (isDying ? 'dying' : 'alive') : 'dead'}">
+            <div class="pet-big-emoji">${petData.emoji || '🐾'}</div>
+          </div>
+          <div class="pet-info-wrap">
+            <div class="pet-name-display">${petData.name || petData.id}</div>
+            <div style="margin-bottom:8px;">
+              <span class="tier-badge tier-${tier.id}">${tier.label}</span>
+              ${!isAlive ? '<span style="color:var(--danger);font-size:0.85rem;margin-left:8px;">💀 Passed Away</span>' : ''}
+              ${isDying && isAlive ? '<span style="color:var(--danger);font-size:0.85rem;margin-left:8px;">⚠️ Low moonlight!</span>' : ''}
+            </div>
+            <div class="pet-stage-wrap">
+              <div class="pet-stage-label">Growth Stage: <b style="color:var(--accent-2);">${stage.name}</b></div>
+              <div class="stage-bar-wrap" style="margin-top:4px;">
+                <div class="stage-bar" style="width:${stagePct}%"></div>
+              </div>
+              ${nextStage ? `<div style="font-size:0.75rem;color:var(--text-dim);margin-top:3px;">Next: ${nextStage.name} · ${stagePct}%</div>` : '<div style="font-size:0.75rem;color:var(--pet-legendary);margin-top:3px;">🌟 Fully grown!</div>'}
+            </div>
+            <div class="pet-health-info">
+              Growth Points: <span>${petData.growthPts || 0}</span> · Moonlight Remaining: <span style="color:${isDying?'var(--danger)':'var(--accent)'};">${moonData.totalGlow}</span> pts
+              <div class="alive-badge">🌙 Alive for ${Math.floor(((Date.now() - (petData.adoptedAt || Date.now())) / 86400000))} days</div>
+            </div>
+            ${isAlive ? `
+            <div class="pet-weekly-drain">⏳ Weekly upkeep: <b>50 moonlight pts</b> auto-deducted. Keep earning to keep your pet alive!</div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+              <button class="action-btn primary" onclick="switchTab('food')">🍃 Feed Pet</button>
+              ${!isAlive ? '' : `<button class="action-btn danger" onclick="forceKillPet()">😢 Release Pet</button>`}
+            </div>` : `
+            <div style="margin-top:10px;">
+              <button class="action-btn golden" onclick="switchTab('adopt')">🥚 Adopt a New Pet</button>
+            </div>`}
+          </div>
+        </div>`;
+    };
+
+    window.forceKillPet = function() {
+      if (confirm("Are you sure you want to release your pet? This cannot be undone.")) {
+        killPet("You chose to release your pet. Thank you for the memories 🌙");
+      }
+    };
+
+    // ═══ RENDER STAGES ═══
+    window.renderStages = function() {
+      const row = document.getElementById('stages-row');
+      const currentStage = petData ? (petData.stageIndex || 0) : -1;
+      row.innerHTML = STAGES.map((s, i) => {
+        let cls = 'stage-chip';
+        if (i < currentStage) cls += ' completed';
+        if (i === currentStage) cls += ' current';
+        return `<div class="${cls}">${s.name}</div>`;
+      }).join('');
+    };
+
+    // ═══ RENDER ADOPT TIERS ═══
+    window.renderAdoptTiers = function() {
+      const container = document.getElementById('adopt-tiers');
+      const hasPet = petData && petData.alive;
+      container.innerHTML = PET_TIERS.map(tier => {
+        const canAfford = moonData.totalGlow >= tier.cost;
+        return `
+          <div class="tier-section">
+            <div class="tier-header">
+              <span class="tier-badge tier-${tier.id}">${tier.label}</span>
+              <span class="tier-cost-label">${tier.cost} 🌙 moonlight</span>
+            </div>
+            <div class="adopt-grid">
+              ${tier.pets.map(pet => `
+                <div class="adopt-card ${!canAfford || hasPet ? 'locked-tier' : ''}" 
+                     onclick="${canAfford && !hasPet ? `openAdoptModal('${tier.id}','${pet.id}')` : ''}">
+                  <span class="pet-icon">${pet.emoji}</span>
+                  <div class="pet-name">${pet.n}</div>
+                  <div class="pet-cost">${tier.cost} pts</div>
+                  ${!canAfford ? `<div class="lock-overlay">🔒</div>` : ''}
+                  ${hasPet ? `<div class="lock-overlay" title="You already have a pet">🐾</div>` : ''}
+                </div>`).join('')}
+            </div>
+          </div>`;
+      }).join('');
+
+      if (hasPet) {
+        container.insertAdjacentHTML('afterbegin', `
+          <div style="background:rgba(126,214,255,0.08);border:1px solid rgba(126,214,255,0.2);border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:0.88rem;color:var(--accent-2);position:relative;z-index:1;">
+            🐾 You already have an active pet. Release or wait until it passes to adopt a new one.
+          </div>`);
+      }
+    };
+
+    // ═══ OPEN ADOPT MODAL ═══
+    window.openAdoptModal = function(tierId, petId) {
+      const tier = PET_TIERS.find(t => t.id === tierId);
+      if (!tier) return;
+      pendingAdoptTierId = tierId;
+      selectedAdoptPetId = petId;
+
+      document.getElementById('adoptModalTitle').textContent = `🥚 Adopt a ${tier.label} Pet`;
+      document.getElementById('adoptModalSub').textContent = `Cost: ${tier.cost} moonlight pts · You have: ${moonData.totalGlow} pts`;
+
+      document.getElementById('adoptModalGrid').innerHTML = tier.pets.map(p => `
+        <div class="modal-pet-opt ${p.id === petId ? 'selected' : ''}" onclick="selectAdoptPet('${p.id}',this)">
+          <span class="opt-emoji">${p.emoji}</span>
+          <div class="opt-name">${p.n}</div>
+        </div>`).join('');
+
+      openModal('adoptModal');
+    };
+
+    window.selectAdoptPet = function(petId, el) {
+      selectedAdoptPetId = petId;
+      document.querySelectorAll('.modal-pet-opt').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+    };
+
+    window.confirmAdoptPet = async function() {
+      if (!selectedAdoptPetId || !pendingAdoptTierId) return;
+      const tier = PET_TIERS.find(t => t.id === pendingAdoptTierId);
+      if (!tier) return;
+      if (moonData.totalGlow < tier.cost) {
+        showToast(`🌙 Not enough moonlight! Need ${tier.cost} pts.`);
+        return;
+      }
+      const pet = tier.pets.find(p => p.id === selectedAdoptPetId);
+      if (!pet) return;
+
+      moonData.totalGlow -= tier.cost;
+      moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+
+      petData = {
+        id: pet.id,
+        name: pet.n,
+        emoji: pet.emoji,
+        tierId: tier.id,
+        adoptedAt: Date.now(),
+        growthPts: 0,
+        stageIndex: 0,
+        alive: true,
+        lastDrainTime: Date.now(),
+        deadPets: (petData && petData.deadPets) || [],
+      };
+      savePetLocal();
+
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const logEntry = {
+          time: new Date().toISOString(),
+          glow: tier.cost,
+          type: "redeem",
+          source: `🐾 Adopted ${pet.n} (${tier.label})`
+        };
+        await updateDoc(userRef, {
+          moonGlowTotal: moonData.totalGlow,
+          moonGlowCycle: moonData.cycleGlow,
+          moonGlowLogs: arrayUnion(logEntry),
+        }).catch(()=>{});
+        moonData.logs.push(logEntry);
+      }
+
+      closeModal('adoptModal');
+      renderMoonUI();
+      showToast(`🐾 Welcome, ${pet.n}! Your new companion has hatched! 🥚`);
+      setTimeout(() => switchTab('pet'), 800);
+    };
+
+    // ═══ RENDER FOOD SHOP ═══
+    window.renderFoodShop = function() {
+      const grid = document.getElementById('food-grid');
+      grid.innerHTML = FOOD_TIERS.map(tier => tier.items.map(item => {
+        const canAfford = moonData.totalGlow >= tier.cost;
+        const hasPet = petData && petData.alive;
+        return `
+          <div class="food-card ${!canAfford || !hasPet ? 'cant-afford' : ''}" 
+               onclick="${canAfford && hasPet ? `feedPet('${tier.id}','${item.name}','${item.emoji}')` : ''}">
+            <span class="food-icon">${item.emoji}</span>
+            <div class="food-tier-label" style="color:${tier.color}">${tier.label}</div>
+            <div class="food-name">${item.name}</div>
+            <div class="food-cost">🌙 ${tier.cost} pts</div>
+            <div class="food-effect">+${tier.growthPts} growth</div>
+          </div>`;
+      }).join('')).join('');
+    };
+
+    // ═══ FEED PET ═══
+    window.feedPet = async function(tierId, foodName, foodEmoji) {
+      if (!petData || !petData.alive) { showToast('You need a pet first!'); return; }
+      const tier = FOOD_TIERS.find(t => t.id === tierId);
+      if (!tier) return;
+      if (moonData.totalGlow < tier.cost) { showToast(`Not enough moonlight! Need ${tier.cost} pts.`); return; }
+
+      moonData.totalGlow -= tier.cost;
+      moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+      petData.growthPts = (petData.growthPts || 0) + tier.growthPts;
+
+      // Update stage
+      let newStage = 0;
+      for (let i = STAGES.length - 1; i >= 0; i--) {
+        if (petData.growthPts >= STAGES[i].min) { newStage = i; break; }
+      }
+      const leveledUp = newStage > (petData.stageIndex || 0);
+      petData.stageIndex = newStage;
+      savePetLocal();
+
+      // Floating food popup
+      const popup = document.createElement('div');
+      popup.className = 'feed-popup';
+      popup.textContent = foodEmoji;
+      popup.style.left = `${30 + Math.random() * 40}vw`;
+      popup.style.top = `${40 + Math.random() * 20}vh`;
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 1600);
+
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const logEntry = {
+          time: new Date().toISOString(),
+          glow: tier.cost,
+          type: "redeem",
+          source: `🍃 Fed ${foodName} to ${petData.name}`
+        };
+        await updateDoc(userRef, {
+          moonGlowTotal: moonData.totalGlow,
+          moonGlowCycle: moonData.cycleGlow,
+          moonGlowLogs: arrayUnion(logEntry),
+        }).catch(()=>{});
+        moonData.logs.push(logEntry);
+      }
+
+      renderMoonUI();
+      renderFoodShop();
+      showToast(`${foodEmoji} ${petData.name} ate ${foodName}! +${tier.growthPts} growth pts`);
+      if (leveledUp) {
+        setTimeout(() => showToast(`🌟 ${petData.name} grew up! Now: ${STAGES[newStage].name}`), 1000);
+        burstStars();
+      }
+      if (moonData.totalGlow <= 0 && petData.alive) {
+        setTimeout(() => killPet("Your moonlight ran out while feeding. Your pet couldn't survive."), 500);
+      }
+    };
+
+    // ═══ MOON UI ═══
+    function setMissionStarted(v) {
+      missionStarted = v;
+      sessionStorage.setItem("missionStarted", v ? "1" : "0");
+      const panel = document.getElementById("startMissionPanel");
+      if (panel) panel.style.display = v ? "none" : "flex";
+      document.querySelectorAll("#mission-list a").forEach(a => a.classList.toggle("locked", !v));
+    }
+
+    document.addEventListener("click", (e) => {
+      if (e.target?.id === "startMissionBtn") setMissionStarted(true);
     });
 
-    function renderMissions(){
+    function renderMissions() {
       const listEl = document.getElementById("mission-list");
       if (!listEl) return;
       listEl.innerHTML = "";
-
       MISSIONS.forEach(m => {
         const a = document.createElement("a");
-
         if (m.url && m.url.trim() !== "") {
           a.href = m.url;
-          a.onclick = startLunarMission;
+          a.onclick = (e) => { e.preventDefault(); window.open(m.url, "_blank"); };
           a.innerHTML = `<div>${m.title}</div><div class="task-tag">開啟任務</div>`;
         } else {
           a.href = "javascript:void(0)";
-          a.onclick = (e)=>{ e.preventDefault(); alert(`${m.title} 尚未開放`); };
+          a.onclick = (e) => { e.preventDefault(); alert(`${m.title} not yet available`); };
           a.innerHTML = `<div>${m.title}</div><div class="task-tag">尚未開放</div>`;
         }
-
         listEl.appendChild(a);
       });
-
       setMissionStarted(missionStarted);
     }
 
-    // *** 簡化後的月相判斷邏輯：達到 Full Moon 後就鎖定，直到下次循環開始 (p=0) ***
-    function getPhaseByValue(val){
-      if (val <= 30)  return {emoji:"🌑", text:"New Moon / 新月"};
-      if (val <= 60)  return {emoji:"🌒", text:"Waxing Crescent / 蛾眉月"};
-      if (val <= 120) return {emoji:"🌓", text:"First Quarter / 上弦月"};
-      if (val <= 200) return {emoji:"🌔", text:"Waxing Gibbous / 盈凸月"};
-      // 201 - 300 (包含以上)
-      return {emoji:"🌕", text:"Full Moon / 滿月"}; 
+    function getPhaseByValue(val) {
+      if (val <= 30) return {emoji:"🌑", text:"New Moon"};
+      if (val <= 60) return {emoji:"🌒", text:"Waxing Crescent"};
+      if (val <= 120) return {emoji:"🌓", text:"First Quarter"};
+      if (val <= 200) return {emoji:"🌔", text:"Waxing Gibbous"};
+      return {emoji:"🌕", text:"Full Moon"};
     }
 
-    // [修正] 當數值進入 201-300 區間時，視為滿月狀態 (觸發發光特效)
-    function isFullMoonState(val){ return val > 200; } 
+    function isFullMoonState(val){ return val > 200; }
 
-    function burstStars(){
+    function burstStars() {
       const layer = document.getElementById("burst-layer");
       if (!layer) return;
-      const stars = ["✨","⭐","🌟","💫"];
-      const count = 18;
-      for (let i=0;i<count;i++){
+      const stars = ["✨","⭐","🌟","💫","🐾","🥚"];
+      for (let i = 0; i < 18; i++) {
         const s = document.createElement("span");
         s.className = "burst-star";
-        s.innerText = stars[Math.floor(Math.random()*stars.length)];
-        const angle = Math.random()*Math.PI*2;
-        const dist  = 70 + Math.random()*100;
-        s.style.left = "50%";
-        s.style.top  = "50%";
+        s.innerText = stars[Math.floor(Math.random() * stars.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 70 + Math.random() * 100;
+        s.style.left = "50%"; s.style.top = "50%";
         s.style.setProperty("--dx", `${Math.cos(angle)*dist}px`);
         s.style.setProperty("--dy", `${Math.sin(angle)*dist}px`);
         s.style.fontSize = `${10 + Math.random()*10}px`;
         s.style.animationDelay = `${Math.random()*0.25}s`;
         layer.appendChild(s);
-        s.addEventListener("animationend", ()=> s.remove());
+        s.addEventListener("animationend", () => s.remove());
       }
     }
 
     let prevIsFull = false;
 
-    // 修正：強制由總積分推算所有 UI 數值，確保 1/29 之前的累積能正確顯示
-    function renderMoonUI(){
+    window.renderMoonUI = function() {
       const totalEl = document.getElementById("moon-total");
-      const barEl   = document.getElementById("moon-progress");
+      const barEl = document.getElementById("moon-progress");
       const emojiEl = document.getElementById("moon-emoji");
       const phaseEl = document.getElementById("moon-phase-text");
       const glassBox = document.getElementById("glass-box");
-      const cycleProgressStatEl = document.getElementById("cycle-progress-stat");
+      const cycleStatEl = document.getElementById("cycle-progress-stat");
 
       const totalGlow = moonData.totalGlow || 0;
-      // 關鍵點：由總分動態推算循環進度 (300 點一輪)
-      const cycleGlowValue = totalGlow % MOON_CYCLE; 
+      const cycleGlowValue = totalGlow % MOON_CYCLE;
       const currentCycleNum = Math.floor(totalGlow / MOON_CYCLE) + 1;
 
       if (totalEl) totalEl.innerText = totalGlow;
-
-      // 更新文字描述
-      if (cycleProgressStatEl) {
-        cycleProgressStatEl.innerHTML = `第 <b>${currentCycleNum}</b> 個月光循環：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
-      }
-
-      // 更新進度條
+      if (cycleStatEl) cycleStatEl.innerHTML = `Cycle <b>${currentCycleNum}</b>：<b id="moon-cycle">${cycleGlowValue}</b> / ${MOON_CYCLE}`;
       const percent = Math.min(cycleGlowValue / MOON_CYCLE, 1);
       if (barEl) barEl.style.width = `${percent * 100}%`;
       const phase = getPhaseByValue(cycleGlowValue);
       if (emojiEl) emojiEl.innerText = phase.emoji;
       if (phaseEl) phaseEl.innerText = phase.text;
-
       const nowIsFull = isFullMoonState(cycleGlowValue);
       if (glassBox) glassBox.classList.toggle("full-moon", nowIsFull);
-
       if (nowIsFull && !prevIsFull) burstStars();
       prevIsFull = nowIsFull;
-
       renderLogs();
-    }
+    };
 
-    // 修正 loadMoonData 函數的語法錯誤
-    async function loadMoonData(uid) {
-      try {
-        const userRef = doc(db, "users", uid);
-        const snap = await getDoc(userRef);
-
-        if(!snap.exists()){
-          await setDoc(userRef,{ moonGlowTotal:0, moonGlowLogs:[] },{ merge:true });
-          renderMoonUI();
-          return;
-        }
-
-        const data = snap.data();
-        const logs = data.moonGlowLogs || [];
-
-        let total = 0;
-        logs.forEach(l=>{
-          if(l.type === "earn")   total += l.glow || 0;
-          if(l.type === "redeem") total -= l.glow || 0;
-        });
-
-        moonData.totalGlow = Math.max(total,0);
-        moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
-        moonData.logs = logs;
-
-        await updateDoc(userRef,{
-          moonGlowTotal: moonData.totalGlow
-        });
-
-        renderMoonUI();
-      } catch (err) {
-        console.error("月光數據加載失敗:", err);
-      }
-    }
-
-    function renderLogs(){
+    function renderLogs() {
       const logBox = document.getElementById("moon-log-box");
-      if(!logBox) return;
+      if (!logBox) return;
       logBox.innerHTML = "";
       const logs = [...(moonData.logs || [])].reverse().slice(0, 12);
-      logs.forEach(l=>{
+      logs.forEach(l => {
         const div = document.createElement("div");
         div.className = "log-item";
-        const time = new Date(l.time).toLocaleString("zh-TW",{ hour12:false });
+        const time = new Date(l.time).toLocaleString("zh-TW", {hour12: false});
         const sign = l.type === "earn" ? "+" : "-";
         const color = l.type === "earn" ? "#55efc4" : "#ff7675";
-        const source = l.source || "任務";
-        div.innerHTML = `<div>${source} <span style="color:${color}">${sign}${l.glow}</span></div><div class="log-time">${time}</div>`;
+        div.innerHTML = `<div>${l.source || "任務"} <span style="color:${color}">${sign}${l.glow}</span></div><div class="log-time">${time}</div>`;
         logBox.appendChild(div);
       });
-      if(logs.length===0){
+      if (!logs.length) {
         const empty = document.createElement("div");
         empty.className = "log-item";
-        empty.innerHTML = `<div>尚無收集紀錄</div><div class="log-time">--</div>`;
+        empty.innerHTML = `<div>No logs yet</div><div class="log-time">--</div>`;
         logBox.appendChild(empty);
       }
     }
 
-    function recomputeCycleFromTotal(total){
-      return total % MOON_CYCLE;
+    async function loadMoonData(uid) {
+      try {
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
+          await setDoc(userRef, {moonGlowTotal:0, moonGlowLogs:[]}, {merge:true});
+          renderMoonUI(); return;
+        }
+        const data = snap.data();
+        const logs = data.moonGlowLogs || [];
+        let total = 0;
+        logs.forEach(l => { if (l.type==="earn") total += l.glow||0; if (l.type==="redeem") total -= l.glow||0; });
+        moonData.totalGlow = Math.max(total, 0);
+        moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
+        moonData.logs = logs;
+        await updateDoc(userRef, {moonGlowTotal: moonData.totalGlow});
+        renderMoonUI();
+        checkWeeklyDrain();
+      } catch (err) {
+        console.error("Moon data load failed:", err);
+      }
     }
 
-    window.startLunarMission = function(event){
-      event.preventDefault();
-      window.open(event.currentTarget.href, "_blank");
-    };
-
-    // 修正：允許更多來源，特別是 iVocab Reader
-    function isAllowedOrigin(origin){
+    // ═══ MESSAGE HANDLER ═══
+    function isAllowedOrigin(origin) {
       if (!origin) return false;
-      // 允許的來源列表
-      const allowedOrigins = [
+      const allowed = [
         "https://ducj-creator.github.io",
-        "https://ducj-creator.github.io/Teacher-Shirley",
         "https://ivocab-quiz.vercel.app",
         "https://shirley-ai-reading.vercel.app",
         "https://ducj-creator.github.io/iVocab-Readers",
-        "http://localhost"  // 本地開發也允許
+        "http://localhost"
       ];
-      
-      // 檢查是否匹配任何允許的來源
-      return allowedOrigins.some(allowed => origin.startsWith(allowed));
+      return allowed.some(a => origin.startsWith(a));
     }
 
-    // [修改] 接收 mission 參數並存入 source - 添加調試信息
     window.addEventListener("message", async (event) => {
-      console.log("月光寶盒收到消息:", event.origin, event.data);
-      
-      if (!isAllowedOrigin(event.origin)) {
-        console.log("來源不允許:", event.origin);
-        return;
-      }
-      
+      if (!isAllowedOrigin(event.origin)) return;
       const data = event.data || {};
-      console.log("消息數據:", data);
-      
-      if (data.type !== "LUNAR_MISSION_RESULT") {
-        console.log("消息類型不匹配:", data.type);
-        return;
-      }
-
+      if (data.type !== "LUNAR_MISSION_RESULT") return;
       const correctVal = parseInt(data.correct) || 0;
-      if (correctVal <= 0) {
-        console.log("正確題數為0或無效");
-        return;
-      }
-
-      // 優先讀取 data.mission (配合 GSAT)，其次 data.title
-      const missionTitle = data.mission || data.title || "Lunar Mission"; 
-      console.log("任務標題:", missionTitle);
-
-      if(!missionStarted){
-        alert("請先回月光寶盒按 Start Mission，再進行任務回報 🌙");
-        return;
-      }
-
-      if (!currentUser){
-        document.getElementById("login-hint").style.display = "block";
-        alert("請先回主站登入，才能記錄月光 🌙");
-        return;
-      }
+      if (correctVal <= 0) return;
+      const missionTitle = data.mission || data.title || "Lunar Mission";
+      if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
+      if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
 
       const glow = correctVal;
       const userRef = doc(db, "users", currentUser.uid);
-
       const newTotal = (moonData.totalGlow || 0) + glow;
-      const newCycle = recomputeCycleFromTotal(newTotal);
-
-      const logEntry = {
-        time: new Date().toISOString(),
-        correct: correctVal,
-        wrong: 0,
-        glow,
-        type: "earn",
-        source: missionTitle // 儲存來源
-      };
+      const newCycle = newTotal % MOON_CYCLE;
+      const logEntry = { time: new Date().toISOString(), correct: correctVal, wrong:0, glow, type:"earn", source: missionTitle };
 
       try {
         await updateDoc(userRef, {
-          moonGlowTotal: newTotal,
-          moonGlowCycle: newCycle,
+          moonGlowTotal: newTotal, moonGlowCycle: newCycle,
           moonGlowLogs: arrayUnion(logEntry),
-          activityLogs: arrayUnion({
-            date: new Date().toISOString(),
-            type: "Lunar Glow",
-            detail: `Collected ${glow} pts from ${missionTitle}`
-          })
+          activityLogs: arrayUnion({ date: new Date().toISOString(), type:"Lunar Glow", detail:`Collected ${glow} pts from ${missionTitle}` })
         });
-
-        moonData.totalGlow = newTotal;
-        moonData.cycleGlow = newCycle;
+        moonData.totalGlow = newTotal; moonData.cycleGlow = newCycle;
         moonData.logs.push(logEntry);
         renderMoonUI();
-
-        console.log(`成功收集 ${glow} 點月光，來源: ${missionTitle}`);
-        alert(`🌕 任務完成！\n來源：${missionTitle}\n自動收集 ${glow} 點月光（✅${correctVal}）`);
+        alert(`🌕 Mission complete!\nSource：${missionTitle}\n+${glow} moonlight (✅${correctVal})`);
       } catch (error) {
-        console.error("更新月光數據時出錯:", error);
-        alert("收集月光時出錯，請稍後再試");
+        console.error("Update error:", error);
+        alert("Error saving moonlight. Please try again.");
       }
     });
 
-    // [修改] 兌換時加入 source 標記
-    async function redeemGlow(){
-      const sel = document.getElementById("redeemAmount");
-      const amt = parseInt(sel?.value || "", 10);
+    // ═══ UTILS ═══
+    window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
+    document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); }));
 
-      if (!currentUser){
-        alert("請先登入主站，才能兌換月光 🌙");
-        return;
-      }
-      if (!missionStarted){
-        alert("請先按 Start Mission 才能使用兌換功能 🌙");
-        return;
-      }
-      if (!amt){
-        alert("請先選擇兌換數值");
-        return;
-      }
-      if (amt > (moonData.totalGlow || 0)){
-        alert(`月光不足 🌙\n目前只有 ${moonData.totalGlow || 0} pts`);
-        return;
-      }
+    window.showToast = function(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(window._tt);
+      window._tt = setTimeout(() => t.classList.remove('show'), 2800);
+    };
 
-      const userRef = doc(db, "users", currentUser.uid);
-
-      const newTotal = (moonData.totalGlow || 0) - amt;
-      const newCycle = recomputeCycleFromTotal(newTotal);
-
-      const logEntry = {
-        time: new Date().toISOString(),
-        glow: amt,
-        type: "redeem",
-        source: "月光兌換"
-      };
-
-      await updateDoc(userRef, {
-        moonGlowTotal: newTotal,
-        moonGlowCycle: newCycle,
-        moonGlowLogs: arrayUnion(logEntry),
-        activityLogs: arrayUnion({
-          date: new Date().toISOString(),
-          type: "Redeem Lunar Glow",
-          detail: `Redeemed ${amt} pts`
-        })
-      });
-
-      moonData.totalGlow = newTotal;
-      moonData.cycleGlow = newCycle;
-      moonData.logs.push(logEntry);
-      renderMoonUI();
-
-      sel.value = "";
-      alert(`🎁 已兌換成功！\n扣除 ${amt} 點月光`);
-    }
-
-    document.addEventListener("click", (e)=>{
-      if(e.target?.id === "redeemBtn") redeemGlow();
-    });
-
+    // ═══ AUTH ═══
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
       if (!currentUser) {
         document.getElementById("login-hint").style.display = "block";
-        moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
+        moonData = {totalGlow:0, cycleGlow:0, logs:[]};
         renderMoonUI();
         return;
       }
       document.getElementById("login-hint").style.display = "none";
-      // 呼叫修正後的加載函數，恢復所有積分
-      await loadMoonData(currentUser.uid); 
+      await loadMoonData(currentUser.uid);
     });
 
-    function init(){
-      renderMissions();
-      renderMoonUI();
-      setMissionStarted(missionStarted);
-    }
-
-    if (document.readyState === "loading"){
-      document.addEventListener("DOMContentLoaded", init);
-    } else {
-      init();
-    }
+    // ═══ INIT ═══
+    loadPetLocal();
+    renderMissions();
+    renderMoonUI();
+    setMissionStarted(missionStarted);
+    renderPetDisplay();
+    renderStages();
   </script>
 
   <script>
     function sendHeight(){
-      const h = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-      );
-      parent.postMessage({ type: "moonlightHeight", height: h }, "*");
+      const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({type:"moonlightHeight", height:h}, "*");
     }
-
     window.addEventListener("load", sendHeight);
     window.addEventListener("resize", sendHeight);
-
     const mo = new MutationObserver(sendHeight);
-    mo.observe(document.body, { childList: true, subtree: true });
+    mo.observe(document.body, {childList:true, subtree:true});
   </script>
 </body>
 </html>
