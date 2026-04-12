@@ -1184,6 +1184,10 @@
 
     // ═══ OPEN ADOPT MODAL ═══
     window.openAdoptModal = function(tierId, petId) {
+      if (!currentUser) {
+        showToast('🌙 Please log in to adopt a pet — your companion needs to be saved to your account!');
+        return;
+      }
       const tier = PET_TIERS.find(t => t.id === tierId);
       if (!tier) return;
       pendingAdoptTierId = tierId;
@@ -1209,6 +1213,10 @@
 
     window.confirmAdoptPet = async function() {
       if (!selectedAdoptPetId || !pendingAdoptTierId) return;
+      if (!currentUser) {
+        showToast('🌙 Please log in first — your pet must be saved to your account!');
+        return;
+      }
       const tier = PET_TIERS.find(t => t.id === pendingAdoptTierId);
       if (!tier) return;
       if (moonData.totalGlow < tier.cost) {
@@ -1279,6 +1287,7 @@
 
     // ═══ FEED PET ═══
     window.feedPet = async function(tierId, foodName, foodEmoji) {
+      if (!currentUser) { showToast('🌙 Please log in to feed your pet!'); return; }
       if (!petData || !petData.alive) { showToast('You need a pet first!'); return; }
       const tier = FOOD_TIERS.find(t => t.id === tierId);
       if (!tier) return;
@@ -1453,11 +1462,21 @@
       try {
         const userRef = doc(db, "users", uid);
         const snap = await getDoc(userRef);
+
         if (!snap.exists()) {
-          await setDoc(userRef, {moonGlowTotal:0, moonGlowLogs:[]}, {merge:true});
-          renderMoonUI(); return;
+          // Brand new user: create doc with petData field explicitly set to null
+          await setDoc(userRef, {moonGlowTotal:0, moonGlowLogs:[], petData: null}, {merge:true});
+          petData = null;
+          savePetLocal();
+          renderMoonUI();
+          renderPetDisplay();
+          renderStages();
+          return;
         }
+
         const data = snap.data();
+
+        // ── Moon points: always replay from log (source of truth) ──
         const logs = data.moonGlowLogs || [];
         let total = 0;
         logs.forEach(l => { if (l.type==="earn") total += l.glow||0; if (l.type==="redeem") total -= l.glow||0; });
@@ -1465,10 +1484,18 @@
         moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
         moonData.logs = logs;
         await updateDoc(userRef, {moonGlowTotal: moonData.totalGlow});
+
+        // ── Pet data: ALWAYS overwrite local from server when logged in ──
+        // Key may not exist on old accounts; treat missing as null (no pet yet)
+        petData = Object.prototype.hasOwnProperty.call(data, 'petData') ? data.petData : null;
+        savePetLocal(); // keep local cache in sync with server truth
+
         renderMoonUI();
-        checkWeeklyDrain();
+        await checkWeeklyDrain(); // runs after both moon+pet loaded; writes back if drain occurs
+        renderPetDisplay();
+        renderStages();
       } catch (err) {
-        console.error("Moon data load failed:", err);
+        console.error("loadMoonData failed:", err);
       }
     }
 
@@ -1533,21 +1560,27 @@
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
       if (!currentUser) {
+        // Not logged in: show login hint, zero out moon, show local pet cache (read-only)
         document.getElementById("login-hint").style.display = "block";
         moonData = {totalGlow:0, cycleGlow:0, logs:[]};
+        petData = null; // clear any stale data from a previous session
         renderMoonUI();
+        renderPetDisplay();
+        renderStages();
         return;
       }
+      // Logged in: server is the single source of truth — loadMoonData overwrites everything
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
     });
 
     // ═══ INIT ═══
-    loadPetLocal();
+    // Do NOT pre-seed from local storage — onAuthStateChanged will load the
+    // authoritative server data (or fall back to local cache if not logged in).
     renderMissions();
     renderMoonUI();
     setMissionStarted(missionStarted);
-    renderPetDisplay();
+    renderPetDisplay();  // renders empty/egg state until auth resolves
     renderStages();
   </script>
 
