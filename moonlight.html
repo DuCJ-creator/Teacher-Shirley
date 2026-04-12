@@ -951,8 +951,46 @@
     let pendingAdoptTierId = null;
     let selectedAdoptPetId = null;
 
+    // ═══ PET PERSISTENCE (Firestore + localStorage cache) ═══
+    function savePetLocal() {
+      // Always keep a local cache for instant reads
+      localStorage.setItem('moonlight_pet_v1', JSON.stringify(petData));
+    }
+    function loadPetLocal() {
+      const raw = localStorage.getItem('moonlight_pet_v1');
+      if (raw) { try { petData = JSON.parse(raw); } catch(e){} }
+    }
+
+    async function savePetRemote(extraMoonFields) {
+      // extraMoonFields: optional object with moonGlowTotal / moonGlowCycle / moonGlowLogs
+      if (!currentUser) return;
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const payload = { petData: petData || null };
+        if (extraMoonFields) Object.assign(payload, extraMoonFields);
+        await updateDoc(userRef, payload);
+      } catch(err) {
+        console.error("savePetRemote failed:", err);
+      }
+    }
+
+    async function loadPetRemote(uid) {
+      try {
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) return;
+        const data = snap.data();
+        if (data.petData !== undefined) {
+          petData = data.petData; // null means no pet; object means has pet
+          savePetLocal();         // sync to local cache
+        }
+      } catch(err) {
+        console.error("loadPetRemote failed:", err);
+      }
+    }
+
     // ═══ WEEKLY DRAIN ═══
-    function checkWeeklyDrain() {
+    async function checkWeeklyDrain() {
       if (!petData || !petData.alive) return;
       const now = Date.now();
       const lastDrain = petData.lastDrainTime || petData.adoptedAt || now;
@@ -962,33 +1000,60 @@
 
       const drain = weeksPassed * 50;
       moonData.totalGlow = Math.max(0, moonData.totalGlow - drain);
+      moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
       petData.lastDrainTime = lastDrain + weeksPassed * msPerWeek;
 
-      if (moonData.totalGlow <= 0 && petData.alive) {
-        killPet("Your moonlight ran out. Your pet couldn't survive without energy.");
-      }
+      const drainLogEntry = {
+        time: new Date().toISOString(),
+        glow: drain,
+        type: "redeem",
+        source: `⏳ Weekly pet upkeep (${weeksPassed} week${weeksPassed>1?'s':''})`
+      };
+      moonData.logs.push(drainLogEntry);
+
       savePetLocal();
+
+      if (moonData.totalGlow <= 0 && petData.alive) {
+        await killPet("Your moonlight ran out. Your pet couldn't survive without energy.", drainLogEntry);
+      } else {
+        // Save both pet and moon state together
+        if (currentUser) {
+          const userRef = doc(db, "users", currentUser.uid);
+          await updateDoc(userRef, {
+            petData: petData,
+            moonGlowTotal: moonData.totalGlow,
+            moonGlowCycle: moonData.cycleGlow,
+            moonGlowLogs: arrayUnion(drainLogEntry),
+          }).catch(()=>{});
+        }
+        renderMoonUI();
+      }
     }
 
-    function killPet(reason) {
+    async function killPet(reason, extraLogEntry) {
       if (!petData) return;
       petData.alive = false;
       const deceased = { id: petData.id, name: petData.name, emoji: petData.emoji, diedAt: Date.now() };
       if (!petData.deadPets) petData.deadPets = [];
       petData.deadPets.push(deceased);
       savePetLocal();
+
+      // Persist to Firestore
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const payload = {
+          petData: petData,
+          moonGlowTotal: moonData.totalGlow,
+          moonGlowCycle: moonData.cycleGlow,
+        };
+        if (extraLogEntry) payload.moonGlowLogs = arrayUnion(extraLogEntry);
+        await updateDoc(userRef, payload).catch(()=>{});
+      }
+
       document.getElementById('deathText').textContent = reason || "Your pet has passed away...";
       document.getElementById('deathOverlay').classList.add('show');
       renderPetDisplay();
-    }
-
-    // ═══ LOCAL STORAGE ═══
-    function savePetLocal() {
-      localStorage.setItem('moonlight_pet_v1', JSON.stringify(petData));
-    }
-    function loadPetLocal() {
-      const raw = localStorage.getItem('moonlight_pet_v1');
-      if (raw) petData = JSON.parse(raw);
+      renderMoonUI();
     }
 
     // ═══ TAB SWITCHING ═══
@@ -1170,20 +1235,22 @@
       };
       savePetLocal();
 
+      const logEntry = {
+        time: new Date().toISOString(),
+        glow: tier.cost,
+        type: "redeem",
+        source: `🐾 Adopted ${pet.n} (${tier.label})`
+      };
+      moonData.logs.push(logEntry);
+
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
-        const logEntry = {
-          time: new Date().toISOString(),
-          glow: tier.cost,
-          type: "redeem",
-          source: `🐾 Adopted ${pet.n} (${tier.label})`
-        };
         await updateDoc(userRef, {
+          petData: petData,
           moonGlowTotal: moonData.totalGlow,
           moonGlowCycle: moonData.cycleGlow,
           moonGlowLogs: arrayUnion(logEntry),
         }).catch(()=>{});
-        moonData.logs.push(logEntry);
       }
 
       closeModal('adoptModal');
@@ -1239,20 +1306,22 @@
       document.body.appendChild(popup);
       setTimeout(() => popup.remove(), 1600);
 
+      const logEntry = {
+        time: new Date().toISOString(),
+        glow: tier.cost,
+        type: "redeem",
+        source: `🍃 Fed ${foodName} to ${petData.name}`
+      };
+      moonData.logs.push(logEntry);
+
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
-        const logEntry = {
-          time: new Date().toISOString(),
-          glow: tier.cost,
-          type: "redeem",
-          source: `🍃 Fed ${foodName} to ${petData.name}`
-        };
         await updateDoc(userRef, {
+          petData: petData,
           moonGlowTotal: moonData.totalGlow,
           moonGlowCycle: moonData.cycleGlow,
           moonGlowLogs: arrayUnion(logEntry),
         }).catch(()=>{});
-        moonData.logs.push(logEntry);
       }
 
       renderMoonUI();
@@ -1263,7 +1332,7 @@
         burstStars();
       }
       if (moonData.totalGlow <= 0 && petData.alive) {
-        setTimeout(() => killPet("Your moonlight ran out while feeding. Your pet couldn't survive."), 500);
+        setTimeout(() => killPet("Your moonlight ran out while feeding. Your pet couldn't survive.", logEntry), 500);
       }
     };
 
