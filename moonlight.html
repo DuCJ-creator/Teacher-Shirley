@@ -81,7 +81,6 @@
       100%{transform:translateY(120px);}
     }
 
-    /* ── HEADER ── */
     header{
       text-align:center; margin-top:10px; margin-bottom:16px;
       position:relative; width:100%; max-width:860px;
@@ -90,9 +89,7 @@
       font-family:'Cinzel Decorative',cursive;
       font-weight:900; letter-spacing:1px; margin:0 0 6px 0;
       font-size:clamp(1.6rem,4vw,2.4rem);
-      text-shadow:
-        0 0 18px rgba(241,196,15,0.45),
-        0 0 40px rgba(126,214,255,0.25);
+      text-shadow:0 0 18px rgba(241,196,15,0.45), 0 0 40px rgba(126,214,255,0.25);
       animation: titleGlow 3.8s ease-in-out infinite alternate;
     }
     @keyframes titleGlow{
@@ -101,7 +98,6 @@
     }
     .subtitle{ color:var(--text-dim); font-size:0.95rem; }
 
-    /* ── TABS ── */
     .tab-nav{
       display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
       width:100%; max-width:860px; margin-bottom:14px;
@@ -121,7 +117,6 @@
     .tab-content{ display:none; width:100%; max-width:860px; }
     .tab-content.active{ display:block; }
 
-    /* ── PANEL ── */
     .panel{
       width:100%;
       background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
@@ -163,13 +158,7 @@
     .card::before{
       content:"";
       position:absolute; inset:-2px;
-      background: conic-gradient(
-        from 150deg,
-        transparent 0%,
-        rgba(126,214,255,0.35) 18%,
-        rgba(241,196,15,0.35) 30%,
-        transparent 55%
-      );
+      background: conic-gradient(from 150deg, transparent 0%, rgba(126,214,255,0.35) 18%, rgba(241,196,15,0.35) 30%, transparent 55%);
       filter: blur(10px);
       opacity:0.45;
       animation: rimSpin 8s linear infinite;
@@ -185,7 +174,6 @@
       position:relative; z-index:1;
     }
 
-    /* ── GLASS BOX ── */
     .glass-box{
       position: relative;
       border-radius: 20px;
@@ -318,7 +306,6 @@
       to{transform:translateY(-50%) translateY(-4px);}
     }
 
-    /* ── MISSIONS ── */
     .task-list a{
       display:flex; justify-content:space-between; align-items:center;
       padding:10px 12px; border-radius:10px;
@@ -353,7 +340,6 @@
     }
     .start-mission-hint{ font-size:13px; opacity:.85; color:var(--text-dim); text-align:center; }
 
-    /* ── PET SANCTUARY STYLES ── */
     .pet-section-title{
       font-family:'Cinzel Decorative',cursive;
       font-size:1.2rem; font-weight:700;
@@ -362,7 +348,6 @@
       margin:0 0 12px 0; position:relative; z-index:1;
     }
 
-    /* Tier badges */
     .tier-badge{
       display:inline-flex; align-items:center; gap:5px;
       padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;
@@ -374,7 +359,6 @@
     .tier-unique{ background:rgba(253,121,168,0.15); border:1px solid rgba(253,121,168,0.5); color:var(--pet-unique); }
     .tier-legendary{ background:rgba(253,203,110,0.2); border:1px solid rgba(253,203,110,0.6); color:var(--pet-legendary); box-shadow:0 0 10px rgba(253,203,110,0.25); }
 
-    /* Adopt grid */
     .adopt-grid{
       display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;
       margin-bottom:16px;
@@ -405,7 +389,6 @@
       font-size:1.5rem; border-radius:16px;
     }
 
-    /* My Pet display */
     .my-pet-display{
       display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start;
     }
@@ -465,7 +448,6 @@
     .no-pet-message .egg-icon{ font-size:3.5rem; display:block; margin-bottom:12px; animation:eggPulse 2s ease-in-out infinite; }
     @keyframes eggPulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
 
-    /* Food shop */
     .food-grid{
       display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px;
       position:relative; z-index:1;
@@ -491,7 +473,6 @@
       background:rgba(85,239,196,0.1); border-radius:6px; padding:2px 6px; margin-top:4px;
     }
 
-    /* Pet stages display */
     .stages-row{
       display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; position:relative; z-index:1;
     }
@@ -509,7 +490,6 @@
       color:var(--pet-common);
     }
 
-    /* Tier sections in adopt */
     .tier-section{ margin-bottom:20px; position:relative; z-index:1; }
     .tier-header{
       display:flex; align-items:center; gap:10px; margin-bottom:10px;
@@ -517,7 +497,6 @@
     }
     .tier-cost-label{ font-size:0.82rem; color:var(--text-dim); margin-left:auto; }
 
-    /* ── ACTION BUTTONS ── */
     .action-btn{
       padding:10px 18px; border-radius:12px; border:none; cursor:pointer;
       font-family:'Exo 2',sans-serif; font-weight:700; font-size:0.9rem;
@@ -544,7 +523,6 @@
       opacity:0.4; cursor:not-allowed; box-shadow:none;
     }
 
-    /* ── TOAST / POPUP ── */
     #toast{
       position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
       background:linear-gradient(135deg,rgba(126,214,255,0.95),rgba(241,196,15,0.9));
@@ -557,7 +535,6 @@
     }
     #toast.show{ opacity:1; }
 
-    /* ── MODAL ── */
     .modal-overlay{
       position:fixed; inset:0; background:rgba(5,6,13,0.8);
       z-index:200; display:none; align-items:center; justify-content:center;
@@ -583,7 +560,6 @@
       padding:4px 10px; font-size:1rem;
     }
 
-    /* Adopt modal pet grid */
     .modal-pet-grid{
       display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:8px;
       margin:12px 0;
@@ -600,7 +576,6 @@
 
     footer{ margin-top:8px; font-size:0.8rem; color:var(--text-dim); opacity:0.8; position:relative; z-index:1; }
 
-    /* Death overlay */
     .death-overlay{
       position:fixed; inset:0; z-index:500;
       background:rgba(5,6,13,0.9); display:none;
@@ -619,7 +594,6 @@
     .death-title{ font-family:'Cinzel Decorative',cursive; font-size:1.4rem; color:#ff7675; margin-bottom:8px; }
     .death-text{ color:var(--text-dim); font-size:0.9rem; line-height:1.6; }
 
-    /* Floating feed popup */
     .feed-popup{
       position:fixed; pointer-events:none;
       font-size:1.6rem; z-index:999;
@@ -630,13 +604,11 @@
       100%{ opacity:0; transform:translateY(-80px) scale(1.4); }
     }
 
-    /* Paw decoration */
     .paw-deco{
       position:absolute; pointer-events:none; opacity:0.06;
       font-size:6rem;
     }
 
-    /* Alive days badge */
     .alive-badge{
       display:inline-flex; align-items:center; gap:4px;
       background:rgba(85,239,196,0.1); border:1px solid rgba(85,239,196,0.3);
@@ -652,7 +624,6 @@
     <div class="subtitle">Lunar Glow Cache — Earn moonlight · Adopt pets · Watch them grow 🌱</div>
   </header>
 
-  <!-- TAB NAV -->
   <div class="tab-nav">
     <button class="tab-btn active" onclick="switchTab('moon')">🌙 Moonlight</button>
     <button class="tab-btn" onclick="switchTab('pet')">🐾 My Pet</button>
@@ -660,9 +631,7 @@
     <button class="tab-btn" onclick="switchTab('food')">🌿 Food Shop</button>
   </div>
 
-  <!-- ═══ TAB: MOON ═══ -->
   <div class="tab-content active" id="tab-moon">
-
     <section class="panel">
       <div class="glass-box" id="glass-box">
         <i class="corner c-tl"></i><i class="corner c-tr"></i>
@@ -703,58 +672,38 @@
         <a href="https://ducj-creator.github.io/Teacher-Shirley/" style="color:#7ed6ff;text-decoration:underline;">Main Site →</a>
       </div>
     </section>
-
   </div>
 
-  <!-- ═══ TAB: MY PET ═══ -->
   <div class="tab-content" id="tab-pet">
-
     <section class="panel" id="pet-panel">
       <span class="paw-deco" style="bottom:-20px;right:-20px;">🐾</span>
       <div class="pet-section-title">🐾 My Companion</div>
-      <div id="pet-display-area">
-        <!-- filled by renderPetDisplay() -->
-      </div>
+      <div id="pet-display-area"></div>
     </section>
 
     <section class="panel card" id="pet-stages-panel">
       <h3>🌱 Growth Journey</h3>
-      <div class="stages-row" id="stages-row">
-        <!-- filled by renderStages() -->
-      </div>
+      <div class="stages-row" id="stages-row"></div>
       <div class="hint" style="margin-top:8px;">Feed your pet better food to grow faster! Weekly upkeep costs <b style="color:var(--danger)">20 pts</b>. Pet dies when moonlight hits 0.</div>
     </section>
-
   </div>
 
-  <!-- ═══ TAB: ADOPT ═══ -->
   <div class="tab-content" id="tab-adopt">
-
     <section class="panel">
       <div class="pet-section-title">🥚 Adoption Center</div>
       <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Spend moonlight to adopt a companion. Higher-tier pets require more points but are rarer and more majestic. Weekly drain: <b style="color:var(--danger)">20 pts</b>.</div>
-
-      <div id="adopt-tiers">
-        <!-- filled by renderAdoptTiers() -->
-      </div>
+      <div id="adopt-tiers"></div>
     </section>
-
   </div>
 
-  <!-- ═══ TAB: FOOD SHOP ═══ -->
   <div class="tab-content" id="tab-food">
-
     <section class="panel">
       <div class="pet-section-title">🍃 Food Shop</div>
       <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Redeem moonlight for food. Higher-grade food = faster growth. Each feeding restores health & advances your pet's stage.</div>
-      <div class="food-grid" id="food-grid">
-        <!-- filled by renderFoodShop() -->
-      </div>
+      <div class="food-grid" id="food-grid"></div>
     </section>
-
   </div>
 
-  <!-- ═══ MODAL: Adopt confirm ═══ -->
   <div class="modal-overlay" id="adoptModal">
     <div class="modal-box">
       <button class="modal-close-btn" onclick="closeModal('adoptModal')">✕</button>
@@ -768,7 +717,6 @@
     </div>
   </div>
 
-  <!-- ═══ DEATH overlay ═══ -->
   <div class="death-overlay" id="deathOverlay">
     <div class="death-message">
       <span class="death-icon">💀</span>
@@ -781,7 +729,6 @@
   <div id="toast"></div>
   <footer>© Teacher Shirley's ET Platform 2025 · Pet Sanctuary Edition</footer>
 
-  <!-- ═══════════════════════════════ FIREBASE ═══════════════════════════════ -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import {
@@ -810,186 +757,114 @@
     const MOON_CYCLE = 300;
 
     const MISSIONS = [
-  { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html", pointsPerQuestion: 3 },
-  { title: "Mission 2: iVocab詞彙選擇題", url: "https://ivocab-quiz.vercel.app/", pointsPerQuestion: 2 },
-  { title: "Mission 3: Topic Reading 19議題素養閱讀理解", url: "https://shirley-ai-reading.vercel.app/", pointsPerQuestion: 4 },
-  { title: "Mission 4: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html", pointsPerQuestion: 2 },
-  { title: "Mission 5: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 }
-];
+      { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html", pointsPerQuestion: 3 },
+      { title: "Mission 2: iVocab詞彙選擇題", url: "https://ivocab-quiz.vercel.app/", pointsPerQuestion: 2 },
+      { title: "Mission 3: Topic Reading 19議題素養閱讀理解", url: "https://shirley-ai-reading.vercel.app/", pointsPerQuestion: 4 },
+      { title: "Mission 4: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html", pointsPerQuestion: 2 },
+      { title: "Mission 5: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 }
+    ];
 
-    // ═══ PET DEFINITIONS ═══
     const PET_TIERS = [
       {
         id:'common', label:'Common', cost:100, count:20, color:'var(--pet-common)',
         pets:[
-          {id:'hamster',n:'Hamster',emoji:'🐹'},
-          {id:'rabbit',n:'Rabbit',emoji:'🐰'},
-          {id:'chick',n:'Baby Chick',emoji:'🐥'},
-          {id:'cat',n:'Cat',emoji:'🐱'},
-          {id:'dog',n:'Dog',emoji:'🐶'},
-          {id:'duck',n:'Duck',emoji:'🦆'},
-          {id:'frog',n:'Frog',emoji:'🐸'},
-          {id:'turtle',n:'Turtle',emoji:'🐢'},
-          {id:'mouse',n:'Mouse',emoji:'🐭'},
-          {id:'hedgehog',n:'Hedgehog',emoji:'🦔'},
-          {id:'snail',n:'Snail',emoji:'🐌'},
-          {id:'butterfly',n:'Butterfly',emoji:'🦋'},
-          {id:'bee',n:'Bee',emoji:'🐝'},
-          {id:'ladybug',n:'Ladybug',emoji:'🐞'},
-          {id:'fish',n:'Fish',emoji:'🐟'},
-          {id:'goldfish',n:'Goldfish',emoji:'🐠'},
-          {id:'crab',n:'Crab',emoji:'🦀'},
-          {id:'parrot',n:'Parrot',emoji:'🦜'},
-          {id:'owl',n:'Owl',emoji:'🦉'},
-          {id:'penguin',n:'Penguin',emoji:'🐧'},
+          {id:'hamster',n:'Hamster',emoji:'🐹'},{id:'rabbit',n:'Rabbit',emoji:'🐰'},
+          {id:'chick',n:'Baby Chick',emoji:'🐥'},{id:'cat',n:'Cat',emoji:'🐱'},
+          {id:'dog',n:'Dog',emoji:'🐶'},{id:'duck',n:'Duck',emoji:'🦆'},
+          {id:'frog',n:'Frog',emoji:'🐸'},{id:'turtle',n:'Turtle',emoji:'🐢'},
+          {id:'mouse',n:'Mouse',emoji:'🐭'},{id:'hedgehog',n:'Hedgehog',emoji:'🦔'},
+          {id:'snail',n:'Snail',emoji:'🐌'},{id:'butterfly',n:'Butterfly',emoji:'🦋'},
+          {id:'bee',n:'Bee',emoji:'🐝'},{id:'ladybug',n:'Ladybug',emoji:'🐞'},
+          {id:'fish',n:'Fish',emoji:'🐟'},{id:'goldfish',n:'Goldfish',emoji:'🐠'},
+          {id:'crab',n:'Crab',emoji:'🦀'},{id:'parrot',n:'Parrot',emoji:'🦜'},
+          {id:'owl',n:'Owl',emoji:'🦉'},{id:'penguin',n:'Penguin',emoji:'🐧'},
         ]
       },
       {
         id:'rare', label:'Rare', cost:300, count:10, color:'var(--pet-rare)',
         pets:[
-          {id:'fox',n:'Fox',emoji:'🦊'},
-          {id:'raccoon',n:'Raccoon',emoji:'🦝'},
-          {id:'koala',n:'Koala',emoji:'🐨'},
-          {id:'panda',n:'Panda',emoji:'🐼'},
-          {id:'deer',n:'Deer',emoji:'🦌'},
-          {id:'flamingo',n:'Flamingo',emoji:'🦩'},
-          {id:'axolotl',n:'Axolotl',emoji:'🦎'},
-          {id:'capybara',n:'Capybara',emoji:'🦫'},
-          {id:'sloth',n:'Sloth',emoji:'🦥'},
-          {id:'otter',n:'Otter',emoji:'🦦'},
+          {id:'fox',n:'Fox',emoji:'🦊'},{id:'raccoon',n:'Raccoon',emoji:'🦝'},
+          {id:'koala',n:'Koala',emoji:'🐨'},{id:'panda',n:'Panda',emoji:'🐼'},
+          {id:'deer',n:'Deer',emoji:'🦌'},{id:'flamingo',n:'Flamingo',emoji:'🦩'},
+          {id:'axolotl',n:'Axolotl',emoji:'🦎'},{id:'capybara',n:'Capybara',emoji:'🦫'},
+          {id:'sloth',n:'Sloth',emoji:'🦥'},{id:'otter',n:'Otter',emoji:'🦦'},
         ]
       },
       {
         id:'precious', label:'Precious', cost:500, count:10, color:'var(--pet-precious)',
         pets:[
-          {id:'redpanda',n:'Red Panda',emoji:'🦊'},
-          {id:'tiger',n:'Tiger Cub',emoji:'🐯'},
-          {id:'lion',n:'Lion Cub',emoji:'🦁'},
-          {id:'elephant',n:'Elephant',emoji:'🐘'},
-          {id:'giraffe',n:'Giraffe',emoji:'🦒'},
-          {id:'zebra',n:'Zebra',emoji:'🦓'},
-          {id:'dolphin',n:'Dolphin',emoji:'🐬'},
-          {id:'whale',n:'Whale',emoji:'🐳'},
-          {id:'seal',n:'Seal',emoji:'🦭'},
-          {id:'octopus',n:'Octopus',emoji:'🐙'},
+          {id:'redpanda',n:'Red Panda',emoji:'🦊'},{id:'tiger',n:'Tiger Cub',emoji:'🐯'},
+          {id:'lion',n:'Lion Cub',emoji:'🦁'},{id:'elephant',n:'Elephant',emoji:'🐘'},
+          {id:'giraffe',n:'Giraffe',emoji:'🦒'},{id:'zebra',n:'Zebra',emoji:'🦓'},
+          {id:'dolphin',n:'Dolphin',emoji:'🐬'},{id:'whale',n:'Whale',emoji:'🐳'},
+          {id:'seal',n:'Seal',emoji:'🦭'},{id:'octopus',n:'Octopus',emoji:'🐙'},
         ]
       },
       {
         id:'unique', label:'Unique', cost:800, count:5, color:'var(--pet-unique)',
         pets:[
-          {id:'polarbear',n:'Polar Bear',emoji:'🐻‍❄️'},
-          {id:'narwhal',n:'Narwhal',emoji:'🦄'},
-          {id:'eagle',n:'Eagle',emoji:'🦅'},
-          {id:'shark',n:'Great Shark',emoji:'🦈'},
+          {id:'polarbear',n:'Polar Bear',emoji:'🐻‍❄️'},{id:'narwhal',n:'Narwhal',emoji:'🦄'},
+          {id:'eagle',n:'Eagle',emoji:'🦅'},{id:'shark',n:'Great Shark',emoji:'🦈'},
           {id:'phoenix',n:'Phoenix',emoji:'🦚'},
         ]
       },
       {
         id:'legendary', label:'Legendary', cost:1000, count:1, color:'var(--pet-legendary)',
-        pets:[
-          {id:'dragon',n:'Dragon',emoji:'🐉'},
-        ]
+        pets:[{id:'dragon',n:'Dragon',emoji:'🐉'}]
       },
     ];
 
-    // Stage thresholds: food points accumulated
     const STAGES = [
-      {name:'🥚 Egg',min:0},
-      {name:'🐣 Hatch',min:30},
-      {name:'🍼 Baby',min:80},
-      {name:'🌱 Infant',min:160},
-      {name:'🌿 Toddler',min:280},
-      {name:'🌳 Child',min:440},
-      {name:'⚡ Teenager',min:660},
-      {name:'🌟 Adult',min:940},
+      {name:'🥚 Egg',min:0},{name:'🐣 Hatch',min:30},{name:'🍼 Baby',min:80},
+      {name:'🌱 Infant',min:160},{name:'🌿 Toddler',min:280},{name:'🌳 Child',min:440},
+      {name:'⚡ Teenager',min:660},{name:'🌟 Adult',min:940},
     ];
 
     const FOOD_TIERS = [
-      {
-        id:'common', label:'Common Food', cost:20, growthPts:5, color:'var(--pet-common)',
-        items:[
-          {name:'Cabbage',emoji:'🥬'},{name:'Carrot',emoji:'🥕'},
-          {name:'Leaves',emoji:'🍃'},{name:'Apple',emoji:'🍎'},
-        ]
-      },
-      {
-        id:'rare', label:'Rare Food', cost:50, growthPts:12, color:'var(--pet-rare)',
-        items:[
-          {name:'Beans',emoji:'🫘'},{name:'Cucumber',emoji:'🥒'},
-          {name:'Strawberry',emoji:'🍓'},{name:'Insects',emoji:'🐛'},
-        ]
-      },
-      {
-        id:'precious', label:'Precious Food', cost:100, growthPts:25, color:'var(--pet-precious)',
-        items:[
-          {name:'Blueberries',emoji:'🫐'},{name:'Grapes',emoji:'🍇'},
-          {name:'Tomato',emoji:'🍅'},{name:'Egg',emoji:'🥚'},
-        ]
-      },
-      {
-        id:'hi-protein', label:'Hi-Protein Food', cost:200, growthPts:45, color:'var(--pet-unique)',
-        items:[
-          {name:'Fish',emoji:'🐟'},{name:'Shrimp',emoji:'🍤'},
-          {name:'Chicken',emoji:'🍗'},{name:'Beef',emoji:'🥩'},{name:'Cranberry',emoji:'🍒'},
-        ]
-      },
-      {
-        id:'superfood', label:'Super Food', cost:300, growthPts:80, color:'var(--pet-legendary)',
-        items:[
-          {name:'Salmon',emoji:'🐠'},{name:'Lobster',emoji:'🦞'},
-          {name:'Lamb',emoji:'🍖'},{name:'Turkey',emoji:'🦃'},{name:'Durian',emoji:'🍈'},
-        ]
-      },
+      {id:'common', label:'Common Food', cost:20, growthPts:5, color:'var(--pet-common)',
+        items:[{name:'Cabbage',emoji:'🥬'},{name:'Carrot',emoji:'🥕'},{name:'Leaves',emoji:'🍃'},{name:'Apple',emoji:'🍎'}]},
+      {id:'rare', label:'Rare Food', cost:50, growthPts:12, color:'var(--pet-rare)',
+        items:[{name:'Beans',emoji:'🫘'},{name:'Cucumber',emoji:'🥒'},{name:'Strawberry',emoji:'🍓'},{name:'Insects',emoji:'🐛'}]},
+      {id:'precious', label:'Precious Food', cost:100, growthPts:25, color:'var(--pet-precious)',
+        items:[{name:'Blueberries',emoji:'🫐'},{name:'Grapes',emoji:'🍇'},{name:'Tomato',emoji:'🍅'},{name:'Egg',emoji:'🥚'}]},
+      {id:'hi-protein', label:'Hi-Protein Food', cost:200, growthPts:45, color:'var(--pet-unique)',
+        items:[{name:'Fish',emoji:'🐟'},{name:'Shrimp',emoji:'🍤'},{name:'Chicken',emoji:'🍗'},{name:'Beef',emoji:'🥩'},{name:'Cranberry',emoji:'🍒'}]},
+      {id:'superfood', label:'Super Food', cost:300, growthPts:80, color:'var(--pet-legendary)',
+        items:[{name:'Salmon',emoji:'🐠'},{name:'Lobster',emoji:'🦞'},{name:'Lamb',emoji:'🍖'},{name:'Turkey',emoji:'🦃'},{name:'Durian',emoji:'🍈'}]},
     ];
 
-    // ═══ STATE ═══
     let currentUser = null;
     let moonData = { totalGlow: 0, cycleGlow: 0, logs: [] };
-    let petData = null; // { id, name, emoji, tier, tierId, adoptedAt, growthPts, stageIndex, alive, lastDrainTime, deadPets:[] }
+    let petData = null;
     let missionStarted = sessionStorage.getItem("missionStarted") === "1";
-
     let pendingAdoptTierId = null;
     let selectedAdoptPetId = null;
 
-    // ═══ PET PERSISTENCE (Firestore + localStorage cache) ═══
     function savePetLocal() {
-      // Always keep a local cache for instant reads
       localStorage.setItem('moonlight_pet_v1', JSON.stringify(petData));
     }
-    function loadPetLocal() {
-      const raw = localStorage.getItem('moonlight_pet_v1');
-      if (raw) { try { petData = JSON.parse(raw); } catch(e){} }
-    }
 
-    async function savePetRemote(extraMoonFields) {
-      // extraMoonFields: optional object with moonGlowTotal / moonGlowCycle / moonGlowLogs
-      if (!currentUser) return;
-      try {
+    async function killPet(reason, extraLogEntry) {
+      if (!petData) return;
+      petData.alive = false;
+      const deceased = { id: petData.id, name: petData.name, emoji: petData.emoji, diedAt: Date.now() };
+      if (!petData.deadPets) petData.deadPets = [];
+      petData.deadPets.push(deceased);
+      savePetLocal();
+
+      if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
-        const payload = { petData: petData || null };
-        if (extraMoonFields) Object.assign(payload, extraMoonFields);
-        await updateDoc(userRef, payload);
-      } catch(err) {
-        console.error("savePetRemote failed:", err);
+        const payload = { petData: petData, moonGlowTotal: moonData.totalGlow, moonGlowCycle: moonData.cycleGlow };
+        if (extraLogEntry) payload.moonGlowLogs = arrayUnion(extraLogEntry);
+        await updateDoc(userRef, payload).catch(()=>{});
       }
+
+      document.getElementById('deathText').textContent = reason || "Your pet has passed away...";
+      document.getElementById('deathOverlay').classList.add('show');
+      renderPetDisplay();
+      renderMoonUI();
     }
 
-    async function loadPetRemote(uid) {
-      try {
-        const userRef = doc(db, "users", uid);
-        const snap = await getDoc(userRef);
-        if (!snap.exists()) return;
-        const data = snap.data();
-        if (data.petData !== undefined) {
-          petData = data.petData; // null means no pet; object means has pet
-          savePetLocal();         // sync to local cache
-        }
-      } catch(err) {
-        console.error("loadPetRemote failed:", err);
-      }
-    }
-
-    // ═══ WEEKLY DRAIN ═══
     async function checkWeeklyDrain() {
       if (!petData || !petData.alive) return;
       const now = Date.now();
@@ -1010,13 +885,11 @@
         source: `⏳ Weekly pet upkeep (${weeksPassed} week${weeksPassed>1?'s':''})`
       };
       moonData.logs.push(drainLogEntry);
-
       savePetLocal();
 
       if (moonData.totalGlow <= 0 && petData.alive) {
         await killPet("Your moonlight ran out. Your pet couldn't survive without energy.", drainLogEntry);
       } else {
-        // Save both pet and moon state together
         if (currentUser) {
           const userRef = doc(db, "users", currentUser.uid);
           await updateDoc(userRef, {
@@ -1030,33 +903,6 @@
       }
     }
 
-    async function killPet(reason, extraLogEntry) {
-      if (!petData) return;
-      petData.alive = false;
-      const deceased = { id: petData.id, name: petData.name, emoji: petData.emoji, diedAt: Date.now() };
-      if (!petData.deadPets) petData.deadPets = [];
-      petData.deadPets.push(deceased);
-      savePetLocal();
-
-      // Persist to Firestore
-      if (currentUser) {
-        const userRef = doc(db, "users", currentUser.uid);
-        const payload = {
-          petData: petData,
-          moonGlowTotal: moonData.totalGlow,
-          moonGlowCycle: moonData.cycleGlow,
-        };
-        if (extraLogEntry) payload.moonGlowLogs = arrayUnion(extraLogEntry);
-        await updateDoc(userRef, payload).catch(()=>{});
-      }
-
-      document.getElementById('deathText').textContent = reason || "Your pet has passed away...";
-      document.getElementById('deathOverlay').classList.add('show');
-      renderPetDisplay();
-      renderMoonUI();
-    }
-
-    // ═══ TAB SWITCHING ═══
     window.switchTab = function(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -1071,7 +917,6 @@
       if (tab === 'food') renderFoodShop();
     };
 
-    // ═══ RENDER PET DISPLAY ═══
     window.renderPetDisplay = function() {
       const area = document.getElementById('pet-display-area');
       if (!petData || !petData.id) {
@@ -1087,9 +932,7 @@
 
       const stage = STAGES[petData.stageIndex || 0];
       const nextStage = STAGES[(petData.stageIndex || 0) + 1];
-      const stagePct = nextStage
-        ? Math.min(100, Math.round(((petData.growthPts || 0) - stage.min) / (nextStage.min - stage.min) * 100))
-        : 100;
+      const stagePct = nextStage ? Math.min(100, Math.round(((petData.growthPts || 0) - stage.min) / (nextStage.min - stage.min) * 100)) : 100;
       const tier = PET_TIERS.find(t => t.id === petData.tierId) || PET_TIERS[0];
       const isAlive = petData.alive !== false;
       const isDying = moonData.totalGlow < 100 && isAlive;
@@ -1108,9 +951,7 @@
             </div>
             <div class="pet-stage-wrap">
               <div class="pet-stage-label">Growth Stage: <b style="color:var(--accent-2);">${stage.name}</b></div>
-              <div class="stage-bar-wrap" style="margin-top:4px;">
-                <div class="stage-bar" style="width:${stagePct}%"></div>
-              </div>
+              <div class="stage-bar-wrap" style="margin-top:4px;"><div class="stage-bar" style="width:${stagePct}%"></div></div>
               ${nextStage ? `<div style="font-size:0.75rem;color:var(--text-dim);margin-top:3px;">Next: ${nextStage.name} · ${stagePct}%</div>` : '<div style="font-size:0.75rem;color:var(--pet-legendary);margin-top:3px;">🌟 Fully grown!</div>'}
             </div>
             <div class="pet-health-info">
@@ -1121,7 +962,7 @@
             <div class="pet-weekly-drain">⏳ Weekly upkeep: <b>20 moonlight pts</b> auto-deducted. Keep earning to keep your pet alive!</div>
             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
               <button class="action-btn primary" onclick="switchTab('food')">🍃 Feed Pet</button>
-              ${!isAlive ? '' : `<button class="action-btn danger" onclick="forceKillPet()">😢 Release Pet</button>`}
+              <button class="action-btn danger" onclick="forceKillPet()">😢 Release Pet</button>
             </div>` : `
             <div style="margin-top:10px;">
               <button class="action-btn golden" onclick="switchTab('adopt')">🥚 Adopt a New Pet</button>
@@ -1136,7 +977,6 @@
       }
     };
 
-    // ═══ RENDER STAGES ═══
     window.renderStages = function() {
       const row = document.getElementById('stages-row');
       const currentStage = petData ? (petData.stageIndex || 0) : -1;
@@ -1148,7 +988,6 @@
       }).join('');
     };
 
-    // ═══ RENDER ADOPT TIERS ═══
     window.renderAdoptTiers = function() {
       const container = document.getElementById('adopt-tiers');
       const hasPet = petData && petData.alive;
@@ -1182,7 +1021,6 @@
       }
     };
 
-    // ═══ OPEN ADOPT MODAL ═══
     window.openAdoptModal = function(tierId, petId) {
       if (!currentUser) {
         showToast('🌙 Please log in to adopt a pet — your companion needs to be saved to your account!');
@@ -1195,13 +1033,11 @@
 
       document.getElementById('adoptModalTitle').textContent = `🥚 Adopt a ${tier.label} Pet`;
       document.getElementById('adoptModalSub').textContent = `Cost: ${tier.cost} moonlight pts · You have: ${moonData.totalGlow} pts`;
-
       document.getElementById('adoptModalGrid').innerHTML = tier.pets.map(p => `
         <div class="modal-pet-opt ${p.id === petId ? 'selected' : ''}" onclick="selectAdoptPet('${p.id}',this)">
           <span class="opt-emoji">${p.emoji}</span>
           <div class="opt-name">${p.n}</div>
         </div>`).join('');
-
       openModal('adoptModal');
     };
 
@@ -1230,25 +1066,13 @@
       moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
 
       petData = {
-        id: pet.id,
-        name: pet.n,
-        emoji: pet.emoji,
-        tierId: tier.id,
-        adoptedAt: Date.now(),
-        growthPts: 0,
-        stageIndex: 0,
-        alive: true,
-        lastDrainTime: Date.now(),
-        deadPets: (petData && petData.deadPets) || [],
+        id: pet.id, name: pet.n, emoji: pet.emoji, tierId: tier.id,
+        adoptedAt: Date.now(), growthPts: 0, stageIndex: 0, alive: true,
+        lastDrainTime: Date.now(), deadPets: (petData && petData.deadPets) || [],
       };
       savePetLocal();
 
-      const logEntry = {
-        time: new Date().toISOString(),
-        glow: tier.cost,
-        type: "redeem",
-        source: `🐾 Adopted ${pet.n} (${tier.label})`
-      };
+      const logEntry = { time: new Date().toISOString(), glow: tier.cost, type: "redeem", source: `🐾 Adopted ${pet.n} (${tier.label})` };
       moonData.logs.push(logEntry);
 
       if (currentUser) {
@@ -1267,7 +1091,6 @@
       setTimeout(() => switchTab('pet'), 800);
     };
 
-    // ═══ RENDER FOOD SHOP ═══
     window.renderFoodShop = function() {
       const grid = document.getElementById('food-grid');
       grid.innerHTML = FOOD_TIERS.map(tier => tier.items.map(item => {
@@ -1285,7 +1108,6 @@
       }).join('')).join('');
     };
 
-    // ═══ FEED PET ═══
     window.feedPet = async function(tierId, foodName, foodEmoji) {
       if (!currentUser) { showToast('🌙 Please log in to feed your pet!'); return; }
       if (!petData || !petData.alive) { showToast('You need a pet first!'); return; }
@@ -1297,7 +1119,6 @@
       moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
       petData.growthPts = (petData.growthPts || 0) + tier.growthPts;
 
-      // Update stage
       let newStage = 0;
       for (let i = STAGES.length - 1; i >= 0; i--) {
         if (petData.growthPts >= STAGES[i].min) { newStage = i; break; }
@@ -1306,7 +1127,6 @@
       petData.stageIndex = newStage;
       savePetLocal();
 
-      // Floating food popup
       const popup = document.createElement('div');
       popup.className = 'feed-popup';
       popup.textContent = foodEmoji;
@@ -1315,12 +1135,7 @@
       document.body.appendChild(popup);
       setTimeout(() => popup.remove(), 1600);
 
-      const logEntry = {
-        time: new Date().toISOString(),
-        glow: tier.cost,
-        type: "redeem",
-        source: `🍃 Fed ${foodName} to ${petData.name}`
-      };
+      const logEntry = { time: new Date().toISOString(), glow: tier.cost, type: "redeem", source: `🍃 Fed ${foodName} to ${petData.name}` };
       moonData.logs.push(logEntry);
 
       if (currentUser) {
@@ -1345,7 +1160,6 @@
       }
     };
 
-    // ═══ MOON UI ═══
     function setMissionStarted(v) {
       missionStarted = v;
       sessionStorage.setItem("missionStarted", v ? "1" : "0");
@@ -1464,7 +1278,6 @@
         const snap = await getDoc(userRef);
 
         if (!snap.exists()) {
-          // Brand new user: create doc with petData field explicitly set to null
           await setDoc(userRef, {moonGlowTotal:0, moonGlowLogs:[], petData: null}, {merge:true});
           petData = null;
           savePetLocal();
@@ -1475,8 +1288,6 @@
         }
 
         const data = snap.data();
-
-        // ── Moon points: always replay from log (source of truth) ──
         const logs = data.moonGlowLogs || [];
         let total = 0;
         logs.forEach(l => { if (l.type==="earn") total += l.glow||0; if (l.type==="redeem") total -= l.glow||0; });
@@ -1485,13 +1296,11 @@
         moonData.logs = logs;
         await updateDoc(userRef, {moonGlowTotal: moonData.totalGlow});
 
-        // ── Pet data: ALWAYS overwrite local from server when logged in ──
-        // Key may not exist on old accounts; treat missing as null (no pet yet)
         petData = Object.prototype.hasOwnProperty.call(data, 'petData') ? data.petData : null;
-        savePetLocal(); // keep local cache in sync with server truth
+        savePetLocal();
 
         renderMoonUI();
-        await checkWeeklyDrain(); // runs after both moon+pet loaded; writes back if drain occurs
+        await checkWeeklyDrain();
         renderPetDisplay();
         renderStages();
       } catch (err) {
@@ -1499,7 +1308,6 @@
       }
     }
 
-    // ═══ MESSAGE HANDLER ═══
     function isAllowedOrigin(origin) {
       if (!origin) return false;
       const allowed = [
@@ -1513,54 +1321,53 @@
     }
 
     window.addEventListener("message", async (event) => {
-  if (!isAllowedOrigin(event.origin)) return;
-  const data = event.data || {};
-  if (data.type !== "LUNAR_MISSION_RESULT") return;
-  const correctVal = parseInt(data.correct) || 0;
-  if (correctVal <= 0) return;
-  const missionTitle = data.mission || data.title || "Lunar Mission";
-  if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
-  if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
+      if (!isAllowedOrigin(event.origin)) return;
+      const data = event.data || {};
+      if (data.type !== "LUNAR_MISSION_RESULT") return;
+      const correctVal = parseInt(data.correct) || 0;
+      if (correctVal <= 0) return;
+      const missionTitle = data.mission || data.title || "Lunar Mission";
+      if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
+      if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
 
- // 根據 mission 標題關鍵字決定每題分數
-let pointsPerQ = 1;
-if (missionTitle.includes("GSAT") || missionTitle.includes("學測")) {
-  pointsPerQ = 3;
-} else if (missionTitle.includes("iVocab詞彙") || (missionTitle.includes("iVocab") && missionTitle.includes("選擇"))) {
-  pointsPerQ = 2;
-} else if (missionTitle.includes("Reading") || missionTitle.includes("議題素養")) {
-  pointsPerQ = 4;
-} else if (missionTitle.includes("CAP") || missionTitle.includes("國中會考")) {
-  pointsPerQ = 2;
-} else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
-  pointsPerQ = 3;
-}
+      let pointsPerQ = 1;
+      if (missionTitle.includes("GSAT") || missionTitle.includes("學測")) {
+        pointsPerQ = 3;
+      } else if (missionTitle.includes("iVocab詞彙") || (missionTitle.includes("iVocab") && missionTitle.includes("選擇"))) {
+        pointsPerQ = 2;
+      } else if (missionTitle.includes("Reading") || missionTitle.includes("議題素養") || missionTitle.includes("Topic Reading")) {
+        pointsPerQ = 4;
+      } else if (missionTitle.includes("CAP") || missionTitle.includes("國中會考")) {
+        pointsPerQ = 2;
+      } else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
+        pointsPerQ = 3;
+      }
 
-const glow = correctVal * pointsPerQ;
-  const glow = correctVal * pointsPerQ;
+      const glow = correctVal * pointsPerQ;
 
-  const userRef = doc(db, "users", currentUser.uid);
-  const newTotal = (moonData.totalGlow || 0) + glow;
-  const newCycle = newTotal % MOON_CYCLE;
-  const logEntry = { time: new Date().toISOString(), correct: correctVal, wrong:0, glow, type:"earn", source: `${missionTitle} (${pointsPerQ}pt/題)` };
+      const userRef = doc(db, "users", currentUser.uid);
+      const newTotal = (moonData.totalGlow || 0) + glow;
+      const newCycle = newTotal % MOON_CYCLE;
+      const logEntry = { time: new Date().toISOString(), correct: correctVal, wrong: 0, glow, type: "earn", source: `${missionTitle} (${pointsPerQ}pt/題)` };
 
-  try {
-    await updateDoc(userRef, {
-      moonGlowTotal: newTotal, moonGlowCycle: newCycle,
-      moonGlowLogs: arrayUnion(logEntry),
-      activityLogs: arrayUnion({ date: new Date().toISOString(), type:"Lunar Glow", detail:`Collected ${glow} pts from ${missionTitle}` })
+      try {
+        await updateDoc(userRef, {
+          moonGlowTotal: newTotal,
+          moonGlowCycle: newCycle,
+          moonGlowLogs: arrayUnion(logEntry),
+          activityLogs: arrayUnion({ date: new Date().toISOString(), type: "Lunar Glow", detail: `Collected ${glow} pts from ${missionTitle}` })
+        });
+        moonData.totalGlow = newTotal;
+        moonData.cycleGlow = newCycle;
+        moonData.logs.push(logEntry);
+        renderMoonUI();
+        alert(`🌕 Mission complete!\nSource：${missionTitle}\n✅ ${correctVal} correct answers × ${pointsPerQ} pts = +${glow} moonlight`);
+      } catch (error) {
+        console.error("Update error:", error);
+        alert("Error saving moonlight. Please try again.");
+      }
     });
-    moonData.totalGlow = newTotal; moonData.cycleGlow = newCycle;
-    moonData.logs.push(logEntry);
-    renderMoonUI();
-    alert(`🌕 Mission complete!\nSource：${missionTitle}\n✅ ${correctVal} correct answers × ${pointsPerQ} pts = +${glow} moonlight`);
-  } catch (error) {
-    console.error("Update error:", error);
-    alert("Error saving moonlight. Please try again.");
-  }
-});
 
-    // ═══ UTILS ═══
     window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
     window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); }));
@@ -1572,31 +1379,25 @@ const glow = correctVal * pointsPerQ;
       window._tt = setTimeout(() => t.classList.remove('show'), 2800);
     };
 
-    // ═══ AUTH ═══
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
       if (!currentUser) {
-        // Not logged in: show login hint, zero out moon, show local pet cache (read-only)
         document.getElementById("login-hint").style.display = "block";
         moonData = {totalGlow:0, cycleGlow:0, logs:[]};
-        petData = null; // clear any stale data from a previous session
+        petData = null;
         renderMoonUI();
         renderPetDisplay();
         renderStages();
         return;
       }
-      // Logged in: server is the single source of truth — loadMoonData overwrites everything
       document.getElementById("login-hint").style.display = "none";
       await loadMoonData(currentUser.uid);
     });
 
-    // ═══ INIT ═══
-    // Do NOT pre-seed from local storage — onAuthStateChanged will load the
-    // authoritative server data (or fall back to local cache if not logged in).
     renderMissions();
     renderMoonUI();
     setMissionStarted(missionStarted);
-    renderPetDisplay();  // renders empty/egg state until auth resolves
+    renderPetDisplay();
     renderStages();
   </script>
 
