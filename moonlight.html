@@ -810,12 +810,12 @@
     const MOON_CYCLE = 300;
 
     const MISSIONS = [
-      { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html" },
-      { title: "Mission 2: iVocab詞彙選擇題", url: "https://ivocab-quiz.vercel.app/" },
-      { title: "Mission 3: Topic Reading 19議題素養閱讀理解", url: "https://shirley-ai-reading.vercel.app/" },
-      { title: "Mission 4: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" },
-      { title: "Mission 5: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/" }
-    ];
+  { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html", pointsPerQuestion: 3 },
+  { title: "Mission 2: iVocab詞彙選擇題", url: "https://ivocab-quiz.vercel.app/", pointsPerQuestion: 2 },
+  { title: "Mission 3: Topic Reading 19議題素養閱讀理解", url: "https://shirley-ai-reading.vercel.app/", pointsPerQuestion: 4 },
+  { title: "Mission 4: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html", pointsPerQuestion: 2 },
+  { title: "Mission 5: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 }
+];
 
     // ═══ PET DEFINITIONS ═══
     const PET_TIERS = [
@@ -1513,36 +1513,43 @@
     }
 
     window.addEventListener("message", async (event) => {
-      if (!isAllowedOrigin(event.origin)) return;
-      const data = event.data || {};
-      if (data.type !== "LUNAR_MISSION_RESULT") return;
-      const correctVal = parseInt(data.correct) || 0;
-      if (correctVal <= 0) return;
-      const missionTitle = data.mission || data.title || "Lunar Mission";
-      if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
-      if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
+  if (!isAllowedOrigin(event.origin)) return;
+  const data = event.data || {};
+  if (data.type !== "LUNAR_MISSION_RESULT") return;
+  const correctVal = parseInt(data.correct) || 0;
+  if (correctVal <= 0) return;
+  const missionTitle = data.mission || data.title || "Lunar Mission";
+  if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
+  if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
 
-      const glow = correctVal;
-      const userRef = doc(db, "users", currentUser.uid);
-      const newTotal = (moonData.totalGlow || 0) + glow;
-      const newCycle = newTotal % MOON_CYCLE;
-      const logEntry = { time: new Date().toISOString(), correct: correctVal, wrong:0, glow, type:"earn", source: missionTitle };
+  // 根據 mission 取得每題分數
+  let pointsPerQ = 1;
+  const matchedMission = MISSIONS.find(m => missionTitle.includes(m.title) || m.title.includes(missionTitle));
+  if (matchedMission) {
+    pointsPerQ = matchedMission.pointsPerQuestion;
+  }
+  const glow = correctVal * pointsPerQ;
 
-      try {
-        await updateDoc(userRef, {
-          moonGlowTotal: newTotal, moonGlowCycle: newCycle,
-          moonGlowLogs: arrayUnion(logEntry),
-          activityLogs: arrayUnion({ date: new Date().toISOString(), type:"Lunar Glow", detail:`Collected ${glow} pts from ${missionTitle}` })
-        });
-        moonData.totalGlow = newTotal; moonData.cycleGlow = newCycle;
-        moonData.logs.push(logEntry);
-        renderMoonUI();
-        alert(`🌕 Mission complete!\nSource：${missionTitle}\n+${glow} moonlight (✅${correctVal})`);
-      } catch (error) {
-        console.error("Update error:", error);
-        alert("Error saving moonlight. Please try again.");
-      }
+  const userRef = doc(db, "users", currentUser.uid);
+  const newTotal = (moonData.totalGlow || 0) + glow;
+  const newCycle = newTotal % MOON_CYCLE;
+  const logEntry = { time: new Date().toISOString(), correct: correctVal, wrong:0, glow, type:"earn", source: `${missionTitle} (${pointsPerQ}pt/題)` };
+
+  try {
+    await updateDoc(userRef, {
+      moonGlowTotal: newTotal, moonGlowCycle: newCycle,
+      moonGlowLogs: arrayUnion(logEntry),
+      activityLogs: arrayUnion({ date: new Date().toISOString(), type:"Lunar Glow", detail:`Collected ${glow} pts from ${missionTitle}` })
     });
+    moonData.totalGlow = newTotal; moonData.cycleGlow = newCycle;
+    moonData.logs.push(logEntry);
+    renderMoonUI();
+    alert(`🌕 Mission complete!\nSource：${missionTitle}\n✅ ${correctVal} correct answers × ${pointsPerQ} pts = +${glow} moonlight`);
+  } catch (error) {
+    console.error("Update error:", error);
+    alert("Error saving moonlight. Please try again.");
+  }
+});
 
     // ═══ UTILS ═══
     window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
