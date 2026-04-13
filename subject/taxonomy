@@ -1,0 +1,2435 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>國中教材對照版 v3｜生物分類圓形遞進學習平台</title>
+  <style>
+    :root{
+      --bg1:#dfe8de;
+      --bg2:#d8d5cb;
+      --panel:#fff9ef;
+      --green:#96c094;
+      --green-dark:#31513a;
+      --gold:#d3b477;
+      --gold-soft:#efe1b0;
+      --ink:#1f2920;
+      --muted:#5b665b;
+      --shadow:0 18px 40px rgba(0,0,0,.13);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Segoe UI','Noto Sans TC','Microsoft JhengHei',sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--ink);
+    }
+    .page{
+      max-width:1540px;
+      margin:24px auto;
+      padding:0 16px 32px;
+    }
+    .shell{
+      background:rgba(255,250,240,.94);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:var(--shadow);
+      border-radius:38px;
+      padding:26px 22px 32px;
+    }
+    .hero{
+      text-align:center;
+      margin-bottom:18px;
+    }
+    .hero h1{
+      margin:0;
+      color:#24462f;
+      font-size:2rem;
+      font-weight:900;
+    }
+    .hero p{
+      margin:10px 0 0;
+      color:#566759;
+      line-height:1.8;
+    }
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      background:#e6eee1;
+      border-radius:999px;
+      padding:12px;
+      margin-bottom:18px;
+    }
+    .topbar input,.topbar select,.topbar button{
+      font-family:inherit;
+      font-size:.97rem;
+      padding:12px 16px;
+      border:none;
+      border-radius:999px;
+    }
+    .topbar input{
+      min-width:320px;
+      flex:1 1 360px;
+      background:#fff;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+    }
+    .topbar select{background:#fff; min-width:150px}
+    .topbar button{
+      cursor:pointer;
+      font-weight:800;
+      transition:.18s ease;
+    }
+    .topbar button:hover,.action-btn:hover,.crumb:hover,.circle-card:hover,.mini-jump:hover{transform:translateY(-2px)}
+    .primary{background:#456f4d;color:#fff}
+    .secondary{background:#bda170;color:#2d2315}
+    .layout{
+      display:grid;
+      grid-template-columns:360px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .panel{
+      background:rgba(255,255,255,.58);
+      border:1px solid #eadfc8;
+      border-radius:30px;
+      padding:18px;
+    }
+    .panel h2{
+      margin:0 0 12px;
+      color:#294433;
+      font-size:1.1rem;
+    }
+    .current-node{
+      position:sticky;
+      top:14px;
+      background:linear-gradient(180deg,#fff7e7,#fffdf8);
+    }
+    .node-title{
+      font-size:1.4rem;
+      font-weight:900;
+      color:#264332;
+      line-height:1.45;
+    }
+    .node-sub{
+      margin-top:10px;
+      color:#5a695d;
+      line-height:1.8;
+      font-size:.96rem;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+    .pill{
+      background:#edf3e6;
+      color:#294332;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:.88rem;
+      font-weight:700;
+    }
+    .quick-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    .action-btn{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-family:inherit;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+      background:#497251;
+      color:#fff;
+    }
+    .action-btn.alt{background:#c0a46d;color:#302414}
+    .note-box{
+      margin-top:14px;
+      background:#fff6df;
+      border:1px solid #ead6a7;
+      border-radius:18px;
+      padding:12px;
+      color:#675a3c;
+      line-height:1.75;
+      font-size:.9rem;
+    }
+    .breadcrumb{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:14px;
+      align-items:center;
+    }
+    .crumb{
+      background:#2f4d38;
+      color:#fff4d8;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.9rem;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .crumb.alt{
+      background:#c2a56f;
+      color:#2f2414;
+    }
+    .gallery-wrap{
+      background:linear-gradient(180deg,#fbf4e5,#fffaf1);
+      border:1px solid #e7d8be;
+      border-radius:34px;
+      padding:18px 18px 24px;
+      min-height:590px;
+    }
+    .gallery-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .gallery-title{
+      font-size:1.08rem;
+      font-weight:900;
+      color:#35523e;
+    }
+    .gallery-tip{
+      font-size:.9rem;
+      color:#627162;
+    }
+    .gallery-stage{
+      position:relative;
+      min-height:470px;
+      overflow:hidden;
+      border-radius:24px;
+    }
+    .gallery-view{
+      position:absolute;
+      inset:0;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(180px,1fr));
+      gap:26px 22px;
+      justify-items:center;
+      align-content:start;
+      padding:6px 4px 12px;
+    }
+    .enter-right{animation:slideInRight .32s ease both}
+    .enter-left{animation:slideInLeft .32s ease both}
+    .search-fade{animation:fadeIn .24s ease both}
+    @keyframes slideInRight{from{opacity:.2;transform:translateX(70px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes slideInLeft{from{opacity:.2;transform:translateX(-70px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes fadeIn{from{opacity:.2;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+    .circle-card{
+      width:100%;
+      max-width:240px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .circle-shell{
+      width:210px;
+      height:210px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#95bf94,#8db38d);
+      padding:8px;
+      box-shadow:0 12px 26px rgba(0,0,0,.14);
+    }
+    .circle-ring{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:#d9c28d;
+      padding:8px;
+    }
+    .circle-core{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 25%, #f7f0dc, #eee1c0 72%);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:18px 14px;
+    }
+    .circle-en,.circle-zh{
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:900;
+    }
+    .circle-en{
+      background:#bfd1aa;
+      font-size:1.02rem;
+      margin-bottom:10px;
+    }
+    .circle-zh{
+      background:#efe1ae;
+      font-size:1.01rem;
+      margin-bottom:10px;
+    }
+    .circle-rank{
+      font-size:.96rem;
+      font-weight:700;
+      color:#2c2616;
+      margin-top:4px;
+    }
+    .circle-hint{
+      margin-top:10px;
+      font-size:.96rem;
+      font-weight:900;
+    }
+    .circle-note{
+      margin-top:6px;
+      min-height:38px;
+      text-align:center;
+      color:#5c665a;
+      font-size:.82rem;
+      line-height:1.45;
+    }
+    .detail{
+      margin-top:18px;
+      background:#fff4dc;
+      border:1px solid #ead3a3;
+      border-radius:28px;
+      padding:20px;
+      animation:fadeIn .22s ease both;
+    }
+    .detail h3{
+      margin:0 0 10px;
+      color:#2c4934;
+      font-size:1.28rem;
+    }
+    .detail p{
+      margin:0 0 12px;
+      color:#58695d;
+      line-height:1.8;
+    }
+    .detail-chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:10px 0 16px;
+    }
+    .detail-chip{
+      background:#eef3e5;
+      color:#2a4332;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+    .sub-title{
+      margin:6px 0 12px;
+      color:#34513c;
+      font-weight:900;
+    }
+    .subgrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+      gap:14px;
+    }
+    .mini-jump{text-align:center;cursor:pointer}
+    .mini-circle{
+      width:102px;
+      height:102px;
+      margin:0 auto;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #f8ecd2, #ead4a5);
+      box-shadow:0 8px 14px rgba(0,0,0,.08);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:10px;
+    }
+    .mini-circle .en{font-size:.78rem;font-weight:800}
+    .mini-circle .zh{font-size:.82rem;font-weight:900;margin-top:5px}
+    .mini-label{margin-top:8px;color:#59695b;font-size:.76rem;font-weight:800}
+    .empty{
+      grid-column:1/-1;
+      text-align:center;
+      padding:56px 16px;
+      color:#617161;
+      font-size:1rem;
+    }
+
+    .group-header{
+      grid-column:1/-1;
+      background:linear-gradient(90deg,#eef4e8,#fff6df);
+      border:1px solid #e4d6b8;
+      border-radius:20px;
+      padding:12px 16px;
+      margin-top:4px;
+    }
+    .group-title{
+      font-size:1rem;
+      font-weight:900;
+      color:#31503a;
+    }
+    .group-sub{
+      margin-top:4px;
+      color:#6a715f;
+      font-size:.86rem;
+      line-height:1.6;
+    }
+    .teach-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(220px,1fr));
+      gap:12px;
+      margin:14px 0 16px;
+    }
+    .teach-card{
+      background:#fffaf0;
+      border:1px solid #eadcbd;
+      border-radius:20px;
+      padding:14px;
+    }
+    .teach-card h4{
+      margin:0 0 8px;
+      font-size:.95rem;
+      color:#2e4b38;
+    }
+    .teach-card p{
+      margin:0;
+      color:#5d6b5f;
+      line-height:1.75;
+      font-size:.92rem;
+    }
+    .mode-line{
+      margin-top:12px;
+      color:#6a715f;
+      font-size:.9rem;
+      line-height:1.7;
+    }
+
+    @media (max-width:1080px){
+      .layout{grid-template-columns:1fr}
+      .current-node{position:static}
+      .gallery-view{grid-template-columns:repeat(2,minmax(180px,1fr))}
+      .teach-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:690px){
+      .page{padding:0 10px 24px}
+      .shell{padding:20px 12px 24px}
+      .hero h1{font-size:1.7rem}
+      .topbar input{min-width:100%}
+      .gallery-view{grid-template-columns:1fr}
+      .circle-shell{width:190px;height:190px}
+      .gallery-stage{min-height:720px}
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="shell">
+    <div class="hero">
+      <h1>🌿 Shirley's Bilingual Junior Taxonomy Interactive Platform (國中)生物分類互動平台(雙語)</h1>
+      <p> <strong>Domain → Kingdom → Phylum → Class → Order → Family → Genus → Species</strong> </p>
+    </div>
+
+    <div class="topbar">
+      <input id="searchInput" type="text" placeholder="搜尋中文、英文、學名，例如 真菌界、哺乳綱、Homo sapiens、稻屬">
+      <select id="rankFilter">
+        <option value="all">全部層級</option>
+        <option value="Domain">Domain</option>
+        <option value="Kingdom">Kingdom</option>
+        <option value="Phylum">Phylum</option>
+        <option value="Class">Class</option>
+        <option value="Order">Order</option>
+        <option value="Family">Family</option>
+        <option value="Genus">Genus</option>
+        <option value="Species">Species</option>
+      </select>
+      <button id="searchBtn" class="primary">搜尋</button>
+      <select id="viewMode">
+        <option value="textbook" selected>課本主幹模式</option>
+        <option value="full">完整分類模式</option>
+      </select>
+      <button id="homeBtn" class="secondary">回到起點</button>
+    </div>
+
+    <div class="layout">
+      <aside class="panel current-node">
+        <h2>📍 目前節點</h2>
+        <div id="currentNodeBox"></div>
+        <div class="quick-actions">
+          <button class="action-btn alt" id="upBtn">↩ 返回上一層</button>
+          <button class="action-btn" id="randomBtn">🎲 隨機節點</button>
+        </div>
+        </div>
+      </aside>
+
+      <main class="panel">
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div class="gallery-wrap">
+          <div class="gallery-head">
+            <div class="gallery-title" id="galleryTitle"></div>
+            <div class="gallery-tip">點圓形卡片後，會滑動進入下一層</div>
+          </div>
+          <div class="gallery-stage" id="galleryStage"></div>
+        </div>
+        <div id="detailBox" class="detail" style="display:none;"></div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+const taxonomyData = {
+  id:'life',
+  name_en:'Life',
+  name_zh:'Life 生命起點',
+  rank:'Root',
+  description:'從三域系統出發，逐步進入國中教材常見的界、門、綱、目、科、屬、種。',
+  children:[
+    {
+      id:'d-archaea', name_en:'Archaea', name_zh:'古菌域', rank:'Domain',
+      description:'原核生物的一域，常見於高鹽、高熱或缺氧環境。',
+      children:[
+        {
+          id:'k-archaea', name_en:'Archaebacteria', name_zh:'古細菌界', rank:'Kingdom',
+          description:'教材用來承接古菌域的代表界。',
+          children:[
+            {
+              id:'p-methano', name_en:'Euryarchaeota', name_zh:'廣古菌門', rank:'Phylum',
+              description:'包含產甲烷古菌與嗜鹽古菌。',
+              children:[
+                {
+                  id:'c-methano', name_en:'Methanobacteria', name_zh:'甲烷桿菌綱', rank:'Class',
+                  description:'能在缺氧環境中產生甲烷的古菌。',
+                  children:[
+                    {
+                      id:'o-methano', name_en:'Methanobacteriales', name_zh:'甲烷桿菌目', rank:'Order',
+                      description:'典型產甲烷古菌所在目。',
+                      children:[
+                        {
+                          id:'f-methano', name_en:'Methanobacteriaceae', name_zh:'甲烷桿菌科', rank:'Family',
+                          description:'常見產甲烷古菌的一科。',
+                          children:[
+                            {
+                              id:'g-methano', name_en:'Methanobacterium', name_zh:'甲烷桿菌屬', rank:'Genus',
+                              description:'代表性的產甲烷古菌屬。',
+                              children:[
+                                {id:'s-methano', name_en:'Methanobacterium formicicum', name_zh:'甲酸甲烷桿菌', rank:'Species', description:'教材中常作產甲烷古菌例子。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-halo', name_en:'Halobacteria', name_zh:'鹽桿菌綱', rank:'Class',
+                  description:'適應高鹽環境的古菌。',
+                  children:[
+                    {
+                      id:'o-halo', name_en:'Halobacteriales', name_zh:'鹽桿菌目', rank:'Order',
+                      description:'高鹽環境中的古菌類群。',
+                      children:[
+                        {
+                          id:'f-halo', name_en:'Halobacteriaceae', name_zh:'鹽桿菌科', rank:'Family',
+                          description:'嗜鹽古菌的一科。',
+                          children:[
+                            {
+                              id:'g-halo', name_en:'Halobacterium', name_zh:'鹽桿菌屬', rank:'Genus',
+                              description:'高鹽環境代表屬。',
+                              children:[
+                                {id:'s-halo', name_en:'Halobacterium salinarum', name_zh:'鹽沼鹽桿菌', rank:'Species', description:'常見於鹽田與高鹽湖。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id:'d-bacteria', name_en:'Bacteria', name_zh:'細菌域', rank:'Domain',
+      description:'數量最多、分布最廣的原核生物群。',
+      children:[
+        {
+          id:'k-bacteria', name_en:'Eubacteria', name_zh:'真細菌界', rank:'Kingdom',
+          description:'教材用來承接細菌域的代表界。',
+          children:[
+            {
+              id:'p-proteo', name_en:'Proteobacteria', name_zh:'變形菌門', rank:'Phylum',
+              description:'重要細菌大群，包含桿菌與多種模式菌。',
+              children:[
+                {
+                  id:'c-gamma', name_en:'Gammaproteobacteria', name_zh:'γ-變形菌綱', rank:'Class',
+                  description:'含大腸桿菌、沙門氏菌等。',
+                  children:[
+                    {
+                      id:'o-entero', name_en:'Enterobacterales', name_zh:'腸桿菌目', rank:'Order',
+                      description:'腸道細菌的重要分類群。',
+                      children:[
+                        {
+                          id:'f-entero', name_en:'Enterobacteriaceae', name_zh:'腸桿菌科', rank:'Family',
+                          description:'教科書與醫學教材常見的一科。',
+                          children:[
+                            {
+                              id:'g-escherichia', name_en:'Escherichia', name_zh:'埃希氏菌屬', rank:'Genus',
+                              description:'包含大腸桿菌。',
+                              children:[
+                                {id:'s-ecoli', name_en:'Escherichia coli', name_zh:'大腸桿菌', rank:'Species', description:'最常見的模式細菌之一。', children:[]}
+                              ]
+                            },
+                            {
+                              id:'g-salmonella', name_en:'Salmonella', name_zh:'沙門氏菌屬', rank:'Genus',
+                              description:'食源性疾病中常被提及。',
+                              children:[
+                                {id:'s-salmonella', name_en:'Salmonella enterica', name_zh:'腸道沙門氏菌', rank:'Species', description:'常見病原菌。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-firmi', name_en:'Firmicutes', name_zh:'厚壁菌門', rank:'Phylum',
+              description:'包含多種革蘭氏陽性菌。',
+              children:[
+                {
+                  id:'c-bacilli', name_en:'Bacilli', name_zh:'芽孢桿菌綱', rank:'Class',
+                  description:'土壤與環境中常見。',
+                  children:[
+                    {
+                      id:'o-bacillales', name_en:'Bacillales', name_zh:'芽孢桿菌目', rank:'Order',
+                      description:'芽孢形成菌常見目。',
+                      children:[
+                        {
+                          id:'f-bacillaceae', name_en:'Bacillaceae', name_zh:'芽孢桿菌科', rank:'Family',
+                          description:'教材中常見桿菌家族。',
+                          children:[
+                            {
+                              id:'g-bacillus', name_en:'Bacillus', name_zh:'芽孢桿菌屬', rank:'Genus',
+                              description:'代表性的環境細菌屬。',
+                              children:[
+                                {id:'s-bsub', name_en:'Bacillus subtilis', name_zh:'枯草桿菌', rank:'Species', description:'常用模式細菌。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id:'d-eukarya', name_en:'Eukarya', name_zh:'真核生物域', rank:'Domain',
+      description:'具有細胞核與膜狀胞器，包含原生生物、真菌、植物與動物。',
+      children:[
+        {
+          id:'k-protista', name_en:'Protista', name_zh:'原生生物界', rank:'Kingdom',
+          description:'結構較簡單的真核生物，國中課本常介紹原生動物、藻類與原生菌類。',
+          children:[
+            {
+              id:'p-ciliophora', name_en:'Ciliophora', name_zh:'纖毛蟲門', rank:'Phylum',
+              description:'以纖毛運動的原生生物。',
+              children:[
+                {
+                  id:'c-oligo', name_en:'Oligohymenophorea', name_zh:'寡膜綱', rank:'Class',
+                  description:'草履蟲所在綱。',
+                  children:[
+                    {
+                      id:'o-peniculida', name_en:'Peniculida', name_zh:'草履蟲目', rank:'Order',
+                      description:'典型纖毛蟲所在目。',
+                      children:[
+                        {
+                          id:'f-parameciidae', name_en:'Parameciidae', name_zh:'草履蟲科', rank:'Family',
+                          description:'草履蟲常見科。',
+                          children:[
+                            {
+                              id:'g-paramecium', name_en:'Paramecium', name_zh:'草履蟲屬', rank:'Genus',
+                              description:'國中常見原生生物教材。',
+                              children:[
+                                {id:'s-paramecium', name_en:'Paramecium caudatum', name_zh:'草履蟲', rank:'Species', description:'以纖毛游動。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-euglenozoa', name_en:'Euglenozoa', name_zh:'眼蟲門', rank:'Phylum',
+              description:'兼具植物與動物特徵的原生生物。',
+              children:[
+                {
+                  id:'c-euglena', name_en:'Euglenophyceae', name_zh:'裸藻綱', rank:'Class',
+                  description:'眼蟲所在綱。',
+                  children:[
+                    {
+                      id:'o-euglenales', name_en:'Euglenales', name_zh:'眼蟲目', rank:'Order',
+                      description:'眼蟲類所在目。',
+                      children:[
+                        {
+                          id:'f-euglenaceae', name_en:'Euglenaceae', name_zh:'眼蟲科', rank:'Family',
+                          description:'教材常見眼蟲類群。',
+                          children:[
+                            {
+                              id:'g-euglena', name_en:'Euglena', name_zh:'眼蟲屬', rank:'Genus',
+                              description:'具有鞭毛。',
+                              children:[
+                                {id:'s-euglena', name_en:'Euglena gracilis', name_zh:'眼蟲', rank:'Species', description:'兼具植物與動物特性。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-apicomplexa', name_en:'Apicomplexa', name_zh:'頂複門', rank:'Phylum',
+              description:'包含瘧原蟲等寄生性原生生物。',
+              children:[
+                {
+                  id:'c-aconoidasida', name_en:'Aconoidasida', name_zh:'無錐綱', rank:'Class',
+                  description:'瘧原蟲所在綱。',
+                  children:[
+                    {
+                      id:'o-haemosporida', name_en:'Haemosporida', name_zh:'血孢子蟲目', rank:'Order',
+                      description:'寄生於血液細胞。',
+                      children:[
+                        {
+                          id:'f-plasmodiidae', name_en:'Plasmodiidae', name_zh:'瘧原蟲科', rank:'Family',
+                          description:'瘧疾病原相關。',
+                          children:[
+                            {
+                              id:'g-plasmodium', name_en:'Plasmodium', name_zh:'瘧原蟲屬', rank:'Genus',
+                              description:'瘧疾病原屬。',
+                              children:[
+                                {id:'s-plasmodium', name_en:'Plasmodium falciparum', name_zh:'惡性瘧原蟲', rank:'Species', description:'最危險的瘧疾病原之一。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-chlorophyta', name_en:'Chlorophyta', name_zh:'綠藻門', rank:'Phylum',
+              description:'教材常見藻類之一。',
+              children:[
+                {
+                  id:'c-chloro', name_en:'Chlorophyceae', name_zh:'綠藻綱', rank:'Class',
+                  description:'綠藻代表綱。',
+                  children:[
+                    {
+                      id:'o-chlamy', name_en:'Chlamydomonadales', name_zh:'衣藻目', rank:'Order',
+                      description:'單細胞綠藻常見類群。',
+                      children:[
+                        {
+                          id:'f-chlamy', name_en:'Chlamydomonadaceae', name_zh:'衣藻科', rank:'Family',
+                          description:'衣藻所在科。',
+                          children:[
+                            {
+                              id:'g-chlamydomonas', name_en:'Chlamydomonas', name_zh:'衣藻屬', rank:'Genus',
+                              description:'國中常見綠藻教材。',
+                              children:[
+                                {id:'s-chlamydomonas', name_en:'Chlamydomonas reinhardtii', name_zh:'萊氏衣藻', rank:'Species', description:'常見模式綠藻。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id:'k-fungi', name_en:'Fungi', name_zh:'真菌界', rank:'Kingdom',
+          description:'異營生物，細胞壁主要成分為幾丁質，國中課本常提酵母、黴菌、菇類。',
+          children:[
+            {
+              id:'p-basidio', name_en:'Basidiomycota', name_zh:'擔子菌門', rank:'Phylum',
+              description:'包括香菇、平菇、洋菇等常見菇類。',
+              children:[
+                {
+                  id:'c-agarico', name_en:'Agaricomycetes', name_zh:'傘菌綱', rank:'Class',
+                  description:'大型傘狀菇類常見綱。',
+                  children:[
+                    {
+                      id:'o-agaricales', name_en:'Agaricales', name_zh:'傘菌目', rank:'Order',
+                      description:'最常見的蘑菇類群。',
+                      children:[
+                        {
+                          id:'f-agaricaceae', name_en:'Agaricaceae', name_zh:'傘菌科', rank:'Family',
+                          description:'洋菇等常見食用菇所在科。',
+                          children:[
+                            {
+                              id:'g-agaricus', name_en:'Agaricus', name_zh:'傘菌屬', rank:'Genus',
+                              description:'包含洋菇。',
+                              children:[
+                                {id:'s-agaricus', name_en:'Agaricus bisporus', name_zh:'洋菇', rank:'Species', description:'常見食用菇。', children:[]}
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          id:'f-pleurotaceae', name_en:'Pleurotaceae', name_zh:'側耳科', rank:'Family',
+                          description:'平菇所在科。',
+                          children:[
+                            {
+                              id:'g-pleurotus', name_en:'Pleurotus', name_zh:'側耳屬', rank:'Genus',
+                              description:'平菇類常見屬。',
+                              children:[
+                                {id:'s-pleurotus', name_en:'Pleurotus ostreatus', name_zh:'平菇', rank:'Species', description:'常見食用菇。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-asco', name_en:'Ascomycota', name_zh:'子囊菌門', rank:'Phylum',
+              description:'酵母、青黴、麴菌等常見真菌所在門。',
+              children:[
+                {
+                  id:'c-saccharo', name_en:'Saccharomycetes', name_zh:'酵母綱', rank:'Class',
+                  description:'常見單細胞真菌。',
+                  children:[
+                    {
+                      id:'o-saccharo', name_en:'Saccharomycetales', name_zh:'酵母目', rank:'Order',
+                      description:'釀造酵母所在目。',
+                      children:[
+                        {
+                          id:'f-saccharo', name_en:'Saccharomycetaceae', name_zh:'酵母科', rank:'Family',
+                          description:'常見酵母類群。',
+                          children:[
+                            {
+                              id:'g-saccharomyces', name_en:'Saccharomyces', name_zh:'酵母屬', rank:'Genus',
+                              description:'發酵工業常見屬。',
+                              children:[
+                                {id:'s-saccharomyces', name_en:'Saccharomyces cerevisiae', name_zh:'釀酒酵母', rank:'Species', description:'麵包、釀酒常用。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-eurotio', name_en:'Eurotiomycetes', name_zh:'散囊菌綱', rank:'Class',
+                  description:'青黴與麴菌常見所在綱。',
+                  children:[
+                    {
+                      id:'o-eurotiales', name_en:'Eurotiales', name_zh:'散囊菌目', rank:'Order',
+                      description:'食品與工業真菌常見目。',
+                      children:[
+                        {
+                          id:'f-tricho', name_en:'Trichocomaceae', name_zh:'散囊菌科', rank:'Family',
+                          description:'包含青黴與麴菌。',
+                          children:[
+                            {
+                              id:'g-penicillium', name_en:'Penicillium', name_zh:'青黴屬', rank:'Genus',
+                              description:'青黴菌所在屬。',
+                              children:[
+                                {id:'s-penicillium', name_en:'Penicillium chrysogenum', name_zh:'產黃青黴', rank:'Species', description:'青黴素相關代表菌。', children:[]}
+                              ]
+                            },
+                            {
+                              id:'g-aspergillus', name_en:'Aspergillus', name_zh:'麴菌屬', rank:'Genus',
+                              description:'發酵與食品加工常提及。',
+                              children:[
+                                {id:'s-aspergillus', name_en:'Aspergillus oryzae', name_zh:'米麴菌', rank:'Species', description:'醬油、味噌發酵常用。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id:'k-plantae', name_en:'Plantae', name_zh:'植物界', rank:'Kingdom',
+          description:'多細胞光合自營生物。國中課本常從蘚苔、蕨類、裸子、被子植物切入。',
+          children:[
+            {
+              id:'p-bryophyta', name_en:'Bryophyta', name_zh:'苔蘚植物門', rank:'Phylum',
+              description:'無維管束植物，依賴潮濕環境。',
+              children:[
+                {
+                  id:'c-bryopsida', name_en:'Bryopsida', name_zh:'蘚綱', rank:'Class',
+                  description:'蘚苔植物中常見的一綱。',
+                  children:[
+                    {
+                      id:'o-hypnales', name_en:'Hypnales', name_zh:'灰蘚目', rank:'Order',
+                      description:'苔蘚中常見目。',
+                      children:[
+                        {
+                          id:'f-hypnaceae', name_en:'Hypnaceae', name_zh:'灰蘚科', rank:'Family',
+                          description:'常見綠色苔蘚。',
+                          children:[
+                            {
+                              id:'g-hypnum', name_en:'Hypnum', name_zh:'灰蘚屬', rank:'Genus',
+                              description:'苔蘚代表屬。',
+                              children:[
+                                {id:'s-hypnum', name_en:'Hypnum cupressiforme', name_zh:'柏葉灰蘚', rank:'Species', description:'常見苔蘚。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-marchantiopsida', name_en:'Marchantiopsida', name_zh:'地錢綱', rank:'Class',
+                  description:'蘚苔植物中常見的地錢類。',
+                  children:[
+                    {
+                      id:'o-marchantiales', name_en:'Marchantiales', name_zh:'地錢目', rank:'Order',
+                      description:'典型地錢類所在目。',
+                      children:[
+                        {
+                          id:'f-marchantiaceae', name_en:'Marchantiaceae', name_zh:'地錢科', rank:'Family',
+                          description:'國中教材常見蘚苔類代表。',
+                          children:[
+                            {
+                              id:'g-marchantia', name_en:'Marchantia', name_zh:'地錢屬', rank:'Genus',
+                              description:'常見蘚苔植物屬。',
+                              children:[
+                                {id:'s-marchantia', name_en:'Marchantia polymorpha', name_zh:'地錢', rank:'Species', description:'常見潮濕環境蘚苔植物。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-pteridophyta', name_en:'Pteridophyta', name_zh:'蕨類植物門', rank:'Phylum',
+              description:'具維管束，以孢子繁殖。',
+              children:[
+                {
+                  id:'c-polypodiopsida', name_en:'Polypodiopsida', name_zh:'真蕨綱', rank:'Class',
+                  description:'常見蕨類綱。',
+                  children:[
+                    {
+                      id:'o-polypodiales', name_en:'Polypodiales', name_zh:'水龍骨目', rank:'Order',
+                      description:'蕨類重要目別。',
+                      children:[
+                        {
+                          id:'f-pteridaceae', name_en:'Pteridaceae', name_zh:'鳳尾蕨科', rank:'Family',
+                          description:'常見庭園蕨類。',
+                          children:[
+                            {
+                              id:'g-adiantum', name_en:'Adiantum', name_zh:'鐵線蕨屬', rank:'Genus',
+                              description:'觀賞蕨類常見屬。',
+                              children:[
+                                {id:'s-adiantum-1', name_en:'Adiantum capillus-veneris', name_zh:'鐵線蕨', rank:'Species', description:'常見觀賞蕨類。', children:[]},
+                                {id:'s-adiantum-2', name_en:'Adiantum pedatum', name_zh:'孔雀鐵線蕨', rank:'Species', description:'常見園藝觀賞蕨類。', children:[]}
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          id:'f-polypodiaceae', name_en:'Polypodiaceae', name_zh:'水龍骨科', rank:'Family',
+                          description:'附生蕨類常見科。',
+                          children:[
+                            {
+                              id:'g-platycerium', name_en:'Platycerium', name_zh:'鹿角蕨屬', rank:'Genus',
+                              description:'外型特殊的附生蕨類。',
+                              children:[
+                                {id:'s-platycerium', name_en:'Platycerium bifurcatum', name_zh:'鹿角蕨', rank:'Species', description:'常見觀賞附生蕨。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-gymnospermae', name_en:'Gymnospermae', name_zh:'裸子植物門', rank:'Phylum',
+              description:'種子裸露，沒有果實包覆。',
+              children:[
+                {
+                  id:'c-pinopsida', name_en:'Pinopsida', name_zh:'松柏綱', rank:'Class',
+                  description:'裸子植物代表綱。',
+                  children:[
+                    {
+                      id:'o-pinales', name_en:'Pinales', name_zh:'松柏目', rank:'Order',
+                      description:'松、杉、柏所在目。',
+                      children:[
+                        {
+                          id:'f-pinaceae', name_en:'Pinaceae', name_zh:'松科', rank:'Family',
+                          description:'重要木本植物科。',
+                          children:[
+                            {
+                              id:'g-pinus', name_en:'Pinus', name_zh:'松屬', rank:'Genus',
+                              description:'松樹代表屬。',
+                              children:[
+                                {id:'s-pinus', name_en:'Pinus taiwanensis', name_zh:'台灣二葉松', rank:'Species', description:'台灣常見松樹。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-ginkgoopsida', name_en:'Ginkgoopsida', name_zh:'銀杏綱', rank:'Class',
+                  description:'銀杏為代表的裸子植物類群。',
+                  children:[
+                    {
+                      id:'o-ginkgoales', name_en:'Ginkgoales', name_zh:'銀杏目', rank:'Order',
+                      description:'銀杏所在目。',
+                      children:[
+                        {
+                          id:'f-ginkgoaceae', name_en:'Ginkgoaceae', name_zh:'銀杏科', rank:'Family',
+                          description:'銀杏科唯一現生代表。',
+                          children:[
+                            {
+                              id:'g-ginkgo', name_en:'Ginkgo', name_zh:'銀杏屬', rank:'Genus',
+                              description:'古老裸子植物代表屬。',
+                              children:[
+                                {id:'s-ginkgo', name_en:'Ginkgo biloba', name_zh:'銀杏', rank:'Species', description:'常見裸子植物。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-angiospermae', name_en:'Angiospermae', name_zh:'被子植物門', rank:'Phylum',
+              description:'開花植物，種子有果實包覆。',
+              children:[
+                {
+                  id:'c-magnoliopsida', name_en:'Magnoliopsida', name_zh:'雙子葉植物綱', rank:'Class',
+                  description:'胚具兩片子葉。',
+                  children:[
+                    {
+                      id:'o-rosales', name_en:'Rosales', name_zh:'薔薇目', rank:'Order',
+                      description:'重要雙子葉植物目。',
+                      children:[
+                        {
+                          id:'f-rosaceae', name_en:'Rosaceae', name_zh:'薔薇科', rank:'Family',
+                          description:'桃、李、蘋果等所在科。',
+                          children:[
+                            {
+                              id:'g-prunus', name_en:'Prunus', name_zh:'李屬', rank:'Genus',
+                              description:'桃、李、櫻花所在屬。',
+                              children:[
+                                {id:'s-prunus-1', name_en:'Prunus persica', name_zh:'桃', rank:'Species', description:'常見水果。', children:[]},
+                                {id:'s-prunus-2', name_en:'Prunus serrulata', name_zh:'櫻花', rank:'Species', description:'常見觀賞植物。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      id:'o-fabales', name_en:'Fabales', name_zh:'豆目', rank:'Order',
+                      description:'豆科植物所在目。',
+                      children:[
+                        {
+                          id:'f-fabaceae', name_en:'Fabaceae', name_zh:'豆科', rank:'Family',
+                          description:'豆類與固氮植物常見科。',
+                          children:[
+                            {
+                              id:'g-glycine', name_en:'Glycine', name_zh:'大豆屬', rank:'Genus',
+                              description:'豆類重要屬。',
+                              children:[
+                                {id:'s-glycine', name_en:'Glycine max', name_zh:'大豆', rank:'Species', description:'重要糧食作物。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-liliopsida', name_en:'Liliopsida', name_zh:'單子葉植物綱', rank:'Class',
+                  description:'胚具一片子葉。',
+                  children:[
+                    {
+                      id:'o-poales', name_en:'Poales', name_zh:'禾本目', rank:'Order',
+                      description:'禾本科植物所在目。',
+                      children:[
+                        {
+                          id:'f-poaceae', name_en:'Poaceae', name_zh:'禾本科', rank:'Family',
+                          description:'稻、麥、玉米等重要糧食植物所在科。',
+                          children:[
+                            {
+                              id:'g-oryza', name_en:'Oryza', name_zh:'稻屬', rank:'Genus',
+                              description:'稻米所在屬。',
+                              children:[
+                                {id:'s-oryza', name_en:'Oryza sativa', name_zh:'水稻', rank:'Species', description:'主要糧食作物。', children:[]}
+                              ]
+                            },
+                            {
+                              id:'g-zea', name_en:'Zea', name_zh:'玉蜀黍屬', rank:'Genus',
+                              description:'玉米所在屬。',
+                              children:[
+                                {id:'s-zea', name_en:'Zea mays', name_zh:'玉米', rank:'Species', description:'重要糧食與飼料作物。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      id:'o-asparagales', name_en:'Asparagales', name_zh:'天門冬目', rank:'Order',
+                      description:'蘭科所在目。',
+                      children:[
+                        {
+                          id:'f-orchidaceae', name_en:'Orchidaceae', name_zh:'蘭科', rank:'Family',
+                          description:'花形特殊的觀賞植物大科。',
+                          children:[
+                            {
+                              id:'g-phalaenopsis', name_en:'Phalaenopsis', name_zh:'蝴蝶蘭屬', rank:'Genus',
+                              description:'常見觀賞蘭花。',
+                              children:[
+                                {id:'s-phalaenopsis', name_en:'Phalaenopsis aphrodite', name_zh:'白花蝴蝶蘭', rank:'Species', description:'常見栽培蘭花。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id:'k-animalia', name_en:'Animalia', name_zh:'動物界', rank:'Kingdom',
+          description:'多細胞、異營、可運動的真核生物。國中課本常由無脊椎與脊椎動物切入。',
+          children:[
+            {
+              id:'p-cnidaria', name_en:'Cnidaria', name_zh:'刺絲胞動物門', rank:'Phylum',
+              description:'無脊椎動物常見類群，具刺絲胞。',
+              children:[
+                {
+                  id:'c-anthozoa', name_en:'Anthozoa', name_zh:'珊瑚綱', rank:'Class',
+                  description:'海葵與珊瑚所在綱。',
+                  children:[
+                    {
+                      id:'o-actiniaria', name_en:'Actiniaria', name_zh:'海葵目', rank:'Order',
+                      description:'海葵所在目。',
+                      children:[
+                        {
+                          id:'f-actiniidae', name_en:'Actiniidae', name_zh:'海葵科', rank:'Family',
+                          description:'典型海葵科。',
+                          children:[
+                            {
+                              id:'g-actinia', name_en:'Actinia', name_zh:'海葵屬', rank:'Genus',
+                              description:'教材常見刺絲胞動物代表。',
+                              children:[
+                                {id:'s-actinia', name_en:'Actinia equina', name_zh:'馬海葵', rank:'Species', description:'刺絲胞動物代表。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-platyhelminthes', name_en:'Platyhelminthes', name_zh:'扁形動物門', rank:'Phylum',
+              description:'身體背腹扁平的無脊椎動物。',
+              children:[
+                {
+                  id:'c-turbellaria', name_en:'Turbellaria', name_zh:'渦蟲綱', rank:'Class',
+                  description:'常見自由生活扁形動物。',
+                  children:[
+                    {
+                      id:'o-tricladida', name_en:'Tricladida', name_zh:'三腸目', rank:'Order',
+                      description:'渦蟲所在目。',
+                      children:[
+                        {
+                          id:'f-planariidae', name_en:'Planariidae', name_zh:'渦蟲科', rank:'Family',
+                          description:'國中教材常見扁形動物。',
+                          children:[
+                            {
+                              id:'g-planaria', name_en:'Planaria', name_zh:'渦蟲屬', rank:'Genus',
+                              description:'再生能力常作教材例子。',
+                              children:[
+                                {id:'s-planaria', name_en:'Planaria torva', name_zh:'渦蟲', rank:'Species', description:'扁形動物代表。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-arthropoda', name_en:'Arthropoda', name_zh:'節肢動物門', rank:'Phylum',
+              description:'動物界最大門，具外骨骼與分節附肢。',
+              children:[
+                {
+                  id:'c-insecta', name_en:'Insecta', name_zh:'昆蟲綱', rank:'Class',
+                  description:'頭、胸、腹三部分，六足。',
+                  children:[
+                    {
+                      id:'o-lepidoptera', name_en:'Lepidoptera', name_zh:'鱗翅目', rank:'Order',
+                      description:'蝴蝶與蛾所在目。',
+                      children:[
+                        {
+                          id:'f-nymphalidae', name_en:'Nymphalidae', name_zh:'蛺蝶科', rank:'Family',
+                          description:'蝴蝶常見科。',
+                          children:[
+                            {
+                              id:'g-danaus', name_en:'Danaus', name_zh:'斑蝶屬', rank:'Genus',
+                              description:'遷徙蝶類知名屬。',
+                              children:[
+                                {id:'s-danaus', name_en:'Danaus plexippus', name_zh:'帝王斑蝶', rank:'Species', description:'著名遷徙蝴蝶。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      id:'o-coleoptera', name_en:'Coleoptera', name_zh:'鞘翅目', rank:'Order',
+                      description:'甲蟲所在目。',
+                      children:[
+                        {
+                          id:'f-coccinellidae', name_en:'Coccinellidae', name_zh:'瓢蟲科', rank:'Family',
+                          description:'常見益蟲。',
+                          children:[
+                            {
+                              id:'g-coccinella', name_en:'Coccinella', name_zh:'瓢蟲屬', rank:'Genus',
+                              description:'典型瓢蟲。',
+                              children:[
+                                {id:'s-coccinella', name_en:'Coccinella septempunctata', name_zh:'七星瓢蟲', rank:'Species', description:'常見瓢蟲。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-malacostraca', name_en:'Malacostraca', name_zh:'軟甲綱', rank:'Class',
+                  description:'蝦、蟹等甲殼類常見群。',
+                  children:[
+                    {
+                      id:'o-decapoda', name_en:'Decapoda', name_zh:'十足目', rank:'Order',
+                      description:'蝦與蟹所在目。',
+                      children:[
+                        {
+                          id:'f-portunidae', name_en:'Portunidae', name_zh:'梭子蟹科', rank:'Family',
+                          description:'游泳蟹常見科。',
+                          children:[
+                            {
+                              id:'g-portunus', name_en:'Portunus', name_zh:'梭子蟹屬', rank:'Genus',
+                              description:'常見海蟹屬。',
+                              children:[
+                                {id:'s-portunus', name_en:'Portunus trituberculatus', name_zh:'三點蟹', rank:'Species', description:'常見食用蟹。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id:'p-chordata', name_en:'Chordata', name_zh:'脊索動物門', rank:'Phylum',
+              description:'包含魚類、兩棲類、爬蟲類、鳥類與哺乳類。',
+              children:[
+                {
+                  id:'c-actinopterygii', name_en:'Actinopterygii', name_zh:'輻鰭魚綱', rank:'Class',
+                  description:'硬骨魚類主要群體。',
+                  children:[
+                    {
+                      id:'o-cypriniformes', name_en:'Cypriniformes', name_zh:'鯉形目', rank:'Order',
+                      description:'淡水魚重要目別。',
+                      children:[
+                        {
+                          id:'f-cyprinidae', name_en:'Cyprinidae', name_zh:'鯉科', rank:'Family',
+                          description:'鯉魚與金魚所在科。',
+                          children:[
+                            {
+                              id:'g-carassius', name_en:'Carassius', name_zh:'鯽屬', rank:'Genus',
+                              description:'常見淡水魚屬。',
+                              children:[
+                                {id:'s-carassius', name_en:'Carassius auratus', name_zh:'金魚', rank:'Species', description:'觀賞魚代表。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-amphibia', name_en:'Amphibia', name_zh:'兩棲綱', rank:'Class',
+                  description:'幼體多水生，成體可陸生。',
+                  children:[
+                    {
+                      id:'o-anura', name_en:'Anura', name_zh:'無尾目', rank:'Order',
+                      description:'蛙與蟾蜍所在目。',
+                      children:[
+                        {
+                          id:'f-ranidae', name_en:'Ranidae', name_zh:'蛙科', rank:'Family',
+                          description:'常見蛙類。',
+                          children:[
+                            {
+                              id:'g-rana', name_en:'Rana', name_zh:'蛙屬', rank:'Genus',
+                              description:'教學常見屬。',
+                              children:[
+                                {id:'s-rana', name_en:'Rana temporaria', name_zh:'歐洲林蛙', rank:'Species', description:'兩棲類代表。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-reptilia', name_en:'Reptilia', name_zh:'爬蟲綱', rank:'Class',
+                  description:'鱗片皮膚，卵生為主。',
+                  children:[
+                    {
+                      id:'o-testudines', name_en:'Testudines', name_zh:'龜鱉目', rank:'Order',
+                      description:'具甲殼保護。',
+                      children:[
+                        {
+                          id:'f-cheloniidae', name_en:'Cheloniidae', name_zh:'海龜科', rank:'Family',
+                          description:'海洋爬蟲類。',
+                          children:[
+                            {
+                              id:'g-chelonia', name_en:'Chelonia', name_zh:'海龜屬', rank:'Genus',
+                              description:'海龜代表屬。',
+                              children:[
+                                {id:'s-chelonia', name_en:'Chelonia mydas', name_zh:'綠蠵龜', rank:'Species', description:'常見海龜物種。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-aves', name_en:'Aves', name_zh:'鳥綱', rank:'Class',
+                  description:'具羽毛、喙與產卵特徵。',
+                  children:[
+                    {
+                      id:'o-falconiformes', name_en:'Falconiformes', name_zh:'隼形目', rank:'Order',
+                      description:'猛禽之一。',
+                      children:[
+                        {
+                          id:'f-falconidae', name_en:'Falconidae', name_zh:'隼科', rank:'Family',
+                          description:'飛行敏捷。',
+                          children:[
+                            {
+                              id:'g-falco', name_en:'Falco', name_zh:'隼屬', rank:'Genus',
+                              description:'猛禽代表屬。',
+                              children:[
+                                {id:'s-falco', name_en:'Falco peregrinus', name_zh:'遊隼', rank:'Species', description:'高速俯衝的鳥類。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id:'c-mammalia', name_en:'Mammalia', name_zh:'哺乳綱', rank:'Class',
+                  description:'具毛髮與乳腺，多數恆溫。',
+                  children:[
+                    {
+                      id:'o-primates', name_en:'Primates', name_zh:'靈長目', rank:'Order',
+                      description:'靈長類，雙眼前視。',
+                      children:[
+                        {
+                          id:'f-hominidae', name_en:'Hominidae', name_zh:'人科', rank:'Family',
+                          description:'大型靈長類。',
+                          children:[
+                            {
+                              id:'g-homo', name_en:'Homo', name_zh:'人屬', rank:'Genus',
+                              description:'現代人類所屬。',
+                              children:[
+                                {id:'s-homo', name_en:'Homo sapiens', name_zh:'智人', rank:'Species', description:'現代人類。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      id:'o-carnivora', name_en:'Carnivora', name_zh:'食肉目', rank:'Order',
+                      description:'包括貓、狗、熊等。',
+                      children:[
+                        {
+                          id:'f-felidae', name_en:'Felidae', name_zh:'貓科', rank:'Family',
+                          description:'敏捷的掠食型哺乳動物。',
+                          children:[
+                            {
+                              id:'g-panthera', name_en:'Panthera', name_zh:'豹屬', rank:'Genus',
+                              description:'大型貓科，包括獅、虎、豹。',
+                              children:[
+                                {id:'s-panthera-leo', name_en:'Panthera leo', name_zh:'獅', rank:'Species', description:'群居大型貓科。', children:[]},
+                                {id:'s-panthera-tigris', name_en:'Panthera tigris', name_zh:'虎', rank:'Species', description:'亞洲大型貓科代表。', children:[]}
+                              ]
+                            },
+                            {
+                              id:'g-felis', name_en:'Felis', name_zh:'貓屬', rank:'Genus',
+                              description:'小型貓科。',
+                              children:[
+                                {id:'s-felis', name_en:'Felis catus', name_zh:'家貓', rank:'Species', description:'常見伴侶動物。', children:[]}
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          id:'f-canidae', name_en:'Canidae', name_zh:'犬科', rank:'Family',
+                          description:'嗅覺發達，社會性強。',
+                          children:[
+                            {
+                              id:'g-canis', name_en:'Canis', name_zh:'犬屬', rank:'Genus',
+                              description:'包括狼與家犬。',
+                              children:[
+                                {id:'s-canis-lupus', name_en:'Canis lupus', name_zh:'灰狼', rank:'Species', description:'犬科代表物種。', children:[]},
+                                {id:'s-canis-dog', name_en:'Canis lupus familiaris', name_zh:'家犬', rank:'Species', description:'人類最早馴化動物之一。', children:[]}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+const idMap = new Map();
+const parentMap = new Map();
+
+function indexTree(node, parent=null){
+  idMap.set(node.id, node);
+  if(parent) parentMap.set(node.id, parent.id);
+  (node.children || []).forEach(child => indexTree(child, node));
+}
+indexTree(taxonomyData);
+
+function addChild(parentId, child){
+  const parent = idMap.get(parentId);
+  if(!parent){
+    console.warn('Missing parent:', parentId);
+    return;
+  }
+  if(!Array.isArray(parent.children)) parent.children = [];
+  parent.children.push(child);
+  indexTree(child, parent);
+}
+function augmentJuniorHighV2(){
+  addChild('p-ciliophora', {
+    id:'c-spiro', name_en:'Spirotrichea', name_zh:'旋毛綱', rank:'Class', description:'纖毛蟲中的另一常見綱。',
+    children:[{id:'o-heterotrichida', name_en:'Heterotrichida', name_zh:'異毛目', rank:'Order', description:'鐘形與喇叭形纖毛蟲所在目。',
+      children:[{id:'f-stentoridae', name_en:'Stentoridae', name_zh:'喇叭蟲科', rank:'Family', description:'大型纖毛蟲常見科。',
+        children:[{id:'g-stentor', name_en:'Stentor', name_zh:'喇叭蟲屬', rank:'Genus', description:'教材常見原生動物之一。',
+          children:[{id:'s-stentor', name_en:'Stentor coeruleus', name_zh:'喇叭蟲', rank:'Species', description:'喇叭形大型纖毛蟲。', children:[]}]
+        }]
+      }]
+    }]
+  });
+  addChild('k-protista', {
+    id:'p-rhizopoda', name_en:'Rhizopoda', name_zh:'肉足蟲門', rank:'Phylum', description:'以偽足運動的原生動物。',
+    children:[{id:'c-lobosea', name_en:'Lobosea', name_zh:'葉足綱', rank:'Class', description:'變形蟲所在綱。',
+      children:[{id:'o-amoebida', name_en:'Amoebida', name_zh:'變形蟲目', rank:'Order', description:'常見肉足蟲所在目。',
+        children:[{id:'f-amoebidae', name_en:'Amoebidae', name_zh:'變形蟲科', rank:'Family', description:'教材常見原生動物類群。',
+          children:[{id:'g-amoeba', name_en:'Amoeba', name_zh:'變形蟲屬', rank:'Genus', description:'以偽足運動。',
+            children:[{id:'s-amoeba', name_en:'Amoeba proteus', name_zh:'變形蟲', rank:'Species', description:'原生動物代表之一。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+  addChild('p-chlorophyta', {
+    id:'c-ulvophyceae', name_en:'Ulvophyceae', name_zh:'石蓴綱', rank:'Class', description:'多細胞綠藻代表綱。',
+    children:[{id:'o-ulvales', name_en:'Ulvales', name_zh:'石蓴目', rank:'Order', description:'海中常見綠藻所在目。',
+      children:[{id:'f-ulvaceae', name_en:'Ulvaceae', name_zh:'石蓴科', rank:'Family', description:'常見綠藻科。',
+        children:[{id:'g-ulva', name_en:'Ulva', name_zh:'石蓴屬', rank:'Genus', description:'海菜常見綠藻屬。',
+          children:[{id:'s-ulva', name_en:'Ulva lactuca', name_zh:'石蓴', rank:'Species', description:'教材常見綠藻。', children:[]}]
+        }]
+      }]
+    }]
+  });
+  addChild('k-protista', {
+    id:'p-rhodophyta', name_en:'Rhodophyta', name_zh:'紅藻門', rank:'Phylum', description:'教材常見藻類之一。',
+    children:[{id:'c-florideophyceae', name_en:'Florideophyceae', name_zh:'真紅藻綱', rank:'Class', description:'多數大型紅藻所在綱。',
+      children:[{id:'o-gigartinales', name_en:'Gigartinales', name_zh:'杉藻目', rank:'Order', description:'紅藻常見目。',
+        children:[{id:'f-solieriaceae', name_en:'Solieriaceae', name_zh:'角叉菜科', rank:'Family', description:'食用紅藻相關科。',
+          children:[{id:'g-eucheuma', name_en:'Eucheuma', name_zh:'角叉菜屬', rank:'Genus', description:'常見紅藻屬。',
+            children:[{id:'s-eucheuma', name_en:'Eucheuma denticulatum', name_zh:'角叉菜', rank:'Species', description:'紅藻代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+  addChild('k-protista', {
+    id:'p-oomycota', name_en:'Oomycota', name_zh:'卵菌門', rank:'Phylum', description:'教材常歸入原生菌類的代表群。',
+    children:[{id:'c-oomycetes', name_en:'Oomycetes', name_zh:'卵菌綱', rank:'Class', description:'水黴與疫病菌所在綱。',
+      children:[{id:'o-saprolegniales', name_en:'Saprolegniales', name_zh:'水黴目', rank:'Order', description:'水生原生菌類常見目。',
+        children:[{id:'f-saprolegniaceae', name_en:'Saprolegniaceae', name_zh:'水黴科', rank:'Family', description:'常見卵菌類群。',
+          children:[{id:'g-saprolegnia', name_en:'Saprolegnia', name_zh:'水黴屬', rank:'Genus', description:'國中教材常見原生菌類。',
+            children:[{id:'s-saprolegnia', name_en:'Saprolegnia ferax', name_zh:'水黴', rank:'Species', description:'原生菌類代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+
+  addChild('c-saccharo', {
+    id:'o-saccharo-2', name_en:'Pichiales', name_zh:'畢赤酵母目', rank:'Order', description:'補充酵母類平行分支。',
+    children:[{id:'f-pichiaceae', name_en:'Pichiaceae', name_zh:'畢赤酵母科', rank:'Family', description:'常見酵母類群之一。',
+      children:[{id:'g-pichia', name_en:'Pichia', name_zh:'畢赤酵母屬', rank:'Genus', description:'常見工業酵母屬。',
+        children:[{id:'s-pichia', name_en:'Pichia pastoris', name_zh:'畢赤酵母', rank:'Species', description:'常見表現系統酵母。', children:[]}]
+      }]
+    }]
+  });
+  addChild('p-asco', {
+    id:'c-sordariomycetes', name_en:'Sordariomycetes', name_zh:'粪殼菌綱', rank:'Class', description:'黴菌與絲狀真菌常見綱。',
+    children:[{id:'o-hypocreales', name_en:'Hypocreales', name_zh:'肉座菌目', rank:'Order', description:'絲狀真菌常見目。',
+      children:[{id:'f-nectriaceae', name_en:'Nectriaceae', name_zh:'肉座菌科', rank:'Family', description:'常見黴菌群。',
+        children:[{id:'g-fusarium', name_en:'Fusarium', name_zh:'鐮刀菌屬', rank:'Genus', description:'教材常見黴菌例子。',
+          children:[{id:'s-fusarium', name_en:'Fusarium oxysporum', name_zh:'鐮刀菌', rank:'Species', description:'常見植物病原黴菌。', children:[]}]
+        }]
+      }]
+    }]
+  });
+  addChild('o-agaricales', {
+    id:'f-marasmiaceae', name_en:'Marasmiaceae', name_zh:'小皮傘科', rank:'Family', description:'菇類補充分支。',
+    children:[{id:'g-lentinula', name_en:'Lentinula', name_zh:'香菇屬', rank:'Genus', description:'香菇所在屬。',
+      children:[{id:'s-lentinula', name_en:'Lentinula edodes', name_zh:'香菇', rank:'Species', description:'常見食用菇。', children:[]}]
+    }]
+  });
+  addChild('o-agaricales', {
+    id:'f-tricholomataceae', name_en:'Tricholomataceae', name_zh:'口蘑科', rank:'Family', description:'菇類常見科。',
+    children:[{id:'g-tricholoma', name_en:'Tricholoma', name_zh:'口蘑屬', rank:'Genus', description:'口蘑所在屬。',
+      children:[{id:'s-tricholoma', name_en:'Tricholoma matsutake', name_zh:'松茸', rank:'Species', description:'知名食用菇。', children:[]}]
+    }]
+  });
+
+  addChild('o-hypnales', {
+    id:'f-polytrichaceae', name_en:'Polytrichaceae', name_zh:'金髮蘚科', rank:'Family', description:'蘚類補充分支。',
+    children:[{id:'g-polytrichum', name_en:'Polytrichum', name_zh:'金髮蘚屬', rank:'Genus', description:'常見蘚類屬。',
+      children:[{id:'s-polytrichum', name_en:'Polytrichum commune', name_zh:'金髮蘚', rank:'Species', description:'蘚類代表。', children:[]}]
+    }]
+  });
+  addChild('c-polypodiopsida', {
+    id:'o-salviniales', name_en:'Salviniales', name_zh:'槐葉蘋目', rank:'Order', description:'水生蕨類所在目。',
+    children:[{id:'f-marsileaceae', name_en:'Marsileaceae', name_zh:'蘋科', rank:'Family', description:'四葉狀水生蕨類。',
+      children:[{id:'g-marsilea', name_en:'Marsilea', name_zh:'蘋屬', rank:'Genus', description:'田字草所在屬。',
+        children:[{id:'s-marsilea', name_en:'Marsilea quadrifolia', name_zh:'田字草', rank:'Species', description:'國中教材常見水生蕨類。', children:[]}]
+      }]
+    }]
+  });
+  addChild('c-pinopsida', {
+    id:'o-cycadales', name_en:'Cycadales', name_zh:'蘇鐵目', rank:'Order', description:'裸子植物中蘇鐵類所在目。',
+    children:[{id:'f-cycadaceae', name_en:'Cycadaceae', name_zh:'蘇鐵科', rank:'Family', description:'常見裸子植物代表。',
+      children:[{id:'g-cycas', name_en:'Cycas', name_zh:'蘇鐵屬', rank:'Genus', description:'教材常見裸子植物。',
+        children:[{id:'s-cycas', name_en:'Cycas revoluta', name_zh:'蘇鐵', rank:'Species', description:'常見園藝裸子植物。', children:[]}]
+      }]
+    }]
+  });
+  addChild('f-rosaceae', {
+    id:'g-malus', name_en:'Malus', name_zh:'蘋果屬', rank:'Genus', description:'蘋果所在屬。',
+    children:[{id:'s-malus', name_en:'Malus domestica', name_zh:'蘋果', rank:'Species', description:'重要水果。', children:[]}]
+  });
+  addChild('f-fabaceae', {
+    id:'g-arachis', name_en:'Arachis', name_zh:'落花生屬', rank:'Genus', description:'花生所在屬。',
+    children:[{id:'s-arachis', name_en:'Arachis hypogaea', name_zh:'花生', rank:'Species', description:'常見油料作物。', children:[]}]
+  });
+  addChild('f-poaceae', {
+    id:'g-triticum', name_en:'Triticum', name_zh:'小麥屬', rank:'Genus', description:'小麥所在屬。',
+    children:[{id:'s-triticum', name_en:'Triticum aestivum', name_zh:'小麥', rank:'Species', description:'主要糧食作物。', children:[]}]
+  });
+  addChild('f-orchidaceae', {
+    id:'g-dendrobium', name_en:'Dendrobium', name_zh:'石斛蘭屬', rank:'Genus', description:'蘭科補充分支。',
+    children:[{id:'s-dendrobium', name_en:'Dendrobium nobile', name_zh:'石斛蘭', rank:'Species', description:'常見觀賞蘭花。', children:[]}]
+  });
+
+  addChild('k-animalia', {
+    id:'p-mollusca', name_en:'Mollusca', name_zh:'軟體動物門', rank:'Phylum', description:'身體柔軟，多有外殼。',
+    children:[{id:'c-gastropoda', name_en:'Gastropoda', name_zh:'腹足綱', rank:'Class', description:'蝸牛與蛞蝓所在綱。',
+      children:[{id:'o-stylommatophora', name_en:'Stylommatophora', name_zh:'柄眼目', rank:'Order', description:'陸生蝸牛常見目。',
+        children:[{id:'f-helicidae', name_en:'Helicidae', name_zh:'蝸牛科', rank:'Family', description:'常見陸生蝸牛。',
+          children:[{id:'g-helix', name_en:'Helix', name_zh:'蝸牛屬', rank:'Genus', description:'典型蝸牛屬。',
+            children:[{id:'s-helix', name_en:'Helix pomatia', name_zh:'葡萄園蝸牛', rank:'Species', description:'大型蝸牛代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+  addChild('k-animalia', {
+    id:'p-annelida', name_en:'Annelida', name_zh:'環節動物門', rank:'Phylum', description:'身體分節的無脊椎動物。',
+    children:[{id:'c-clitellata', name_en:'Clitellata', name_zh:'寡毛綱', rank:'Class', description:'蚯蚓所在綱。',
+      children:[{id:'o-haplotaxida', name_en:'Haplotaxida', name_zh:'單向蚓目', rank:'Order', description:'蚯蚓常見目。',
+        children:[{id:'f-lumbricidae', name_en:'Lumbricidae', name_zh:'正蚓科', rank:'Family', description:'常見蚯蚓類群。',
+          children:[{id:'g-lumbricus', name_en:'Lumbricus', name_zh:'正蚓屬', rank:'Genus', description:'教材常見蚯蚓屬。',
+            children:[{id:'s-lumbricus', name_en:'Lumbricus terrestris', name_zh:'蚯蚓', rank:'Species', description:'環節動物代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+  addChild('k-animalia', {
+    id:'p-echinodermata', name_en:'Echinodermata', name_zh:'棘皮動物門', rank:'Phylum', description:'體表有棘，成體多呈五輻對稱。',
+    children:[{id:'c-asteroidea', name_en:'Asteroidea', name_zh:'海星綱', rank:'Class', description:'海星所在綱。',
+      children:[{id:'o-valvatida', name_en:'Valvatida', name_zh:'瓣棘目', rank:'Order', description:'海星常見目。',
+        children:[{id:'f-asteriidae', name_en:'Asteriidae', name_zh:'海星科', rank:'Family', description:'常見海星類群。',
+          children:[{id:'g-asterias', name_en:'Asterias', name_zh:'海星屬', rank:'Genus', description:'教材常見棘皮動物。',
+            children:[{id:'s-asterias', name_en:'Asterias rubens', name_zh:'海星', rank:'Species', description:'棘皮動物代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+  addChild('c-actinopterygii', {
+    id:'o-carcharhiniformes', name_en:'Carcharhiniformes', name_zh:'真鯊目', rank:'Order', description:'軟骨魚教材常見代表支線。',
+    children:[{id:'f-carcharhinidae', name_en:'Carcharhinidae', name_zh:'真鯊科', rank:'Family', description:'鯊魚重要科別。',
+      children:[{id:'g-carcharhinus', name_en:'Carcharhinus', name_zh:'真鯊屬', rank:'Genus', description:'常見真鯊類群。',
+        children:[{id:'s-carcharhinus', name_en:'Carcharhinus melanopterus', name_zh:'黑鰭礁鯊', rank:'Species', description:'軟骨魚代表例子。', children:[]}]
+      }]
+    }]
+  });
+  addChild('c-amphibia', {
+    id:'o-caudata', name_en:'Caudata', name_zh:'有尾目', rank:'Order', description:'蠑螈與山椒魚所在目。',
+    children:[{id:'f-salamandridae', name_en:'Salamandridae', name_zh:'蠑螈科', rank:'Family', description:'兩棲類常見科。',
+      children:[{id:'g-salamandra', name_en:'Salamandra', name_zh:'火蠑螈屬', rank:'Genus', description:'常見蠑螈教材例子。',
+        children:[{id:'s-salamandra', name_en:'Salamandra salamandra', name_zh:'火蠑螈', rank:'Species', description:'有尾目代表。', children:[]}]
+      }]
+    }]
+  });
+  addChild('c-reptilia', {
+    id:'o-crocodilia', name_en:'Crocodilia', name_zh:'鱷目', rank:'Order', description:'大型爬蟲類代表。',
+    children:[{id:'f-crocodylidae', name_en:'Crocodylidae', name_zh:'鱷科', rank:'Family', description:'典型鱷類所在科。',
+      children:[{id:'g-crocodylus', name_en:'Crocodylus', name_zh:'鱷屬', rank:'Genus', description:'常見鱷類屬。',
+        children:[{id:'s-crocodylus', name_en:'Crocodylus porosus', name_zh:'灣鱷', rank:'Species', description:'大型鱷類代表。', children:[]}]
+      }]
+    }]
+  });
+  addChild('c-aves', {
+    id:'o-passeriformes', name_en:'Passeriformes', name_zh:'雀形目', rank:'Order', description:'鳥類中最大的目。',
+    children:[{id:'f-corvidae', name_en:'Corvidae', name_zh:'鴉科', rank:'Family', description:'高智力鳥類。',
+      children:[{id:'g-corvus', name_en:'Corvus', name_zh:'鴉屬', rank:'Genus', description:'烏鴉與渡鴉所在屬。',
+        children:[{id:'s-corvus', name_en:'Corvus macrorhynchos', name_zh:'巨嘴鴉', rank:'Species', description:'亞洲常見鴉類。', children:[]}]
+      }]
+    }]
+  });
+  addChild('o-carnivora', {
+    id:'f-ursidae', name_en:'Ursidae', name_zh:'熊科', rank:'Family', description:'大型雜食性哺乳動物。',
+    children:[{id:'g-ursus', name_en:'Ursus', name_zh:'熊屬', rank:'Genus', description:'熊科重要屬。',
+      children:[{id:'s-ursus', name_en:'Ursus arctos', name_zh:'棕熊', rank:'Species', description:'大型熊類代表。', children:[]}]
+    }]
+  });
+}
+augmentJuniorHighV2();
+
+
+function removeChild(parentId, childId){
+  const parent = idMap.get(parentId);
+  if(!parent || !Array.isArray(parent.children)) return;
+  parent.children = parent.children.filter(child => child.id !== childId);
+}
+function rebuildIndex(){
+  idMap.clear();
+  parentMap.clear();
+  indexTree(taxonomyData);
+}
+function augmentJuniorHighV3(){
+  removeChild('c-actinopterygii', 'o-carcharhiniformes');
+  removeChild('c-pinopsida', 'o-cycadales');
+  rebuildIndex();
+
+  addChild('k-protista', {
+    id:'p-bacillariophyta', name_en:'Bacillariophyta', name_zh:'矽藻門', rank:'Phylum', description:'教材常見藻類之一。',
+    children:[{
+      id:'c-bacillariophyceae', name_en:'Bacillariophyceae', name_zh:'矽藻綱', rank:'Class', description:'矽藻代表綱。',
+      children:[{
+        id:'o-naviculales', name_en:'Naviculales', name_zh:'舟形藻目', rank:'Order', description:'常見矽藻類群。',
+        children:[{
+          id:'f-naviculaceae', name_en:'Naviculaceae', name_zh:'舟形藻科', rank:'Family', description:'教材常見矽藻科。',
+          children:[{
+            id:'g-navicula', name_en:'Navicula', name_zh:'舟形藻屬', rank:'Genus', description:'典型矽藻屬。',
+            children:[
+              {id:'s-navicula', name_en:'Navicula radiosa', name_zh:'舟形藻', rank:'Species', description:'常見矽藻代表。', children:[]}
+            ]
+          }]
+        }]
+      }]
+    }]
+  });
+
+  addChild('k-fungi', {
+    id:'p-mucoromycota', name_en:'Mucoromycota', name_zh:'毛黴菌門', rank:'Phylum', description:'教材常見黴菌代表群。',
+    children:[{
+      id:'c-mucoromycetes', name_en:'Mucoromycetes', name_zh:'毛黴菌綱', rank:'Class', description:'常見黴菌所在綱。',
+      children:[{
+        id:'o-mucorales', name_en:'Mucorales', name_zh:'毛黴目', rank:'Order', description:'麵包發霉常見真菌所在目。',
+        children:[{
+          id:'f-mucoraceae', name_en:'Mucoraceae', name_zh:'毛黴科', rank:'Family', description:'常見毛黴與根黴。',
+          children:[
+            {
+              id:'g-rhizopus', name_en:'Rhizopus', name_zh:'根黴屬', rank:'Genus', description:'麵包發霉常見類群。',
+              children:[{id:'s-rhizopus', name_en:'Rhizopus stolonifer', name_zh:'黑根黴', rank:'Species', description:'教材常見黴菌。', children:[]}]
+            },
+            {
+              id:'g-mucor', name_en:'Mucor', name_zh:'毛黴屬', rank:'Genus', description:'絲狀黴菌常見屬。',
+              children:[{id:'s-mucor', name_en:'Mucor mucedo', name_zh:'毛黴', rank:'Species', description:'常見黴菌代表。', children:[]}]
+            }
+          ]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-pteridophyta', {
+    id:'c-lycopodiopsida', name_en:'Lycopodiopsida', name_zh:'石松綱', rank:'Class', description:'蕨類植物中的另一常見支線。',
+    children:[{
+      id:'o-lycopodiales', name_en:'Lycopodiales', name_zh:'石松目', rank:'Order', description:'石松類所在目。',
+      children:[{
+        id:'f-lycopodiaceae', name_en:'Lycopodiaceae', name_zh:'石松科', rank:'Family', description:'孢子植物代表。',
+        children:[{
+          id:'g-lycopodium', name_en:'Lycopodium', name_zh:'石松屬', rank:'Genus', description:'石松類代表屬。',
+          children:[{id:'s-lycopodium', name_en:'Lycopodium clavatum', name_zh:'石松', rank:'Species', description:'石松類代表。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-gymnospermae', {
+    id:'c-cycadopsida', name_en:'Cycadopsida', name_zh:'蘇鐵綱', rank:'Class', description:'裸子植物中蘇鐵類支線。',
+    children:[{
+      id:'o-cycadales-v3', name_en:'Cycadales', name_zh:'蘇鐵目', rank:'Order', description:'蘇鐵類所在目。',
+      children:[{
+        id:'f-cycadaceae-v3', name_en:'Cycadaceae', name_zh:'蘇鐵科', rank:'Family', description:'常見裸子植物代表。',
+        children:[{
+          id:'g-cycas-v3', name_en:'Cycas', name_zh:'蘇鐵屬', rank:'Genus', description:'教材常見裸子植物。',
+          children:[{id:'s-cycas-v3', name_en:'Cycas revoluta', name_zh:'蘇鐵', rank:'Species', description:'常見園藝裸子植物。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-arthropoda', {
+    id:'c-arachnida', name_en:'Arachnida', name_zh:'蛛形綱', rank:'Class', description:'蜘蛛、蠍子等所屬類群。',
+    children:[{
+      id:'o-araneae', name_en:'Araneae', name_zh:'蜘蛛目', rank:'Order', description:'蜘蛛所在目。',
+      children:[{
+        id:'f-araneidae', name_en:'Araneidae', name_zh:'園蛛科', rank:'Family', description:'結網蜘蛛常見科。',
+        children:[{
+          id:'g-araneus', name_en:'Araneus', name_zh:'園蛛屬', rank:'Genus', description:'常見園蛛。',
+          children:[{id:'s-araneus', name_en:'Araneus diadematus', name_zh:'十字園蛛', rank:'Species', description:'常見結網蜘蛛。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-arthropoda', {
+    id:'c-chilopoda', name_en:'Chilopoda', name_zh:'唇足綱', rank:'Class', description:'蜈蚣所在綱，節肢動物教材常見類群。',
+    children:[{
+      id:'o-scolopendromorpha', name_en:'Scolopendromorpha', name_zh:'蜈蚣目', rank:'Order', description:'大型蜈蚣常見目。',
+      children:[{
+        id:'f-scolopendridae', name_en:'Scolopendridae', name_zh:'蜈蚣科', rank:'Family', description:'常見蜈蚣所在科。',
+        children:[{
+          id:'g-scolopendra', name_en:'Scolopendra', name_zh:'蜈蚣屬', rank:'Genus', description:'教材常見節肢動物。',
+          children:[{id:'s-scolopendra', name_en:'Scolopendra subspinipes', name_zh:'紅頭蜈蚣', rank:'Species', description:'常見蜈蚣代表。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('k-animalia', {
+    id:'p-porifera', name_en:'Porifera', name_zh:'海綿動物門', rank:'Phylum', description:'最簡單的多細胞動物之一。',
+    children:[{
+      id:'c-demospongiae', name_en:'Demospongiae', name_zh:'尋常海綿綱', rank:'Class', description:'海綿動物常見綱。',
+      children:[{
+        id:'o-haplosclerida', name_en:'Haplosclerida', name_zh:'單骨海綿目', rank:'Order', description:'常見海綿所在目。',
+        children:[{
+          id:'f-spongiidae', name_en:'Spongiidae', name_zh:'海綿科', rank:'Family', description:'海綿代表類群。',
+          children:[{
+            id:'g-spongia', name_en:'Spongia', name_zh:'海綿屬', rank:'Genus', description:'海綿動物代表屬。',
+            children:[{id:'s-spongia', name_en:'Spongia officinalis', name_zh:'浴海綿', rank:'Species', description:'海綿動物代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+
+  addChild('k-animalia', {
+    id:'p-nematoda', name_en:'Nematoda', name_zh:'線形動物門', rank:'Phylum', description:'身體細長、不分節的無脊椎動物。',
+    children:[{
+      id:'c-chromadorea', name_en:'Chromadorea', name_zh:'尾感綱', rank:'Class', description:'線蟲常見綱。',
+      children:[{
+        id:'o-rhabditida', name_en:'Rhabditida', name_zh:'桿線蟲目', rank:'Order', description:'線蟲常見目。',
+        children:[{
+          id:'f-rhabditidae', name_en:'Rhabditidae', name_zh:'桿線蟲科', rank:'Family', description:'教材常見線蟲類群。',
+          children:[{
+            id:'g-caenorhabditis', name_en:'Caenorhabditis', name_zh:'秀麗隱桿線蟲屬', rank:'Genus', description:'常見模式動物屬。',
+            children:[{id:'s-caenorhabditis', name_en:'Caenorhabditis elegans', name_zh:'秀麗隱桿線蟲', rank:'Species', description:'線形動物代表。', children:[]}]
+          }]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-mollusca', {
+    id:'c-bivalvia', name_en:'Bivalvia', name_zh:'雙殼綱', rank:'Class', description:'貝類重要類群。',
+    children:[{
+      id:'o-ostreoida', name_en:'Ostreoida', name_zh:'牡蠣目', rank:'Order', description:'牡蠣所在目。',
+      children:[{
+        id:'f-ostreidae', name_en:'Ostreidae', name_zh:'牡蠣科', rank:'Family', description:'常見海產貝類。',
+        children:[{
+          id:'g-crassostrea', name_en:'Crassostrea', name_zh:'牡蠣屬', rank:'Genus', description:'常見食用牡蠣屬。',
+          children:[{id:'s-crassostrea', name_en:'Crassostrea gigas', name_zh:'太平洋牡蠣', rank:'Species', description:'重要經濟貝類。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-echinodermata', {
+    id:'c-echinoidea', name_en:'Echinoidea', name_zh:'海膽綱', rank:'Class', description:'海膽所在綱。',
+    children:[{
+      id:'o-camarodonta', name_en:'Camarodonta', name_zh:'有齒目', rank:'Order', description:'常見海膽目。',
+      children:[{
+        id:'f-strongylocentrotidae', name_en:'Strongylocentrotidae', name_zh:'球海膽科', rank:'Family', description:'常見海膽類群。',
+        children:[{
+          id:'g-strongylocentrotus', name_en:'Strongylocentrotus', name_zh:'球海膽屬', rank:'Genus', description:'教材常見棘皮動物補充分支。',
+          children:[{id:'s-strongylocentrotus', name_en:'Strongylocentrotus purpuratus', name_zh:'紫海膽', rank:'Species', description:'常見海膽代表。', children:[]}]
+        }]
+      }]
+    }]
+  });
+
+  addChild('p-chordata', {
+    id:'c-chondrichthyes', name_en:'Chondrichthyes', name_zh:'軟骨魚綱', rank:'Class', description:'鯊魚與魟魚等所在綱。',
+    children:[
+      {
+        id:'o-carcharhiniformes-v3', name_en:'Carcharhiniformes', name_zh:'真鯊目', rank:'Order', description:'鯊魚常見目。',
+        children:[{
+          id:'f-carcharhinidae-v3', name_en:'Carcharhinidae', name_zh:'真鯊科', rank:'Family', description:'鯊魚重要科別。',
+          children:[{
+            id:'g-carcharhinus-v3', name_en:'Carcharhinus', name_zh:'真鯊屬', rank:'Genus', description:'常見真鯊類群。',
+            children:[{id:'s-carcharhinus-v3', name_en:'Carcharhinus melanopterus', name_zh:'黑鰭礁鯊', rank:'Species', description:'軟骨魚代表例子。', children:[]}]
+          }]
+        }]
+      },
+      {
+        id:'o-rajiformes', name_en:'Rajiformes', name_zh:'鰩形目', rank:'Order', description:'魟魚與鰩魚常見目。',
+        children:[{
+          id:'f-rajidae', name_en:'Rajidae', name_zh:'鰩科', rank:'Family', description:'扁平軟骨魚類群。',
+          children:[{
+            id:'g-raja', name_en:'Raja', name_zh:'鰩屬', rank:'Genus', description:'常見鰩類屬。',
+            children:[{id:'s-raja', name_en:'Raja clavata', name_zh:'刺鰩', rank:'Species', description:'軟骨魚補充分支。', children:[]}]
+          }]
+        }]
+      }
+    ]
+  });
+
+  addChild('c-mammalia', {
+    id:'o-perissodactyla', name_en:'Perissodactyla', name_zh:'奇蹄目', rank:'Order', description:'馬、驢、犀牛等。',
+    children:[{
+      id:'f-equidae', name_en:'Equidae', name_zh:'馬科', rank:'Family', description:'現存奇蹄類代表之一。',
+      children:[{
+        id:'g-equus', name_en:'Equus', name_zh:'馬屬', rank:'Genus', description:'包括馬、驢、斑馬。',
+        children:[{id:'s-equus', name_en:'Equus ferus caballus', name_zh:'家馬', rank:'Species', description:'常見家養馬。', children:[]}]
+      }]
+    }]
+  });
+}
+augmentJuniorHighV3();
+
+
+let currentNode = taxonomyData;
+let activeDetail = null;
+let lastDirection = 'enter-right';
+let displayMode = 'textbook';
+
+const currentNodeBox = document.getElementById('currentNodeBox');
+const breadcrumb = document.getElementById('breadcrumb');
+const galleryStage = document.getElementById('galleryStage');
+const galleryTitle = document.getElementById('galleryTitle');
+const detailBox = document.getElementById('detailBox');
+const viewModeSelect = document.getElementById('viewMode');
+
+const textbookGroupMap = {
+  'k-protista': [
+    {title:'原生動物', note:'草履蟲、變形蟲、瘧原蟲與眼蟲等教材常見代表。', ids:['p-ciliophora','p-rhizopoda','p-apicomplexa','p-euglenozoa']},
+    {title:'藻類', note:'可行光合作用或常以藻類身分介紹的原生生物。', ids:['p-chlorophyta','p-bacillariophyta','p-rhodophyta']},
+    {title:'原生菌類', note:'國中教材常見如水黴。', ids:['p-oomycota']}
+  ],
+  'k-fungi': [
+    {title:'酵母與黴菌主幹', note:'單細胞酵母與絲狀黴菌。', ids:['p-asco','p-mucoromycota']},
+    {title:'菇類主幹', note:'大型子實體真菌。', ids:['p-basidio']}
+  ],
+  'p-asco': [
+    {title:'酵母', note:'單細胞發酵真菌。', ids:['c-saccharo']},
+    {title:'黴菌', note:'常見青黴、麴菌與鐮刀菌等。', ids:['c-eurotio','c-sordariomycetes']}
+  ],
+  'k-plantae': [
+    {title:'孢子植物', note:'以孢子繁殖。', ids:['p-bryophyta','p-pteridophyta']},
+    {title:'種子植物', note:'以種子繁殖。', ids:['p-gymnospermae','p-angiospermae']}
+  ],
+  'p-bryophyta': [
+    {title:'蘚類', note:'常見苔蘚主幹。', ids:['c-bryopsida']},
+    {title:'地錢類', note:'貼地生長的蘚苔代表。', ids:['c-marchantiopsida']}
+  ],
+  'p-pteridophyta': [
+    {title:'真蕨類', note:'鐵線蕨、鹿角蕨等。', ids:['c-polypodiopsida']},
+    {title:'石松類', note:'石松類補充分支。', ids:['c-lycopodiopsida']}
+  ],
+  'p-gymnospermae': [
+    {title:'松柏類', note:'常見針葉裸子植物。', ids:['c-pinopsida']},
+    {title:'銀杏類', note:'銀杏為代表。', ids:['c-ginkgoopsida']},
+    {title:'蘇鐵類', note:'課本常見裸子植物。', ids:['c-cycadopsida']}
+  ],
+  'p-angiospermae': [
+    {title:'雙子葉植物', note:'網狀葉脈、胚具兩片子葉。', ids:['c-magnoliopsida']},
+    {title:'單子葉植物', note:'平行葉脈、胚具一片子葉。', ids:['c-liliopsida']}
+  ],
+  'k-animalia': [
+    {title:'無脊椎動物', note:'課本常見無脊椎大類。', ids:['p-porifera','p-cnidaria','p-platyhelminthes','p-nematoda','p-annelida','p-mollusca','p-arthropoda','p-echinodermata']},
+    {title:'脊椎動物', note:'具有脊柱的動物。', ids:['p-chordata']}
+  ],
+  'p-mollusca': [
+    {title:'腹足類', note:'蝸牛類代表。', ids:['c-gastropoda']},
+    {title:'雙殼類', note:'牡蠣、蛤蜊等。', ids:['c-bivalvia']}
+  ],
+  'p-arthropoda': [
+    {title:'昆蟲', note:'六足、頭胸腹分明。', ids:['c-insecta']},
+    {title:'蛛形類', note:'蜘蛛、蠍子等。', ids:['c-arachnida']},
+    {title:'甲殼類', note:'蝦、蟹所在類群。', ids:['c-malacostraca']},
+    {title:'多足類', note:'蜈蚣等。', ids:['c-chilopoda']}
+  ],
+  'p-echinodermata': [
+    {title:'海星類', note:'五輻對稱代表。', ids:['c-asteroidea']},
+    {title:'海膽類', note:'棘皮動物補充分支。', ids:['c-echinoidea']}
+  ],
+  'p-chordata': [
+    {title:'魚類', note:'課本常分軟骨魚與硬骨魚。', ids:['c-chondrichthyes','c-actinopterygii']},
+    {title:'兩生類', note:'幼體水生、成體可陸生。', ids:['c-amphibia']},
+    {title:'爬蟲類', note:'有鱗片、卵生為主。', ids:['c-reptilia']},
+    {title:'鳥類', note:'具羽毛與翅。', ids:['c-aves']},
+    {title:'哺乳類', note:'具毛髮與乳腺。', ids:['c-mammalia']}
+  ],
+  'c-mammalia': [
+    {title:'靈長類', note:'人類所在主幹。', ids:['o-primates']},
+    {title:'食肉類', note:'貓、狗、熊等。', ids:['o-carnivora']},
+    {title:'奇蹄類', note:'馬等大型草食動物。', ids:['o-perissodactyla']}
+  ]
+};
+
+const teachingMap = {
+  'd-archaea': {
+    features:'細胞沒有真正細胞核，常生活在高鹽、高熱或缺氧環境。',
+    examples:'甲酸甲烷桿菌、鹽沼鹽桿菌',
+    textbook:'三域系統 → 古菌域',
+    compare:'可和細菌域比較：兩者都屬原核生物，但古菌常出現在極端環境。',
+    habitat:'高鹽湖、溫泉、缺氧泥沼等。',
+    exam:'國中常考：三域系統中，古菌域的代表特徵與生活環境。'
+  },
+  'd-bacteria': {
+    features:'原核生物，分布廣，常見於土壤、水域與生物體內外。',
+    examples:'大腸桿菌、沙門氏菌、枯草桿菌',
+    textbook:'三域系統 → 細菌域',
+    compare:'可和古菌域比較環境適應性，也可和真核生物比較是否具有細胞核。',
+    habitat:'土壤、水、腸道、食物表面等。',
+    exam:'國中常考：細菌的基本構造與生活方式。'
+  },
+  'k-protista': {
+    features:'真核生物中構造較簡單的一群，可包含原生動物、藻類與原生菌類。',
+    examples:'草履蟲、眼蟲、變形蟲、衣藻、水黴',
+    textbook:'原生生物界 → 原生動物 / 藻類 / 原生菌類',
+    compare:'可和真菌界比較是否以吸收方式攝食，也可和植物界比較是否固定行光合作用。',
+    habitat:'池塘、水溝、潮濕環境或寄生在生物體內。',
+    exam:'國中常考：原生生物界的三種教材主幹分類與代表生物。'
+  },
+  'k-fungi': {
+    features:'不能行光合作用，以吸收方式獲得養分，細胞壁主要成分為幾丁質。',
+    examples:'酵母、青黴、麴菌、香菇、平菇',
+    textbook:'真菌界 → 酵母 / 黴菌 / 菇類',
+    compare:'可和植物界比較：真菌不含葉綠體，無法自行製造養分。',
+    habitat:'潮濕有機物、土壤、食物表面、枯木等。',
+    exam:'國中常考：真菌的營養方式，以及酵母、黴菌、菇類的區分。'
+  },
+  'k-plantae': {
+    features:'多細胞、可行光合作用、細胞壁主要成分為纖維素。',
+    examples:'地錢、鐵線蕨、蘇鐵、銀杏、水稻、玉米、蝴蝶蘭',
+    textbook:'植物界 → 蘚苔 / 蕨類 / 裸子 / 被子',
+    compare:'可從是否具維管束、是否產生種子、種子是否被果實包覆來比較。',
+    habitat:'陸地、潮濕陰暗處、森林、農田、水域邊緣等。',
+    exam:'國中常考：蘚苔、蕨類、裸子植物、被子植物的差異。'
+  },
+  'k-animalia': {
+    features:'多細胞異營生物，通常能主動運動，沒有細胞壁。',
+    examples:'海星、蝸牛、昆蟲、魚類、青蛙、鳥、人類',
+    textbook:'動物界 → 無脊椎動物 / 脊椎動物',
+    compare:'可先分有無脊柱，再比較不同門與綱的身體構造。',
+    habitat:'海洋、淡水、陸地、空中等各種環境。',
+    exam:'國中常考：動物界如何從無脊椎與脊椎動物做大分類。'
+  },
+  'p-bryophyta': {features:'沒有真正的根、莖、葉與維管束，需潮濕環境。', textbook:'植物界 → 孢子植物 → 蘚苔類', exam:'國中常考：蘚苔植物沒有維管束，依賴潮濕環境。'},
+  'p-pteridophyta': {features:'有維管束，以孢子繁殖，沒有種子。', textbook:'植物界 → 孢子植物 → 蕨類', exam:'國中常考：蕨類有維管束，但仍以孢子繁殖。'},
+  'p-gymnospermae': {features:'有種子但種子裸露，不被果實包覆。', textbook:'植物界 → 種子植物 → 裸子植物', exam:'國中常考：裸子植物與被子植物的差異。'},
+  'p-angiospermae': {features:'開花植物，種子會被果實包覆。', textbook:'植物界 → 種子植物 → 被子植物', exam:'國中常考：單子葉與雙子葉植物的比較。'},
+  'p-arthropoda': {features:'具外骨骼、分節身體與分節附肢。', textbook:'動物界 → 無脊椎動物 → 節肢動物', exam:'國中常考：昆蟲、蛛形類、甲殼類、多足類的差異。'},
+  'p-chordata': {features:'在發育時期具有脊索，脊椎動物都屬於此門。', textbook:'動物界 → 脊椎動物', exam:'國中常考：魚類、兩生類、爬蟲類、鳥類、哺乳類的分類。'},
+  'c-actinopterygii': {features:'硬骨魚類主要群體，多以鰓呼吸、鰭游動。', textbook:'動物界 → 脊椎動物 → 魚類', exam:'國中常考：硬骨魚與軟骨魚的比較。'},
+  'c-chondrichthyes': {features:'骨骼主要由軟骨構成。', textbook:'動物界 → 脊椎動物 → 魚類', exam:'國中常考：鯊魚與魟魚屬於軟骨魚。'},
+  'c-amphibia': {features:'幼體多以鰓呼吸，成體多以肺與皮膚輔助呼吸。', textbook:'動物界 → 脊椎動物 → 兩生類', exam:'國中常考：兩生類生活史與變態。'},
+  'c-reptilia': {features:'體表有角質鱗片，較不依賴潮濕環境。', textbook:'動物界 → 脊椎動物 → 爬蟲類', exam:'國中常考：爬蟲類與兩生類的差異。'},
+  'c-aves': {features:'具羽毛、前肢成翼、產卵。', textbook:'動物界 → 脊椎動物 → 鳥類', exam:'國中常考：鳥類適合飛行的構造。'},
+  'c-mammalia': {features:'具毛髮與乳腺，多數胎生、恆溫。', textbook:'動物界 → 脊椎動物 → 哺乳類', exam:'國中常考：哺乳類與其他脊椎動物的比較。'}
+};
+
+function rankLabel(rank){ return rank || '分類'; }
+function pathToNode(node){
+  const path = [];
+  let cur = node;
+  while(cur){
+    path.unshift(cur);
+    const pid = parentMap.get(cur.id);
+    cur = pid ? idMap.get(pid) : null;
+  }
+  return path;
+}
+function pathIds(node){
+  return pathToNode(node).map(item => item.id);
+}
+function allNodes(){
+  return Array.from(idMap.values()).filter(n => n.rank !== 'Root');
+}
+function descendantSpecies(node, limit=4){
+  const found = [];
+  function walk(n){
+    if(found.length >= limit) return;
+    if(n.rank === 'Species'){
+      found.push(n.name_zh);
+      return;
+    }
+    (n.children || []).forEach(child => walk(child));
+  }
+  walk(node);
+  return found;
+}
+function siblingNames(node, limit=3){
+  const pid = parentMap.get(node.id);
+  if(!pid) return [];
+  const parent = idMap.get(pid);
+  return (parent.children || []).filter(child => child.id !== node.id).slice(0, limit).map(child => child.name_zh);
+}
+function getTextbookLineage(node){
+  const ids = pathIds(node);
+  if(ids.includes('k-animalia')){
+    if(ids.includes('p-chordata')){
+      if(ids.includes('c-chondrichthyes') || ids.includes('c-actinopterygii')) return '動物界 → 脊椎動物 → 魚類';
+      if(ids.includes('c-amphibia')) return '動物界 → 脊椎動物 → 兩生類';
+      if(ids.includes('c-reptilia')) return '動物界 → 脊椎動物 → 爬蟲類';
+      if(ids.includes('c-aves')) return '動物界 → 脊椎動物 → 鳥類';
+      if(ids.includes('c-mammalia')) return '動物界 → 脊椎動物 → 哺乳類';
+      return '動物界 → 脊椎動物';
+    }
+    if(ids.includes('p-porifera')) return '動物界 → 無脊椎動物 → 海綿動物';
+    if(ids.includes('p-cnidaria')) return '動物界 → 無脊椎動物 → 刺絲胞動物';
+    if(ids.includes('p-platyhelminthes')) return '動物界 → 無脊椎動物 → 扁形動物';
+    if(ids.includes('p-nematoda')) return '動物界 → 無脊椎動物 → 線形動物';
+    if(ids.includes('p-annelida')) return '動物界 → 無脊椎動物 → 環節動物';
+    if(ids.includes('p-mollusca')) return '動物界 → 無脊椎動物 → 軟體動物';
+    if(ids.includes('p-arthropoda')) return '動物界 → 無脊椎動物 → 節肢動物';
+    if(ids.includes('p-echinodermata')) return '動物界 → 無脊椎動物 → 棘皮動物';
+    return '動物界';
+  }
+  if(ids.includes('k-plantae')){
+    if(ids.includes('p-bryophyta')) return '植物界 → 孢子植物 → 蘚苔類';
+    if(ids.includes('p-pteridophyta')) return '植物界 → 孢子植物 → 蕨類';
+    if(ids.includes('p-gymnospermae')) return '植物界 → 種子植物 → 裸子植物';
+    if(ids.includes('p-angiospermae')){
+      if(ids.includes('c-liliopsida')) return '植物界 → 種子植物 → 被子植物 → 單子葉植物';
+      return '植物界 → 種子植物 → 被子植物 → 雙子葉植物';
+    }
+    return '植物界';
+  }
+  if(ids.includes('k-fungi')){
+    if(ids.includes('p-basidio')) return '真菌界 → 菇類';
+    if(ids.includes('c-saccharo') || ids.includes('o-saccharo-2')) return '真菌界 → 酵母';
+    if(ids.includes('p-mucoromycota') || ids.includes('c-eurotio') || ids.includes('c-sordariomycetes')) return '真菌界 → 黴菌';
+    return '真菌界';
+  }
+  if(ids.includes('k-protista')){
+    if(ids.some(id => ['p-ciliophora','p-rhizopoda','p-apicomplexa','p-euglenozoa'].includes(id))) return '原生生物界 → 原生動物';
+    if(ids.some(id => ['p-chlorophyta','p-bacillariophyta','p-rhodophyta'].includes(id))) return '原生生物界 → 藻類';
+    if(ids.includes('p-oomycota')) return '原生生物界 → 原生菌類';
+    return '原生生物界';
+  }
+  if(ids.includes('d-bacteria')) return '三域系統 → 細菌域';
+  if(ids.includes('d-archaea')) return '三域系統 → 古菌域';
+  return '完整分類支線';
+}
+function getTeachingFields(node){
+  const base = teachingMap[node.id] || {};
+  const examples = base.examples || descendantSpecies(node, 4).join('、') || node.name_zh;
+  const features = base.features || node.description || '可由此節點理解其基本特徵。';
+  const textbook = base.textbook || getTextbookLineage(node);
+  const siblings = siblingNames(node, 3);
+  const compare = base.compare || (siblings.length
+    ? `可和同層的 ${siblings.join('、')} 比較外形、生活方式或繁殖方式。`
+    : '可向上一層比較它與同類群的共同特徵。');
+  const habitat = base.habitat || '可依教材例子理解其常見生活環境。';
+  const exam = base.exam || `國中常考：判斷它在「${textbook}」中的位置與代表特徵。`;
+  return {features, examples, textbook, compare, habitat, exam};
+}
+function getGroupedChildren(node){
+  const children = node.children || [];
+  if(displayMode !== 'textbook' || !children.length){
+    return [{title:'', note:'', nodes:children}];
+  }
+  const spec = textbookGroupMap[node.id];
+  if(!spec){
+    return [{title:'完整下一層', note:'此節點未另外分教材主幹，直接顯示完整下一層。', nodes:children}];
+  }
+  const used = new Set();
+  const groups = spec.map(group => {
+    const nodes = group.ids.map(id => children.find(child => child.id === id)).filter(Boolean);
+    nodes.forEach(nodeItem => used.add(nodeItem.id));
+    return {...group, nodes};
+  }).filter(group => group.nodes.length);
+  const others = children.filter(child => !used.has(child.id));
+  if(others.length){
+    groups.push({title:'教材補充支線', note:'保留完整分類資料，不在主幹也可繼續向下探索。', nodes:others});
+  }
+  return groups;
+}
+function cardHTML(node, searchMode=false){
+  const cnt = (node.children || []).length;
+  return `
+      <div class="circle-card" data-id="${node.id}">
+        <div class="circle-shell">
+          <div class="circle-ring">
+            <div class="circle-core">
+              <div class="circle-en">${node.name_en}</div>
+              <div class="circle-zh">${node.name_zh}</div>
+              <div class="circle-rank">${rankLabel(node.rank)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="circle-hint">${searchMode ? '▼ 點擊跳轉' : '▼ 點擊進入下一層'}</div>
+        <div class="circle-note">${cnt ? `下位分類 ${cnt} 個` : '已到最細分類'}</div>
+      </div>
+  `;
+}
+function bindCards(view, searchMode=false){
+  view.querySelectorAll('.circle-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const node = idMap.get(card.dataset.id);
+      activeDetail = node;
+      if(searchMode){
+        currentNode = node;
+        lastDirection = 'search-fade';
+        renderAll();
+      } else if((node.children || []).length){
+        currentNode = node;
+        lastDirection = 'enter-right';
+        renderAll();
+      } else {
+        renderDetail();
+      }
+    });
+  });
+}
+function createGalleryView(groupList, animClass, searchMode=false){
+  const view = document.createElement('div');
+  view.className = `gallery-view ${searchMode ? 'search-fade' : animClass}`;
+  if(searchMode){
+    if(!groupList.length){
+      view.innerHTML = `<div class="empty">找不到符合條件的分類。</div>`;
+      return view;
+    }
+    view.innerHTML = groupList.map(node => cardHTML(node, true)).join('');
+    bindCards(view, true);
+    return view;
+  }
+  if(!groupList.length){
+    view.innerHTML = `<div class="empty">這個節點已經是最下層，沒有下一層分類。</div>`;
+    return view;
+  }
+  let html = '';
+  groupList.forEach(group => {
+    if(group.title){
+      html += `
+        <div class="group-header">
+          <div class="group-title">${group.title}</div>
+          <div class="group-sub">${group.note || ''}</div>
+        </div>
+      `;
+    }
+    html += (group.nodes || []).map(node => cardHTML(node, false)).join('');
+  });
+  if(!html){
+    html = `<div class="empty">這個節點已經是最下層，沒有下一層分類。</div>`;
+  }
+  view.innerHTML = html;
+  bindCards(view, false);
+  return view;
+}
+function renderCurrentNode(){
+  const childCount = (currentNode.children || []).length;
+  const teach = getTeachingFields(currentNode);
+  currentNodeBox.innerHTML = `
+    <div class="node-title">${currentNode.name_zh} <span style="font-size:1rem;color:#68756a;">(${currentNode.name_en})</span></div>
+    <div class="node-sub">${currentNode.description || '目前沒有補充說明。'}</div>
+    <div class="pill-row">
+      <div class="pill">層級：${rankLabel(currentNode.rank)}</div>
+      <div class="pill">下位分類：${childCount} 個</div>
+      <div class="pill">完整路徑長度：${Math.max(pathToNode(currentNode).length - 1, 0)} 層</div>
+      <div class="pill">顯示模式：${displayMode === 'textbook' ? '課本主幹' : '完整分類'}</div>
+    </div>
+    <div class="mode-line"><strong>課本主幹：</strong>${teach.textbook}<br><strong>代表例子：</strong>${teach.examples}</div>
+  `;
+}
+function renderBreadcrumb(){
+  const path = pathToNode(currentNode);
+  breadcrumb.innerHTML = '';
+  path.forEach((node, idx) => {
+    const item = document.createElement('div');
+    item.className = 'crumb';
+    item.textContent = idx === 0 ? '生命起點' : node.name_zh;
+    item.addEventListener('click', () => {
+      currentNode = node;
+      activeDetail = null;
+      lastDirection = 'enter-left';
+      renderAll();
+    });
+    breadcrumb.appendChild(item);
+  });
+  if(currentNode !== taxonomyData){
+    const up = document.createElement('div');
+    up.className = 'crumb alt';
+    up.textContent = '↩ 返回上一層';
+    up.addEventListener('click', goUp);
+    breadcrumb.appendChild(up);
+  }
+}
+function renderGallery(){
+  const groups = getGroupedChildren(currentNode);
+  galleryTitle.textContent = currentNode === taxonomyData
+    ? `請點選下一層分類（${displayMode === 'textbook' ? '課本主幹模式' : '完整分類模式'}）`
+    : `${currentNode.name_zh} 的下一層分類（${displayMode === 'textbook' ? '課本主幹模式' : '完整分類模式'}）`;
+  galleryStage.innerHTML = '';
+  galleryStage.appendChild(createGalleryView(groups, lastDirection, false));
+}
+function renderDetail(){
+  if(!activeDetail){
+    detailBox.style.display = 'none';
+    return;
+  }
+  const sub = activeDetail.children || [];
+  const teach = getTeachingFields(activeDetail);
+  detailBox.style.display = 'block';
+  detailBox.innerHTML = `
+    <h3>📘 ${activeDetail.name_zh} (${activeDetail.name_en})</h3>
+    <p><strong>層級：</strong>${rankLabel(activeDetail.rank)}<br>
+    <strong>說明：</strong>${activeDetail.description || '目前沒有補充說明。'}<br>
+    <strong>下位分類數量：</strong>${sub.length}</p>
+    <div class="detail-chip-row">
+      <div class="detail-chip">目前節點：${currentNode.name_zh}</div>
+      <div class="detail-chip">查看對象：${activeDetail.name_zh}</div>
+      <div class="detail-chip">教材主幹：${teach.textbook}</div>
+    </div>
+    <div class="teach-grid">
+      <div class="teach-card">
+        <h4>教學重點</h4>
+        <p>${teach.features}</p>
+      </div>
+      <div class="teach-card">
+        <h4>課本主幹位置</h4>
+        <p>${teach.textbook}</p>
+      </div>
+      <div class="teach-card">
+        <h4>常見例子</h4>
+        <p>${teach.examples}</p>
+      </div>
+      <div class="teach-card">
+        <h4>比較提醒</h4>
+        <p>${teach.compare}</p>
+      </div>
+      <div class="teach-card">
+        <h4>常見環境</h4>
+        <p>${teach.habitat}</p>
+      </div>
+      <div class="teach-card">
+        <h4>國中考點</h4>
+        <p>${teach.exam}</p>
+      </div>
+    </div>
+    ${sub.length ? `
+      <div class="sub-title">快速跳到下一層</div>
+      <div class="subgrid">
+        ${sub.map(c => `
+          <div class="mini-jump" data-subid="${c.id}">
+            <div class="mini-circle">
+              <div class="en">${c.name_en}</div>
+              <div class="zh">${c.name_zh}</div>
+            </div>
+            <div class="mini-label">${rankLabel(c.rank)}</div>
+          </div>
+        `).join('')}
+      </div>
+    ` : `<div class="sub-title">已到物種或最末端分類。</div>`}
+  `;
+  detailBox.querySelectorAll('[data-subid]').forEach(el => {
+    el.addEventListener('click', () => {
+      const node = idMap.get(el.dataset.subid);
+      currentNode = node;
+      activeDetail = node;
+      lastDirection = 'enter-right';
+      renderAll();
+    });
+  });
+}
+function renderAll(){
+  renderCurrentNode();
+  renderBreadcrumb();
+  renderGallery();
+  renderDetail();
+}
+function goUp(){
+  const pid = parentMap.get(currentNode.id);
+  if(!pid) return;
+  currentNode = idMap.get(pid);
+  activeDetail = null;
+  lastDirection = 'enter-left';
+  renderAll();
+}
+function searchNodes(keyword, rank){
+  const kw = keyword.trim().toLowerCase();
+  return allNodes().filter(node => {
+    const rankOk = rank === 'all' || node.rank === rank;
+    const teach = getTeachingFields(node);
+    const hay = `${node.name_en} ${node.name_zh} ${node.description || ''} ${teach.textbook} ${teach.examples}`.toLowerCase();
+    return rankOk && hay.includes(kw);
+  });
+}
+function showSearchResults(hits, keyword){
+  galleryTitle.textContent = `搜尋結果：${hits.length} 筆`;
+  galleryStage.innerHTML = '';
+  galleryStage.appendChild(createGalleryView(hits, 'search-fade', true));
+  detailBox.style.display = 'none';
+  activeDetail = null;
+}
+function randomNode(){
+  const nodes = allNodes();
+  const node = nodes[Math.floor(Math.random() * nodes.length)];
+  currentNode = node;
+  activeDetail = node;
+  lastDirection = 'search-fade';
+  renderAll();
+}
+document.getElementById('searchBtn').addEventListener('click', () => {
+  const kw = document.getElementById('searchInput').value.trim();
+  const rank = document.getElementById('rankFilter').value;
+  if(!kw) return;
+  const hits = searchNodes(kw, rank);
+  showSearchResults(hits, kw);
+});
+document.getElementById('homeBtn').addEventListener('click', () => {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('rankFilter').value = 'all';
+  currentNode = taxonomyData;
+  activeDetail = null;
+  lastDirection = 'enter-left';
+  renderAll();
+});
+document.getElementById('viewMode').addEventListener('change', (e) => {
+  displayMode = e.target.value;
+  lastDirection = 'search-fade';
+  renderAll();
+});
+document.getElementById('upBtn').addEventListener('click', goUp);
+document.getElementById('randomBtn').addEventListener('click', randomNode);
+document.getElementById('searchInput').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+
+renderAll();
+</script>
+</body>
+</html>
