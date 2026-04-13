@@ -1522,12 +1522,21 @@
   if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
   if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
 
-  // 根據 mission 取得每題分數
-  let pointsPerQ = 1;
-  const matchedMission = MISSIONS.find(m => missionTitle.includes(m.title) || m.title.includes(missionTitle));
-  if (matchedMission) {
-    pointsPerQ = matchedMission.pointsPerQuestion;
-  }
+ // 根據 mission 標題關鍵字決定每題分數
+let pointsPerQ = 1;
+if (missionTitle.includes("GSAT") || missionTitle.includes("學測")) {
+  pointsPerQ = 3;
+} else if (missionTitle.includes("iVocab詞彙") || (missionTitle.includes("iVocab") && missionTitle.includes("選擇"))) {
+  pointsPerQ = 2;
+} else if (missionTitle.includes("Reading") || missionTitle.includes("議題素養")) {
+  pointsPerQ = 4;
+} else if (missionTitle.includes("CAP") || missionTitle.includes("國中會考")) {
+  pointsPerQ = 2;
+} else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
+  pointsPerQ = 3;
+}
+
+const glow = correctVal * pointsPerQ;
   const glow = correctVal * pointsPerQ;
 
   const userRef = doc(db, "users", currentUser.uid);
