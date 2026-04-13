@@ -722,7 +722,7 @@
       <div class="stages-row" id="stages-row">
         <!-- filled by renderStages() -->
       </div>
-      <div class="hint" style="margin-top:8px;">Feed your pet better food to grow faster! Weekly upkeep costs <b style="color:var(--danger)">50 pts</b>. Pet dies when moonlight hits 0.</div>
+      <div class="hint" style="margin-top:8px;">Feed your pet better food to grow faster! Weekly upkeep costs <b style="color:var(--danger)">20 pts</b>. Pet dies when moonlight hits 0.</div>
     </section>
 
   </div>
@@ -732,7 +732,7 @@
 
     <section class="panel">
       <div class="pet-section-title">🥚 Adoption Center</div>
-      <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Spend moonlight to adopt a companion. Higher-tier pets require more points but are rarer and more majestic. Weekly drain: <b style="color:var(--danger)">50 pts</b>.</div>
+      <div class="hint" style="margin-bottom:14px; position:relative; z-index:1;">Spend moonlight to adopt a companion. Higher-tier pets require more points but are rarer and more majestic. Weekly drain: <b style="color:var(--danger)">20 pts</b>.</div>
 
       <div id="adopt-tiers">
         <!-- filled by renderAdoptTiers() -->
@@ -998,7 +998,7 @@
       const weeksPassed = Math.floor((now - lastDrain) / msPerWeek);
       if (weeksPassed < 1) return;
 
-      const drain = weeksPassed * 50;
+      const drain = weeksPassed * 20;
       moonData.totalGlow = Math.max(0, moonData.totalGlow - drain);
       moonData.cycleGlow = moonData.totalGlow % MOON_CYCLE;
       petData.lastDrainTime = lastDrain + weeksPassed * msPerWeek;
@@ -1118,7 +1118,7 @@
               <div class="alive-badge">🌙 Alive for ${Math.floor(((Date.now() - (petData.adoptedAt || Date.now())) / 86400000))} days</div>
             </div>
             ${isAlive ? `
-            <div class="pet-weekly-drain">⏳ Weekly upkeep: <b>50 moonlight pts</b> auto-deducted. Keep earning to keep your pet alive!</div>
+            <div class="pet-weekly-drain">⏳ Weekly upkeep: <b>20 moonlight pts</b> auto-deducted. Keep earning to keep your pet alive!</div>
             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
               <button class="action-btn primary" onclick="switchTab('food')">🍃 Feed Pet</button>
               ${!isAlive ? '' : `<button class="action-btn danger" onclick="forceKillPet()">😢 Release Pet</button>`}
