@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>數學分支互動平台 · 概念圖鑑</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f6f8fc;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', 'Noto Sans TC', sans-serif;
+        }
+
+        .wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem 2.5rem;
+            position: relative;
+        }
+
+        /* 頁面切換 */
+        .pg {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .pg.on {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* 首頁風格: 仿圖片的網格卡片 (數學分支廣場) */
+        .hero-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1f3b4c, #2a5f6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .hero-title p {
+            color: #5c6f87;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        /* 六角形意象？不，完全仿照附圖：六個精緻分支卡片，圓潤+陰影 */
+        .branch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .branch-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem 0.8rem 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .branch-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        .branch-icon {
+            font-size: 3rem;
+            font-weight: 500;
+            margin-bottom: 0.7rem;
+            display: inline-block;
+            background: #eef2fa;
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            border-radius: 40px;
+            text-align: center;
+            background: var(--icon-bg, #eef2fa);
+            color: var(--icon-color, #1f3b4c);
+        }
+
+        .branch-name {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 0.5rem 0 0.2rem;
+            color: #1e2f3e;
+        }
+
+        .branch-zh {
+            font-size: 0.85rem;
+            color: #5f7f9e;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .branch-count {
+            font-size: 0.7rem;
+            background: #eef2fa;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            color: #2c5a6e;
+            font-weight: 500;
+        }
+
+        /* 返回按鈕 與 分支頁面 */
+        .back-btn {
+            background: white;
+            border: 1px solid #dce5f0;
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #2c5f7a;
+            margin-bottom: 1.5rem;
+            transition: 0.1s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .back-btn:hover {
+            background: #eef3fc;
+            border-color: #b9ceec;
+        }
+
+        .branch-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .desc-text {
+            color: #4a627a;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            line-height: 1.5;
+            max-width: 85%;
+        }
+
+        .action-buttons {
+            margin-top: 0.6rem;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .abtn {
+            background: white;
+            border: 1px solid #cbdde9;
+            border-radius: 30px;
+            padding: 0.25rem 0.9rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #2c6280;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .abtn:hover {
+            background: #eef3fc;
+        }
+
+        /* 等級分頁 */
+        .level-tabs {
+            display: flex;
+            gap: 12px;
+            margin: 1.8rem 0 1.2rem;
+            border-bottom: 1px solid #e2e9f2;
+            padding-bottom: 6px;
+        }
+
+        .ltab {
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6c86a3;
+            transition: 0.1s;
+        }
+
+        .ltab.active {
+            color: #1f6392;
+            border-bottom: 2.5px solid #1f6392;
+        }
+
+        /* 概念卡片 */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 1.2rem;
+            margin-top: 0.8rem;
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1rem 1rem 1rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 5px solid var(--branch-color, #2a5f6e);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #ecf1f7;
+            border-left-width: 5px;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            background: #fefefe;
+        }
+
+        .level-tag {
+            font-size: 0.65rem;
+            border-radius: 30px;
+            padding: 0.2rem 0.6rem;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: #152b3c;
+        }
+
+        .concept-zh {
+            font-size: 0.7rem;
+            color: #7d8fa8;
+            margin-bottom: 0.4rem;
+        }
+
+        .concept-prev {
+            font-size: 0.7rem;
+            color: #9aaec2;
+            line-height: 1.3;
+        }
+
+        /* Modal 覆層 */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .overlay.on {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            max-width: 560px;
+            width: 100%;
+            border-radius: 1.8rem;
+            padding: 1.6rem;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            background: #f0f4f9;
+            border: none;
+            font-size: 1.2rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #4b6f8c;
+        }
+
+        .modal-level {
+            display: inline-block;
+            font-size: 0.7rem;
+            border-radius: 30px;
+            padding: 0.2rem 0.7rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .formula-box {
+            background: #f4f9fe;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            font-family: 'Courier New', 'SF Mono', monospace;
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+            border: 1px solid #e2eaf1;
+        }
+
+        .illustration {
+            margin: 0.8rem 0;
+            background: #fafcff;
+            border-radius: 1rem;
+            padding: 6px;
+            text-align: center;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .branch-desc-en, .branch-desc-zh {
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 680px) {
+            .wrap {
+                padding: 1rem;
+            }
+            .branch-grid {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" id="app">
+    <!-- 首頁：仿圖像設計 六個分支大卡片 -->
+    <div class="pg on" id="pg-home">
+        <div class="hero-title">
+            <h1>📐 Branches of Mathematics</h1>
+            <p>探索分支 · 掌握概念與公式 | 點擊任意分支開始</p>
+        </div>
+        <div class="branch-grid" id="branchGrid"></div>
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #8ca3bc;">—— 每個概念皆含公式/插圖 ——</div>
+    </div>
+
+    <!-- 分支詳細頁 -->
+    <div class="pg" id="pg-branch">
+        <button class="back-btn" id="backHomeBtn">← 返回所有分支</button>
+        <div class="branch-header" id="branchHeader"></div>
+        <div class="level-tabs" id="levelTabs">
+            <button class="ltab active" data-lv="all">📚 全部</button>
+            <button class="ltab" data-lv="junior">🧑‍🎓 國中 Junior</button>
+            <button class="ltab" data-lv="senior">🎓 高中 Senior</button>
+        </div>
+        <div class="concept-grid" id="conceptGrid"></div>
+    </div>
+
+    <!-- Modal 彈窗 -->
+    <div class="overlay" id="modalOverlay">
+        <div class="modal-card" id="modalContent">
+            <button class="close-modal" id="closeModalBtn">✕</button>
+            <div id="modalInner"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------- 擴充概念：補齊基本重要公式/主題 ---------------------------------
+    // 在原有 DATA 基礎上，為每個分支增加缺少的核心概念 (保持原有內容且添加更多)
+    // 原始 DATA 分支：算術,代數,幾何,統計,分析,三角。 但附圖希望完整，且補齊缺漏。
+    // 在每個分支 concepts 增加一些關鍵主題，例如 算術增加「指數與根式進階」、代數增加「多項式除法/餘式定理」
+    // 幾何增加「相似形與三角比應用」、統計增加「常態分佈進階」、分析增加「積分技巧與應用」、三角增加「三角恆等式證明」等等。
+    // 並且確保每分支至少 10~12 個概念，完整涵蓋國高中核心。
+    
+    // 保留原始數據並深拷貝再擴充，避免破壞原設計但補足完整性
+    const rawBranches = [
+        {id:0,name:"Arithmetic",zh:"算術",bg:"#1a7a4a",lt:"#c6f0da",tx:"#0a3d22",
+            desc:"The oldest branch — covers numbers, operations, and numerical reasoning.",
+            zhDesc:"最古老的數學分支，涵蓋數字、運算與數值推理。",
+            concepts:[
+                {name:"Natural & Integer Numbers",zh:"自然數與整數",lv:"junior",prev:"Counting, zero, negatives",body:"Natural numbers are 1,2,3,… Integers include negative numbers and zero…",zhBody:"自然數1,2,3...整數包含負數與零。",formula:"ℤ = {…,−2,−1,0,1,2,…}",illus:"numline"},
+                {name:"Four Operations",zh:"四則運算",lv:"junior",prev:"+ − × ÷ rules & order",body:"Addition, subtraction, multiplication, division. BODMAS/PEMDAS order.",zhBody:"加減乘除，先乘除後加減，括號優先。",formula:"(3+5)×2−4÷2 = 14",illus:"ops"},
+                {name:"Fractions",zh:"分數",lv:"junior",prev:"Parts of a whole",body:"a/b means a parts out of b. Add with common denominator.",zhBody:"分數加減需通分，乘法直接相乘。",formula:"a/b + c/d = (ad+bc)/bd",illus:"frac"},
+                {name:"Decimals & Rounding",zh:"小數與四捨五入",lv:"junior",prev:"Place value, rounding",body:"Rounding: look at the next digit. 5+ rounds up.",zhBody:"小數四捨五入規則。",formula:"3.14159… ≈ 3.14",illus:null},
+                {name:"Percentages",zh:"百分比",lv:"junior",prev:"Per hundred, % conversions",body:"Percent means per hundred. Used in discount, tax.",zhBody:"百分比應用折扣、利率。",formula:"% = (part/whole)×100",illus:"pct"},
+                {name:"Ratios & Proportions",zh:"比例",lv:"junior",prev:"a:b, direct & inverse",body:"Direct proportion y=kx, inverse y=k/x.",zhBody:"正比與反比關係。",formula:"a:b = c:d ⇒ ad=bc",illus:null},
+                {name:"Prime Numbers & Factors",zh:"質數與因數",lv:"junior",prev:"Primes, GCD, LCM",body:"Prime has exactly two factors. GCD & LCM.",zhBody:"質數、最大公因數、最小公倍數。",formula:"GCD(12,18)=6, LCM(4,6)=12",illus:"prime"},
+                {name:"Powers & Square Roots",zh:"指數與平方根",lv:"junior",prev:"aⁿ, √a",body:"aⁿ repeated multiplication. √a asks for square root.",zhBody:"冪次與根式基本運算。",formula:"a²×a³=a⁵, √(ab)=√a×√b",illus:null},
+                {name:"Scientific Notation",zh:"科學記號",lv:"senior",prev:"Very large or small numbers",body:"a × 10ⁿ where 1≤a<10",zhBody:"科學記號表示法。",formula:"6,400,000 = 6.4×10⁶",illus:null},
+                {name:"Logarithms (base)",zh:"對數",lv:"senior",prev:"Inverse of exponents",body:"logₐ(x) asks exponent to get x.",zhBody:"對數為指數逆運算。",formula:"logₐ(xy)=logₐx+logₐy",illus:null},
+                {name:"Roots & Radicals",zh:"根式運算",lv:"junior",prev:"Simplify √, rationalize",body:"Simplify square roots and rationalize denominator.",zhBody:"化簡根式及有理化分母。",formula:"√(a/b)=√a/√b, 1/√2=√2/2",illus:null}
+            ]},
+        {id:1,name:"Algebra",zh:"代數",bg:"#1a5fa0",lt:"#c5dff7",tx:"#0a2d52",
+            desc:"Algebra uses symbols and equations to describe patterns.",
+            zhDesc:"代數用符號描述規律並求解未知數。",
+            concepts:[
+                {name:"Variables & Expressions",zh:"變數與代數式",lv:"junior",prev:"Letters for unknowns",body:"Expressions combine variables.",zhBody:"代數式合併同類項。",formula:"3x+5x=8x",illus:null},
+                {name:"Linear Equations",zh:"一次方程式",lv:"junior",prev:"ax + b = c",body:"Isolate x by inverse operations.",zhBody:"解一元一次方程。",formula:"ax+b=c ⇒ x=(c-b)/a",illus:"linear"},
+                {name:"Simultaneous Equations",zh:"聯立方程式",lv:"junior",prev:"2 equations, 2 unknowns",body:"Substitution or elimination.",zhBody:"代入法或加減消去法。",formula:"x+y=5, 2x−y=4 ⇒ x=3,y=2",illus:null},
+                {name:"Inequalities",zh:"不等式",lv:"junior",prev:"<  >  ≤  ≥",body:"Reverse sign when multiply by negative.",zhBody:"負數乘除反向不等號。",formula:"−2x>6 ⇒ x<−3",illus:null},
+                {name:"Quadratic Equations",zh:"二次方程式",lv:"junior",prev:"ax²+bx+c=0",body:"Quadratic formula, discriminant.",zhBody:"判別式判斷實根。",formula:"x = [-b±√(b²-4ac)]/2a",illus:"quad"},
+                {name:"Polynomials",zh:"多項式",lv:"junior",prev:"Adding, factoring",body:"Difference of squares, perfect square.",zhBody:"多項式因式分解。",formula:"a²−b²=(a+b)(a−b)",illus:null},
+                {name:"Functions & Graphs",zh:"函數與圖形",lv:"junior",prev:"f(x), domain, range",body:"A function maps input to output.",zhBody:"函數定義域值域。",formula:"f(x)=2x+1",illus:"func"},
+                {name:"Exponents & Laws",zh:"指數定律",lv:"junior",prev:"aᵐ·aⁿ = aᵐ⁺ⁿ",body:"Laws of exponents.",zhBody:"指數律運算。",formula:"aᵐ/aⁿ=aᵐ⁻ⁿ, (aᵐ)ⁿ=aᵐⁿ",illus:null},
+                {name:"Sequences & Series",zh:"數列與級數",lv:"senior",prev:"AP, GP, Σ notation",body:"Arithmetic & geometric series sum formulas.",zhBody:"等差等比求和。",formula:"Sn = n/2·(2a+(n-1)d)",illus:null},
+                {name:"Matrices",zh:"矩陣",lv:"senior",prev:"Arrays, multiplication, determinant",body:"Matrix multiplication not commutative.",zhBody:"矩陣乘法不可交換。",formula:"det(A)=ad−bc for 2×2",illus:null},
+                {name:"Complex Numbers",zh:"複數",lv:"senior",prev:"a + bi, imaginary unit i",body:"i=√(-1), complex plane.",zhBody:"複數平面與運算。",formula:"(a+bi)(c+di) = (ac-bd)+(ad+bc)i",illus:null},
+                {name:"Polynomial Remainder Theorem",zh:"餘式定理",lv:"senior",prev:"f(a) remainder",body:"Remainder when f(x) divided by (x-a) is f(a).",zhBody:"多項式餘式定理。",formula:"f(x) ÷ (x-a) ⇒ remainder = f(a)",illus:null}
+            ]},
+        {id:2,name:"Geometry",zh:"幾何",bg:"#7a2a90",lt:"#e8c8f5",tx:"#3a0a48",
+            desc:"Geometry studies shapes, sizes, and properties of space.",
+            zhDesc:"幾何學研究圖形、空間性質。",
+            concepts:[
+                {name:"Angles & Lines",zh:"角與直線",lv:"junior",prev:"Types of angles",body:"Acute, obtuse, parallel lines angles.",zhBody:"平行線截線性質。",formula:"同位角相等",illus:null},
+                {name:"Triangles",zh:"三角形",lv:"junior",prev:"Area, types, congruence",body:"Congruence: SSS,SAS,ASA,AAS",zhBody:"全等與相似。",formula:"Area=½×base×height",illus:"tri"},
+                {name:"Pythagorean Theorem",zh:"畢氏定理",lv:"junior",prev:"a²+b²=c²",body:"Right triangle hypotenuse relation.",zhBody:"直角三角形邊長關係。",formula:"a²+b²=c²",illus:"pyth"},
+                {name:"Circles",zh:"圓",lv:"junior",prev:"Circumference, area, arcs",body:"Arc length, sector area.",zhBody:"圓周長面積與扇形。",formula:"C=2πr, A=πr²",illus:"circle"},
+                {name:"Quadrilaterals",zh:"四邊形",lv:"junior",prev:"Square, rectangle, parallelogram",body:"Properties of parallelogram, trapezoid.",zhBody:"平行四邊形面積。",formula:"A=base×height",illus:"quad2"},
+                {name:"3D Solids",zh:"立體圖形",lv:"junior",prev:"Volume, surface area",body:"Prism, cylinder, sphere.",zhBody:"體積與表面積。",formula:"V_sphere=⁴⁄₃πr³",illus:null},
+                {name:"Coordinate Geometry",zh:"坐標幾何",lv:"junior",prev:"Distance, midpoint, gradient",body:"Distance formula derived from Pythagoras.",zhBody:"兩點距離與中點。",formula:"d=√((x₂−x₁)²+(y₂−y₁)²)",illus:"coords"},
+                {name:"Transformations",zh:"幾何變換",lv:"junior",prev:"Translate, reflect, rotate, enlarge",body:"Congruent vs similar.",zhBody:"平移旋轉反射與縮放。",formula:"Enlargement scale factor k",illus:null},
+                {name:"Vectors",zh:"向量",lv:"senior",prev:"Direction and magnitude",body:"Dot product and angle.",zhBody:"向量內積與夾角。",formula:"a·b=|a||b|cosθ",illus:null},
+                {name:"Conic Sections",zh:"圓錐曲線",lv:"senior",prev:"Circle, ellipse, parabola, hyperbola",body:"Standard equations.",zhBody:"橢圓拋物線雙曲線。",formula:"x²/a²+y²/b²=1",illus:null},
+                {name:"Similarity & Proportions",zh:"相似形與比例",lv:"junior",prev:"AA similarity, SSS similarity",body:"Corresponding sides proportional.",zhBody:"相似三角形對應邊成比例。",formula:"AB/DE = BC/EF",illus:null}
+            ]},
+        {id:3,name:"Statistics",zh:"統計學",bg:"#b05010",lt:"#fde0c5",tx:"#4a1800",
+            desc:"Statistics is the science of collecting, analysing, and interpreting data.",
+            zhDesc:"統計學收集分析數據。",
+            concepts:[
+                {name:"Data Types",zh:"資料類型",lv:"junior",prev:"Categorical, discrete, continuous",body:"Qualitative vs quantitative.",zhBody:"類別與數值資料。",formula:"Sample vs population",illus:null},
+                {name:"Mean, Median, Mode",zh:"集中趨勢",lv:"junior",prev:"Measures of central tendency",body:"Mean, median, mode.",zhBody:"平均數中位數眾數。",formula:"x̄ = Σxᵢ/n",illus:"mmm"},
+                {name:"Range & IQR",zh:"全距與四分位距",lv:"junior",prev:"Spread of data",body:"IQR = Q3−Q1",zhBody:"四分位距。",formula:"Outliers: 1.5×IQR",illus:null},
+                {name:"Histograms",zh:"直方圖",lv:"junior",prev:"Frequency distribution",body:"Grouped data display.",zhBody:"次數分配直方圖。",formula:"Relative frequency = f/n",illus:"hist"},
+                {name:"Probability Basics",zh:"機率基礎",lv:"junior",prev:"P(A) = favorable/total",body:"Range 0 to 1.",zhBody:"古典機率定義。",formula:"P(A)+P(not A)=1",illus:"prob"},
+                {name:"Combined Probability",zh:"複合機率",lv:"junior",prev:"And, or, tree diagrams",body:"Independent & mutually exclusive.",zhBody:"獨立事件與互斥事件。",formula:"P(A∩B)=P(A)·P(B)",illus:null},
+                {name:"Standard Deviation",zh:"標準差",lv:"senior",prev:"σ, spread around mean",body:"Population vs sample.",zhBody:"標準差衡量離散程度。",formula:"σ = √(Σ(xᵢ−μ)²/N)",illus:null},
+                {name:"Normal Distribution",zh:"常態分佈",lv:"senior",prev:"Bell curve, 68-95-99.7 rule",body:"Z-score standardization.",zhBody:"常態分配與Z分數。",formula:"Z = (x−μ)/σ",illus:"norm"},
+                {name:"Correlation & Regression",zh:"相關與迴歸",lv:"senior",prev:"r value, line of best fit",body:"Pearson correlation r.",zhBody:"線性迴歸與相關係數。",formula:"ŷ = a + bx",illus:null},
+                {name:"Binomial Distribution",zh:"二項分布",lv:"senior",prev:"n trials, prob p",body:"P(X=k) = C(n,k)pᵏ(1-p)ⁿ⁻ᵏ",zhBody:"二項試驗機率。",formula:"E[X]=np",illus:null}
+            ]},
+        {id:4,name:"Analysis",zh:"分析學",bg:"#8a0a2a",lt:"#f5c5d0",tx:"#3a0010",
+            desc:"Calculus — limits, derivatives, integrals, and infinite series.",
+            zhDesc:"微積分連續變化數學。",
+            concepts:[
+                {name:"Limits",zh:"極限",lv:"senior",prev:"lim x→a f(x)=L",body:"Approaching behavior.",zhBody:"極限概念。",formula:"lim(x→∞) 1/x = 0",illus:null},
+                {name:"Continuity",zh:"連續性",lv:"senior",prev:"No breaks, holes",body:"Limit equals function value.",zhBody:"連續定義。",formula:"lim f(x)=f(a)",illus:null},
+                {name:"Derivatives",zh:"導數",lv:"senior",prev:"f'(x), rate of change",body:"Slope of tangent line.",zhBody:"導數定義切線斜率。",formula:"d/dx[xⁿ]=nxⁿ⁻¹",illus:"deriv"},
+                {name:"Chain Rule",zh:"鏈式法則",lv:"senior",prev:"Composite function derivative",body:"Derivative of composition.",zhBody:"連鎖律。",formula:"d/dx[f(g(x))] = f'(g(x))·g'(x)",illus:null},
+                {name:"Applications of Derivatives",zh:"導數應用",lv:"senior",prev:"Max/min, optimisation",body:"Critical points and concavity.",zhBody:"極值與凹性。",formula:"f'(c)=0, f''(c)>0 => min",illus:null},
+                {name:"Integration (Antiderivatives)",zh:"積分",lv:"senior",prev:"∫f(x)dx",body:"Reverse differentiation.",zhBody:"不定積分與常數C。",formula:"∫xⁿdx = xⁿ⁺¹/(n+1)+C",illus:null},
+                {name:"Definite Integrals & Area",zh:"定積分",lv:"senior",prev:"Area under curve",body:"Fundamental theorem.",zhBody:"微積分基本定理。",formula:"∫ₐᵇ f(x)dx = F(b)-F(a)",illus:"area"},
+                {name:"Exponential & Log Derivatives",zh:"指數對數微分",lv:"senior",prev:"d/dx eˣ, d/dx ln(x)",body:"eˣ derivative is itself.",zhBody:"自然指數與對數微分。",formula:"d/dx[eˣ]=eˣ, d/dx[ln x]=1/x",illus:null},
+                {name:"Differential Equations (intro)",zh:"微分方程入門",lv:"senior",prev:"dy/dx = ky",body:"Exponential growth/decay.",zhBody:"指數成長模型。",formula:"y = y₀eᵏˣ",illus:null},
+                {name:"Integration by Substitution",zh:"代換積分法",lv:"senior",prev:"u-substitution",body:"Simplify integrals.",zhBody:"變數代換技巧。",formula:"∫ f(g(x))g'(x)dx = ∫ f(u)du",illus:null}
+            ]},
+        {id:5,name:"Trigonometry",zh:"三角學",bg:"#0a6868",lt:"#b8e8e8",tx:"#022828",
+            desc:"Trigonometry studies angles and periodic functions.",
+            zhDesc:"三角學研究角度與週期現象。",
+            concepts:[
+                {name:"Right Triangle Ratios",zh:"直角三角形比值",lv:"junior",prev:"SOH-CAH-TOA",body:"sin, cos, tan definitions.",zhBody:"正弦餘弦正切定義。",formula:"sinθ=opp/hyp",illus:"sct"},
+                {name:"Special Angles",zh:"特殊角",lv:"junior",prev:"30°,45°,60° exact values",body:"Exact values from geometry.",zhBody:"常見角度精確值。",formula:"sin30°=½, sin45°=√2/2",illus:"special"},
+                {name:"Pythagorean Identity",zh:"畢氏恆等式",lv:"junior",prev:"sin²θ+cos²θ=1",body:"Fundamental identity.",zhBody:"三角恆等式基礎。",formula:"tan²θ+1=sec²θ",illus:null},
+                {name:"Unit Circle",zh:"單位圓",lv:"junior",prev:"(cosθ, sinθ)",body:"Coordinates on circle radius 1.",zhBody:"單位圓與三角函數值。",formula:"x²+y²=1",illus:"unit"},
+                {name:"CAST Rule & Signs",zh:"CAST法則",lv:"junior",prev:"Quadrant signs",body:"All positive in Q1, sin in Q2...",zhBody:"象限正負判斷。",formula:"ASTC",illus:"cast"},
+                {name:"Sine & Cosine Rules",zh:"正餘弦定理",lv:"junior",prev:"Any triangle",body:"Law of sines, cosines.",zhBody:"解任意三角形。",formula:"a/sinA = b/sinB = c/sinC",illus:null},
+                {name:"Trig Graphs & Waves",zh:"三角函數圖形",lv:"senior",prev:"Amplitude, period",body:"y = A·sin(Bx+C)+D",zhBody:"振幅週期相位。",formula:"Period=2π/B",illus:"wave"},
+                {name:"Addition Formulae",zh:"和角公式",lv:"senior",prev:"sin(A±B), cos(A±B)",body:"Expand sum of angles.",zhBody:"三角函數和角公式。",formula:"sin(A+B)=sinAcosB+cosAsinB",illus:null},
+                {name:"Solving Trig Equations",zh:"解三角方程",lv:"senior",prev:"General solutions",body:"Infinite solutions using period.",zhBody:"三角方程式通解。",formula:"sinx=k => x=arcsin(k)+360°n",illus:null},
+                {name:"Inverse Trig Functions",zh:"反三角函數",lv:"senior",prev:"arcsin, arccos, arctan",body:"Angle from ratio.",zhBody:"反三角求角度。",formula:"sin⁻¹(½)=30°",illus:null}
+            ]}
+    ];
+
+    // 補齊插圖映射 (沿用原有 ILLS 並擴充缺少的)
+    const ILLS = window.ILLS || {};
+    // 確保部份插圖存在 (原有已定義)
+    const safeIlls = {
+        numline:'<svg viewBox="0 0 300 60"><line x1="10" y1="30" x2="290" y2="30" stroke="#1a7a4a" stroke-width="2"/><circle cx="150" cy="30" r="5" fill="#e05060"/><text x="150" y="18" font-size="10" fill="#e05060" text-anchor="middle">zero</text></svg>',
+        ops:'<svg viewBox="0 0 300 70"><rect x="10" y="18" width="50" height="34" rx="6" fill="#c6f0da"/><text x="35" y="41" text-anchor="middle" font-size="20" fill="#1a7a4a">3</text><text x="72" y="41" text-anchor="middle" font-size="20" fill="#555">+</text><rect x="88" y="18" width="50" height="34" rx="6" fill="#c6f0da"/><text x="113" y="41" text-anchor="middle" font-size="20" fill="#1a7a4a">5</text><text x="153" y="41" text-anchor="middle" font-size="20" fill="#555">=</text><rect x="168" y="18" width="50" height="34" rx="6" fill="#1a7a4a"/><text x="193" y="41" text-anchor="middle" font-size="20" fill="#fff">8</text></svg>',
+        pct:'<svg viewBox="0 0 300 70"><rect x="10" y="22" width="200" height="28" rx="5" fill="#d4f0d4"/><rect x="10" y="22" width="60" height="28" rx="5" fill="#1a7a4a"/><text x="40" y="41" text-anchor="middle" font-size="13" fill="#fff">30%</text></svg>',
+        prime:'<svg viewBox="0 0 300 80"><g font-size="13"><circle cx="35" cy="30" r="18" fill="#c6f0da"/><text x="35" y="35" text-anchor="middle">2</text><circle cx="85" cy="30" r="18" fill="#c6f0da"/><text x="85" y="35" text-anchor="middle">3</text><circle cx="135" cy="30" r="18" fill="#c6f0da"/><text x="135" y="35" text-anchor="middle">5</text></g></svg>',
+        linear:'<svg viewBox="0 0 300 100"><line x1="20" y1="90" x2="280" y2="90" stroke="#bbb"/><line x1="20" y1="80" x2="250" y2="22" stroke="#1a5fa0" stroke-width="2.5"/><circle cx="120" cy="52" r="5" fill="#1a5fa0"/><text x="128" y="48" font-size="12" fill="#1a5fa0">y=2x+1</text></svg>',
+        quad:'<svg viewBox="0 0 300 105"><path d="M 50,90 Q 150,8 250,90" fill="none" stroke="#1a5fa0" stroke-width="2.5"/><circle cx="150" cy="16" r="5" fill="#e05060"/><text x="155" y="104" font-size="10" fill="#888">x</text></svg>',
+        func:'<svg viewBox="0 0 300 90"><rect x="115" y="24" width="68" height="44" rx="8" fill="#1a5fa0"/><text x="149" y="44" text-anchor="middle" fill="#fff">f(x)=2x+1</text></svg>',
+        tri:'<svg viewBox="0 0 300 115"><polygon points="150,12 28,103 272,103" fill="#e8c8f5" stroke="#7a2a90" stroke-width="2"/><line x1="150" y1="12" x2="150" y2="103" stroke="#7a2a90" stroke-width="1.5" stroke-dasharray="5,3"/><text x="155" y="62" font-size="12" fill="#7a2a90">h</text></svg>',
+        pyth:'<svg viewBox="0 0 300 130"><polygon points="60,110 60,20 225,110" fill="#f0e0ff" stroke="#7a2a90" stroke-width="2"/><rect x="52" y="102" width="16" height="16" fill="none" stroke="#7a2a90"/><text x="150" y="60" font-size="14" fill="#e05060">c</text></svg>',
+        circle:'<svg viewBox="0 0 300 118"><circle cx="150" cy="58" r="50" fill="#e8c8f5" stroke="#7a2a90" stroke-width="2"/><line x1="150" y1="58" x2="200" y2="58" stroke="#7a2a90" stroke-width="2"/><text x="170" y="52" font-size="13" fill="#7a2a90">r</text></svg>',
+        coords:'<svg viewBox="0 0 300 110"><line x1="20" y1="55" x2="280" y2="55" stroke="#ccc"/><line x1="150" y1="8" x2="150" y2="105" stroke="#ccc"/><circle cx="80" cy="80" r="5" fill="#7a2a90"/><circle cx="220" cy="30" r="5" fill="#7a2a90"/></svg>',
+        mmm:'<svg viewBox="0 0 300 95"><rect x="52" y="42" width="28" height="45" rx="3" fill="#b05010" opacity=".7"/><rect x="84" y="28" width="28" height="59" rx="3" fill="#b05010"/><line x1="112" y1="18" x2="112" y2="90" stroke="#e05060" stroke-width="2" stroke-dasharray="4,2"/></svg>',
+        hist:'<svg viewBox="0 0 300 100"><rect x="28" y="58" width="44" height="30" fill="#fde0c5"/><rect x="74" y="38" width="44" height="50" fill="#b05010" opacity=".8"/><rect x="120" y="25" width="44" height="63" fill="#b05010"/></svg>',
+        prob:'<svg viewBox="0 0 300 90"><rect x="20" y="25" width="40" height="50" rx="4" fill="#b05010"/><rect x="63" y="35" width="40" height="40" rx="4" fill="#b05010"/><rect x="106" y="28" width="40" height="47" rx="4" fill="#b05010"/></svg>',
+        norm:'<svg viewBox="0 0 300 108"><path d="M 18,93 C 50,92 88,78 118,38 C 148,3 178,3 198,38 C 228,78 258,92 282,93 Z" fill="#fde0c5" stroke="#b05010" stroke-width="2"/><line x1="150" y1="8" x2="150" y2="96" stroke="#b05010" stroke-dasharray="4,2"/></svg>',
+        deriv:'<svg viewBox="0 0 300 108"><path d="M 18,88 C 80,84 140,38 200,18 C 230,8 260,14 280,18" fill="none" stroke="#8a0a2a" stroke-width="2.5"/><circle cx="150" cy="42" r="5" fill="#e05060"/></svg>',
+        area:'<svg viewBox="0 0 300 108"><path d="M 28,88 Q 100,78 150,28 Q 200,78 272,88" fill="#f5c5d0" stroke="#8a0a2a" stroke-width="2"/><text x="118" y="105" font-size="11" fill="#8a0a2a">∫f(x)dx</text></svg>',
+        sct:'<svg viewBox="0 0 300 118"><polygon points="60,105 60,18 228,105" fill="#b8e8e8" stroke="#0a6868" stroke-width="2"/><text x="28" y="64" font-size="13" fill="#0a6868">opp</text><text x="150" y="56" font-size="13" fill="#e05060">hyp</text></svg>',
+        special:'<svg viewBox="0 0 300 85"><rect x="15" y="8" width="55" height="64" rx="6" fill="#b8e8e8"/><text x="42" y="26" fill="#0a6868" text-anchor="middle">30° sin=½</text></svg>',
+        unit:'<svg viewBox="0 0 300 118"><circle cx="150" cy="58" r="50" fill="none" stroke="#0a6868" stroke-width="1.5"/><line x1="150" y1="58" x2="192" y2="30" stroke="#0a6868" stroke-width="2"/><circle cx="192" cy="30" r="5" fill="#0a6868"/></svg>',
+        cast:'<svg viewBox="0 0 300 110"><line x1="10" y1="55" x2="290" y2="55" stroke="#bbb"/><line x1="150" y1="5" x2="150" y2="108" stroke="#bbb"/><text x="68" y="32" text-anchor="middle" fill="#0a6868">S (sin+)</text><text x="230" y="32" text-anchor="middle" fill="#0a6868">A (all+)</text></svg>',
+        wave:'<svg viewBox="0 0 300 90"><path d="M 10,45 C 27,10 53,10 70,45 C 87,80 113,80 130,45 C 147,10 173,10 190,45 C 207,80 233,80 250,45" fill="none" stroke="#0a6868" stroke-width="2.5"/><line x1="10" y1="45" x2="290" y2="45" stroke="#bbb" stroke-dasharray="4,3"/></svg>'
+    };
+    Object.assign(ILLS, safeIlls);
+
+    let currentBranch = null;
+    let currentLevel = 'all';
+    function renderBranchGrid() {
+        const grid = document.getElementById('branchGrid');
+        grid.innerHTML = rawBranches.map((b, idx) => `
+            <div class="branch-card" data-idx="${idx}" style="border-bottom: 4px solid ${b.bg}">
+                <div class="branch-icon" style="background: ${b.lt}; color: ${b.bg};">${b.name[0]}</div>
+                <div class="branch-name">${b.name}</div>
+                <div class="branch-zh">${b.zh}</div>
+                <div class="branch-count">${b.concepts.length} 個概念</div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.branch-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const idx = parseInt(card.dataset.idx);
+                openBranch(idx);
+            });
+        });
+    }
+    function openBranch(idx) { currentBranch = rawBranches[idx]; currentLevel = 'all'; renderBranchHeader(); renderConcepts(); showPage('pg-branch'); }
+    function renderBranchHeader() {
+        const header = document.getElementById('branchHeader');
+        header.innerHTML = `<h2 style="color:${currentBranch.bg}">${currentBranch.name} · ${currentBranch.zh}</h2>
+        <div class="desc-text">${currentBranch.zhDesc}</div>
+        <div class="desc-text" style="font-size:0.8rem;">${currentBranch.desc}</div>
+        <div class="action-buttons"><button class="abtn" onclick="speakOnlyEnglish('${escapeStr(currentBranch.name+'. '+currentBranch.desc)}')">🔊 English</button></div>`;
+    }
+    function renderConcepts() {
+        const grid = document.getElementById('conceptGrid');
+        let filtered = currentBranch.concepts.filter(c => currentLevel === 'all' || c.lv === currentLevel);
+        grid.innerHTML = filtered.map(c => `<div class="concept-card" style="border-left-color:${currentBranch.bg}" data-concept='${JSON.stringify(c)}'>
+            <span class="level-tag" style="background:${c.lv==='junior'?'#e2f0e6':'#e1ecf9'}; color:${c.lv==='junior'?'#0f6e3f':'#1a5fa0'}">${c.lv==='junior'?'國中':'高中'}</span>
+            <div class="concept-name">${c.name}</div><div class="concept-zh">${c.zh}</div><div class="concept-prev">${c.prev || '核心概念'}</div>
+        </div>`).join('');
+        document.querySelectorAll('.concept-card').forEach(card => {
+            card.addEventListener('click', () => openConcept(JSON.parse(card.dataset.concept)));
+        });
+    }
+    function openConcept(c) {
+        const illusHtml = (c.illus && ILLS[c.illus]) ? `<div class="illustration">${ILLS[c.illus]}</div>` : '';
+        document.getElementById('modalInner').innerHTML = `
+            <span class="modal-level" style="background:${c.lv==='junior'?'#c6f0da':'#c5dff7'}">${c.lv==='junior'?'國中 Junior':'高中 Senior'}</span>
+            <h3 style="color:${currentBranch.bg}">${c.name}</h3><div class="concept-zh" style="margin-bottom:6px;">${c.zh}</div>
+            ${illusHtml}<div class="formula-box">${c.formula || '—'}</div>
+            <div class="desc-text">${c.body}</div><div class="desc-text" style="margin-top:8px; font-style:italic;">${c.zhBody || ''}</div>
+            <button class="abtn" style="margin-top:10px;" onclick="speakOnlyEnglish('${escapeStr(c.name+'. '+c.body)}')">🔊 English Audio</button>
+        `;
+        document.getElementById('modalOverlay').classList.add('on');
+    }
+    function speakOnlyEnglish(txt) { if(window.speechSynthesis) { let u = new SpeechSynthesisUtterance(txt); u.lang='en-US'; u.rate=0.85; speechSynthesis.cancel(); speechSynthesis.speak(u); } }
+    function escapeStr(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+    function showPage(id) { document.querySelectorAll('.pg').forEach(p => p.classList.remove('on')); document.getElementById(id).classList.add('on'); }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('on'); }
+    function initEvents() {
+        document.getElementById('backHomeBtn').onclick = () => showPage('pg-home');
+        document.getElementById('closeModalBtn').onclick = closeModal;
+        document.getElementById('modalOverlay').onclick = (e) => { if(e.target === document.getElementById('modalOverlay')) closeModal(); };
+        document.querySelectorAll('.ltab').forEach(tab => {
+            tab.onclick = (e) => { currentLevel = tab.dataset.lv; document.querySelectorAll('.ltab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); if(currentBranch) renderConcepts(); };
+        });
+        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+    }
+    renderBranchGrid();
+    initEvents();
+</script>
+</body>
+</html>
