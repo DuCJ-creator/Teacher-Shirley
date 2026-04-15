@@ -123,11 +123,6 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* lunar badge */
-    .lunar-badge {
-      display: none !important;
-    }
-
     /* 修正顯示區域的斷行 */
     #q-text {
       word-break: break-word;
@@ -165,7 +160,6 @@
 
 <body class="flex items-center justify-center p-4 relative">
 
-  <div id="lunar-badge" class="lunar-badge">🌙 請從月光寶盒進入</div>
   <div id="tsparticles"></div>
 
   <div id="app-container" class="w-full max-w-3xl glass-card rounded-3xl p-8 md:p-10 relative min-h-[550px] flex flex-col justify-center border-t-white/40">
@@ -196,7 +190,7 @@
           <i class="fas fa-stopwatch text-blue-400 mr-2"></i> 30s Timer
         </div>
       </div>
-      <button onclick="startQuiz()" class="group relative px-10 py-4 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-cyan-500/30 bg-white/10 backdrop-blur-lg border border-white/30">
+      <button id="start-quiz-btn" class="group relative px-10 py-4 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-cyan-500/30 bg-white/10 backdrop-blur-lg border border-white/30">
         <div class="absolute inset-0 w-full h-full accent-gradient opacity-80 group-hover:opacity-100 transition-opacity"></div>
         <span class="relative text-white font-bold text-xl tracking-wider flex items-center justify-center">
           START MODULE <i class="fas fa-chevron-right ml-3 text-sm group-hover:translate-x-1 transition-transform"></i>
@@ -249,13 +243,13 @@
       </div>
       <div id="feedback-list" class="space-y-4 mb-8 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar"></div>
       <div class="flex flex-col md:flex-row gap-4 justify-center mt-8 no-print">
-        <button onclick="startQuiz(true)" class="px-8 py-4 rounded-2xl accent-gradient text-blue-950 font-extrabold shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-1 flex items-center justify-center">
+        <button id="next-challenge-btn" class="px-8 py-4 rounded-2xl accent-gradient text-blue-950 font-extrabold shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-1 flex items-center justify-center">
           <i class="fas fa-redo-alt mr-3"></i> Next Challenge
         </button>
-        <button onclick="window.print()" class="px-8 py-4 rounded-2xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 font-bold transition-all border border-blue-400/30 flex items-center justify-center backdrop-blur-md">
+        <button id="print-results-btn" class="px-8 py-4 rounded-2xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 font-bold transition-all border border-blue-400/30 flex items-center justify-center backdrop-blur-md">
           <i class="fas fa-print mr-3"></i> Print Results
         </button>
-        <button onclick="exitApp()" class="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold transition-colors border border-white/20 flex items-center justify-center backdrop-blur-md">
+        <button id="exit-app-btn" class="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold transition-colors border border-white/20 flex items-center justify-center backdrop-blur-md">
           <i class="fas fa-power-off mr-3 text-red-400"></i> Exit
         </button>
       </div>
@@ -264,90 +258,27 @@
   </div>
 
   <script>
-    (function initLunarBadge(){
-      const badge = document.getElementById("lunar-badge");
-      const linked = !!window.opener;
-      if (linked) {
-        badge.classList.add("linked");
-        badge.textContent = "🌙 月光任務已連線";
-      } else {
-        badge.textContent = "🌙 請從月光寶盒進入";
-      }
-    })();
-
-    // --- Particle System
+    // --- 核心修復: 確保 loadQuestion 正確更新 currentIndex，且計時器與選項不再互相干擾 ---
+    // 粒子系統
     async function initParticles() {
       try {
         await tsParticles.load("tsparticles", {
           particles: {
-            number: { value: 180, density: { enable: true, value_area: 900 } },
+            number: { value: 120, density: { enable: true, value_area: 800 } },
             color: { value: ["#ffffff", "#c4b5fd", "#93c5fd", "#fde68a", "#6ee7b7", "#f9a8d4"] },
             shape: { type: "circle" },
-            opacity: {
-              value: 0.7,
-              random: true,
-              animation: { enable: true, speed: 0.5, minimumValue: 0.1, sync: false }
-            },
-            size: {
-              value: 2.2,
-              random: true,
-              animation: { enable: true, speed: 1.2, minimumValue: 0.3, sync: false }
-            },
-            links: {
-              enable: true,
-              distance: 120,
-              color: "#a78bfa",
-              opacity: 0.07,
-              width: 1
-            },
-            move: {
-              enable: true,
-              speed: 0.4,
-              direction: "none",
-              random: true,
-              straight: false,
-              out_mode: "out",
-              bounce: false,
-              attract: { enable: false }
-            }
+            opacity: { value: 0.6, random: true, animation: { enable: true, speed: 0.5, minimumValue: 0.1, sync: false } },
+            size: { value: 2, random: true, animation: { enable: true, speed: 1, minimumValue: 0.3, sync: false } },
+            links: { enable: true, distance: 130, color: "#a78bfa", opacity: 0.07, width: 1 },
+            move: { enable: true, speed: 0.4, direction: "none", random: true, straight: false, out_mode: "out", bounce: false }
           },
           interactivity: {
             detect_on: "canvas",
-            events: {
-              onhover: { enable: true, mode: ["grab", "bubble"] },
-              resize: true
-            },
-            modes: {
-              grab: { distance: 180, line_linked: { opacity: 0.25 } },
-              bubble: { distance: 200, size: 5, duration: 2, opacity: 0.8 }
-            }
+            events: { onhover: { enable: true, mode: ["grab", "bubble"] }, resize: true },
+            modes: { grab: { distance: 160, line_linked: { opacity: 0.25 } }, bubble: { distance: 200, size: 4, duration: 2, opacity: 0.7 } }
           },
           retina_detect: true,
-          background: { color: "transparent" },
-          emitters: [
-            {
-              direction: "top-right",
-              rate: { delay: 4, quantity: 1 },
-              position: { x: 0, y: 100 },
-              size: { width: 0, height: 0 },
-              particles: {
-                number: { value: 1 },
-                color: { value: "#ffffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.9, animation: { enable: true, speed: 2, minimumValue: 0, sync: false } },
-                size: { value: 1.5, random: false },
-                links: { enable: false },
-                move: {
-                  enable: true,
-                  speed: 18,
-                  direction: "top-right",
-                  straight: true,
-                  out_mode: "destroy"
-                },
-                life: { duration: { sync: true, value: 0.8 }, count: 1 }
-              }
-            }
-          ]
+          background: { color: "transparent" }
         });
       } catch(e){ console.warn(e); }
     }
@@ -360,19 +291,20 @@
     const QUESTION_LIMIT = 10;
     const TIME_LIMIT = 30;
 
-    let allQuestions = [];          // 儲存所有題目物件
-    let wrongHistory = new Set();   // 錯題索引 (包含超時)
-    let seenHistory = new Set();    // 出現過的題目索引
+    let allQuestions = [];
+    let wrongHistory = new Set();
+    let seenHistory = new Set();
 
     let currentSession = {
       questions: [],
-      userAnswers: [],    // 儲存選擇的選項索引 (0~3) 或 null
+      userAnswers: [],     // 儲存每個題目用戶選擇的選項文字 (或是 null)
       currentIndex: 0,
       timer: null,
-      timeLeft: TIME_LIMIT
+      timeLeft: TIME_LIMIT,
+      isAnswerLocked: false  // 防止同一題重複作答
     };
 
-    // ---------- 載入 CSV + 嚴謹解析 (解決 code/question/options 空白問題) ----------
+    // 載入 CSV (與原邏輯相同但增強健壯性)
     async function loadData() {
       const loadingDiv = document.getElementById('loading-screen');
       const loadingSub = document.getElementById('loading-sub');
@@ -387,26 +319,15 @@
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const csvText = await response.text();
           
-          // 重要: PapaParse 設定 header: false，但我們要手動過濾空行、前後空白
-          const parseResult = Papa.parse(csvText, {
-            header: false,
-            skipEmptyLines: true,
-            trimHeaders: false,   // 我們自行 trim 每個欄位
-          });
-          
-          if (parseResult.errors && parseResult.errors.length) {
-            console.warn("Parse warnings", parseResult.errors);
-          }
-          
+          const parseResult = Papa.parse(csvText, { header: false, skipEmptyLines: true });
+          if (parseResult.errors && parseResult.errors.length) console.warn("Parse warnings", parseResult.errors);
           const rows = parseResult.data;
           if (!rows || rows.length < 2) throw new Error("CSV 無有效資料");
           
-          // 重建題庫：預期欄位 0: CODE, 1: 題幹, 2: 選項A, 3: 選項B, 4: 選項C, 5: 選項D, 6: 正確答案文字
           const tempQuestions = [];
           for (let i = 0; i < rows.length; i++) {
             const row = rows[i];
-            if (!row || row.length < 7) continue;  // 欄位不足跳過
-            // 確實 trim 每個欄位，避免空格影響顯示
+            if (!row || row.length < 7) continue;
             const code = (row[0] !== undefined ? String(row[0]).trim() : "");
             const text = (row[1] !== undefined ? String(row[1]).trim() : "");
             const optA = (row[2] !== undefined ? String(row[2]).trim() : "");
@@ -414,12 +335,9 @@
             const optC = (row[4] !== undefined ? String(row[4]).trim() : "");
             const optD = (row[5] !== undefined ? String(row[5]).trim() : "");
             const correctAns = (row[6] !== undefined ? String(row[6]).trim() : "");
-            
-            // 過濾無效題目: 題幹不能為空，正確答案不能為空，選項不能全空
             if (!text || !correctAns) continue;
             const options = [optA, optB, optC, optD];
             if (options.every(opt => opt === "")) continue;
-            
             tempQuestions.push({
               originalIndex: i,
               code: code || `Q${i+1}`,
@@ -428,24 +346,18 @@
               correctAnswer: correctAns
             });
           }
-          
           if (tempQuestions.length === 0) throw new Error("CSV 解析後無任何有效題目");
-          
           allQuestions = tempQuestions;
-          console.log(`成功載入 ${allQuestions.length} 題，來源: ${baseUrl}`);
-          
-          // 載入成功，隱藏loading顯示開始畫面
+          console.log(`成功載入 ${allQuestions.length} 題`);
           loadingDiv.classList.add('hidden');
           startDiv.classList.remove('hidden');
           return;
-          
         } catch (err) {
           console.error(`CSV載入失敗 (${attempt+1}):`, err);
           loadingSub.textContent = `來源 ${attempt+1} 失敗: ${err.message}，嘗試下一個...`;
         }
       }
       
-      // 所有來源皆失敗
       loadingDiv.innerHTML = `
         <div class="text-center">
           <div class="text-5xl mb-4">⚠️</div>
@@ -454,14 +366,12 @@
           <div class="bg-black/30 p-3 rounded-xl text-left text-xs text-blue-200 mt-5">
             <p class="font-mono">嘗試過的位址：</p>
             ${CSV_CANDIDATES.map(u => `<div class="break-all">- ${u}</div>`).join('')}
-            <p class="mt-2">請確保 CSV 格式為: 代碼,題幹,選項A,選項B,選項C,選項D,正確答案</p>
           </div>
           <button onclick="location.reload()" class="mt-6 px-5 py-2 bg-white/20 rounded-full text-white">重新載入</button>
         </div>
       `;
     }
 
-    // ---------- 輔助: 洗牌 ----------
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -469,7 +379,7 @@
       }
     }
 
-    // ---------- 啟動測驗 (nextChallenge 沿用錯題策略) ----------
+    // 開始或重新挑戰
     function startQuiz(isNextChallenge = false) {
       if (!allQuestions.length) {
         alert("題庫尚未載入，請稍後或重新整理。");
@@ -478,35 +388,33 @@
       
       let pool = [];
       if (isNextChallenge) {
-        // 優先錯題池 (含超時)
         const wrongPool = allQuestions.filter(q => wrongHistory.has(q.originalIndex));
         shuffleArray(wrongPool);
-        // 從未看過 (不在錯題池且不在看過池)
         const unseenPool = allQuestions.filter(q => !seenHistory.has(q.originalIndex) && !wrongHistory.has(q.originalIndex));
         shuffleArray(unseenPool);
         pool = [...wrongPool, ...unseenPool];
-        
         if (pool.length < QUESTION_LIMIT) {
-          // 補上曾經看過但非錯題的 (已熟題)
           const mastered = allQuestions.filter(q => seenHistory.has(q.originalIndex) && !wrongHistory.has(q.originalIndex));
           shuffleArray(mastered);
           pool = pool.concat(mastered);
         }
       } else {
-        // 初次隨機
         pool = [...allQuestions];
         shuffleArray(pool);
       }
       
-      // 取前 QUESTION_LIMIT 題
       currentSession.questions = pool.slice(0, QUESTION_LIMIT);
       currentSession.userAnswers = new Array(currentSession.questions.length).fill(null);
       currentSession.currentIndex = 0;
+      currentSession.isAnswerLocked = false;
+      if (currentSession.timer) {
+        clearInterval(currentSession.timer);
+        currentSession.timer = null;
+      }
       
-      // 記錄看過 (讓下一輪錯題策略更精準)
+      // 記錄看過
       currentSession.questions.forEach(q => seenHistory.add(q.originalIndex));
       
-      // 切換畫面
       document.getElementById('start-screen').classList.add('hidden');
       document.getElementById('results-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
@@ -514,47 +422,53 @@
       loadQuestion(0);
     }
     
-    // ---------- 載入指定題目 (徹底解決顯示問題) ----------
+    // 核心修復：徹底重置計時器與鎖定狀態
     function loadQuestion(index) {
-      // 清除前一個計時器
+      // 清除舊計時器
       if (currentSession.timer) {
         clearInterval(currentSession.timer);
         currentSession.timer = null;
       }
       
+      // 重置鎖定狀態
+      currentSession.isAnswerLocked = false;
+      
       const qData = currentSession.questions[index];
       if (!qData) {
-        console.error("題目不存在", index);
+        console.error("題目不存在");
         return;
       }
       
-      // 更新 UI 元素
+      // 更新 UI
       document.getElementById('q-current').innerText = index + 1;
       const codeSpan = document.getElementById('q-code');
       codeSpan.innerText = qData.code ? `CODE: ${qData.code}` : `CODE: ${index+1}`;
-      
       const questionTextEl = document.getElementById('q-text');
-      // 確保題幹有內容，如果題幹空白就顯示佔位符 (防止空白)
       questionTextEl.innerText = qData.text && qData.text.trim() !== "" ? qData.text : "(題幹未提供)";
       
-      // 重置計時顯示
+      // 重置時間顯示
       currentSession.timeLeft = TIME_LIMIT;
-      document.getElementById('timer-text').innerText = `${TIME_LIMIT}s`;
-      document.getElementById('timer-text').classList.add('accent-text');
-      document.getElementById('timer-text').classList.remove('text-red-400');
+      const timerTextEl = document.getElementById('timer-text');
+      timerTextEl.innerText = `${TIME_LIMIT}s`;
+      timerTextEl.classList.add('accent-text');
+      timerTextEl.classList.remove('text-red-400');
       
       const timerBar = document.getElementById('timer-bar');
+      // 移除過渡效果重置寬度
       timerBar.style.transition = 'none';
       timerBar.style.width = '100%';
+      // 強制重排後開始動畫
+      void timerBar.offsetWidth;
+      timerBar.style.transition = `width ${TIME_LIMIT}s linear`;
+      timerBar.style.width = '0%';
       
-      // 渲染選項按鈕
+      // 渲染選項
       const optsContainer = document.getElementById('options-container');
       optsContainer.innerHTML = '';
-      
       const optionsArray = qData.options;
+      
       for (let i = 0; i < optionsArray.length; i++) {
         const optText = optionsArray[i];
-        // 防止選項為空字串，但保留原本文字 (若有空選項仍顯示，但避免顯示 undefined)
         const displayText = (optText && optText !== "") ? optText : `(選項 ${String.fromCharCode(65+i)})`;
         const btn = document.createElement('button');
         btn.className = `option-btn w-full text-left p-5 rounded-2xl text-gray-100 text-lg font-medium flex items-center group`;
@@ -564,38 +478,43 @@
           </span> 
           <span class="flex-1">${escapeHtml(displayText)}</span>
         `;
-        btn.onclick = (function(optIdx) {
+        // 重要: 使用閉包避免重複綁定
+        btn.addEventListener('click', (function(optIdx) {
           return function() { selectOption(optIdx, btn); };
-        })(i);
+        })(i));
         optsContainer.appendChild(btn);
       }
       
-      // 觸發重排後開始計時條動畫
-      setTimeout(() => {
-        timerBar.style.transition = `width ${TIME_LIMIT}s linear`;
-        timerBar.style.width = '0%';
-      }, 50);
-      
-      // 計時器
+      // 啟動計時器
       currentSession.timer = setInterval(() => {
+        // 若題目已經被鎖定（已作答或已超時處理），則不再減少時間
+        if (currentSession.isAnswerLocked) return;
+        
         if (currentSession.timeLeft <= 1) {
+          // 時間到，強制鎖定並推進
           if (currentSession.timer) clearInterval(currentSession.timer);
-          currentSession.timeLeft = 0;
-          document.getElementById('timer-text').innerText = `0s`;
-          // 時間到，不記錄答案 (保持null)，直接下一題
-          handleNext();
+          currentSession.timer = null;
+          if (!currentSession.isAnswerLocked) {
+            currentSession.isAnswerLocked = true;
+            // 沒有作答，記錄為 null (超時)
+            if (currentSession.userAnswers[currentSession.currentIndex] === null) {
+              currentSession.userAnswers[currentSession.currentIndex] = null;
+            }
+            // 直接處理下一題
+            handleNext();
+          }
         } else {
           currentSession.timeLeft--;
-          document.getElementById('timer-text').innerText = `${currentSession.timeLeft}s`;
+          const timerSpan = document.getElementById('timer-text');
+          timerSpan.innerText = `${currentSession.timeLeft}s`;
           if (currentSession.timeLeft <= 5) {
-            document.getElementById('timer-text').classList.remove('accent-text');
-            document.getElementById('timer-text').classList.add('text-red-400');
+            timerSpan.classList.remove('accent-text');
+            timerSpan.classList.add('text-red-400');
           }
         }
       }, 1000);
     }
     
-    // 輔助防 XSS
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/[&<>]/g, function(m) {
@@ -603,43 +522,57 @@
         if (m === '<') return '&lt;';
         if (m === '>') return '&gt;';
         return m;
-      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-        return c;
       });
     }
     
     function selectOption(optIndex, btnElement) {
-      // 避免重複作答
-      if (currentSession.userAnswers[currentSession.currentIndex] !== null) return;
+      // 如果已經鎖定或是已經有答案則拒絕
+      if (currentSession.isAnswerLocked) return;
+      const currentIdx = currentSession.currentIndex;
+      if (currentSession.userAnswers[currentIdx] !== null) return;
       
-      const allBtns = document.querySelectorAll('.option-btn');
-      allBtns.forEach(b => b.classList.remove('selected'));
-      btnElement.classList.add('selected');
+      // 鎖定，避免重複點擊
+      currentSession.isAnswerLocked = true;
       
-      // 記錄答案
-      currentSession.userAnswers[currentSession.currentIndex] = optIndex;
-      
-      // 停止計時器
+      // 清除計時器
       if (currentSession.timer) {
         clearInterval(currentSession.timer);
         currentSession.timer = null;
       }
-      // 延遲進入下一題
-      setTimeout(() => handleNext(), 300);
+      
+      const qData = currentSession.questions[currentIdx];
+      const selectedOptionText = qData.options[optIndex];
+      // 儲存使用者選擇的選項文字（便於後續比對）
+      currentSession.userAnswers[currentIdx] = selectedOptionText;
+      
+      // 視覺反饋：清除所有選項的 selected 狀態，高亮當前選中
+      const allBtns = document.querySelectorAll('.option-btn');
+      allBtns.forEach(btn => btn.classList.remove('selected'));
+      btnElement.classList.add('selected');
+      
+      // 延遲短暫時間進入下一題，讓用戶看到反饋
+      setTimeout(() => {
+        handleNext();
+      }, 300);
     }
     
     function handleNext() {
       const nextIdx = currentSession.currentIndex + 1;
       if (nextIdx < currentSession.questions.length) {
+        currentSession.currentIndex = nextIdx;
+        // 重置鎖定狀態 (新題目剛開始未鎖定)
+        currentSession.isAnswerLocked = false;
         loadQuestion(nextIdx);
       } else {
         finishQuiz();
       }
     }
     
-    // ---------- 結算畫面，修正錯題池與正確率 ----------
     function finishQuiz() {
-      if (currentSession.timer) clearInterval(currentSession.timer);
+      if (currentSession.timer) {
+        clearInterval(currentSession.timer);
+        currentSession.timer = null;
+      }
       
       document.getElementById('quiz-screen').classList.add('hidden');
       document.getElementById('results-screen').classList.remove('hidden');
@@ -650,13 +583,13 @@
       let correctCount = 0;
       
       currentSession.questions.forEach((q, idx) => {
-        const userChoiceIdx = currentSession.userAnswers[idx];
+        const userChoiceText = currentSession.userAnswers[idx];
         let isCorrect = false;
-        let userChoiceText = "Time Out / No Answer";
+        let displayUserChoice = "Time Out / No Answer";
         
-        if (userChoiceIdx !== null && q.options[userChoiceIdx] !== undefined) {
-          userChoiceText = q.options[userChoiceIdx];
-          // 正確比對：選項文字完全等於正確答案
+        if (userChoiceText !== null && userChoiceText !== undefined) {
+          displayUserChoice = userChoiceText;
+          // 比對選項文字與正確答案
           if (userChoiceText === q.correctAnswer) {
             isCorrect = true;
           }
@@ -664,19 +597,15 @@
         
         if (isCorrect) {
           correctCount++;
-          // 若答對且之前被記錯，移除錯題記錄
           if (wrongHistory.has(q.originalIndex)) wrongHistory.delete(q.originalIndex);
         } else {
-          // 超時或答錯 -> 加入錯題池
           wrongHistory.add(q.originalIndex);
         }
         
-        // 建立回饋卡片 (填空強調)
         let sentenceWithAnswer = q.text;
-        if (sentenceWithAnswer.includes('___') || sentenceWithAnswer.includes('____') || sentenceWithAnswer.includes('______')) {
+        if (sentenceWithAnswer.includes('___') || sentenceWithAnswer.includes('____')) {
           sentenceWithAnswer = sentenceWithAnswer.replace(/_{2,}/g, `<span class="text-emerald-300 font-bold border-b-2 border-emerald-300/50 px-1">${escapeHtml(q.correctAnswer)}</span>`);
         } else {
-          // 若無底線，附加正確答案提示
           sentenceWithAnswer = `${sentenceWithAnswer} <span class="text-cyan-300 text-sm ml-2">(正確: ${escapeHtml(q.correctAnswer)})</span>`;
         }
         
@@ -692,15 +621,14 @@
             </span>
           </div>
           <p class="text-lg mb-3 leading-relaxed text-white/90 font-medium">${sentenceWithAnswer}</p>
-          ${!isCorrect ? `<div class="text-sm text-rose-300 mb-2 bg-rose-950/30 p-2 rounded-lg"><i class="fas fa-arrow-right mr-2"></i>Your choice: <span class="font-bold">${escapeHtml(userChoiceText)}</span></div>` : ''}
-          <button onclick="speakText(this, '${escapeHtml(plainTextForTTS).replace(/'/g, "\\'")}')" class="text-sm px-4 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 transition-colors flex items-center gap-2 border border-blue-400/20">
+          ${!isCorrect ? `<div class="text-sm text-rose-300 mb-2 bg-rose-950/30 p-2 rounded-lg"><i class="fas fa-arrow-right mr-2"></i>Your choice: <span class="font-bold">${escapeHtml(displayUserChoice)}</span></div>` : ''}
+          <button onclick="window.speakTextFn(this, '${escapeHtml(plainTextForTTS).replace(/'/g, "\\'")}')" class="text-sm px-4 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 transition-colors flex items-center gap-2 border border-blue-400/20">
             <i class="fas fa-volume-high"></i> Play Audio
           </button>
         `;
         listContainer.appendChild(cardDiv);
       });
       
-      // 傳送結果至父視窗 (月光任務)
       const finalScorePercent = Math.round((correctCount / QUESTION_LIMIT) * 100);
       const resultMsg = {
         type: "LUNAR_MISSION_RESULT",
@@ -715,7 +643,6 @@
       animateValue(document.getElementById('score-display'), 0, finalScorePercent, 1200);
     }
     
-    // 數字動畫
     function animateValue(obj, start, end, duration) {
       let startTimestamp = null;
       const step = (timestamp) => {
@@ -727,8 +654,8 @@
       requestAnimationFrame(step);
     }
     
-    // TTS 功能
-    window.speakText = function(btn, text) {
+    // 全局語音函數
+    window.speakTextFn = function(btn, text) {
       if (!text) return;
       const originalHtml = btn.innerHTML;
       btn.innerHTML = `<i class="fas fa-wave-square animate-pulse text-cyan-400"></i> Speaking...`;
@@ -736,25 +663,31 @@
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
         utterance.rate = 0.9;
-        utterance.onend = () => {
-          btn.innerHTML = originalHtml;
-        };
+        utterance.onend = () => { btn.innerHTML = originalHtml; };
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
       } else {
-        alert("您的瀏覽器不支援語音");
+        alert("不支援語音");
         btn.innerHTML = originalHtml;
       }
     };
     
-    function exitApp() {
-      location.reload();
-    }
+    function exitApp() { location.reload(); }
     
-    // 全域初始化
+    // 事件綁定 (確保按鈕監聽)
     document.addEventListener('DOMContentLoaded', () => {
       initParticles();
       loadData();
+      
+      // 動態綁定按鈕，避免 onclick 內嵌遺失
+      const startBtn = document.getElementById('start-quiz-btn');
+      if (startBtn) startBtn.onclick = () => startQuiz(false);
+      const nextChallengeBtn = document.getElementById('next-challenge-btn');
+      if (nextChallengeBtn) nextChallengeBtn.onclick = () => startQuiz(true);
+      const printBtn = document.getElementById('print-results-btn');
+      if (printBtn) printBtn.onclick = () => window.print();
+      const exitBtn = document.getElementById('exit-app-btn');
+      if (exitBtn) exitBtn.onclick = () => exitApp();
     });
   </script>
 </body>
