@@ -423,7 +423,7 @@
 <div class="container">
     <div class="hero">
         <h1>Shirley's Bilingual Physics</h1>
-        <p>explore the universe of physics · 雙語物理宇宙 | 點擊插圖體驗互動模擬</p>
+        <p>explore the universe of physics · 雙語物理宇宙 | 精選概念互動模擬</p>
     </div>
 
     <div class="search-global">
@@ -459,7 +459,7 @@
 
         <div id="dynamicContentArea"></div>
     </div>
-    <footer>點擊喇叭圖示發音 | 閃卡模式: 點擊卡片翻轉 | 每個插圖都是互動式物理模擬</footer>
+    <footer>點擊喇叭圖示發音 | 閃卡模式: 點擊卡片翻轉 | 精選概念包含即時物理模擬</footer>
 </div>
 
 <script>
@@ -470,10 +470,24 @@
     let currentMode = "grid";
     let flashcardIndex = 0;
     let filteredTermsCache = [];
-    let activeVisualizations = {};
 
-    // 互動式物理模擬生成器
+    // 定義哪些概念有互動模擬
+    const conceptsWithViz = [
+        'newton', 'force', 'acceleration', 'pendulum', 'simple harmonic', 
+        'wave', 'frequency', 'doppler', 'orbit', 'kepler', 
+        'gravity', 'gravitational', 'black hole', 'collision', 'momentum',
+        'projectile', 'spring', 'oscillation', 'circular motion', 'centripetal'
+    ];
+
+    function hasVisualization(word) {
+        const w = word.toLowerCase();
+        return conceptsWithViz.some(concept => w.includes(concept));
+    }
+
+    // 互動式物理模擬生成器 (只有符合條件的才生成)
     function createInteractiveVisualization(word, containerId) {
+        if (!hasVisualization(word)) return;
+        
         const w = word.toLowerCase();
         const canvasId = `viz_${Date.now()}_${Math.random()}`;
         
@@ -496,20 +510,22 @@
             // 根據單字類型繪製不同模擬
             if (w.includes('newton') || w.includes('force') || w.includes('acceleration')) {
                 drawForceSimulation(canvasId, canvas.width, canvas.height);
-            } else if (w.includes('pendulum') || w.includes('simple harmonic')) {
+            } else if (w.includes('pendulum') || w.includes('simple harmonic') || w.includes('oscillation')) {
                 drawPendulumSimulation(canvasId, canvas.width, canvas.height);
-            } else if (w.includes('projectile') || w.includes('orbit')) {
+            } else if (w.includes('orbit') || w.includes('kepler') || w.includes('circular motion')) {
                 drawOrbitSimulation(canvasId, canvas.width, canvas.height);
             } else if (w.includes('wave') || w.includes('frequency') || w.includes('doppler')) {
                 drawWaveSimulation(canvasId, canvas.width, canvas.height);
-            } else if (w.includes('gravit') || w.includes('black hole')) {
+            } else if (w.includes('gravity') || w.includes('gravitational') || w.includes('black hole')) {
                 drawGravitySimulation(canvasId, canvas.width, canvas.height);
             } else if (w.includes('collision') || w.includes('momentum')) {
                 drawCollisionSimulation(canvasId, canvas.width, canvas.height);
-            } else {
-                drawParticleSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('spring')) {
+                drawSpringSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('centripetal')) {
+                drawCentripetalSimulation(canvasId, canvas.width, canvas.height);
             }
-        }, 50);
+        }, 100);
     }
 
     function drawForceSimulation(canvasId, w, h) {
@@ -523,29 +539,33 @@
             ctx.fillRect(0, 0, w, h);
             
             const centerX = w/2, centerY = h/2;
-            const forceX = Math.sin(angle) * 40;
-            const forceY = Math.cos(angle * 1.3) * 30;
+            const forceX = Math.sin(angle) * 45;
+            const forceY = Math.cos(angle * 1.3) * 35;
             
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 20, 0, Math.PI*2);
+            ctx.arc(centerX, centerY, 18, 0, Math.PI*2);
             ctx.fillStyle = '#4a6cdb';
             ctx.fill();
             ctx.fillStyle = 'white';
-            ctx.font = '10px Arial';
+            ctx.font = 'bold 10px Arial';
             ctx.fillText('m', centerX-4, centerY+4);
             
             ctx.beginPath();
-            ctx.moveTo(centerX+20, centerY);
-            ctx.lineTo(centerX+20+forceX, centerY+forceY);
+            ctx.moveTo(centerX+18, centerY);
+            ctx.lineTo(centerX+18+forceX, centerY+forceY);
             ctx.strokeStyle = '#ff6666';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
+            
             ctx.fillStyle = '#ff8888';
-            ctx.fillText('F = m·a', centerX+25+forceX/2, centerY+forceY/2);
+            ctx.font = '8px monospace';
+            ctx.fillText('F = ma', centerX+25+forceX/2, centerY+forceY/2);
             
             ctx.fillStyle = '#88ff88';
-            ctx.font = '8px monospace';
-            ctx.fillText(`a = ${(Math.sqrt(forceX*forceX+forceY*forceY)/20).toFixed(1)} m/s²`, centerX-40, centerY-20);
+            ctx.font = '7px monospace';
+            const a = (Math.sqrt(forceX*forceX+forceY*forceY)/20).toFixed(1);
+            ctx.fillText(`a = ${a} m/s²`, centerX-45, centerY-20);
+            ctx.fillText(`F = ${(a*5).toFixed(0)} N`, centerX-45, centerY-10);
             
             angle += 0.05;
             requestAnimationFrame(draw);
@@ -565,7 +585,7 @@
             
             const pivotX = w/2, pivotY = 20;
             const length = 70;
-            const angle = Math.sin(time) * 0.8;
+            const angle = Math.sin(time) * 0.9;
             const bobX = pivotX + Math.sin(angle) * length;
             const bobY = pivotY + Math.cos(angle) * length;
             
@@ -577,14 +597,14 @@
             ctx.stroke();
             
             ctx.beginPath();
-            ctx.arc(bobX, bobY, 12, 0, Math.PI*2);
+            ctx.arc(bobX, bobY, 10, 0, Math.PI*2);
             ctx.fillStyle = '#ffaa66';
             ctx.fill();
             
             ctx.fillStyle = '#88ffaa';
-            ctx.font = '8px monospace';
-            ctx.fillText(`T = 2π√(L/g)`, w/2-40, h-10);
-            ctx.fillText(`θ = ${(angle*57.3).toFixed(0)}°`, bobX-15, bobY-10);
+            ctx.font = '7px monospace';
+            ctx.fillText(`T = 2π√(L/g)`, w/2-35, h-8);
+            ctx.fillText(`θ = ${Math.abs((angle*57.3).toFixed(0))}°`, bobX-12, bobY-8);
             
             time += 0.05;
             requestAnimationFrame(draw);
@@ -604,7 +624,7 @@
             
             ctx.beginPath();
             for(let x = 0; x < w; x++) {
-                let y = h/2 + Math.sin(x * 0.05 + phase) * 25 + Math.sin(x * 0.12 + phase*1.5) * 10;
+                let y = h/2 + Math.sin(x * 0.06 + phase) * 30 + Math.sin(x * 0.15 + phase*1.5) * 8;
                 if(x === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
@@ -613,11 +633,13 @@
             ctx.stroke();
             
             ctx.fillStyle = '#ffcc66';
-            ctx.font = '8px monospace';
-            ctx.fillText(`λ = ${(w/4).toFixed(0)}px  f = ${(phase*2).toFixed(1)}Hz`, 10, 20);
-            ctx.fillText('v = λ·f', 10, 35);
+            ctx.font = '7px monospace';
+            const wavelength = (w/5).toFixed(0);
+            ctx.fillText(`λ ≈ ${wavelength} px`, 10, 20);
+            ctx.fillText(`v = λ·f`, 10, 32);
+            ctx.fillText(`f = ${(phase*2).toFixed(1)} Hz`, 10, 44);
             
-            phase += 0.1;
+            phase += 0.08;
             requestAnimationFrame(draw);
         }
         draw();
@@ -634,20 +656,20 @@
             ctx.fillRect(0, 0, w, h);
             
             const centerX = w/2, centerY = h/2;
-            const orbitX = centerX + Math.cos(angle) * 50;
-            const orbitY = centerY + Math.sin(angle) * 35;
+            const orbitX = centerX + Math.cos(angle) * 55;
+            const orbitY = centerY + Math.sin(angle) * 40;
             
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 15, 0, Math.PI*2);
+            ctx.arc(centerX, centerY, 14, 0, Math.PI*2);
             ctx.fillStyle = '#ffaa44';
             ctx.fill();
             ctx.fillStyle = 'white';
-            ctx.font = '8px Arial';
+            ctx.font = 'bold 8px Arial';
             ctx.fillText('★', centerX-3, centerY+3);
             
             ctx.beginPath();
-            ctx.ellipse(centerX, centerY, 55, 40, 0, 0, Math.PI*2);
-            ctx.strokeStyle = '#4488ff44';
+            ctx.ellipse(centerX, centerY, 60, 45, 0, 0, Math.PI*2);
+            ctx.strokeStyle = '#4488ff66';
             ctx.setLineDash([5, 5]);
             ctx.stroke();
             ctx.setLineDash([]);
@@ -659,22 +681,23 @@
             
             ctx.fillStyle = '#aaffdd';
             ctx.font = '7px monospace';
-            ctx.fillText('Kepler\'s Laws: equal areas', 10, 20);
+            ctx.fillText('Kepler: equal areas', 10, 20);
+            ctx.fillText(`T² ∝ a³`, 10, 32);
             
-            angle += 0.03;
+            angle += 0.025;
             requestAnimationFrame(draw);
         }
         draw();
     }
 
     function drawGravitySimulation(canvasId, w, h) {
-        let particles = [{x: w/2, y: h/2, vx: 0, vy: 0, mass: 100}];
-        for(let i=0; i<8; i++) {
+        let particles = [{x: w/2, y: h/2, mass: 120}];
+        for(let i=0; i<12; i++) {
             particles.push({
-                x: w/2 + 40 + Math.random() * 60,
-                y: h/2 + (Math.random() - 0.5) * 80,
-                vx: (Math.random() - 0.5) * 2,
-                vy: (Math.random() - 0.5) * 2,
+                x: w/2 + 35 + Math.random() * 70,
+                y: h/2 + (Math.random() - 0.5) * 90,
+                vx: (Math.random() - 0.5) * 1.8,
+                vy: (Math.random() - 0.5) * 1.8,
                 mass: 1
             });
         }
@@ -692,7 +715,7 @@
                 const dx = particles[0].x - p.x;
                 const dy = particles[0].y - p.y;
                 const dist = Math.sqrt(dx*dx + dy*dy) || 1;
-                const force = (particles[0].mass * p.mass) / (dist * dist) * 0.5;
+                const force = (particles[0].mass * p.mass) / (dist * dist) * 0.6;
                 const ax = (dx / dist) * force / p.mass;
                 const ay = (dy / dist) * force / p.mass;
                 p.vx += ax;
@@ -707,15 +730,17 @@
             }
             
             ctx.beginPath();
-            ctx.arc(particles[0].x, particles[0].y, 12, 0, Math.PI*2);
+            ctx.arc(particles[0].x, particles[0].y, 14, 0, Math.PI*2);
             ctx.fillStyle = '#ff6644';
             ctx.fill();
             ctx.fillStyle = 'white';
-            ctx.fillText('黑洞', particles[0].x-8, particles[0].y+4);
+            ctx.font = '7px Arial';
+            ctx.fillText('M', particles[0].x-3, particles[0].y+3);
             
             ctx.fillStyle = '#ffaa88';
             ctx.font = '7px monospace';
-            ctx.fillText('重力彎曲時空', 10, 20);
+            ctx.fillText(`F = G·M·m / r²`, 10, 20);
+            ctx.fillText(`重力彎曲時空`, 10, 32);
             
             requestAnimationFrame(draw);
         }
@@ -723,7 +748,7 @@
     }
 
     function drawCollisionSimulation(canvasId, w, h) {
-        let pos1 = 30, pos2 = w-30, v1 = 1.2, v2 = -1.2;
+        let pos1 = 25, pos2 = w-25, v1 = 1.3, v2 = -1.1;
         function draw() {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -734,22 +759,27 @@
             
             pos1 += v1;
             pos2 += v2;
-            if(Math.abs(pos1 - pos2) < 25) {
+            if(Math.abs(pos1 - pos2) < 24) {
                 let temp = v1;
                 v1 = v2;
                 v2 = temp;
             }
-            if(pos1 < 10 || pos1 > w-10) v1 *= -0.9;
-            if(pos2 < 10 || pos2 > w-10) v2 *= -0.9;
+            if(pos1 < 12 || pos1 > w-12) v1 *= -0.95;
+            if(pos2 < 12 || pos2 > w-12) v2 *= -0.95;
             
             ctx.beginPath();
-            ctx.arc(pos1, h/2, 12, 0, Math.PI*2);
+            ctx.arc(pos1, h/2, 11, 0, Math.PI*2);
             ctx.fillStyle = '#66ff99';
             ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.font = '7px Arial';
+            ctx.fillText('m₁', pos1-4, h/2+4);
+            
             ctx.beginPath();
-            ctx.arc(pos2, h/2, 12, 0, Math.PI*2);
+            ctx.arc(pos2, h/2, 11, 0, Math.PI*2);
             ctx.fillStyle = '#ff9966';
             ctx.fill();
+            ctx.fillText('m₂', pos2-4, h/2+4);
             
             ctx.fillStyle = '#aaffdd';
             ctx.font = '7px monospace';
@@ -761,17 +791,11 @@
         draw();
     }
 
-    function drawParticleSimulation(canvasId, w, h) {
-        let particles = [];
-        for(let i=0; i<20; i++) {
-            particles.push({
-                x: Math.random() * w,
-                y: Math.random() * h,
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5,
-                r: Math.random() * 3 + 1
-            });
-        }
+    function drawSpringSimulation(canvasId, w, h) {
+        let stretch = 0;
+        let velocity = 0;
+        let time = 0;
+        
         function draw() {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -780,21 +804,88 @@
             ctx.fillStyle = '#01061f';
             ctx.fillRect(0, 0, w, h);
             
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                if(p.x < 0 || p.x > w) p.vx *= -0.9;
-                if(p.y < 0 || p.y > h) p.vy *= -0.9;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                ctx.fillStyle = `rgba(100, 180, 255, 0.8)`;
-                ctx.fill();
-            });
+            const k = 0.08;
+            const a = -k * stretch;
+            velocity += a;
+            stretch += velocity;
+            velocity *= 0.99;
             
-            ctx.fillStyle = '#88aaff';
+            const startX = w/2 - 30;
+            const endX = w/2 + 30 + stretch * 20;
+            
+            ctx.beginPath();
+            ctx.moveTo(w/2 - 40, h/2);
+            for(let i = 0; i <= 20; i++) {
+                const t = i / 20;
+                const x = startX + t * (endX - startX);
+                const y = h/2 + Math.sin(t * Math.PI * 4) * 8;
+                if(i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = '#aaaaff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.rect(endX, h/2 - 10, 12, 20);
+            ctx.fillStyle = '#ffaa66';
+            ctx.fill();
+            
+            ctx.fillStyle = '#88ffaa';
             ctx.font = '7px monospace';
-            ctx.fillText('粒子隨機運動 | 布朗運動模擬', 10, 20);
+            ctx.fillText(`F = -kx (虎克定律)`, w/2-45, h-8);
+            ctx.fillText(`x = ${(stretch*2).toFixed(1)}`, w/2-30, 20);
             
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawCentripetalSimulation(canvasId, w, h) {
+        let angle = 0;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            const centerX = w/2, centerY = h/2;
+            const radius = 50;
+            const ballX = centerX + Math.cos(angle) * radius;
+            const ballY = centerY + Math.sin(angle) * radius;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 6, 0, Math.PI*2);
+            ctx.fillStyle = '#ffaa44';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI*2);
+            ctx.strokeStyle = '#4488ff66';
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(ballX, ballY);
+            ctx.strokeStyle = '#ff6666';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, 8, 0, Math.PI*2);
+            ctx.fillStyle = '#66ccff';
+            ctx.fill();
+            
+            ctx.fillStyle = '#ff8888';
+            ctx.font = '7px monospace';
+            ctx.fillText(`F_c = m·v²/r`, ballX-35, ballY-8);
+            ctx.fillText(`向心力指向圓心`, centerX-30, centerY-15);
+            
+            angle += 0.04;
             requestAnimationFrame(draw);
         }
         draw();
@@ -896,8 +987,11 @@
         return `<div class="terms-container">
             ${terms.map((term, idx) => {
                 const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+                const hasViz = hasVisualization(term.word);
                 const vizId = `viz_${idx}_${Date.now()}`;
-                setTimeout(() => createInteractiveVisualization(term.word, vizId), 100);
+                if(hasViz) {
+                    setTimeout(() => createInteractiveVisualization(term.word, vizId), 100);
+                }
                 return `
                     <div class="term-card">
                         <div class="term-word">
@@ -910,9 +1004,7 @@
                             ${term.sentence_c}
                         </div>
                         <button class="btn-speak" data-text="${term.word}" style="margin-top:5px;"><i class="fas fa-volume-up"></i> 發音</button>
-                        <div class="interactive-viz" id="${vizId}">
-                            <div class="viz-label">載入互動模擬中...</div>
-                        </div>
+                        ${hasViz ? `<div class="interactive-viz" id="${vizId}"><div class="viz-label">載入互動模擬中...</div></div>` : ''}
                     </div>
                 `;
             }).join('')}
