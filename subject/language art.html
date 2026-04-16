@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✦ Shirley's Language Arts Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --parchment: #fdf6e3;
+    --cream: #f7eed8;
+    --gold: #c9973a;
+    --gold-light: #e8c56d;
+    --rose: #b85c6e;
+    --teal: #2d7d7a;
+    --indigo: #3d4f8a;
+    --sage: #5a7a5c;
+    --mist: #8fa0b8;
+    --warm-shadow: rgba(201,151,58,0.15);
+    --card-bg: rgba(253,246,227,0.92);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,151,58,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(184,92,110,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(45,125,122,0.05) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 3.5rem 2rem 2rem;
+    border-bottom: 1px solid rgba(201,151,58,0.3);
+  }
+  header::after {
+    content: '❦';
+    display: block;
+    color: var(--gold);
+    font-size: 1.4rem;
+    margin-top: 0.8rem;
+    opacity: 0.7;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: #5a4a2a;
+    margin-top: 0.6rem;
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-wrap {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,246,227,0.97);
+    backdrop-filter: blur(12px);
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid rgba(201,151,58,0.2);
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  #globalSearch {
+    flex: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem 0.6rem 2.6rem;
+    border: 1.5px solid rgba(201,151,58,0.4);
+    border-radius: 2rem;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  #globalSearch:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--warm-shadow);
+  }
+  .search-wrap .search-icon {
+    position: absolute;
+    left: 2.5rem;
+    color: var(--gold);
+    font-size: 0.95rem;
+    pointer-events: none;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap input { padding-left: 2.6rem; }
+  .clear-search {
+    background: none; border: none; cursor: pointer;
+    color: var(--mist); font-size: 1.1rem; padding: 0.2rem;
+    transition: color 0.15s;
+    display: none;
+  }
+  .clear-search:hover { color: var(--rose); }
+  #searchCount {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--mist);
+    white-space: nowrap;
+  }
+
+  /* ── BACK BUTTON ── */
+  #backBtn {
+    display: none;
+    align-items: center; gap: 0.5rem;
+    background: none; border: 1.5px solid rgba(201,151,58,0.4);
+    border-radius: 2rem;
+    padding: 0.45rem 1.1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  #backBtn:hover { background: var(--warm-shadow); border-color: var(--gold); }
+
+  /* ── STARRED TOAST ── */
+  #starToast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+    background: var(--gold); color: white;
+    padding: 0.6rem 1.2rem; border-radius: 2rem;
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  #starToast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── MAIN LAYOUT ── */
+  main { position: relative; z-index: 1; padding: 1.5rem 1.5rem 4rem; max-width: 1400px; margin: 0 auto; }
+
+  /* ── STRAND GRID (home) ── */
+  #strandView { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+
+  .strand-card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid rgba(201,151,58,0.25);
+    border-radius: 1rem;
+    padding: 1.6rem 1.4rem;
+    cursor: pointer;
+    transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    overflow: hidden;
+  }
+  .strand-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--strand-color, var(--gold));
+    border-radius: 1rem 0 0 1rem;
+  }
+  .strand-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(201,151,58,0.18);
+    border-color: rgba(201,151,58,0.5);
+  }
+  .strand-icon { font-size: 2rem; margin-bottom: 0.7rem; display: block; }
+  .strand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: capitalize;
+    margin-bottom: 0.25rem;
+  }
+  .strand-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--mist);
+    letter-spacing: 0.05em;
+  }
+  .strand-preview {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: #7a6040;
+    font-style: italic;
+    line-height: 1.4;
+    opacity: 0.85;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ── WORD LIST ── */
+  #wordView { display: none; }
+  .strand-title-bar {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .strand-title-bar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700;
+    text-transform: capitalize;
+  }
+  .strand-badge {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    background: var(--strand-color-current, var(--gold));
+    color: white; padding: 0.25rem 0.7rem; border-radius: 1rem;
+  }
+  .view-toggle {
+    display: flex; gap: 0.5rem; margin-left: auto;
+  }
+  .view-btn {
+    background: none; border: 1.5px solid rgba(201,151,58,0.3);
+    border-radius: 0.5rem; padding: 0.4rem 0.7rem;
+    cursor: pointer; font-size: 1rem; transition: all 0.15s;
+    color: var(--mist);
+  }
+  .view-btn.active { background: var(--gold); color: white; border-color: var(--gold); }
+
+  /* ── WORD CARDS GRID ── */
+  #wordGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  #wordGrid.list-mode { grid-template-columns: 1fr; }
+
+  .word-card {
+    background: white;
+    border: 1px solid rgba(201,151,58,0.2);
+    border-radius: 0.875rem;
+    padding: 1.3rem 1.4rem;
+    position: relative;
+    transition: box-shadow 0.2s, transform 0.2s;
+    animation: fadeSlide 0.35s ease both;
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .word-card:hover { box-shadow: 0 4px 20px rgba(201,151,58,0.15); transform: translateY(-2px); }
+  .word-card.starred { border-color: var(--gold-light); background: #fffbf0; }
+
+  .word-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+  .word-english {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.18rem; font-weight: 700;
+    color: var(--ink); line-height: 1.2;
+  }
+  .word-pos {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: var(--rose); background: #fdeef1;
+    padding: 0.15rem 0.5rem; border-radius: 0.5rem;
+    white-space: nowrap; margin-top: 0.15rem;
+  }
+
+  .word-chinese {
+    font-size: 1.1rem; color: var(--teal);
+    margin: 0.5rem 0 0.7rem;
+    font-weight: 600; letter-spacing: 0.03em;
+  }
+
+  .sentences { border-top: 1px dashed rgba(201,151,58,0.2); padding-top: 0.7rem; }
+  .sentence { font-size: 0.88rem; line-height: 1.6; color: #4a3a1a; margin-bottom: 0.4rem; }
+  .sentence.cn { color: var(--teal); font-size: 0.9rem; }
+  .sentence-label {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    color: var(--mist); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.15rem;
+  }
+
+  /* ── WORD CARD ACTIONS ── */
+  .card-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.8rem; }
+  .btn-pronounce {
+    background: var(--indigo); color: white;
+    border: none; border-radius: 1.5rem;
+    padding: 0.3rem 0.85rem; font-size: 0.8rem;
+    cursor: pointer; display: flex; align-items: center; gap: 0.3rem;
+    transition: background 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+  .btn-pronounce:hover { background: #2d3a6e; }
+  .btn-star {
+    background: none; border: 1.5px solid rgba(201,151,58,0.3);
+    border-radius: 1.5rem; padding: 0.3rem 0.7rem;
+    cursor: pointer; font-size: 0.85rem;
+    transition: all 0.15s; color: var(--mist);
+  }
+  .btn-star:hover, .word-card.starred .btn-star { color: var(--gold); border-color: var(--gold); }
+  .btn-flip {
+    background: none; border: 1.5px solid rgba(93,130,122,0.3);
+    border-radius: 1.5rem; padding: 0.3rem 0.7rem;
+    cursor: pointer; font-size: 0.8rem; color: var(--teal);
+    transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+  .btn-flip:hover { background: rgba(45,125,122,0.08); }
+
+  /* ── FLASHCARD MODE ── */
+  #flashcardView {
+    display: none; flex-direction: column; align-items: center; gap: 1.5rem;
+  }
+  .flashcard-controls { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .fc-btn {
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    padding: 0.55rem 1.4rem; border-radius: 2rem; cursor: pointer;
+    border: 1.5px solid rgba(201,151,58,0.4); background: white;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .fc-btn:hover { background: var(--warm-shadow); }
+  .fc-btn.primary { background: var(--gold); color: white; border-color: var(--gold); }
+  .fc-btn.primary:hover { background: #b8862e; }
+  .fc-count { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--mist); }
+
+  .flashcard-scene {
+    width: min(500px, 90vw); height: 300px;
+    perspective: 1200px; cursor: pointer;
+  }
+  .flashcard-inner {
+    width: 100%; height: 100%;
+    position: relative; transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23,1,0.32,1);
+  }
+  .flashcard-inner.flipped { transform: rotateY(180deg); }
+  .flashcard-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    background: white;
+    border: 1.5px solid rgba(201,151,58,0.3);
+    border-radius: 1.25rem;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem; text-align: center;
+    box-shadow: 0 8px 30px rgba(201,151,58,0.12);
+  }
+  .flashcard-face.back { transform: rotateY(180deg); background: #fffbf0; }
+  .fc-word { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--ink); }
+  .fc-hint { font-size: 0.85rem; color: var(--mist); margin-top: 0.5rem; font-style: italic; }
+  .fc-meaning { font-size: 1.4rem; color: var(--teal); font-weight: 600; margin-bottom: 0.5rem; }
+  .fc-sentence { font-size: 0.9rem; color: #4a3a1a; line-height: 1.55; max-width: 380px; }
+  .fc-sentence.cn { color: var(--teal); margin-top: 0.4rem; }
+
+  .flashcard-nav { display: flex; gap: 1.2rem; align-items: center; }
+  .fc-nav-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: white; border: 1.5px solid rgba(201,151,58,0.4);
+    cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .fc-nav-btn:hover { background: var(--warm-shadow); transform: scale(1.05); }
+  .fc-progress { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--mist); min-width: 60px; text-align: center; }
+
+  /* ── STARRED LIST ── */
+  #starredView { display: none; }
+  .starred-empty {
+    text-align: center; padding: 3rem;
+    color: var(--mist); font-style: italic; font-size: 1.1rem;
+  }
+
+  /* ── GLOBAL SEARCH RESULTS ── */
+  #searchResultsView { display: none; }
+  .search-result-strand {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mist); margin: 1.2rem 0 0.5rem;
+  }
+  .search-result-strand:first-child { margin-top: 0; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex; gap: 0.5rem; padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid rgba(201,151,58,0.2);
+    overflow-x: auto; position: relative; z-index: 5;
+    background: rgba(253,246,227,0.95);
+  }
+  .nav-tab {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; padding: 0.4rem 1rem;
+    border: none; background: none; cursor: pointer;
+    color: var(--mist); border-radius: 2rem;
+    transition: all 0.2s; white-space: nowrap;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .nav-tab.active { background: var(--ink); color: var(--gold-light); }
+  .nav-tab .tab-count {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    background: rgba(201,151,58,0.15); color: var(--gold);
+    padding: 0.1rem 0.4rem; border-radius: 1rem;
+  }
+  .nav-tab.active .tab-count { background: rgba(255,255,255,0.15); color: var(--gold-light); }
+
+  /* ── DECORATIVE ── */
+  .ornament { color: var(--gold); opacity: 0.4; font-size: 1.2rem; }
+
+  /* ── HIGHLIGHT ── */
+  mark { background: rgba(201,151,58,0.25); color: inherit; border-radius: 2px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 2rem 1rem 1.5rem; }
+    #strandView { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    #wordGrid { grid-template-columns: 1fr; }
+  }
+
+  /* ── FLIP CARD IN WORD VIEW ── */
+  .word-card.flipped .sentences { display: none; }
+  .word-card .flip-back { display: none; }
+  .word-card.flipped .flip-back { display: block; }
+  .flip-back .sentence { color: var(--teal); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">✦ Teacher Shirley's Interactive Platform ✦</div>
+  <h1>Language <em>Arts</em></h1>
+  <p class="subtitle">語文的世界；詞藻的殿堂 · A universe of words, meanings & poetic expression</p>
+</header>
+
+<!-- NAV TABS -->
+<nav class="nav-tabs" id="navTabs">
+  <button class="nav-tab active" onclick="showTab('strands')" id="tabStrands">
+    📖 Strands
+  </button>
+  <button class="nav-tab" onclick="showTab('flashcard')" id="tabFlash">
+    🃏 Flashcard
+  </button>
+  <button class="nav-tab" onclick="showTab('starred')" id="tabStarred">
+    ⭐ Starred <span class="tab-count" id="starCount">0</span>
+  </button>
+</nav>
+
+<!-- SEARCH + BACK -->
+<div class="search-wrap">
+  <button id="backBtn" onclick="goBack()">← Back</button>
+  <span class="search-icon">🔍</span>
+  <input type="text" id="globalSearch" placeholder="Search any word, meaning, or sentence…" oninput="handleSearch(this.value)" />
+  <button class="clear-search" id="clearBtn" onclick="clearSearch()">✕</button>
+  <span id="searchCount"></span>
+</div>
+
+<main>
+  <!-- STRAND GRID -->
+  <div id="strandView"></div>
+
+  <!-- WORD LIST -->
+  <div id="wordView">
+    <div class="strand-title-bar" id="strandTitleBar"></div>
+    <div id="wordGrid"></div>
+  </div>
+
+  <!-- FLASHCARD -->
+  <div id="flashcardView">
+    <div class="flashcard-controls">
+      <button class="fc-btn" onclick="fcShuffle()">🔀 Shuffle</button>
+      <button class="fc-btn" onclick="fcStarredOnly()" id="fcStarBtn">⭐ Starred Only</button>
+      <button class="fc-btn primary" onclick="fcReset()">↺ Restart</button>
+      <span class="fc-count" id="fcDeckInfo"></span>
+    </div>
+    <div class="flashcard-scene" onclick="flipCard()">
+      <div class="flashcard-inner" id="fcInner">
+        <div class="flashcard-face front">
+          <div class="fc-word" id="fcWord">—</div>
+          <div class="fc-hint">Click to reveal meaning</div>
+        </div>
+        <div class="flashcard-face back">
+          <div class="fc-meaning" id="fcMeaning">—</div>
+          <div class="fc-sentence" id="fcSentE">—</div>
+          <div class="fc-sentence cn" id="fcSentC">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="flashcard-nav">
+      <button class="fc-nav-btn" onclick="fcPrev()">‹</button>
+      <span class="fc-progress" id="fcProgress">0 / 0</span>
+      <button class="fc-nav-btn" onclick="fcNext()">›</button>
+    </div>
+  </div>
+
+  <!-- STARRED VIEW -->
+  <div id="starredView">
+    <div class="strand-title-bar">
+      <h2 style="font-family:'Playfair Display',serif;">⭐ Starred Words</h2>
+    </div>
+    <div id="starredGrid"></div>
+  </div>
+
+  <!-- SEARCH RESULTS VIEW -->
+  <div id="searchResultsView"></div>
+</main>
+
+<div id="starToast">⭐ Word starred!</div>
+
+<script>
+// ── DATA ──
+const DATA = {"academic": [{"word": "abstract", "pos": "n.", "meaning": "摘要", "sentence e": "The abstract provides a concise summary of the research paper's purpose and findings.", "sentence c": "摘要簡潔概括了研究論文的目的與發現。"}, {"word": "academic framing", "pos": "n.", "meaning": "學術框架設定", "sentence e": "Academic framing situates the discussion within a specific theoretical context.", "sentence c": "學術框架設定將討論置於特定的理論脈絡中。"}, {"word": "academic tone", "pos": "n.", "meaning": "學術語氣", "sentence e": "Maintaining an academic tone requires objectivity, precision, and formality.", "sentence c": "維持學術語氣需要客觀、精確與正式。"}, {"word": "analysis", "pos": "n.", "meaning": "分析；闡釋", "sentence e": "After presenting data, the writer must provide thorough analysis to explain its significance.", "sentence c": "提出數據後，作者必須提供深入分析以解釋其重要性。"}, {"word": "annotation", "pos": "n.", "meaning": "註釋；評註", "sentence e": "Annotation adds explanatory notes to a text for deeper understanding.", "sentence c": "註釋為文本添加解釋性筆記以促進深入理解。"}, {"word": "boosting", "pos": "n.", "meaning": "強化語氣；肯定表述", "sentence e": "Boosting phrases like 'it is evident that' emphasize the writer's confidence in the claim.", "sentence c": "強化語氣片語（如「顯然」）強調作者對主張的信心。"}, {"word": "citation", "pos": "n.", "meaning": "引用；引註", "sentence e": "Proper citation avoids plagiarism and credits original authors.", "sentence c": "正確引用可避免抄襲並致謝原作者。"}, {"word": "citation integration", "pos": "n.", "meaning": "引用融入", "sentence e": "Proper citation integration weaves source material smoothly into the paragraph.", "sentence c": "恰當的引用融入能將來源資料流暢地編織進段落中。"}, {"word": "claim", "pos": "n.", "meaning": "主張；論點", "sentence e": "Each body paragraph should present a clear claim that supports the thesis.", "sentence c": "每個主體段都應提出一個支持論文主旨的明確主張。"}, {"word": "commentary", "pos": "n.", "meaning": "評論；闡釋性文字", "sentence e": "Commentary links the evidence back to the paragraph's main idea.", "sentence c": "評論性文字將證據與段落主旨聯繫起來。"}, {"word": "comparative paragraph", "pos": "n.", "meaning": "比較段", "sentence e": "A comparative paragraph systematically examines similarities and differences between theories.", "sentence c": "比較段系統性地檢視不同理論間的異同。"}, {"word": "concession", "pos": "n.", "meaning": "讓步", "sentence e": "A concession admits partial validity in the opposing argument before refuting it.", "sentence c": "讓步承認對立論點的部分合理性，隨後再進行反駁。"}, {"word": "counterargument", "pos": "n.", "meaning": "反方論點；對立觀點", "sentence e": "A well-developed paragraph acknowledges and addresses the counterargument.", "sentence c": "一個發展完善的段落會承認並回應反方論點。"}, {"word": "critical evaluation", "pos": "n.", "meaning": "批判性評估", "sentence e": "Critical evaluation assesses the strengths and limitations of a source.", "sentence c": "批判性評估會檢視資料來源的優勢與限制。"}, {"word": "evidence", "pos": "n.", "meaning": "證據；佐證資料", "sentence e": "Strong evidence, such as peer-reviewed studies, strengthens the argument.", "sentence c": "強大的證據（如同儕審查研究）能強化論證。"}, {"word": "hedging", "pos": "n.", "meaning": "謹慎表述；模糊限制語", "sentence e": "Academic writing often uses hedging to avoid overgeneralization.", "sentence c": "學術寫作常使用謹慎表述來避免過度概括。"}, {"word": "hook", "pos": "n.", "meaning": "開頭引子；吸引句", "sentence e": "A strong hook at the beginning of an essay grabs the reader's interest.", "sentence c": "文章開頭有力的引子能抓住讀者的興趣。"}, {"word": "link sentence", "pos": "n.", "meaning": "連結句；銜接句", "sentence e": "The link sentence connects the paragraph's analysis back to the overall thesis.", "sentence c": "連結句將段落分析與整體論文主旨相連接。"}, {"word": "literature review", "pos": "n.", "meaning": "文獻回顧", "sentence e": "A thorough literature review identifies gaps in existing research.", "sentence c": "詳盡的文獻回顧能識別現有研究中的空白。"}, {"word": "literature review paragraph", "pos": "n.", "meaning": "文獻回顧段", "sentence e": "A literature review paragraph summarizes and synthesizes previous research on a topic.", "sentence c": "文獻回顧段會總結並綜合該主題的過往研究。"}, {"word": "MEAL plan", "pos": "n.", "meaning": "MEAL段落結構法", "sentence e": "The MEAL plan stands for Main idea, Evidence, Analysis, and Link.", "sentence c": "MEAL結構法代表主旨、證據、分析與連結。"}, {"word": "metadiscourse", "pos": "n.", "meaning": "元話語；組織性語言", "sentence e": "Metadiscourse helps readers navigate the text (e.g., 'this section will discuss...').", "sentence c": "元話語幫助讀者理解文本結構（例如：「本節將探討……」）。"}, {"word": "methodological paragraph", "pos": "n.", "meaning": "方法論段", "sentence e": "The methodological paragraph outlines the research design and data collection process.", "sentence c": "方法論段概述研究設計與資料收集過程。"}, {"word": "methodology", "pos": "n.", "meaning": "研究方法；方法論", "sentence e": "The methodology section explains how the data was collected and analyzed.", "sentence c": "研究方法章節說明資料是如何收集與分析的。"}, {"word": "paragraph unity", "pos": "n.", "meaning": "段落統一性", "sentence e": "Paragraph unity ensures every sentence directly supports the central claim.", "sentence c": "段落統一性確保每句話都直接支持核心主張。"}, {"word": "paraphrase", "pos": "v./n.", "meaning": "改寫；轉述", "sentence e": "A paraphrase restates the original idea in the writer's own words while maintaining accuracy.", "sentence c": "改寫是用作者自己的話重述原意，同時保持準確性。"}, {"word": "paraphrase", "pos": "v.", "meaning": "改寫；轉述", "sentence e": "When you paraphrase, you must rewrite the idea completely in your own words.", "sentence c": "改寫時，必須用自己的話完全重述該想法。"}, {"word": "plagiarism", "pos": "n.", "meaning": "抄襲；剽竊", "sentence e": "Plagiarism is presenting someone else's work as your own.", "sentence c": "抄襲是將他人的作品當作自己的呈現。"}, {"word": "primary source", "pos": "n.", "meaning": "一手資料；原始資料", "sentence e": "A primary source provides direct evidence about a topic.", "sentence c": "一手資料提供關於主題的直接證據。"}, {"word": "quotation block", "pos": "n.", "meaning": "整段引用", "sentence e": "Long quotations exceeding four lines should be formatted as a block quotation.", "sentence c": "超過四行的長引用應排版為整段引用格式。"}, {"word": "rebuttal", "pos": "n.", "meaning": "反駁；辯駁", "sentence e": "The rebuttal uses logical reasoning to dismantle the opposing view.", "sentence c": "反駁部分運用邏輯推理來推翻對立觀點。"}, {"word": "secondary source", "pos": "n.", "meaning": "二手資料；間接資料", "sentence e": "A secondary source analyzes or interprets primary sources.", "sentence c": "二手資料分析或詮釋一手資料。"}, {"word": "signpost", "pos": "n.", "meaning": "路標詞；指引", "sentence e": "Signposts like 'firstly,' 'conversely,' and 'ultimately' guide readers through the argument.", "sentence c": "像「首先」、「相反地」和「最終」這類路標詞能引導讀者理解論證脈絡。"}, {"word": "source triangulation", "pos": "n.", "meaning": "資料三角驗證", "sentence e": "Source triangulation strengthens credibility by cross-referencing multiple independent sources.", "sentence c": "資料三角驗證透過交叉比對多個獨立來源來提升可信度。"}, {"word": "stance marker", "pos": "n.", "meaning": "立場標記詞", "sentence e": "Stance markers like 'arguably,' 'undoubtedly,' or 'it seems' reveal the writer's position.", "sentence c": "立場標記詞（如「可說」、「無疑」、「似乎」）揭示作者的立場。"}, {"word": "synthesis", "pos": "n.", "meaning": "綜合；整合", "sentence e": "Synthesis involves combining multiple sources to create a new perspective.", "sentence c": "綜合是指整合多個來源以創造新的觀點。"}, {"word": "thematic paragraph", "pos": "n.", "meaning": "主題段", "sentence e": "Thematic paragraphs organize ideas by concept rather than chronologically.", "sentence c": "主題段按概念而非時間順序來組織觀點。"}, {"word": "thesis statement", "pos": "n.", "meaning": "論文主旨句", "sentence e": "The thesis statement clearly outlines the argument and scope of the paper.", "sentence c": "論文主旨句清楚勾勒出文章的論點與範圍。"}, {"word": "Toulmin model", "pos": "n.", "meaning": "圖爾敏論證模型", "sentence e": "The Toulmin model breaks arguments into claim, data, warrant, backing, and rebuttal.", "sentence c": "圖爾敏模型將論證拆解為主張、資料、理據、支撐與反駁。"}, {"word": "transitional hook", "pos": "n.", "meaning": "過渡鉤子；承上啟下句", "sentence e": "A transitional hook at the end of a paragraph links to the next section's topic.", "sentence c": "段落結尾的過渡鉤子能將內容連結至下一節的主題。"}, {"word": "warrant", "pos": "n.", "meaning": "理據；橋接論證", "sentence e": "The warrant explains how the evidence logically supports the claim.", "sentence c": "理據解釋證據如何在邏輯上支持主張。"}], "argumentation": [{"word": "assertion", "pos": "n.", "meaning": "主張；斷言", "sentence e": "The critic's assertion that the movie was a failure sparked much debate.", "sentence c": "評論家關於這部電影是失敗之作的主張引發了許多辯論。"}, {"word": "bias", "pos": "n.", "meaning": "偏見；偏向", "sentence e": "Recognizing bias helps readers evaluate sources critically.", "sentence c": "識別偏見有助於讀者批判性地評估資料來源。"}, {"word": "concede", "pos": "v.", "meaning": "讓步；承認(屬實)", "sentence e": "Although he disagreed, he had to concede that his opponent made a valid point.", "sentence c": "儘管他不同意，但他不得不承認對手的觀點是有道理的。"}, {"word": "credibility", "pos": "n.", "meaning": "可信度；可靠性", "sentence e": "The credibility of a source depends on its accuracy and authority.", "sentence c": "資料來源的可信度取決於其準確性與權威性。"}, {"word": "fallacy", "pos": "n.", "meaning": "謬誤", "sentence e": "The politician's speech was criticized for containing several logical fallacies.", "sentence c": "這位政治家的演說因包含多個邏輯謬誤而受到批評。"}, {"word": "premise", "pos": "n.", "meaning": "前提", "sentence e": "The entire argument is based on the premise that all men are created equal.", "sentence c": "整個論點都建立在人人生而平等的前提之上。"}, {"word": "refute", "pos": "v.", "meaning": "反駁", "sentence e": "The lawyer presented new evidence to refute the witness's testimony.", "sentence c": "律師提出了新證據來反駁證人的證詞。"}, {"word": "substantiate", "pos": "v.", "meaning": "證實", "sentence e": "You must provide specific examples to substantiate your claims in the essay.", "sentence c": "你必須提供具體例子來證實你在文章中的主張。"}, {"word": "thesis", "pos": "n.", "meaning": "論點；主旨", "sentence e": "The thesis of the paper is clearly stated in the introduction.", "sentence c": "論文的論點在引言中清楚陳述。"}], "character-analysis": [{"word": "agency", "pos": "n.", "meaning": "能動性；自主性", "sentence e": "Feminist criticism examines how female characters exercise agency within patriarchal constraints.", "sentence c": "女性主義批評檢視女性角色如何在父權限制下展現能動性。"}, {"word": "antagonist", "pos": "n.", "meaning": "反派；對立角色", "sentence e": "The antagonist opposes the protagonist and creates conflict.", "sentence c": "反派與主角對立並製造衝突。"}, {"word": "anti-hero", "pos": "n.", "meaning": "反英雄", "sentence e": "The anti-hero lacks traditional heroic qualities like courage and idealism.", "sentence c": "反英雄缺乏勇氣與理想主義等傳統英雄特質。"}, {"word": "archetype", "pos": "n.", "meaning": "原型", "sentence e": "The wise old mentor is a common archetype across cultures.", "sentence c": "智慧長者是全球文化中常見的原型。"}, {"word": "character arc", "pos": "n.", "meaning": "角色弧線", "sentence e": "The character arc traces the protagonist's emotional journey from fear to courage.", "sentence c": "角色弧線描繪主角從恐懼到勇氣的情感旅程。"}, {"word": "character development", "pos": "n.", "meaning": "角色發展；人物塑造", "sentence e": "Effective character development makes readers care about the protagonist's fate.", "sentence c": "有效的角色發展讓讀者關心主角的命運。"}, {"word": "character flaw", "pos": "n.", "meaning": "角色缺陷", "sentence e": "Pride is the fatal character flaw that leads to the hero's downfall.", "sentence c": "驕傲是導致英雄毀滅的致命角色缺陷。"}, {"word": "character motivation", "pos": "n.", "meaning": "角色動機", "sentence e": "Understanding character motivation helps readers predict actions and interpret choices.", "sentence c": "理解角色動機有助於讀者預測行為並解讀選擇。"}, {"word": "character revelation", "pos": "n.", "meaning": "角色揭露；性格展現", "sentence e": "The letter serves as a key moment of character revelation.", "sentence c": "這封信是角色揭露的關鍵時刻。"}, {"word": "characterization", "pos": "n.", "meaning": "人物塑造（總稱）", "sentence e": "Through subtle characterization, the author makes even minor characters memorable.", "sentence c": "透過細膩的人物塑造，作者讓即使是次要角色也令人難忘。"}, {"word": "confidant", "pos": "n.", "meaning": "知心角色；傾訴對象", "sentence e": "The confidant allows the protagonist to reveal inner thoughts through dialogue.", "sentence c": "知心角色讓主角能透過對話揭露內心想法。"}, {"word": "deuteragonist", "pos": "n.", "meaning": "第二主角", "sentence e": "The deuteragonist plays a crucial supporting role to the protagonist.", "sentence c": "第二主角對主角扮演關鍵的輔助角色。"}, {"word": "direct characterization", "pos": "n.", "meaning": "直接人物塑造", "sentence e": "Direct characterization tells the reader explicitly what a character is like.", "sentence c": "直接人物塑造明確告訴讀者角色是什麼樣的人。"}, {"word": "dynamic character", "pos": "n.", "meaning": "動態人物", "sentence e": "A dynamic character changes significantly over the course of the story.", "sentence c": "動態人物在故事過程中發生顯著變化。"}, {"word": "epiphany", "pos": "n.", "meaning": "頓悟；靈光乍現", "sentence e": "The protagonist experiences an epiphany that changes his worldview.", "sentence c": "主角經歷了一次頓悟，改變了他的世界觀。"}, {"word": "external conflict", "pos": "n.", "meaning": "外部衝突", "sentence e": "External conflict arises when the character faces opposition from society or nature.", "sentence c": "當角色面臨社會或自然的對立時，便產生外部衝突。"}, {"word": "flat character", "pos": "n.", "meaning": "扁平人物", "sentence e": "A flat character represents a single trait without psychological depth.", "sentence c": "扁平人物代表單一特質，缺乏心理深度。"}, {"word": "foil", "pos": "n.", "meaning": "襯托角色", "sentence e": "The optimistic friend serves as a foil to highlight the protagonist's cynicism.", "sentence c": "樂觀的朋友作為襯托角色，凸顯主角的憤世嫉俗。"}, {"word": "indirect characterization", "pos": "n.", "meaning": "間接人物塑造", "sentence e": "Indirect characterization reveals personality through actions, speech, and thoughts.", "sentence c": "間接人物塑造透過行為、言語和思想來揭示性格。"}, {"word": "internal conflict", "pos": "n.", "meaning": "內心衝突", "sentence e": "The protagonist's internal conflict between duty and desire drives the narrative.", "sentence c": "主角在責任與慾望之間的內心衝突推動了敘事。"}, {"word": "marginalization", "pos": "n.", "meaning": "邊緣化", "sentence e": "The story explores the marginalization of minority characters in mainstream society.", "sentence c": "這個故事探討少數族群角色在主流社會中的邊緣化。"}, {"word": "protagonist", "pos": "n.", "meaning": "主角", "sentence e": "The protagonist drives the main action of the story.", "sentence c": "主角推動故事的主要行動。"}, {"word": "psychological depth", "pos": "n.", "meaning": "心理深度", "sentence e": "The novel is praised for its psychological depth in portraying the heroine's inner turmoil.", "sentence c": "這部小說因在描繪女主角內心掙扎時展現的心理深度而受到讚譽。"}, {"word": "round character", "pos": "n.", "meaning": "圓形人物", "sentence e": "A round character has complexity and undergoes development.", "sentence c": "圓形人物具有複雜性並會經歷發展。"}, {"word": "social context", "pos": "n.", "meaning": "社會脈絡；時代背景", "sentence e": "Analyzing a character requires understanding the social context of their time.", "sentence c": "分析角色需要理解其所處時代的社會脈絡。"}, {"word": "static character", "pos": "n.", "meaning": "靜態人物", "sentence e": "A static character remains largely unchanged from beginning to end.", "sentence c": "靜態人物從頭到尾基本保持不變。"}, {"word": "stock character", "pos": "n.", "meaning": "定型角色", "sentence e": "The clever servant is a stock character in commedia dell'arte.", "sentence c": "聰明的僕人是即興喜劇中的定型角色。"}, {"word": "tragic flaw", "pos": "n.", "meaning": "悲劇缺陷；致命缺陷", "sentence e": "Hubris is often the tragic flaw in Greek tragedies.", "sentence c": "傲慢往往是希臘悲劇中的悲劇缺陷。"}, {"word": "tragic hero", "pos": "n.", "meaning": "悲劇英雄", "sentence e": "A tragic hero is a noble character whose flaw leads to downfall.", "sentence c": "悲劇英雄是一位高貴的角色，其缺陷導致毀滅。"}], "critics": [{"word": "ambivalent", "pos": "adj.", "meaning": "矛盾曖昧的", "sentence e": "The narrator's attitude toward the hero remains ambivalent throughout the novel.", "sentence c": "敘事者對英雄的態度在整部小說中始終矛盾曖昧。"}, {"word": "analyze", "pos": "v.", "meaning": "分析", "sentence e": "Students must learn to analyze the author's use of language.", "sentence c": "學生必須學會分析作者的語言運用。"}, {"word": "articulate", "pos": "v.", "meaning": "清晰表達；體現", "sentence e": "The novel articulates the anxiety of post-war generation.", "sentence c": "這部小說清晰表達了戰後一代的焦慮。"}, {"word": "canon", "pos": "n.", "meaning": "文學經典", "sentence e": "The Western literary canon includes works by Shakespeare and Dante.", "sentence c": "西方文學經典包括莎士比亞和但丁的作品。"}, {"word": "contextualize", "pos": "v.", "meaning": "脈絡化；置於背景中理解", "sentence e": "To understand the poem, we must contextualize it within the Romantic era.", "sentence c": "要理解這首詩，我們必須將其置於浪漫主義時代的脈絡中。"}, {"word": "deconstruction", "pos": "n.", "meaning": "解構", "sentence e": "Deconstruction challenges the binary oppositions in a text.", "sentence c": "解構挑戰文本中的二元對立。"}, {"word": "diegesis", "pos": "n.", "meaning": "敘事世界；故事內虛構世界", "sentence e": "The diegesis includes everything that exists within the story's world.", "sentence c": "敘事世界包含了故事世界內存在的一切。"}, {"word": "ecocriticism", "pos": "n.", "meaning": "生態批評", "sentence e": "Ecocriticism investigates the relationship between literature and the natural world.", "sentence c": "生態批評研究文學與自然世界之間的關係。"}, {"word": "feminist criticism", "pos": "n.", "meaning": "女性主義批評", "sentence e": "Feminist criticism examines how gender shapes literary texts.", "sentence c": "女性主義批評探討性別如何形塑文學文本。"}, {"word": "foreground", "pos": "v.", "meaning": "前景化；凸顯", "sentence e": "The close-up shots foreground the character's emotional turmoil.", "sentence c": "特寫鏡頭凸顯了角色內心的情感混亂。"}, {"word": "hegemony", "pos": "n.", "meaning": "霸權；文化主導權", "sentence e": "Cultural hegemony maintains power through consent rather than force.", "sentence c": "文化霸權透過同意而非武力來維持權力。"}, {"word": "hermeneutics", "pos": "n.", "meaning": "詮釋學", "sentence e": "Hermeneutics is the theory of interpretation in literary studies.", "sentence c": "詮釋學是文學研究中的解釋理論。"}, {"word": "intertextuality", "pos": "n.", "meaning": "互文性", "sentence e": "The novel's intertextuality with Greek myths adds layers of meaning.", "sentence c": "這部小說與希臘神話的互文性增添了多重意義。"}, {"word": "marxist criticism", "pos": "n.", "meaning": "馬克思主義批評", "sentence e": "Marxist criticism examines how texts reflect class struggle and economic power.", "sentence c": "馬克思主義批評檢視文本如何反映階級鬥爭和經濟權力。"}, {"word": "mimesis", "pos": "n.", "meaning": "模仿；擬真", "sentence e": "Aristotle viewed drama as an act of mimesis imitating human action.", "sentence c": "亞里斯多德將戲劇視為模仿人類行動的行為。"}, {"word": "new historicism", "pos": "n.", "meaning": "新歷史主義", "sentence e": "New historicism reads literary texts alongside historical documents of the same period.", "sentence c": "新歷史主義將文學文本與同期歷史文獻並行解讀。"}, {"word": "nuanced", "pos": "adj.", "meaning": "細緻入微的", "sentence e": "The critic offered a nuanced reading of the film's ambiguous ending.", "sentence c": "評論家對電影模棱兩可的結局提出了細緻入微的解讀。"}, {"word": "post-structuralism", "pos": "n.", "meaning": "後結構主義", "sentence e": "Post-structuralism challenges the idea of fixed meanings in language and texts.", "sentence c": "後結構主義挑戰語言和文本中存在固定意義的觀念。"}, {"word": "postcolonial criticism", "pos": "n.", "meaning": "後殖民批評", "sentence e": "Postcolonial criticism analyzes literature from formerly colonized nations.", "sentence c": "後殖民批評分析來自前殖民地國家的文學。"}, {"word": "problematize", "pos": "v.", "meaning": "問題化；質疑", "sentence e": "The documentary problematizes the simple narrative of technological progress.", "sentence c": "這部紀錄片對科技進步的簡單敘事提出了質疑。"}, {"word": "psychoanalytic criticism", "pos": "n.", "meaning": "精神分析批評", "sentence e": "Psychoanalytic criticism explores characters' unconscious desires.", "sentence c": "精神分析批評探索角色的無意識慾望。"}, {"word": "queer theory", "pos": "n.", "meaning": "酷兒理論", "sentence e": "Queer theory challenges normative assumptions about gender and sexuality.", "sentence c": "酷兒理論挑戰關於性別與性向的規範性假設。"}, {"word": "reader-response criticism", "pos": "n.", "meaning": "讀者反應批評", "sentence e": "Reader-response criticism argues that a text's meaning is co-created by the reader.", "sentence c": "讀者反應批評主張文本的意義是由讀者共同創造的。"}, {"word": "reinforce", "pos": "v.", "meaning": "強化；鞏固", "sentence e": "The fairy tale reinforces the virtue of kindness and punishes cruelty.", "sentence c": "這則童話強化了善良的美德並懲罰殘酷。"}, {"word": "representation", "pos": "n.", "meaning": "再現；表征", "sentence e": "Media representation shapes public perception of social groups.", "sentence c": "媒體再現形塑了大眾對社會群體的認知。"}, {"word": "stereotype", "pos": "n.", "meaning": "刻板印象", "sentence e": "The play challenges racial stereotypes by presenting complex minority characters.", "sentence c": "這部戲劇透過呈現複雜的少數族裔角色來挑戰種族刻板印象。"}, {"word": "structuralism", "pos": "n.", "meaning": "結構主義", "sentence e": "Structuralism analyzes the underlying systems and patterns that shape a text.", "sentence c": "結構主義分析塑造文本的潛在系統和模式。"}, {"word": "subvert", "pos": "v.", "meaning": "顛覆；推翻", "sentence e": "The novel subverts the traditional hero's journey by making the hero fail.", "sentence c": "這部小說透過讓英雄失敗來顛覆傳統的英雄旅程。"}, {"word": "undermine", "pos": "v.", "meaning": "削弱；暗中破壞", "sentence e": "The author uses irony to undermine the protagonist's supposed wisdom.", "sentence c": "作者運用反諷來削弱主角自以為是的智慧。"}, {"word": "verisimilitude", "pos": "n.", "meaning": "真實感；似真性", "sentence e": "The novel achieves verisimilitude through detailed historical research.", "sentence c": "這部小說透過詳細的歷史研究達到了真實感。"}], "drama": [{"word": "absurdist theatre", "pos": "n.", "meaning": "荒誕派戲劇", "sentence e": "Samuel Beckett's \"Waiting for Godot\" is a classic example of absurdist theatre.", "sentence c": "塞繆爾·貝克特的《等待戈多》是荒誕派戲劇的經典範例。"}, {"word": "aside", "pos": "n.", "meaning": "旁白", "sentence e": "In a stage whisper, the character says an aside to the audience.", "sentence c": "角色以舞台低語對觀眾說出一段旁白。"}, {"word": "blocking", "pos": "n.", "meaning": "走位；舞台調度", "sentence e": "The director spent an hour blocking the opening scene for the actors.", "sentence c": "導演花了一小時為演員們排練開場戲的走位。"}, {"word": "catharsis", "pos": "n.", "meaning": "情感淨化；宣洩", "sentence e": "Audiences experience catharsis as the tragic hero accepts his fate.", "sentence c": "當悲劇英雄接受命運時，觀眾經歷了情感淨化。"}, {"word": "chorus", "pos": "n.", "meaning": "歌隊；合唱歌隊", "sentence e": "The chorus in Greek tragedy comments on the action and provides background information.", "sentence c": "希臘悲劇中的歌隊評論劇情並提供背景訊息。"}, {"word": "comedy", "pos": "n.", "meaning": "喜劇", "sentence e": "Shakespeare's \"A Midsummer Night's Dream\" is a romantic comedy.", "sentence c": "莎士比亞的《仲夏夜之夢》是一部浪漫喜劇。"}, {"word": "commedia dell'arte", "pos": "n.", "meaning": "即興喜劇；義大利即興喜劇", "sentence e": "Commedia dell'arte features stock characters like Harlequin and Pantalone.", "sentence c": "即興喜劇以丑角和潘塔隆內等定型角色為特色。"}, {"word": "costume design", "pos": "n.", "meaning": "服裝設計", "sentence e": "The costume design for the period drama required extensive historical research.", "sentence c": "這部時代劇的服裝設計需要大量的歷史研究。"}, {"word": "cross-cutting", "pos": "n.", "meaning": "交叉剪輯；場景交錯", "sentence e": "The director used cross-cutting to show the parallel lives of the two protagonists.", "sentence c": "導演運用交叉剪輯來展示兩位主角平行的人生。"}, {"word": "dialogue", "pos": "n.", "meaning": "對話", "sentence e": "The dialogue reveals the characters' true intentions.", "sentence c": "對話揭示了角色的真實意圖。"}, {"word": "direct address", "pos": "n.", "meaning": "直接對白；直接對觀眾說話", "sentence e": "By using direct address, the villain shared his evil plan with the audience.", "sentence c": "惡棍透過直接對白向觀眾分享他的邪惡計畫。"}, {"word": "ensemble", "pos": "n.", "meaning": "合奏；劇團；全體演員", "sentence e": "The ensemble worked together seamlessly to create a powerful performance.", "sentence c": "全體演員無縫合作，共同創造了一場動人的演出。"}, {"word": "epic theatre", "pos": "n.", "meaning": "史詩劇場", "sentence e": "Bertolt Brecht developed epic theatre to encourage audiences to think critically rather than emotionally.", "sentence c": "貝托爾特·布萊希特發展史詩劇場是為了鼓勵觀眾理性思考而非情感投入。"}, {"word": "farce", "pos": "n.", "meaning": "鬧劇", "sentence e": "The play's mistaken identities and slapstick make it a classic farce.", "sentence c": "這齣戲的錯認身份與鬧劇式搞笑使其成為經典鬧劇。"}, {"word": "fourth wall", "pos": "n.", "meaning": "第四面牆", "sentence e": "The actor broke the fourth wall by winking at the audience.", "sentence c": "那位演員對著觀眾眨眼，打破了第四面牆。"}, {"word": "hot-seating", "pos": "n.", "meaning": "熱椅提問", "sentence e": "The teacher used hot-seating to help students explore their character's motivations.", "sentence c": "老師使用熱椅提問來幫助學生探索他們角色的動機。"}, {"word": "improvisation", "pos": "n.", "meaning": "即興表演", "sentence e": "The actors used improvisation to generate new material for the scene.", "sentence c": "演員們使用即興表演為該場景生成新的素材。"}, {"word": "lighting design", "pos": "n.", "meaning": "燈光設計", "sentence e": "The lighting design shifted from warm amber to cold blue to show the change in mood.", "sentence c": "燈光設計從溫暖的琥珀色轉為冷冽的藍色以顯示情緒轉變。"}, {"word": "melodrama", "pos": "n.", "meaning": "情節劇；通俗劇", "sentence e": "Victorian melodrama often features a virtuous hero and a dastardly villain.", "sentence c": "維多利亞時代的情節劇通常有一位品德高尚的英雄和一個卑鄙的惡棍。"}, {"word": "monologue", "pos": "n.", "meaning": "獨白", "sentence e": "The actor delivered a moving monologue about loss.", "sentence c": "演員發表了一段關於失去的動人獨白。"}, {"word": "musical theatre", "pos": "n.", "meaning": "音樂劇", "sentence e": "Les Misérables is a famous musical theatre production based on Victor Hugo's novel.", "sentence c": "《悲慘世界》是一部根據維克多·雨果小說改編的著名音樂劇。"}, {"word": "naturalism", "pos": "n.", "meaning": "自然主義", "sentence e": "\"Hedda Gabler\" by Henrik Ibsen is a landmark play of theatrical naturalism.", "sentence c": "易卜生的《海達·蓋伯勒》是戲劇自然主義的里程碑作品。"}, {"word": "physical theatre", "pos": "n.", "meaning": "形體劇場", "sentence e": "DV8 Physical Theatre uses movement and dance rather than spoken dialogue to tell stories.", "sentence c": "DV8形體劇場使用動作和舞蹈而非口語對白來講述故事。"}, {"word": "props", "pos": "n.", "meaning": "道具；小道具", "sentence e": "The actor forgot his most important prop: the letter.", "sentence c": "演員忘記了他最重要的道具：那封信。"}, {"word": "set design", "pos": "n.", "meaning": "舞台設計；佈景設計", "sentence e": "The set design for the musical included a rotating two-storey house.", "sentence c": "這部音樂劇的舞台設計包含一座旋轉的兩層樓房屋。"}, {"word": "slow motion", "pos": "n.", "meaning": "慢動作", "sentence e": "The fight scene was performed in slow motion to heighten the drama.", "sentence c": "打鬥場景以慢動作演出以增強戲劇張力。"}, {"word": "soliloquy", "pos": "n.", "meaning": "戲劇獨白", "sentence e": "Hamlet's \"To be or not to be\" is a famous soliloquy.", "sentence c": "哈姆雷特的「生存還是毀滅」是一段著名的戲劇獨白。"}, {"word": "sound design", "pos": "n.", "meaning": "音效設計", "sentence e": "The sound design used a low rumble to suggest an approaching storm.", "sentence c": "音效設計使用低沉的轟鳴聲來暗示即將來臨的風暴。"}, {"word": "stage direction", "pos": "n.", "meaning": "舞台指示", "sentence e": "According to the stage direction, the lights fade and the curtain falls.", "sentence c": "根據舞台指示，燈光漸暗，布幕落下。"}, {"word": "symbolic gesture", "pos": "n.", "meaning": "象徵性動作", "sentence e": "Her symbolic gesture of opening a cage represented a desire for freedom.", "sentence c": "她打開籠子的象徵性動作代表了對自由的渴望。"}, {"word": "tableau", "pos": "n.", "meaning": "靜止畫面；定格造型", "sentence e": "The play ended with a powerful tableau of the family reunited.", "sentence c": "這齣戲以一家團聚的強而有力定格畫面作結。"}, {"word": "thought-tracking", "pos": "n.", "meaning": "思緒追蹤", "sentence e": "During thought-tracking, the actor revealed her character's secret fear.", "sentence c": "在思緒追蹤環節中，演員揭示了她角色內心深處的恐懼。"}, {"word": "tragedy", "pos": "n.", "meaning": "悲劇", "sentence e": "The protagonist's tragic flaw leads to his downfall in the tragedy.", "sentence c": "悲劇中主角的缺陷導致了他的毀滅。"}], "genre": [{"word": "anthology", "pos": "n.", "meaning": "選集；文集", "sentence e": "The students read an anthology of modern American short stories.", "sentence c": "學生們閱讀了一本美國現代短篇小說選集。"}, {"word": "biography", "pos": "n.", "meaning": "傳記", "sentence e": "The biography of Steve Jobs explores the life of the Apple co-founder.", "sentence c": "這部史蒂夫·賈伯斯的傳記探索了這位蘋果公司共同創始人的一生。"}, {"word": "discursive text", "pos": "n.", "meaning": "議論性文本", "sentence e": "In a discursive text, the writer explores an issue from multiple perspectives.", "sentence c": "在議論性文本中，作者會從多個角度探討一個議題。"}, {"word": "epic", "pos": "n.", "meaning": "史詩", "sentence e": "The Odyssey is an ancient Greek epic that narrates the journey of Odysseus.", "sentence c": "《奧德賽》是一部古希臘史詩，敘述了奧德修斯的旅程。"}, {"word": "essay", "pos": "n.", "meaning": "散文；論說文", "sentence e": "The student wrote a persuasive essay on climate change.", "sentence c": "學生寫了一篇關於氣候變遷的說服性文章。"}, {"word": "fiction", "pos": "n.", "meaning": "小說", "sentence e": "She enjoys reading historical fiction.", "sentence c": "她喜歡讀歷史小說。"}, {"word": "genre", "pos": "n.", "meaning": "文類；體裁", "sentence e": "The novel belongs to the science fiction genre.", "sentence c": "這部小說屬於科幻文類。"}, {"word": "literary essay", "pos": "n.", "meaning": "文學評論", "sentence e": "A literary essay presents an argument about a text supported by evidence.", "sentence c": "文學評論提出一個關於文本的論點，並以證據支持。"}, {"word": "memoir", "pos": "n.", "meaning": "回憶錄", "sentence e": "The senator published a memoir detailing her years in public service.", "sentence c": "這位參議員出版了一本回憶錄，詳述她多年從政的經歷。"}, {"word": "non-fiction", "pos": "n.", "meaning": "非虛構作品", "sentence e": "The course focuses on non-fiction essays and memoirs.", "sentence c": "這門課程專注於非虛構散文與回憶錄。"}, {"word": "parody", "pos": "n.", "meaning": "戲仿；滑稽模仿", "sentence e": "The sketch show performed a parody of the famous spy movie.", "sentence c": "這場短劇表演對那部著名的間諜電影進行了戲仿。"}, {"word": "prose", "pos": "n.", "meaning": "散文", "sentence e": "Unlike poetry, prose uses ordinary grammatical structure and natural flow of speech.", "sentence c": "與詩歌不同，散文使用普通的語法結構和自然的語言流動。"}], "grammar": [{"word": "active voice", "pos": "n.", "meaning": "主動語態", "sentence e": "\"The dog bit the mailman\" is written in the active voice.", "sentence c": "「狗咬了郵差」用的是主動語態。"}, {"word": "ambiguity", "pos": "n.", "meaning": "含糊；歧義", "sentence e": "The poet uses ambiguity to allow multiple interpretations.", "sentence c": "詩人使用含糊來允許多種解讀。"}, {"word": "clause", "pos": "n.", "meaning": "子句；分句", "sentence e": "A clause contains both a subject and a verb.", "sentence c": "一個子句同時包含主語和動詞。"}, {"word": "code-switching", "pos": "n.", "meaning": "語碼轉換", "sentence e": "Code-switching occurs when speakers alternate between languages or dialects.", "sentence c": "語碼轉換發生在說話者交替使用不同語言或方言時。"}, {"word": "colloquialism", "pos": "n.", "meaning": "口語表達；俚語", "sentence e": "The dialogue is rich in colloquialisms that reflect the character's regional background.", "sentence c": "對話充滿口語表達，反映了角色的地域背景。"}, {"word": "connotation", "pos": "n.", "meaning": "隱含意義；聯想義", "sentence e": "The word \"home\" has positive connotations of warmth and safety.", "sentence c": "「家」這個詞帶有溫暖和安全的正面聯想意義。"}, {"word": "denotation", "pos": "n.", "meaning": "字面意義；外延義", "sentence e": "While the connotation of \"snake\" is deceit, its denotation is simply a legless reptile.", "sentence c": "雖然「蛇」的隱含意義是欺詐，但其字面意義只是無腿的爬行動物。"}, {"word": "homonym", "pos": "n.", "meaning": "同音異義詞；同形異義詞", "sentence e": "\"Bank\" is a homonym that can mean a financial institution or the side of a river.", "sentence c": "「Bank」是一個同形異義詞，可指金融機構或河岸。"}, {"word": "nuance", "pos": "n.", "meaning": "細微差別", "sentence e": "Understanding nuance is key to literary analysis.", "sentence c": "理解細微差別是文學分析的關鍵。"}, {"word": "passive voice", "pos": "n.", "meaning": "被動語態", "sentence e": "\"The mailman was bitten by the dog\" is written in the passive voice.", "sentence c": "「郵差被狗咬了」用的是被動語態。"}, {"word": "phrase", "pos": "n.", "meaning": "片語；短語", "sentence e": "A phrase is a group of words that does not contain a verb.", "sentence c": "片語是一組不包含動詞的單詞。"}, {"word": "plausible", "pos": "adj.", "meaning": "看似合理的", "sentence e": "Although the excuse was creative, it did not seem plausible to the teacher.", "sentence c": "雖然這個藉口很有創意，但在老師看來似乎並不合理。"}, {"word": "polysemy", "pos": "n.", "meaning": "多義性", "sentence e": "Polysemy refers to a word having multiple related meanings.", "sentence c": "多義性指一個詞擁有多個相關意義。"}, {"word": "pragmatics", "pos": "n.", "meaning": "語用學", "sentence e": "Pragmatics examines how context influences language interpretation.", "sentence c": "語用學檢視語境如何影響語言解讀。"}, {"word": "register", "pos": "n.", "meaning": "語域；語體", "sentence e": "Register refers to language variation according to social context.", "sentence c": "語域指根據社會語境產生的語言變體。"}, {"word": "semantics", "pos": "n.", "meaning": "語義學", "sentence e": "Semantics studies the meaning of words and sentences.", "sentence c": "語義學研究詞語與句子的意義。"}, {"word": "subtext", "pos": "n.", "meaning": "潛臺詞", "sentence e": "The subtext of the scene suggests hidden anger.", "sentence c": "這場景的潛臺詞暗示了隱藏的憤怒。"}, {"word": "syntax", "pos": "n.", "meaning": "句法；句構", "sentence e": "Syntax governs the arrangement of words and phrases to create well-formed sentences.", "sentence c": "句法規範詞與片語的排列以構成合乎語法的句子。"}], "literary": [{"word": "allegory", "pos": "n.", "meaning": "寓言；托物寓意", "sentence e": "George Orwell's \"Animal Farm\" is a famous allegory for the Russian Revolution.", "sentence c": "喬治·歐威爾的《動物農莊》是描述俄國革命的著名寓言。"}, {"word": "allusion", "pos": "n.", "meaning": "典故；影射", "sentence e": "The author made an allusion to Greek mythology by mentioning the Achilles' heel.", "sentence c": "作者藉由提到「阿基里斯之踵」來影射希臘神話。"}, {"word": "analogy", "pos": "n.", "meaning": "類比；類推", "sentence e": "The teacher used the analogy of a computer to explain how the human brain processes information.", "sentence c": "老師用電腦來類比，以解釋人類大腦如何處理資訊。"}, {"word": "anaphora", "pos": "n.", "meaning": "首語重複", "sentence e": "Anaphora repeats words at the beginning of successive clauses.", "sentence c": "首語重複在連續子句開頭重複詞語。"}, {"word": "antithesis", "pos": "n.", "meaning": "對立面；對照", "sentence e": "Poverty is the spiritual antithesis of the abundance seen in nature.", "sentence c": "貧窮是自然界所見之豐饒在精神上的對立面。"}, {"word": "apostrophe", "pos": "n.", "meaning": "呼語；頓呼", "sentence e": "\"O death, where is thy sting?\" is an example of apostrophe.", "sentence c": "「哦，死亡，你的毒刺在哪裡？」是呼語的一個例子。"}, {"word": "conflict", "pos": "n.", "meaning": "衝突", "sentence e": "The main conflict is between tradition and progress.", "sentence c": "主要衝突在於傳統與進步之間。"}, {"word": "ethos", "pos": "n.", "meaning": "品格訴求；道德訴求", "sentence e": "The speaker established ethos by showing his expertise and honesty.", "sentence c": "演講者透過展現專業與誠信來建立品格訴求。"}, {"word": "euphemism", "pos": "n.", "meaning": "委婉語", "sentence e": "\"Passed away\" is a common euphemism used to avoid saying the word \"died\".", "sentence c": "「過世」是一個常用的委婉語，用來避免說出「死」這個字。"}, {"word": "hyperbole", "pos": "n.", "meaning": "誇張法", "sentence e": "The phrase \"I've told you a million times\" is a classic example of hyperbole.", "sentence c": "「我已經跟你說過一百萬次了」這句話是誇張法的經典例子。"}, {"word": "imagery", "pos": "n.", "meaning": "意象；形象化語言", "sentence e": "The poet uses vivid imagery of nature to convey peace.", "sentence c": "詩人運用生動的自然意象來傳達平靜。"}, {"word": "irony", "pos": "n.", "meaning": "諷刺；反諷", "sentence e": "It is a cruel irony that the fire station burned down while the firefighters were away.", "sentence c": "消防局在消防員外出時燒毀，真是一個殘酷的諷刺。"}, {"word": "logos", "pos": "n.", "meaning": "邏輯訴求", "sentence e": "The lawyer used logos by presenting statistical evidence.", "sentence c": "律師透過呈現統計證據來使用邏輯訴求。"}, {"word": "metaphor", "pos": "n.", "meaning": "隱喻", "sentence e": "\"Life is a roller coaster\" is a common metaphor used to describe ups and downs.", "sentence c": "「人生如雲霄飛車」是用來形容起伏波折的常見隱喻。"}, {"word": "metonymy", "pos": "n.", "meaning": "借代", "sentence e": "The crown is often used as a metonymy for the royal government.", "sentence c": "「王冠」常用作皇室政府的借代。"}, {"word": "mood", "pos": "n.", "meaning": "氛圍；情緒", "sentence e": "The dark setting creates a mood of fear and suspense.", "sentence c": "陰暗的場景營造出恐懼與懸疑的氛圍。"}, {"word": "motif", "pos": "n.", "meaning": "母題；重複出現的元素", "sentence e": "The motif of birds appears throughout the novel.", "sentence c": "鳥的母題貫穿整部小說。"}, {"word": "onomatopoeia", "pos": "n.", "meaning": "擬聲詞", "sentence e": "Words like \"buzz\" and \"hiss\" are examples of onomatopoeia.", "sentence c": "像 \"buzz\" 和 \"hiss\" 這樣的詞都是擬聲詞的例子。"}, {"word": "oxymoron", "pos": "n.", "meaning": "矛盾修辭法", "sentence e": "The phrase \"deafening silence\" is an oxymoron that highlights the tension.", "sentence c": "「震耳欲聾的沉默」是一個矛盾修辭法，突顯了緊張氣氛。"}, {"word": "paradox", "pos": "n.", "meaning": "悖論；似非而是", "sentence e": "The statement \"the only constant is change\" is a famous philosophical paradox.", "sentence c": "「唯一的不變就是變」是一個著名的哲學悖論。"}, {"word": "parallelism", "pos": "n.", "meaning": "平行結構；排比", "sentence e": "Parallelism uses similar grammatical structures for emphasis.", "sentence c": "平行結構使用相似的語法結構以強調。"}, {"word": "pathos", "pos": "n.", "meaning": "情感訴求", "sentence e": "The charity ad relies on pathos to evoke sympathy from viewers.", "sentence c": "慈善廣告依賴情感訴求來引發觀眾的同情。"}, {"word": "personification", "pos": "n.", "meaning": "擬人化", "sentence e": "The poet uses personification to describe the wind whispering through the trees.", "sentence c": "詩人使用擬人化法來描寫風在樹林間低語。"}, {"word": "plot", "pos": "n.", "meaning": "情節", "sentence e": "The plot thickens when the detective finds a hidden letter.", "sentence c": "當偵探發現一封隱藏的信件時，情節變得更加複雜。"}, {"word": "rhetoric", "pos": "n.", "meaning": "修辭學", "sentence e": "Rhetoric is the art of effective or persuasive speaking or writing.", "sentence c": "修辭學是有效或說服性口語與寫作的藝術。"}, {"word": "rhetorical question", "pos": "n.", "meaning": "修辭問句；反問", "sentence e": "A rhetorical question is asked for effect, not to elicit an answer.", "sentence c": "修辭問句是為了效果而問，並非尋求答案。"}, {"word": "setting", "pos": "n.", "meaning": "背景；場景", "sentence e": "The setting of the story is a small town in the 1950s.", "sentence c": "故事背景設定在1950年代的一個小鎮。"}, {"word": "simile", "pos": "n.", "meaning": "明喻", "sentence e": "\"As brave as a lion\" is a common simile.", "sentence c": "「像獅子一樣勇敢」是一個常見的明喻。"}, {"word": "symbol", "pos": "n.", "meaning": "象徵", "sentence e": "The white dove is a symbol of peace.", "sentence c": "白鴿是和平的象徵。"}, {"word": "symbolism", "pos": "n.", "meaning": "象徵主義", "sentence e": "The broken clock in the story is a piece of symbolism representing the end of an era.", "sentence c": "故事中破碎的鐘是一個象徵，代表一個時代的終結。"}, {"word": "synecdoche", "pos": "n.", "meaning": "提喻法", "sentence e": "Using the word \"wheels\" to refer to a whole car is an example of synecdoche.", "sentence c": "用 \"wheels\"（輪子）這個詞來指代整輛車是提喻法的一個例子。"}, {"word": "theme", "pos": "n.", "meaning": "主題", "sentence e": "The central theme of the novel is the loss of innocence.", "sentence c": "這部小說的主題是天真與純真的喪失。"}, {"word": "tone", "pos": "n.", "meaning": "語氣；語調", "sentence e": "The tone of the essay shifts from humorous to serious.", "sentence c": "這篇文章的語氣從幽默轉為嚴肅。"}, {"word": "trope", "pos": "n.", "meaning": "比喻；套路；常見修辭", "sentence e": "The hero's journey is a common trope in fantasy literature.", "sentence c": "英雄之旅是奇幻文學中常見的套路。"}, {"word": "understatement", "pos": "n.", "meaning": "輕描淡寫；含蓄說法", "sentence e": "Saying the hurricane was \"a bit of wind\" is a massive understatement.", "sentence c": "說這場颶風只是「一點風」簡直是極大的輕描淡寫。"}, {"word": "voice", "pos": "n.", "meaning": "敘事聲音；風格", "sentence e": "The author's voice is distinctive and full of wit.", "sentence c": "作者的敘事風格獨特且充滿機智。"}], "narrative": [{"word": "analepsis", "pos": "n.", "meaning": "倒敘；回敘", "sentence e": "The story uses analepsis to reveal the character's forgotten childhood memory.", "sentence c": "這個故事使用倒敘來揭示角色被遺忘的童年記憶。"}, {"word": "anecdote", "pos": "n.", "meaning": "軼事；趣聞", "sentence e": "The speaker opened with a humorous anecdote to capture the audience's attention.", "sentence c": "演講者以一段幽默的軼事開場，以吸引觀眾的注意力。"}, {"word": "backstory", "pos": "n.", "meaning": "背景故事", "sentence e": "The hero's tragic backstory explains his motivation for revenge.", "sentence c": "主角悲慘的背景故事解釋了他復仇的動機。"}, {"word": "characterisation", "pos": "n.", "meaning": "人物塑造", "sentence e": "Through direct and indirect characterisation, the author brings the hero to life.", "sentence c": "透過直接與間接的人物塑造，作者讓主角栩栩如生。"}, {"word": "chronological", "pos": "adj.", "meaning": "按時間順序的", "sentence e": "Chronological order is the most straightforward way to organize a narrative.", "sentence c": "時間順序是組織敘事最直接的方式。"}, {"word": "chronology", "pos": "n.", "meaning": "時間順序", "sentence e": "The film disrupts strict chronology by jumping back and forth in time.", "sentence c": "這部電影透過在時間中前後跳躍來打亂嚴格的時間順序。"}, {"word": "climax", "pos": "n.", "meaning": "高潮", "sentence e": "The story reaches its climax when the two rivals finally meet face to face.", "sentence c": "當兩個競爭對手終於面對面碰頭時，故事達到了高潮。"}, {"word": "denouement", "pos": "n.", "meaning": "(小說/戲劇)結局", "sentence e": "In the final denouement, all the mysteries are finally explained.", "sentence c": "在最終的結局中，所有的謎團終於得到了解釋。"}, {"word": "ellipsis", "pos": "n.", "meaning": "省略；跳脫", "sentence e": "A ten-year ellipsis jumps from the character's childhood to her adulthood.", "sentence c": "一個十年的省略從角色的童年跳到了她的成年時期。"}, {"word": "epilogue", "pos": "n.", "meaning": "後記", "sentence e": "The epilogue reveals what happened to the characters years later.", "sentence c": "後記揭示了角色們多年後的境遇。"}, {"word": "exposition", "pos": "n.", "meaning": "闡述；(故事)背景鋪陳", "sentence e": "The exposition provides the necessary background information about the characters.", "sentence c": "故事的背景鋪陳提供了關於角色的必要背景資訊。"}, {"word": "external focalization", "pos": "n.", "meaning": "外部聚焦", "sentence e": "External focalization only shows external actions without entering any character's mind.", "sentence c": "外部聚焦只展示外部行動，不進入任何角色的內心。"}, {"word": "first-person", "pos": "n.", "meaning": "第一人稱", "sentence e": "First-person narration uses \"I\" to tell the story from a character's perspective.", "sentence c": "第一人稱敘事使用「我」從角色的視角講述故事。"}, {"word": "flashback", "pos": "n.", "meaning": "倒敘", "sentence e": "A flashback reveals the character's traumatic childhood experience.", "sentence c": "倒敘手法揭露了角色悲慘的童年經歷。"}, {"word": "flashforward", "pos": "n.", "meaning": "預敘；閃前", "sentence e": "A flashforward reveals the character's fate at the very end of the play.", "sentence c": "一個預敘鏡頭在戲劇尾聲揭示了角色的命運。"}, {"word": "focalization", "pos": "n.", "meaning": "聚焦；視角", "sentence e": "Focalization determines through whose eyes the story is seen.", "sentence c": "聚焦決定了故事是透過誰的眼睛被看見。"}, {"word": "foreshadowing", "pos": "n.", "meaning": "伏筆", "sentence e": "The dark clouds in the first chapter served as foreshadowing for the coming tragedy.", "sentence c": "第一章中的烏雲是為即將到來的悲劇埋下的伏筆。"}, {"word": "frame story", "pos": "n.", "meaning": "框架故事", "sentence e": "The Thousand and One Nights is a famous frame story.", "sentence c": "《一千零一夜》是一個著名的框架故事。"}, {"word": "in medias res", "pos": "phrase.", "meaning": "從情節中間開始", "sentence e": "The epic begins in medias res, with the hero already on his journey.", "sentence c": "這部史詩從情節中間開始，英雄已踏上旅程。"}, {"word": "internal focalization", "pos": "n.", "meaning": "內部聚焦", "sentence e": "Internal focalization limits the narrative to what a single character knows.", "sentence c": "內部聚焦將敘事限制在單一角色所知的範圍內。"}, {"word": "narrator", "pos": "n.", "meaning": "敘事者", "sentence e": "The unreliable narrator makes the reader question the truth.", "sentence c": "不可靠的敘事者讓讀者質疑故事的真實性。"}, {"word": "non-linear", "pos": "adj.", "meaning": "非線性的", "sentence e": "The film uses a non-linear structure to reveal the mystery gradually.", "sentence c": "這部電影使用非線性結構逐步揭示謎團。"}, {"word": "pacing", "pos": "n.", "meaning": "節奏", "sentence e": "The fast pacing of the thriller kept the audience on the edge of their seats.", "sentence c": "這部驚悚片快速的節奏讓觀眾緊張得坐立難安。"}, {"word": "perspective", "pos": "n.", "meaning": "觀點；視角", "sentence e": "The story is told from a child's perspective.", "sentence c": "這個故事是從孩子的視角敘述的。"}, {"word": "prolepsis", "pos": "n.", "meaning": "預敘；前敘", "sentence e": "The prolepsis at the beginning foreshadows the tragic ending.", "sentence c": "開頭的預敘暗示了悲劇的結局。"}, {"word": "prologue", "pos": "n.", "meaning": "序言", "sentence e": "The prologue introduces the setting and the main conflict.", "sentence c": "序言介紹了故事背景與主要衝突。"}, {"word": "resolution", "pos": "n.", "meaning": "結局；(問題)解決", "sentence e": "In the resolution, the family finally reunites and the conflict is settled.", "sentence c": "在結局中，一家人終於團聚，衝突得到了解決。"}, {"word": "scene", "pos": "n.", "meaning": "場景；場景敘事", "sentence e": "In the scene, the conversation unfolds in real-time without summary.", "sentence c": "在場景中，對話即時展開，沒有概括。"}, {"word": "stream of consciousness", "pos": "n.", "meaning": "意識流", "sentence e": "James Joyce uses stream of consciousness to mimic inner thoughts.", "sentence c": "詹姆斯·喬伊斯使用意識流來模仿內心思緒。"}, {"word": "subplot", "pos": "n.", "meaning": "次要情節；支線", "sentence e": "The subplot involving the detective's personal life adds depth to the main story.", "sentence c": "涉及偵探個人生活的次要情節為主線增添了深度。"}, {"word": "summary", "pos": "n.", "meaning": "概括；概要敘事", "sentence e": "The author uses a summary to quickly cover the protagonist's uneventful years.", "sentence c": "作者使用概括來快速交代主角平淡的幾年。"}, {"word": "third-person limited", "pos": "n.", "meaning": "第三人稱有限視角", "sentence e": "Third-person limited narration reveals only one character's thoughts.", "sentence c": "第三人稱有限視角僅揭示單一角色的想法。"}, {"word": "third-person omniscient", "pos": "n.", "meaning": "第三人稱全知視角", "sentence e": "Third-person omniscient narration knows everything about all characters.", "sentence c": "第三人稱全知視角了解所有角色的一切。"}, {"word": "transition", "pos": "n.", "meaning": "過渡", "sentence e": "Use transition words like \"however\" and \"moreover\" to improve the flow of your essay.", "sentence c": "使用像「然而」和「此外」之類的過渡詞來改善文章的連貫性。"}, {"word": "unreliable narrator", "pos": "n.", "meaning": "不可靠的敘事者", "sentence e": "The reader cannot fully trust the story told by an unreliable narrator.", "sentence c": "讀者無法完全信任不可靠敘事者所講述的故事。"}, {"word": "zero focalization", "pos": "n.", "meaning": "零聚焦；全知聚焦", "sentence e": "Zero focalization allows the narrator to know everything about all characters.", "sentence c": "零聚焦允許敘事者了解所有角色的一切。"}], "poetic-devices": [{"word": "alliteration", "pos": "n.", "meaning": "頭韻", "sentence e": "\"She sells seashells\" uses alliteration with the \"s\" sound.", "sentence c": "「she sells seashells」使用了 s 音的頭韻。"}, {"word": "assonance", "pos": "n.", "meaning": "母韻；元音韻", "sentence e": "The repetition of the long \"o\" sound in \"slow motion\" is assonance.", "sentence c": "「slow motion」中長 o 音的重複就是母韻。"}, {"word": "caesura", "pos": "n.", "meaning": "詩行中間的停頓", "sentence e": "A strong caesura appears after the word \"death\" in the middle of the line.", "sentence c": "在詩行中間，「death」一詞之後出現一個強烈的停頓。"}, {"word": "consonance", "pos": "n.", "meaning": "子音韻", "sentence e": "\"Pitter-patter\" shows consonance with the \"t\" and \"r\" sounds.", "sentence c": "「pitter-patter」展現了 t 與 r 音的子音韻。"}, {"word": "elegy", "pos": "n.", "meaning": "輓歌", "sentence e": "In Memoriam by Tennyson is a long elegy for a lost friend.", "sentence c": "丁尼生的《紀念》是為逝去友人寫的長篇輓歌。"}, {"word": "enjambment", "pos": "n.", "meaning": "跨行；跨句", "sentence e": "The sentence continues to the next line without pause, creating enjambment.", "sentence c": "句子未停頓直接延續到下一行，形成跨行。"}, {"word": "foot", "pos": "n.", "meaning": "音步", "sentence e": "Iambic pentameter consists of five feet per line.", "sentence c": "抑揚格五音步每行包含五個音步。"}, {"word": "free verse", "pos": "n.", "meaning": "自由詩", "sentence e": "Modern poets often use free verse with no regular meter or rhyme.", "sentence c": "現代詩人經常使用無固定格律或押韻的自由詩。"}, {"word": "iamb", "pos": "n.", "meaning": "抑揚格", "sentence e": "An iamb is an unstressed syllable followed by a stressed syllable.", "sentence c": "抑揚格是一個非重讀音節後接一個重讀音節。"}, {"word": "meter", "pos": "n.", "meaning": "格律；音步", "sentence e": "The poem is written in iambic pentameter.", "sentence c": "這首詩是以抑揚格五音步寫成的。"}, {"word": "ode", "pos": "n.", "meaning": "頌詩", "sentence e": "Keats wrote \"Ode on a Grecian Urn\" as a celebration of art and beauty.", "sentence c": "濟慈寫下《希臘古甕頌》來歌頌藝術與美。"}, {"word": "rhyme", "pos": "n.", "meaning": "押韻", "sentence e": "The poet uses rhyme to create a musical effect.", "sentence c": "詩人使用押韻來營造音樂效果。"}, {"word": "rhythm", "pos": "n.", "meaning": "節奏", "sentence e": "The rhythm of the poem mimics the sound of waves.", "sentence c": "詩的節奏模仿了海浪的聲音。"}, {"word": "sonnet", "pos": "n.", "meaning": "十四行詩", "sentence e": "Shakespeare wrote 154 sonnets following a specific rhyme scheme.", "sentence c": "莎士比亞按照特定押韻格式創作了154首十四行詩。"}, {"word": "stanza", "pos": "n.", "meaning": "詩節", "sentence e": "Each stanza in the poem explores a different season.", "sentence c": "詩中的每個詩節探討一個不同的季節。"}, {"word": "trochee", "pos": "n.", "meaning": "揚抑格", "sentence e": "A trochee is a stressed syllable followed by an unstressed syllable.", "sentence c": "揚抑格是一個重讀音節後接一個非重讀音節。"}, {"word": "villanelle", "pos": "n.", "meaning": "維拉內拉詩", "sentence e": "\"Do not go gentle into that good night\" is a famous villanelle.", "sentence c": "《溫柔地不要走進那良夜》是一首著名的維拉內拉詩。"}], "reading-skills": [{"word": "biased", "pos": "adj.", "meaning": "有偏見的", "sentence e": "The news article was criticized for being biased toward the ruling party.", "sentence c": "這篇新聞報導因偏袒執政黨而受到批評。"}, {"word": "comprehension", "pos": "n.", "meaning": "理解；閱讀理解", "sentence e": "Reading comprehension is essential for academic success.", "sentence c": "閱讀理解是學業成功的關鍵。"}, {"word": "condescending", "pos": "adj.", "meaning": "居高臨下的", "sentence e": "The professor's condescending tone made the students feel unintelligent.", "sentence c": "教授那居高臨下的語氣讓學生們覺得自己很不聰明。"}, {"word": "context clue", "pos": "n.", "meaning": "上下文線索", "sentence e": "Readers can use context clues to guess the meaning of unfamiliar words.", "sentence c": "讀者可以利用上下文線索猜測生詞的含義。"}, {"word": "cynical", "pos": "adj.", "meaning": "憤世嫉俗的；懷疑人性自私的", "sentence e": "The author's cynical view suggests that people only help others for personal gain.", "sentence c": "作者憤世嫉俗的觀點暗示人們幫助他人只是為了個人利益。"}, {"word": "indifferent", "pos": "adj.", "meaning": "冷淡的；不在意的", "sentence e": "The protagonist remained indifferent to the suffering of those around him.", "sentence c": "主角對身邊人的痛苦保持冷漠。"}, {"word": "inference", "pos": "n.", "meaning": "推論；推斷", "sentence e": "Making inferences helps readers understand what is not directly stated.", "sentence c": "做出推論能幫助讀者理解未直接陳述的內容。"}, {"word": "main idea", "pos": "n.", "meaning": "主旨；中心思想", "sentence e": "Identifying the main idea is the first step in summarizing a text.", "sentence c": "識別主旨是總結文本的第一步。"}, {"word": "nostalgic", "pos": "adj.", "meaning": "懷舊的", "sentence e": "The poem has a nostalgic tone, reflecting on the simple joys of childhood.", "sentence c": "這首詩帶有懷舊的語調，反思童年簡單的快樂。"}, {"word": "optimistic", "pos": "adj.", "meaning": "樂觀的", "sentence e": "Despite the challenges, the author maintains an optimistic outlook for the future.", "sentence c": "儘管面臨挑戰，作者對未來仍保持樂觀的見解。"}, {"word": "reverent", "pos": "adj.", "meaning": "虔誠的；恭敬的", "sentence e": "The biographer wrote in a reverent tone when describing the leader's sacrifices.", "sentence c": "傳記作者在描述這位領袖的犧牲時，語氣充滿了崇敬。"}, {"word": "sardonic", "pos": "adj.", "meaning": "嘲諷的；譏諷的", "sentence e": "His sardonic laugh suggested that he didn't believe a word of the explanation.", "sentence c": "他那譏諷的笑聲暗示他對那番解釋一個字也不信。"}, {"word": "skeptical", "pos": "adj.", "meaning": "懷疑的", "sentence e": "Many scientists remain skeptical about the new claims until they see data.", "sentence c": "許多科學家在看到數據之前，對這些新主張仍持懷疑態度。"}, {"word": "supporting detail", "pos": "n.", "meaning": "支持細節；佐證細節", "sentence e": "Supporting details provide evidence for the main idea.", "sentence c": "支持細節為主旨提供證據。"}], "structure": [{"word": "argumentative paragraph", "pos": "n.", "meaning": "論證段；議論文段", "sentence e": "An argumentative paragraph presents a claim supported by evidence and reasoning.", "sentence c": "論證段提出一個由證據與推理支持的主張。"}, {"word": "block paragraph", "pos": "n.", "meaning": "齊頭式段落", "sentence e": "Block paragraphs have no indentation but are separated by a blank line.", "sentence c": "齊頭式段落無縮排，但以空行分隔。"}, {"word": "body paragraph", "pos": "n.", "meaning": "主體段；論證段", "sentence e": "Each body paragraph develops one main point that supports the thesis.", "sentence c": "每個主體段發展一個支持論點的主要觀點。"}, {"word": "cause and effect", "pos": "n.", "meaning": "因果關係", "sentence e": "A cause-and-effect paragraph explains why something happens and what results from it.", "sentence c": "因果段落解釋某事發生的原因及其結果。"}, {"word": "cause-and-effect", "pos": "n.", "meaning": "因果關係", "sentence e": "A cause-and-effect structure explains why an event occurred and what resulted from it.", "sentence c": "因果結構解釋事件發生的原因及其結果。"}, {"word": "chronological order", "pos": "n.", "meaning": "時間順序", "sentence e": "Chronological order arranges events in the sequence they occurred.", "sentence c": "時間順序按事件發生的先後排列。"}, {"word": "clarity", "pos": "n.", "meaning": "清晰", "sentence e": "Good writing is marked by clarity and precision.", "sentence c": "好的寫作以清晰與精確為特點。"}, {"word": "classification", "pos": "n.", "meaning": "分類", "sentence e": "Classification organizes ideas into categories for clearer understanding.", "sentence c": "分類將觀點歸入不同類別以利清晰理解。"}, {"word": "clincher", "pos": "n.", "meaning": "有力結尾；點睛句", "sentence e": "A clincher is a memorable final sentence that reinforces the main point.", "sentence c": "有力結尾是令人難忘的最後一句，用以強化主旨。"}, {"word": "coherence", "pos": "n.", "meaning": "連貫性", "sentence e": "The essay lacks coherence between paragraphs.", "sentence c": "這篇文章在段落之間缺乏連貫性。"}, {"word": "compare-and-contrast", "pos": "n.", "meaning": "比較與對比", "sentence e": "The essay uses a compare-and-contrast pattern to analyze two literary movements.", "sentence c": "文章使用比較與對比模式分析兩個文學運動。"}, {"word": "comparison", "pos": "n.", "meaning": "比較", "sentence e": "Comparison highlights similarities between two or more items.", "sentence c": "比較強調兩個或多個項目之間的相似之處。"}, {"word": "concluding paragraph", "pos": "n.", "meaning": "結論段；總結段", "sentence e": "The concluding paragraph restates the thesis and synthesizes key arguments.", "sentence c": "結論段重述論點並綜合關鍵論證。"}, {"word": "concluding sentence", "pos": "n.", "meaning": "結尾句", "sentence e": "A concluding sentence summarizes the main point of the paragraph.", "sentence c": "結尾句總結段落的主要觀點。"}, {"word": "contrast", "pos": "n.", "meaning": "對比", "sentence e": "Contrast emphasizes differences to clarify distinctions.", "sentence c": "對比強調差異以釐清區別。"}, {"word": "controlling idea", "pos": "n.", "meaning": "控制概念；限定主旨", "sentence e": "The controlling idea in the topic sentence limits the scope of the paragraph.", "sentence c": "主題句中的控制概念限定了段落的討論範圍。"}, {"word": "definition", "pos": "n.", "meaning": "定義", "sentence e": "A definition paragraph explains the meaning of a term or concept.", "sentence c": "定義段落解釋某個術語或概念的含義。"}, {"word": "descriptive paragraph", "pos": "n.", "meaning": "描述段", "sentence e": "A descriptive paragraph uses sensory details to create a vivid picture.", "sentence c": "描述段運用感官細節營造生動畫面。"}, {"word": "exemplification", "pos": "n.", "meaning": "舉例說明", "sentence e": "Exemplification uses specific cases to illustrate a general point.", "sentence c": "舉例說明使用具體案例來闡釋一般觀點。"}, {"word": "expository paragraph", "pos": "n.", "meaning": "說明段", "sentence e": "An expository paragraph explains or informs about a topic objectively.", "sentence c": "說明段客觀地解釋或介紹某個主題。"}, {"word": "indentation", "pos": "n.", "meaning": "縮排", "sentence e": "Indentation signals the beginning of a new paragraph in formal writing.", "sentence c": "縮排在正式寫作中標示新段落的開始。"}, {"word": "introductory paragraph", "pos": "n.", "meaning": "引言段；開頭段", "sentence e": "The introductory paragraph presents the topic and thesis statement.", "sentence c": "引言段提出主題與論點陳述。"}, {"word": "lexical cohesion", "pos": "n.", "meaning": "詞彙銜接", "sentence e": "Lexical cohesion uses synonyms and related words to link ideas.", "sentence c": "詞彙銜接使用同義詞與相關詞彙來連接觀點。"}, {"word": "logical", "pos": "adj.", "meaning": "合邏輯的", "sentence e": "The argument is logical and well-structured.", "sentence c": "這個論點合邏輯且結構良好。"}, {"word": "narrative paragraph", "pos": "n.", "meaning": "敘事段", "sentence e": "A narrative paragraph tells a short story or recounts an event in sequence.", "sentence c": "敘事段講述一個小故事或按順序敘述事件。"}, {"word": "order of importance", "pos": "n.", "meaning": "重要性順序", "sentence e": "Order of importance arranges points from most to least significant (or vice versa).", "sentence c": "重要性順序按從最重要到最不重要（或相反）排列觀點。"}, {"word": "paragraph development", "pos": "n.", "meaning": "段落展開；段落發展", "sentence e": "Common methods of paragraph development include exemplification and comparison.", "sentence c": "常見的段落展開方法包括舉例與比較。"}, {"word": "paragraph hook", "pos": "n.", "meaning": "段落引子；開頭鉤子", "sentence e": "A paragraph hook grabs the reader's attention at the beginning.", "sentence c": "段落引子在開頭吸引讀者的注意力。"}, {"word": "paragraph length", "pos": "n.", "meaning": "段落長度", "sentence e": "Varying paragraph length helps maintain reader engagement and control pacing.", "sentence c": "變化段落長度有助於維持讀者興趣並控制節奏。"}, {"word": "parallel structure", "pos": "n.", "meaning": "平行結構；排比句式", "sentence e": "Parallel structure uses the same grammatical pattern for items in a list.", "sentence c": "平行結構對列表中的項目使用相同的語法模式。"}, {"word": "problem-solution", "pos": "n.", "meaning": "問題與解決", "sentence e": "The article follows a problem-solution framework to address urban pollution.", "sentence c": "文章遵循問題與解決框架來探討都市污染。"}, {"word": "process analysis", "pos": "n.", "meaning": "過程分析", "sentence e": "Process analysis breaks down a procedure into step-by-step instructions.", "sentence c": "過程分析將一個程序分解為逐步說明。"}, {"word": "pronoun reference", "pos": "n.", "meaning": "代詞指代", "sentence e": "Clear pronoun reference avoids confusion about what 'it' or 'they' refers to.", "sentence c": "清晰的代詞指代可避免 'it' 或 'they' 所指不明的混淆。"}, {"word": "repetition for emphasis", "pos": "n.", "meaning": "強調性重複", "sentence e": "Strategic repetition of key words can reinforce the paragraph's message.", "sentence c": "策略性地重複關鍵詞可以強化段落訊息。"}, {"word": "spatial order", "pos": "n.", "meaning": "空間順序", "sentence e": "Spatial order describes a scene from left to right or top to bottom.", "sentence c": "空間順序從左到右或從上到下描述場景。"}, {"word": "supporting sentence", "pos": "n.", "meaning": "支持句；佐證句", "sentence e": "Supporting sentences provide examples and evidence to develop the topic sentence.", "sentence c": "支持句提供例子與證據來發展主題句。"}, {"word": "topic sentence", "pos": "n.", "meaning": "主題句；主旨句", "sentence e": "A strong topic sentence clearly states the main idea of the paragraph.", "sentence c": "一個有力的主題句能清楚陳述段落的主要觀點。"}, {"word": "transition word", "pos": "n.", "meaning": "過渡詞；連接詞", "sentence e": "Transition words like 'furthermore' and 'however' help connect ideas between sentences.", "sentence c": "像 'furthermore' 和 'however' 這類過渡詞有助於連接句與句之間的觀點。"}, {"word": "transitional phrase", "pos": "n.", "meaning": "過渡片語", "sentence e": "Transitional phrases such as 'on the other hand' signal a shift in perspective.", "sentence c": "像 'on the other hand' 這類過渡片語標示觀點的轉換。"}, {"word": "unity", "pos": "n.", "meaning": "統一性；一致性", "sentence e": "Paragraph unity means every sentence relates directly to the main idea.", "sentence c": "段落統一性意味著每句話都直接關聯主旨。"}], "writing": [{"word": "brainstorm", "pos": "v.", "meaning": "腦力激盪；構思", "sentence e": "Before writing, brainstorm ideas to organize your thoughts.", "sentence c": "寫作前先進行腦力激盪，整理思路。"}, {"word": "colloquial", "pos": "adj.", "meaning": "口語的；非正式的", "sentence e": "The writer uses colloquial language to make the characters sound more authentic.", "sentence c": "作者使用口語化的語言，使角色聽起來更加真實。"}, {"word": "concise", "pos": "adj.", "meaning": "簡潔的", "sentence e": "The editor asked the writer to make the paragraph more concise by removing extra words.", "sentence c": "編輯要求作者刪除多餘的字詞，使段落更加簡潔。"}, {"word": "draft", "pos": "n.", "meaning": "草稿；初稿", "sentence e": "The first draft doesn't need to be perfect; you can revise later.", "sentence c": "初稿不需要完美，你可以稍後修改。"}, {"word": "eloquent", "pos": "adj.", "meaning": "雄辯的；口才流利的", "sentence e": "The activist gave an eloquent speech that moved many in the audience.", "sentence c": "這位活動家發表了一場動人的雄辯演說，感動了許多觀眾。"}, {"word": "figurative", "pos": "adj.", "meaning": "比喻的", "sentence e": "\"Broken heart\" is a figurative expression.", "sentence c": "「心碎」是一種比喻性表達。"}, {"word": "literal", "pos": "adj.", "meaning": "字面的", "sentence e": "Don't take his words literally; he was being sarcastic.", "sentence c": "不要字面理解他的話；他在諷刺。"}, {"word": "objective", "pos": "adj.", "meaning": "客觀的", "sentence e": "News reporters are expected to give an objective account of events without personal bias.", "sentence c": "新聞記者被要求對事件進行客觀報導，而不帶個人偏見。"}, {"word": "ornate", "pos": "adj.", "meaning": "華麗的", "sentence e": "The Victorian novel was known for its ornate and flowery language.", "sentence c": "這部維多利亞時代的小說以其華麗且詞藻豐富的語言聞名。"}, {"word": "outline", "pos": "n.", "meaning": "大綱；提綱", "sentence e": "Creating an outline helps structure your essay logically.", "sentence c": "製作大綱有助於邏輯性地組織文章結構。"}, {"word": "peer review", "pos": "n.", "meaning": "同儕評閱", "sentence e": "Peer review allows students to give and receive constructive feedback.", "sentence c": "同儕評閱讓學生能夠給予並接收建設性回饋。"}, {"word": "redundant", "pos": "adj.", "meaning": "贅述的；多餘的", "sentence e": "Mentioning the \"blue sky\" as \"blue\" is sometimes considered redundant in creative writing.", "sentence c": "在創意寫作中，提到「藍色的藍天」有時被認為是贅述。"}, {"word": "revise", "pos": "v.", "meaning": "修訂；修改", "sentence e": "Revise your essay to improve clarity and coherence.", "sentence c": "修訂文章以提升清晰度與連貫性。"}, {"word": "subjective", "pos": "adj.", "meaning": "主觀的", "sentence e": "Your opinion of the movie is purely subjective and depends on your personal taste.", "sentence c": "你對這部電影的評價純粹是主觀的，取決於你個人的品味。"}, {"word": "verbose", "pos": "adj.", "meaning": "冗長的", "sentence e": "His writing style is often verbose, making simple ideas hard to understand.", "sentence c": "他的寫作風格通常很冗長，使簡單的想法變得難以理解。"}]};
+
+// ── STRAND CONFIG ──
+const STRAND_CONFIG = {
+  'literary':          { icon: '🌿', color: '#5a7a5c' },
+  'narrative':         { icon: '📜', color: '#7a5a2a' },
+  'academic':          { icon: '🎓', color: '#3d4f8a' },
+  'structure':         { icon: '🏛️', color: '#6a4a8a' },
+  'drama':             { icon: '🎭', color: '#b85c6e' },
+  'critics':           { icon: '🔍', color: '#2d6a7a' },
+  'character-analysis':{ icon: '🪞', color: '#8a5a2a' },
+  'grammar':           { icon: '✍️', color: '#2a7a5a' },
+  'poetic-devices':    { icon: '🌸', color: '#b8629a' },
+  'writing':           { icon: '🖋️', color: '#5a7a8a' },
+  'reading-skills':    { icon: '👁️', color: '#8a7a2a' },
+  'genre':             { icon: '📚', color: '#4a6a8a' },
+  'argumentation':     { icon: '⚖️', color: '#7a4a4a' },
+};
+
+// ── STATE ──
+let currentStrand = null;
+let starred = new Set(JSON.parse(localStorage.getItem('la_starred') || '[]'));
+let currentTab = 'strands';
+let listMode = false;
+// Flashcard state
+let fcDeck = [];
+let fcIndex = 0;
+let fcStarredMode = false;
+
+// ── HELPERS ──
+function saveStarred() { localStorage.setItem('la_starred', JSON.stringify([...starred])); }
+function wordKey(strand, word) { return strand + '::' + word; }
+function allWords() {
+  const arr = [];
+  for (const [strand, words] of Object.entries(DATA)) words.forEach(w => arr.push({...w, strand}));
+  return arr;
+}
+
+// ── STRAND VIEW ──
+function renderStrands() {
+  const sv = document.getElementById('strandView');
+  sv.innerHTML = '';
+  const strands = Object.entries(DATA).sort((a,b) => b[1].length - a[1].length);
+  strands.forEach(([name, words], i) => {
+    const cfg = STRAND_CONFIG[name] || { icon: '📖', color: '#c9973a' };
+    const preview = words[0] ? words[0].word + ' · ' + words[0].meaning : '';
+    const card = document.createElement('div');
+    card.className = 'strand-card';
+    card.style.setProperty('--strand-color', cfg.color);
+    card.style.animationDelay = (i * 0.04) + 's';
+    card.innerHTML = `
+      <span class="strand-icon">${cfg.icon}</span>
+      <div class="strand-name">${name.replace(/-/g,' ')}</div>
+      <div class="strand-count">${words.length} terms</div>
+      <div class="strand-preview">${preview}</div>
+    `;
+    card.onclick = () => openStrand(name);
+    sv.appendChild(card);
+  });
+}
+
+// ── WORD VIEW ──
+function openStrand(name) {
+  currentStrand = name;
+  const cfg = STRAND_CONFIG[name] || { icon: '📖', color: '#c9973a' };
+  document.getElementById('strandView').style.display = 'none';
+  document.getElementById('wordView').style.display = 'block';
+  document.getElementById('backBtn').style.display = 'flex';
+  document.getElementById('searchResultsView').style.display = 'none';
+
+  const bar = document.getElementById('strandTitleBar');
+  bar.innerHTML = `
+    <span style="font-size:1.8rem">${cfg.icon}</span>
+    <h2 style="font-family:'Playfair Display',serif;">${name.replace(/-/g,' ')}</h2>
+    <span class="strand-badge" style="background:${cfg.color}">${DATA[name].length} terms</span>
+    <div class="view-toggle" style="margin-left:auto">
+      <button class="view-btn active" id="gridBtn" onclick="setListMode(false)" title="Grid">⊞</button>
+      <button class="view-btn" id="listBtn" onclick="setListMode(true)" title="List">☰</button>
+    </div>
+  `;
+  renderWords(DATA[name], name);
+}
+
+function setListMode(mode) {
+  listMode = mode;
+  document.getElementById('gridBtn').classList.toggle('active', !mode);
+  document.getElementById('listBtn').classList.toggle('active', mode);
+  document.getElementById('wordGrid').className = 'word-grid' + (mode ? ' list-mode' : '');
+  if (currentStrand) renderWords(DATA[currentStrand], currentStrand);
+}
+
+function renderWords(words, strand, highlight='') {
+  const grid = document.getElementById('wordGrid');
+  grid.className = listMode ? 'list-mode' : '';
+  grid.innerHTML = '';
+  words.forEach((w, idx) => {
+    grid.appendChild(buildWordCard(w, strand, highlight, idx));
+  });
+}
+
+function buildWordCard(w, strand, highlight='', idx=0) {
+  const key = wordKey(strand, w.word);
+  const isStarred = starred.has(key);
+  const hl = (str) => highlight ? str.replace(new RegExp(`(${highlight})`, 'gi'), '<mark>$1</mark>') : str;
+
+  const card = document.createElement('div');
+  card.className = 'word-card' + (isStarred ? ' starred' : '');
+  card.style.animationDelay = (idx * 0.03) + 's';
+  card.dataset.key = key;
+
+  card.innerHTML = `
+    <div class="word-card-head">
+      <div>
+        <div class="word-english">${hl(w.word)}</div>
+        <div class="word-pos">${w.pos}</div>
+      </div>
+    </div>
+    <div class="word-chinese">${hl(w.meaning)}</div>
+    <div class="sentences">
+      <div class="sentence-label">English</div>
+      <div class="sentence">${hl(w['sentence e'] || '')}</div>
+      <div class="sentence-label" style="margin-top:0.5rem">中文</div>
+      <div class="sentence cn">${hl(w['sentence c'] || '')}</div>
+    </div>
+    <div class="card-actions">
+      <button class="btn-pronounce" onclick="pronounce('${w.word.replace(/'/g,"\\'")}',this)">🔊 Pronounce</button>
+      <button class="btn-star" onclick="toggleStar('${key}',this,'${strand}')" title="Star this word">${isStarred ? '⭐' : '☆'}</button>
+    </div>
+  `;
+  return card;
+}
+
+// ── PRONUNCIATION ──
+function pronounce(word, btn) {
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'en-US'; u.rate = 0.85;
+    btn.textContent = '🔊 …';
+    u.onend = () => btn.textContent = '🔊 Pronounce';
+    speechSynthesis.speak(u);
+  } else {
+    alert('Speech synthesis not supported in this browser.');
+  }
+}
+
+// ── STAR ──
+function toggleStar(key, btn, strand) {
+  if (starred.has(key)) {
+    starred.delete(key);
+    btn.textContent = '☆';
+    btn.closest('.word-card').classList.remove('starred');
+  } else {
+    starred.add(key);
+    btn.textContent = '⭐';
+    btn.closest('.word-card').classList.add('starred');
+    showToast('⭐ Word starred!');
+  }
+  saveStarred();
+  document.getElementById('starCount').textContent = starred.size;
+  if (currentTab === 'starred') renderStarred();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('starToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ── NAVIGATION ──
+function showTab(tab) {
+  currentTab = tab;
+  // Update tabs
+  ['strands','flashcard','starred'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))?.classList.toggle('active', t === tab);
+  });
+  // Hide all views
+  document.getElementById('strandView').style.display = 'none';
+  document.getElementById('wordView').style.display = 'none';
+  document.getElementById('flashcardView').style.display = 'none';
+  document.getElementById('starredView').style.display = 'none';
+  document.getElementById('searchResultsView').style.display = 'none';
+  document.getElementById('backBtn').style.display = 'none';
+  clearSearch();
+
+  if (tab === 'strands') {
+    document.getElementById('strandView').style.display = 'grid';
+  } else if (tab === 'flashcard') {
+    document.getElementById('flashcardView').style.display = 'flex';
+    initFlashcard();
+  } else if (tab === 'starred') {
+    document.getElementById('starredView').style.display = 'block';
+    renderStarred();
+  }
+}
+
+function goBack() {
+  currentStrand = null;
+  document.getElementById('wordView').style.display = 'none';
+  document.getElementById('strandView').style.display = 'grid';
+  document.getElementById('backBtn').style.display = 'none';
+  document.getElementById('searchResultsView').style.display = 'none';
+  clearSearch();
+}
+
+// ── SEARCH ──
+function handleSearch(val) {
+  const v = val.trim();
+  document.getElementById('clearBtn').style.display = v ? 'block' : 'none';
+  if (!v) {
+    document.getElementById('searchCount').textContent = '';
+    document.getElementById('searchResultsView').style.display = 'none';
+    if (currentTab === 'strands' && !currentStrand) {
+      document.getElementById('strandView').style.display = 'grid';
+    } else if (currentStrand) {
+      document.getElementById('wordView').style.display = 'block';
+      renderWords(DATA[currentStrand], currentStrand);
+    }
+    return;
+  }
+
+  const lower = v.toLowerCase();
+  const allW = allWords();
+  const hits = allW.filter(w =>
+    w.word.toLowerCase().includes(lower) ||
+    w.meaning.includes(v) ||
+    (w['sentence e'] || '').toLowerCase().includes(lower) ||
+    (w['sentence c'] || '').includes(v)
+  );
+
+  document.getElementById('searchCount').textContent = hits.length + ' result' + (hits.length !== 1 ? 's' : '');
+
+  // Show results in searchResultsView
+  document.getElementById('strandView').style.display = 'none';
+  document.getElementById('wordView').style.display = 'none';
+  document.getElementById('flashcardView').style.display = 'none';
+  document.getElementById('starredView').style.display = 'none';
+
+  const rv = document.getElementById('searchResultsView');
+  rv.style.display = 'block';
+  rv.innerHTML = '';
+
+  if (hits.length === 0) {
+    rv.innerHTML = '<p style="text-align:center;padding:3rem;font-style:italic;color:var(--mist)">No results found for "' + v + '"</p>';
+    return;
+  }
+
+  // Group by strand
+  const grouped = {};
+  hits.forEach(w => {
+    if (!grouped[w.strand]) grouped[w.strand] = [];
+    grouped[w.strand].push(w);
+  });
+
+  const grid = document.createElement('div');
+  grid.id = 'wordGrid';
+  grid.className = listMode ? 'list-mode' : '';
+  let idx = 0;
+
+  for (const [strand, words] of Object.entries(grouped)) {
+    const label = document.createElement('div');
+    label.className = 'search-result-strand';
+    const cfg = STRAND_CONFIG[strand] || { icon: '📖' };
+    label.textContent = cfg.icon + ' ' + strand.replace(/-/g,' ').toUpperCase();
+    rv.appendChild(label);
+
+    const sg = document.createElement('div');
+    sg.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-bottom:1rem';
+    words.forEach(w => sg.appendChild(buildWordCard(w, strand, v, idx++)));
+    rv.appendChild(sg);
+  }
+}
+
+function clearSearch() {
+  const inp = document.getElementById('globalSearch');
+  inp.value = '';
+  document.getElementById('clearBtn').style.display = 'none';
+  document.getElementById('searchCount').textContent = '';
+  document.getElementById('searchResultsView').style.display = 'none';
+  if (currentTab === 'strands' && !currentStrand) {
+    document.getElementById('strandView').style.display = 'grid';
+  } else if (currentStrand) {
+    document.getElementById('wordView').style.display = 'block';
+    renderWords(DATA[currentStrand], currentStrand);
+  }
+}
+
+// ── FLASHCARD ──
+function initFlashcard(useStarred=false) {
+  fcStarredMode = useStarred;
+  let words = allWords();
+  if (useStarred) words = words.filter(w => starred.has(wordKey(w.strand, w.word)));
+  fcDeck = words;
+  fcIndex = 0;
+  document.getElementById('fcDeckInfo').textContent = fcDeck.length + ' cards in deck';
+  document.getElementById('fcStarBtn').textContent = useStarred ? '⭐ All Words' : '⭐ Starred Only';
+  renderFcCard();
+}
+
+function renderFcCard() {
+  const inner = document.getElementById('fcInner');
+  inner.classList.remove('flipped');
+  if (fcDeck.length === 0) {
+    document.getElementById('fcWord').textContent = '(no cards)';
+    document.getElementById('fcMeaning').textContent = '—';
+    document.getElementById('fcSentE').textContent = '';
+    document.getElementById('fcSentC').textContent = '';
+    document.getElementById('fcProgress').textContent = '0 / 0';
+    return;
+  }
+  const w = fcDeck[fcIndex];
+  document.getElementById('fcWord').textContent = w.word;
+  document.getElementById('fcMeaning').textContent = w.meaning;
+  document.getElementById('fcSentE').textContent = w['sentence e'] || '';
+  document.getElementById('fcSentC').textContent = w['sentence c'] || '';
+  document.getElementById('fcProgress').textContent = (fcIndex + 1) + ' / ' + fcDeck.length;
+  document.getElementById('fcDeckInfo').textContent = fcDeck.length + ' cards · ' + w.strand.replace(/-/g,' ');
+}
+
+function flipCard() {
+  document.getElementById('fcInner').classList.toggle('flipped');
+  if ('speechSynthesis' in window) {
+    const w = fcDeck[fcIndex];
+    if (w && !document.getElementById('fcInner').classList.contains('flipped')) return;
+    if (w) {
+      const u = new SpeechSynthesisUtterance(w.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    }
+  }
+}
+
+function fcNext() { if (fcDeck.length) { fcIndex = (fcIndex+1) % fcDeck.length; renderFcCard(); } }
+function fcPrev() { if (fcDeck.length) { fcIndex = (fcIndex - 1 + fcDeck.length) % fcDeck.length; renderFcCard(); } }
+function fcShuffle() {
+  for (let i = fcDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [fcDeck[i], fcDeck[j]] = [fcDeck[j], fcDeck[i]];
+  }
+  fcIndex = 0; renderFcCard();
+}
+function fcStarredOnly() { initFlashcard(!fcStarredMode); }
+function fcReset() { fcIndex = 0; renderFcCard(); }
+
+// ── STARRED VIEW ──
+function renderStarred() {
+  const sg = document.getElementById('starredGrid');
+  sg.innerHTML = '';
+  const words = allWords().filter(w => starred.has(wordKey(w.strand, w.word)));
+  if (words.length === 0) {
+    sg.innerHTML = '<p class="starred-empty">✦ No starred words yet.<br>Star words while studying to collect them here.</p>';
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem';
+  words.forEach((w,i) => grid.appendChild(buildWordCard(w, w.strand, '', i)));
+  sg.appendChild(grid);
+}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', e => {
+  if (document.activeElement === document.getElementById('globalSearch')) return;
+  if (e.key === 'ArrowRight' && currentTab === 'flashcard') fcNext();
+  if (e.key === 'ArrowLeft' && currentTab === 'flashcard') fcPrev();
+  if (e.key === ' ' && currentTab === 'flashcard') { e.preventDefault(); flipCard(); }
+});
+
+// ── INIT ──
+document.getElementById('starCount').textContent = starred.size;
+renderStrands();
+initFlashcard();
+</script>
+</body>
+</html>
