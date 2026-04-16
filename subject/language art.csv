@@ -28,340 +28,341 @@ subject,word,pos,meaning,sentence e,sentence c
  academic,plagiarism,v.,改寫；轉述,"When you paraphrase, you must rewrite the idea completely in your own words.",改寫時，必須用自己的話完全重述該想法。
  academic,primary source,n.,抄襲；剽竊,Plagiarism is presenting someone else's work as your own.,抄襲是將他人的作品當作自己的呈現。
  academic,quotation block,n.,一手資料；原始資料,A primary source provides direct evidence about a topic.,一手資料提供關於主題的直接證據。
- academic,rebuttal,n.,整段引用,Long quotations exceeding four lines should be formatted as a block quotation.,超過四行的長引用應排版為整段引用格式。
- academic,secondary source,n.,反駁；辯駁,The rebuttal uses logical reasoning to dismantle the opposing view.,反駁部分運用邏輯推理來推翻對立觀點。
- academic,signpost,n.,二手資料；間接資料,A secondary source analyzes or interprets primary sources.,二手資料分析或詮釋一手資料。
- academic,source triangulation,n.,路標詞；指引,"Signposts like 'firstly,' 'conversely,' and 'ultimately' guide readers through the argument.",像「首先」、「相反地」和「最終」這類路標詞能引導讀者理解論證脈絡。
- academic,stance marker,n.,資料三角驗證,Source triangulation strengthens credibility by cross-referencing multiple independent sources.,資料三角驗證透過交叉比對多個獨立來源來提升可信度。
- academic,synthesis,n.,立場標記詞,"Stance markers like 'arguably,' 'undoubtedly,' or 'it seems' reveal the writer's position.",立場標記詞（如「可說」、「無疑」、「似乎」）揭示作者的立場。
- academic,thematic paragraph,n.,綜合；整合,Synthesis involves combining multiple sources to create a new perspective.,綜合是指整合多個來源以創造新的觀點。
- academic,thesis statement,n.,主題段,Thematic paragraphs organize ideas by concept rather than chronologically.,主題段按概念而非時間順序來組織觀點。
- academic,Toulmin model,n.,論文主旨句,The thesis statement clearly outlines the argument and scope of the paper.,論文主旨句清楚勾勒出文章的論點與範圍。
- academic,transitional hook,n.,圖爾敏論證模型,"The Toulmin model breaks arguments into claim, data, warrant, backing, and rebuttal.",圖爾敏模型將論證拆解為主張、資料、理據、支撐與反駁。
- academic,warrant,n.,過渡鉤子；承上啟下句,A transitional hook at the end of a paragraph links to the next section's topic.,段落結尾的過渡鉤子能將內容連結至下一節的主題。
- argumentation,assertion,n.,理據；橋接論證,The warrant explains how the evidence logically supports the claim.,理據解釋證據如何在邏輯上支持主張。
- argumentation,bias,n.,主張；斷言,The critic's assertion that the movie was a failure sparked much debate.,評論家關於這部電影是失敗之作的主張引發了許多辯論。
- argumentation,concede,n.,偏見；偏向,Recognizing bias helps readers evaluate sources critically.,識別偏見有助於讀者批判性地評估資料來源。
- argumentation,credibility,v.,讓步；承認(屬實),"Although he disagreed, he had to concede that his opponent made a valid point.",儘管他不同意，但他不得不承認對手的觀點是有道理的。
- argumentation,fallacy,n.,可信度；可靠性,The credibility of a source depends on its accuracy and authority.,資料來源的可信度取決於其準確性與權威性。
- argumentation,premise,n.,謬誤,The politician's speech was criticized for containing several logical fallacies.,這位政治家的演說因包含多個邏輯謬誤而受到批評。
- argumentation,refute,n.,前提,The entire argument is based on the premise that all men are created equal.,整個論點都建立在人人生而平等的前提之上。
- argumentation,substantiate,v.,反駁,The lawyer presented new evidence to refute the witness's testimony.,律師提出了新證據來反駁證人的證詞。
- argumentation,thesis,v.,證實,You must provide specific examples to substantiate your claims in the essay.,你必須提供具體例子來證實你在文章中的主張。
- character-analysis,agency,n.,論點；主旨,The thesis of the paper is clearly stated in the introduction.,論文的論點在引言中清楚陳述。
- character-analysis,antagonist,n.,能動性；自主性,Feminist criticism examines how female characters exercise agency within patriarchal constraints.,女性主義批評檢視女性角色如何在父權限制下展現能動性。
- character-analysis,anti-hero,n.,反派；對立角色,The antagonist opposes the protagonist and creates conflict.,反派與主角對立並製造衝突。
- character-analysis,archetype,n.,反英雄,The anti-hero lacks traditional heroic qualities like courage and idealism.,反英雄缺乏勇氣與理想主義等傳統英雄特質。
- character-analysis,character arc,n.,原型,The wise old mentor is a common archetype across cultures.,智慧長者是全球文化中常見的原型。
- character-analysis,character development,n.,角色弧線,The character arc traces the protagonist's emotional journey from fear to courage.,角色弧線描繪主角從恐懼到勇氣的情感旅程。
- character-analysis,character flaw,n.,角色發展；人物塑造,Effective character development makes readers care about the protagonist's fate.,有效的角色發展讓讀者關心主角的命運。
- character-analysis,character motivation,n.,角色缺陷,Pride is the fatal character flaw that leads to the hero's downfall.,驕傲是導致英雄毀滅的致命角色缺陷。
- character-analysis,character revelation,n.,角色動機,Understanding character motivation helps readers predict actions and interpret choices.,理解角色動機有助於讀者預測行為並解讀選擇。
- character-analysis,characterization,n.,角色揭露；性格展現,The letter serves as a key moment of character revelation.,這封信是角色揭露的關鍵時刻。
- character-analysis,confidant,n.,人物塑造（總稱）,"Through subtle characterization, the author makes even minor characters memorable.",透過細膩的人物塑造，作者讓即使是次要角色也令人難忘。
- character-analysis,deuteragonist,n.,知心角色；傾訴對象,The confidant allows the protagonist to reveal inner thoughts through dialogue.,知心角色讓主角能透過對話揭露內心想法。
- character-analysis,direct characterization,n.,第二主角,The deuteragonist plays a crucial supporting role to the protagonist.,第二主角對主角扮演關鍵的輔助角色。
- character-analysis,dynamic character,n.,直接人物塑造,Direct characterization tells the reader explicitly what a character is like.,直接人物塑造明確告訴讀者角色是什麼樣的人。
- character-analysis,epiphany,n.,動態人物,A dynamic character changes significantly over the course of the story.,動態人物在故事過程中發生顯著變化。
- character-analysis,external conflict,n.,頓悟；靈光乍現,The protagonist experiences an epiphany that changes his worldview.,主角經歷了一次頓悟，改變了他的世界觀。
- character-analysis,flat character,n.,外部衝突,External conflict arises when the character faces opposition from society or nature.,當角色面臨社會或自然的對立時，便產生外部衝突。
- character-analysis,foil,n.,扁平人物,A flat character represents a single trait without psychological depth.,扁平人物代表單一特質，缺乏心理深度。
- character-analysis,indirect characterization,n.,襯托角色,The optimistic friend serves as a foil to highlight the protagonist's cynicism.,樂觀的朋友作為襯托角色，凸顯主角的憤世嫉俗。
- character-analysis,internal conflict,n.,間接人物塑造,"Indirect characterization reveals personality through actions, speech, and thoughts.",間接人物塑造透過行為、言語和思想來揭示性格。
- character-analysis,marginalization,n.,內心衝突,The protagonist's internal conflict between duty and desire drives the narrative.,主角在責任與慾望之間的內心衝突推動了敘事。
- character-analysis,protagonist,n.,邊緣化,The story explores the marginalization of minority characters in mainstream society.,這個故事探討少數族群角色在主流社會中的邊緣化。
- character-analysis,psychological depth,n.,主角,The protagonist drives the main action of the story.,主角推動故事的主要行動。
- character-analysis,round character,n.,心理深度,The novel is praised for its psychological depth in portraying the heroine's inner turmoil.,這部小說因在描繪女主角內心掙扎時展現的心理深度而受到讚譽。
- character-analysis,social context,n.,圓形人物,A round character has complexity and undergoes development.,圓形人物具有複雜性並會經歷發展。
- character-analysis,static character,n.,社會脈絡；時代背景,Analyzing a character requires understanding the social context of their time.,分析角色需要理解其所處時代的社會脈絡。
- character-analysis,stock character,n.,靜態人物,A static character remains largely unchanged from beginning to end.,靜態人物從頭到尾基本保持不變。
- character-analysis,tragic flaw,n.,定型角色,The clever servant is a stock character in commedia dell'arte.,聰明的僕人是即興喜劇中的定型角色。
- character-analysis,tragic hero,n.,悲劇缺陷；致命缺陷,Hubris is often the tragic flaw in Greek tragedies.,傲慢往往是希臘悲劇中的悲劇缺陷。
- critics,ambivalent,n.,悲劇英雄,A tragic hero is a noble character whose flaw leads to downfall.,悲劇英雄是一位高貴的角色，其缺陷導致毀滅。
- critics,analyze,adj.,矛盾曖昧的,The narrator's attitude toward the hero remains ambivalent throughout the novel.,敘事者對英雄的態度在整部小說中始終矛盾曖昧。
- critics,articulate,v.,分析,Students must learn to analyze the author's use of language.,學生必須學會分析作者的語言運用。
- critics,canon,v.,清晰表達；體現,The novel articulates the anxiety of post-war generation.,這部小說清晰表達了戰後一代的焦慮。
- critics,contextualize,n.,文學經典,The Western literary canon includes works by Shakespeare and Dante.,西方文學經典包括莎士比亞和但丁的作品。
- critics,deconstruction,v.,脈絡化；置於背景中理解,"To understand the poem, we must contextualize it within the Romantic era.",要理解這首詩，我們必須將其置於浪漫主義時代的脈絡中。
- critics,diegesis,n.,解構,Deconstruction challenges the binary oppositions in a text.,解構挑戰文本中的二元對立。
- critics,ecocriticism,n.,敘事世界；故事內虛構世界,The diegesis includes everything that exists within the story's world.,敘事世界包含了故事世界內存在的一切。
- critics,feminist criticism,n.,生態批評,Ecocriticism investigates the relationship between literature and the natural world.,生態批評研究文學與自然世界之間的關係。
- critics,foreground,n.,女性主義批評,Feminist criticism examines how gender shapes literary texts.,女性主義批評探討性別如何形塑文學文本。
- critics,hegemony,v.,前景化；凸顯,The close-up shots foreground the character's emotional turmoil.,特寫鏡頭凸顯了角色內心的情感混亂。
- critics,hermeneutics,n.,霸權；文化主導權,Cultural hegemony maintains power through consent rather than force.,文化霸權透過同意而非武力來維持權力。
- critics,intertextuality,n.,詮釋學,Hermeneutics is the theory of interpretation in literary studies.,詮釋學是文學研究中的解釋理論。
- critics,marxist criticism,n.,互文性,The novel's intertextuality with Greek myths adds layers of meaning.,這部小說與希臘神話的互文性增添了多重意義。
- critics,mimesis,n.,馬克思主義批評,Marxist criticism examines how texts reflect class struggle and economic power.,馬克思主義批評檢視文本如何反映階級鬥爭和經濟權力。
- critics,new historicism,n.,模仿；擬真,Aristotle viewed drama as an act of mimesis imitating human action.,亞里斯多德將戲劇視為模仿人類行動的行為。
- critics,nuanced,n.,新歷史主義,New historicism reads literary texts alongside historical documents of the same period.,新歷史主義將文學文本與同期歷史文獻並行解讀。
- critics,post-structuralism,adj.,細緻入微的,The critic offered a nuanced reading of the film's ambiguous ending.,評論家對電影模棱兩可的結局提出了細緻入微的解讀。
- critics,postcolonial criticism,n.,後結構主義,Post-structuralism challenges the idea of fixed meanings in language and texts.,後結構主義挑戰語言和文本中存在固定意義的觀念。
- critics,problematize,n.,後殖民批評,Postcolonial criticism analyzes literature from formerly colonized nations.,後殖民批評分析來自前殖民地國家的文學。
- critics,psychoanalytic criticism,v.,問題化；質疑,The documentary problematizes the simple narrative of technological progress.,這部紀錄片對科技進步的簡單敘事提出了質疑。
- critics,queer theory,n.,精神分析批評,Psychoanalytic criticism explores characters' unconscious desires.,精神分析批評探索角色的無意識慾望。
- critics,reader-response criticism,n.,酷兒理論,Queer theory challenges normative assumptions about gender and sexuality.,酷兒理論挑戰關於性別與性向的規範性假設。
- critics,reinforce,n.,讀者反應批評,Reader-response criticism argues that a text's meaning is co-created by the reader.,讀者反應批評主張文本的意義是由讀者共同創造的。
- critics,representation,v.,強化；鞏固,The fairy tale reinforces the virtue of kindness and punishes cruelty.,這則童話強化了善良的美德並懲罰殘酷。
- critics,stereotype,n.,再現；表征,Media representation shapes public perception of social groups.,媒體再現形塑了大眾對社會群體的認知。
- critics,structuralism,n.,刻板印象,The play challenges racial stereotypes by presenting complex minority characters.,這部戲劇透過呈現複雜的少數族裔角色來挑戰種族刻板印象。
- critics,subvert,n.,結構主義,Structuralism analyzes the underlying systems and patterns that shape a text.,結構主義分析塑造文本的潛在系統和模式。
- critics,undermine,v.,顛覆；推翻,The novel subverts the traditional hero's journey by making the hero fail.,這部小說透過讓英雄失敗來顛覆傳統的英雄旅程。
- critics,verisimilitude,v.,削弱；暗中破壞,The author uses irony to undermine the protagonist's supposed wisdom.,作者運用反諷來削弱主角自以為是的智慧。
- drama,absurdist theatre,n.,真實感；似真性,The novel achieves verisimilitude through detailed historical research.,這部小說透過詳細的歷史研究達到了真實感。
- drama,aside,n.,荒誕派戲劇,"Samuel Beckett's ""Waiting for Godot"" is a classic example of absurdist theatre.",塞繆爾·貝克特的《等待戈多》是荒誕派戲劇的經典範例。
- drama,blocking,n.,旁白,"In a stage whisper, the character says an aside to the audience.",角色以舞台低語對觀眾說出一段旁白。
- drama,catharsis,n.,走位；舞台調度,The director spent an hour blocking the opening scene for the actors.,導演花了一小時為演員們排練開場戲的走位。
- drama,chorus,n.,情感淨化；宣洩,Audiences experience catharsis as the tragic hero accepts his fate.,當悲劇英雄接受命運時，觀眾經歷了情感淨化。
- drama,comedy,n.,歌隊；合唱歌隊,The chorus in Greek tragedy comments on the action and provides background information.,希臘悲劇中的歌隊評論劇情並提供背景訊息。
- drama,commedia dell'arte,n.,喜劇,"Shakespeare's ""A Midsummer Night's Dream"" is a romantic comedy.",莎士比亞的《仲夏夜之夢》是一部浪漫喜劇。
- drama,costume design,n.,即興喜劇；義大利即興喜劇,Commedia dell'arte features stock characters like Harlequin and Pantalone.,即興喜劇以丑角和潘塔隆內等定型角色為特色。
- drama,cross-cutting,n.,服裝設計,The costume design for the period drama required extensive historical research.,這部時代劇的服裝設計需要大量的歷史研究。
- drama,dialogue,n.,交叉剪輯；場景交錯,The director used cross-cutting to show the parallel lives of the two protagonists.,導演運用交叉剪輯來展示兩位主角平行的人生。
- drama,direct address,n.,對話,The dialogue reveals the characters' true intentions.,對話揭示了角色的真實意圖。
- drama,ensemble,n.,直接對白；直接對觀眾說話,"By using direct address, the villain shared his evil plan with the audience.",惡棍透過直接對白向觀眾分享他的邪惡計畫。
- drama,epic theatre,n.,合奏；劇團；全體演員,The ensemble worked together seamlessly to create a powerful performance.,全體演員無縫合作，共同創造了一場動人的演出。
- drama,farce,n.,史詩劇場,Bertolt Brecht developed epic theatre to encourage audiences to think critically rather than emotionally.,貝托爾特·布萊希特發展史詩劇場是為了鼓勵觀眾理性思考而非情感投入。
- drama,fourth wall,n.,鬧劇,The play's mistaken identities and slapstick make it a classic farce.,這齣戲的錯認身份與鬧劇式搞笑使其成為經典鬧劇。
- drama,hot-seating,n.,第四面牆,The actor broke the fourth wall by winking at the audience.,那位演員對著觀眾眨眼，打破了第四面牆。
- drama,improvisation,n.,熱椅提問,The teacher used hot-seating to help students explore their character's motivations.,老師使用熱椅提問來幫助學生探索他們角色的動機。
- drama,lighting design,n.,即興表演,The actors used improvisation to generate new material for the scene.,演員們使用即興表演為該場景生成新的素材。
- drama,melodrama,n.,燈光設計,The lighting design shifted from warm amber to cold blue to show the change in mood.,燈光設計從溫暖的琥珀色轉為冷冽的藍色以顯示情緒轉變。
- drama,monologue,n.,情節劇；通俗劇,Victorian melodrama often features a virtuous hero and a dastardly villain.,維多利亞時代的情節劇通常有一位品德高尚的英雄和一個卑鄙的惡棍。
- drama,musical theatre,n.,獨白,The actor delivered a moving monologue about loss.,演員發表了一段關於失去的動人獨白。
- drama,naturalism,n.,音樂劇,Les Misérables is a famous musical theatre production based on Victor Hugo's novel.,《悲慘世界》是一部根據維克多·雨果小說改編的著名音樂劇。
- drama,physical theatre,n.,自然主義,"""Hedda Gabler"" by Henrik Ibsen is a landmark play of theatrical naturalism.",易卜生的《海達·蓋伯勒》是戲劇自然主義的里程碑作品。
- drama,props,n.,形體劇場,DV8 Physical Theatre uses movement and dance rather than spoken dialogue to tell stories.,DV8形體劇場使用動作和舞蹈而非口語對白來講述故事。
- drama,set design,n.,道具；小道具,The actor forgot his most important prop: the letter.,演員忘記了他最重要的道具：那封信。
- drama,slow motion,n.,舞台設計；佈景設計,The set design for the musical included a rotating two-storey house.,這部音樂劇的舞台設計包含一座旋轉的兩層樓房屋。
- drama,soliloquy,n.,慢動作,The fight scene was performed in slow motion to heighten the drama.,打鬥場景以慢動作演出以增強戲劇張力。
- drama,sound design,n.,戲劇獨白,"Hamlet's ""To be or not to be"" is a famous soliloquy.",哈姆雷特的「生存還是毀滅」是一段著名的戲劇獨白。
- drama,stage direction,n.,音效設計,The sound design used a low rumble to suggest an approaching storm.,音效設計使用低沉的轟鳴聲來暗示即將來臨的風暴。
- drama,symbolic gesture,n.,舞台指示,"According to the stage direction, the lights fade and the curtain falls.",根據舞台指示，燈光漸暗，布幕落下。
- drama,tableau,n.,象徵性動作,Her symbolic gesture of opening a cage represented a desire for freedom.,她打開籠子的象徵性動作代表了對自由的渴望。
- drama,thought-tracking,n.,靜止畫面；定格造型,The play ended with a powerful tableau of the family reunited.,這齣戲以一家團聚的強而有力定格畫面作結。
- drama,tragedy,n.,思緒追蹤,"During thought-tracking, the actor revealed her character's secret fear.",在思緒追蹤環節中，演員揭示了她角色內心深處的恐懼。
- genre,anthology,n.,悲劇,The protagonist's tragic flaw leads to his downfall in the tragedy.,悲劇中主角的缺陷導致了他的毀滅。
- genre,biography,n.,選集；文集,The students read an anthology of modern American short stories.,學生們閱讀了一本美國現代短篇小說選集。
- genre,discursive text,n.,傳記,The biography of Steve Jobs explores the life of the Apple co-founder.,這部史蒂夫·賈伯斯的傳記探索了這位蘋果公司共同創始人的一生。
- genre,epic,n.,議論性文本,"In a discursive text, the writer explores an issue from multiple perspectives.",在議論性文本中，作者會從多個角度探討一個議題。
- genre,essay,n.,史詩,The Odyssey is an ancient Greek epic that narrates the journey of Odysseus.,《奧德賽》是一部古希臘史詩，敘述了奧德修斯的旅程。
- genre,fiction,n.,散文；論說文,The student wrote a persuasive essay on climate change.,學生寫了一篇關於氣候變遷的說服性文章。
- genre,genre,n.,小說,She enjoys reading historical fiction.,她喜歡讀歷史小說。
- genre,literary essay,n.,文類；體裁,The novel belongs to the science fiction genre.,這部小說屬於科幻文類。
- genre,memoir,n.,文學評論,A literary essay presents an argument about a text supported by evidence.,文學評論提出一個關於文本的論點，並以證據支持。
- genre,non-fiction,n.,回憶錄,The senator published a memoir detailing her years in public service.,這位參議員出版了一本回憶錄，詳述她多年從政的經歷。
- genre,parody,n.,非虛構作品,The course focuses on non-fiction essays and memoirs.,這門課程專注於非虛構散文與回憶錄。
- genre,prose,n.,戲仿；滑稽模仿,The sketch show performed a parody of the famous spy movie.,這場短劇表演對那部著名的間諜電影進行了戲仿。
- grammar,active voice,n.,散文,"Unlike poetry, prose uses ordinary grammatical structure and natural flow of speech.",與詩歌不同，散文使用普通的語法結構和自然的語言流動。
- grammar,ambiguity,n.,主動語態,"""The dog bit the mailman"" is written in the active voice.",「狗咬了郵差」用的是主動語態。
- grammar,clause,n.,含糊；歧義,The poet uses ambiguity to allow multiple interpretations.,詩人使用含糊來允許多種解讀。
- grammar,code-switching,n.,子句；分句,A clause contains both a subject and a verb.,一個子句同時包含主語和動詞。
- grammar,colloquialism,n.,語碼轉換,Code-switching occurs when speakers alternate between languages or dialects.,語碼轉換發生在說話者交替使用不同語言或方言時。
- grammar,connotation,n.,口語表達；俚語,The dialogue is rich in colloquialisms that reflect the character's regional background.,對話充滿口語表達，反映了角色的地域背景。
- grammar,denotation,n.,隱含意義；聯想義,"The word ""home"" has positive connotations of warmth and safety.",「家」這個詞帶有溫暖和安全的正面聯想意義。
- grammar,homonym,n.,字面意義；外延義,"While the connotation of ""snake"" is deceit, its denotation is simply a legless reptile.",雖然「蛇」的隱含意義是欺詐，但其字面意義只是無腿的爬行動物。
- grammar,nuance,n.,同音異義詞；同形異義詞,"""Bank"" is a homonym that can mean a financial institution or the side of a river.",「Bank」是一個同形異義詞，可指金融機構或河岸。
- grammar,passive voice,n.,細微差別,Understanding nuance is key to literary analysis.,理解細微差別是文學分析的關鍵。
- grammar,phrase,n.,被動語態,"""The mailman was bitten by the dog"" is written in the passive voice.",「郵差被狗咬了」用的是被動語態。
- grammar,plausible,n.,片語；短語,A phrase is a group of words that does not contain a verb.,片語是一組不包含動詞的單詞。
- grammar,polysemy,adj.,看似合理的,"Although the excuse was creative, it did not seem plausible to the teacher.",雖然這個藉口很有創意，但在老師看來似乎並不合理。
- grammar,pragmatics,n.,多義性,Polysemy refers to a word having multiple related meanings.,多義性指一個詞擁有多個相關意義。
- grammar,register,n.,語用學,Pragmatics examines how context influences language interpretation.,語用學檢視語境如何影響語言解讀。
- grammar,semantics,n.,語域；語體,Register refers to language variation according to social context.,語域指根據社會語境產生的語言變體。
- grammar,subtext,n.,語義學,Semantics studies the meaning of words and sentences.,語義學研究詞語與句子的意義。
- grammar,syntax,n.,潛臺詞,The subtext of the scene suggests hidden anger.,這場景的潛臺詞暗示了隱藏的憤怒。
- narrative,analepsis,n.,句法；句構,Syntax governs the arrangement of words and phrases to create well-formed sentences.,句法規範詞與片語的排列以構成合乎語法的句子。
- narrative,anecdote,n.,倒敘；回敘,The story uses analepsis to reveal the character's forgotten childhood memory.,這個故事使用倒敘來揭示角色被遺忘的童年記憶。
- narrative,backstory,n.,軼事；趣聞,The speaker opened with a humorous anecdote to capture the audience's attention.,演講者以一段幽默的軼事開場，以吸引觀眾的注意力。
- narrative,characterisation,n.,背景故事,The hero's tragic backstory explains his motivation for revenge.,主角悲慘的背景故事解釋了他復仇的動機。
- narrative,chronological,n.,人物塑造,"Through direct and indirect characterisation, the author brings the hero to life.",透過直接與間接的人物塑造，作者讓主角栩栩如生。
- narrative,chronology,adj.,按時間順序的,Chronological order is the most straightforward way to organize a narrative.,時間順序是組織敘事最直接的方式。
- narrative,climax,n.,時間順序,The film disrupts strict chronology by jumping back and forth in time.,這部電影透過在時間中前後跳躍來打亂嚴格的時間順序。
- narrative,denouement,n.,高潮,The story reaches its climax when the two rivals finally meet face to face.,當兩個競爭對手終於面對面碰頭時，故事達到了高潮。
- narrative,ellipsis,n.,(小說/戲劇)結局,"In the final denouement, all the mysteries are finally explained.",在最終的結局中，所有的謎團終於得到了解釋。
- narrative,epilogue,n.,省略；跳脫,A ten-year ellipsis jumps from the character's childhood to her adulthood.,一個十年的省略從角色的童年跳到了她的成年時期。
- narrative,exposition,n.,後記,The epilogue reveals what happened to the characters years later.,後記揭示了角色們多年後的境遇。
- narrative,external focalization,n.,闡述；(故事)背景鋪陳,The exposition provides the necessary background information about the characters.,故事的背景鋪陳提供了關於角色的必要背景資訊。
- narrative,first-person,n.,外部聚焦,External focalization only shows external actions without entering any character's mind.,外部聚焦只展示外部行動，不進入任何角色的內心。
- narrative,flashback,n.,第一人稱,"First-person narration uses ""I"" to tell the story from a character's perspective.",第一人稱敘事使用「我」從角色的視角講述故事。
- narrative,flashforward,n.,倒敘,A flashback reveals the character's traumatic childhood experience.,倒敘手法揭露了角色悲慘的童年經歷。
- narrative,focalization,n.,預敘；閃前,A flashforward reveals the character's fate at the very end of the play.,一個預敘鏡頭在戲劇尾聲揭示了角色的命運。
- narrative,foreshadowing,n.,聚焦；視角,Focalization determines through whose eyes the story is seen.,聚焦決定了故事是透過誰的眼睛被看見。
- narrative,frame story,n.,伏筆,The dark clouds in the first chapter served as foreshadowing for the coming tragedy.,第一章中的烏雲是為即將到來的悲劇埋下的伏筆。
- narrative,in medias res,n.,框架故事,The Thousand and One Nights is a famous frame story.,《一千零一夜》是一個著名的框架故事。
- narrative,internal focalization,phrase.,從情節中間開始,"The epic begins in medias res, with the hero already on his journey.",這部史詩從情節中間開始，英雄已踏上旅程。
- narrative,narrator,n.,內部聚焦,Internal focalization limits the narrative to what a single character knows.,內部聚焦將敘事限制在單一角色所知的範圍內。
- narrative,non-linear,n.,敘事者,The unreliable narrator makes the reader question the truth.,不可靠的敘事者讓讀者質疑故事的真實性。
- narrative,pacing,adj.,非線性的,The film uses a non-linear structure to reveal the mystery gradually.,這部電影使用非線性結構逐步揭示謎團。
- narrative,perspective,n.,節奏,The fast pacing of the thriller kept the audience on the edge of their seats.,這部驚悚片快速的節奏讓觀眾緊張得坐立難安。
- narrative,prolepsis,n.,觀點；視角,The story is told from a child's perspective.,這個故事是從孩子的視角敘述的。
- narrative,prologue,n.,預敘；前敘,The prolepsis at the beginning foreshadows the tragic ending.,開頭的預敘暗示了悲劇的結局。
- narrative,resolution,n.,序言,The prologue introduces the setting and the main conflict.,序言介紹了故事背景與主要衝突。
- narrative,scene,n.,結局；(問題)解決,"In the resolution, the family finally reunites and the conflict is settled.",在結局中，一家人終於團聚，衝突得到了解決。
- narrative,stream of consciousness,n.,場景；場景敘事,"In the scene, the conversation unfolds in real-time without summary.",在場景中，對話即時展開，沒有概括。
- narrative,subplot,n.,意識流,James Joyce uses stream of consciousness to mimic inner thoughts.,詹姆斯·喬伊斯使用意識流來模仿內心思緒。
- narrative,summary,n.,次要情節；支線,The subplot involving the detective's personal life adds depth to the main story.,涉及偵探個人生活的次要情節為主線增添了深度。
- narrative,third-person limited,n.,概括；概要敘事,The author uses a summary to quickly cover the protagonist's uneventful years.,作者使用概括來快速交代主角平淡的幾年。
- narrative,third-person omniscient,n.,第三人稱有限視角,Third-person limited narration reveals only one character's thoughts.,第三人稱有限視角僅揭示單一角色的想法。
- narrative,transition,n.,第三人稱全知視角,Third-person omniscient narration knows everything about all characters.,第三人稱全知視角了解所有角色的一切。
- narrative,unreliable narrator,n.,過渡,"Use transition words like ""however"" and ""moreover"" to improve the flow of your essay.",使用像「然而」和「此外」之類的過渡詞來改善文章的連貫性。
- narrative,zero focalization,n.,不可靠的敘事者,The reader cannot fully trust the story told by an unreliable narrator.,讀者無法完全信任不可靠敘事者所講述的故事。
- poetic-devices,alliteration,n.,零聚焦；全知聚焦,Zero focalization allows the narrator to know everything about all characters.,零聚焦允許敘事者了解所有角色的一切。
- poetic-devices,assonance,n.,頭韻,"""She sells seashells"" uses alliteration with the ""s"" sound.",「she sells seashells」使用了 s 音的頭韻。
- poetic-devices,caesura,n.,母韻；元音韻,"The repetition of the long ""o"" sound in ""slow motion"" is assonance.",「slow motion」中長 o 音的重複就是母韻。
- poetic-devices,consonance,n.,詩行中間的停頓,"A strong caesura appears after the word ""death"" in the middle of the line.",在詩行中間，「death」一詞之後出現一個強烈的停頓。
- poetic-devices,elegy,n.,子音韻,"""Pitter-patter"" shows consonance with the ""t"" and ""r"" sounds.",「pitter-patter」展現了 t 與 r 音的子音韻。
- poetic-devices,enjambment,n.,輓歌,In Memoriam by Tennyson is a long elegy for a lost friend.,丁尼生的《紀念》是為逝去友人寫的長篇輓歌。
- poetic-devices,foot,n.,跨行；跨句,"The sentence continues to the next line without pause, creating enjambment.",句子未停頓直接延續到下一行，形成跨行。
- poetic-devices,free verse,n.,音步,Iambic pentameter consists of five feet per line.,抑揚格五音步每行包含五個音步。
- poetic-devices,iamb,n.,自由詩,Modern poets often use free verse with no regular meter or rhyme.,現代詩人經常使用無固定格律或押韻的自由詩。
- poetic-devices,meter,n.,抑揚格,An iamb is an unstressed syllable followed by a stressed syllable.,抑揚格是一個非重讀音節後接一個重讀音節。
- poetic-devices,ode,n.,格律；音步,The poem is written in iambic pentameter.,這首詩是以抑揚格五音步寫成的。
- poetic-devices,rhyme,n.,頌詩,"Keats wrote ""Ode on a Grecian Urn"" as a celebration of art and beauty.",濟慈寫下《希臘古甕頌》來歌頌藝術與美。
- poetic-devices,rhythm,n.,押韻,The poet uses rhyme to create a musical effect.,詩人使用押韻來營造音樂效果。
- poetic-devices,sonnet,n.,節奏,The rhythm of the poem mimics the sound of waves.,詩的節奏模仿了海浪的聲音。
- poetic-devices,stanza,n.,十四行詩,Shakespeare wrote 154 sonnets following a specific rhyme scheme.,莎士比亞按照特定押韻格式創作了154首十四行詩。
- poetic-devices,trochee,n.,詩節,Each stanza in the poem explores a different season.,詩中的每個詩節探討一個不同的季節。
- poetic-devices,villanelle,n.,揚抑格,A trochee is a stressed syllable followed by an unstressed syllable.,揚抑格是一個重讀音節後接一個非重讀音節。
- reading-skills,biased,n.,維拉內拉詩,"""Do not go gentle into that good night"" is a famous villanelle.",《溫柔地不要走進那良夜》是一首著名的維拉內拉詩。
- reading-skills,comprehension,adj.,有偏見的,The news article was criticized for being biased toward the ruling party.,這篇新聞報導因偏袒執政黨而受到批評。
- reading-skills,condescending,n.,理解；閱讀理解,Reading comprehension is essential for academic success.,閱讀理解是學業成功的關鍵。
- reading-skills,context clue,adj.,居高臨下的,The professor's condescending tone made the students feel unintelligent.,教授那居高臨下的語氣讓學生們覺得自己很不聰明。
- reading-skills,cynical,n.,上下文線索,Readers can use context clues to guess the meaning of unfamiliar words.,讀者可以利用上下文線索猜測生詞的含義。
- reading-skills,indifferent,adj.,憤世嫉俗的；懷疑人性自私的,The author's cynical view suggests that people only help others for personal gain.,作者憤世嫉俗的觀點暗示人們幫助他人只是為了個人利益。
- reading-skills,inference,adj.,冷淡的；不在意的,The protagonist remained indifferent to the suffering of those around him.,主角對身邊人的痛苦保持冷漠。
- reading-skills,main idea,n.,推論；推斷,Making inferences helps readers understand what is not directly stated.,做出推論能幫助讀者理解未直接陳述的內容。
- reading-skills,nostalgic,n.,主旨；中心思想,Identifying the main idea is the first step in summarizing a text.,識別主旨是總結文本的第一步。
- reading-skills,optimistic,adj.,懷舊的,"The poem has a nostalgic tone, reflecting on the simple joys of childhood.",這首詩帶有懷舊的語調，反思童年簡單的快樂。
- reading-skills,reverent,adj.,樂觀的,"Despite the challenges, the author maintains an optimistic outlook for the future.",儘管面臨挑戰，作者對未來仍保持樂觀的見解。
- reading-skills,sardonic,adj.,虔誠的；恭敬的,The biographer wrote in a reverent tone when describing the leader's sacrifices.,傳記作者在描述這位領袖的犧牲時，語氣充滿了崇敬。
- reading-skills,skeptical,adj.,嘲諷的；譏諷的,His sardonic laugh suggested that he didn't believe a word of the explanation.,他那譏諷的笑聲暗示他對那番解釋一個字也不信。
- reading-skills,supporting detail,adj.,懷疑的,Many scientists remain skeptical about the new claims until they see data.,許多科學家在看到數據之前，對這些新主張仍持懷疑態度。
- structure,argumentative paragraph,n.,支持細節；佐證細節,Supporting details provide evidence for the main idea.,支持細節為主旨提供證據。
- structure,block paragraph,n.,論證段；議論文段,An argumentative paragraph presents a claim supported by evidence and reasoning.,論證段提出一個由證據與推理支持的主張。
- structure,body paragraph,n.,齊頭式段落,Block paragraphs have no indentation but are separated by a blank line.,齊頭式段落無縮排，但以空行分隔。
- structure,cause and effect,n.,主體段；論證段,Each body paragraph develops one main point that supports the thesis.,每個主體段發展一個支持論點的主要觀點。
- structure,cause-and-effect,n.,因果關係,A cause-and-effect paragraph explains why something happens and what results from it.,因果段落解釋某事發生的原因及其結果。
- structure,chronological order,n.,因果關係,A cause-and-effect structure explains why an event occurred and what resulted from it.,因果結構解釋事件發生的原因及其結果。
- structure,clarity,n.,時間順序,Chronological order arranges events in the sequence they occurred.,時間順序按事件發生的先後排列。
- structure,classification,n.,清晰,Good writing is marked by clarity and precision.,好的寫作以清晰與精確為特點。
- structure,clincher,n.,分類,Classification organizes ideas into categories for clearer understanding.,分類將觀點歸入不同類別以利清晰理解。
- structure,coherence,n.,有力結尾；點睛句,A clincher is a memorable final sentence that reinforces the main point.,有力結尾是令人難忘的最後一句，用以強化主旨。
- structure,compare-and-contrast,n.,連貫性,The essay lacks coherence between paragraphs.,這篇文章在段落之間缺乏連貫性。
- structure,comparison,n.,比較與對比,The essay uses a compare-and-contrast pattern to analyze two literary movements.,文章使用比較與對比模式分析兩個文學運動。
- structure,concluding paragraph,n.,比較,Comparison highlights similarities between two or more items.,比較強調兩個或多個項目之間的相似之處。
- structure,concluding sentence,n.,結論段；總結段,The concluding paragraph restates the thesis and synthesizes key arguments.,結論段重述論點並綜合關鍵論證。
- structure,contrast,n.,結尾句,A concluding sentence summarizes the main point of the paragraph.,結尾句總結段落的主要觀點。
- structure,controlling idea,n.,對比,Contrast emphasizes differences to clarify distinctions.,對比強調差異以釐清區別。
- structure,definition,n.,控制概念；限定主旨,The controlling idea in the topic sentence limits the scope of the paragraph.,主題句中的控制概念限定了段落的討論範圍。
- structure,descriptive paragraph,n.,定義,A definition paragraph explains the meaning of a term or concept.,定義段落解釋某個術語或概念的含義。
- structure,exemplification,n.,描述段,A descriptive paragraph uses sensory details to create a vivid picture.,描述段運用感官細節營造生動畫面。
- structure,expository paragraph,n.,舉例說明,Exemplification uses specific cases to illustrate a general point.,舉例說明使用具體案例來闡釋一般觀點。
- structure,indentation,n.,說明段,An expository paragraph explains or informs about a topic objectively.,說明段客觀地解釋或介紹某個主題。
- structure,introductory paragraph,n.,縮排,Indentation signals the beginning of a new paragraph in formal writing.,縮排在正式寫作中標示新段落的開始。
- structure,lexical cohesion,n.,引言段；開頭段,The introductory paragraph presents the topic and thesis statement.,引言段提出主題與論點陳述。
- structure,logical,n.,詞彙銜接,Lexical cohesion uses synonyms and related words to link ideas.,詞彙銜接使用同義詞與相關詞彙來連接觀點。
- structure,narrative paragraph,adj.,合邏輯的,The argument is logical and well-structured.,這個論點合邏輯且結構良好。
- structure,order of importance,n.,敘事段,A narrative paragraph tells a short story or recounts an event in sequence.,敘事段講述一個小故事或按順序敘述事件。
- structure,paragraph development,n.,重要性順序,Order of importance arranges points from most to least significant (or vice versa).,重要性順序按從最重要到最不重要（或相反）排列觀點。
- structure,paragraph hook,n.,段落展開；段落發展,Common methods of paragraph development include exemplification and comparison.,常見的段落展開方法包括舉例與比較。
- structure,paragraph length,n.,段落引子；開頭鉤子,A paragraph hook grabs the reader's attention at the beginning.,段落引子在開頭吸引讀者的注意力。
- structure,parallel structure,n.,段落長度,Varying paragraph length helps maintain reader engagement and control pacing.,變化段落長度有助於維持讀者興趣並控制節奏。
- structure,problem-solution,n.,平行結構；排比句式,Parallel structure uses the same grammatical pattern for items in a list.,平行結構對列表中的項目使用相同的語法模式。
- structure,process analysis,n.,問題與解決,The article follows a problem-solution framework to address urban pollution.,文章遵循問題與解決框架來探討都市污染。
- structure,pronoun reference,n.,過程分析,Process analysis breaks down a procedure into step-by-step instructions.,過程分析將一個程序分解為逐步說明。
- structure,repetition for emphasis,n.,代詞指代,Clear pronoun reference avoids confusion about what 'it' or 'they' refers to.,清晰的代詞指代可避免 'it' 或 'they' 所指不明的混淆。
- structure,spatial order,n.,強調性重複,Strategic repetition of key words can reinforce the paragraph's message.,策略性地重複關鍵詞可以強化段落訊息。
- structure,supporting sentence,n.,空間順序,Spatial order describes a scene from left to right or top to bottom.,空間順序從左到右或從上到下描述場景。
- structure,topic sentence,n.,支持句；佐證句,Supporting sentences provide examples and evidence to develop the topic sentence.,支持句提供例子與證據來發展主題句。
- structure,transition word,n.,主題句；主旨句,A strong topic sentence clearly states the main idea of the paragraph.,一個有力的主題句能清楚陳述段落的主要觀點。
- structure,transitional phrase,n.,過渡詞；連接詞,Transition words like 'furthermore' and 'however' help connect ideas between sentences.,像 'furthermore' 和 'however' 這類過渡詞有助於連接句與句之間的觀點。
- structure,unity,n.,過渡片語,Transitional phrases such as 'on the other hand' signal a shift in perspective.,像 'on the other hand' 這類過渡片語標示觀點的轉換。
- writing,brainstorm,n.,統一性；一致性,Paragraph unity means every sentence relates directly to the main idea.,段落統一性意味著每句話都直接關聯主旨。
- writing,colloquial,v.,腦力激盪；構思,"Before writing, brainstorm ideas to organize your thoughts.",寫作前先進行腦力激盪，整理思路。
- writing,concise,adj.,口語的；非正式的,The writer uses colloquial language to make the characters sound more authentic.,作者使用口語化的語言，使角色聽起來更加真實。
- writing,draft,adj.,簡潔的,The editor asked the writer to make the paragraph more concise by removing extra words.,編輯要求作者刪除多餘的字詞，使段落更加簡潔。
- writing,eloquent,n.,草稿；初稿,The first draft doesn't need to be perfect; you can revise later.,初稿不需要完美，你可以稍後修改。
- writing,figurative,adj.,雄辯的；口才流利的,The activist gave an eloquent speech that moved many in the audience.,這位活動家發表了一場動人的雄辯演說，感動了許多觀眾。
- writing,literal,adj.,比喻的,"""Broken heart"" is a figurative expression.",「心碎」是一種比喻性表達。
- writing,objective,adj.,字面的,Don't take his words literally; he was being sarcastic.,不要字面理解他的話；他在諷刺。
- writing,ornate,adj.,客觀的,News reporters are expected to give an objective account of events without personal bias.,新聞記者被要求對事件進行客觀報導，而不帶個人偏見。
- writing,outline,adj.,華麗的,The Victorian novel was known for its ornate and flowery language.,這部維多利亞時代的小說以其華麗且詞藻豐富的語言聞名。
- writing,peer review,n.,大綱；提綱,Creating an outline helps structure your essay logically.,製作大綱有助於邏輯性地組織文章結構。
- writing,redundant,n.,同儕評閱,Peer review allows students to give and receive constructive feedback.,同儕評閱讓學生能夠給予並接收建設性回饋。
- writing,revise,adj.,贅述的；多餘的,"Mentioning the ""blue sky"" as ""blue"" is sometimes considered redundant in creative writing.",在創意寫作中，提到「藍色的藍天」有時被認為是贅述。
- writing,subjective,v.,修訂；修改,Revise your essay to improve clarity and coherence.,修訂文章以提升清晰度與連貫性。
- writing,verbose,adj.,主觀的,Your opinion of the movie is purely subjective and depends on your personal taste.,你對這部電影的評價純粹是主觀的，取決於你個人的品味。
-genre,adventure,adj.,冗長的,"His writing style is often verbose, making simple ideas hard to understand.",他的寫作風格通常很冗長，使簡單的想法變得難以理解。
-genre,autobiography,n.,冒險小說,"Mark Twain's ""The Adventures of Huckleberry Finn"" is a classic adventure.",馬克·吐溫的《頑童歷險記》是一部經典的冒險小說。
-genre,ballad,n.,自傳,The Diary of a Young Girl by Anne Frank is a powerful autobiography.,安妮·法蘭克的《安妮日記》是一部強而有力的自傳。
-genre,bildungsroman,n.,歌謠；敘事歌謠,The folk ballad often tells a tragic story of love or death.,民間歌謠常常講述一個關於愛情或死亡的悲劇故事。
-genre,commercial fiction,n.,成長小說,"Jane Eyre"" is a bildungsroman that traces the protagonist's journey to adulthood.",《簡愛》是一部追溯主角走向成年之路的成長小說。
-genre,detective fiction,n.,商業小說,Commercial fiction is written primarily to entertain a wide audience.,商業小說的寫作主要是為了娛樂廣大讀者。
-genre,dystopian fiction,n.,偵探小說,Sherlock Holmes is the most famous character in detective fiction.,夏洛克·福爾摩斯是偵探小說中最著名的角色。
-genre,fable,n.,反烏托邦小說,The Handmaid's Tale is a dystopian fiction about a totalitarian society.,《使女的故事》是一部關於極權社會的反烏托邦小說。
-genre,fantasy,n.,寓言,"The fable ""The Tortoise and the Hare"" teaches that slow and steady wins the race.",寓言《龜兔賽跑》教導我們穩紮穩打方能致勝。
-genre,flash fiction,n.,奇幻小說,The Lord of the Rings is a classic fantasy novel set in a fictional world.,《魔戒》是一部以虛構世界為背景的經典奇幻小說。
-genre,folktale,n.,微型小說,Flash fiction tells a complete story in under 1000 words.,微型小說用少於1000個單詞講述一個完整的故事。
-genre,food writing,n.,民間故事,"The folktale ""Cinderella"" exists in hundreds of versions across many cultures.",民間故事《灰姑娘》在許多文化中有數百個版本。
-genre,gothic fiction,n.,飲食文學,M.F.K. Fisher is celebrated for her lyrical food writing.,M.F.K. 費雪以其抒情優美的飲食文學而聞名。
-genre,graphic novel,n.,哥德小說,Edgar Allan Poe is a master of gothic fiction with its dark and eerie atmosphere.,愛倫·坡是哥德小說的大師
-genre,haiku,n.,圖像小說,"Art Spiegelman's ""Maus"" is a Pulitzer Prize-winning graphic novel about the Holocaust.",阿特·斯皮格曼的《鼠族》是一部關於大屠殺的普立茲獎獲獎圖像小說。
-genre,historical fiction,n.,俳句,The haiku captures a single moment in nature with just seventeen syllables.,俳句僅用十七個音節捕捉自然界的一個瞬間。
-genre,history play,n.,歷史小說,Wolf Hall is a historical fiction novel set in the Tudor court.,《狼廳》是一部以都鐸王朝宮廷為背景的歷史小說。
-genre,horror,n.,歷史劇,"Shakespeare's ""Henry V"" is a history play about the English king.",莎士比亞的《亨利五世》是一部關於英國國王的歷史劇。
-genre,journalism,n.,恐怖小說,Stephen King is one of the most successful authors of horror.,史蒂芬·金是最成功的恐怖小說作家之一。
-genre,legend,n.,新聞寫作,Investigative journalism uncovers wrongdoing and holds power accountable.,調查性新聞報導揭露不當行為並追究權力者的責任。
-genre,literary fiction,n.,傳說,The legend of King Arthur blends history with chivalric romance.,亞瑟王的傳說融合了歷史與騎士浪漫。
-genre,lyric poetry,n.,文學小說,Literary fiction often focuses on character development and style over plot.,文學小說通常更注重角色發展和風格而非情節。
-genre,mystery fiction,n.,抒情詩,"William Wordsworth's ""I Wandered Lonely as a Cloud"" is a famous lyric poem.",威廉·華茲華斯的《我孤獨地漫遊
-genre,myth,n.,懸疑小說,Agatha Christie is the queen of mystery fiction.,阿嘉莎·克莉絲蒂是懸疑小說之后。
-genre,narrative poetry,n.,神話,The Greek myth of Persephone explains the changing of the seasons.,希臘神話中的波瑟芬妮解釋了四季的更迭。
-genre,nature writing,n.,敘事詩,The Rime of the Ancient Mariner by Coleridge is a narrative poem.,柯勒律治的《古舟子詠》是一首敘事詩。
-genre,one-act play,n.,自然寫作,"Henry David Thoreau's ""Walden"" is a foundational work of nature writing.",亨利·大衛·梭羅的《湖濱散記》是自然寫作的奠基之作。
-genre,picaresque,n.,獨幕劇,"The one-act play ""The Zoo Story"" is a powerful exploration of alienation.",獨幕劇《動物園故事》是對疏離感的有力探索。
-genre,romance,n.,流浪漢小說,"Don Quixote"" is a famous picaresque novel from 17th-century Spain.",《堂吉訶德》是17世紀西班牙著名的流浪漢小說。
-genre,science fiction,n.,愛情小說,Romance novels typically end with a satisfying emotional resolution.,愛情小說通常以令人滿意的情感結局收尾。
-genre,short story,n.,科幻小說,Science fiction often explores the potential consequences of scientific innovations.,科幻小說經常探討科學創新的潛在後果。
-genre,spoken word,n.,短篇小說,The short story is a concise form of fiction that focuses on a single effect.,短篇小說是一種專注於單一效果的簡潔小說形式。
-genre,stand-up comedy,n.,口語詩,Spoken word poetry is performed live and often addresses social justice issues.,口語詩是現場表演的詩歌
-genre,thriller,n.,單口喜劇,"Hannah Gadsby's ""Nanette"" is a stand-up comedy that deconstructs the form itself.",漢娜·蓋茲比的《娜內特》是一部解構自身形式的單口喜劇。
-genre,tragicomedy,n.,驚悚小說,The thriller kept readers on the edge of their seats with its constant suspense.,這本驚悚小說以其持續的懸念讓讀者緊張不已。
-genre,travel writing,n.,悲喜劇,Anton Chekhov's plays are often classified as tragicomedy.,安東·契訶夫的戲劇常被歸類為悲喜劇。
-genre,utopian fiction,n.,旅行文學,"Bruce Chatwin's ""In Patagonia"" reinvented modern travel writing.",布魯斯·查特文的《在巴塔哥尼亞》重塑了現代旅行文學。
-literary,allegory,n.,烏托邦小說,"Sir Thomas More's ""Utopia"" is the foundational text of utopian fiction.",湯瑪斯·摩爾爵士的《烏托邦》是烏托邦小說的奠基文本。
-literary,allusion,n.,寓言；托物寓意,"George Orwell's ""Animal Farm"" is a famous allegory for the Russian Revolution.",喬治·歐威爾的《動物農莊》是描述俄國革命的著名寓言。
-literary,analogy,n.,典故；影射,The author made an allusion to Greek mythology by mentioning the Achilles' heel.,作者藉由提到「阿基里斯之踵」來影射希臘神話。
-literary,anaphora,n.,類比；類推,The teacher used the analogy of a computer to explain how the human brain processes information.,老師用電腦來類比，以解釋人類大腦如何處理資訊。
-literary,antithesis,n.,首語重複,Anaphora repeats words at the beginning of successive clauses.,首語重複在連續子句開頭重複詞語。
-literary,apostrophe,n.,對立面；對照,Poverty is the spiritual antithesis of the abundance seen in nature.,貧窮是自然界所見之豐饒在精神上的對立面。
-literary,conflict,n.,呼語；頓呼,"""O death, where is thy sting?"" is an example of apostrophe.",「哦，死亡，你的毒刺在哪裡？」是呼語的一個例子。
-literary,ethos,n.,衝突,The main conflict is between tradition and progress.,主要衝突在於傳統與進步之間。
-literary,euphemism,n.,品格訴求；道德訴求,The speaker established ethos by showing his expertise and honesty.,演講者透過展現專業與誠信來建立品格訴求。
-literary,hyperbole,n.,委婉語,"""Passed away"" is a common euphemism used to avoid saying the word ""died"".",「過世」是一個常用的委婉語，用來避免說出「死」這個字。
-literary,imagery,n.,誇張法,"The phrase ""I've told you a million times"" is a classic example of hyperbole.",「我已經跟你說過一百萬次了」這句話是誇張法的經典例子。
-literary,irony,n.,意象；形象化語言,The poet uses vivid imagery of nature to convey peace.,詩人運用生動的自然意象來傳達平靜。
-literary,logos,n.,諷刺；反諷,It is a cruel irony that the fire station burned down while the firefighters were away.,消防局在消防員外出時燒毀，真是一個殘酷的諷刺。
-literary,metaphor,n.,邏輯訴求,The lawyer used logos by presenting statistical evidence.,律師透過呈現統計證據來使用邏輯訴求。
-literary,metonymy,n.,隱喻,"""Life is a roller coaster"" is a common metaphor used to describe ups and downs.",「人生如雲霄飛車」是用來形容起伏波折的常見隱喻。
-literary,mood,n.,借代,The crown is often used as a metonymy for the royal government.,「王冠」常用作皇室政府的借代。
-literary,motif,n.,氛圍；情緒,The dark setting creates a mood of fear and suspense.,陰暗的場景營造出恐懼與懸疑的氛圍。
-literary,onomatopoeia,n.,母題；重複出現的元素,The motif of birds appears throughout the novel.,鳥的母題貫穿整部小說。
-literary,oxymoron,n.,擬聲詞,"Words like ""buzz"" and ""hiss"" are examples of onomatopoeia.","像 ""buzz"" 和 ""hiss"" 這樣的詞都是擬聲詞的例子。"
-literary,paradox,n.,矛盾修辭法,"The phrase ""deafening silence"" is an oxymoron that highlights the tension.",「震耳欲聾的沉默」是一個矛盾修辭法，突顯了緊張氣氛。
-literary,parallelism,n.,悖論；似非而是,"The statement ""the only constant is change"" is a famous philosophical paradox.",「唯一的不變就是變」是一個著名的哲學悖論。
-literary,pathos,n.,平行結構；排比,Parallelism uses similar grammatical structures for emphasis.,平行結構使用相似的語法結構以強調。
-literary,personification,n.,情感訴求,The charity ad relies on pathos to evoke sympathy from viewers.,慈善廣告依賴情感訴求來引發觀眾的同情。
-literary,plot,n.,擬人化,The poet uses personification to describe the wind whispering through the trees.,詩人使用擬人化法來描寫風在樹林間低語。
-literary,rhetoric,n.,情節,The plot thickens when the detective finds a hidden letter.,當偵探發現一封隱藏的信件時，情節變得更加複雜。
-literary,rhetorical question,n.,修辭學,Rhetoric is the art of effective or persuasive speaking or writing.,修辭學是有效或說服性口語與寫作的藝術。
-literary,setting,n.,修辭問句；反問,"A rhetorical question is asked for effect, not to elicit an answer.",修辭問句是為了效果而問，並非尋求答案。
-literary,simile,n.,背景；場景,The setting of the story is a small town in the 1950s.,故事背景設定在1950年代的一個小鎮。
-literary,symbol,n.,明喻,"""As brave as a lion"" is a common simile.",「像獅子一樣勇敢」是一個常見的明喻。
-literary,symbolism,n.,象徵,The white dove is a symbol of peace.,白鴿是和平的象徵。
-literary,synecdoche,n.,象徵主義,The broken clock in the story is a piece of symbolism representing the end of an era.,故事中破碎的鐘是一個象徵，代表一個時代的終結。
-literary,theme,n.,提喻法,"Using the word ""wheels"" to refer to a whole car is an example of synecdoche.","用 ""wheels""（輪子）這個詞來指代整輛車是提喻法的一個例子。"
-literary,tone,n.,主題,The central theme of the novel is the loss of innocence.,這部小說的主題是天真與純真的喪失。
-literary,trope,n.,語氣；語調,The tone of the essay shifts from humorous to serious.,這篇文章的語氣從幽默轉為嚴肅。
-literary,understatement,n.,比喻；套路；常見修辭,The hero's journey is a common trope in fantasy literature.,英雄之旅是奇幻文學中常見的套路。
-literary,voice,n.,輕描淡寫；含蓄說法,"Saying the hurricane was ""a bit of wind"" is a massive understatement.",說這場颶風只是「一點風」簡直是極大的輕描淡寫。
+ academic,long quotations,n.,整段引用,Long quotations exceeding four lines should be formatted as a block quotation.,超過四行的長引用應排版為整段引用格式。
+ academic,rebuttal,n.,反駁；辯駁,The rebuttal uses logical reasoning to dismantle the opposing view.,反駁部分運用邏輯推理來推翻對立觀點。
+ academic,secondary source,n.,二手資料；間接資料,A secondary source analyzes or interprets primary sources.,二手資料分析或詮釋一手資料。
+ academic,signpost,n.,路標詞；指引,"Signposts like 'firstly,' 'conversely,' and 'ultimately' guide readers through the argument.",像「首先」、「相反地」和「最終」這類路標詞能引導讀者理解論證脈絡。
+ academic,source triangulation,n.,資料三角驗證,Source triangulation strengthens credibility by cross-referencing multiple independent sources.,資料三角驗證透過交叉比對多個獨立來源來提升可信度。
+ academic,stance marker,n.,立場標記詞,"Stance markers like 'arguably,' 'undoubtedly,' or 'it seems' reveal the writer's position.",立場標記詞（如「可說」、「無疑」、「似乎」）揭示作者的立場。
+ academic,synthesis,n.,綜合；整合,Synthesis involves combining multiple sources to create a new perspective.,綜合是指整合多個來源以創造新的觀點。
+ academic,thematic paragraph,n.,主題段,Thematic paragraphs organize ideas by concept rather than chronologically.,主題段按概念而非時間順序來組織觀點。
+ academic,thesis statement,n.,論文主旨句,The thesis statement clearly outlines the argument and scope of the paper.,論文主旨句清楚勾勒出文章的論點與範圍。
+ academic,Toulmin model,n.,圖爾敏論證模型,"The Toulmin model breaks arguments into claim, data, warrant, backing, and rebuttal.",圖爾敏模型將論證拆解為主張、資料、理據、支撐與反駁。
+ academic,transitional hook,n.,過渡鉤子；承上啟下句,A transitional hook at the end of a paragraph links to the next section's topic.,段落結尾的過渡鉤子能將內容連結至下一節的主題。
+ academic,warrant,n.,理據；橋接論證,The warrant explains how the evidence logically supports the claim.,理據解釋證據如何在邏輯上支持主張。
+ argumentation,assertion,n.,主張；斷言,The critic's assertion that the movie was a failure sparked much debate.,評論家關於這部電影是失敗之作的主張引發了許多辯論。
+ argumentation,bias,n.,偏見；偏向,Recognizing bias helps readers evaluate sources critically.,識別偏見有助於讀者批判性地評估資料來源。
+ argumentation,concede,v.,讓步；承認(屬實),"Although he disagreed, he had to concede that his opponent made a valid point.",儘管他不同意，但他不得不承認對手的觀點是有道理的。
+ argumentation,credibility,n.,可信度；可靠性,The credibility of a source depends on its accuracy and authority.,資料來源的可信度取決於其準確性與權威性。
+ argumentation,fallacy,n.,謬誤,The politician's speech was criticized for containing several logical fallacies.,這位政治家的演說因包含多個邏輯謬誤而受到批評。
+ argumentation,premise,n.,前提,The entire argument is based on the premise that all men are created equal.,整個論點都建立在人人生而平等的前提之上。
+ argumentation,refute,v.,反駁,The lawyer presented new evidence to refute the witness's testimony.,律師提出了新證據來反駁證人的證詞。
+ argumentation,substantiate,v.,證實,You must provide specific examples to substantiate your claims in the essay.,你必須提供具體例子來證實你在文章中的主張。
+ argumentation,thesis,n.,論點；主旨,The thesis of the paper is clearly stated in the introduction.,論文的論點在引言中清楚陳述。
+ character-analysis,agency,n.,能動性；自主性,Feminist criticism examines how female characters exercise agency within patriarchal constraints.,女性主義批評檢視女性角色如何在父權限制下展現能動性。
+ character-analysis,antagonist,n.,反派；對立角色,The antagonist opposes the protagonist and creates conflict.,反派與主角對立並製造衝突。
+ character-analysis,anti-hero,n.,反英雄,The anti-hero lacks traditional heroic qualities like courage and idealism.,反英雄缺乏勇氣與理想主義等傳統英雄特質。
+ character-analysis,archetype,n.,原型,The wise old mentor is a common archetype across cultures.,智慧長者是全球文化中常見的原型。
+ character-analysis,character arc,n.,角色弧線,The character arc traces the protagonist's emotional journey from fear to courage.,角色弧線描繪主角從恐懼到勇氣的情感旅程。
+ character-analysis,character development,n.,角色發展；人物塑造,Effective character development makes readers care about the protagonist's fate.,有效的角色發展讓讀者關心主角的命運。
+ character-analysis,character flaw,n.,角色缺陷,Pride is the fatal character flaw that leads to the hero's downfall.,驕傲是導致英雄毀滅的致命角色缺陷。
+ character-analysis,character motivation,n.,角色動機,Understanding character motivation helps readers predict actions and interpret choices.,理解角色動機有助於讀者預測行為並解讀選擇。
+ character-analysis,character revelation,n.,角色揭露；性格展現,The letter serves as a key moment of character revelation.,這封信是角色揭露的關鍵時刻。
+ character-analysis,characterization,n.,人物塑造（總稱）,"Through subtle characterization, the author makes even minor characters memorable.",透過細膩的人物塑造，作者讓即使是次要角色也令人難忘。
+ character-analysis,confidant,n.,知心角色；傾訴對象,The confidant allows the protagonist to reveal inner thoughts through dialogue.,知心角色讓主角能透過對話揭露內心想法。
+ character-analysis,deuteragonist,n.,第二主角,The deuteragonist plays a crucial supporting role to the protagonist.,第二主角對主角扮演關鍵的輔助角色。
+ character-analysis,direct characterization,n.,直接人物塑造,Direct characterization tells the reader explicitly what a character is like.,直接人物塑造明確告訴讀者角色是什麼樣的人。
+ character-analysis,dynamic character,n.,動態人物,A dynamic character changes significantly over the course of the story.,動態人物在故事過程中發生顯著變化。
+ character-analysis,epiphany,n.,頓悟；靈光乍現,The protagonist experiences an epiphany that changes his worldview.,主角經歷了一次頓悟，改變了他的世界觀。
+ character-analysis,external conflict,n.,外部衝突,External conflict arises when the character faces opposition from society or nature.,當角色面臨社會或自然的對立時，便產生外部衝突。
+ character-analysis,flat character,n.,扁平人物,A flat character represents a single trait without psychological depth.,扁平人物代表單一特質，缺乏心理深度。
+ character-analysis,foil,n.,襯托角色,The optimistic friend serves as a foil to highlight the protagonist's cynicism.,樂觀的朋友作為襯托角色，凸顯主角的憤世嫉俗。
+ character-analysis,indirect characterization,n.,間接人物塑造,"Indirect characterization reveals personality through actions, speech, and thoughts.",間接人物塑造透過行為、言語和思想來揭示性格。
+ character-analysis,internal conflict,n.,內心衝突,The protagonist's internal conflict between duty and desire drives the narrative.,主角在責任與慾望之間的內心衝突推動了敘事。
+ character-analysis,marginalization,n.,邊緣化,The story explores the marginalization of minority characters in mainstream society.,這個故事探討少數族群角色在主流社會中的邊緣化。
+ character-analysis,protagonist,n.,主角,The protagonist drives the main action of the story.,主角推動故事的主要行動。
+ character-analysis,psychological depth,n.,心理深度,The novel is praised for its psychological depth in portraying the heroine's inner turmoil.,這部小說因在描繪女主角內心掙扎時展現的心理深度而受到讚譽。
+ character-analysis,round character,n.,圓形人物,A round character has complexity and undergoes development.,圓形人物具有複雜性並會經歷發展。
+ character-analysis,social context,n.,社會脈絡；時代背景,Analyzing a character requires understanding the social context of their time.,分析角色需要理解其所處時代的社會脈絡。
+ character-analysis,static character,n.,靜態人物,A static character remains largely unchanged from beginning to end.,靜態人物從頭到尾基本保持不變。
+ character-analysis,stock character,n.,定型角色,The clever servant is a stock character in commedia dell'arte.,聰明的僕人是即興喜劇中的定型角色。
+ character-analysis,tragic flaw,n.,悲劇缺陷；致命缺陷,Hubris is often the tragic flaw in Greek tragedies.,傲慢往往是希臘悲劇中的悲劇缺陷。
+ character-analysis,tragic hero,n.,悲劇英雄,A tragic hero is a noble character whose flaw leads to downfall.,悲劇英雄是一位高貴的角色，其缺陷導致毀滅。
+ critics,ambivalent,adj.,矛盾曖昧的,The narrator's attitude toward the hero remains ambivalent throughout the novel.,敘事者對英雄的態度在整部小說中始終矛盾曖昧。
+ critics,analyze,v.,分析,Students must learn to analyze the author's use of language.,學生必須學會分析作者的語言運用。
+ critics,articulate,v.,清晰表達；體現,The novel articulates the anxiety of post-war generation.,這部小說清晰表達了戰後一代的焦慮。
+ critics,canon,n.,文學經典,The Western literary canon includes works by Shakespeare and Dante.,西方文學經典包括莎士比亞和但丁的作品。
+ critics,contextualize,v.,脈絡化；置於背景中理解,"To understand the poem, we must contextualize it within the Romantic era.",要理解這首詩，我們必須將其置於浪漫主義時代的脈絡中。
+ critics,deconstruction,n.,解構,Deconstruction challenges the binary oppositions in a text.,解構挑戰文本中的二元對立。
+ critics,diegesis,n.,敘事世界；故事內虛構世界,The diegesis includes everything that exists within the story's world.,敘事世界包含了故事世界內存在的一切。
+ critics,ecocriticism,n.,生態批評,Ecocriticism investigates the relationship between literature and the natural world.,生態批評研究文學與自然世界之間的關係。
+ critics,feminist criticism,n.,女性主義批評,Feminist criticism examines how gender shapes literary texts.,女性主義批評探討性別如何形塑文學文本。
+ critics,foreground,v.,前景化；凸顯,The close-up shots foreground the character's emotional turmoil.,特寫鏡頭凸顯了角色內心的情感混亂。
+ critics,hegemony,n.,霸權；文化主導權,Cultural hegemony maintains power through consent rather than force.,文化霸權透過同意而非武力來維持權力。
+ critics,hermeneutics,n.,詮釋學,Hermeneutics is the theory of interpretation in literary studies.,詮釋學是文學研究中的解釋理論。
+ critics,intertextuality,n.,互文性,The novel's intertextuality with Greek myths adds layers of meaning.,這部小說與希臘神話的互文性增添了多重意義。
+ critics,marxist criticism,n.,馬克思主義批評,Marxist criticism examines how texts reflect class struggle and economic power.,馬克思主義批評檢視文本如何反映階級鬥爭和經濟權力。
+ critics,mimesis,n.,模仿；擬真,Aristotle viewed drama as an act of mimesis imitating human action.,亞里斯多德將戲劇視為模仿人類行動的行為。
+ critics,new historicism,n.,新歷史主義,New historicism reads literary texts alongside historical documents of the same period.,新歷史主義將文學文本與同期歷史文獻並行解讀。
+ critics,nuanced,adj.,細緻入微的,The critic offered a nuanced reading of the film's ambiguous ending.,評論家對電影模棱兩可的結局提出了細緻入微的解讀。
+ critics,post-structuralism,n.,後結構主義,Post-structuralism challenges the idea of fixed meanings in language and texts.,後結構主義挑戰語言和文本中存在固定意義的觀念。
+ critics,postcolonial criticism,n.,後殖民批評,Postcolonial criticism analyzes literature from formerly colonized nations.,後殖民批評分析來自前殖民地國家的文學。
+ critics,problematize,v.,問題化；質疑,The documentary problematizes the simple narrative of technological progress.,這部紀錄片對科技進步的簡單敘事提出了質疑。
+ critics,psychoanalytic criticism,n.,精神分析批評,Psychoanalytic criticism explores characters' unconscious desires.,精神分析批評探索角色的無意識慾望。
+ critics,queer theory,n.,酷兒理論,Queer theory challenges normative assumptions about gender and sexuality.,酷兒理論挑戰關於性別與性向的規範性假設。
+ critics,reader-response criticism,n.,讀者反應批評,Reader-response criticism argues that a text's meaning is co-created by the reader.,讀者反應批評主張文本的意義是由讀者共同創造的。
+ critics,reinforce,v.,強化；鞏固,The fairy tale reinforces the virtue of kindness and punishes cruelty.,這則童話強化了善良的美德並懲罰殘酷。
+ critics,representation,n.,再現；表征,Media representation shapes public perception of social groups.,媒體再現形塑了大眾對社會群體的認知。
+ critics,stereotype,n.,刻板印象,The play challenges racial stereotypes by presenting complex minority characters.,這部戲劇透過呈現複雜的少數族裔角色來挑戰種族刻板印象。
+ critics,structuralism,n.,結構主義,Structuralism analyzes the underlying systems and patterns that shape a text.,結構主義分析塑造文本的潛在系統和模式。
+ critics,subvert,v.,顛覆；推翻,The novel subverts the traditional hero's journey by making the hero fail.,這部小說透過讓英雄失敗來顛覆傳統的英雄旅程。
+ critics,undermine,v.,削弱；暗中破壞,The author uses irony to undermine the protagonist's supposed wisdom.,作者運用反諷來削弱主角自以為是的智慧。
+ critics,verisimilitude,n.,真實感；似真性,The novel achieves verisimilitude through detailed historical research.,這部小說透過詳細的歷史研究達到了真實感。
+ drama,absurdist theatre,n.,荒誕派戲劇,"Samuel Beckett's ""Waiting for Godot"" is a classic example of absurdist theatre.",塞繆爾·貝克特的《等待戈多》是荒誕派戲劇的經典範例。
+ drama,aside,n.,旁白,"In a stage whisper, the character says an aside to the audience.",角色以舞台低語對觀眾說出一段旁白。
+ drama,blocking,n.,走位；舞台調度,The director spent an hour blocking the opening scene for the actors.,導演花了一小時為演員們排練開場戲的走位。
+ drama,catharsis,n.,情感淨化；宣洩,Audiences experience catharsis as the tragic hero accepts his fate.,當悲劇英雄接受命運時，觀眾經歷了情感淨化。
+ drama,chorus,n.,歌隊；合唱歌隊,The chorus in Greek tragedy comments on the action and provides background information.,希臘悲劇中的歌隊評論劇情並提供背景訊息。
+ drama,comedy,n.,喜劇,"Shakespeare's ""A Midsummer Night's Dream"" is a romantic comedy.",莎士比亞的《仲夏夜之夢》是一部浪漫喜劇。
+ drama,commedia dell'arte,n.,即興喜劇；義大利即興喜劇,Commedia dell'arte features stock characters like Harlequin and Pantalone.,即興喜劇以丑角和潘塔隆內等定型角色為特色。
+ drama,costume design,n.,服裝設計,The costume design for the period drama required extensive historical research.,這部時代劇的服裝設計需要大量的歷史研究。
+ drama,cross-cutting,n.,交叉剪輯；場景交錯,The director used cross-cutting to show the parallel lives of the two protagonists.,導演運用交叉剪輯來展示兩位主角平行的人生。
+ drama,dialogue,n.,對話,The dialogue reveals the characters' true intentions.,對話揭示了角色的真實意圖。
+ drama,direct address,n.,直接對白；直接對觀眾說話,"By using direct address, the villain shared his evil plan with the audience.",惡棍透過直接對白向觀眾分享他的邪惡計畫。
+ drama,ensemble,n.,合奏；劇團；全體演員,The ensemble worked together seamlessly to create a powerful performance.,全體演員無縫合作，共同創造了一場動人的演出。
+ drama,epic theatre,n.,史詩劇場,Bertolt Brecht developed epic theatre to encourage audiences to think critically rather than emotionally.,貝托爾特·布萊希特發展史詩劇場是為了鼓勵觀眾理性思考而非情感投入。
+ drama,farce,n.,鬧劇,The play's mistaken identities and slapstick make it a classic farce.,這齣戲的錯認身份與鬧劇式搞笑使其成為經典鬧劇。
+ drama,fourth wall,n.,第四面牆,The actor broke the fourth wall by winking at the audience.,那位演員對著觀眾眨眼，打破了第四面牆。
+ drama,hot-seating,n.,熱椅提問,The teacher used hot-seating to help students explore their character's motivations.,老師使用熱椅提問來幫助學生探索他們角色的動機。
+ drama,improvisation,n.,即興表演,The actors used improvisation to generate new material for the scene.,演員們使用即興表演為該場景生成新的素材。
+ drama,lighting design,n.,燈光設計,The lighting design shifted from warm amber to cold blue to show the change in mood.,燈光設計從溫暖的琥珀色轉為冷冽的藍色以顯示情緒轉變。
+ drama,melodrama,n.,情節劇；通俗劇,Victorian melodrama often features a virtuous hero and a dastardly villain.,維多利亞時代的情節劇通常有一位品德高尚的英雄和一個卑鄙的惡棍。
+ drama,monologue,n.,獨白,The actor delivered a moving monologue about loss.,演員發表了一段關於失去的動人獨白。
+ drama,musical theatre,n.,音樂劇,Les Misérables is a famous musical theatre production based on Victor Hugo's novel.,《悲慘世界》是一部根據維克多·雨果小說改編的著名音樂劇。
+ drama,naturalism,n.,自然主義,"""Hedda Gabler"" by Henrik Ibsen is a landmark play of theatrical naturalism.",易卜生的《海達·蓋伯勒》是戲劇自然主義的里程碑作品。
+ drama,physical theatre,n.,形體劇場,DV8 Physical Theatre uses movement and dance rather than spoken dialogue to tell stories.,DV8形體劇場使用動作和舞蹈而非口語對白來講述故事。
+ drama,props,n.,道具；小道具,The actor forgot his most important prop: the letter.,演員忘記了他最重要的道具：那封信。
+ drama,set design,n.,舞台設計；佈景設計,The set design for the musical included a rotating two-storey house.,這部音樂劇的舞台設計包含一座旋轉的兩層樓房屋。
+ drama,slow motion,n.,慢動作,The fight scene was performed in slow motion to heighten the drama.,打鬥場景以慢動作演出以增強戲劇張力。
+ drama,soliloquy,n.,戲劇獨白,"Hamlet's ""To be or not to be"" is a famous soliloquy.",哈姆雷特的「生存還是毀滅」是一段著名的戲劇獨白。
+ drama,sound design,n.,音效設計,The sound design used a low rumble to suggest an approaching storm.,音效設計使用低沉的轟鳴聲來暗示即將來臨的風暴。
+ drama,stage direction,n.,舞台指示,"According to the stage direction, the lights fade and the curtain falls.",根據舞台指示，燈光漸暗，布幕落下。
+ drama,symbolic gesture,n.,象徵性動作,Her symbolic gesture of opening a cage represented a desire for freedom.,她打開籠子的象徵性動作代表了對自由的渴望。
+ drama,tableau,n.,靜止畫面；定格造型,The play ended with a powerful tableau of the family reunited.,這齣戲以一家團聚的強而有力定格畫面作結。
+ drama,thought-tracking,n.,思緒追蹤,"During thought-tracking, the actor revealed her character's secret fear.",在思緒追蹤環節中，演員揭示了她角色內心深處的恐懼。
+ drama,tragedy,n.,悲劇,The protagonist's tragic flaw leads to his downfall in the tragedy.,悲劇中主角的缺陷導致了他的毀滅。
+ genre,anthology,n.,選集；文集,The students read an anthology of modern American short stories.,學生們閱讀了一本美國現代短篇小說選集。
+ genre,biography,n.,傳記,The biography of Steve Jobs explores the life of the Apple co-founder.,這部史蒂夫·賈伯斯的傳記探索了這位蘋果公司共同創始人的一生。
+ genre,discursive text,n.,議論性文本,"In a discursive text, the writer explores an issue from multiple perspectives.",在議論性文本中，作者會從多個角度探討一個議題。
+ genre,epic,n.,史詩,The Odyssey is an ancient Greek epic that narrates the journey of Odysseus.,《奧德賽》是一部古希臘史詩，敘述了奧德修斯的旅程。
+ genre,essay,n.,散文；論說文,The student wrote a persuasive essay on climate change.,學生寫了一篇關於氣候變遷的說服性文章。
+ genre,fiction,n.,小說,She enjoys reading historical fiction.,她喜歡讀歷史小說。
+ genre,genre,n.,文類；體裁,The novel belongs to the science fiction genre.,這部小說屬於科幻文類。
+ genre,literary essay,n.,文學評論,A literary essay presents an argument about a text supported by evidence.,文學評論提出一個關於文本的論點，並以證據支持。
+ genre,memoir,n.,回憶錄,The senator published a memoir detailing her years in public service.,這位參議員出版了一本回憶錄，詳述她多年從政的經歷。
+ genre,non-fiction,n.,非虛構作品,The course focuses on non-fiction essays and memoirs.,這門課程專注於非虛構散文與回憶錄。
+ genre,parody,n.,戲仿；滑稽模仿,The sketch show performed a parody of the famous spy movie.,這場短劇表演對那部著名的間諜電影進行了戲仿。
+ genre,prose,n.,散文,"Unlike poetry, prose uses ordinary grammatical structure and natural flow of speech.",與詩歌不同，散文使用普通的語法結構和自然的語言流動。
+ grammar,active voice,n.,主動語態,"""The dog bit the mailman"" is written in the active voice.",「狗咬了郵差」用的是主動語態。
+ grammar,ambiguity,n.,含糊；歧義,The poet uses ambiguity to allow multiple interpretations.,詩人使用含糊來允許多種解讀。
+ grammar,clause,n.,子句；分句,A clause contains both a subject and a verb.,一個子句同時包含主語和動詞。
+ grammar,code-switching,n.,語碼轉換,Code-switching occurs when speakers alternate between languages or dialects.,語碼轉換發生在說話者交替使用不同語言或方言時。
+ grammar,colloquialism,n.,口語表達；俚語,The dialogue is rich in colloquialisms that reflect the character's regional background.,對話充滿口語表達，反映了角色的地域背景。
+ grammar,connotation,n.,隱含意義；聯想義,"The word ""home"" has positive connotations of warmth and safety.",「家」這個詞帶有溫暖和安全的正面聯想意義。
+ grammar,denotation,n.,字面意義；外延義,"While the connotation of ""snake"" is deceit, its denotation is simply a legless reptile.",雖然「蛇」的隱含意義是欺詐，但其字面意義只是無腿的爬行動物。
+ grammar,homonym,n.,同音異義詞；同形異義詞,"""Bank"" is a homonym that can mean a financial institution or the side of a river.",「Bank」是一個同形異義詞，可指金融機構或河岸。
+ grammar,nuance,n.,細微差別,Understanding nuance is key to literary analysis.,理解細微差別是文學分析的關鍵。
+ grammar,passive voice,n.,被動語態,"""The mailman was bitten by the dog"" is written in the passive voice.",「郵差被狗咬了」用的是被動語態。
+ grammar,phrase,n.,片語；短語,A phrase is a group of words that does not contain a verb.,片語是一組不包含動詞的單詞。
+ grammar,plausible,adj.,看似合理的,"Although the excuse was creative, it did not seem plausible to the teacher.",雖然這個藉口很有創意，但在老師看來似乎並不合理。
+ grammar,polysemy,n.,多義性,Polysemy refers to a word having multiple related meanings.,多義性指一個詞擁有多個相關意義。
+ grammar,pragmatics,n.,語用學,Pragmatics examines how context influences language interpretation.,語用學檢視語境如何影響語言解讀。
+ grammar,register,n.,語域；語體,Register refers to language variation according to social context.,語域指根據社會語境產生的語言變體。
+ grammar,semantics,n.,語義學,Semantics studies the meaning of words and sentences.,語義學研究詞語與句子的意義。
+ grammar,subtext,n.,潛臺詞,The subtext of the scene suggests hidden anger.,這場景的潛臺詞暗示了隱藏的憤怒。
+ grammar,syntax,n.,句法；句構,Syntax governs the arrangement of words and phrases to create well-formed sentences.,句法規範詞與片語的排列以構成合乎語法的句子。
+ narrative,analepsis,n.,倒敘；回敘,The story uses analepsis to reveal the character's forgotten childhood memory.,這個故事使用倒敘來揭示角色被遺忘的童年記憶。
+ narrative,anecdote,n.,軼事；趣聞,The speaker opened with a humorous anecdote to capture the audience's attention.,演講者以一段幽默的軼事開場，以吸引觀眾的注意力。
+ narrative,backstory,n.,背景故事,The hero's tragic backstory explains his motivation for revenge.,主角悲慘的背景故事解釋了他復仇的動機。
+ narrative,characterisation,n.,人物塑造,"Through direct and indirect characterisation, the author brings the hero to life.",透過直接與間接的人物塑造，作者讓主角栩栩如生。
+ narrative,chronological,adj.,按時間順序的,Chronological order is the most straightforward way to organize a narrative.,時間順序是組織敘事最直接的方式。
+ narrative,chronology,n.,時間順序,The film disrupts strict chronology by jumping back and forth in time.,這部電影透過在時間中前後跳躍來打亂嚴格的時間順序。
+ narrative,climax,n.,高潮,The story reaches its climax when the two rivals finally meet face to face.,當兩個競爭對手終於面對面碰頭時，故事達到了高潮。
+ narrative,denouement,n.,(小說/戲劇)結局,"In the final denouement, all the mysteries are finally explained.",在最終的結局中，所有的謎團終於得到了解釋。
+ narrative,ellipsis,n.,省略；跳脫,A ten-year ellipsis jumps from the character's childhood to her adulthood.,一個十年的省略從角色的童年跳到了她的成年時期。
+ narrative,epilogue,n.,後記,The epilogue reveals what happened to the characters years later.,後記揭示了角色們多年後的境遇。
+ narrative,exposition,n.,闡述；(故事)背景鋪陳,The exposition provides the necessary background information about the characters.,故事的背景鋪陳提供了關於角色的必要背景資訊。
+ narrative,external focalization,n.,外部聚焦,External focalization only shows external actions without entering any character's mind.,外部聚焦只展示外部行動，不進入任何角色的內心。
+ narrative,first-person,n.,第一人稱,"First-person narration uses ""I"" to tell the story from a character's perspective.",第一人稱敘事使用「我」從角色的視角講述故事。
+ narrative,flashback,n.,倒敘,A flashback reveals the character's traumatic childhood experience.,倒敘手法揭露了角色悲慘的童年經歷。
+ narrative,flashforward,n.,預敘；閃前,A flashforward reveals the character's fate at the very end of the play.,一個預敘鏡頭在戲劇尾聲揭示了角色的命運。
+ narrative,focalization,n.,聚焦；視角,Focalization determines through whose eyes the story is seen.,聚焦決定了故事是透過誰的眼睛被看見。
+ narrative,foreshadowing,n.,伏筆,The dark clouds in the first chapter served as foreshadowing for the coming tragedy.,第一章中的烏雲是為即將到來的悲劇埋下的伏筆。
+ narrative,frame story,n.,框架故事,The Thousand and One Nights is a famous frame story.,《一千零一夜》是一個著名的框架故事。
+ narrative,in medias res,phrase.,從情節中間開始,"The epic begins in medias res, with the hero already on his journey.",這部史詩從情節中間開始，英雄已踏上旅程。
+ narrative,internal focalization,n.,內部聚焦,Internal focalization limits the narrative to what a single character knows.,內部聚焦將敘事限制在單一角色所知的範圍內。
+ narrative,narrator,n.,敘事者,The unreliable narrator makes the reader question the truth.,不可靠的敘事者讓讀者質疑故事的真實性。
+ narrative,non-linear,adj.,非線性的,The film uses a non-linear structure to reveal the mystery gradually.,這部電影使用非線性結構逐步揭示謎團。
+ narrative,pacing,n.,節奏,The fast pacing of the thriller kept the audience on the edge of their seats.,這部驚悚片快速的節奏讓觀眾緊張得坐立難安。
+ narrative,perspective,n.,觀點；視角,The story is told from a child's perspective.,這個故事是從孩子的視角敘述的。
+ narrative,prolepsis,n.,預敘；前敘,The prolepsis at the beginning foreshadows the tragic ending.,開頭的預敘暗示了悲劇的結局。
+ narrative,prologue,n.,序言,The prologue introduces the setting and the main conflict.,序言介紹了故事背景與主要衝突。
+ narrative,resolution,n.,結局；(問題)解決,"In the resolution, the family finally reunites and the conflict is settled.",在結局中，一家人終於團聚，衝突得到了解決。
+ narrative,scene,n.,場景；場景敘事,"In the scene, the conversation unfolds in real-time without summary.",在場景中，對話即時展開，沒有概括。
+ narrative,stream of consciousness,n.,意識流,James Joyce uses stream of consciousness to mimic inner thoughts.,詹姆斯·喬伊斯使用意識流來模仿內心思緒。
+ narrative,subplot,n.,次要情節；支線,The subplot involving the detective's personal life adds depth to the main story.,涉及偵探個人生活的次要情節為主線增添了深度。
+ narrative,summary,n.,概括；概要敘事,The author uses a summary to quickly cover the protagonist's uneventful years.,作者使用概括來快速交代主角平淡的幾年。
+ narrative,third-person limited,n.,第三人稱有限視角,Third-person limited narration reveals only one character's thoughts.,第三人稱有限視角僅揭示單一角色的想法。
+ narrative,third-person omniscient,n.,第三人稱全知視角,Third-person omniscient narration knows everything about all characters.,第三人稱全知視角了解所有角色的一切。
+ narrative,transition,n.,過渡,"Use transition words like ""however"" and ""moreover"" to improve the flow of your essay.",使用像「然而」和「此外」之類的過渡詞來改善文章的連貫性。
+ narrative,unreliable narrator,n.,不可靠的敘事者,The reader cannot fully trust the story told by an unreliable narrator.,讀者無法完全信任不可靠敘事者所講述的故事。
+ narrative,zero focalization,n.,零聚焦；全知聚焦,Zero focalization allows the narrator to know everything about all characters.,零聚焦允許敘事者了解所有角色的一切。
+ poetic-devices,alliteration,n.,頭韻,"""She sells seashells"" uses alliteration with the ""s"" sound.",「she sells seashells」使用了 s 音的頭韻。
+ poetic-devices,assonance,n.,母韻；元音韻,"The repetition of the long ""o"" sound in ""slow motion"" is assonance.",「slow motion」中長 o 音的重複就是母韻。
+ poetic-devices,caesura,n.,詩行中間的停頓,"A strong caesura appears after the word ""death"" in the middle of the line.",在詩行中間，「death」一詞之後出現一個強烈的停頓。
+ poetic-devices,consonance,n.,子音韻,"""Pitter-patter"" shows consonance with the ""t"" and ""r"" sounds.",「pitter-patter」展現了 t 與 r 音的子音韻。
+ poetic-devices,elegy,n.,輓歌,In Memoriam by Tennyson is a long elegy for a lost friend.,丁尼生的《紀念》是為逝去友人寫的長篇輓歌。
+ poetic-devices,enjambment,n.,跨行；跨句,"The sentence continues to the next line without pause, creating enjambment.",句子未停頓直接延續到下一行，形成跨行。
+ poetic-devices,foot,n.,音步,Iambic pentameter consists of five feet per line.,抑揚格五音步每行包含五個音步。
+ poetic-devices,free verse,n.,自由詩,Modern poets often use free verse with no regular meter or rhyme.,現代詩人經常使用無固定格律或押韻的自由詩。
+ poetic-devices,iamb,n.,抑揚格,An iamb is an unstressed syllable followed by a stressed syllable.,抑揚格是一個非重讀音節後接一個重讀音節。
+ poetic-devices,meter,n.,格律；音步,The poem is written in iambic pentameter.,這首詩是以抑揚格五音步寫成的。
+ poetic-devices,ode,n.,頌詩,"Keats wrote ""Ode on a Grecian Urn"" as a celebration of art and beauty.",濟慈寫下《希臘古甕頌》來歌頌藝術與美。
+ poetic-devices,rhyme,n.,押韻,The poet uses rhyme to create a musical effect.,詩人使用押韻來營造音樂效果。
+ poetic-devices,rhythm,n.,節奏,The rhythm of the poem mimics the sound of waves.,詩的節奏模仿了海浪的聲音。
+ poetic-devices,sonnet,n.,十四行詩,Shakespeare wrote 154 sonnets following a specific rhyme scheme.,莎士比亞按照特定押韻格式創作了154首十四行詩。
+ poetic-devices,stanza,n.,詩節,Each stanza in the poem explores a different season.,詩中的每個詩節探討一個不同的季節。
+ poetic-devices,trochee,n.,揚抑格,A trochee is a stressed syllable followed by an unstressed syllable.,揚抑格是一個重讀音節後接一個非重讀音節。
+ poetic-devices,villanelle,n.,維拉內拉詩,"""Do not go gentle into that good night"" is a famous villanelle.",《溫柔地不要走進那良夜》是一首著名的維拉內拉詩。
+ reading-skills,biased,adj.,有偏見的,The news article was criticized for being biased toward the ruling party.,這篇新聞報導因偏袒執政黨而受到批評。
+ reading-skills,comprehension,n.,理解；閱讀理解,Reading comprehension is essential for academic success.,閱讀理解是學業成功的關鍵。
+ reading-skills,condescending,adj.,居高臨下的,The professor's condescending tone made the students feel unintelligent.,教授那居高臨下的語氣讓學生們覺得自己很不聰明。
+ reading-skills,context clue,n.,上下文線索,Readers can use context clues to guess the meaning of unfamiliar words.,讀者可以利用上下文線索猜測生詞的含義。
+ reading-skills,cynical,adj.,憤世嫉俗的；懷疑人性自私的,The author's cynical view suggests that people only help others for personal gain.,作者憤世嫉俗的觀點暗示人們幫助他人只是為了個人利益。
+ reading-skills,indifferent,adj.,冷淡的；不在意的,The protagonist remained indifferent to the suffering of those around him.,主角對身邊人的痛苦保持冷漠。
+ reading-skills,inference,n.,推論；推斷,Making inferences helps readers understand what is not directly stated.,做出推論能幫助讀者理解未直接陳述的內容。
+ reading-skills,main idea,n.,主旨；中心思想,Identifying the main idea is the first step in summarizing a text.,識別主旨是總結文本的第一步。
+ reading-skills,nostalgic,adj.,懷舊的,"The poem has a nostalgic tone, reflecting on the simple joys of childhood.",這首詩帶有懷舊的語調，反思童年簡單的快樂。
+ reading-skills,optimistic,adj.,樂觀的,"Despite the challenges, the author maintains an optimistic outlook for the future.",儘管面臨挑戰，作者對未來仍保持樂觀的見解。
+ reading-skills,reverent,adj.,虔誠的；恭敬的,The biographer wrote in a reverent tone when describing the leader's sacrifices.,傳記作者在描述這位領袖的犧牲時，語氣充滿了崇敬。
+ reading-skills,sardonic,adj.,嘲諷的；譏諷的,His sardonic laugh suggested that he didn't believe a word of the explanation.,他那譏諷的笑聲暗示他對那番解釋一個字也不信。
+ reading-skills,skeptical,adj.,懷疑的,Many scientists remain skeptical about the new claims until they see data.,許多科學家在看到數據之前，對這些新主張仍持懷疑態度。
+ reading-skills,supporting detail,n.,支持細節；佐證細節,Supporting details provide evidence for the main idea.,支持細節為主旨提供證據。
+ structure,argumentative paragraph,n.,論證段；議論文段,An argumentative paragraph presents a claim supported by evidence and reasoning.,論證段提出一個由證據與推理支持的主張。
+ structure,block paragraph,n.,齊頭式段落,Block paragraphs have no indentation but are separated by a blank line.,齊頭式段落無縮排，但以空行分隔。
+ structure,body paragraph,n.,主體段；論證段,Each body paragraph develops one main point that supports the thesis.,每個主體段發展一個支持論點的主要觀點。
+ structure,cause and effect,n.,因果關係,A cause-and-effect paragraph explains why something happens and what results from it.,因果段落解釋某事發生的原因及其結果。
+ structure,cause-and-effect,n.,因果關係,A cause-and-effect structure explains why an event occurred and what resulted from it.,因果結構解釋事件發生的原因及其結果。
+ structure,chronological order,n.,時間順序,Chronological order arranges events in the sequence they occurred.,時間順序按事件發生的先後排列。
+ structure,clarity,n.,清晰,Good writing is marked by clarity and precision.,好的寫作以清晰與精確為特點。
+ structure,classification,n.,分類,Classification organizes ideas into categories for clearer understanding.,分類將觀點歸入不同類別以利清晰理解。
+ structure,clincher,n.,有力結尾；點睛句,A clincher is a memorable final sentence that reinforces the main point.,有力結尾是令人難忘的最後一句，用以強化主旨。
+ structure,coherence,n.,連貫性,The essay lacks coherence between paragraphs.,這篇文章在段落之間缺乏連貫性。
+ structure,compare-and-contrast,n.,比較與對比,The essay uses a compare-and-contrast pattern to analyze two literary movements.,文章使用比較與對比模式分析兩個文學運動。
+ structure,comparison,n.,比較,Comparison highlights similarities between two or more items.,比較強調兩個或多個項目之間的相似之處。
+ structure,concluding paragraph,n.,結論段；總結段,The concluding paragraph restates the thesis and synthesizes key arguments.,結論段重述論點並綜合關鍵論證。
+ structure,concluding sentence,n.,結尾句,A concluding sentence summarizes the main point of the paragraph.,結尾句總結段落的主要觀點。
+ structure,contrast,n.,對比,Contrast emphasizes differences to clarify distinctions.,對比強調差異以釐清區別。
+ structure,controlling idea,n.,控制概念；限定主旨,The controlling idea in the topic sentence limits the scope of the paragraph.,主題句中的控制概念限定了段落的討論範圍。
+ structure,definition,n.,定義,A definition paragraph explains the meaning of a term or concept.,定義段落解釋某個術語或概念的含義。
+ structure,descriptive paragraph,n.,描述段,A descriptive paragraph uses sensory details to create a vivid picture.,描述段運用感官細節營造生動畫面。
+ structure,exemplification,n.,舉例說明,Exemplification uses specific cases to illustrate a general point.,舉例說明使用具體案例來闡釋一般觀點。
+ structure,expository paragraph,n.,說明段,An expository paragraph explains or informs about a topic objectively.,說明段客觀地解釋或介紹某個主題。
+ structure,indentation,n.,縮排,Indentation signals the beginning of a new paragraph in formal writing.,縮排在正式寫作中標示新段落的開始。
+ structure,introductory paragraph,n.,引言段；開頭段,The introductory paragraph presents the topic and thesis statement.,引言段提出主題與論點陳述。
+ structure,lexical cohesion,n.,詞彙銜接,Lexical cohesion uses synonyms and related words to link ideas.,詞彙銜接使用同義詞與相關詞彙來連接觀點。
+ structure,logical,adj.,合邏輯的,The argument is logical and well-structured.,這個論點合邏輯且結構良好。
+ structure,narrative paragraph,n.,敘事段,A narrative paragraph tells a short story or recounts an event in sequence.,敘事段講述一個小故事或按順序敘述事件。
+ structure,order of importance,n.,重要性順序,Order of importance arranges points from most to least significant (or vice versa).,重要性順序按從最重要到最不重要（或相反）排列觀點。
+ structure,paragraph development,n.,段落展開；段落發展,Common methods of paragraph development include exemplification and comparison.,常見的段落展開方法包括舉例與比較。
+ structure,paragraph hook,n.,段落引子；開頭鉤子,A paragraph hook grabs the reader's attention at the beginning.,段落引子在開頭吸引讀者的注意力。
+ structure,paragraph length,n.,段落長度,Varying paragraph length helps maintain reader engagement and control pacing.,變化段落長度有助於維持讀者興趣並控制節奏。
+ structure,parallel structure,n.,平行結構；排比句式,Parallel structure uses the same grammatical pattern for items in a list.,平行結構對列表中的項目使用相同的語法模式。
+ structure,problem-solution,n.,問題與解決,The article follows a problem-solution framework to address urban pollution.,文章遵循問題與解決框架來探討都市污染。
+ structure,process analysis,n.,過程分析,Process analysis breaks down a procedure into step-by-step instructions.,過程分析將一個程序分解為逐步說明。
+ structure,pronoun reference,n.,代詞指代,Clear pronoun reference avoids confusion about what 'it' or 'they' refers to.,清晰的代詞指代可避免 'it' 或 'they' 所指不明的混淆。
+ structure,repetition for emphasis,n.,強調性重複,Strategic repetition of key words can reinforce the paragraph's message.,策略性地重複關鍵詞可以強化段落訊息。
+ structure,spatial order,n.,空間順序,Spatial order describes a scene from left to right or top to bottom.,空間順序從左到右或從上到下描述場景。
+ structure,supporting sentence,n.,支持句；佐證句,Supporting sentences provide examples and evidence to develop the topic sentence.,支持句提供例子與證據來發展主題句。
+ structure,topic sentence,n.,主題句；主旨句,A strong topic sentence clearly states the main idea of the paragraph.,一個有力的主題句能清楚陳述段落的主要觀點。
+ structure,transition word,n.,過渡詞；連接詞,Transition words like 'furthermore' and 'however' help connect ideas between sentences.,像 'furthermore' 和 'however' 這類過渡詞有助於連接句與句之間的觀點。
+ structure,transitional phrase,n.,過渡片語,Transitional phrases such as 'on the other hand' signal a shift in perspective.,像 'on the other hand' 這類過渡片語標示觀點的轉換。
+ structure,unity,n.,統一性；一致性,Paragraph unity means every sentence relates directly to the main idea.,段落統一性意味著每句話都直接關聯主旨。
+ writing,brainstorm,v.,腦力激盪；構思,"Before writing, brainstorm ideas to organize your thoughts.",寫作前先進行腦力激盪，整理思路。
+ writing,colloquial,adj.,口語的；非正式的,The writer uses colloquial language to make the characters sound more authentic.,作者使用口語化的語言，使角色聽起來更加真實。
+ writing,concise,adj.,簡潔的,The editor asked the writer to make the paragraph more concise by removing extra words.,編輯要求作者刪除多餘的字詞，使段落更加簡潔。
+ writing,draft,n.,草稿；初稿,The first draft doesn't need to be perfect; you can revise later.,初稿不需要完美，你可以稍後修改。
+ writing,eloquent,adj.,雄辯的；口才流利的,The activist gave an eloquent speech that moved many in the audience.,這位活動家發表了一場動人的雄辯演說，感動了許多觀眾。
+ writing,figurative,adj.,比喻的,"""Broken heart"" is a figurative expression.",「心碎」是一種比喻性表達。
+ writing,literal,adj.,字面的,Don't take his words literally; he was being sarcastic.,不要字面理解他的話；他在諷刺。
+ writing,objective,adj.,客觀的,News reporters are expected to give an objective account of events without personal bias.,新聞記者被要求對事件進行客觀報導，而不帶個人偏見。
+ writing,ornate,adj.,華麗的,The Victorian novel was known for its ornate and flowery language.,這部維多利亞時代的小說以其華麗且詞藻豐富的語言聞名。
+ writing,outline,n.,大綱；提綱,Creating an outline helps structure your essay logically.,製作大綱有助於邏輯性地組織文章結構。
+ writing,peer review,n.,同儕評閱,Peer review allows students to give and receive constructive feedback.,同儕評閱讓學生能夠給予並接收建設性回饋。
+ writing,redundant,adj.,贅述的；多餘的,"Mentioning the ""blue sky"" as ""blue"" is sometimes considered redundant in creative writing.",在創意寫作中，提到「藍色的藍天」有時被認為是贅述。
+ writing,revise,v.,修訂；修改,Revise your essay to improve clarity and coherence.,修訂文章以提升清晰度與連貫性。
+ writing,subjective,adj.,主觀的,Your opinion of the movie is purely subjective and depends on your personal taste.,你對這部電影的評價純粹是主觀的，取決於你個人的品味。
+ writing,verbose,adj.,冗長的,"His writing style is often verbose, making simple ideas hard to understand.",他的寫作風格通常很冗長，使簡單的想法變得難以理解。
+genre,adventure,n.,冒險小說,"Mark Twain's ""The Adventures of Huckleberry Finn"" is a classic adventure.",馬克·吐溫的《頑童歷險記》是一部經典的冒險小說。
+genre,autobiography,n.,自傳,The Diary of a Young Girl by Anne Frank is a powerful autobiography.,安妮·法蘭克的《安妮日記》是一部強而有力的自傳。
+genre,ballad,n.,歌謠；敘事歌謠,The folk ballad often tells a tragic story of love or death.,民間歌謠常常講述一個關於愛情或死亡的悲劇故事。
+genre,bildungsroman,n.,成長小說,"Jane Eyre"" is a bildungsroman that traces the protagonist's journey to adulthood.",《簡愛》是一部追溯主角走向成年之路的成長小說。
+genre,commercial fiction,n.,商業小說,Commercial fiction is written primarily to entertain a wide audience.,商業小說的寫作主要是為了娛樂廣大讀者。
+genre,detective fiction,n.,偵探小說,Sherlock Holmes is the most famous character in detective fiction.,夏洛克·福爾摩斯是偵探小說中最著名的角色。
+genre,dystopian fiction,n.,反烏托邦小說,The Handmaid's Tale is a dystopian fiction about a totalitarian society.,《使女的故事》是一部關於極權社會的反烏托邦小說。
+genre,fable,n.,寓言,"The fable ""The Tortoise and the Hare"" teaches that slow and steady wins the race.",寓言《龜兔賽跑》教導我們穩紮穩打方能致勝。
+genre,fantasy,n.,奇幻小說,The Lord of the Rings is a classic fantasy novel set in a fictional world.,《魔戒》是一部以虛構世界為背景的經典奇幻小說。
+genre,flash fiction,n.,微型小說,Flash fiction tells a complete story in under 1000 words.,微型小說用少於1000個單詞講述一個完整的故事。
+genre,folktale,n.,民間故事,"The folktale ""Cinderella"" exists in hundreds of versions across many cultures.",民間故事《灰姑娘》在許多文化中有數百個版本。
+genre,food writing,n.,飲食文學,M.F.K. Fisher is celebrated for her lyrical food writing.,M.F.K. 費雪以其抒情優美的飲食文學而聞名。
+genre,gothic fiction,n.,哥德小說,Edgar Allan Poe is a master of gothic fiction with its dark and eerie atmosphere.,愛倫·坡是哥德小說的大師
+genre,graphic novel,n.,圖像小說,"Art Spiegelman's ""Maus"" is a Pulitzer Prize-winning graphic novel about the Holocaust.",阿特·斯皮格曼的《鼠族》是一部關於大屠殺的普立茲獎獲獎圖像小說。
+genre,haiku,n.,俳句,The haiku captures a single moment in nature with just seventeen syllables.,俳句僅用十七個音節捕捉自然界的一個瞬間。
+genre,historical fiction,n.,歷史小說,Wolf Hall is a historical fiction novel set in the Tudor court.,《狼廳》是一部以都鐸王朝宮廷為背景的歷史小說。
+genre,history play,n.,歷史劇,"Shakespeare's ""Henry V"" is a history play about the English king.",莎士比亞的《亨利五世》是一部關於英國國王的歷史劇。
+genre,horror,n.,恐怖小說,Stephen King is one of the most successful authors of horror.,史蒂芬·金是最成功的恐怖小說作家之一。
+genre,journalism,n.,新聞寫作,Investigative journalism uncovers wrongdoing and holds power accountable.,調查性新聞報導揭露不當行為並追究權力者的責任。
+genre,legend,n.,傳說,The legend of King Arthur blends history with chivalric romance.,亞瑟王的傳說融合了歷史與騎士浪漫。
+genre,literary fiction,n.,文學小說,Literary fiction often focuses on character development and style over plot.,文學小說通常更注重角色發展和風格而非情節。
+genre,lyric poetry,n.,抒情詩,"William Wordsworth's ""I Wandered Lonely as a Cloud"" is a famous lyric poem.",威廉·華茲華斯的《我孤獨地漫遊
+genre,mystery fiction,n.,懸疑小說,Agatha Christie is the queen of mystery fiction.,阿嘉莎·克莉絲蒂是懸疑小說之后。
+genre,myth,n.,神話,The Greek myth of Persephone explains the changing of the seasons.,希臘神話中的波瑟芬妮解釋了四季的更迭。
+genre,narrative poetry,n.,敘事詩,The Rime of the Ancient Mariner by Coleridge is a narrative poem.,柯勒律治的《古舟子詠》是一首敘事詩。
+genre,nature writing,n.,自然寫作,"Henry David Thoreau's ""Walden"" is a foundational work of nature writing.",亨利·大衛·梭羅的《湖濱散記》是自然寫作的奠基之作。
+genre,one-act play,n.,獨幕劇,"The one-act play ""The Zoo Story"" is a powerful exploration of alienation.",獨幕劇《動物園故事》是對疏離感的有力探索。
+genre,picaresque,n.,流浪漢小說,"Don Quixote"" is a famous picaresque novel from 17th-century Spain.",《堂吉訶德》是17世紀西班牙著名的流浪漢小說。
+genre,romance,n.,愛情小說,Romance novels typically end with a satisfying emotional resolution.,愛情小說通常以令人滿意的情感結局收尾。
+genre,science fiction,n.,科幻小說,Science fiction often explores the potential consequences of scientific innovations.,科幻小說經常探討科學創新的潛在後果。
+genre,short story,n.,短篇小說,The short story is a concise form of fiction that focuses on a single effect.,短篇小說是一種專注於單一效果的簡潔小說形式。
+genre,spoken word,n.,口語詩,Spoken word poetry is performed live and often addresses social justice issues.,口語詩是現場表演的詩歌
+genre,stand-up comedy,n.,單口喜劇,"Hannah Gadsby's ""Nanette"" is a stand-up comedy that deconstructs the form itself.",漢娜·蓋茲比的《娜內特》是一部解構自身形式的單口喜劇。
+genre,thriller,n.,驚悚小說,The thriller kept readers on the edge of their seats with its constant suspense.,這本驚悚小說以其持續的懸念讓讀者緊張不已。
+genre,tragicomedy,n.,悲喜劇,Anton Chekhov's plays are often classified as tragicomedy.,安東·契訶夫的戲劇常被歸類為悲喜劇。
+genre,travel writing,n.,旅行文學,"Bruce Chatwin's ""In Patagonia"" reinvented modern travel writing.",布魯斯·查特文的《在巴塔哥尼亞》重塑了現代旅行文學。
+genre,utopian fiction,n.,烏托邦小說,"Sir Thomas More's ""Utopia"" is the foundational text of utopian fiction.",湯瑪斯·摩爾爵士的《烏托邦》是烏托邦小說的奠基文本。
+literary,allegory,n.,寓言；托物寓意,"George Orwell's ""Animal Farm"" is a famous allegory for the Russian Revolution.",喬治·歐威爾的《動物農莊》是描述俄國革命的著名寓言。
+literary,allusion,n.,典故；影射,The author made an allusion to Greek mythology by mentioning the Achilles' heel.,作者藉由提到「阿基里斯之踵」來影射希臘神話。
+literary,analogy,n.,類比；類推,The teacher used the analogy of a computer to explain how the human brain processes information.,老師用電腦來類比，以解釋人類大腦如何處理資訊。
+literary,anaphora,n.,首語重複,Anaphora repeats words at the beginning of successive clauses.,首語重複在連續子句開頭重複詞語。
+literary,antithesis,n.,對立面；對照,Poverty is the spiritual antithesis of the abundance seen in nature.,貧窮是自然界所見之豐饒在精神上的對立面。
+literary,apostrophe,n.,呼語；頓呼,"""O death, where is thy sting?"" is an example of apostrophe.",「哦，死亡，你的毒刺在哪裡？」是呼語的一個例子。
+literary,conflict,n.,衝突,The main conflict is between tradition and progress.,主要衝突在於傳統與進步之間。
+literary,ethos,n.,品格訴求；道德訴求,The speaker established ethos by showing his expertise and honesty.,演講者透過展現專業與誠信來建立品格訴求。
+literary,euphemism,n.,委婉語,"""Passed away"" is a common euphemism used to avoid saying the word ""died"".",「過世」是一個常用的委婉語，用來避免說出「死」這個字。
+literary,hyperbole,n.,誇張法,"The phrase ""I've told you a million times"" is a classic example of hyperbole.",「我已經跟你說過一百萬次了」這句話是誇張法的經典例子。
+literary,imagery,n.,意象；形象化語言,The poet uses vivid imagery of nature to convey peace.,詩人運用生動的自然意象來傳達平靜。
+literary,irony,n.,諷刺；反諷,It is a cruel irony that the fire station burned down while the firefighters were away.,消防局在消防員外出時燒毀，真是一個殘酷的諷刺。
+literary,logos,n.,邏輯訴求,The lawyer used logos by presenting statistical evidence.,律師透過呈現統計證據來使用邏輯訴求。
+literary,metaphor,n.,隱喻,"""Life is a roller coaster"" is a common metaphor used to describe ups and downs.",「人生如雲霄飛車」是用來形容起伏波折的常見隱喻。
+literary,metonymy,n.,借代,The crown is often used as a metonymy for the royal government.,「王冠」常用作皇室政府的借代。
+literary,mood,n.,氛圍；情緒,The dark setting creates a mood of fear and suspense.,陰暗的場景營造出恐懼與懸疑的氛圍。
+literary,motif,n.,母題；重複出現的元素,The motif of birds appears throughout the novel.,鳥的母題貫穿整部小說。
+literary,onomatopoeia,n.,擬聲詞,"Words like ""buzz"" and ""hiss"" are examples of onomatopoeia.","像 ""buzz"" 和 ""hiss"" 這樣的詞都是擬聲詞的例子。"
+literary,oxymoron,n.,矛盾修辭法,"The phrase ""deafening silence"" is an oxymoron that highlights the tension.",「震耳欲聾的沉默」是一個矛盾修辭法，突顯了緊張氣氛。
+literary,paradox,n.,悖論；似非而是,"The statement ""the only constant is change"" is a famous philosophical paradox.",「唯一的不變就是變」是一個著名的哲學悖論。
+literary,parallelism,n.,平行結構；排比,Parallelism uses similar grammatical structures for emphasis.,平行結構使用相似的語法結構以強調。
+literary,pathos,n.,情感訴求,The charity ad relies on pathos to evoke sympathy from viewers.,慈善廣告依賴情感訴求來引發觀眾的同情。
+literary,personification,n.,擬人化,The poet uses personification to describe the wind whispering through the trees.,詩人使用擬人化法來描寫風在樹林間低語。
+literary,plot,n.,情節,The plot thickens when the detective finds a hidden letter.,當偵探發現一封隱藏的信件時，情節變得更加複雜。
+literary,rhetoric,n.,修辭學,Rhetoric is the art of effective or persuasive speaking or writing.,修辭學是有效或說服性口語與寫作的藝術。
+literary,rhetorical question,n.,修辭問句；反問,"A rhetorical question is asked for effect, not to elicit an answer.",修辭問句是為了效果而問，並非尋求答案。
+literary,setting,n.,背景；場景,The setting of the story is a small town in the 1950s.,故事背景設定在1950年代的一個小鎮。
+literary,simile,n.,明喻,"""As brave as a lion"" is a common simile.",「像獅子一樣勇敢」是一個常見的明喻。
+literary,symbol,n.,象徵,The white dove is a symbol of peace.,白鴿是和平的象徵。
+literary,symbolism,n.,象徵主義,The broken clock in the story is a piece of symbolism representing the end of an era.,故事中破碎的鐘是一個象徵，代表一個時代的終結。
+literary,synecdoche,n.,提喻法,"Using the word ""wheels"" to refer to a whole car is an example of synecdoche.","用 ""wheels""（輪子）這個詞來指代整輛車是提喻法的一個例子。"
+literary,theme,n.,主題,The central theme of the novel is the loss of innocence.,這部小說的主題是天真與純真的喪失。
+literary,tone,n.,語氣；語調,The tone of the essay shifts from humorous to serious.,這篇文章的語氣從幽默轉為嚴肅。
+literary,trope,n.,比喻；套路；常見修辭,The hero's journey is a common trope in fantasy literature.,英雄之旅是奇幻文學中常見的套路。
+literary,understatement,n.,輕描淡寫；含蓄說法,"Saying the hurricane was ""a bit of wind"" is a massive understatement.",說這場颶風只是「一點風」簡直是極大的輕描淡寫。
+literary,voice,n.,敘事聲音；風格,The author's voice is distinctive and full of wit.,作者的敘事風格獨特且充滿機智。
