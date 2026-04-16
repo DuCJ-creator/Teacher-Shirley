@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shirley's Bilingual Physics | 雙語物理學堂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at 20% 30%, #0a0a2a, #010105);
+            color: #e8ecff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 3rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(3px);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #7f9ef5, #b0e0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .search-global {
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            gap: 12px;
+            background: rgba(10, 15, 40, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+            border: 1px solid rgba(100, 150, 255, 0.5);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+        .search-global i {
+            align-self: center;
+            font-size: 1.2rem;
+            color: #8aadff;
+        }
+        .search-global input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+        }
+        .search-global input::placeholder {
+            color: #9aafdf;
+        }
+        .search-global button {
+            background: #2c3f8c;
+            border: none;
+            border-radius: 50px;
+            padding: 0 1.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .search-global button:hover {
+            background: #4a6cdb;
+            transform: scale(0.96);
+        }
+
+        .strands-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+        .strand-btn {
+            background: radial-gradient(circle at 30% 20%, rgba(30,40,90,0.9), rgba(10,15,50,0.95));
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(80, 140, 255, 0.5);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #eef4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+        .strand-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: 0.5s;
+        }
+        .strand-btn:hover::before {
+            opacity: 1;
+        }
+        .strand-btn i {
+            font-size: 1.2rem;
+        }
+        .strand-btn.active {
+            background: radial-gradient(circle at 30% 20%, #3c5ecf, #1a2a6e);
+            border-color: #ffd966;
+            box-shadow: 0 0 18px #3c5ecfaa;
+            color: white;
+        }
+
+        .content-panel {
+            background: rgba(8, 12, 28, 0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            padding: 1.8rem;
+            border: 1px solid rgba(100, 150, 250, 0.3);
+            box-shadow: 0 25px 40px -15px black;
+        }
+
+        .starred-section {
+            margin-bottom: 2rem;
+        }
+        .starred-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #2d3e7e;
+            padding-bottom: 0.5rem;
+        }
+        .star-badge {
+            background: #ffc10720;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .starred-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1rem;
+            background: #050a1c40;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            min-height: 65px;
+        }
+        .starred-word {
+            background: #1e2a5e;
+            padding: 5px 14px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .starred-word:hover {
+            background: #2e3e7e;
+        }
+        .starred-word i {
+            color: #ffaa44;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .empty-star {
+            color: #aaaacc;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .mode-toggle {
+            display: flex;
+            gap: 12px;
+        }
+        .mode-btn {
+            background: #1a2350;
+            border: 1px solid #4a6cdb;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .mode-btn.active {
+            background: #3c5ecf;
+            border-color: #ffd966;
+        }
+        .reset-btn {
+            background: none;
+            border: 1px solid #5f7ef0;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .reset-btn:hover {
+            background: #2c3f8c;
+        }
+
+        .terms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .term-card {
+            background: #0f1535d9;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            transition: all 0.2s;
+            border-left: 4px solid #5c7ef0;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .term-card:hover {
+            transform: translateY(-4px);
+            background: #141d48;
+            border-left-color: #ffd966;
+        }
+
+        .interactive-viz {
+            margin-top: 12px;
+            background: #01061f;
+            border-radius: 12px;
+            padding: 8px;
+            border: 1px solid #3a5a9f;
+            min-height: 160px;
+            position: relative;
+        }
+        .viz-canvas {
+            width: 100%;
+            height: 140px;
+            border-radius: 8px;
+            background: #00000033;
+            cursor: pointer;
+        }
+        .viz-label {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 5px;
+            color: #8aadff;
+        }
+
+        .flashcard-container {
+            perspective: 1500px;
+            height: 380px;
+            margin-top: 1rem;
+        }
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f1535, #0a0f2a);
+            border: 1px solid #5c7ef0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .card-front {
+            transform: rotateY(0deg);
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #1a2350, #0f1535);
+        }
+        .flashcard-word {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .flashcard-sentence {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+        .flash-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .flash-nav button {
+            background: #2c3f8c;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .term-word {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .star-icon {
+            color: #ffcd4a;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .star-icon.far {
+            color: #99aaff;
+        }
+        .term-meaning {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ffecb3;
+            margin: 8px 0;
+        }
+        .sentence {
+            font-size: 0.8rem;
+            background: #01071f60;
+            padding: 8px;
+            border-radius: 12px;
+            margin: 8px 0;
+            color: #ccdeff;
+        }
+        .btn-speak {
+            background: none;
+            border: none;
+            color: #bdd4ff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 6px;
+        }
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.1rem;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            opacity: 0.5;
+        }
+        @media (max-width: 650px) {
+            .container { padding: 1rem; }
+            .flashcard-word { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="particleCanvas"></canvas>
+<div class="container">
+    <div class="hero">
+        <h1>Shirley's Bilingual Physics</h1>
+        <p>explore the universe of physics · 雙語物理宇宙 | 點擊插圖體驗互動模擬</p>
+    </div>
+
+    <div class="search-global">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearchInput" placeholder="搜尋單字 / 中文 (如: momentum, 黑洞, torque)" autocomplete="off">
+        <button id="globalSearchBtn">搜尋</button>
+    </div>
+
+    <div class="strands-grid" id="strandsContainer">
+        <div style="color:white;">載入物理天體中...</div>
+    </div>
+
+    <div class="content-panel">
+        <div class="starred-section">
+            <div class="starred-header">
+                <h3><i class="fas fa-star" style="color: gold;"></i> 我的收藏星核</h3>
+                <div class="star-badge">點擊星星收藏單字</div>
+            </div>
+            <div id="starredWordsContainer" class="starred-list"></div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="grid">詞彙卡片網格</button>
+                <button class="mode-btn" data-mode="flashcard">閃卡模式 Flashcard</button>
+            </div>
+            <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置篩選</button>
+        </div>
+
+        <div id="currentStrandTitle" style="margin-bottom: 1rem; font-size: 1.2rem;">
+            <i class="fas fa-globe"></i> 
+        </div>
+
+        <div id="dynamicContentArea"></div>
+    </div>
+    <footer>點擊喇叭圖示發音 | 閃卡模式: 點擊卡片翻轉 | 每個插圖都是互動式物理模擬</footer>
+</div>
+
+<script>
+    let physicsData = [];
+    let currentStrand = "";
+    let starredWords = JSON.parse(localStorage.getItem("physics_starred_v2") || "[]");
+    let searchKeyword = "";
+    let currentMode = "grid";
+    let flashcardIndex = 0;
+    let filteredTermsCache = [];
+    let activeVisualizations = {};
+
+    // 互動式物理模擬生成器
+    function createInteractiveVisualization(word, containerId) {
+        const w = word.toLowerCase();
+        const canvasId = `viz_${Date.now()}_${Math.random()}`;
+        
+        setTimeout(() => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let canvas = document.createElement('canvas');
+            canvas.id = canvasId;
+            canvas.width = container.clientWidth - 16;
+            canvas.height = 130;
+            canvas.style.width = '100%';
+            canvas.style.height = '130px';
+            canvas.style.borderRadius = '8px';
+            canvas.style.backgroundColor = '#01061f';
+            canvas.className = 'viz-canvas';
+            container.innerHTML = '';
+            container.appendChild(canvas);
+            
+            // 根據單字類型繪製不同模擬
+            if (w.includes('newton') || w.includes('force') || w.includes('acceleration')) {
+                drawForceSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('pendulum') || w.includes('simple harmonic')) {
+                drawPendulumSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('projectile') || w.includes('orbit')) {
+                drawOrbitSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('wave') || w.includes('frequency') || w.includes('doppler')) {
+                drawWaveSimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('gravit') || w.includes('black hole')) {
+                drawGravitySimulation(canvasId, canvas.width, canvas.height);
+            } else if (w.includes('collision') || w.includes('momentum')) {
+                drawCollisionSimulation(canvasId, canvas.width, canvas.height);
+            } else {
+                drawParticleSimulation(canvasId, canvas.width, canvas.height);
+            }
+        }, 50);
+    }
+
+    function drawForceSimulation(canvasId, w, h) {
+        let angle = 0;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            const centerX = w/2, centerY = h/2;
+            const forceX = Math.sin(angle) * 40;
+            const forceY = Math.cos(angle * 1.3) * 30;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, Math.PI*2);
+            ctx.fillStyle = '#4a6cdb';
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.font = '10px Arial';
+            ctx.fillText('m', centerX-4, centerY+4);
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX+20, centerY);
+            ctx.lineTo(centerX+20+forceX, centerY+forceY);
+            ctx.strokeStyle = '#ff6666';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#ff8888';
+            ctx.fillText('F = m·a', centerX+25+forceX/2, centerY+forceY/2);
+            
+            ctx.fillStyle = '#88ff88';
+            ctx.font = '8px monospace';
+            ctx.fillText(`a = ${(Math.sqrt(forceX*forceX+forceY*forceY)/20).toFixed(1)} m/s²`, centerX-40, centerY-20);
+            
+            angle += 0.05;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawPendulumSimulation(canvasId, w, h) {
+        let time = 0;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            const pivotX = w/2, pivotY = 20;
+            const length = 70;
+            const angle = Math.sin(time) * 0.8;
+            const bobX = pivotX + Math.sin(angle) * length;
+            const bobY = pivotY + Math.cos(angle) * length;
+            
+            ctx.beginPath();
+            ctx.moveTo(pivotX, pivotY);
+            ctx.lineTo(bobX, bobY);
+            ctx.strokeStyle = '#aaaaff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(bobX, bobY, 12, 0, Math.PI*2);
+            ctx.fillStyle = '#ffaa66';
+            ctx.fill();
+            
+            ctx.fillStyle = '#88ffaa';
+            ctx.font = '8px monospace';
+            ctx.fillText(`T = 2π√(L/g)`, w/2-40, h-10);
+            ctx.fillText(`θ = ${(angle*57.3).toFixed(0)}°`, bobX-15, bobY-10);
+            
+            time += 0.05;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawWaveSimulation(canvasId, w, h) {
+        let phase = 0;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            ctx.beginPath();
+            for(let x = 0; x < w; x++) {
+                let y = h/2 + Math.sin(x * 0.05 + phase) * 25 + Math.sin(x * 0.12 + phase*1.5) * 10;
+                if(x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = '#66ffcc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.fillStyle = '#ffcc66';
+            ctx.font = '8px monospace';
+            ctx.fillText(`λ = ${(w/4).toFixed(0)}px  f = ${(phase*2).toFixed(1)}Hz`, 10, 20);
+            ctx.fillText('v = λ·f', 10, 35);
+            
+            phase += 0.1;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawOrbitSimulation(canvasId, w, h) {
+        let angle = 0;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            const centerX = w/2, centerY = h/2;
+            const orbitX = centerX + Math.cos(angle) * 50;
+            const orbitY = centerY + Math.sin(angle) * 35;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 15, 0, Math.PI*2);
+            ctx.fillStyle = '#ffaa44';
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.font = '8px Arial';
+            ctx.fillText('★', centerX-3, centerY+3);
+            
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, 55, 40, 0, 0, Math.PI*2);
+            ctx.strokeStyle = '#4488ff44';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.beginPath();
+            ctx.arc(orbitX, orbitY, 6, 0, Math.PI*2);
+            ctx.fillStyle = '#66ccff';
+            ctx.fill();
+            
+            ctx.fillStyle = '#aaffdd';
+            ctx.font = '7px monospace';
+            ctx.fillText('Kepler\'s Laws: equal areas', 10, 20);
+            
+            angle += 0.03;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawGravitySimulation(canvasId, w, h) {
+        let particles = [{x: w/2, y: h/2, vx: 0, vy: 0, mass: 100}];
+        for(let i=0; i<8; i++) {
+            particles.push({
+                x: w/2 + 40 + Math.random() * 60,
+                y: h/2 + (Math.random() - 0.5) * 80,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                mass: 1
+            });
+        }
+        
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            for(let i=1; i<particles.length; i++) {
+                const p = particles[i];
+                const dx = particles[0].x - p.x;
+                const dy = particles[0].y - p.y;
+                const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+                const force = (particles[0].mass * p.mass) / (dist * dist) * 0.5;
+                const ax = (dx / dist) * force / p.mass;
+                const ay = (dy / dist) * force / p.mass;
+                p.vx += ax;
+                p.vy += ay;
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+                ctx.fillStyle = '#88ccff';
+                ctx.fill();
+            }
+            
+            ctx.beginPath();
+            ctx.arc(particles[0].x, particles[0].y, 12, 0, Math.PI*2);
+            ctx.fillStyle = '#ff6644';
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.fillText('黑洞', particles[0].x-8, particles[0].y+4);
+            
+            ctx.fillStyle = '#ffaa88';
+            ctx.font = '7px monospace';
+            ctx.fillText('重力彎曲時空', 10, 20);
+            
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawCollisionSimulation(canvasId, w, h) {
+        let pos1 = 30, pos2 = w-30, v1 = 1.2, v2 = -1.2;
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            pos1 += v1;
+            pos2 += v2;
+            if(Math.abs(pos1 - pos2) < 25) {
+                let temp = v1;
+                v1 = v2;
+                v2 = temp;
+            }
+            if(pos1 < 10 || pos1 > w-10) v1 *= -0.9;
+            if(pos2 < 10 || pos2 > w-10) v2 *= -0.9;
+            
+            ctx.beginPath();
+            ctx.arc(pos1, h/2, 12, 0, Math.PI*2);
+            ctx.fillStyle = '#66ff99';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(pos2, h/2, 12, 0, Math.PI*2);
+            ctx.fillStyle = '#ff9966';
+            ctx.fill();
+            
+            ctx.fillStyle = '#aaffdd';
+            ctx.font = '7px monospace';
+            ctx.fillText(`動量守恆: m₁v₁ + m₂v₂ = 常數`, 10, 20);
+            ctx.fillText(`v₁ = ${v1.toFixed(1)}  v₂ = ${v2.toFixed(1)}`, 10, 35);
+            
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    function drawParticleSimulation(canvasId, w, h) {
+        let particles = [];
+        for(let i=0; i<20; i++) {
+            particles.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5,
+                r: Math.random() * 3 + 1
+            });
+        }
+        function draw() {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#01061f';
+            ctx.fillRect(0, 0, w, h);
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if(p.x < 0 || p.x > w) p.vx *= -0.9;
+                if(p.y < 0 || p.y > h) p.vy *= -0.9;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(100, 180, 255, 0.8)`;
+                ctx.fill();
+            });
+            
+            ctx.fillStyle = '#88aaff';
+            ctx.font = '7px monospace';
+            ctx.fillText('粒子隨機運動 | 布朗運動模擬', 10, 20);
+            
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    // CSV 載入與解析
+    async function loadCSV() {
+        const csvUrl = "https://ducj-creator.github.io/Teacher-Shirley/subject/physics.csv";
+        try {
+            const response = await fetch(csvUrl);
+            const csvText = await response.text();
+            parseCSV(csvText);
+        } catch (error) {
+            console.error("載入失敗", error);
+            document.getElementById("strandsContainer").innerHTML = '<div style="color:red;">無法載入資料，請檢查網路</div>';
+        }
+    }
+
+    function parseCSV(csv) {
+        const lines = csv.split(/\r?\n/);
+        const headers = lines[0].split(',');
+        const subjectIdx = headers.indexOf('subject');
+        const wordIdx = headers.indexOf('word');
+        const posIdx = headers.indexOf('pos');
+        const meaningIdx = headers.indexOf('meaning');
+        const sentenceEIdx = headers.indexOf('sentence e');
+        const sentenceCIdx = headers.indexOf('sentence c');
+        
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            let row = [];
+            let inQuote = false;
+            let current = '';
+            for (let ch of lines[i]) {
+                if (ch === '"') inQuote = !inQuote;
+                else if (ch === ',' && !inQuote) {
+                    row.push(current.trim());
+                    current = '';
+                } else current += ch;
+            }
+            row.push(current.trim());
+            
+            if (row.length < 6) continue;
+            const term = {
+                subject: row[subjectIdx] || "",
+                word: row[wordIdx] || "",
+                pos: row[posIdx] || "",
+                meaning: row[meaningIdx] || "",
+                sentence_e: row[sentenceEIdx] || "",
+                sentence_c: row[sentenceCIdx] || ""
+            };
+            if (term.word && term.subject) physicsData.push(term);
+        }
+        
+        if (physicsData.length > 0) {
+            const subjects = [...new Set(physicsData.map(d => d.subject))];
+            currentStrand = subjects[0];
+            renderAll();
+        }
+        initBackgroundParticles();
+    }
+
+    function saveStarred() {
+        localStorage.setItem("physics_starred_v2", JSON.stringify(starredWords));
+    }
+
+    function toggleStar(term) {
+        const exists = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+        if (exists) {
+            starredWords = starredWords.filter(s => !(s.word === term.word && s.subject === term.subject));
+        } else {
+            starredWords.push({ word: term.word, meaning: term.meaning, subject: term.subject });
+        }
+        saveStarred();
+        renderAll();
+    }
+
+    function speakText(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.9;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+    }
+
+    function getFilteredTerms() {
+        let terms = physicsData.filter(t => t.subject === currentStrand);
+        if (searchKeyword.trim() !== "") {
+            const kw = searchKeyword.trim().toLowerCase();
+            terms = terms.filter(t => t.word.toLowerCase().includes(kw) || t.meaning.toLowerCase().includes(kw) || t.sentence_c.includes(kw));
+        }
+        return terms;
+    }
+
+    function renderGridMode(terms) {
+        if (terms.length === 0) {
+            return `<div class="no-results">在此天體中未找到相關物理概念</div>`;
+        }
+        return `<div class="terms-container">
+            ${terms.map((term, idx) => {
+                const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+                const vizId = `viz_${idx}_${Date.now()}`;
+                setTimeout(() => createInteractiveVisualization(term.word, vizId), 100);
+                return `
+                    <div class="term-card">
+                        <div class="term-word">
+                            <span><strong>${term.word}</strong> <span style="font-size:0.7rem;">${term.pos}</span></span>
+                            <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${term.word}" data-sub="${term.subject}"></i>
+                        </div>
+                        <div class="term-meaning">${term.meaning}</div>
+                        <div class="sentence">
+                            ${term.sentence_e}<br>
+                            ${term.sentence_c}
+                        </div>
+                        <button class="btn-speak" data-text="${term.word}" style="margin-top:5px;"><i class="fas fa-volume-up"></i> 發音</button>
+                        <div class="interactive-viz" id="${vizId}">
+                            <div class="viz-label">載入互動模擬中...</div>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>`;
+    }
+
+    function renderFlashcardMode(terms) {
+        if (terms.length === 0) return `<div class="no-results">暫無詞彙</div>`;
+        if (flashcardIndex >= terms.length) flashcardIndex = 0;
+        const term = terms[flashcardIndex];
+        return `
+            <div class="flashcard-container">
+                <div class="flashcard" id="activeFlashcard">
+                    <div class="card-front">
+                        <div class="flashcard-word">${term.word}</div>
+                        <div class="flashcard-sentence">${term.sentence_e}</div>
+                        <div class="flashcard-label">點擊翻轉 | 英文正面</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="flashcard-word">${term.meaning}</div>
+                        <div class="flashcard-sentence">${term.sentence_c}</div>
+                        <div class="flashcard-label">中文背面 | 點擊翻回</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flash-nav">
+                <button id="prevCardBtn">◀ 上一張</button>
+                <span>${flashcardIndex+1} / ${terms.length}</span>
+                <button id="nextCardBtn">下一張 ▶</button>
+                <button id="speakCardBtn" class="btn-speak"><i class="fas fa-volume-up"></i> 發音</button>
+            </div>
+        `;
+    }
+
+    function renderDynamicContent() {
+        const filtered = getFilteredTerms();
+        filteredTermsCache = filtered;
+        const area = document.getElementById("dynamicContentArea");
+        if (currentMode === "grid") {
+            area.innerHTML = renderGridMode(filtered);
+            attachGridEvents();
+        } else {
+            area.innerHTML = renderFlashcardMode(filtered);
+            attachFlashcardEvents();
+        }
+    }
+
+    function attachGridEvents() {
+        document.querySelectorAll('.star-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wordName = icon.getAttribute('data-word');
+                const subj = icon.getAttribute('data-sub');
+                const target = physicsData.find(t => t.word === wordName && t.subject === subj);
+                if (target) toggleStar(target);
+            });
+        });
+        document.querySelectorAll('.btn-speak').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const text = btn.getAttribute('data-text');
+                if(text) speakText(text);
+            });
+        });
+    }
+
+    function attachFlashcardEvents() {
+        const flashcard = document.getElementById("activeFlashcard");
+        if (flashcard) {
+            flashcard.addEventListener("click", () => flashcard.classList.toggle("flipped"));
+        }
+        document.getElementById("prevCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache.length) {
+                flashcardIndex = (flashcardIndex - 1 + filteredTermsCache.length) % filteredTermsCache.length;
+                renderDynamicContent();
+            }
+        });
+        document.getElementById("nextCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache.length) {
+                flashcardIndex = (flashcardIndex + 1) % filteredTermsCache.length;
+                renderDynamicContent();
+            }
+        });
+        document.getElementById("speakCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache[flashcardIndex]) {
+                speakText(filteredTermsCache[flashcardIndex].word);
+            }
+        });
+    }
+
+    function renderStarredList() {
+        const container = document.getElementById("starredWordsContainer");
+        if (starredWords.length === 0) {
+            container.innerHTML = '<div class="empty-star">暫無收藏單字，點擊卡片上的星星收藏</div>';
+            return;
+        }
+        container.innerHTML = starredWords.map(s => `
+            <div class="starred-word" data-word="${s.word}">
+                ${s.word} 
+                <i class="fas fa-times-circle" data-remove="${s.word}"></i>
+            </div>
+        `).join('');
+        document.querySelectorAll('.starred-word i').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const w = icon.getAttribute('data-remove');
+                starredWords = starredWords.filter(s => s.word !== w);
+                saveStarred();
+                renderAll();
+            });
+        });
+        document.querySelectorAll('.starred-word').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if(e.target.tagName === 'I') return;
+                const word = el.getAttribute('data-word');
+                const found = physicsData.find(t => t.word === word);
+                if(found) {
+                    currentStrand = found.subject;
+                    searchKeyword = "";
+                    document.getElementById("globalSearchInput").value = "";
+                    renderAll();
+                }
+            });
+        });
+    }
+
+    function renderStrands() {
+        const subjects = [...new Set(physicsData.map(d => d.subject))];
+        const container = document.getElementById("strandsContainer");
+        if (subjects.length === 0) return;
+        container.innerHTML = subjects.map(sub => `
+            <button class="strand-btn ${currentStrand === sub ? 'active' : ''}" data-subject="${sub}">
+                <i class="fas fa-globe"></i> ${sub}
+            </button>
+        `).join('');
+        document.querySelectorAll('.strand-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentStrand = btn.getAttribute('data-subject');
+                searchKeyword = "";
+                flashcardIndex = 0;
+                document.getElementById("globalSearchInput").value = "";
+                renderAll();
+            });
+        });
+    }
+
+    function renderAll() {
+        if (physicsData.length === 0) return;
+        renderStrands();
+        renderStarredList();
+        renderDynamicContent();
+        document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-globe"></i> 當前天體分支: ${currentStrand}`;
+    }
+
+    function initBackgroundParticles() {
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        let width, height, particles = [];
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+        for(let i=0;i<100;i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 2,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.2,
+                alpha: Math.random() * 0.4
+            });
+        }
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(120, 180, 255, ${p.alpha})`;
+                ctx.fill();
+                p.x += p.vx;
+                p.y += p.vy;
+                if(p.x < 0) p.x = width;
+                if(p.x > width) p.x = 0;
+                if(p.y < 0) p.y = height;
+                if(p.y > height) p.y = 0;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    // 模式切換
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".mode-btn")) {
+            const btn = e.target.closest(".mode-btn");
+            const mode = btn.getAttribute("data-mode");
+            if (mode) {
+                currentMode = mode;
+                document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                flashcardIndex = 0;
+                renderDynamicContent();
+            }
+        }
+    });
+
+    document.getElementById("globalSearchBtn").addEventListener("click", () => {
+        searchKeyword = document.getElementById("globalSearchInput").value;
+        flashcardIndex = 0;
+        renderDynamicContent();
+    });
+    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => {
+        if(e.key === "Enter") {
+            searchKeyword = document.getElementById("globalSearchInput").value;
+            flashcardIndex = 0;
+            renderDynamicContent();
+        }
+    });
+    document.getElementById("resetSearchBtn").addEventListener("click", () => {
+        searchKeyword = "";
+        flashcardIndex = 0;
+        document.getElementById("globalSearchInput").value = "";
+        renderDynamicContent();
+    });
+
+    loadCSV();
+</script>
+</body>
+</html>
