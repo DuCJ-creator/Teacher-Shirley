@@ -1,0 +1,111 @@
+subject,word,pos,meaning,sentence e,sentence c
+生物 (分生) Biology (Molecular Biology),carbohydrate,n.,碳水化合物,Carbohydrates are the body's main source of quick energy.,碳水化合物是身體主要的快速能量來源。
+生物 (分生) Biology (Molecular Biology),enzyme,n.,酶,Enzymes are biological catalysts that speed up chemical reactions in cells.,酶是加速細胞內化學反應的生物催化劑。
+生物 (分生) Biology (Molecular Biology),lipid,n.,脂質,"Lipids store energy, form cell membranes, and act as signaling molecules.",脂質可儲存能量、構成細胞膜，並作為訊號分子。
+生物 (分生) Biology (Molecular Biology),mutation,n.,突變,A mutation is a permanent change in the dna sequence of a gene.,突變是基因 dna 序列中的永久性改變。
+生物 (分生) Biology (Molecular Biology),nucleic acid,n.,核酸,Nucleic acids like DNA and RNA store and transmit genetic information.,核酸（如 DNA 和 RNA）負責儲存與傳遞遺傳資訊。
+生物 (分生) Biology (Molecular Biology),protein,n.,蛋白質,"Proteins perform many vital functions, including building tissues and fighting infections.",蛋白質執行許多重要功能，包括建構組織和抵抗感染。
+生物 (分生) Biology (Molecular Biology),proteome,n.,蛋白質體,"The proteome refers to all proteins expressed by a cell, tissue, or organism at a given time.",蛋白質體指某一時間點細胞、組織或生物體所表現的全部蛋白質。
+生物 (分生) Biology (Molecular Biology),replication,n.,複製,Dna replication ensures that each new cell receives a complete set of genetic instructions.,Dna 複製確保每個新細胞都能收到一套完整的遺傳指令。
+生物 (分生) Biology (Molecular Biology),transcription,n.,轉錄,Transcription is the process where dna is copied into rna.,轉錄是將 dna 複製成 rna 的過程。
+生物 (分生) Biology (Molecular Biology),transcriptome,n.,轉錄體,The transcriptome is the complete set of RNA transcripts produced by the genome.,轉錄體是基因組所產生的全部 RNA 轉錄本集合。
+生物 (分生) Biology (Molecular Biology),translation,n.,轉譯,"During translation, ribosomes decode mrna to produce a specific protein.",在轉譯過程中，核糖體解碼 mrna 以產生特定的蛋白質。
+生物 (分類) Biology (Taxonomy),taxonomy,n.,分類學,Taxonomy is the branch of science concerned with classifying organisms.,分類學是研究生物分類的科學分支。
+生物 (動物) Biology (Zoology),ectotherm,n.,外溫動物；冷血動物,An ectotherm relies on environmental heat sources to regulate its body temperature.,外溫動物依靠環境熱源來調節體溫。
+生物 (動物) Biology (Zoology),metamorphosis,n.,變態,Butterflies undergo a complete metamorphosis from a larva to an adult.,蝴蝶經歷了從幼蟲到成蟲的完全變態。
+生物 (動物) Biology (Zoology),vertebrate,n.,脊椎動物,A vertebrate is an animal that possesses a backbone or spinal column.,脊椎動物是擁有脊柱或脊椎的動物。
+生物 (基因工程) Biology (Genetic Engineering),cloning,n.,克隆；複製,Cloning is the process of producing genetically identical copies of a biological entity.,克隆是產生生物體基因完全相同副本的過程。
+生物 (基因工程) Biology (Genetic Engineering),crispr,n.,基因編輯技術,Crispr is a revolutionary tool that allows scientists to edit dna sequences with precision.,Crispr 是一種革命性的工具，讓科學家能夠精確地編輯 dna 序列。
+生物 (基因工程) Biology (Genetic Engineering),plasmid,n.,質體,Scientists often use a plasmid as a vector to insert new genes into bacteria.,科學家經常使用質體作為載體，將新基因插入細菌中。
+生物 (基因工程) Biology (Genetic Engineering),recombinant dna,n.,重組 dna,Recombinant dna technology combines genetic material from different sources.,重組 dna 技術將來自不同來源的遺傳物質結合在一起。
+生物 (基因工程) Biology (Genetic Engineering),transgenic,adj.,轉基因的,Transgenic crops are engineered to be resistant to pests or herbicides.,轉基因作物的設計目的是為了抵抗害蟲或除草劑。
+生物 (基礎) Biology (Fundamentals),animal,n.,動物,Animals cannot make their own food and must eat plants or other animals.,動物無法自行製造食物，必須攝取植物或其他動物。
+生物 (基礎) Biology (Fundamentals),cell,n.,細胞,All living things are made up of one or more cells.,所有生物都是由一個或多個細胞組成。
+生物 (基礎) Biology (Fundamentals),organism,n.,生物體；有機體,An organism can be as simple as a single cell or as complex as a human.,生物體可以簡單如單一細胞，也可以複雜如人類。
+生物 (基礎) Biology (Fundamentals),photosynthesis,n.,光合作用,Photosynthesis allows plants to convert sunlight into chemical energy.,光合作用讓植物能將陽光轉化為化學能。
+生物 (基礎) Biology (Fundamentals),plant,n.,植物,Plants use sunlight to make their own food through photosynthesis.,植物透過光合作用利用陽光製造自己的食物。
+生物 (基礎) Biology (Fundamentals),reproduction,n.,生殖,Reproduction is the biological process by which new individual organisms are produced.,生殖是產生新個體的生物過程。
+生物 (微生物) Biology (Microbiology),antibiotic,n.,抗生素,Doctors prescribe antibiotics to treat infections caused by harmful bacteria.,醫生開立抗生素來治療由有害細菌引起的感染。
+生物 (微生物) Biology (Microbiology),binary fission,n.,二分體分裂,Bacteria reproduce asexually through a process called binary fission.,細菌透過稱為二分體分裂的過程進行無性生殖。
+生物 (微生物) Biology (Microbiology),capsid,n.,(病毒) 衣殼,The capsid is the protein shell that encloses the genetic material of a virus.,衣殼是包裹病毒遺傳物質的蛋白質外殼。
+生物 (微生物) Biology (Microbiology),extremophile,n.,嗜極生物,An extremophile is a microorganism that lives in conditions of extreme temperature or acidity.,嗜極生物是生活在極端溫度或酸度條件下的微生物。
+生物 (植物) Biology (Botany),angiosperm,n.,被子植物,Angiosperms are flowering plants that produce seeds enclosed within a fruit.,被子植物是會開花並產生包裹在果實中種子的植物。
+生物 (植物) Biology (Botany),chloroplast,n.,葉綠體,Chloroplasts are the organelles responsible for photosynthesis in plant cells.,葉綠體是植物細胞中負責光合作用的細胞器。
+生物 (植物) Biology (Botany),transpiration,n.,蒸散作用,Transpiration is the process where plants release water vapor through their leaves.,蒸散作用是植物透過葉片釋放水蒸氣的過程。
+生物 (植物) Biology (Botany),vascular bundle,n.,維管束,"The vascular bundle consists of xylem and phloem, which transport water and nutrients.",維管束由木質部和韌皮部組成，負責運輸水分和養分。
+生物 (演化) Biology (Evolution),adaptation,n.,適應,Camouflage is a physical adaptation that helps animals hide from predators.,偽裝是一種物理上的適應，能幫助動物躲避掠食者。
+生物 (演化) Biology (Evolution),evolution,n.,演化,Evolution explains how species change over time through genetic variation and selection.,演化解釋物種如何透過遺傳變異與選擇隨時間改變。
+生物 (演化) Biology (Evolution),natural selection,n.,天擇；自然選擇,Natural selection is the process by which traits become more common in a population.,天擇是特徵在族群中變得更加普遍的過程。
+生物 (生態) Biology (Ecology),autotroph,n.,自營生物,"Most plants are autotrophs, meaning they can produce their own food from light.",大多數植物是自營生物，這意味著它們能利用光製造自己的食物。
+生物 (生態) Biology (Ecology),biodiversity,n.,生物多樣性,Protecting biodiversity is essential for maintaining a healthy ecosystem.,保護生物多樣性對於維持健康的生態系統至關重要。
+生物 (生態) Biology (Ecology),biosphere,n.,生物圈,The biosphere includes all living beings and their relationships on earth.,生物圈包括地球上所有的生物及其相互關係。
+生物 (生態) Biology (Ecology),carnivore,n.,肉食動物,"A carnivore is an animal that eats other animals, such as a lion or hawk.",肉食動物是以其他動物為食的動物，例如獅子或老鷹。
+生物 (生態) Biology (Ecology),decomposer,n.,分解者,Fungi act as decomposers by breaking down dead organic matter in the forest.,真菌作為分解者，負責分解森林中的死亡有機物。
+生物 (生態) Biology (Ecology),ecosystem,n.,生態系統,An ecosystem includes all living organisms and their physical environment in an area.,生態系統包含某一區域內所有生物及其物理環境。
+生物 (生態) Biology (Ecology),food chain,n.,食物鏈,A food chain shows how energy moves from one living thing to another.,食物鏈顯示能量如何從一個生物傳遞到另一個生物。
+生物 (生態) Biology (Ecology),habitat,n.,棲息地,A habitat is the natural home or environment of an organism.,棲息地是生物體的自然家園或生存環境。
+生物 (生態) Biology (Ecology),herbivore,n.,草食動物,"A herbivore is an animal that eats only plants, like a rabbit or deer.",草食動物是只吃植物的動物，例如兔子或鹿。
+生物 (生態) Biology (Ecology),heterotroph,n.,異營生物,Humans are heterotrophs because we must consume other organisms for energy.,人類是異營生物，因為我們必須攝取其他生物來獲得能量。
+生物 (生態) Biology (Ecology),niche,n.,生態位,An organism's niche describes its role and position within an ecosystem.,一個生物體的生態位描述了它在生態系統中的角色與位置。
+生物 (生態) Biology (Ecology),omnivore,n.,雜食動物,Humans are omnivores because we eat both plants and animals.,人類是雜食動物，因為我們同時攝取植物和動物。
+生物 (生態) Biology (Ecology),population,n.,族群,A population refers to all individuals of the same species living in a specific area.,族群指生活在特定區域的同一物種所有個體。
+生物 (生態) Biology (Ecology),predator,n.,掠食者,"A predator hunts and feeds on other animals, called prey.",掠食者會獵捕並以其他動物（稱為獵物）為食。
+生物 (生態) Biology (Ecology),prey,n.,獵物,Prey animals have adaptations like speed or camouflage to avoid predators.,獵物動物具有速度或偽裝等適應特徵以躲避掠食者。
+生物 (生態) Biology (Ecology),species,n.,物種,A species is a group of organisms that can interbreed and produce fertile offspring.,物種是一群能夠交配並產生可育後代的生物。
+生物 (生態) Biology (Ecology),symbiosis,n.,共生,Symbiosis describes a close and long-term interaction between two different species.,共生描述了兩個不同物種之間緊密且長期的交互作用。
+生物 (生態) Biology (Ecology),trophic level,n.,營養層級,Each step in a food chain or web is called a trophic level.,食物鏈或食物網中的每一個步驟都被稱為營養層級。
+生物 (生技) Biology (Biotechnology),bioinformatics,n.,生物資訊學,"Bioinformatics uses computer tools to analyze and interpret biological data, especially genetic sequences.",生物資訊學運用電腦工具分析與解讀生物資料，特別是基因序列。
+生物 (生技) Biology (Biotechnology),bioremediation,n.,生物修復,Bioremediation uses microorganisms to clean up contaminated soil and groundwater.,生物修復利用微生物來清理受污染的土壤和地下水。
+生物 (生技) Biology (Biotechnology),biotechnology,n.,生物技術,Biotechnology uses living systems to develop products like medicine and fuels.,生物技術利用生命系統來開發醫藥和燃料等產品。
+生物 (生技) Biology (Biotechnology),sequencing,n.,(基因) 定序,Next-generation sequencing allows scientists to scan an entire genome quickly.,次世代定序讓科學家能夠快速掃描整個基因組。
+生物 (生技) Biology (Biotechnology),stem cell,n.,幹細胞,Stem cell research holds great potential for regenerating damaged tissues.,幹細胞研究在再生受損組織方面具有巨大潛力。
+生物 (生理) Biology (Physiology),circulation,n.,循環,"The circulatory system transports oxygen, nutrients, and waste throughout the body.",循環系統在全身輸送氧氣、養分和廢物。
+生物 (生理) Biology (Physiology),digestion,n.,消化,Digestion breaks down food into small molecules that the body can absorb.,消化將食物分解為身體可吸收的小分子。
+生物 (生理) Biology (Physiology),homeostasis,n.,體內平衡；恆定性,Sweat helps the body maintain homeostasis by cooling it down.,流汗透過冷卻身體來幫助維持體內平衡。
+生物 (生理) Biology (Physiology),hormone,n.,荷爾蒙；激素,Insulin is a vital hormone that regulates the concentration of glucose in the blood.,胰島素是調節血液中葡萄糖濃度的重要荷爾蒙。
+生物 (生理) Biology (Physiology),neuron,n.,神經元,A neuron is a specialized cell designed to transmit information to other nerve cells.,神經元是專門用於向其他神經細胞傳遞資訊的細胞。
+生物 (生理) Biology (Physiology),pathogen,n.,病原體,Viruses and bacteria are common types of pathogens that cause infectious diseases.,病毒和細菌是引起傳染病的常見病原體。
+生物 (生理) Biology (Physiology),respiration,n.,呼吸作用,Cellular respiration releases energy from glucose to power life processes.,細胞呼吸作用從葡萄糖中釋放能量，為生命活動提供動力。
+生物 (細胞) Biology (Cell Biology),active transport,n.,主動運輸,Active transport moves substances against their concentration gradient using energy.,主動運輸消耗能量，將物質逆濃度梯度運輸。
+生物 (細胞) Biology (Cell Biology),apoptosis,n.,細胞凋亡,Apoptosis is programmed cell death that helps maintain healthy tissue.,細胞凋亡是程式性細胞死亡，有助於維持組織健康。
+生物 (細胞) Biology (Cell Biology),diffusion,n.,擴散,Diffusion is the passive movement of particles from an area of high concentration to low concentration.,擴散是粒子從高濃度區域被動移動到低濃度區域的過程。
+生物 (細胞) Biology (Cell Biology),eukaryote,n.,真核生物,Eukaryote cells contain a nucleus and other membrane-bound organelles.,真核生物細胞含有細胞核以及其他具膜的細胞器。
+生物 (細胞) Biology (Cell Biology),meiosis,n.,減數分裂,Meiosis is a type of cell division that reduces the chromosome number by half.,減數分裂是一種使染色體數量減半的細胞分裂方式。
+生物 (細胞) Biology (Cell Biology),mitosis,n.,有絲分裂,Mitosis results in two daughter cells that are genetically identical to the parent.,有絲分裂產生兩個與親代基因完全相同的子細胞。
+生物 (細胞) Biology (Cell Biology),organelle,n.,細胞器,Mitochondria are known as the powerhouse organelle of the cell.,線粒體被稱為細胞的能量工廠細胞器。
+生物 (細胞) Biology (Cell Biology),osmosis,n.,滲透作用,Osmosis is the movement of water across a semipermeable membrane from low to high solute concentration.,滲透作用是水分子從低濃度溶液經半透膜移動到高濃度溶液的現象。
+生物 (細胞) Biology (Cell Biology),prokaryote,n.,原核生物,Bacteria are the most common examples of prokaryote organisms.,細菌是原核生物最常見的例子。
+生物 (解剖) Biology (Anatomy),organ system,n.,器官系統,The circulatory system is an organ system that moves blood throughout the body.,循環系統是一個在全身輸送血液的器官系統。
+生物 (解剖) Biology (Anatomy),tissue,n.,組織,Muscle tissue is responsible for movement in the human body.,肌肉組織負責人體的運動。
+生物 (遺傳) Biology (Genetics),allele,n.,等位基因,An allele is one of two or more alternative forms of a gene.,等位基因是基因的兩種或多種替代形式之一。
+生物 (遺傳) Biology (Genetics),chromosome,n.,染色體,Humans typically have 23 pairs of chromosomes in each cell.,人類每個細胞中通常有 23 對染色體。
+生物 (遺傳) Biology (Genetics),epigenetics,n.,表觀遺傳學,Epigenetics studies heritable changes in gene expression without altering the DNA sequence.,表觀遺傳學研究不改變 DNA 序列下，可遺傳的基因表現變化。
+生物 (遺傳) Biology (Genetics),gene,n.,基因,A gene is a segment of DNA that codes for a specific protein or trait.,基因是 DNA 的一段，負責編碼特定蛋白質或性狀。
+生物 (遺傳) Biology (Genetics),genotype,n.,基因型,The genotype represents the entire genetic makeup of an individual.,基因型代表一個個體完整的遺傳組成。
+生物 (遺傳) Biology (Genetics),heterozygous,adj.,雜合的,Heterozygous individuals possess two different alleles for a specific trait.,雜合個體對特定性狀具有兩個不同的等位基因。
+生物 (遺傳) Biology (Genetics),homozygous,adj.,純合的,An organism is homozygous if it has two identical alleles for a particular gene.,如果一個生物體對某個特定基因具有兩個相同的等位基因，則它是純合的。
+生物 (遺傳) Biology (Genetics),phenotype,n.,表型；表現型,The phenotype of an organism is the set of its observable characteristics.,生物體的表型是其可觀察特徵的集合。
+醫療 Medical,acute,adj.,急性的,The patient was rushed to the hospital with acute abdominal pain.,病人因急性腹痛被緊急送往醫院。
+醫療 Medical,anesthesia,n.,麻醉,Local anesthesia is used to numb a specific area during minor surgery.,局部麻醉用於在小型手術中使特定區域麻痺。
+醫療 Medical,antibody,n.,抗體,Vaccination stimulates the immune system to produce a specific antibody.,接種疫苗會刺激免疫系統產生特定的抗體。
+醫療 Medical,antigen,n.,抗原,An antigen is any substance that causes your immune system to produce antibodies.,抗原是任何會導致免疫系統產生抗體的物質。
+醫療 Medical,biopsy,n.,活體組織檢查；切片,The doctor ordered a biopsy to determine if the tumor was benign or malignant.,醫生要求進行活檢以確定腫瘤是良性還是惡性。
+醫療 Medical,bioremediation,n.,生物修復,Bioremediation uses microorganisms to clean up contaminated soil and groundwater.,生物修復利用微生物來清理受污染的土壤和地下水。
+醫療 Medical,biotechnology,n.,生物技術,Biotechnology uses living systems to develop products like medicine and fuels.,生物技術利用生命系統來開發醫藥和燃料等產品。
+醫療 Medical,cardiovascular,adj.,心血管的,Regular exercise can significantly improve cardiovascular health.,定期運動可以顯著改善心血管健康。
+醫療 Medical,chronic,adj.,慢性的,Diabetes is a chronic condition that requires long-term management.,糖尿病是一種需要長期管理的慢性疾病。
+醫療 Medical,coagulation,n.,凝血,Coagulation is the essential process by which blood changes from a liquid to a gel.,凝血是血液從液體變為凝膠的必要過程。
+醫療 Medical,efficacy,n.,功效；效力,Clinical trials are conducted to test the safety and efficacy of new drugs.,進行臨床試驗是為了測試新藥的安全性和有效性。
+醫療 Medical,gene therapy,n.,基因治療,Gene therapy aims to treat genetic disorders by replacing faulty genes.,基因治療旨在透過更換缺陷基因來治療遺傳性疾病。
+醫療 Medical,immunotherapy,n.,免疫治療,Immunotherapy boosts the body's own immune system to fight diseases like cancer.,免疫治療透過增強人體自身免疫系統來對抗癌症等疾病。
+醫療 Medical,incubation period,n.,潛伏期,The incubation period is the time between exposure to a pathogen and the onset of symptoms.,潛伏期是指接觸病原體到症狀出現之間的時間。
+醫療 Medical,inflammation,n.,發炎,Inflammation is the body's natural response to injury or infection.,發炎是身體對受傷或感染的自然反應。
+醫療 Medical,metabolism,n.,新陳代謝,Certain medical conditions can slow down a patient's basal metabolism.,某些醫療狀況可能會減慢病人的基礎新陳代謝。
+醫療 Medical,metastasis,n.,(癌症) 轉移,Metastasis occurs when cancer cells spread from the primary site to other organs.,當癌細胞從原發部位擴散到其他器官時，就會發生轉移。
+醫療 Medical,microbiome,n.,微生物組,The human microbiome includes trillions of microbes living in and on our bodies.,人體微生物組包含生活在人體內外的數兆微生物。
+醫療 Medical,pathogenesis,n.,致病機制,Pathogenesis describes how a disease develops and progresses in the body.,致病機制描述疾病在體內如何發生與進展。
+醫療 Medical,pharmacokinetics,n.,藥代動力學,"Pharmacokinetics studies how the body absorbs, distributes, metabolizes, and excretes drugs.",藥代動力學研究身體如何吸收、分布、代謝與排泄藥物。
+醫療 Medical,prognosis,n.,預後 (對病情的預測),"With early detection, the prognosis for many types of cancer is positive.",透過早期發現，許多類型癌症的預後都是樂觀的。
+醫療 Medical,sequencing,n.,(基因) 定序,Next-generation sequencing allows scientists to scan an entire genome quickly.,次世代定序讓科學家能夠快速掃描整個基因組。
+醫療 Medical,stem cell,n.,幹細胞,Stem cell research holds great potential for regenerating damaged tissues.,幹細胞研究在再生受損組織方面具有巨大潛力。
+醫療 Medical,virulence,n.,毒性；致病力,The virulence of the virus determines how severe the infection will be.,病毒的毒性決定了感染的嚴重程度。
