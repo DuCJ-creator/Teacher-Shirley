@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shirley's Bilingual Geography | 雙語地理觀測站</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #e0eef7;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 星空與地形粒子背景 */
+        #geoCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.35;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.8rem 2rem 3rem;
+        }
+
+        /* 標題區 */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, #ffd89b, #c7e9fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero h1 i {
+            color: #ffd89b;
+            font-size: 2.5rem;
+            margin: 0 0.5rem;
+        }
+        .hero p {
+            font-size: 0.95rem;
+            color: #a8c9dc;
+            margin-top: 0.5rem;
+        }
+        .hero .stats {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #8db5cc;
+        }
+
+        /* 搜尋欄 */
+        .search-global {
+            max-width: 550px;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            gap: 10px;
+            background: rgba(20, 40, 50, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            padding: 0.2rem 0.2rem 0.2rem 1.5rem;
+            border: 1px solid #5a8faa;
+        }
+        .search-global input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
+            color: #e0eef7;
+            outline: none;
+        }
+        .search-global input::placeholder {
+            color: #8db5cc;
+        }
+        .search-global button {
+            background: #3a7ca5;
+            border: none;
+            border-radius: 50px;
+            padding: 0 1.5rem;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .search-global button:hover {
+            background: #2c5d7a;
+            transform: scale(0.96);
+        }
+
+        /* 分支按鈕 */
+        .strands-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+        .strand-btn {
+            background: rgba(30, 55, 70, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid #5a8faa;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: #c7e9fb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .strand-btn.active {
+            background: #3a7ca5;
+            color: white;
+            border-color: #ffd89b;
+        }
+
+        /* 主內容面板 */
+        .content-panel {
+            background: rgba(15, 35, 45, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            padding: 1.6rem;
+            border: 1px solid #5a8faa;
+        }
+
+        /* 收藏區 */
+        .starred-section {
+            margin-bottom: 1.8rem;
+        }
+        .starred-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #4a7a92;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .starred-header h3 {
+            color: #ffd89b;
+            font-weight: 500;
+        }
+        .star-badge {
+            background: #2a5a70;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #c7e9fb;
+        }
+        .starred-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 1rem;
+            padding: 0.6rem;
+            min-height: 55px;
+        }
+        .starred-word {
+            background: #2a5a70;
+            padding: 4px 12px;
+            border-radius: 24px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #c7e9fb;
+        }
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        .mode-btn {
+            background: #1a4052;
+            border: 1px solid #5a8faa;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #c7e9fb;
+        }
+        .mode-btn.active {
+            background: #3a7ca5;
+            color: white;
+            border-color: #ffd89b;
+        }
+        .reset-btn {
+            background: none;
+            border: 1px solid #5a8faa;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #c7e9fb;
+        }
+
+        /* 卡片網格 */
+        .terms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+        .term-card {
+            background: rgba(25, 55, 70, 0.85);
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border-left: 4px solid #ffd89b;
+            border: 1px solid #4a7a92;
+            transition: all 0.25s ease;
+        }
+        .term-card:hover {
+            transform: translateY(-3px);
+            background: rgba(35, 75, 90, 0.9);
+            border-left-color: #ffb347;
+        }
+
+        /* 閃卡模式 */
+        .flashcard-container {
+            perspective: 1500px;
+            height: 340px;
+            margin-top: 1rem;
+        }
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #1a4052;
+            border: 1px solid #ffd89b;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            background: #0f2e3b;
+        }
+        .flashcard-word {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffd89b;
+            font-family: 'Space Mono', monospace;
+        }
+        .flashcard-sentence {
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            color: #c7e9fb;
+        }
+        .flash-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        .flash-nav button {
+            background: #3a7ca5;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .term-word {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            color: #ffd89b;
+        }
+        .star-icon {
+            color: #ffb347;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .star-icon.far {
+            color: #5a8faa;
+        }
+        .term-meaning {
+            font-size: 0.95rem;
+            color: #c7e9fb;
+            margin: 6px 0;
+        }
+        .sentence {
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 12px;
+            margin: 8px 0;
+            color: #b0d4e8;
+        }
+        .btn-speak {
+            background: none;
+            border: none;
+            color: #ffd89b;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #8db5cc;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #5a8faa;
+        }
+        .loading, .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: #8db5cc;
+        }
+        .error-message {
+            color: #ffb347;
+        }
+        @media (max-width: 650px) {
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="geoCanvas"></canvas>
+<div class="container">
+    <div class="hero">
+        <h1><i class="fas fa-globe-americas"></i> Shirley's Bilingual Geography <i class="fas fa-meteor"></i></h1>
+        <p>天文 · 地理 · 地質 · 氣候 | 雙語探索地球與宇宙</p>
+        <div class="stats" id="dataStats">🌍 等待載入地理詞彙...</div>
+    </div>
+    <div class="search-global">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearchInput" placeholder="搜尋詞彙 / 中文 (如: volcano, 板塊)" autocomplete="off">
+        <button id="globalSearchBtn">觀測</button>
+    </div>
+    <div class="strands-grid" id="strandsContainer"><div class="loading">⛰️ 正在載入地理詞彙...</div></div>
+    <div class="content-panel">
+        <div class="starred-section">
+            <div class="starred-header"><h3><i class="fas fa-star" style="color: #ffb347;"></i> 我的收藏</h3><div class="star-badge">點擊星星收藏</div></div>
+            <div id="starredWordsContainer" class="starred-list"></div>
+        </div>
+        <div class="controls-bar">
+            <div class="mode-toggle"><button class="mode-btn active" data-mode="grid">卡片瀏覽</button><button class="mode-btn" data-mode="flashcard">閃卡溫習</button></div>
+            <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置</button>
+        </div>
+        <div id="currentStrandTitle" style="margin-bottom: 1rem; font-size: 0.9rem; color: #ffd89b;"><i class="fas fa-map-marked-alt"></i> </div>
+        <div id="dynamicContentArea"></div>
+    </div>
+    <footer>🎧 點擊喇叭聆聽發音 | 閃卡模式點擊翻轉 | 請將此檔案與 geography.csv 放在同一資料夾</footer>
+</div>
+
+<script>
+    let geoData = [];
+    let currentStrand = "";
+    let starredWords = JSON.parse(localStorage.getItem("geography_starred_v1") || "[]");
+    let searchKeyword = "";
+    let currentMode = "grid";
+    let flashcardIndex = 0;
+    let filteredTermsCache = [];
+
+    const CSV_PATH = "./geography.csv";
+
+    // 天文地理背景動畫 (星星 + 地形)
+    function initGeoBackground() {
+        const canvas = document.getElementById("geoCanvas");
+        const ctx = canvas.getContext("2d");
+        let width, height, stars = [], terrains = [];
+        
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+        
+        // 星星
+        for(let i=0;i<80;i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 2 + 1,
+                alpha: Math.random() * 0.5 + 0.2,
+                twinkle: Math.random() * 0.05
+            });
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            // 星星
+            stars.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(255, 220, 150, ${s.alpha + Math.sin(Date.now() * s.twinkle) * 0.15})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    // 讀取 CSV
+    async function loadCSV() {
+        try {
+            console.log("嘗試讀取:", CSV_PATH);
+            const response = await fetch(CSV_PATH);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const csvText = await response.text();
+            parseCSV(csvText);
+        } catch (error) {
+            console.error("載入失敗:", error);
+            document.getElementById("strandsContainer").innerHTML = `<div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i> 無法讀取 geography.csv<br><br>
+                請確認：<br>
+                1. 已將此 HTML 檔案與 geography.csv 放在「同一個資料夾」中<br>
+                2. 檔案名稱正確 (geography.csv)<br>
+                3. 直接使用瀏覽器開啟此 HTML 檔案<br><br>
+                <button onclick="location.reload()" style="background:#3a7ca5; border:none; padding:8px 20px; border-radius:40px; cursor:pointer; color:white;">重新載入</button>
+            </div>`;
+        }
+    }
+
+    function parseCSV(csv) {
+        const lines = csv.split(/\r?\n/);
+        if (lines.length < 2) return;
+        const headers = lines[0].split(',');
+        const subjectIdx = headers.indexOf('subject');
+        const wordIdx = headers.indexOf('word');
+        const posIdx = headers.indexOf('pos');
+        const meaningIdx = headers.indexOf('meaning');
+        const sentenceEIdx = headers.indexOf('sentence e');
+        const sentenceCIdx = headers.indexOf('sentence c');
+        
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            let row = [], inQuote = false, current = '';
+            for (let ch of line) {
+                if (ch === '"') inQuote = !inQuote;
+                else if (ch === ',' && !inQuote) { row.push(current.trim()); current = ''; }
+                else current += ch;
+            }
+            row.push(current.trim());
+            if (row.length < 6) continue;
+            const term = {
+                subject: row[subjectIdx] || "", word: row[wordIdx] || "", pos: row[posIdx] || "",
+                meaning: row[meaningIdx] || "", sentence_e: row[sentenceEIdx] || "", sentence_c: row[sentenceCIdx] || ""
+            };
+            if (term.word && term.subject) geoData.push(term);
+        }
+        
+        if (geoData.length > 0) {
+            document.getElementById("dataStats").innerHTML = `🌎 已載入 ${geoData.length} 個地理/天文詞彙`;
+            const subjects = [...new Set(geoData.map(d => d.subject))];
+            currentStrand = subjects[0];
+            initGeoBackground();
+            renderAll();
+        } else {
+            document.getElementById("strandsContainer").innerHTML = '<div class="error-message">CSV 檔案中沒有找到有效的詞彙資料</div>';
+        }
+    }
+
+    function saveStarred() { localStorage.setItem("geography_starred_v1", JSON.stringify(starredWords)); }
+    function toggleStar(term) {
+        const exists = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+        if (exists) starredWords = starredWords.filter(s => !(s.word === term.word && s.subject === term.subject));
+        else starredWords.push({ word: term.word, meaning: term.meaning, subject: term.subject });
+        saveStarred(); renderAll();
+    }
+    function speakText(text) { const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+    function getFilteredTerms() {
+        let terms = geoData.filter(t => t.subject === currentStrand);
+        if (searchKeyword.trim()) { const kw = searchKeyword.trim().toLowerCase(); terms = terms.filter(t => t.word.toLowerCase().includes(kw) || t.meaning.includes(kw) || t.sentence_c.includes(kw)); }
+        return terms;
+    }
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+    
+    function renderGridMode(terms) {
+        if (terms.length === 0) return `<div class="no-results">🗺️ 在此領域中未找到相關詞彙</div>`;
+        return `<div class="terms-container">${terms.map(term => {
+            const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+            return `<div class="term-card">
+                <div class="term-word">
+                    <span><strong>${escapeHtml(term.word)}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
+                    <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i>
+                </div>
+                <div class="term-meaning">${escapeHtml(term.meaning)}</div>
+                <div class="sentence">${escapeHtml(term.sentence_e)}<br>${escapeHtml(term.sentence_c)}</div>
+                <button class="btn-speak" data-text="${escapeHtml(term.word)}"><i class="fas fa-volume-up"></i> 聆聽</button>
+            </div>`;}).join('')}</div>`;
+    }
+    
+    function renderFlashcardMode(terms) {
+        if (terms.length === 0) return `<div class="no-results">暫無詞彙</div>`;
+        if (flashcardIndex >= terms.length) flashcardIndex = 0;
+        const term = terms[flashcardIndex];
+        return `<div class="flashcard-container">
+            <div class="flashcard" id="activeFlashcard">
+                <div class="card-front">
+                    <div class="flashcard-word">${escapeHtml(term.word)}</div>
+                    <div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div>
+                    <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">🖱️ 點擊翻轉</div>
+                </div>
+                <div class="card-back">
+                    <div class="flashcard-word">${escapeHtml(term.meaning)}</div>
+                    <div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div>
+                    <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">🌏 中文釋義</div>
+                </div>
+            </div>
+        </div>
+        <div class="flash-nav">
+            <button id="prevCardBtn">◀ 上一張</button>
+            <span style="color:#ffd89b;">${flashcardIndex+1} / ${terms.length}</span>
+            <button id="nextCardBtn">下一張 ▶</button>
+            <button id="speakCardBtn"><i class="fas fa-volume-up"></i> 發音</button>
+        </div>`;
+    }
+    
+    function renderDynamicContent() {
+        const filtered = getFilteredTerms();
+        filteredTermsCache = filtered;
+        const area = document.getElementById("dynamicContentArea");
+        if (currentMode === "grid") { area.innerHTML = renderGridMode(filtered); attachGridEvents(); }
+        else { area.innerHTML = renderFlashcardMode(filtered); attachFlashcardEvents(); }
+    }
+    
+    function attachGridEvents() {
+        document.querySelectorAll('.star-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => { e.stopPropagation();
+                const wordName = icon.getAttribute('data-word'), subj = icon.getAttribute('data-sub');
+                const target = geoData.find(t => t.word === wordName && t.subject === subj);
+                if (target) toggleStar(target);
+            });
+        });
+        document.querySelectorAll('.btn-speak').forEach(btn => {
+            btn.addEventListener('click', (e) => { e.stopPropagation(); const text = btn.getAttribute('data-text'); if(text) speakText(text); });
+        });
+    }
+    
+    function attachFlashcardEvents() {
+        const flashcard = document.getElementById("activeFlashcard");
+        if (flashcard) flashcard.addEventListener("click", () => flashcard.classList.toggle("flipped"));
+        document.getElementById("prevCardBtn")?.addEventListener("click", () => { if (filteredTermsCache.length) { flashcardIndex = (flashcardIndex - 1 + filteredTermsCache.length) % filteredTermsCache.length; renderDynamicContent(); } });
+        document.getElementById("nextCardBtn")?.addEventListener("click", () => { if (filteredTermsCache.length) { flashcardIndex = (flashcardIndex + 1) % filteredTermsCache.length; renderDynamicContent(); } });
+        document.getElementById("speakCardBtn")?.addEventListener("click", () => { if (filteredTermsCache[flashcardIndex]) speakText(filteredTermsCache[flashcardIndex].word); });
+    }
+    
+    function renderStarredList() {
+        const container = document.getElementById("starredWordsContainer");
+        if (starredWords.length === 0) { container.innerHTML = '<div class="empty-star">⭐ 暫無收藏，點擊星星收藏</div>'; return; }
+        container.innerHTML = starredWords.map(s => `<div class="starred-word" data-word="${escapeHtml(s.word)}">${escapeHtml(s.word)} <i class="fas fa-times-circle" data-remove="${escapeHtml(s.word)}"></i></div>`).join('');
+        document.querySelectorAll('.starred-word i').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); const w = icon.getAttribute('data-remove'); starredWords = starredWords.filter(s => s.word !== w); saveStarred(); renderAll(); }); });
+        document.querySelectorAll('.starred-word').forEach(el => { el.addEventListener('click', (e) => { if(e.target.tagName === 'I') return; const word = el.getAttribute('data-word'); const found = geoData.find(t => t.word === word); if(found) { currentStrand = found.subject; searchKeyword = ""; document.getElementById("globalSearchInput").value = ""; renderAll(); } }); });
+    }
+    
+    function renderStrands() {
+        const subjects = [...new Set(geoData.map(d => d.subject))];
+        const container = document.getElementById("strandsContainer");
+        if (subjects.length === 0) return;
+        container.innerHTML = subjects.map(sub => `<button class="strand-btn ${currentStrand === sub ? 'active' : ''}" data-subject="${escapeHtml(sub)}"><i class="fas fa-mountain"></i> ${escapeHtml(sub)}</button>`).join('');
+        document.querySelectorAll('.strand-btn').forEach(btn => { btn.addEventListener('click', () => { currentStrand = btn.getAttribute('data-subject'); searchKeyword = ""; flashcardIndex = 0; document.getElementById("globalSearchInput").value = ""; renderAll(); }); });
+    }
+    
+    function renderAll() {
+        if (geoData.length === 0) return;
+        renderStrands(); renderStarredList(); renderDynamicContent();
+        document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-map-marked-alt"></i> 當前領域：${currentStrand}`;
+    }
+    
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".mode-btn")) {
+            const btn = e.target.closest(".mode-btn");
+            const mode = btn.getAttribute("data-mode");
+            if (mode) { currentMode = mode; document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); flashcardIndex = 0; renderDynamicContent(); }
+        }
+    });
+    document.getElementById("globalSearchBtn").addEventListener("click", () => { searchKeyword = document.getElementById("globalSearchInput").value; flashcardIndex = 0; renderDynamicContent(); });
+    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { searchKeyword = document.getElementById("globalSearchInput").value; flashcardIndex = 0; renderDynamicContent(); } });
+    document.getElementById("resetSearchBtn").addEventListener("click", () => { searchKeyword = ""; flashcardIndex = 0; document.getElementById("globalSearchInput").value = ""; renderDynamicContent(); });
+    
+    loadCSV();
+</script>
+</body>
+</html>
