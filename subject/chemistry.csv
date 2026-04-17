@@ -1,0 +1,145 @@
+subject,word,pos,meaning,sentence e,sentence c
+化學 (基礎) / Basic Chemistry,element,n.,元素,An element is a pure substance that cannot be broken down into simpler substances by chemical means.,元素是一種純物質，無法透過化學方法分解成更簡單的物質。
+化學 (基礎) / Basic Chemistry,compound,n.,化合物,A compound is a substance formed when two or more elements are chemically bonded.,化合物是兩種或多種元素透過化學鍵結合而成的物質。
+化學 (基礎) / Basic Chemistry,mixture,n.,混合物,A mixture contains two or more substances that are physically combined but not chemically bonded.,混合物包含兩種或多種物質，它們是物理性混合而非化學鍵結。
+化學 (基礎) / Basic Chemistry,solubility,n.,溶解度,Solubility refers to the maximum amount of solute that can dissolve in a solvent at a given temperature.,溶解度是指在特定溫度下，溶劑中所能溶解溶質的最大量。
+化學 (基礎) / Basic Chemistry,ion,n.,離子,"An ion is an atom or molecule that has gained or lost electrons, giving it a positive or negative charge.",離子是獲得或失去電子的原子或分子，因而帶有正電或負電。
+化學 (基礎) / Basic Chemistry,acid,n.,酸,An acid is a substance that donates hydrogen ions (H⁺) when dissolved in water.,酸是一種在水中溶解時會釋放氫離子（H⁺）的物質。
+化學 (基礎) / Basic Chemistry,base,n.,鹼,A base is a substance that accepts hydrogen ions or produces hydroxide ions (OH⁻) in water.,鹼是一種能接受氫離子或在水中產生氫氧根離子（OH⁻）的物質。
+化學 (基礎) / Basic Chemistry,exothermic,adj.,放熱的,An exothermic reaction releases energy in the form of heat to its surroundings.,放熱反應會以熱的形式向周圍環境釋放能量。
+化學 (基礎) / Basic Chemistry,endothermic,adj.,吸熱的,An endothermic reaction absorbs thermal energy from its surroundings during the process.,吸熱反應在進行過程中會從周圍環境吸收熱能。
+化學 (計量) / Chemical Stoichiometry,mole,n.,摩爾 (物質的量單位),"A mole represents 6.022×10²³ particles of a substance, known as Avogadro's number.",一摩爾代表 6.022×10²³ 個物質微粒，即阿佛加德羅常數。
+化學 (計量) / Chemical Stoichiometry,molar mass,n.,莫耳質量,"The molar mass of a substance is the mass of one mole of that substance, expressed in g/mol.",物質的莫耳質量是指一摩耳該物質的質量，單位為 g/mol。
+化學 (計量) / Chemical Stoichiometry,molarity,n.,體積莫耳濃度,Molarity is the concentration of a solution expressed as moles of solute per liter of solution.,體積莫耳濃度是以每公升溶液中所含溶質的莫耳數來表示的濃度。
+化學 (計量) / Chemical Stoichiometry,stoichiometry,n.,化學計量學,Stoichiometry involves calculating the quantities of reactants and products in a chemical reaction.,化學計量學涉及計算化學反應中反應物與生成物的數量。
+化學 (計量) / Chemical Stoichiometry,limiting reactant,n.,限量反應物,"The limiting reactant is the substance that is completely consumed first, determining the maximum amount of product.",限量反應物是最先完全耗盡的物質，決定了生成物的最大產量。
+化學 (計量) / Chemical Stoichiometry,percent yield,n.,產率百分比,Percent yield compares the actual amount of product obtained to the theoretical maximum amount.,產率百分比是將實際獲得的生成物量與理論最大量進行比較。
+化學 (氣體) / Gas Laws,ideal gas law,n.,理想氣體定律,The ideal gas law is expressed by the formula PV = nRT.,理想氣體定律由公式 PV = nRT 來表達。
+化學 (氣體) / Gas Laws,Boyle's law,n.,波以耳定律,"Boyle's law states that at constant temperature, the pressure of a gas is inversely proportional to its volume.",波以耳定律指出：在恆溫下，氣體的壓力與體積成反比。
+化學 (氣體) / Gas Laws,Charles's law,n.,查爾斯定律,"Charles's law states that at constant pressure, the volume of a gas is directly proportional to its temperature.",查爾斯定律指出：在恆壓下，氣體的體積與溫度成正比。
+化學 (氣體) / Gas Laws,Dalton's law,n.,道耳頓分壓定律,Dalton's law states that the total pressure of a gas mixture equals the sum of the partial pressures of each component.,道耳頓分壓定律指出：混合氣體的總壓等於各組分氣體分壓之總和。
+化學 (構造) / Chemical Structure & Bonding,covalent bond,n.,共價鍵,A covalent bond is formed when two atoms share a pair of electrons.,當兩個原子共享一對電子時，就會形成共價鍵。
+化學 (構造) / Chemical Structure & Bonding,ionic bond,n.,離子鍵,"An ionic bond forms when electrons are transferred from a metal to a non-metal, creating oppositely charged ions.",離子鍵形成於電子從金屬轉移至非金屬，產生帶相反電荷的離子。
+化學 (構造) / Chemical Structure & Bonding,electronegativity,n.,電負度,Electronegativity measures an atom's ability to attract shared electrons in a bond.,電負度衡量的是原子在化學鍵中吸引共享電子的能力。
+化學 (構造) / Chemical Structure & Bonding,polarity,n.,極性,The polarity of water molecules allows them to form hydrogen bonds with each other.,水分子的極性使它們能夠彼此形成氫鍵。
+化學 (構造) / Chemical Structure & Bonding,intermolecular forces,n.,分子間作用力,Intermolecular forces are the attractive forces between molecules that affect physical properties like boiling point.,分子間作用力是分子之間的吸引力，會影響沸點等物理性質。
+化學 (構造) / Chemical Structure & Bonding,hydrogen bonding,n.,氫鍵,"Hydrogen bonding is a strong type of intermolecular force that occurs when hydrogen is bonded to nitrogen, oxygen, or fluorine.",氫鍵是一種較強的分子間作用力，發生於氫與氮、氧或氟鍵結時。
+化學 (構造) / Chemical Structure & Bonding,hybridization,n.,軌域混成,"Orbital hybridization explains how atomic orbitals mix to form new, identical orbitals.",軌域混成解釋了原子軌域如何混合以形成新的、相同的軌域。
+化學 (構造) / Chemical Structure & Bonding,resonance,n.,共振,Resonance occurs when a molecule can be represented by multiple valid Lewis structures.,當一個分子可以用多個有效的路易斯結構表示時，就會產生共振。
+化學 (構造) / Chemical Structure & Bonding,molecular orbital theory,n.,分子軌域理論,Molecular orbital theory describes electrons as delocalized over the entire molecule rather than confined to individual bonds.,分子軌域理論將電子描述為離域於整個分子，而非局限於單一化學鍵。
+化學 (構造) / Chemical Structure & Bonding,crystal field theory,n.,晶體場理論,Crystal field theory explains the splitting of d-orbital energies in transition metal complexes due to ligand interactions.,晶體場理論解釋過渡金屬錯合物中，因配位基作用導致 d 軌域能階分裂的現象。
+化學 (構造) / Chemical Structure & Bonding,bond order,n.,鍵級,Bond order indicates the number of chemical bonds between a pair of atoms and correlates with bond strength.,鍵級表示原子對之間的化學鍵數目，並與鍵強度相關。
+化學 (構造) / Chemical Structure & Bonding,VSEPR theory,n.,價殼層電子對互斥理論,VSEPR theory predicts molecular geometry by minimizing repulsion between electron domains around a central atom.,價殼層電子對互斥理論 (VSEPR) 透過最小化中心原子周圍電子域間的斥力來預測分子幾何結構。
+化學 (結構) / Atomic Structure,isotope,n.,同位素,Isotopes of an element have the same number of protons but different numbers of neutrons.,同一種元素的同位素具有相同數量的質子，但中子數量不同。
+化學 (結構) / Atomic Structure,allotrope,n.,同素異形體,Diamond and graphite are two different allotropes of the element carbon.,鑽石和石墨是碳元素的兩種不同的同素異形體。
+化學 (結構) / Atomic Structure,Heisenberg uncertainty principle,n.,海森堡測不準原理,The Heisenberg uncertainty principle states that the position and momentum of a particle cannot be simultaneously known with arbitrary precision.,海森堡測不準原理指出，粒子的位置與動量無法同時被精確測定。
+化學 (結構) / Atomic Structure,Pauli exclusion principle,n.,包立不相容原理,The Pauli exclusion principle dictates that no two electrons in an atom can have the same set of four quantum numbers.,包立不相容原理規定原子中沒有兩個電子能擁有完全相同的四個量子數。
+化學 (結構) / Atomic Structure,Aufbau principle,n.,奧夫堡原理,The Aufbau principle describes how electrons fill atomic orbitals from the lowest to the highest energy levels.,奧夫堡原理描述電子如何由最低能階填至最高能階的原子軌域。
+化學 (平衡) / Chemical Equilibrium,Le Chatelier's principle,n.,勒沙特列原理,Le Chatelier's principle predicts how a system at equilibrium responds to changes in conditions.,勒沙特列原理預測平衡系統對條件改變會如何做出反應。
+化學 (平衡) / Chemical Equilibrium,dynamic equilibrium,n.,動態平衡,"Dynamic equilibrium occurs when the forward and reverse reaction rates are equal, so concentrations remain constant.",動態平衡發生於正逆反應速率相等時，此時各物質濃度保持不變。
+化學 (平衡) / Chemical Equilibrium,reaction quotient,n.,反應商,The reaction quotient (Q) helps predict the direction a reaction will shift to reach equilibrium.,反應商（Q）有助於預測反應將朝哪個方向移動以達到平衡。
+化學 (平衡) / Chemical Equilibrium,equilibrium constant,n.,平衡常數,The equilibrium constant (K) indicates the extent to which a reaction proceeds.,平衡常數 (K) 表示反應進行的程度。
+化學 (平衡) / Chemical Equilibrium,solubility product,n.,溶度積,The solubility product constant (Ksp) quantifies the equilibrium between a solid salt and its dissolved ions.,溶度積常數 (Ksp) 量化固體鹽類與其溶解離子間的平衡。
+化學 (平衡) / Chemical Equilibrium,common ion effect,n.,同離子效應,The common ion effect reduces the solubility of a salt when another compound sharing an ion is added.,當加入含有相同離子的另一化合物時，同離子效應會降低鹽類的溶解度。
+化學 (平衡) / Chemical Equilibrium,complex ion,n.,錯離子,A complex ion forms when a central metal ion binds to surrounding ligands through coordinate covalent bonds.,錯離子形成於中心金屬離子透過配位共價鍵與周圍配位基結合時。
+化學 (酸鹼) / Acid-Base Chemistry,titration,n.,滴定,Titration is a technique used to determine the unknown concentration of a solution.,滴定是一種用於測定溶液未知濃度的技術。
+化學 (酸鹼) / Acid-Base Chemistry,pH scale,n.,pH 值 (酸鹼值),"The pH scale measures how acidic or basic a substance is, ranging from 0 to 14.",pH 值衡量物質的酸鹼程度，範圍從 0 到 14。
+化學 (酸鹼) / Acid-Base Chemistry,conjugate acid-base pair,n.,共軛酸鹼對,A conjugate acid-base pair differs by only one proton (H⁺).,共軛酸鹼對僅相差一個質子（H⁺）。
+化學 (酸鹼) / Acid-Base Chemistry,equivalence point,n.,當量點,The equivalence point in a titration is when the amount of titrant added exactly neutralizes the analyte.,滴定中的當量點是指加入的滴定劑恰好完全中和待測物的時刻。
+化學 (酸鹼) / Acid-Base Chemistry,Henderson-Hasselbalch equation,n.,亨德森-哈塞爾巴赫方程式,The Henderson-Hasselbalch equation relates the pH of a buffer solution to the pKa and the ratio of conjugate base to acid.,亨德森-哈塞爾巴赫方程式將緩衝溶液的 pH 值與 pKa 及共軛鹼酸比例關聯起來。
+化學 (酸鹼) / Acid-Base Chemistry,Lewis acid,n.,路易斯酸,"A Lewis acid is defined as an electron pair acceptor, broadening the concept beyond proton transfer.",路易斯酸定義為電子對接受體，將概念擴展超越質子轉移。
+化學 (酸鹼) / Acid-Base Chemistry,Lewis base,n.,路易斯鹼,A Lewis base donates an electron pair to form a coordinate covalent bond with a Lewis acid.,路易斯鹼提供電子對以與路易斯酸形成配位共價鍵。
+化學 (酸鹼) / Acid-Base Chemistry,HSAB theory,n.,硬軟酸鹼理論,HSAB theory predicts stability based on the match between hard/soft acids and hard/soft bases.,硬軟酸鹼理論 (HSAB) 依據硬/軟酸與硬/軟鹼的匹配程度預測穩定性。
+化學 (酸鹼) / Acid-Base Chemistry,amphiprotic,adj.,兩性質子性的,An amphiprotic substance can both donate and accept a proton depending on the reaction conditions.,兩性質子性物質可依反應條件提供或接受質子。
+化學 (動力) / Chemical Kinetics,catalyst,n.,催化劑,A catalyst speeds up a chemical reaction by lowering the activation energy.,催化劑透過降低活化能來加速化學反應。
+化學 (動力) / Chemical Kinetics,activation energy,n.,活化能,"A reaction with a high activation energy will be slow, regardless of its thermodynamic stability.",無論熱力學穩定性如何，具有高活化能的反應速率都會很慢。
+化學 (動力) / Chemical Kinetics,half-life,n.,半衰期,The half-life of a first-order reaction is constant regardless of the initial concentration.,一級反應的半衰期是恆定的，與初始濃度無關。
+化學 (動力) / Chemical Kinetics,rate law,n.,速率定律,The rate law expresses the relationship between the reaction rate and the concentration of reactants.,速率定律表達了反應速率與反應物濃度之間的關係。
+化學 (動力) / Chemical Kinetics,order of reaction,n.,反應級數,The order of reaction describes how the concentration of a specific reactant affects the rate.,反應級數描述了特定反應物的濃度如何影響速率。
+化學 (動力) / Chemical Kinetics,collision theory,n.,碰撞理論,Collision theory states that reactant particles must collide with sufficient energy to react.,碰撞理論指出反應物微粒必須以足夠的能量碰撞才能發生反應。
+化學 (動力) / Chemical Kinetics,reaction rate,n.,反應速率,"Thermodynamics tells us if a reaction will happen, but only kinetics tells us the reaction rate.",熱力學告訴我們反應是否會發生，但只有動力學告訴我們反應速率。
+化學 (動力) / Chemical Kinetics,reaction mechanism,n.,反應機構,A reaction mechanism describes the step-by-step sequence of elementary reactions that make up an overall reaction.,反應機構描述構成總反應的各個基元反應的逐步順序。
+化學 (動力) / Chemical Kinetics,intermediate,n.,中間產物,A reaction intermediate is a short-lived species formed during a multi-step reaction.,反應中間產物是在多步驟反應過程中形成的短暫存在的物質。
+化學 (動力) / Chemical Kinetics,Arrhenius equation,n.,阿瑞尼士方程式,The Arrhenius equation describes how the rate constant depends on temperature and activation energy.,阿瑞尼士方程式描述速率常數如何隨溫度與活化能變化。
+化學 (動力) / Chemical Kinetics,steady-state approximation,n.,穩態近似法,The steady-state approximation assumes the concentration of a reactive intermediate remains constant during the reaction.,穩態近似法假設反應過程中活性中間體的濃度保持恆定。
+化學 (動力) / Chemical Kinetics,reaction coordinate,n.,反應座標,The reaction coordinate diagram plots the potential energy changes as reactants transform into products.,反應座標圖繪製反應物轉化為生成物過程中的位能變化。
+化學 (動力) / Chemical Kinetics,pre-exponential factor,n.,指前因子,The pre-exponential factor in the Arrhenius equation represents the frequency of collisions with correct orientation.,阿瑞尼士方程式中的指前因子代表具有正確碰撞方向的頻率。
+化學 (熱力) / Chemical Thermodynamics,enthalpy,n.,焓；熱含量,Enthalpy change (ΔH) measures the heat absorbed or released during a reaction at constant pressure.,焓變 (ΔH) 量度恆壓反應過程中吸收或釋放的熱量。
+化學 (熱力) / Chemical Thermodynamics,entropy,n.,熵；亂度,"According to the second law of thermodynamics, the entropy of the universe is increasing.",根據熱力學第二定律，宇宙的熵（亂度）正在增加。
+化學 (熱力) / Chemical Thermodynamics,Gibbs free energy,n.,吉布斯自由能,A negative Gibbs free energy (ΔG < 0) indicates that a reaction is spontaneous.,負的吉布斯自由能 (ΔG < 0) 表示反應是自發的。
+化學 (熱力) / Chemical Thermodynamics,spontaneity,n.,自發性,The spontaneity of a reaction is determined by the sign of Gibbs free energy.,反應的自發性是由吉布斯自由能的符號（正負）決定的。
+化學 (熱力) / Chemical Thermodynamics,calorimetry,n.,量熱法,Calorimetry is the science of measuring the heat of chemical reactions or physical changes.,量熱法是測量化學反應或物理變化熱量的科學。
+化學 (熱力) / Chemical Thermodynamics,Hess's law,n.,赫斯定律,Hess's law states that the total enthalpy change for a reaction is independent of the pathway taken.,赫斯定律指出：反應的總焓變與反應途徑無關。
+化學 (熱力) / Chemical Thermodynamics,bond energy,n.,鍵能,Bond energy is the amount of energy required to break one mole of a particular chemical bond.,鍵能是指斷裂一摩耳特定化學鍵所需的能量。
+化學 (熱力) / Chemical Thermodynamics,exergonic,adj.,釋能的 (自發),An exergonic reaction has a negative ΔG and occurs spontaneously.,釋能反應具有負的 ΔG，且會自發進行。
+化學 (熱力) / Chemical Thermodynamics,endergonic,adj.,需能的 (非自發),Endergonic reactions require an input of energy to proceed.,需能反應需要輸入能量才能進行。
+化學 (熱力) / Chemical Thermodynamics,chemical potential,n.,化學勢,Chemical potential represents the change in free energy when particles are added to a system.,化學勢代表系統中加入粒子時自由能的變化。
+化學 (熱力) / Chemical Thermodynamics,fugacity,n.,逸度,Fugacity is an effective pressure used to describe the behavior of real gases.,逸度是用來描述真實氣體行為的有效壓力。
+化學 (熱力) / Chemical Thermodynamics,activity,n.,活度,Activity accounts for non-ideal behavior in concentrated solutions when calculating equilibrium constants.,活度用於在計算平衡常數時修正濃溶液的非理想行為。
+化學 (電化) / Electrochemistry,oxidation,n.,氧化作用,Oxidation involves the loss of electrons during a chemical reaction.,氧化作用涉及化學反應過程中電子的流失。
+化學 (電化) / Electrochemistry,reduction,n.,還原作用,Reduction is the process where an atom or ion gains one or more electrons.,還原作用是原子或離子獲得一個或多個電子的過程。
+化學 (電化) / Electrochemistry,electrolysis,n.,電解,Electrolysis uses electrical energy to drive a non-spontaneous chemical reaction.,電解利用電能來驅動非自發的化學反應。
+化學 (電化) / Electrochemistry,anode,n.,陽極,"In an electrochemical cell, oxidation always occurs at the anode.",在電化學電池中，氧化反應總是發生在陽極。
+化學 (電化) / Electrochemistry,cathode,n.,陰極,The cathode is the electrode where reduction takes place in a battery.,陰極是電池中發生還原反應的電極。
+化學 (電化) / Electrochemistry,galvanic cell,n.,伽伐尼電池（原電池）,A galvanic cell converts chemical energy into electrical energy through spontaneous redox reactions.,伽伐尼電池透過自發的氧化還原反應將化學能轉化為電能。
+化學 (電化) / Electrochemistry,Nernst equation,n.,能斯特方程式,The Nernst equation calculates the cell potential under non-standard conditions.,能斯特方程式用於計算非標準條件下的電池電位。
+化學 (電化) / Electrochemistry,overpotential,n.,超電位,Overpotential is the extra voltage required beyond the theoretical value to drive an electrochemical reaction at a practical rate.,超電位是指為使電化學反應以實用速率進行，需超出理論值的額外電壓。
+化學 (電化) / Electrochemistry,standard hydrogen electrode,n.,標準氫電極,The standard hydrogen electrode serves as the universal reference with a defined potential of zero volts.,標準氫電極作為電位定義為零伏特的通用參考基準。
+化學 (電化) / Electrochemistry,Faraday's law,n.,法拉第定律,Faraday's law relates the amount of substance produced during electrolysis to the quantity of electric charge passed.,法拉第定律描述電解過程中產生的物質量與通過電荷量之間的關係。
+化學 (電化) / Electrochemistry,galvanic corrosion,n.,伽伐尼腐蝕,Galvanic corrosion occurs when two dissimilar metals are electrically connected in an electrolyte.,當兩種不同金屬在電解質中電性連接時，會發生伽伐尼腐蝕。
+化學 (有機) / Organic Chemistry,hydrocarbon,n.,碳氫化合物/烴,"Methane is the simplest hydrocarbon, consisting of one carbon and four hydrogen atoms.",甲烷是最簡單的碳氫化合物，由一個碳原子和四個氫原子組成。
+化學 (有機) / Organic Chemistry,functional group,n.,官能基,The hydroxyl group is the characteristic functional group found in alcohols.,羥基是醇類中特有的官能基。
+化學 (有機) / Organic Chemistry,isomer,n.,同分異構物,Isomers are molecules with the same molecular formula but different structural arrangements.,同分異構物是具有相同分子式但結構排列不同的分子。
+化學 (有機) / Organic Chemistry,polymerization,n.,聚合法,Polymerization is the process of linking small monomers together to form a long chain.,聚合法是將小單體連接在一起形成長鏈的過程。
+化學 (有機) / Organic Chemistry,saturated,adj.,飽和的,Saturated hydrocarbons contain only single bonds between carbon atoms.,飽和烴的碳原子之間僅含單鍵。
+化學 (有機) / Organic Chemistry,substitution reaction,n.,取代反應,"In a substitution reaction, one atom or group in a molecule is replaced by another.",在取代反應中，分子中的一個原子或基團被另一個取代。
+化學 (有機) / Organic Chemistry,addition reaction,n.,加成反應,"An addition reaction occurs when atoms are added to a double or triple bond, breaking it.",加成反應發生於原子加到雙鍵或三鍵上，使其斷裂。
+化學 (有機) / Organic Chemistry,alkane,n.,烷烴,Alkanes are saturated hydrocarbons containing only single bonds between carbon atoms.,烷烴是飽和烴，其碳原子之間僅含有單鍵。
+化學 (有機) / Organic Chemistry,alkene,n.,烯烴,Alkenes are unsaturated hydrocarbons that contain at least one carbon-carbon double bond.,烯烴是不飽和烴，含有至少一個碳碳雙鍵。
+化學 (有機) / Organic Chemistry,alkyne,n.,炔烴,Alkynes are hydrocarbons characterized by the presence of a triple bond between carbon atoms.,炔烴是以碳原子間存在三鍵為特徵的烴類。
+化學 (有機) / Organic Chemistry,alcohol,n.,醇類,Alcohols are organic compounds containing one or more hydroxyl (-OH) functional groups.,醇類是含有一或多個羥基 (-OH) 官能基的有機化合物。
+化學 (有機) / Organic Chemistry,aldehyde,n.,醛類,An aldehyde has a carbonyl group located at the end of the carbon chain.,醛類的羰基位於碳鏈的末端。
+化學 (有機) / Organic Chemistry,ketone,n.,酮類,"In a ketone, the carbonyl group is located within the carbon chain rather than at the end.",在酮類中，羰基位於碳鏈內部而非末端。
+化學 (有機) / Organic Chemistry,carboxylic acid,n.,羧酸,"Acetic acid, found in vinegar, is a common example of a carboxylic acid.",醋中的乙酸是羧酸的一個常見例子。
+化學 (有機) / Organic Chemistry,ester,n.,酯類,Esters are often responsible for the pleasant fragrances of fruits and flowers.,酯類通常是水果和花卉芬芳香氣的來源。
+化學 (有機) / Organic Chemistry,nucleophile,n.,親核試劑,A nucleophile is an electron-rich species that donates an electron pair to an electrophile during a reaction.,親核試劑是富含電子的物種，在反應中將電子對提供給親電子試劑。
+化學 (有機) / Organic Chemistry,electrophile,n.,親電子試劑,An electrophile is an electron-deficient species that accepts an electron pair from a nucleophile.,親電子試劑是缺乏電子的物種，會接受親核試劑提供的電子對。
+化學 (有機) / Organic Chemistry,SN1 mechanism,n.,SN1 反應機構,The SN1 mechanism proceeds through a two-step process involving a carbocation intermediate.,SN1 機構透過包含碳陽離子中間體的兩步驟過程進行。
+化學 (有機) / Organic Chemistry,SN2 mechanism,n.,SN2 反應機構,The SN2 mechanism occurs in a single concerted step with simultaneous bond breaking and formation.,SN2 機構以單一協同步驟進行，鍵的斷裂與形成同時發生。
+化學 (有機) / Organic Chemistry,chirality,n.,手徵性,Chirality refers to a molecule's property of being non-superimposable on its mirror image.,手徵性指分子無法與其鏡像完全重疊的特性。
+化學 (有機) / Organic Chemistry,aromaticity,n.,芳香性,"Aromaticity confers exceptional stability to cyclic, planar molecules with a continuous ring of delocalized π electrons.",芳香性賦予具有連續離域 π 電子環的平面環狀分子異常的穩定性。
+化學 (分析) / Analytical Chemistry,precipitate,n./v.,沉澱物/使沉澱,A white precipitate formed when silver nitrate was added to the sodium chloride solution.,當硝酸銀加入氯化鈉溶液時，形成了白色沉澱物。
+化學 (分析) / Analytical Chemistry,spectroscopy,n.,光譜學,Spectroscopy is used to identify substances by studying their interaction with light.,光譜學用於透過研究物質與光的相互作用來鑑定物質。
+化學 (分析) / Analytical Chemistry,distillation,n.,蒸餾,Distillation is a process used to separate components of a mixture based on boiling points.,蒸餾是利用沸點差異來分離混合物成分的過程。
+化學 (分析) / Analytical Chemistry,titrant,n.,滴定劑,The titrant is the solution of known concentration added during a titration.,滴定劑是在滴定過程中加入的已知濃度的溶液。
+化學 (分析) / Analytical Chemistry,indicator,n.,指示劑,An indicator changes color to signal the endpoint of a chemical reaction.,指示劑會透過改變顏色來示意化學反應的終點。
+化學 (分析) / Analytical Chemistry,chromatography,n.,色譜法；層析法,Chromatography is used to separate the components of a complex mixture.,層析法用於分離複雜混合物中的各個成分。
+化學 (分析) / Analytical Chemistry,calibration curve,n.,校正曲線,A calibration curve is used in quantitative analysis to determine the concentration of an unknown sample.,校正曲線用於定量分析，以測定未知樣品的濃度。
+化學 (分析) / Analytical Chemistry,qualitative analysis,n.,定性分析,"Qualitative analysis identifies what substances are present in a sample, without measuring amounts.",定性分析用於鑑定樣品中含有哪些物質，而不測定其含量。
+化學 (分析) / Analytical Chemistry,nuclear magnetic resonance,n.,核磁共振,Nuclear magnetic resonance (NMR) spectroscopy reveals the local magnetic environment of atomic nuclei.,核磁共振 (NMR) 光譜揭示原子核周圍的局部磁場環境。
+化學 (分析) / Analytical Chemistry,infrared spectroscopy,n.,紅外光譜學,Infrared spectroscopy identifies functional groups by measuring molecular vibrations at specific frequencies.,紅外光譜學透過測量特定頻率下的分子振動來鑑定官能基。
+化學 (分析) / Analytical Chemistry,mass spectrometry,n.,質譜法,Mass spectrometry determines molecular mass and structure by measuring the mass-to-charge ratio of ionized fragments.,質譜法透過測量離子碎片的質荷比來推斷分子質量與結構。
+化學 (分析) / Analytical Chemistry,Beer-Lambert law,n.,比耳-蘭伯特定律,The Beer-Lambert law relates the attenuation of light to the concentration of an absorbing species in solution.,比耳-蘭伯特定律將光線衰減與溶液中吸光物質的濃度關聯起來。
+化學 (性質) / Chemical Properties,miscible,adj.,互溶的,"Ethanol and water are miscible, meaning they can mix in any proportion to form a homogeneous solution.",乙醇與水互溶，表示它們能以任意比例混合形成均勻溶液。
+化學 (性質) / Chemical Properties,immiscible,adj.,不互溶的,Oil and water are immiscible liquids that separate into distinct layers.,油與水是不互溶的液體，會分層。
+化學 (性質) / Chemical Properties,volatile,adj.,易揮發的,Gasoline is a highly volatile liquid that evaporates quickly at room temperature.,汽油是一種高度易揮發的液體，在室溫下會迅速蒸發。
+化學 (性質) / Chemical Properties,corrosive,adj.,腐蝕性的,Strong acids are highly corrosive and can damage metal surfaces and skin.,強酸具有高度腐蝕性，會損壞金屬表面和皮膚。
+化學 (性質) / Chemical Properties,amphoteric,adj.,兩性的,Water is an amphoteric substance because it can act as both an acid and a base.,水是一種兩性物質，因為它既可以作為酸也可以作為鹼。
+化學 (性質) / Chemical Properties,buffer,n.,緩衝液,A buffer solution resists changes in pH when small amounts of acid or base are added.,當加入少量酸或鹼時，緩衝溶液能抵抗 pH 值的變化。
+化學 (性質) / Chemical Properties,colligative properties,n.,依數性質,"Colligative properties depend only on the number of solute particles, not their chemical identity.",依數性質僅取決於溶質粒子的數量，而非其化學特性。
+化學 (性質) / Chemical Properties,phase diagram,n.,相圖,A phase diagram maps the states of matter of a substance as a function of temperature and pressure.,相圖繪製物質狀態隨溫度與壓力變化的分佈。
+化學 (性質) / Chemical Properties,triple point,n.,三相點,"The triple point is the unique temperature and pressure at which solid, liquid, and gas phases coexist in equilibrium.",三相點是固、液、氣三相共存於平衡的獨特溫度與壓力條件。
+化學 (性質) / Chemical Properties,critical point,n.,臨界點,"Above the critical point, the distinction between liquid and gas phases disappears, forming a supercritical fluid.",超過臨界點後，液態與氣態的界線消失，形成超臨界流體。
+化學 (生化) / Biochemistry,enzyme,n.,酶；酵素,An enzyme acts as a biological catalyst to speed up chemical reactions in cells.,酶作為生物催化劑，可加速細胞內的化學反應。
+化學 (生化) / Biochemistry,amino acid,n.,胺基酸,"Amino acids are the building blocks of proteins, linked by peptide bonds.",胺基酸是蛋白質的組成單位，透過肽鍵相互連接。
+化學 (生化) / Biochemistry,denaturation,n.,變性作用,"Heat can cause the denaturation of proteins, changing their shape and function.",加熱會導致蛋白質變性，改變其形狀與功能。
+化學 (生化) / Biochemistry,metabolism,n.,新陳代謝,Metabolism includes all the chemical processes that occur within a living organism.,新陳代謝包括生物體內發生的所有化學過程。
+化學 (生化) / Biochemistry,nucleotide,n.,核苷酸,A nucleotide is the basic structural unit of nucleic acids like DNA and RNA.,核苷酸是 DNA 和 RNA 等核酸的基本結構單位。
+化學 (核化) / Nuclear Chemistry,radioactivity,n.,放射性,Radioactivity is the spontaneous emission of radiation from unstable atomic nuclei.,放射性是不穩定原子核自發性發出的輻射。
+化學 (核化) / Nuclear Chemistry,fission,n.,核分裂,Nuclear fission is the process of splitting a heavy nucleus into lighter nuclei.,核分裂是將重原子核分裂成較輕原子核的過程。
+化學 (核化) / Nuclear Chemistry,fusion,n.,核融合,Nuclear fusion occurs when two light nuclei combine to form a heavier nucleus.,當兩個輕原子核結合形成一個較重的原子核時，就會發生核融合。
+化學 (命名) / Chemical Nomenclature,nomenclature,n.,命名法,IUPAC nomenclature provides a systematic way to name organic chemical compounds.,IUPAC 命名法提供了一種系統化的方式來為有機化合物命名。
+化學 (命名) / Chemical Nomenclature,suffix,n.,後綴,"In organic chemistry, the suffix of a molecule's name indicates its primary functional group.",在有機化學中，分子名稱的後綴表示其主要的官能基。
+化學 (命名) / Chemical Nomenclature,carbonyl group,n.,羰基,Both aldehydes and ketones contain a carbonyl group (C=O).,醛類和酮類都含有一個羰基 (C=O)。
+化學 (命名) / Chemical Nomenclature,hydroxyl group,n.,羥基,The presence of a hydroxyl group (-OH) defines a molecule as an alcohol.,羥基 (-OH) 的存在定義了一個分子為醇類。
+化學 (命名) / Chemical Nomenclature,lattice energy,n.,晶格能,Lattice energy is the energy released when gaseous ions form an ionic solid.,晶格能是氣態離子形成離子固體時釋放的能量。
