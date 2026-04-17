@@ -16,7 +16,7 @@
             overflow-x: hidden;
             min-height: 100vh;
         }
-        #humanitiesCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
+        #humanitiesCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.25; }
         .container { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; padding: 1.8rem 2rem 3rem; }
         .hero { text-align: center; margin-bottom: 2rem; }
         .hero h1 { font-size: 3rem; font-weight: 500; font-family: 'Cormorant Garamond', serif; color: #6b4c3a; }
@@ -45,8 +45,6 @@
         .terms-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
         .term-card { background: #fffefa; border-radius: 1.2rem; padding: 1.2rem; border-left: 4px solid #d4b898; border: 1px solid #ede3d5; transition: all 0.25s ease; }
         .term-card:hover { transform: translateY(-3px); border-left-color: #b87c5a; }
-        .interactive-viz { margin-top: 12px; background: #faf3e8; border-radius: 16px; padding: 8px; border: 1px solid #e2d2c0; min-height: 120px; text-align: center; }
-        .viz-canvas { width: 100%; height: 100px; border-radius: 12px; background: #fdf8f0; }
         .flashcard-container { perspective: 1500px; height: 340px; margin-top: 1rem; }
         .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
         .flashcard.flipped { transform: rotateY(180deg); }
@@ -102,16 +100,15 @@
 <script>
     let humanitiesData = [];
     let currentStrand = "";
-    let starredWords = JSON.parse(localStorage.getItem("humanities_starred_v2") || "[]");
+    let starredWords = JSON.parse(localStorage.getItem("humanities_starred_v3") || "[]");
     let searchKeyword = "";
     let currentMode = "grid";
     let flashcardIndex = 0;
     let filteredTermsCache = [];
 
-    // 直接讀取同一個資料夾下的 CSV 檔案 (解決 CORS 問題)
     const CSV_PATH = "./humanities.csv";
 
-    // 人文視覺化效果
+    // 人文背景動畫
     function initHumanitiesBackground() {
         const canvas = document.getElementById("humanitiesCanvas");
         const ctx = canvas.getContext("2d");
@@ -120,52 +117,18 @@
         window.addEventListener("resize", resize);
         resize();
         const icons = ["📖", "🪶", "✒️", "📜", "🏛️", "⚖️", "💭"];
-        for(let i=0;i<40;i++) {
-            elements.push({ x: Math.random() * width, y: Math.random() * height, size: Math.random() * 18 + 12, vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.1, char: icons[Math.floor(Math.random() * icons.length)], alpha: Math.random() * 0.15 + 0.05 });
+        for(let i=0;i<45;i++) {
+            elements.push({ x: Math.random() * width, y: Math.random() * height, size: Math.random() * 18 + 12, vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.08, char: icons[Math.floor(Math.random() * icons.length)], alpha: Math.random() * 0.12 + 0.03 });
         }
         function draw() {
             ctx.clearRect(0, 0, width, height);
-            elements.forEach(e => { ctx.font = `${e.size}px "Segoe UI Emoji"`; ctx.fillStyle = `rgba(180, 140, 100, ${e.alpha})`; ctx.fillText(e.char, e.x, e.y); e.x += e.vx; e.y += e.vy; if(e.x < -30) e.x = width + 20; if(e.x > width + 30) e.x = -20; if(e.y < -30) e.y = height + 20; if(e.y > height + 30) e.y = -20; });
+            elements.forEach(e => { ctx.font = `${e.size}px "Segoe UI Emoji"`; ctx.fillStyle = `rgba(180, 140, 100, ${e.alpha})`; ctx.fillText(e.char, e.x, e.y); e.x += e.vx; e.y += e.vy; if(e.x < -40) e.x = width + 30; if(e.x > width + 40) e.x = -30; if(e.y < -40) e.y = height + 30; if(e.y > height + 40) e.y = -30; });
             requestAnimationFrame(draw);
         }
         draw();
     }
 
-    // 人文視覺化
-    function createHumanitiesViz(word, containerId) {
-        const canvasId = `viz_${Date.now()}_${Math.random()}`;
-        setTimeout(() => {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            let canvas = document.createElement('canvas');
-            canvas.id = canvasId; canvas.width = container.clientWidth - 16; canvas.height = 100;
-            canvas.style.width = '100%'; canvas.style.height = '100px'; canvas.style.borderRadius = '12px';
-            canvas.style.backgroundColor = '#fdf8f0'; canvas.className = 'viz-canvas';
-            container.innerHTML = ''; container.appendChild(canvas);
-            function drawIcon(emoji, label) {
-                function animate() {
-                    const c = document.getElementById(canvasId);
-                    if (!c) return;
-                    const ctx = c.getContext('2d');
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = '#fdf8f0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.font = `${Math.min(40, canvas.height/2)}px "Segoe UI Emoji"`;
-                    ctx.fillStyle = '#d4a373'; ctx.fillText(emoji, canvas.width/2-20, canvas.height/2+15);
-                    ctx.fillStyle = '#8b6b55'; ctx.font = '10px "Cormorant Garamond"';
-                    ctx.fillText(label, canvas.width/2-25, canvas.height-8);
-                    requestAnimationFrame(animate);
-                }
-                animate();
-            }
-            const w = word.toLowerCase();
-            if (w.includes('democracy') || w.includes('vote') || w.includes('election')) drawIcon("🗳️", "公民投票");
-            else if (w.includes('justice') || w.includes('law') || w.includes('right')) drawIcon("⚖️", "正義天秤");
-            else if (w.includes('philosophy') || w.includes('truth') || w.includes('reason')) drawIcon("💭", "我思故我在");
-            else drawIcon("📖", "知識之書");
-        }, 100);
-    }
-
-    // 解析 CSV
+    // 讀取 CSV
     async function loadCSV() {
         try {
             console.log("嘗試讀取:", CSV_PATH);
@@ -180,7 +143,7 @@
                 請確認：<br>
                 1. 已將此 HTML 檔案與 humanities.csv 放在「同一個資料夾」中<br>
                 2. 檔案名稱正確 (humanities.csv)<br>
-                3. 直接使用瀏覽器開啟此 HTML 檔案 (而非透過網頁伺服器)<br><br>
+                3. 直接使用瀏覽器開啟此 HTML 檔案<br><br>
                 <button onclick="location.reload()" style="background:#d4b898; border:none; padding:8px 20px; border-radius:40px; cursor:pointer;">重新載入</button>
             </div>`;
         }
@@ -226,8 +189,7 @@
         }
     }
 
-    // 核心功能
-    function saveStarred() { localStorage.setItem("humanities_starred_v2", JSON.stringify(starredWords)); }
+    function saveStarred() { localStorage.setItem("humanities_starred_v3", JSON.stringify(starredWords)); }
     function toggleStar(term) {
         const exists = starredWords.some(s => s.word === term.word && s.subject === term.subject);
         if (exists) starredWords = starredWords.filter(s => !(s.word === term.word && s.subject === term.subject));
@@ -244,24 +206,43 @@
     
     function renderGridMode(terms) {
         if (terms.length === 0) return `<div class="no-results">📭 在此領域中未找到相關詞彙</div>`;
-        return `<div class="terms-container">${terms.map((term, idx) => {
+        return `<div class="terms-container">${terms.map(term => {
             const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
-            const vizId = `viz_${idx}_${Date.now()}`;
-            setTimeout(() => createHumanitiesViz(term.word, vizId), 50);
-            return `<div class="term-card"><div class="term-word"><span><strong>${escapeHtml(term.word)}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
-            <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i></div>
-            <div class="term-meaning">${escapeHtml(term.meaning)}</div><div class="sentence">${escapeHtml(term.sentence_e)}<br>${escapeHtml(term.sentence_c)}</div>
-            <button class="btn-speak" data-text="${escapeHtml(term.word)}"><i class="fas fa-volume-up"></i> 聆聽</button>
-            <div class="interactive-viz" id="${vizId}"><div class="viz-label">📜 人文意象載入中...</div></div></div>`;}).join('')}</div>`;
+            return `<div class="term-card">
+                <div class="term-word">
+                    <span><strong>${escapeHtml(term.word)}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
+                    <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i>
+                </div>
+                <div class="term-meaning">${escapeHtml(term.meaning)}</div>
+                <div class="sentence">${escapeHtml(term.sentence_e)}<br>${escapeHtml(term.sentence_c)}</div>
+                <button class="btn-speak" data-text="${escapeHtml(term.word)}"><i class="fas fa-volume-up"></i> 聆聽</button>
+            </div>`;}).join('')}</div>`;
     }
     
     function renderFlashcardMode(terms) {
         if (terms.length === 0) return `<div class="no-results">暫無詞彙</div>`;
         if (flashcardIndex >= terms.length) flashcardIndex = 0;
         const term = terms[flashcardIndex];
-        return `<div class="flashcard-container"><div class="flashcard" id="activeFlashcard"><div class="card-front"><div class="flashcard-word">${escapeHtml(term.word)}</div><div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div><div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">🖱️ 點擊翻轉</div></div>
-        <div class="card-back"><div class="flashcard-word">${escapeHtml(term.meaning)}</div><div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div><div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">📖 中文釋義</div></div></div></div>
-        <div class="flash-nav"><button id="prevCardBtn">◀ 上一張</button><span style="color:#8b6b55;">${flashcardIndex+1} / ${terms.length}</span><button id="nextCardBtn">下一張 ▶</button><button id="speakCardBtn"><i class="fas fa-volume-up"></i> 發音</button></div>`;
+        return `<div class="flashcard-container">
+            <div class="flashcard" id="activeFlashcard">
+                <div class="card-front">
+                    <div class="flashcard-word">${escapeHtml(term.word)}</div>
+                    <div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div>
+                    <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">🖱️ 點擊翻轉</div>
+                </div>
+                <div class="card-back">
+                    <div class="flashcard-word">${escapeHtml(term.meaning)}</div>
+                    <div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div>
+                    <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">📖 中文釋義</div>
+                </div>
+            </div>
+        </div>
+        <div class="flash-nav">
+            <button id="prevCardBtn">◀ 上一張</button>
+            <span style="color:#8b6b55;">${flashcardIndex+1} / ${terms.length}</span>
+            <button id="nextCardBtn">下一張 ▶</button>
+            <button id="speakCardBtn"><i class="fas fa-volume-up"></i> 發音</button>
+        </div>`;
     }
     
     function renderDynamicContent() {
@@ -315,7 +296,6 @@
         document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-feather-alt"></i> 當前領域：${currentStrand}`;
     }
     
-    // 事件綁定
     document.addEventListener("click", (e) => {
         if (e.target.closest(".mode-btn")) {
             const btn = e.target.closest(".mode-btn");
