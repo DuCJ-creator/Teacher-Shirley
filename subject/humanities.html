@@ -25,10 +25,13 @@
         .hero .stats { margin-top: 0.5rem; font-size: 0.8rem; color: #b89a7a; }
         .search-global { max-width: 550px; margin: 0 auto 2rem auto; display: flex; gap: 10px; background: #fffef8; border-radius: 50px; padding: 0.2rem 0.2rem 0.2rem 1.5rem; border: 1px solid #d4c4b0; }
         .search-global input { flex: 1; background: transparent; border: none; padding: 0.8rem 0; font-size: 0.9rem; color: #3a2c1f; outline: none; }
+        .search-global input::placeholder { color: #c4b5a0; }
         .search-global button { background: #d4b898; border: none; border-radius: 50px; padding: 0 1.5rem; color: #3a2c1f; font-weight: 500; cursor: pointer; transition: 0.2s; }
         .search-global button:hover { background: #c4a47a; transform: scale(0.96); }
+        .search-clear { background: none; border: none; color: #b8a48c; cursor: pointer; padding: 0 10px; font-size: 1rem; }
+        .search-clear:hover { color: #c97e5a; }
         .strands-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 2rem; }
-        .strand-btn { background: #fffef5; border: 1px solid #d9caba; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 500; font-size: 0.85rem; cursor: pointer; color: #6b4c3a; display: flex; align-items: center; gap: 8px; }
+        .strand-btn { background: #fffef5; border: 1px solid #d9caba; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 500; font-size: 0.85rem; cursor: pointer; color: #6b4c3a; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .strand-btn.active { background: #d4b898; color: #2c1f12; border-color: #c4a47a; }
         .content-panel { background: rgba(255, 252, 245, 0.88); backdrop-filter: blur(8px); border-radius: 1.8rem; padding: 1.6rem; border: 1px solid #e8dfd0; }
         .starred-section { margin-bottom: 1.8rem; }
@@ -39,12 +42,16 @@
         .starred-word { background: #e8dccc; padding: 4px 12px; border-radius: 24px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; color: #5a3e2e; }
         .controls-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem; }
         .mode-toggle { display: flex; gap: 10px; }
-        .mode-btn { background: #f4ede4; border: 1px solid #d9caba; padding: 6px 18px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; color: #6b4c3a; }
+        .mode-btn { background: #f4ede4; border: 1px solid #d9caba; padding: 6px 18px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; color: #6b4c3a; transition: 0.2s; }
         .mode-btn.active { background: #d4b898; color: #2c1f12; }
         .reset-btn { background: none; border: 1px solid #d9caba; padding: 6px 18px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; color: #6b4c3a; }
+        .reset-btn:hover { background: #efe3d4; }
+        .search-info { background: #efe3d4; border-radius: 30px; padding: 0.3rem 1rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
+        .search-info i { color: #b87c5a; }
         .terms-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
         .term-card { background: #fffefa; border-radius: 1.2rem; padding: 1.2rem; border-left: 4px solid #d4b898; border: 1px solid #ede3d5; transition: all 0.25s ease; }
         .term-card:hover { transform: translateY(-3px); border-left-color: #b87c5a; }
+        .term-card.search-match { border-left-color: #c97e5a; background: #fffcf5; }
         .flashcard-container { perspective: 1500px; height: 340px; margin-top: 1rem; }
         .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
         .flashcard.flipped { transform: rotateY(180deg); }
@@ -59,12 +66,13 @@
         .star-icon { color: #d4a373; cursor: pointer; font-size: 1rem; }
         .star-icon.far { color: #d9caba; }
         .term-meaning { font-size: 0.95rem; color: #8b6b55; margin: 6px 0; }
-        .sentence { font-size: 0.75rem; background: #faf3e8; padding: 8px; border-radius: 12px; margin: 8px 0; color: #7a5a44; }
+        .sentence { font-size: 0.75rem; background: #faf3e8; padding: 8px; border-radius: 12px; margin: 8px 0; color: #7a5a44; line-height: 1.4; }
         .btn-speak { background: none; border: none; color: #b87c5a; cursor: pointer; font-size: 0.8rem; }
         .no-results { text-align: center; padding: 2rem; font-size: 0.9rem; color: #b8a48c; }
         footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #c4b5a0; }
         .loading, .error-message { text-align: center; padding: 2rem; color: #a68b70; }
         .error-message { color: #c97e5a; }
+        .highlight { background: #d4a37366; border-radius: 4px; padding: 0 2px; }
         @media (max-width: 650px) { .container { padding: 1rem; } }
     </style>
 </head>
@@ -73,13 +81,14 @@
 <div class="container">
     <div class="hero">
         <h1><i class="fas fa-feather-alt"></i> Shirley's Bilingual Humanities <i class="fas fa-book-open"></i></h1>
-        <p>人文思想 · 雙語交匯 | 歷史 · 哲學 · 政治 · 法律 · 倫理 · 教育</p>
+        <p>人文思想 · 雙語交匯 | 歷史 · 哲學 · 政治 · 法律 · 倫理 · 教育 | 支援全域搜尋</p>
         <div class="stats" id="dataStats">📚 等待載入人文詞彙...</div>
     </div>
     <div class="search-global">
         <i class="fas fa-search"></i>
-        <input type="text" id="globalSearchInput" placeholder="搜尋詞彙 / 中文 (如: democracy, 正義)" autocomplete="off">
-        <button id="globalSearchBtn">尋思</button>
+        <input type="text" id="globalSearchInput" placeholder="全域搜尋詞彙 / 中文 (如: democracy, 正義, 啟蒙)" autocomplete="off">
+        <button id="globalSearchBtn">全域搜尋</button>
+        <button id="clearSearchBtn" class="search-clear" style="display:none;"><i class="fas fa-times-circle"></i></button>
     </div>
     <div class="strands-grid" id="strandsContainer"><div class="loading">📖 正在載入人文詞彙...</div></div>
     <div class="content-panel">
@@ -89,19 +98,21 @@
         </div>
         <div class="controls-bar">
             <div class="mode-toggle"><button class="mode-btn active" data-mode="grid">卡片瀏覽</button><button class="mode-btn" data-mode="flashcard">閃卡溫習</button></div>
-            <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置</button>
+            <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置篩選</button>
         </div>
+        <div id="searchInfoArea"></div>
         <div id="currentStrandTitle" style="margin-bottom: 1rem; font-size: 0.9rem; color: #b87c5a;"><i class="fas fa-scroll"></i> </div>
         <div id="dynamicContentArea"></div>
     </div>
-    <footer>🎧 點擊喇叭聆聽發音 | 閃卡模式點擊翻轉 | 請將此檔案與 humanities.csv 放在同一資料夾</footer>
+    <footer>🎧 點擊喇叭聆聽發音 | 閃卡模式點擊翻轉 | 請將此檔案與 humanities.csv 放在同一資料夾 | 搜尋會在所有分類中尋找</footer>
 </div>
 
 <script>
     let humanitiesData = [];
     let currentStrand = "";
-    let starredWords = JSON.parse(localStorage.getItem("humanities_starred_v3") || "[]");
+    let starredWords = JSON.parse(localStorage.getItem("humanities_starred_v4") || "[]");
     let searchKeyword = "";
+    let isSearchMode = false;
     let currentMode = "grid";
     let flashcardIndex = 0;
     let filteredTermsCache = [];
@@ -189,7 +200,7 @@
         }
     }
 
-    function saveStarred() { localStorage.setItem("humanities_starred_v3", JSON.stringify(starredWords)); }
+    function saveStarred() { localStorage.setItem("humanities_starred_v4", JSON.stringify(starredWords)); }
     function toggleStar(term) {
         const exists = starredWords.some(s => s.word === term.word && s.subject === term.subject);
         if (exists) starredWords = starredWords.filter(s => !(s.word === term.word && s.subject === term.subject));
@@ -197,30 +208,77 @@
         saveStarred(); renderAll();
     }
     function speakText(text) { const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+    
+    // 全域搜尋函數
     function getFilteredTerms() {
-        let terms = humanitiesData.filter(t => t.subject === currentStrand);
-        if (searchKeyword.trim()) { const kw = searchKeyword.trim().toLowerCase(); terms = terms.filter(t => t.word.toLowerCase().includes(kw) || t.meaning.includes(kw) || t.sentence_c.includes(kw)); }
-        return terms;
+        if (isSearchMode && searchKeyword.trim() !== "") {
+            const kw = searchKeyword.trim().toLowerCase();
+            return humanitiesData.filter(t => 
+                t.word.toLowerCase().includes(kw) || 
+                t.meaning.includes(kw) || 
+                t.sentence_c.includes(kw) ||
+                (t.sentence_e && t.sentence_e.toLowerCase().includes(kw))
+            );
+        } else {
+            let terms = humanitiesData.filter(t => t.subject === currentStrand);
+            if (searchKeyword.trim() !== "") {
+                const kw = searchKeyword.trim().toLowerCase();
+                terms = terms.filter(t => 
+                    t.word.toLowerCase().includes(kw) || 
+                    t.meaning.includes(kw) || 
+                    t.sentence_c.includes(kw)
+                );
+            }
+            return terms;
+        }
     }
+    
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
     
+    // 高亮關鍵字
+    function highlightKeyword(text, keyword) {
+        if (!keyword || !text) return escapeHtml(text);
+        const escapedText = escapeHtml(text);
+        const escapedKeyword = escapeHtml(keyword);
+        const regex = new RegExp(`(${escapedKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return escapedText.replace(regex, `<span class="highlight">$1</span>`);
+    }
+    
     function renderGridMode(terms) {
-        if (terms.length === 0) return `<div class="no-results">📭 在此領域中未找到相關詞彙</div>`;
+        if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的人文詞彙</div>`;
+            }
+            return `<div class="no-results">📭 在此領域中未找到相關詞彙</div>`;
+        }
+        
+        const kw = isSearchMode ? searchKeyword.trim() : "";
+        
         return `<div class="terms-container">${terms.map(term => {
             const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
-            return `<div class="term-card">
+            const displayWord = kw ? highlightKeyword(term.word, kw) : escapeHtml(term.word);
+            const displayMeaning = kw ? highlightKeyword(term.meaning, kw) : escapeHtml(term.meaning);
+            const displaySentenceC = kw ? highlightKeyword(term.sentence_c, kw) : escapeHtml(term.sentence_c);
+            
+            return `<div class="term-card ${kw ? 'search-match' : ''}">
                 <div class="term-word">
-                    <span><strong>${escapeHtml(term.word)}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
+                    <span><strong>${displayWord}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
                     <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i>
                 </div>
-                <div class="term-meaning">${escapeHtml(term.meaning)}</div>
-                <div class="sentence">${escapeHtml(term.sentence_e)}<br>${escapeHtml(term.sentence_c)}</div>
+                <div class="term-meaning">${displayMeaning}</div>
+                <div class="sentence">${escapeHtml(term.sentence_e)}<br>${displaySentenceC}</div>
                 <button class="btn-speak" data-text="${escapeHtml(term.word)}"><i class="fas fa-volume-up"></i> 聆聽</button>
+                ${isSearchMode ? `<div style="font-size:0.65rem; margin-top:6px; color:#b8a48c;"><i class="fas fa-tag"></i> 來自：${escapeHtml(term.subject)}</div>` : ''}
             </div>`;}).join('')}</div>`;
     }
     
     function renderFlashcardMode(terms) {
-        if (terms.length === 0) return `<div class="no-results">暫無詞彙</div>`;
+        if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的人文詞彙</div>`;
+            }
+            return `<div class="no-results">暫無詞彙</div>`;
+        }
         if (flashcardIndex >= terms.length) flashcardIndex = 0;
         const term = terms[flashcardIndex];
         return `<div class="flashcard-container">
@@ -242,7 +300,44 @@
             <span style="color:#8b6b55;">${flashcardIndex+1} / ${terms.length}</span>
             <button id="nextCardBtn">下一張 ▶</button>
             <button id="speakCardBtn"><i class="fas fa-volume-up"></i> 發音</button>
-        </div>`;
+        </div>
+        ${isSearchMode ? `<div style="text-align:center; margin-top:0.5rem; font-size:0.7rem; color:#b8a48c;"><i class="fas fa-tag"></i> 當前來自：${escapeHtml(term.subject)}</div>` : ''}`;
+    }
+    
+    function renderSearchInfo() {
+        const area = document.getElementById("searchInfoArea");
+        if (isSearchMode && searchKeyword.trim()) {
+            const filtered = getFilteredTerms();
+            area.innerHTML = `<div class="search-info">
+                <i class="fas fa-search"></i> 全域搜尋「${escapeHtml(searchKeyword)}」找到 ${filtered.length} 筆結果
+                <i class="fas fa-times-circle" id="exitSearchBtn" style="cursor:pointer; margin-left:8px;"></i>
+            </div>`;
+            document.getElementById("exitSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+        } else {
+            area.innerHTML = "";
+        }
+    }
+    
+    function exitSearchMode() {
+        isSearchMode = false;
+        searchKeyword = "";
+        document.getElementById("globalSearchInput").value = "";
+        document.getElementById("clearSearchBtn").style.display = "none";
+        flashcardIndex = 0;
+        renderAll();
+    }
+    
+    function performGlobalSearch() {
+        const kw = document.getElementById("globalSearchInput").value.trim();
+        if (kw === "") {
+            exitSearchMode();
+            return;
+        }
+        searchKeyword = kw;
+        isSearchMode = true;
+        flashcardIndex = 0;
+        renderAll();
+        document.getElementById("clearSearchBtn").style.display = "inline-block";
     }
     
     function renderDynamicContent() {
@@ -279,21 +374,57 @@
         if (starredWords.length === 0) { container.innerHTML = '<div class="empty-star">⭐ 暫無收藏，點擊星星收藏</div>'; return; }
         container.innerHTML = starredWords.map(s => `<div class="starred-word" data-word="${escapeHtml(s.word)}">${escapeHtml(s.word)} <i class="fas fa-times-circle" data-remove="${escapeHtml(s.word)}"></i></div>`).join('');
         document.querySelectorAll('.starred-word i').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); const w = icon.getAttribute('data-remove'); starredWords = starredWords.filter(s => s.word !== w); saveStarred(); renderAll(); }); });
-        document.querySelectorAll('.starred-word').forEach(el => { el.addEventListener('click', (e) => { if(e.target.tagName === 'I') return; const word = el.getAttribute('data-word'); const found = humanitiesData.find(t => t.word === word); if(found) { currentStrand = found.subject; searchKeyword = ""; document.getElementById("globalSearchInput").value = ""; renderAll(); } }); });
+        document.querySelectorAll('.starred-word').forEach(el => { el.addEventListener('click', (e) => { if(e.target.tagName === 'I') return; const word = el.getAttribute('data-word'); const found = humanitiesData.find(t => t.word === word); if(found) { 
+            exitSearchMode();
+            currentStrand = found.subject; 
+            searchKeyword = ""; 
+            document.getElementById("globalSearchInput").value = ""; 
+            renderAll(); 
+        } }); });
     }
     
     function renderStrands() {
         const subjects = [...new Set(humanitiesData.map(d => d.subject))];
         const container = document.getElementById("strandsContainer");
         if (subjects.length === 0) return;
-        container.innerHTML = subjects.map(sub => `<button class="strand-btn ${currentStrand === sub ? 'active' : ''}" data-subject="${escapeHtml(sub)}"><i class="fas fa-scroll"></i> ${escapeHtml(sub)}</button>`).join('');
-        document.querySelectorAll('.strand-btn').forEach(btn => { btn.addEventListener('click', () => { currentStrand = btn.getAttribute('data-subject'); searchKeyword = ""; flashcardIndex = 0; document.getElementById("globalSearchInput").value = ""; renderAll(); }); });
+        container.innerHTML = subjects.map(sub => `<button class="strand-btn ${currentStrand === sub && !isSearchMode ? 'active' : ''}" data-subject="${escapeHtml(sub)}"><i class="fas fa-scroll"></i> ${escapeHtml(sub)}</button>`).join('');
+        
+        if (isSearchMode) {
+            document.querySelectorAll('.strand-btn').forEach(btn => btn.classList.remove('active'));
+        }
+        
+        document.querySelectorAll('.strand-btn').forEach(btn => { btn.addEventListener('click', () => { 
+            if (isSearchMode) exitSearchMode();
+            currentStrand = btn.getAttribute('data-subject'); 
+            searchKeyword = ""; 
+            flashcardIndex = 0; 
+            document.getElementById("globalSearchInput").value = ""; 
+            renderAll(); 
+        }); });
     }
     
     function renderAll() {
         if (humanitiesData.length === 0) return;
-        renderStrands(); renderStarredList(); renderDynamicContent();
-        document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-feather-alt"></i> 當前領域：${currentStrand}`;
+        renderStrands(); 
+        renderStarredList(); 
+        renderSearchInfo();
+        renderDynamicContent();
+        
+        if (isSearchMode) {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果：所有分類`;
+        } else {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-feather-alt"></i> 當前領域：${currentStrand}`;
+        }
+    }
+    
+    function resetAll() {
+        exitSearchMode();
+        if (humanitiesData.length > 0) {
+            const subjects = [...new Set(humanitiesData.map(d => d.subject))];
+            currentStrand = subjects[0];
+        }
+        flashcardIndex = 0;
+        renderAll();
     }
     
     document.addEventListener("click", (e) => {
@@ -303,9 +434,11 @@
             if (mode) { currentMode = mode; document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); flashcardIndex = 0; renderDynamicContent(); }
         }
     });
-    document.getElementById("globalSearchBtn").addEventListener("click", () => { searchKeyword = document.getElementById("globalSearchInput").value; flashcardIndex = 0; renderDynamicContent(); });
-    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { searchKeyword = document.getElementById("globalSearchInput").value; flashcardIndex = 0; renderDynamicContent(); } });
-    document.getElementById("resetSearchBtn").addEventListener("click", () => { searchKeyword = ""; flashcardIndex = 0; document.getElementById("globalSearchInput").value = ""; renderDynamicContent(); });
+    
+    document.getElementById("globalSearchBtn").addEventListener("click", () => { performGlobalSearch(); });
+    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { performGlobalSearch(); } });
+    document.getElementById("clearSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+    document.getElementById("resetSearchBtn").addEventListener("click", () => { resetAll(); });
     
     loadCSV();
 </script>
