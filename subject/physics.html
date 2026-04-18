@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Shirley's Bilingual Physics | 雙語物理學堂</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -61,6 +60,11 @@
             margin-top: 0.5rem;
             font-family: 'Space Mono', monospace;
         }
+        .hero .stats {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #8aadff;
+        }
 
         .search-global {
             max-width: 600px;
@@ -105,6 +109,17 @@
             background: #4a6cdb;
             transform: scale(0.96);
         }
+        .search-clear {
+            background: none;
+            border: none;
+            color: #8aadff;
+            cursor: pointer;
+            padding: 0 10px;
+            font-size: 1rem;
+        }
+        .search-clear:hover {
+            color: #ffd966;
+        }
 
         .strands-grid {
             display: flex;
@@ -127,23 +142,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            letter-spacing: 0.3px;
-            position: relative;
-            overflow: hidden;
-        }
-        .strand-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
-            opacity: 0;
-            transition: 0.5s;
-        }
-        .strand-btn:hover::before {
-            opacity: 1;
         }
         .strand-btn i {
             font-size: 1.2rem;
@@ -201,7 +199,6 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            transition: 0.1s;
         }
         .starred-word:hover {
             background: #2e3e7e;
@@ -236,7 +233,6 @@
             border-radius: 40px;
             cursor: pointer;
             font-weight: 500;
-            transition: 0.2s;
         }
         .mode-btn.active {
             background: #3c5ecf;
@@ -248,10 +244,23 @@
             padding: 8px 20px;
             border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
         }
         .reset-btn:hover {
             background: #2c3f8c;
+        }
+
+        .search-info {
+            background: #1a2350;
+            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        .search-info i {
+            color: #ffd966;
         }
 
         .terms-container {
@@ -268,12 +277,15 @@
             transition: all 0.2s;
             border-left: 4px solid #5c7ef0;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-            position: relative;
         }
         .term-card:hover {
             transform: translateY(-4px);
             background: #141d48;
             border-left-color: #ffd966;
+        }
+        .term-card.search-match {
+            border-left-color: #ffd966;
+            background: #1a2350;
         }
 
         .interactive-viz {
@@ -283,14 +295,12 @@
             padding: 8px;
             border: 1px solid #3a5a9f;
             min-height: 160px;
-            position: relative;
         }
         .viz-canvas {
             width: 100%;
             height: 140px;
             border-radius: 8px;
             background: #00000033;
-            cursor: pointer;
         }
         .viz-label {
             font-size: 0.7rem;
@@ -328,7 +338,6 @@
             justify-content: center;
             background: linear-gradient(135deg, #0f1535, #0a0f2a);
             border: 1px solid #5c7ef0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
         .card-front {
             transform: rotateY(0deg);
@@ -412,6 +421,12 @@
             font-size: 0.75rem;
             opacity: 0.5;
         }
+        .highlight {
+            background: #ffd96666;
+            border-radius: 4px;
+            padding: 0 2px;
+            color: #ffd966;
+        }
         @media (max-width: 650px) {
             .container { padding: 1rem; }
             .flashcard-word { font-size: 1.3rem; }
@@ -423,13 +438,15 @@
 <div class="container">
     <div class="hero">
         <h1>Shirley's Bilingual Physics</h1>
-        <p>explore the universe of physics · 雙語物理宇宙 | 精選概念互動模擬</p>
+        <p>explore the universe of physics · 雙語物理宇宙 | 支援全域搜尋</p>
+        <div class="stats" id="dataStats">✨ 等待載入物理數據...</div>
     </div>
 
     <div class="search-global">
         <i class="fas fa-search"></i>
-        <input type="text" id="globalSearchInput" placeholder="搜尋單字 / 中文 (如: momentum, 黑洞, torque)" autocomplete="off">
-        <button id="globalSearchBtn">搜尋</button>
+        <input type="text" id="globalSearchInput" placeholder="全域搜尋單字 / 中文 (如: momentum, 黑洞, torque)" autocomplete="off">
+        <button id="globalSearchBtn">全域搜尋</button>
+        <button id="clearSearchBtn" class="search-clear" style="display:none;"><i class="fas fa-times-circle"></i></button>
     </div>
 
     <div class="strands-grid" id="strandsContainer">
@@ -453,23 +470,27 @@
             <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置篩選</button>
         </div>
 
+        <div id="searchInfoArea"></div>
         <div id="currentStrandTitle" style="margin-bottom: 1rem; font-size: 1.2rem;">
             <i class="fas fa-globe"></i> 
         </div>
 
         <div id="dynamicContentArea"></div>
     </div>
-    <footer>點擊喇叭圖示發音 | 閃卡模式: 點擊卡片翻轉 | 精選概念包含即時物理模擬</footer>
+    <footer>🎧 點擊喇叭圖示發音 | 閃卡模式: 點擊卡片翻轉 | 搜尋會在所有天體分支中尋找</footer>
 </div>
 
 <script>
     let physicsData = [];
     let currentStrand = "";
-    let starredWords = JSON.parse(localStorage.getItem("physics_starred_v2") || "[]");
+    let starredWords = JSON.parse(localStorage.getItem("physics_starred_v3") || "[]");
     let searchKeyword = "";
+    let isSearchMode = false;
     let currentMode = "grid";
     let flashcardIndex = 0;
     let filteredTermsCache = [];
+
+    const CSV_URL = "https://ducj-creator.github.io/Teacher-Shirley/subject/physics.csv";
 
     // 定義哪些概念有互動模擬
     const conceptsWithViz = [
@@ -484,7 +505,7 @@
         return conceptsWithViz.some(concept => w.includes(concept));
     }
 
-    // 互動式物理模擬生成器 (只有符合條件的才生成)
+    // 互動式物理模擬生成器
     function createInteractiveVisualization(word, containerId) {
         if (!hasVisualization(word)) return;
         
@@ -507,7 +528,6 @@
             container.innerHTML = '';
             container.appendChild(canvas);
             
-            // 根據單字類型繪製不同模擬
             if (w.includes('newton') || w.includes('force') || w.includes('acceleration')) {
                 drawForceSimulation(canvasId, canvas.width, canvas.height);
             } else if (w.includes('pendulum') || w.includes('simple harmonic') || w.includes('oscillation')) {
@@ -528,6 +548,7 @@
         }, 100);
     }
 
+    // 模擬函數 (保持原有功能)
     function drawForceSimulation(canvasId, w, h) {
         let angle = 0;
         function draw() {
@@ -794,7 +815,6 @@
     function drawSpringSimulation(canvasId, w, h) {
         let stretch = 0;
         let velocity = 0;
-        let time = 0;
         
         function draw() {
             const canvas = document.getElementById(canvasId);
@@ -893,9 +913,9 @@
 
     // CSV 載入與解析
     async function loadCSV() {
-        const csvUrl = "https://ducj-creator.github.io/Teacher-Shirley/subject/physics.csv";
         try {
-            const response = await fetch(csvUrl);
+            const response = await fetch(CSV_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const csvText = await response.text();
             parseCSV(csvText);
         } catch (error) {
@@ -941,6 +961,7 @@
         }
         
         if (physicsData.length > 0) {
+            document.getElementById("dataStats").innerHTML = `✨ 已載入 ${physicsData.length} 個物理詞彙`;
             const subjects = [...new Set(physicsData.map(d => d.subject))];
             currentStrand = subjects[0];
             renderAll();
@@ -949,7 +970,7 @@
     }
 
     function saveStarred() {
-        localStorage.setItem("physics_starred_v2", JSON.stringify(starredWords));
+        localStorage.setItem("physics_starred_v3", JSON.stringify(starredWords));
     }
 
     function toggleStar(term) {
@@ -971,19 +992,54 @@
         speechSynthesis.speak(utterance);
     }
 
+    // 全域搜尋函數
     function getFilteredTerms() {
-        let terms = physicsData.filter(t => t.subject === currentStrand);
-        if (searchKeyword.trim() !== "") {
+        if (isSearchMode && searchKeyword.trim() !== "") {
             const kw = searchKeyword.trim().toLowerCase();
-            terms = terms.filter(t => t.word.toLowerCase().includes(kw) || t.meaning.toLowerCase().includes(kw) || t.sentence_c.includes(kw));
+            return physicsData.filter(t => 
+                t.word.toLowerCase().includes(kw) || 
+                t.meaning.toLowerCase().includes(kw) || 
+                t.sentence_c.includes(kw) ||
+                (t.sentence_e && t.sentence_e.toLowerCase().includes(kw))
+            );
+        } else {
+            let terms = physicsData.filter(t => t.subject === currentStrand);
+            if (searchKeyword.trim() !== "") {
+                const kw = searchKeyword.trim().toLowerCase();
+                terms = terms.filter(t => 
+                    t.word.toLowerCase().includes(kw) || 
+                    t.meaning.toLowerCase().includes(kw) || 
+                    t.sentence_c.includes(kw)
+                );
+            }
+            return terms;
         }
-        return terms;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    // 高亮關鍵字
+    function highlightKeyword(text, keyword) {
+        if (!keyword || !text) return escapeHtml(text);
+        const escapedText = escapeHtml(text);
+        const escapedKeyword = escapeHtml(keyword);
+        const regex = new RegExp(`(${escapedKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return escapedText.replace(regex, `<span class="highlight">$1</span>`);
     }
 
     function renderGridMode(terms) {
         if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔭 沒有找到與「${escapeHtml(searchKeyword)}」相關的物理概念</div>`;
+            }
             return `<div class="no-results">在此天體中未找到相關物理概念</div>`;
         }
+        
+        const kw = isSearchMode ? searchKeyword.trim() : "";
+        
         return `<div class="terms-container">
             ${terms.map((term, idx) => {
                 const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
@@ -992,19 +1048,25 @@
                 if(hasViz) {
                     setTimeout(() => createInteractiveVisualization(term.word, vizId), 100);
                 }
+                
+                const displayWord = kw ? highlightKeyword(term.word, kw) : escapeHtml(term.word);
+                const displayMeaning = kw ? highlightKeyword(term.meaning, kw) : escapeHtml(term.meaning);
+                const displaySentenceC = kw ? highlightKeyword(term.sentence_c, kw) : escapeHtml(term.sentence_c);
+                
                 return `
-                    <div class="term-card">
+                    <div class="term-card ${kw ? 'search-match' : ''}">
                         <div class="term-word">
-                            <span><strong>${term.word}</strong> <span style="font-size:0.7rem;">${term.pos}</span></span>
-                            <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${term.word}" data-sub="${term.subject}"></i>
+                            <span><strong>${displayWord}</strong> <span style="font-size:0.7rem;">${escapeHtml(term.pos)}</span></span>
+                            <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i>
                         </div>
-                        <div class="term-meaning">${term.meaning}</div>
+                        <div class="term-meaning">${displayMeaning}</div>
                         <div class="sentence">
-                            ${term.sentence_e}<br>
-                            ${term.sentence_c}
+                            ${escapeHtml(term.sentence_e)}<br>
+                            ${displaySentenceC}
                         </div>
-                        <button class="btn-speak" data-text="${term.word}" style="margin-top:5px;"><i class="fas fa-volume-up"></i> 發音</button>
+                        <button class="btn-speak" data-text="${escapeHtml(term.word)}" style="margin-top:5px;"><i class="fas fa-volume-up"></i> 發音</button>
                         ${hasViz ? `<div class="interactive-viz" id="${vizId}"><div class="viz-label">載入互動模擬中...</div></div>` : ''}
+                        ${isSearchMode ? `<div style="font-size:0.65rem; margin-top:6px; color:#8aadff;"><i class="fas fa-tag"></i> 來自：${escapeHtml(term.subject)}</div>` : ''}
                     </div>
                 `;
             }).join('')}
@@ -1012,20 +1074,25 @@
     }
 
     function renderFlashcardMode(terms) {
-        if (terms.length === 0) return `<div class="no-results">暫無詞彙</div>`;
+        if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔭 沒有找到與「${escapeHtml(searchKeyword)}」相關的物理概念</div>`;
+            }
+            return `<div class="no-results">暫無詞彙</div>`;
+        }
         if (flashcardIndex >= terms.length) flashcardIndex = 0;
         const term = terms[flashcardIndex];
         return `
             <div class="flashcard-container">
                 <div class="flashcard" id="activeFlashcard">
                     <div class="card-front">
-                        <div class="flashcard-word">${term.word}</div>
-                        <div class="flashcard-sentence">${term.sentence_e}</div>
+                        <div class="flashcard-word">${escapeHtml(term.word)}</div>
+                        <div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div>
                         <div class="flashcard-label">點擊翻轉 | 英文正面</div>
                     </div>
                     <div class="card-back">
-                        <div class="flashcard-word">${term.meaning}</div>
-                        <div class="flashcard-sentence">${term.sentence_c}</div>
+                        <div class="flashcard-word">${escapeHtml(term.meaning)}</div>
+                        <div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div>
                         <div class="flashcard-label">中文背面 | 點擊翻回</div>
                     </div>
                 </div>
@@ -1036,7 +1103,44 @@
                 <button id="nextCardBtn">下一張 ▶</button>
                 <button id="speakCardBtn" class="btn-speak"><i class="fas fa-volume-up"></i> 發音</button>
             </div>
+            ${isSearchMode ? `<div style="text-align:center; margin-top:0.5rem; font-size:0.7rem; color:#8aadff;"><i class="fas fa-tag"></i> 當前來自：${escapeHtml(term.subject)}</div>` : ''}
         `;
+    }
+
+    function renderSearchInfo() {
+        const area = document.getElementById("searchInfoArea");
+        if (isSearchMode && searchKeyword.trim()) {
+            const filtered = getFilteredTerms();
+            area.innerHTML = `<div class="search-info">
+                <i class="fas fa-search"></i> 全域搜尋「${escapeHtml(searchKeyword)}」找到 ${filtered.length} 筆結果
+                <i class="fas fa-times-circle" id="exitSearchBtn" style="cursor:pointer; margin-left:8px;"></i>
+            </div>`;
+            document.getElementById("exitSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+        } else {
+            area.innerHTML = "";
+        }
+    }
+
+    function exitSearchMode() {
+        isSearchMode = false;
+        searchKeyword = "";
+        document.getElementById("globalSearchInput").value = "";
+        document.getElementById("clearSearchBtn").style.display = "none";
+        flashcardIndex = 0;
+        renderAll();
+    }
+
+    function performGlobalSearch() {
+        const kw = document.getElementById("globalSearchInput").value.trim();
+        if (kw === "") {
+            exitSearchMode();
+            return;
+        }
+        searchKeyword = kw;
+        isSearchMode = true;
+        flashcardIndex = 0;
+        renderAll();
+        document.getElementById("clearSearchBtn").style.display = "inline-block";
     }
 
     function renderDynamicContent() {
@@ -1102,9 +1206,9 @@
             return;
         }
         container.innerHTML = starredWords.map(s => `
-            <div class="starred-word" data-word="${s.word}">
-                ${s.word} 
-                <i class="fas fa-times-circle" data-remove="${s.word}"></i>
+            <div class="starred-word" data-word="${escapeHtml(s.word)}">
+                ${escapeHtml(s.word)} 
+                <i class="fas fa-times-circle" data-remove="${escapeHtml(s.word)}"></i>
             </div>
         `).join('');
         document.querySelectorAll('.starred-word i').forEach(icon => {
@@ -1122,6 +1226,7 @@
                 const word = el.getAttribute('data-word');
                 const found = physicsData.find(t => t.word === word);
                 if(found) {
+                    exitSearchMode();
                     currentStrand = found.subject;
                     searchKeyword = "";
                     document.getElementById("globalSearchInput").value = "";
@@ -1136,12 +1241,18 @@
         const container = document.getElementById("strandsContainer");
         if (subjects.length === 0) return;
         container.innerHTML = subjects.map(sub => `
-            <button class="strand-btn ${currentStrand === sub ? 'active' : ''}" data-subject="${sub}">
-                <i class="fas fa-globe"></i> ${sub}
+            <button class="strand-btn ${currentStrand === sub && !isSearchMode ? 'active' : ''}" data-subject="${escapeHtml(sub)}">
+                <i class="fas fa-globe"></i> ${escapeHtml(sub)}
             </button>
         `).join('');
+        
+        if (isSearchMode) {
+            document.querySelectorAll('.strand-btn').forEach(btn => btn.classList.remove('active'));
+        }
+        
         document.querySelectorAll('.strand-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                if (isSearchMode) exitSearchMode();
                 currentStrand = btn.getAttribute('data-subject');
                 searchKeyword = "";
                 flashcardIndex = 0;
@@ -1155,8 +1266,24 @@
         if (physicsData.length === 0) return;
         renderStrands();
         renderStarredList();
+        renderSearchInfo();
         renderDynamicContent();
-        document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-globe"></i> 當前天體分支: ${currentStrand}`;
+        
+        if (isSearchMode) {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果：所有天體分支`;
+        } else {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-globe"></i> 當前天體分支: ${currentStrand}`;
+        }
+    }
+
+    function resetAll() {
+        exitSearchMode();
+        if (physicsData.length > 0) {
+            const subjects = [...new Set(physicsData.map(d => d.subject))];
+            currentStrand = subjects[0];
+        }
+        flashcardIndex = 0;
+        renderAll();
     }
 
     function initBackgroundParticles() {
@@ -1200,7 +1327,7 @@
         draw();
     }
 
-    // 模式切換
+    // 事件綁定
     document.addEventListener("click", (e) => {
         if (e.target.closest(".mode-btn")) {
             const btn = e.target.closest(".mode-btn");
@@ -1215,24 +1342,10 @@
         }
     });
 
-    document.getElementById("globalSearchBtn").addEventListener("click", () => {
-        searchKeyword = document.getElementById("globalSearchInput").value;
-        flashcardIndex = 0;
-        renderDynamicContent();
-    });
-    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => {
-        if(e.key === "Enter") {
-            searchKeyword = document.getElementById("globalSearchInput").value;
-            flashcardIndex = 0;
-            renderDynamicContent();
-        }
-    });
-    document.getElementById("resetSearchBtn").addEventListener("click", () => {
-        searchKeyword = "";
-        flashcardIndex = 0;
-        document.getElementById("globalSearchInput").value = "";
-        renderDynamicContent();
-    });
+    document.getElementById("globalSearchBtn").addEventListener("click", () => { performGlobalSearch(); });
+    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { performGlobalSearch(); } });
+    document.getElementById("clearSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+    document.getElementById("resetSearchBtn").addEventListener("click", () => { resetAll(); });
 
     loadCSV();
 </script>
