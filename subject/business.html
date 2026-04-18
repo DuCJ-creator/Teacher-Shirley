@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shirley's Bilingual Business | 雙語商學院</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #0f1a2e 50%, #0c1425 100%);
+            color: #e8eef5;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #businessCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 3rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(3px);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #f5d742, #c9a227, #e8b84a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .hero h1 i {
+            color: #f5d742;
+            font-size: 2.5rem;
+            margin: 0 0.5rem;
+        }
+        .hero p {
+            font-size: 1rem;
+            color: #b8c9e5;
+            margin-top: 0.5rem;
+        }
+        .hero .stats {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #f5d742;
+        }
+
+        .search-global {
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            gap: 12px;
+            background: rgba(15, 25, 45, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+            border: 1px solid #f5d742;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+        .search-global i {
+            align-self: center;
+            font-size: 1.2rem;
+            color: #f5d742;
+        }
+        .search-global input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+        }
+        .search-global input::placeholder {
+            color: #7a8db5;
+        }
+        .search-global button {
+            background: #f5d742;
+            border: none;
+            border-radius: 50px;
+            padding: 0 1.5rem;
+            color: #0a1628;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .search-global button:hover {
+            background: #e8b84a;
+            transform: scale(0.96);
+        }
+        .search-clear {
+            background: none;
+            border: none;
+            color: #f5d742;
+            cursor: pointer;
+            padding: 0 10px;
+            font-size: 1rem;
+        }
+        .search-clear:hover {
+            color: #fff;
+        }
+
+        .strands-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .strand-btn {
+            background: rgba(20, 30, 50, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid #3a4a6e;
+            padding: 0.7rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #c5d5ea;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .strand-btn i {
+            font-size: 1rem;
+        }
+        .strand-btn.active {
+            background: #f5d742;
+            color: #0a1628;
+            border-color: #e8b84a;
+            box-shadow: 0 0 12px rgba(245, 215, 66, 0.4);
+        }
+        .strand-btn:hover:not(.active) {
+            background: rgba(60, 80, 120, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .content-panel {
+            background: rgba(10, 20, 35, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(245, 215, 66, 0.3);
+            box-shadow: 0 20px 35px -12px black;
+        }
+
+        .starred-section {
+            margin-bottom: 1.8rem;
+        }
+        .starred-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #2a3a5a;
+            padding-bottom: 0.4rem;
+        }
+        .starred-header h3 {
+            color: #f5d742;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .star-badge {
+            background: rgba(245, 215, 66, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #f5d742;
+        }
+        .starred-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 1rem;
+            padding: 0.6rem;
+            min-height: 55px;
+        }
+        .starred-word {
+            background: rgba(245, 215, 66, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #f5d742;
+            border: 1px solid rgba(245, 215, 66, 0.4);
+        }
+        .starred-word:hover {
+            background: rgba(245, 215, 66, 0.4);
+        }
+        .starred-word i {
+            color: #f5d742;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .empty-star {
+            color: #7a8db5;
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        .mode-btn {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #3a4a6e;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #c5d5ea;
+            transition: 0.2s;
+        }
+        .mode-btn.active {
+            background: #f5d742;
+            color: #0a1628;
+            border-color: #e8b84a;
+        }
+        .reset-btn {
+            background: none;
+            border: 1px solid #3a4a6e;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #c5d5ea;
+            transition: 0.2s;
+        }
+        .reset-btn:hover {
+            background: rgba(245, 215, 66, 0.2);
+        }
+
+        .search-info {
+            background: rgba(245, 215, 66, 0.15);
+            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        .search-info i {
+            color: #f5d742;
+        }
+
+        .terms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .term-card {
+            background: rgba(15, 25, 45, 0.85);
+            border-radius: 1.2rem;
+            padding: 1rem;
+            transition: all 0.2s;
+            border-left: 3px solid #f5d742;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+        }
+        .term-card:hover {
+            transform: translateY(-3px);
+            background: rgba(25, 40, 65, 0.92);
+            border-left-color: #e8b84a;
+        }
+        .term-card.search-match {
+            border-left-color: #f5d742;
+            background: rgba(30, 50, 80, 0.9);
+        }
+
+        .flashcard-container {
+            perspective: 1500px;
+            height: 360px;
+            margin-top: 1rem;
+        }
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.2rem;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(15, 25, 45, 0.95);
+            border: 1px solid #f5d742;
+        }
+        .card-front {
+            transform: rotateY(0deg);
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(10, 18, 35, 0.95);
+        }
+        .flashcard-word {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f5d742;
+            font-family: 'Playfair Display', serif;
+        }
+        .flashcard-sentence {
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            color: #c5d5ea;
+        }
+        .flash-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        .flash-nav button {
+            background: #f5d742;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: #0a1628;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .term-word {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            color: #f5d742;
+        }
+        .star-icon {
+            color: #f5d742;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .star-icon.far {
+            color: #5a6e8a;
+        }
+        .term-meaning {
+            font-size: 0.95rem;
+            color: #c5d5ea;
+            margin: 6px 0;
+        }
+        .sentence {
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 6px;
+            border-radius: 10px;
+            margin: 6px 0;
+            color: #a8bbd8;
+            line-height: 1.4;
+        }
+        .btn-speak {
+            background: none;
+            border: none;
+            color: #f5d742;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1rem;
+            color: #b8c9e5;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            color: #7a8db5;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #f5d742;
+            font-size: 1rem;
+        }
+        .error-message {
+            text-align: center;
+            padding: 1.5rem;
+            color: #e8b84a;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 1rem;
+            margin: 1rem;
+        }
+        .highlight {
+            background: #f5d74266;
+            border-radius: 4px;
+            padding: 0 2px;
+            color: #f5d742;
+        }
+        @media (max-width: 650px) {
+            .container { padding: 1rem; }
+            .flashcard-word { font-size: 1.2rem; }
+            .terms-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="businessCanvas"></canvas>
+<div class="container">
+    <div class="hero">
+        <h1><i class="fas fa-chart-line"></i> Shirley's Bilingual Business <i class="fas fa-briefcase"></i></h1>
+        <p>商業思維 · 雙語學習 | 管理 · 行銷 · 財務 · 經濟 · 國際貿易</p>
+        <div class="stats" id="dataStats">📊 等待載入商科詞彙...</div>
+    </div>
+
+    <div class="search-global">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearchInput" placeholder="全域搜尋單字 / 中文 (如: marketing, 資產負債表)" autocomplete="off">
+        <button id="globalSearchBtn">全域搜尋</button>
+        <button id="clearSearchBtn" class="search-clear" style="display:none;"><i class="fas fa-times-circle"></i></button>
+    </div>
+
+    <div class="strands-grid" id="strandsContainer">
+        <div class="loading">📈 正在從 CSV 加載商科數據...</div>
+    </div>
+
+    <div class="content-panel">
+        <div class="starred-section">
+            <div class="starred-header">
+                <h3><i class="fas fa-star" style="color: #f5d742;"></i> 我的收藏</h3>
+                <div class="star-badge">點擊星星收藏單字</div>
+            </div>
+            <div id="starredWordsContainer" class="starred-list"></div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="grid">詞彙卡片</button>
+                <button class="mode-btn" data-mode="flashcard">閃卡模式</button>
+            </div>
+            <button id="resetSearchBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置篩選</button>
+        </div>
+
+        <div id="searchInfoArea"></div>
+        <div id="currentStrandTitle" style="margin-bottom: 1rem; font-size: 1rem; color: #f5d742;">
+            <i class="fas fa-chart-simple"></i> 
+        </div>
+
+        <div id="dynamicContentArea"></div>
+    </div>
+    <footer>🎧 點擊喇叭發音 | 閃卡模式點擊翻轉 | 搜尋會在所有商業分類中尋找</footer>
+</div>
+
+<script>
+    let businessData = [];
+    let currentStrand = "";
+    let starredWords = JSON.parse(localStorage.getItem("business_starred_v1") || "[]");
+    let searchKeyword = "";
+    let isSearchMode = false;
+    let currentMode = "grid";
+    let flashcardIndex = 0;
+    let filteredTermsCache = [];
+
+    const CSV_URL = "https://ducj-creator.github.io/Teacher-Shirley/subject/business.csv";
+
+    // 商科背景動畫 (上升股票線條、貨幣符號)
+    function initBusinessBackground() {
+        const canvas = document.getElementById("businessCanvas");
+        const ctx = canvas.getContext("2d");
+        let width, height, elements = [];
+        
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+        
+        const icons = ["📈", "📊", "💹", "💰", "💵", "🏦", "📉", "🪙", "💎", "⚖️", "🏛️"];
+        for(let i=0;i<60;i++) {
+            elements.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 22 + 14,
+                vx: (Math.random() - 0.5) * 0.12,
+                vy: (Math.random() - 0.5) * 0.08,
+                char: icons[Math.floor(Math.random() * icons.length)],
+                alpha: Math.random() * 0.12 + 0.03
+            });
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            elements.forEach(e => {
+                ctx.font = `${e.size}px "Segoe UI Emoji"`;
+                ctx.fillStyle = `rgba(245, 215, 66, ${e.alpha})`;
+                ctx.fillText(e.char, e.x, e.y);
+                e.x += e.vx;
+                e.y += e.vy;
+                if(e.x < -40) e.x = width + 30;
+                if(e.x > width + 40) e.x = -30;
+                if(e.y < -40) e.y = height + 30;
+                if(e.y > height + 40) e.y = -30;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
+
+    // 讀取 CSV
+    async function loadCSV() {
+        try {
+            console.log("正在從 CSV 加載:", CSV_URL);
+            const response = await fetch(CSV_URL, {
+                mode: 'cors',
+                headers: { 'Accept': 'text/csv,text/plain,*/*' }
+            });
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const csvText = await response.text();
+            console.log(`CSV 加載成功，長度: ${csvText.length}`);
+            
+            if (parseCSV(csvText)) {
+                console.log(`成功解析 ${businessData.length} 個商科詞彙`);
+                document.getElementById("dataStats").innerHTML = `📊 已載入 ${businessData.length} 個商科詞彙`;
+                initBusinessBackground();
+                renderAll();
+            } else {
+                throw new Error("CSV 解析失敗");
+            }
+        } catch (error) {
+            console.error("加載失敗:", error);
+            document.getElementById("strandsContainer").innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i> CSV 加載失敗<br><br>
+                    錯誤: ${error.message}<br><br>
+                    <strong>請檢查：</strong><br>
+                    1. CSV 文件是否存在: ${CSV_URL}<br>
+                    2. CSV 格式是否正確 (需包含: subject, word, pos, meaning, sentence e, sentence c)<br><br>
+                    <button onclick="location.reload()" style="background:#f5d742; border:none; padding:6px 16px; border-radius:40px; cursor:pointer; color:#0a1628;">重新加載</button>
+                </div>
+            `;
+        }
+    }
+
+    function parseCSV(csv) {
+        const lines = csv.split(/\r?\n/);
+        if (lines.length < 2) return false;
+        
+        const headerLine = lines[0];
+        const headers = [];
+        let inQuote = false, current = '';
+        for (let ch of headerLine) {
+            if (ch === '"') inQuote = !inQuote;
+            else if (ch === ',' && !inQuote) {
+                headers.push(current.trim());
+                current = '';
+            } else current += ch;
+        }
+        headers.push(current.trim());
+        
+        const subjectIdx = headers.indexOf('subject');
+        const wordIdx = headers.indexOf('word');
+        const posIdx = headers.indexOf('pos');
+        const meaningIdx = headers.indexOf('meaning');
+        const sentenceEIdx = headers.indexOf('sentence e');
+        const sentenceCIdx = headers.indexOf('sentence c');
+        
+        if (subjectIdx === -1 || wordIdx === -1) return false;
+        
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            
+            let row = [];
+            inQuote = false;
+            current = '';
+            for (let ch of line) {
+                if (ch === '"') inQuote = !inQuote;
+                else if (ch === ',' && !inQuote) {
+                    row.push(current.trim());
+                    current = '';
+                } else current += ch;
+            }
+            row.push(current.trim());
+            
+            if (row.length < 6) continue;
+            
+            const term = {
+                subject: row[subjectIdx] || "",
+                word: row[wordIdx] || "",
+                pos: row[posIdx] || "",
+                meaning: row[meaningIdx] || "",
+                sentence_e: row[sentenceEIdx] || "",
+                sentence_c: row[sentenceCIdx] || ""
+            };
+            
+            if (term.word && term.subject && term.meaning) {
+                businessData.push(term);
+            }
+        }
+        
+        return businessData.length > 0;
+    }
+
+    function saveStarred() {
+        localStorage.setItem("business_starred_v1", JSON.stringify(starredWords));
+    }
+
+    function toggleStar(term) {
+        const exists = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+        if (exists) {
+            starredWords = starredWords.filter(s => !(s.word === term.word && s.subject === term.subject));
+        } else {
+            starredWords.push({ word: term.word, meaning: term.meaning, subject: term.subject });
+        }
+        saveStarred();
+        renderAll();
+    }
+
+    function speakText(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.85;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+    }
+
+    // 全域搜尋函數
+    function getFilteredTerms() {
+        if (isSearchMode && searchKeyword.trim() !== "") {
+            const kw = searchKeyword.trim().toLowerCase();
+            return businessData.filter(t => 
+                t.word.toLowerCase().includes(kw) || 
+                t.meaning.toLowerCase().includes(kw) || 
+                t.sentence_c.toLowerCase().includes(kw) ||
+                (t.sentence_e && t.sentence_e.toLowerCase().includes(kw))
+            );
+        } else {
+            let terms = businessData.filter(t => t.subject === currentStrand);
+            if (searchKeyword.trim() !== "") {
+                const kw = searchKeyword.trim().toLowerCase();
+                terms = terms.filter(t => 
+                    t.word.toLowerCase().includes(kw) || 
+                    t.meaning.toLowerCase().includes(kw) || 
+                    t.sentence_c.toLowerCase().includes(kw)
+                );
+            }
+            return terms;
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    // 高亮關鍵字
+    function highlightKeyword(text, keyword) {
+        if (!keyword || !text) return escapeHtml(text);
+        const escapedText = escapeHtml(text);
+        const escapedKeyword = escapeHtml(keyword);
+        const regex = new RegExp(`(${escapedKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return escapedText.replace(regex, `<span class="highlight">$1</span>`);
+    }
+
+    function renderGridMode(terms) {
+        if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的商科詞彙</div>`;
+            }
+            return `<div class="no-results">📉 在此領域中未找到相關概念</div>`;
+        }
+        
+        const kw = isSearchMode ? searchKeyword.trim() : "";
+        
+        return `<div class="terms-container">
+            ${terms.map(term => {
+                const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
+                const displayWord = kw ? highlightKeyword(term.word, kw) : escapeHtml(term.word);
+                const displayMeaning = kw ? highlightKeyword(term.meaning, kw) : escapeHtml(term.meaning);
+                const displaySentenceC = kw ? highlightKeyword(term.sentence_c, kw) : escapeHtml(term.sentence_c);
+                
+                return `
+                    <div class="term-card ${kw ? 'search-match' : ''}">
+                        <div class="term-word">
+                            <span><strong>${displayWord}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
+                            <i class="star-icon ${isStarred ? 'fas fa-star' : 'far fa-star'}" data-word="${escapeHtml(term.word)}" data-sub="${escapeHtml(term.subject)}"></i>
+                        </div>
+                        <div class="term-meaning">${displayMeaning}</div>
+                        <div class="sentence">
+                            ${escapeHtml(term.sentence_e)}<br>
+                            ${displaySentenceC}
+                        </div>
+                        <button class="btn-speak" data-text="${escapeHtml(term.word)}"><i class="fas fa-volume-up"></i> 發音</button>
+                        ${isSearchMode ? `<div style="font-size:0.65rem; margin-top:6px; color:#f5d742;"><i class="fas fa-tag"></i> 來自：${escapeHtml(term.subject)}</div>` : ''}
+                    </div>
+                `;
+            }).join('')}
+        </div>`;
+    }
+
+    function renderFlashcardMode(terms) {
+        if (terms.length === 0) {
+            if (isSearchMode) {
+                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的商科詞彙</div>`;
+            }
+            return `<div class="no-results">暫無詞彙</div>`;
+        }
+        if (flashcardIndex >= terms.length) flashcardIndex = 0;
+        const term = terms[flashcardIndex];
+        return `
+            <div class="flashcard-container">
+                <div class="flashcard" id="activeFlashcard">
+                    <div class="card-front">
+                        <div class="flashcard-word">${escapeHtml(term.word)}</div>
+                        <div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div>
+                        <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">🖱️ 點擊翻轉</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="flashcard-word">${escapeHtml(term.meaning)}</div>
+                        <div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div>
+                        <div class="flashcard-label" style="font-size:0.7rem; margin-top:1rem;">📖 中文釋義</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flash-nav">
+                <button id="prevCardBtn">◀ 上一張</button>
+                <span style="color:#f5d742;">${flashcardIndex+1} / ${terms.length}</span>
+                <button id="nextCardBtn">下一張 ▶</button>
+                <button id="speakCardBtn"><i class="fas fa-volume-up"></i> 發音</button>
+            </div>
+            ${isSearchMode ? `<div style="text-align:center; margin-top:0.5rem; font-size:0.7rem; color:#f5d742;"><i class="fas fa-tag"></i> 當前來自：${escapeHtml(term.subject)}</div>` : ''}
+        `;
+    }
+
+    function renderSearchInfo() {
+        const area = document.getElementById("searchInfoArea");
+        if (isSearchMode && searchKeyword.trim()) {
+            const filtered = getFilteredTerms();
+            area.innerHTML = `<div class="search-info">
+                <i class="fas fa-search"></i> 全域搜尋「${escapeHtml(searchKeyword)}」找到 ${filtered.length} 筆結果
+                <i class="fas fa-times-circle" id="exitSearchBtn" style="cursor:pointer; margin-left:8px;"></i>
+            </div>`;
+            document.getElementById("exitSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+        } else {
+            area.innerHTML = "";
+        }
+    }
+
+    function exitSearchMode() {
+        isSearchMode = false;
+        searchKeyword = "";
+        document.getElementById("globalSearchInput").value = "";
+        document.getElementById("clearSearchBtn").style.display = "none";
+        flashcardIndex = 0;
+        renderAll();
+    }
+
+    function performGlobalSearch() {
+        const kw = document.getElementById("globalSearchInput").value.trim();
+        if (kw === "") {
+            exitSearchMode();
+            return;
+        }
+        searchKeyword = kw;
+        isSearchMode = true;
+        flashcardIndex = 0;
+        renderAll();
+        document.getElementById("clearSearchBtn").style.display = "inline-block";
+    }
+
+    function renderDynamicContent() {
+        const filtered = getFilteredTerms();
+        filteredTermsCache = filtered;
+        const area = document.getElementById("dynamicContentArea");
+        if (currentMode === "grid") {
+            area.innerHTML = renderGridMode(filtered);
+            attachGridEvents();
+        } else {
+            area.innerHTML = renderFlashcardMode(filtered);
+            attachFlashcardEvents();
+        }
+    }
+
+    function attachGridEvents() {
+        document.querySelectorAll('.star-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wordName = icon.getAttribute('data-word');
+                const subj = icon.getAttribute('data-sub');
+                const target = businessData.find(t => t.word === wordName && t.subject === subj);
+                if (target) toggleStar(target);
+            });
+        });
+        document.querySelectorAll('.btn-speak').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const text = btn.getAttribute('data-text');
+                if(text) speakText(text);
+            });
+        });
+    }
+
+    function attachFlashcardEvents() {
+        const flashcard = document.getElementById("activeFlashcard");
+        if (flashcard) flashcard.addEventListener("click", () => flashcard.classList.toggle("flipped"));
+        document.getElementById("prevCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache.length) {
+                flashcardIndex = (flashcardIndex - 1 + filteredTermsCache.length) % filteredTermsCache.length;
+                renderDynamicContent();
+            }
+        });
+        document.getElementById("nextCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache.length) {
+                flashcardIndex = (flashcardIndex + 1) % filteredTermsCache.length;
+                renderDynamicContent();
+            }
+        });
+        document.getElementById("speakCardBtn")?.addEventListener("click", () => {
+            if (filteredTermsCache[flashcardIndex]) speakText(filteredTermsCache[flashcardIndex].word);
+        });
+    }
+
+    function renderStarredList() {
+        const container = document.getElementById("starredWordsContainer");
+        if (starredWords.length === 0) {
+            container.innerHTML = '<div class="empty-star">⭐ 暫無收藏，點擊星星收藏</div>';
+            return;
+        }
+        container.innerHTML = starredWords.map(s => `
+            <div class="starred-word" data-word="${escapeHtml(s.word)}">
+                ${escapeHtml(s.word)} 
+                <i class="fas fa-times-circle" data-remove="${escapeHtml(s.word)}"></i>
+            </div>
+        `).join('');
+        document.querySelectorAll('.starred-word i').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const w = icon.getAttribute('data-remove');
+                starredWords = starredWords.filter(s => s.word !== w);
+                saveStarred();
+                renderAll();
+            });
+        });
+        document.querySelectorAll('.starred-word').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if(e.target.tagName === 'I') return;
+                const word = el.getAttribute('data-word');
+                const found = businessData.find(t => t.word === word);
+                if(found) {
+                    exitSearchMode();
+                    currentStrand = found.subject;
+                    searchKeyword = "";
+                    document.getElementById("globalSearchInput").value = "";
+                    renderAll();
+                }
+            });
+        });
+    }
+
+    function renderStrands() {
+        const subjects = [...new Set(businessData.map(d => d.subject))];
+        const container = document.getElementById("strandsContainer");
+        if (subjects.length === 0) return;
+        container.innerHTML = subjects.map(sub => `
+            <button class="strand-btn ${currentStrand === sub && !isSearchMode ? 'active' : ''}" data-subject="${escapeHtml(sub)}">
+                <i class="fas fa-chart-line"></i> ${escapeHtml(sub)}
+            </button>
+        `).join('');
+        
+        if (isSearchMode) {
+            document.querySelectorAll('.strand-btn').forEach(btn => btn.classList.remove('active'));
+        }
+        
+        document.querySelectorAll('.strand-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isSearchMode) exitSearchMode();
+                currentStrand = btn.getAttribute('data-subject');
+                searchKeyword = "";
+                flashcardIndex = 0;
+                document.getElementById("globalSearchInput").value = "";
+                renderAll();
+            });
+        });
+    }
+
+    function renderAll() {
+        if (businessData.length === 0) return;
+        renderStrands();
+        renderStarredList();
+        renderSearchInfo();
+        renderDynamicContent();
+        
+        if (isSearchMode) {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果：所有商業領域`;
+        } else {
+            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-chart-simple"></i> 當前領域：${currentStrand}`;
+        }
+    }
+
+    function resetAll() {
+        exitSearchMode();
+        if (businessData.length > 0) {
+            const subjects = [...new Set(businessData.map(d => d.subject))];
+            currentStrand = subjects[0];
+        }
+        flashcardIndex = 0;
+        renderAll();
+    }
+
+    // 事件綁定
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".mode-btn")) {
+            const btn = e.target.closest(".mode-btn");
+            const mode = btn.getAttribute("data-mode");
+            if (mode) {
+                currentMode = mode;
+                document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                flashcardIndex = 0;
+                renderDynamicContent();
+            }
+        }
+    });
+
+    document.getElementById("globalSearchBtn").addEventListener("click", () => { performGlobalSearch(); });
+    document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { performGlobalSearch(); } });
+    document.getElementById("clearSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
+    document.getElementById("resetSearchBtn").addEventListener("click", () => { resetAll(); });
+
+    loadCSV();
+</script>
+</body>
+</html>
