@@ -22,6 +22,150 @@
         .hero h1 i { color: #40916c; font-size: 2.5rem; margin: 0 0.5rem; }
         .hero p { font-size: 0.95rem; color: #52b788; margin-top: 0.5rem; }
         .hero .stats { margin-top: 0.5rem; font-size: 0.8rem; color: #74c69d; }
+
+        /* 生物分類專屬入口 Banner */
+        .taxonomy-banner {
+            background: linear-gradient(135deg, #2d6a4f, #1b4d2e);
+            border-radius: 60px;
+            margin: 0 auto 2rem auto;
+            padding: 0.8rem 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #f4a261;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .taxonomy-banner:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+            background: linear-gradient(135deg, #40916c, #2d6a4f);
+        }
+        .taxonomy-banner-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .taxonomy-icon {
+            background: rgba(255,255,255,0.15);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: 0.3s;
+        }
+        .taxonomy-banner:hover .taxonomy-icon {
+            transform: scale(1.05);
+            background: rgba(244, 162, 97, 0.3);
+        }
+        .taxonomy-text h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f4a261;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .taxonomy-text p {
+            font-size: 0.8rem;
+            color: #d8f3dc;
+            margin-top: 4px;
+        }
+        .mnemonic {
+            background: #f4a26120;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            color: #f4a261;
+            border: 1px dashed #f4a261;
+        }
+        .taxonomy-banner-right {
+            background: #f4a261;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1b4d2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .taxonomy-banner:hover .taxonomy-banner-right {
+            background: #ffb347;
+            transform: scale(1.02);
+        }
+
+        /* 彈窗 Modal */
+        .taxonomy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .taxonomy-modal.active {
+            display: flex;
+        }
+        .taxonomy-modal-content {
+            background: #0a2a15;
+            border-radius: 2rem;
+            width: 95%;
+            max-width: 1300px;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #f4a261;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .taxonomy-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #52b788;
+        }
+        .taxonomy-modal-header h2 {
+            color: #f4a261;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+        }
+        .taxonomy-modal-close {
+            background: none;
+            border: none;
+            color: #f4a261;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .taxonomy-modal-close:hover {
+            transform: scale(1.1);
+            color: #fff;
+        }
+        .taxonomy-modal-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            border-radius: 0 0 1.5rem 1.5rem;
+        }
+
         .search-global { max-width: 550px; margin: 0 auto 2rem auto; display: flex; gap: 10px; background: #ffffffcc; backdrop-filter: blur(4px); border-radius: 50px; padding: 0.2rem 0.2rem 0.2rem 1.5rem; border: 1px solid #95d5b2; }
         .search-global input { flex: 1; background: transparent; border: none; padding: 0.8rem 0; font-size: 0.9rem; color: #1b4d2e; outline: none; }
         .search-global input::placeholder { color: #95d5b2; }
@@ -29,9 +173,11 @@
         .search-global button:hover { background: #40916c; transform: scale(0.96); }
         .search-clear { background: none; border: none; color: #95d5b2; cursor: pointer; padding: 0 10px; font-size: 1rem; }
         .search-clear:hover { color: #e76f51; }
+
         .strands-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 2rem; }
         .strand-btn { background: #ffffffcc; backdrop-filter: blur(4px); border: 1px solid #95d5b2; padding: 0.6rem 1.5rem; border-radius: 40px; font-weight: 500; font-size: 0.85rem; cursor: pointer; color: #2d6a4f; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .strand-btn.active { background: #52b788; color: white; border-color: #40916c; }
+
         .content-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); border-radius: 1.8rem; padding: 1.6rem; border: 1px solid #95d5b2; }
         .starred-section { margin-bottom: 1.8rem; }
         .starred-header { display: flex; justify-content: space-between; border-bottom: 1px solid #b7e4c7; padding-bottom: 0.5rem; margin-bottom: 0.8rem; }
@@ -45,12 +191,14 @@
         .mode-btn.active { background: #52b788; color: white; border-color: #40916c; }
         .reset-btn { background: none; border: 1px solid #95d5b2; padding: 6px 18px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; color: #2d6a4f; transition: 0.2s; }
         .reset-btn:hover { background: #d8f3dc; }
+
         .search-info { background: #d8f3dc; border-radius: 30px; padding: 0.3rem 1rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
         .search-info i { color: #52b788; }
         .terms-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
         .term-card { background: white; border-radius: 1.2rem; padding: 1.2rem; border-left: 4px solid #52b788; border: 1px solid #d8f3dc; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .term-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left-color: #2d6a4f; }
         .term-card.search-match { border-left-color: #f4a261; background: #fffef5; }
+
         .flashcard-container { perspective: 1500px; height: 340px; margin-top: 1rem; }
         .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
         .flashcard.flipped { transform: rotateY(180deg); }
@@ -60,6 +208,7 @@
         .flashcard-sentence { font-size: 0.85rem; margin-top: 1rem; color: #52b788; }
         .flash-nav { display: flex; justify-content: center; gap: 1rem; margin-top: 1.2rem; }
         .flash-nav button { background: #52b788; border: none; padding: 8px 20px; border-radius: 40px; color: white; font-weight: 500; cursor: pointer; }
+
         .term-word { font-size: 1.2rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; color: #1b4d2e; }
         .star-icon { color: #f4a261; cursor: pointer; font-size: 1rem; }
         .star-icon.far { color: #ccc; }
@@ -82,13 +231,36 @@
         <p>生命科學 · 雙語探索 | 細胞 · 遺傳 · 生態 · 演化 · 人體 | 支援全域搜尋</p>
         <div class="stats" id="dataStats">🔬 等待載入生物詞彙...</div>
     </div>
+
+    <!-- 生物分類入口 Banner（含記憶口訣）-->
+    <div class="taxonomy-banner" id="taxonomyBannerBtn">
+        <div class="taxonomy-banner-left">
+            <div class="taxonomy-icon">
+                <i class="fas fa-tree"></i>
+            </div>
+            <div class="taxonomy-text">
+                <h3><i class="fas fa-tags"></i> 生物分類 Taxonomy</h3>
+                <p>域 · 界 · 門 · 綱 · 目 · 科 · 屬 · 種</p>
+            </div>
+            <div class="mnemonic">
+                📖 King Phillip Came Over For Good Soup
+            </div>
+        </div>
+        <div class="taxonomy-banner-right">
+            <span>互動分類圖鑑</span>
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </div>
+
     <div class="search-global">
         <i class="fas fa-search"></i>
         <input type="text" id="globalSearchInput" placeholder="全域搜尋詞彙 / 中文 (如: cell, 光合作用, DNA)" autocomplete="off">
         <button id="globalSearchBtn">全域搜尋</button>
         <button id="clearSearchBtn" class="search-clear" style="display:none;"><i class="fas fa-times-circle"></i></button>
     </div>
+
     <div class="strands-grid" id="strandsContainer"><div class="loading">🧬 正在載入生物詞彙...</div></div>
+
     <div class="content-panel">
         <div class="starred-section">
             <div class="starred-header"><h3><i class="fas fa-star" style="color: #f4a261;"></i> 我的收藏</h3><div class="star-badge">點擊星星收藏</div></div>
@@ -105,6 +277,17 @@
     <footer>🎧 點擊喇叭聆聽發音 | 閃卡模式點擊翻轉 | 請將此檔案與 biology.csv 放在同一資料夾 | 搜尋會在所有分類中尋找</footer>
 </div>
 
+<!-- 生物分類彈窗 Modal -->
+<div id="taxonomyModal" class="taxonomy-modal">
+    <div class="taxonomy-modal-content">
+        <div class="taxonomy-modal-header">
+            <h2><i class="fas fa-tags"></i> 生物分類 Taxonomy | King Phillip Came Over For Good Soup</h2>
+            <button class="taxonomy-modal-close" id="closeModalBtn">&times;</button>
+        </div>
+        <iframe class="taxonomy-modal-iframe" src="https://ducj-creator.github.io/Teacher-Shirley/subject/taxonomy.html" title="生物分類互動平台"></iframe>
+    </div>
+</div>
+
 <script>
     let biologyData = [];
     let currentStrand = "";
@@ -116,6 +299,26 @@
     let filteredTermsCache = [];
 
     const CSV_PATH = "./biology.csv";
+
+    // 彈窗控制
+    const modal = document.getElementById('taxonomyModal');
+    const openBtn = document.getElementById('taxonomyBannerBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
 
     // 生物背景動畫
     function initBiologyBackground() {
@@ -207,7 +410,6 @@
     }
     function speakText(text) { const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }
     
-    // 全域搜尋函數
     function getFilteredTerms() {
         if (isSearchMode && searchKeyword.trim() !== "") {
             const kw = searchKeyword.trim().toLowerCase();
@@ -233,7 +435,6 @@
     
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
     
-    // 高亮關鍵字
     function highlightKeyword(text, keyword) {
         if (!keyword || !text) return escapeHtml(text);
         const escapedText = escapeHtml(text);
@@ -244,20 +445,15 @@
     
     function renderGridMode(terms) {
         if (terms.length === 0) {
-            if (isSearchMode) {
-                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的生物詞彙</div>`;
-            }
+            if (isSearchMode) return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的生物詞彙</div>`;
             return `<div class="no-results">🔬 在此領域中未找到相關詞彙</div>`;
         }
-        
         const kw = isSearchMode ? searchKeyword.trim() : "";
-        
         return `<div class="terms-container">${terms.map(term => {
             const isStarred = starredWords.some(s => s.word === term.word && s.subject === term.subject);
             const displayWord = kw ? highlightKeyword(term.word, kw) : escapeHtml(term.word);
             const displayMeaning = kw ? highlightKeyword(term.meaning, kw) : escapeHtml(term.meaning);
             const displaySentenceC = kw ? highlightKeyword(term.sentence_c, kw) : escapeHtml(term.sentence_c);
-            
             return `<div class="term-card ${kw ? 'search-match' : ''}">
                 <div class="term-word">
                     <span><strong>${displayWord}</strong> <span style="font-size:0.65rem;">${escapeHtml(term.pos)}</span></span>
@@ -272,9 +468,7 @@
     
     function renderFlashcardMode(terms) {
         if (terms.length === 0) {
-            if (isSearchMode) {
-                return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的生物詞彙</div>`;
-            }
+            if (isSearchMode) return `<div class="no-results">🔍 沒有找到與「${escapeHtml(searchKeyword)}」相關的生物詞彙</div>`;
             return `<div class="no-results">暫無詞彙</div>`;
         }
         if (flashcardIndex >= terms.length) flashcardIndex = 0;
@@ -319,33 +513,17 @@
                 <i class="fas fa-times-circle" id="exitSearchBtn" style="cursor:pointer; margin-left:8px; color:#e76f51;"></i>
             </div>`;
             document.getElementById("exitSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
-        } else {
-            area.innerHTML = "";
-        }
+        } else { area.innerHTML = ""; }
     }
     
     function exitSearchMode() {
-        isSearchMode = false;
-        searchKeyword = "";
-        document.getElementById("globalSearchInput").value = "";
-        document.getElementById("clearSearchBtn").style.display = "none";
-        flashcardIndex = 0;
-        renderAll();
+        isSearchMode = false; searchKeyword = ""; document.getElementById("globalSearchInput").value = ""; document.getElementById("clearSearchBtn").style.display = "none"; flashcardIndex = 0; renderAll();
     }
-    
     function performGlobalSearch() {
         const kw = document.getElementById("globalSearchInput").value.trim();
-        if (kw === "") {
-            exitSearchMode();
-            return;
-        }
-        searchKeyword = kw;
-        isSearchMode = true;
-        flashcardIndex = 0;
-        renderAll();
-        document.getElementById("clearSearchBtn").style.display = "inline-block";
+        if (kw === "") { exitSearchMode(); return; }
+        searchKeyword = kw; isSearchMode = true; flashcardIndex = 0; renderAll(); document.getElementById("clearSearchBtn").style.display = "inline-block";
     }
-    
     function attachGridEvents() {
         document.querySelectorAll('.star-icon').forEach(icon => {
             icon.addEventListener('click', (e) => { e.stopPropagation();
@@ -358,7 +536,6 @@
             btn.addEventListener('click', (e) => { e.stopPropagation(); const text = btn.getAttribute('data-text'); if(text) speakText(text); });
         });
     }
-    
     function attachFlashcardEvents() {
         const flashcard = document.getElementById("activeFlashcard");
         if (flashcard) flashcard.addEventListener("click", () => flashcard.classList.toggle("flipped"));
@@ -366,74 +543,35 @@
         document.getElementById("nextCardBtn")?.addEventListener("click", () => { if (filteredTermsCache.length) { flashcardIndex = (flashcardIndex + 1) % filteredTermsCache.length; renderDynamicContent(); } });
         document.getElementById("speakCardBtn")?.addEventListener("click", () => { if (filteredTermsCache[flashcardIndex]) speakText(filteredTermsCache[flashcardIndex].word); });
     }
-    
     function renderStarredList() {
         const container = document.getElementById("starredWordsContainer");
         if (starredWords.length === 0) { container.innerHTML = '<div class="empty-star">⭐ 暫無收藏，點擊星星收藏</div>'; return; }
         container.innerHTML = starredWords.map(s => `<div class="starred-word" data-word="${escapeHtml(s.word)}">${escapeHtml(s.word)} <i class="fas fa-times-circle" data-remove="${escapeHtml(s.word)}"></i></div>`).join('');
         document.querySelectorAll('.starred-word i').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); const w = icon.getAttribute('data-remove'); starredWords = starredWords.filter(s => s.word !== w); saveStarred(); renderAll(); }); });
-        document.querySelectorAll('.starred-word').forEach(el => { el.addEventListener('click', (e) => { if(e.target.tagName === 'I') return; const word = el.getAttribute('data-word'); const found = biologyData.find(t => t.word === word); if(found) { 
-            exitSearchMode();
-            currentStrand = found.subject; 
-            searchKeyword = ""; 
-            document.getElementById("globalSearchInput").value = ""; 
-            renderAll(); 
-        } }); });
+        document.querySelectorAll('.starred-word').forEach(el => { el.addEventListener('click', (e) => { if(e.target.tagName === 'I') return; const word = el.getAttribute('data-word'); const found = biologyData.find(t => t.word === word); if(found) { exitSearchMode(); currentStrand = found.subject; searchKeyword = ""; document.getElementById("globalSearchInput").value = ""; renderAll(); } }); });
     }
-    
     function renderStrands() {
         const subjects = [...new Set(biologyData.map(d => d.subject))];
         const container = document.getElementById("strandsContainer");
         if (subjects.length === 0) return;
         container.innerHTML = subjects.map(sub => `<button class="strand-btn ${currentStrand === sub && !isSearchMode ? 'active' : ''}" data-subject="${escapeHtml(sub)}"><i class="fas fa-dna"></i> ${escapeHtml(sub)}</button>`).join('');
-        
-        if (isSearchMode) {
-            document.querySelectorAll('.strand-btn').forEach(btn => btn.classList.remove('active'));
-        }
-        
-        document.querySelectorAll('.strand-btn').forEach(btn => { btn.addEventListener('click', () => { 
-            if (isSearchMode) exitSearchMode();
-            currentStrand = btn.getAttribute('data-subject'); 
-            searchKeyword = ""; 
-            flashcardIndex = 0; 
-            document.getElementById("globalSearchInput").value = ""; 
-            renderAll(); 
-        }); });
+        if (isSearchMode) document.querySelectorAll('.strand-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.strand-btn').forEach(btn => { btn.addEventListener('click', () => { if (isSearchMode) exitSearchMode(); currentStrand = btn.getAttribute('data-subject'); searchKeyword = ""; flashcardIndex = 0; document.getElementById("globalSearchInput").value = ""; renderAll(); }); });
     }
-    
     function renderAll() {
         if (biologyData.length === 0) return;
-        renderStrands(); 
-        renderStarredList(); 
-        renderSearchInfo();
-        renderDynamicContent();
-        
-        if (isSearchMode) {
-            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果：所有分類`;
-        } else {
-            document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-dna"></i> 當前領域：${currentStrand}`;
-        }
+        renderStrands(); renderStarredList(); renderSearchInfo(); renderDynamicContent();
+        if (isSearchMode) document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果：所有分類`;
+        else document.getElementById("currentStrandTitle").innerHTML = `<i class="fas fa-dna"></i> 當前領域：${currentStrand}`;
     }
+    function resetAll() { exitSearchMode(); if (biologyData.length > 0) { const subjects = [...new Set(biologyData.map(d => d.subject))]; currentStrand = subjects[0]; } flashcardIndex = 0; renderAll(); }
     
-    function resetAll() {
-        exitSearchMode();
-        if (biologyData.length > 0) {
-            const subjects = [...new Set(biologyData.map(d => d.subject))];
-            currentStrand = subjects[0];
-        }
-        flashcardIndex = 0;
-        renderAll();
-    }
-    
-    // 事件綁定
     document.addEventListener("click", (e) => {
         if (e.target.closest(".mode-btn")) {
-            const btn = e.target.closest(".mode-btn");
-            const mode = btn.getAttribute("data-mode");
+            const btn = e.target.closest(".mode-btn"); const mode = btn.getAttribute("data-mode");
             if (mode) { currentMode = mode; document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); flashcardIndex = 0; renderDynamicContent(); }
         }
     });
-    
     document.getElementById("globalSearchBtn").addEventListener("click", () => { performGlobalSearch(); });
     document.getElementById("globalSearchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") { performGlobalSearch(); } });
     document.getElementById("clearSearchBtn")?.addEventListener("click", () => { exitSearchMode(); });
