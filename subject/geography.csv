@@ -57,23 +57,23 @@ subject,word,pos,meaning,sentence e,sentence c
 地理 (氣候) Geography (Climate),stratosphere,n.,平流層,"The stratosphere contains the ozone layer, which protects us from ultraviolet radiation.",平流層包含臭氧層，保護我們免受紫外線輻射。
 地理 (氣候) Geography (Climate),tundra,n.,苔原；凍原,The tundra is a treeless biome characterized by permafrost and low temperatures.,苔原是一個沒有樹木的生物群系，以永凍土和低溫為特徵。
 地理 (氣候) Geography (Climate),typhoon,n.,颱風,A typhoon is a tropical cyclone that forms in the northwestern pacific ocean.,颱風是在西北太平洋形成的熱帶氣旋。
-地理 (水文) Geography,bay,n.,海灣,A bay is a broad inlet of the sea where the land curves inward.,海灣是陸地向內彎曲的寬闊海水入口。
-地理 (水文) Geography,canal,n.,運河,"The panama canal connects the atlantic and pacific oceans, saving ships thousands of miles of travel.",巴拿馬運河連接大西洋和太平洋，為船隻節省數千英里的航程。
-地理 (水文) Geography,delta,n.,三角洲,A delta is a landform created by sediment deposition at the mouth of a river.,三角洲是由河流入海口沉積物堆積形成的地貌。
-地理 (水文) Geography,desalination,n.,海水淡化,Desalination is the process of removing salt from seawater to produce fresh water for drinking.,海水淡化是從海水中去除鹽分以產生飲用淡水的過程。
-地理 (水文) Geography,estuary,n.,河口；河口灣,An estuary is a coastal area where freshwater from a river meets saltwater from the ocean.,河口是河流淡水與海洋鹹水交匯的沿海區域。
-地理 (水文) Geography,flood,n.,洪水,A flood is an overflow of water that submerges land that is usually dry.,洪水是淹沒通常乾燥陸地的水體溢出。
-地理 (水文) Geography,gulf,n.,海灣；灣,"A gulf is a large inlet from the ocean into the landmass, typically larger than a bay.",海灣是從海洋延伸到陸地的大入口，通常比海灣更大。
-地理 (水文) Geography,iceberg,n.,冰山,An iceberg is a large piece of freshwater ice that has broken off a glacier and is floating in open water.,冰山是從冰川斷裂並漂浮在開闊水域的大塊淡水冰。
-地理 (水文) Geography,ocean,n.,海洋,The pacific ocean is the largest and deepest of earth's oceanic divisions.,太平洋是地球海洋劃分中最大且最深的。
-地理 (水文) Geography,ocean current,n.,洋流,Ocean currents play a crucial role in regulating the earth's climate.,洋流在調節地球氣候方面扮演著至關重要的角色。
-地理 (水文) Geography,reef,n.,礁石,A coral reef is an underwater ecosystem characterized by reef-building corals.,珊瑚礁是以造礁珊瑚為特徵的水下生態系統。
-地理 (水文) Geography,sea,n.,海,A sea is a large body of salt water that is partly or fully enclosed by land.,海是被陸地部分或完全包圍的大片鹹水體。
-地理 (水文) Geography,strait,n.,海峽,A strait is a narrow passage of water connecting two larger bodies of water.,海峽是連接兩個較大水體的狹窄水道。
-地理 (水文) Geography,tributary,n.,支流,The missouri river is a major tributary of the mississippi river.,密蘇里河是密西西比河的一條主要支流。
-地理 (水文) Geography,tsunami,n.,海嘯,A tsunami is a series of enormous waves caused by underwater earthquakes or volcanic eruptions.,海嘯是由海底地震或火山爆發引起的一系列巨大波浪。
-地理 (水文) Geography,watershed,n.,流域,A watershed is an area of land that drains all rainfall and snowmelt into a common outlet.,流域是將所有降雨和融雪排入共同出口的土地區域。
-地理 (水文) Geography,wetland,n.,濕地,Wetlands provide critical habitat for wildlife and help filter pollutants from water.,濕地為野生動物提供關鍵棲息地，並有助於過濾水中的污染物。
+地理 (水文) Geography (Hydrology),bay,n.,海灣,A bay is a broad inlet of the sea where the land curves inward.,海灣是陸地向內彎曲的寬闊海水入口。
+地理 (水文) Geography (Hydrology),canal,n.,運河,"The panama canal connects the atlantic and pacific oceans, saving ships thousands of miles of travel.",巴拿馬運河連接大西洋和太平洋，為船隻節省數千英里的航程。
+地理 (水文) Geography (Hydrology),delta,n.,三角洲,A delta is a landform created by sediment deposition at the mouth of a river.,三角洲是由河流入海口沉積物堆積形成的地貌。
+地理 (水文) Geography (Hydrology),desalination,n.,海水淡化,Desalination is the process of removing salt from seawater to produce fresh water for drinking.,海水淡化是從海水中去除鹽分以產生飲用淡水的過程。
+地理 (水文) Geography (Hydrology),estuary,n.,河口；河口灣,An estuary is a coastal area where freshwater from a river meets saltwater from the ocean.,河口是河流淡水與海洋鹹水交匯的沿海區域。
+地理 (水文) Geography (Hydrology),flood,n.,洪水,A flood is an overflow of water that submerges land that is usually dry.,洪水是淹沒通常乾燥陸地的水體溢出。
+地理 (水文) Geography (Hydrology),gulf,n.,海灣；灣,"A gulf is a large inlet from the ocean into the landmass, typically larger than a bay.",海灣是從海洋延伸到陸地的大入口，通常比海灣更大。
+地理 (水文) Geography (Hydrology),iceberg,n.,冰山,An iceberg is a large piece of freshwater ice that has broken off a glacier and is floating in open water.,冰山是從冰川斷裂並漂浮在開闊水域的大塊淡水冰。
+地理 (水文) Geography (Hydrology),ocean,n.,海洋,The pacific ocean is the largest and deepest of earth's oceanic divisions.,太平洋是地球海洋劃分中最大且最深的。
+地理 (水文) Geography (Hydrology),ocean current,n.,洋流,Ocean currents play a crucial role in regulating the earth's climate.,洋流在調節地球氣候方面扮演著至關重要的角色。
+地理 (水文) Geography (Hydrology),reef,n.,礁石,A coral reef is an underwater ecosystem characterized by reef-building corals.,珊瑚礁是以造礁珊瑚為特徵的水下生態系統。
+地理 (水文) Geography (Hydrology),sea,n.,海,A sea is a large body of salt water that is partly or fully enclosed by land.,海是被陸地部分或完全包圍的大片鹹水體。
+地理 (水文) Geography (Hydrology),strait,n.,海峽,A strait is a narrow passage of water connecting two larger bodies of water.,海峽是連接兩個較大水體的狹窄水道。
+地理 (水文) Geography (Hydrology),tributary,n.,支流,The missouri river is a major tributary of the mississippi river.,密蘇里河是密西西比河的一條主要支流。
+地理 (水文) Geography (Hydrology),tsunami,n.,海嘯,A tsunami is a series of enormous waves caused by underwater earthquakes or volcanic eruptions.,海嘯是由海底地震或火山爆發引起的一系列巨大波浪。
+地理 (水文) Geography (Hydrology),watershed,n.,流域,A watershed is an area of land that drains all rainfall and snowmelt into a common outlet.,流域是將所有降雨和融雪排入共同出口的土地區域。
+地理 (水文) Geography (Hydrology),wetland,n.,濕地,Wetlands provide critical habitat for wildlife and help filter pollutants from water.,濕地為野生動物提供關鍵棲息地，並有助於過濾水中的污染物。
 地理 (生態) Geography (Ecology),biodiversity,n.,生物多樣性,Biodiversity refers to the variety of life in the world or in a particular habitat.,生物多樣性是指世界或特定棲息地中生命的多樣性。
 地理 (生態) Geography (Ecology),biome,n.,生物群系,A biome is a large naturally occurring community of flora and fauna occupying a major habitat.,生物群系是佔據主要棲息地的大型自然動植物群落。
 地理 (生態) Geography (Ecology),deforestation,n.,森林砍伐,"Deforestation is the clearing of forests for agriculture, logging, or urban development.",森林砍伐是為農業、伐木或城市發展而清除森林的行為。
