@@ -183,6 +183,27 @@
       display: none;
     }
 
+    /* Score relay toast */
+    #moonlight-toast {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2c3e50;
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      z-index: 9999;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
     @media (max-width: 768px) {
       header { padding: 1.2rem; }
       .title { font-size: 1.8rem; }
@@ -191,6 +212,8 @@
   </style>
 </head>
 <body>
+
+  <div id="moonlight-toast"></div>
 
   <div class="title-wrapper">
     <h1 class="title"> Vocab Challenge · 單字Speedy大挑戰</h1>
@@ -296,8 +319,9 @@
     const unitStep = document.getElementById('unitStep');
 
     let selectedLevel = null;
+    let activeGameWindow = null; // track the opened game window
 
-    // Mapping: Level + Units -> URL (全部沿用原本的連結)
+    // Mapping: Level + Units -> URL
     const seniorLinks = {
       "1": {
         "1-10": "https://ducj-creator.github.io/iVocab%20L1%20U1-10.html",
@@ -307,7 +331,7 @@
         "41-50": "https://ducj-creator.github.io/iVocab%20L1%20U41-50.html"
       },
       "2": {
-        "1-10": "https://ducj-creator.github.io/iVocab%20L2%20U%201-10.html",  // 注意原本這個多一個空白
+        "1-10": "https://ducj-creator.github.io/iVocab%20L2%20U%201-10.html",
         "11-20": "https://ducj-creator.github.io/iVocab%20L2%20U11-20.html",
         "21-30": "https://ducj-creator.github.io/iVocab%20L2%20U21-30.html",
         "31-40": "https://ducj-creator.github.io/iVocab%20L2%20U31-40.html",
@@ -343,6 +367,40 @@
       }
     };
 
+    // ====== Moonlight Score Relay ======
+    // Listen for LUNAR_MISSION_RESULT from sub-game windows,
+    // tag the mission name, then forward to moonlight.html (parent or opener).
+    window.addEventListener("message", (event) => {
+      if (!event.origin.startsWith("https://ducj-creator.github.io")) return;
+      const data = event.data || {};
+      if (data.type !== "LUNAR_MISSION_RESULT") return;
+
+      // Override mission title so moonlight.html recognises it correctly
+      const relay = {
+        ...data,
+        mission: "Mission 5: iVocab Words"
+      };
+
+      // Forward to moonlight.html (iframe parent or opener)
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(relay, "*");
+      }
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(relay, "*");
+      }
+
+      // Show a brief toast so the student knows the score was captured
+      showToast(`🌙 遊戲結束！得分 ${relay.score} 已回傳 Moonlight 系統`);
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('moonlight-toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
     // 顯示 / 隱藏 Senior / Junior 區塊
     btnSenior.addEventListener('click', () => {
       seniorPanel.classList.remove('hidden');
@@ -363,12 +421,10 @@
       const level = btn.getAttribute('data-level');
       if (!level) return;
 
-      // 清空其他選擇
       levelRow.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
       btn.classList.add('selected');
       selectedLevel = level;
 
-      // 一旦改 Level，把 Step2 隱藏、取消 Units 選擇，避免誤選
       unitStep.classList.add('hidden');
       unitRow.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
     });
@@ -383,14 +439,13 @@
       unitStep.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Step 2: 選 Units → 直接開啟對應遊戲
+    // Step 2: 選 Units → 開啟對應遊戲（用 window.open 以便接收 postMessage）
     unitRow.addEventListener('click', (e) => {
       const btn = e.target.closest('.pill');
       if (!btn) return;
       const range = btn.getAttribute('data-range');
       if (!range || !selectedLevel) return;
 
-      // 單選效果
       unitRow.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
       btn.classList.add('selected');
 
@@ -399,7 +454,7 @@
         alert('找不到對應的遊戲連結，請再試一次或聯絡老師。');
         return;
       }
-      window.open(url, '_blank');
+      activeGameWindow = window.open(url, '_blank');
     });
   </script>
 </body>
