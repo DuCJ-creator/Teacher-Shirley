@@ -759,7 +759,8 @@
     const MISSIONS = [
       { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html", pointsPerQuestion: 3 },
       { title: "Mission 2: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html", pointsPerQuestion: 2 },
-      { title: "Mission 3: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 }
+      { title: "Mission 3: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 },
+      { title: "Mission 4: TOEFL Junior詞彙選擇題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Vocab.html", pointsPerQuestion: 50 }
     ];
 
     const PET_TIERS = [
@@ -1339,6 +1340,29 @@
         pointsPerQ = 2;
       } else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
         pointsPerQ = 3;
+      } else if (missionTitle.includes("TOEFL") || missionTitle.includes("Junior")) {
+        // TOEFL Junior: score-based, every 50 pts = 1 moonlight
+        const rawScore = parseInt(data.score) || 0;
+        const toeflGlow = Math.floor(rawScore / 50);
+        if (toeflGlow <= 0) return;
+        const toeflUserRef = doc(db, "users", currentUser.uid);
+        const toeflNewTotal = (moonData.totalGlow || 0) + toeflGlow;
+        const toeflNewCycle = toeflNewTotal % MOON_CYCLE;
+        const toeflLogEntry = { time: new Date().toISOString(), correct: correctVal, wrong: 0, glow: toeflGlow, type: "earn", source: `${missionTitle} (每50分得1pt，得分${rawScore})` };
+        try {
+          await updateDoc(toeflUserRef, {
+            moonGlowTotal: toeflNewTotal,
+            moonGlowCycle: toeflNewCycle,
+            moonGlowLogs: arrayUnion(toeflLogEntry),
+            activityLogs: arrayUnion({ date: new Date().toISOString(), type: "Lunar Glow", detail: `Collected ${toeflGlow} pts from ${missionTitle}` })
+          });
+          moonData.totalGlow = toeflNewTotal;
+          moonData.cycleGlow = toeflNewCycle;
+          moonData.logs.push(toeflLogEntry);
+          renderMoonUI();
+          alert(`🌕 Mission complete!\nSource：${missionTitle}\n📊 得分 ${rawScore} ÷ 50 = +${toeflGlow} moonlight`);
+        } catch(e) { alert("Error saving moonlight. Please try again."); }
+        return;
       }
 
       const glow = correctVal * pointsPerQ;
