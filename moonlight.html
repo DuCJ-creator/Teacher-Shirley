@@ -1326,8 +1326,10 @@
       const data = event.data || {};
       if (data.type !== "LUNAR_MISSION_RESULT") return;
       const correctVal = parseInt(data.correct) || 0;
-      if (correctVal <= 0) return;
       const missionTitle = data.mission || data.title || "Lunar Mission";
+      // score-based missions (iVocab Words, TOEFL Junior) use data.score instead of correctVal
+      const isScoreBased = missionTitle.includes("TOEFL") || missionTitle.includes("Junior") || missionTitle.includes("iVocab Words") || missionTitle.includes("iVocab Challenge");
+      if (!isScoreBased && correctVal <= 0) return;
       if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
       if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
 
@@ -1342,7 +1344,7 @@
         pointsPerQ = 2;
       } else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
         pointsPerQ = 3;
-      } else if (missionTitle.includes("TOEFL") || missionTitle.includes("Junior") || missionTitle.includes("iVocab Words") || missionTitle.includes("iVocab Challenge")) {
+      } else if (isScoreBased) {
         // TOEFL Junior: score-based, every 50 pts = 1 moonlight
         const rawScore = parseInt(data.score) || 0;
         const toeflGlow = Math.floor(rawScore / 50);
