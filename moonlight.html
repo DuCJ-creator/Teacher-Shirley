@@ -760,7 +760,8 @@
       { title: "Mission 1: GSAT高中學測考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/GSAT%20Vocab.html", pointsPerQuestion: 3 },
       { title: "Mission 2: CAP國中會考考古題", url: "https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html", pointsPerQuestion: 2 },
       { title: "Mission 3: iVocab Reader閱讀理解題", url: "https://ducj-creator.github.io/iVocab-Readers/", pointsPerQuestion: 3 },
-      { title: "Mission 4: TOEFL Junior詞彙選擇題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Vocab.html", pointsPerQuestion: 50 }
+      { title: "Mission 4: TOEFL Junior詞彙選擇題", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/TOEFL%20Junior%20Vocab.html", pointsPerQuestion: 50 },
+      { title: "Mission 5: iVocab Words", url: "https://ducj-creator.github.io/Teacher-Shirley/study-tools/iVocab%20Challenge.html", pointsPerQuestion: 50 }
     ];
 
     const PET_TIERS = [
@@ -1314,6 +1315,7 @@
         "https://ivocab-quiz.vercel.app",
         "https://shirley-ai-reading.vercel.app",
         "https://ducj-creator.github.io/iVocab-Readers",
+        "https://ducj-creator.github.io/Teacher-Shirley/study-tools/iVocab%20Challenge.html",
         "http://localhost"
       ];
       return allowed.some(a => origin.startsWith(a));
@@ -1340,7 +1342,7 @@
         pointsPerQ = 2;
       } else if (missionTitle.includes("Reader") || missionTitle.includes("iVocab-Readers")) {
         pointsPerQ = 3;
-      } else if (missionTitle.includes("TOEFL") || missionTitle.includes("Junior")) {
+      } else if (missionTitle.includes("TOEFL") || missionTitle.includes("Junior") || missionTitle.includes("iVocab Words") || missionTitle.includes("iVocab Challenge")) {
         // TOEFL Junior: score-based, every 50 pts = 1 moonlight
         const rawScore = parseInt(data.score) || 0;
         const toeflGlow = Math.floor(rawScore / 50);
