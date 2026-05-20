@@ -1322,16 +1322,23 @@
     }
 
     window.addEventListener("message", async (event) => {
-      if (!isAllowedOrigin(event.origin)) return;
+      // DEBUG: log every incoming message
+      console.log("[Moonlight] message received", event.origin, JSON.stringify(event.data));
+      if (!isAllowedOrigin(event.origin)) {
+        console.log("[Moonlight] BLOCKED - origin not allowed:", event.origin);
+        return;
+      }
       const data = event.data || {};
       if (data.type !== "LUNAR_MISSION_RESULT") return;
+      console.log("[Moonlight] LUNAR_MISSION_RESULT received:", JSON.stringify(data));
       const correctVal = parseInt(data.correct) || 0;
       const missionTitle = data.mission || data.title || "Lunar Mission";
       // score-based missions (iVocab Words, TOEFL Junior) use data.score instead of correctVal
       const isScoreBased = missionTitle.includes("TOEFL") || missionTitle.includes("Junior") || missionTitle.includes("iVocab Words") || missionTitle.includes("iVocab Challenge");
-      if (!isScoreBased && correctVal <= 0) return;
-      if (!missionStarted) { alert("Please press Start Mission first! 🌙"); return; }
-      if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("Please log in first! 🌙"); return; }
+      if (!isScoreBased && correctVal <= 0) { console.log("[Moonlight] BLOCKED - correctVal <= 0"); return; }
+      if (!missionStarted) { alert("[DEBUG] missionStarted = false. Press Start Mission first! 🌙"); return; }
+      if (!currentUser) { document.getElementById("login-hint").style.display = "block"; alert("[DEBUG] Not logged in!"); return; }
+      console.log("[Moonlight] Proceeding - isScoreBased:", isScoreBased, "missionTitle:", missionTitle);
 
       let pointsPerQ = 1;
       if (missionTitle.includes("GSAT") || missionTitle.includes("學測")) {
