@@ -308,6 +308,7 @@
                 <button class="btn btn-year" onclick="startTest(112)">112 年</button>
                 <button class="btn btn-year" onclick="startTest(113)">113 年</button>
                 <button class="btn btn-year" onclick="startTest(114)">114 年</button>
+                <button class="btn btn-year" onclick="startTest(115)">115 年</button>
             </div>
             <p id="error-msg" style="color:#fee2e2; font-size:0.8rem; display:none; margin-top:10px;">
                 ⚠️ 無法讀取資料。請檢查網路或 CSV 檔案格式。
@@ -359,6 +360,11 @@
     <script>
         const baseUrl = "https://ducj-creator.github.io/Teacher-Shirley/tests/asset/";
         const csvUrl = baseUrl + "cap%20reading%20answer.csv";
+
+        // 115年答案（直接內嵌，不依賴遠端 CSV）
+        const hardcodedAnswers = {
+            "115": {20:"C",21:"D",22:"D",23:"B",24:"D",25:"D",26:"C",27:"D",28:"C",29:"A",30:"A",31:"B",32:"D",33:"C",34:"A",35:"A",36:"B",37:"B",38:"C",39:"B",40:"B",41:"B",42:"B",43:"C"}
+        };
         
         let currentYear = '';
         let answerKey = {}; // 結構: { "110": { 15: "A", 16: "B"... } }
@@ -379,6 +385,14 @@
                 skipEmptyLines: true,
                 complete: function(results) {
                     processMatrixCSV(results.data);
+
+                    // 合併內嵌答案（優先補上 CSV 沒有的年份）
+                    for (const [year, questions] of Object.entries(hardcodedAnswers)) {
+                        if (!answerKey[year]) answerKey[year] = {};
+                        for (const [qNum, ans] of Object.entries(questions)) {
+                            answerKey[year][qNum] = ans;
+                        }
+                    }
                     
                     // 啟用按鈕
                     document.getElementById('loading-msg').style.display = 'none';
