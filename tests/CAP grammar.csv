@@ -26,6 +26,9 @@ No. ,Grammar,Year,Question,Sentence
 1,並列連接詞 Coordinating Conjuncion,113,21,"I did most of it this afternoon, and I’ll finish it by Friday."
 1,並列連接詞 Coordinating Conjuncion,114,11,"Jo won't be happy if you're late for his party tonight, so make sure that you arrive on time."
 1,並列連接詞 Coordinating Conjuncion,114,17,"Jane's parents are always happy to see their grandchildren, but mine are less so when I visit them with my kids."
+1,並列連接詞 Coordinating Conjuncion,115,10,"Alan works hard in his new job, and he wants to know how his boss feels about him."
+1,並列連接詞 Coordinating Conjuncion,115,11,"I thought the girl who answered the phone was Kate, but it was her sister, Candy. They sounded almost the same."
+1,並列連接詞 Coordinating Conjuncion,115,18,"Our dog Lassie hides under the bed every time the moon comes out. She has been like this for years, but we don't know why."
 2,名詞 Noun,106,7,I’m glad that my school has students wear uniforms . I don’t have to worry about what clothes to wear to school.
 2,名詞 Noun,107,6,The woman who lives next door to Ken is a stranger to him. They have never met and he doesn’t even know her name.
 2,名詞 Noun,108,4,There are more than twenty clubs in our school. Which one would you like to join?
@@ -42,6 +45,7 @@ No. ,Grammar,Year,Question,Sentence
 2,名詞 Noun,113,16,There are no ups and downs in his voice and you can’t tell if he is happy or sad.
 2,名詞 Noun,114,1,Look at the picture. A plane is flying over the houses.
 2,名詞 Noun,114,5,There are so many new faces in the office.
+2,名詞 Noun,115,3,You can ask Sophia anything about butterflies and bees. She has great knowledge of insects.
 3,代名詞 Pronoun,106,9,I don’t think Katie will read any one of the books you’ve picked out for her: they look(s) very boring.
 3,代名詞 Pronoun,106,10,Jenny’s bag is very heavy because it is filled with toy cars.
 3,代名詞 Pronoun,107,10,It took the police lots of time to find out who entered Liu’s house and killed her one year ago.
@@ -88,6 +92,10 @@ No. ,Grammar,Year,Question,Sentence
 4,形容詞 Adjective,113,10,It’s not as sharp as before.
 4,形容詞 Adjective,113,18,“Bad traffic” is perhaps the worst excuse for being late when your boss knows it only takes you five minutes to walk to work.
 4,形容詞 Adjective,114,13,"In the future, there will perhaps be greater basketball players than Stephen Curry, but now we believe he is the best!"
+4,形容詞 Adjective,115,6,Little Eric chose the doll with big brown eyes because it was the cutest in the store.
+4,形容詞 Adjective,115,13,Joe is happy he is not at the bottom of the class now. His grades are better than half of his classmates' this school year.
+4,形容詞 Adjective,115,15,"On windy days, the flowers in my garden bow like shy children with their heads down."
+4,形容詞 Adjective,115,19,"Tom: Sam, could you help me in the kitchen now? Sam: No, I am watching TV. It's the most important game of the season."
 5,副詞 Adverb,106,14,Sabine walks so lightly in the apartment that sometimes you don’t even know she’s just passed by. You wonder if her feet ever touch the floor.
 5,副詞 Adverb,108,14,He speaks faster
 5,副詞 Adverb,108,15,Most other waiters in the restaurant have worked here longer than Clark
@@ -137,6 +145,10 @@ No. ,Grammar,Year,Question,Sentence
 7,情態助動詞 Modal Verb,113,14,but she couldn’t say a word when they met.
 7,情態助動詞 Modal Verb,113,15,I can’t tell you what I think of the movie because I haven't seen it. 
 7,情態助動詞 Modal Verb,114,12,You may have a long drive because of the terrible traffic. 
+7,情態助動詞 Modal Verb,115,3,You can ask Sophia anything about butterflies and bees. She has great knowledge of insects.
+7,情態助動詞 Modal Verb,115,8,"Having three cups of coffee a day can't be bad for our health, can it?"
+7,情態助動詞 Modal Verb,115,9,You can't push that door open with only one hand. It's too heavy. You have to use both.
+7,情態助動詞 Modal Verb,115,19,"Tom: Sam, could you help me in the kitchen now? Sam: No, I am watching TV. It's the most important game of the season."
 9,祈使句 Imperative,106,11,Take a map with you when you go to a place for the first time. 
 9,祈使句 Imperative,110,9,"If you’re interested in our business plan, call this number and ask for Ms. Lee."
 9,祈使句 Imperative,110,14,Take a look. See if you can find any in there.
@@ -144,6 +156,7 @@ No. ,Grammar,Year,Question,Sentence
 9,祈使句 Imperative,112,9,Don’t go away when you’re cooking.
 9,祈使句 Imperative,112,17," Look, here it is!"
 9,祈使句 Imperative,113,8,...just give me a call 
+9,祈使句 Imperative,115,14,Look! There is not a cloud in the sky. I think the chances of getting some rain today are really small.
 10,動名詞 Gerund,108,3,Playing games on the cellphone is popular with high school students.
 10,動名詞 Gerund,108,12,Everyone in the class enjoys playing chess except Bill
 10,動名詞 Gerund,109,6,"My wife enjoys going to the movies with her friends, but I like to watch TV at home by myself. "
@@ -158,6 +171,11 @@ No. ,Grammar,Year,Question,Sentence
 10,動名詞 Gerund,113,18,“Bad traffic” is perhaps the worst excuse for being late 
 10,動名詞 Gerund,114,4,Cindy enjoys listening to her dad read stories to her before bed.
 10,動名詞 Gerund,114,5,Dad is busy cooking in the kitchen. Dinner will be ready in ten minutes.
+10,動名詞 Gerund,115,4,Adam slept terribly last night because he kept waking up from bad dreams.
+10,動名詞 Gerund,115,5,Tara enjoys being with all kinds of animals; she even keeps a snake as a pet.
+10,動名詞 Gerund,115,8,"Having three cups of coffee a day can't be bad for our health, can it?"
+10,動名詞 Gerund,115,14,Look! There is not a cloud in the sky. I think the chances of getting some rain today are really small.
+10,動名詞 Gerund,115,17,"Do you know what Lindsey's first job was? Before becoming a movie star, she mopped the floors at the supermarket."
 11,不定詞 Infinitive,106,6,"Amy’s father is very sick. The doctors can do nothing for him, so Amy went to the temple to pray for him."
 11,不定詞 Infinitive,106,7,I’m glad that my school has students wear uniforms . I don’t have to worry about what clothes to wear to school.
 11,不定詞 Infinitive,107,10,It took the police lots of time to find out who entered Liu’s house and killed her one year ago.
@@ -200,7 +218,6 @@ No. ,Grammar,Year,Question,Sentence
 12,現在分詞 Present Participle,113,14,"Patty spent several days planning to invite Charlie to dinner, but she couldn’t say a word when they met."
 13,過去分詞 Past Participle,106,4,The little girl was hit by a truck on her way home and was badly hurt.
 13,過去分詞 Past Participle,106,10,Jenny’s bag is very heavy because it is filled with toy cars.
-8-3,未來簡單式 Future Simple,106,12,The weather has been rainy and cloudy in the last few days. I hope the sun will come out soon.  
 13,過去分詞 Past Participle,107,11,Many famous people visit this restaurant. Popular singers like A-mei and Jay Chou are often seen here with their friends.
 13,過去分詞 Past Participle,107,12,Actions must be taken to stop this. 
 13,過去分詞 Past Participle,107,15,I’ve wanted to read The Diary of a Young Girl for months.
@@ -229,7 +246,7 @@ No. ,Grammar,Year,Question,Sentence
 13,過去分詞 Past Participle,113,19,The housework in Mr. and Mrs. Wang’s family are shared between them and their kids.
 13,過去分詞 Past Participle,113,21,Have you finished your report?
 13,過去分詞 Past Participle,114,19,It was very windy this morning. Some of the shirts on the balcony were blown away and fell in the pond.
-14,名詞子句 Noun Clause,107,9,Do you know when Grandma is going to visit us?
+14,名詞子句 Noun Clause,107,9,Do you know whn Grandma is going to visit us?
 14,名詞子句 Noun Clause,107,10,It took the police lots of time to find out who entered Liu’s house and killed her one year ago.
 14,名詞子句 Noun Clause,108,6,(but) I don’t know why it is there.
 14,名詞子句 Noun Clause,108,8,He wondered how his mom could do it every day.
@@ -261,6 +278,13 @@ No. ,Grammar,Year,Question,Sentence
 14,名詞子句 Noun Clause,114,6, It'll take me some time to remember who is who.
 14,名詞子句 Noun Clause,114,11,"Jo won't be happy if you're late for his party tonight, so make sure that you arrive on time."
 14,名詞子句 Noun Clause,114,18,"Before she asks about it, you should tell Daphne you broke her favorite cup."
+14,名詞子句 Noun Clause,115,2,Rita feeds her dogs many times a day. That's why they're too fat.
+14,名詞子句 Noun Clause,115,11,"I thought the girl who answered the phone was Kate, but it was her sister, Candy. They sounded almost the same."
+14,名詞子句 Noun Clause,115,13,Joe is happy he is not at the bottom of the class now. His grades are better than half of his classmates' this school year.
+14,名詞子句 Noun Clause,115,14,Look! There is not a cloud in the sky. I think the chances of getting some rain today are really small.
+14,名詞子句 Noun Clause,115,16,Mr. Olson went to the doctor when he found he was losing his hair. He hoped he would be able to keep his thick hair.
+14,名詞子句 Noun Clause,115,17,"Do you know what Lindsey's first job was? Before becoming a movie star, she mopped the floors at the supermarket."
+14,名詞子句 Noun Clause,115,18,"Our dog Lassie hides under the bed every time the moon comes out. She has been like this for years, but we don't know why."
 15,形容詞子句 Relative/Adjectival Clause,106,13,All the excuses Nick made say a lot about how much he hates to do the job.
 15,形容詞子句 Relative/Adjectival Clause,107,6,The woman who lives next door to Ken is a stranger to him. They have never met and he doesn’t even know her name.
 15,形容詞子句 Relative/Adjectival Clause,107,14,"Anyone who reads Loren’s business plan will quickly see some serious problems in it, or at least feel something is not right."
@@ -276,6 +300,7 @@ No. ,Grammar,Year,Question,Sentence
 15,形容詞子句 Relative/Adjectival Clause,113,7,Lora likes to eat bananas that are already a little brown on the outside
 15,形容詞子句 Relative/Adjectival Clause,113,12,Students who want to go on the school trip should ask their parents first.
 15,形容詞子句 Relative/Adjectival Clause,114,16,There are online videos that teach you exercises you can do at home. 
+15,形容詞子句 Relative/Adjectival Clause,115,11,"I thought the girl who answered the phone was Kate, but it was her sister, Candy. They sounded almost the same."
 16,副詞子句Adverbial Clause,106,14,Sabine walks so lightly  in the apartment that sometimes you don’t even know she’s just passed by. You wonder if her feet ever touch the floor.
 16,副詞子句Adverbial Clause,107,2,The wind is so strong today that my hair keeps blowing in the air.
 16,副詞子句Adverbial Clause,107,3,"When the baby cried, Mr. Wu was cooking in the kitchen and did not hear it."
@@ -329,7 +354,14 @@ No. ,Grammar,Year,Question,Sentence
 16,副詞子句Adverbial Clause,114,11,"Jo won't be happy if you're late for his party tonight, so make sure that you arrive on time."
 16,副詞子句Adverbial Clause,114,15,"Although machines have been used to pick fruits for a long time, they were not used on strawberry farms until several years ago."
 16,副詞子句Adverbial Clause,114,18,"Before she asks about it, you should tell Daphne you broke her favorite cup."
+16,副詞子句Adverbial Clause,115,4,Adam slept terribly last night because he kept waking up from bad dreams.
+16,副詞子句Adverbial Clause,115,6,Little Eric chose the doll with big brown eyes because it was the cutest in the store.
+16,副詞子句Adverbial Clause,115,7,"After four hours of mountain climbing, Rosa's legs got sore so she took a rest on the top of the mountain."
+16,副詞子句Adverbial Clause,115,12,"Ken is going abroad with a woman he met online, though he doesn't know her well."
+16,副詞子句Adverbial Clause,115,16,Mr. Olson went to the doctor when he found he was losing his hair. He hoped he would be able to keep his thick hair.
+16,副詞子句Adverbial Clause,115,18,"Our dog Lassie hides under the bed every time the moon comes out. She has been like this for years, but we don't know why."
 17,倒裝句 Inverted,113,7,"Lora likes to eat bananas that are already a little brown on the outside, and so do I."
+8-3,未來簡單式 Future Simple,106,12,The weather has been rainy and cloudy in the last few days. I hope the sun will come out soon.  
 8-1,現在簡單式 Present Simple,107,13,The beach party tonight marks the end of our summer vacation.
 8-1,現在簡單式 Present Simple,108,9,Joyce tells her brother everything. She never hides anything from her. 
 8-1,現在簡單式 Present Simple,110,6,"Our teacher Ms. Wu seldom laughs, but when she does, everyone in the same building can hear her."
@@ -339,6 +371,10 @@ No. ,Grammar,Year,Question,Sentence
 8-1,現在簡單式 Present Simple,112,11,"Jenny is already forty, doesn’t have a job and often makes trouble for her parents"
 8-1,現在簡單式 Present Simple,112,17,Do you remember the CD I was looking for for months? 
 8-1,現在簡單式 Present Simple,113,10,The knife doesn’t cut very well. It’s not as sharp as before.
+8-1,現在簡單式 Present Simple,115,2,Rita feeds her dogs many times a day. That's why they're too fat.
+8-1,現在簡單式 Present Simple,115,10,"Alan works hard in his new job, and he wants to know how his boss feels about him."
+8-1,現在簡單式 Present Simple,115,17,"Do you know what Lindsey's first job was? Before becoming a movie star, she mopped the floors at the supermarket."
+8-1,現在簡單式 Present Simple,115,18,"Our dog Lassie hides under the bed every time the moon comes out. She has been like this for years, but we don't know why."
 8-10,現在完成進行式 Present Perfect Continuous,107,12,The factory has been throwing trash into the river for years.
 8-10,現在完成進行式 Present Perfect Continuous,109,13,Ms. Johnson has been taking phone calls since she entered the office this morning. 
 8-10,現在完成進行式 Present Perfect Continuous,113,21,"Linda, you’ve been playing computer games all evening! "
@@ -355,6 +391,11 @@ No. ,Grammar,Year,Question,Sentence
 8-2,過去簡單式 Past Simple,112,23,"When I read in my room, he used to come and sit quietly beside me."
 8-2,過去簡單式 Past Simple,113,3,Our school basketball team won the national game last night. 
 8-2,過去簡單式 Past Simple,113,21,"I did most of it this afternoon, and I’ll finish it by Friday."
+8-2,過去簡單式 Past Simple,115,4,Adam slept terribly last night because he kept waking up from bad dreams.
+8-2,過去簡單式 Past Simple,115,7,"After four hours of mountain climbing, Rosa's legs got sore so she took a rest on the top of the mountain."
+8-2,過去簡單式 Past Simple,115,11,"I thought the girl who answered the phone was Kate, but it was her sister, Candy. They sounded almost the same."
+8-2,過去簡單式 Past Simple,115,16,Mr. Olson went to the doctor when he found he was losing his hair. He hoped he would be able to keep his thick hair.
+8-2,過去簡單式 Past Simple,115,17,"Do you know what Lindsey's first job was? Before becoming a movie star, she mopped the floors at the supermarket."
 8-3,未來簡單式 Future Simple,107,8,I will (brush my teech) before I go to bed. 
 8-3,未來簡單式 Future Simple,107,9,Do you know when Grandma is going to visit us?
 8-3,未來簡單式 Future Simple,107,9,(W)e’ll take her to the national park.
@@ -379,6 +420,8 @@ No. ,Grammar,Year,Question,Sentence
 8-4,現在進行式 Present Continuous/Progressive,112,12,"Ed and Jill are going camping this weekend, so they have to finish their homework by Friday."
 8-4,現在進行式 Present Continuous/Progressive,113,8,Your refrigerator shouldn’t be making loud noises now
 8-4,現在進行式 Present Continuous/Progressive,114,10,Christmas is coming and I want to visit my aunt abroad. Do you have any plans yet?
+8-4,現在進行式 Present Continuous/Progressive,115,12,"Ken is going abroad with a woman he met online, though he doesn't know her well."
+8-4,現在進行式 Present Continuous/Progressive,115,19,"Tom: Sam, could you help me in the kitchen now? Sam: No, I am watching TV. It's the most important game of the season."
 8-5,過去進行式 Past Continuous/Progressive,107,3,"When the baby cried, Mr. Wu was cooking in the kitchen and did not hear it."
 8-5,過去進行式 Past Continuous/Progressive,112,6,Rex did not feel the earthquake this morning. He was jogging in the park at the time.
 8-5,過去進行式 Past Continuous/Progressive,112,8,All the seats were taken and a lot of students were standing.
@@ -404,5 +447,4 @@ No. ,Grammar,Year,Question,Sentence
 8-8,過去完成式Past Perfect,109,14,We were so sure that Jerry had done well on the difficult job. 
 8-8,過去完成式Past Perfect,110,8,Edward had worked as a computer engineer for ten years. This experience helped him a lot when he started his own computer shop.
 8-8,過去完成式Past Perfect,110,10,"Jimmy would not get up for breakfast, although his dad had already tried to pull him from his bed several times."
-
 8-8,過去完成式Past Perfect,111,13,"...my brother was going out for dinner, "
