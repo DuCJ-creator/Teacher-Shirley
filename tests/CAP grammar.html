@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -357,6 +358,88 @@
         @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+
+        /* --- Embed / iframe friendly adjustments --- */
+        html {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+
+        html.embedded-page,
+        html.embedded-page body {
+            min-height: auto;
+            height: auto;
+            overflow: visible;
+        }
+
+        body.embedded-page {
+            min-height: auto;
+            overflow-y: visible;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .grid-view {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            align-items: stretch;
+        }
+
+        .card {
+            width: 100%;
+            height: auto;
+            min-height: clamp(190px, 24vw, 240px);
+            overflow: visible;
+        }
+
+        .card-title {
+            width: 100%;
+            overflow-wrap: anywhere;
+            word-break: normal;
+        }
+
+        .detail-container {
+            width: min(95vw, 900px);
+            height: min(90vh, max-content);
+        }
+
+        .sentence-card {
+            height: auto;
+            min-height: min(350px, 58vh);
+        }
+
+        .big-sentence {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: normal;
+        }
+
+        @media (max-width: 640px) {
+            header { padding: 24px 12px 14px; }
+            .container { padding: 12px; }
+            .grid-view { gap: 16px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+            .card { padding: 26px 16px 22px; min-height: 180px; }
+            .card-icon { font-size: 3rem; margin-bottom: 14px; }
+            .card-title { font-size: 1.25rem; }
+            .slider-wrapper { gap: 8px; }
+            .sentence-card { margin: 0 4px; }
+        }
+
+        @media (max-width: 420px) {
+            .grid-view { grid-template-columns: 1fr; }
+            .slider-wrapper {
+                display: grid;
+                grid-template-columns: 44px 1fr 44px;
+                align-items: center;
+                padding: 10px 8px 46px;
+            }
+            .sentence-card { padding: 18px 14px; }
+            .big-sentence { font-size: 1.45rem; }
+            .big-speak-btn { width: 64px; height: 64px; font-size: 1.6rem; }
+        }
+
     </style>
 </head>
 <body>
@@ -398,6 +481,41 @@
         // --- Config ---
         const csvUrl = 'https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.csv';
         let grammarData = {}; 
+
+
+        // --- Embed / iframe friendly auto-height support ---
+        const isEmbedded = window.self !== window.top || new URLSearchParams(window.location.search).has('embed');
+
+        function notifyParentOfHeight() {
+            const height = Math.ceil(Math.max(
+                document.documentElement.scrollHeight,
+                document.body.scrollHeight,
+                document.documentElement.offsetHeight,
+                document.body.offsetHeight
+            ));
+
+            if (isEmbedded && window.parent) {
+                window.parent.postMessage({
+                    type: 'cap-grammar-resize',
+                    height,
+                    source: 'CAP grammar'
+                }, '*');
+            }
+        }
+
+        function setupEmbedMode() {
+            if (isEmbedded) {
+                document.documentElement.classList.add('embedded-page');
+                document.body.classList.add('embedded-page');
+            }
+
+            const resizeObserver = new ResizeObserver(() => notifyParentOfHeight());
+            resizeObserver.observe(document.documentElement);
+            resizeObserver.observe(document.body);
+
+            window.addEventListener('load', notifyParentOfHeight);
+            window.addEventListener('resize', notifyParentOfHeight);
+        }
         
         // --- Expanded Cute Styles Library (35+ Icons) ---
         const styles = [
@@ -445,6 +563,7 @@
         let currentColor = '';
 
         document.addEventListener('DOMContentLoaded', () => {
+            setupEmbedMode();
             initParticles();
             fetchData();
         });
@@ -523,6 +642,7 @@
                 `;
                 container.appendChild(card);
             }
+            notifyParentOfHeight();
         }
 
         // --- Slider Logic ---
@@ -539,6 +659,7 @@
             updateSlide();
             
             document.getElementById('overlay').style.display = 'flex';
+            notifyParentOfHeight();
         }
 
         function updateSlide() {
@@ -565,6 +686,7 @@
                     <i class="fas fa-volume-up"></i>
                 </button>
             `;
+            notifyParentOfHeight();
         }
 
         function changeSlide(direction) {
@@ -579,6 +701,7 @@
         function closeOverlay() {
             document.getElementById('overlay').style.display = 'none';
             window.speechSynthesis.cancel();
+            notifyParentOfHeight();
         }
 
         function speakText(text) {
