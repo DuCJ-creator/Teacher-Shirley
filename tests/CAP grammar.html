@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -359,27 +358,16 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 
-        /* --- Embed / iframe friendly adjustments --- */
-        html {
+        /* --- v3: sentence detail card auto-fit for iframe / embedded pages --- */
+        html, body {
             width: 100%;
-            min-height: 100%;
             overflow-x: hidden;
-        }
-
-        html.embedded-page,
-        html.embedded-page body {
-            min-height: auto;
-            height: auto;
-            overflow: visible;
         }
 
         body.embedded-page {
             min-height: auto;
+            height: auto;
             overflow-y: visible;
-        }
-
-        .container {
-            width: 100%;
         }
 
         .grid-view {
@@ -388,56 +376,169 @@
         }
 
         .card {
-            width: 100%;
             height: auto;
-            min-height: clamp(190px, 24vw, 240px);
             overflow: visible;
         }
 
-        .card-title {
-            width: 100%;
-            overflow-wrap: anywhere;
+        .card-title,
+        .big-sentence {
+            overflow-wrap: break-word;
             word-break: normal;
+        }
+
+        .overlay {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 18px 0 36px;
         }
 
         .detail-container {
-            width: min(95vw, 900px);
-            height: min(90vh, max-content);
+            width: min(96vw, 1120px);
+            max-width: 1120px;
+            height: auto;
+            min-height: auto;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .detail-header {
+            flex: 0 0 auto;
+        }
+
+        .slider-wrapper {
+            flex: 0 0 auto;
+            display: grid;
+            grid-template-columns: 64px minmax(0, 1fr) 64px;
+            gap: 18px;
+            align-items: center;
+            justify-content: center;
+            min-height: auto;
+            height: auto;
+            padding: clamp(18px, 3.2vw, 36px) clamp(12px, 3vw, 36px) 70px;
+            overflow: visible;
         }
 
         .sentence-card {
+            flex: none;
+            width: 100%;
+            margin: 0;
             height: auto;
-            min-height: min(350px, 58vh);
+            min-height: clamp(320px, 42vw, 520px);
+            max-height: none;
+            overflow: visible;
+            padding: clamp(22px, 4vw, 48px);
+            justify-content: center;
+            gap: clamp(16px, 2.4vw, 30px);
+        }
+
+        .sentence-meta {
+            flex: 0 0 auto;
+            margin: 0;
+            font-size: clamp(1rem, 2.2vw, 1.5rem);
+            max-width: 100%;
+            white-space: normal;
+            text-align: center;
         }
 
         .big-sentence {
+            flex: 0 1 auto;
+            width: 100%;
+            margin: 0;
+            font-size: var(--sentence-font-size, clamp(1.45rem, 4.3vw, 2.4rem));
+            line-height: var(--sentence-line-height, 1.35);
+            white-space: normal;
+            overflow: visible;
             max-width: 100%;
-            overflow-wrap: anywhere;
-            word-break: normal;
         }
 
-        @media (max-width: 640px) {
-            header { padding: 24px 12px 14px; }
-            .container { padding: 12px; }
-            .grid-view { gap: 16px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
-            .card { padding: 26px 16px 22px; min-height: 180px; }
-            .card-icon { font-size: 3rem; margin-bottom: 14px; }
-            .card-title { font-size: 1.25rem; }
-            .slider-wrapper { gap: 8px; }
-            .sentence-card { margin: 0 4px; }
+        .big-speak-btn {
+            flex: 0 0 auto;
+            margin-top: 0;
+            width: clamp(60px, 8vw, 80px);
+            height: clamp(60px, 8vw, 80px);
+            font-size: clamp(1.45rem, 3vw, 2rem);
         }
 
-        @media (max-width: 420px) {
-            .grid-view { grid-template-columns: 1fr; }
-            .slider-wrapper {
-                display: grid;
-                grid-template-columns: 44px 1fr 44px;
-                align-items: center;
-                padding: 10px 8px 46px;
+        .page-indicator {
+            bottom: 18px;
+            z-index: 12;
+        }
+
+        body.embedded-page .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100%;
+            height: auto;
+            align-items: flex-start;
+            justify-content: center;
+            overflow: visible;
+            padding-top: 0;
+            padding-bottom: 48px;
+        }
+
+        body.embedded-page .detail-container {
+            width: min(100vw, 1180px);
+            border-radius: 0 0 30px 30px;
+        }
+
+        body.embedded-page .sentence-card {
+            min-height: max(360px, 44vw);
+        }
+
+        @media (max-width: 780px) {
+            .detail-title {
+                font-size: clamp(1.45rem, 7vw, 2.6rem);
+                line-height: 1.15;
             }
-            .sentence-card { padding: 18px 14px; }
-            .big-sentence { font-size: 1.45rem; }
-            .big-speak-btn { width: 64px; height: 64px; font-size: 1.6rem; }
+
+            .detail-header {
+                padding: 14px 10px 18px;
+                gap: 12px;
+            }
+
+            .close-btn {
+                width: 52px;
+                height: 52px;
+                flex: 0 0 52px;
+            }
+
+            .slider-wrapper {
+                grid-template-columns: 48px minmax(0, 1fr) 48px;
+                gap: 8px;
+                padding: 18px 8px 64px;
+            }
+
+            .nav-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.15rem;
+            }
+
+            .sentence-card {
+                min-height: 360px;
+                padding: 24px 16px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .slider-wrapper {
+                grid-template-columns: 42px minmax(0, 1fr) 42px;
+                gap: 6px;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .nav-btn {
+                width: 42px;
+                height: 42px;
+            }
+
+            .sentence-card {
+                padding: 20px 12px;
+                min-height: 340px;
+            }
         }
 
     </style>
@@ -483,24 +584,45 @@
         let grammarData = {}; 
 
 
-        // --- Embed / iframe friendly auto-height support ---
+        // --- v3: iframe / embedded auto-height + sentence auto-fit ---
         const isEmbedded = window.self !== window.top || new URLSearchParams(window.location.search).has('embed');
+        let parentResizeTimer = null;
 
-        function notifyParentOfHeight() {
-            const height = Math.ceil(Math.max(
+        function getDocumentHeight() {
+            const overlay = document.getElementById('overlay');
+            const overlayOpen = overlay && getComputedStyle(overlay).display !== 'none';
+            const baseHeight = Math.max(
                 document.documentElement.scrollHeight,
                 document.body.scrollHeight,
                 document.documentElement.offsetHeight,
                 document.body.offsetHeight
-            ));
+            );
 
-            if (isEmbedded && window.parent) {
-                window.parent.postMessage({
-                    type: 'cap-grammar-resize',
-                    height,
-                    source: 'CAP grammar'
-                }, '*');
-            }
+            if (!overlayOpen) return baseHeight;
+
+            const detail = document.querySelector('.detail-container');
+            const overlayHeight = overlay.scrollHeight || 0;
+            const detailHeight = detail ? detail.getBoundingClientRect().height + 48 : 0;
+            return Math.max(baseHeight, overlayHeight, detailHeight);
+        }
+
+        function notifyParentOfHeight() {
+            if (!isEmbedded || !window.parent) return;
+            const height = Math.ceil(getDocumentHeight() + 32);
+            window.parent.postMessage({
+                type: 'cap-grammar-resize',
+                height,
+                source: 'CAP grammar'
+            }, '*');
+        }
+
+        function scheduleParentResize() {
+            clearTimeout(parentResizeTimer);
+            notifyParentOfHeight();
+            requestAnimationFrame(notifyParentOfHeight);
+            parentResizeTimer = setTimeout(notifyParentOfHeight, 120);
+            setTimeout(notifyParentOfHeight, 360);
+            setTimeout(notifyParentOfHeight, 700);
         }
 
         function setupEmbedMode() {
@@ -509,12 +631,56 @@
                 document.body.classList.add('embedded-page');
             }
 
-            const resizeObserver = new ResizeObserver(() => notifyParentOfHeight());
-            resizeObserver.observe(document.documentElement);
-            resizeObserver.observe(document.body);
+            if ('ResizeObserver' in window) {
+                const resizeObserver = new ResizeObserver(scheduleParentResize);
+                resizeObserver.observe(document.documentElement);
+                resizeObserver.observe(document.body);
+                const overlay = document.getElementById('overlay');
+                if (overlay) resizeObserver.observe(overlay);
+            }
 
-            window.addEventListener('load', notifyParentOfHeight);
-            window.addEventListener('resize', notifyParentOfHeight);
+            window.addEventListener('load', scheduleParentResize);
+            window.addEventListener('resize', () => {
+                fitSentenceCard();
+                scheduleParentResize();
+            });
+        }
+
+        function fitSentenceCard() {
+            const sentenceEl = document.querySelector('.big-sentence');
+            const card = document.getElementById('sentence-card-content');
+            if (!sentenceEl || !card) return;
+
+            const textLength = sentenceEl.textContent.trim().length;
+            const cardWidth = Math.max(card.clientWidth || 0, 280);
+            const viewportWidth = Math.max(window.innerWidth || cardWidth, 320);
+
+            let size;
+            if (textLength <= 90) size = 2.4;
+            else if (textLength <= 130) size = 2.1;
+            else if (textLength <= 175) size = 1.82;
+            else if (textLength <= 230) size = 1.58;
+            else size = 1.38;
+
+            if (viewportWidth < 780) size = Math.min(size, 1.9);
+            if (viewportWidth < 520) size = Math.min(size, 1.45);
+            if (cardWidth < 420) size = Math.min(size, 1.32);
+
+            sentenceEl.style.setProperty('--sentence-font-size', size + 'rem');
+            sentenceEl.style.setProperty('--sentence-line-height', textLength > 170 ? '1.28' : '1.35');
+
+            // If the sentence is still very tall, reduce slightly, but never hide content.
+            requestAnimationFrame(() => {
+                const maxComfortHeight = Math.max(window.innerHeight * 0.72, 360);
+                const fullCardHeight = card.scrollHeight;
+                if (fullCardHeight > maxComfortHeight && size > 1.12) {
+                    const ratio = Math.max(0.78, maxComfortHeight / fullCardHeight);
+                    const newSize = Math.max(1.12, size * ratio);
+                    sentenceEl.style.setProperty('--sentence-font-size', newSize.toFixed(2) + 'rem');
+                    sentenceEl.style.setProperty('--sentence-line-height', '1.26');
+                }
+                scheduleParentResize();
+            });
         }
         
         // --- Expanded Cute Styles Library (35+ Icons) ---
@@ -642,7 +808,7 @@
                 `;
                 container.appendChild(card);
             }
-            notifyParentOfHeight();
+            scheduleParentResize();
         }
 
         // --- Slider Logic ---
@@ -659,7 +825,8 @@
             updateSlide();
             
             document.getElementById('overlay').style.display = 'flex';
-            notifyParentOfHeight();
+            fitSentenceCard();
+            scheduleParentResize();
         }
 
         function updateSlide() {
@@ -675,18 +842,33 @@
             indicator.innerText = `${currentIndex + 1} / ${currentSentences.length}`;
 
             content.style.animation = 'none';
-            content.offsetHeight; 
+            content.offsetHeight;
             content.style.animation = 'fadeIn 0.4s ease';
-            content.style.borderTop = `5px solid ${currentColor}`;
+            content.style.borderTop = `7px solid ${currentColor}`;
 
-            content.innerHTML = `
-                <div class="sentence-meta">${item.year} - Q.${item.question}</div>
-                <div class="big-sentence">${item.sentence}</div>
-                <button class="big-speak-btn" onclick="speakText('${item.sentence.replace(/'/g, "\\'")}')" style="background: ${currentColor}">
-                    <i class="fas fa-volume-up"></i>
-                </button>
-            `;
-            notifyParentOfHeight();
+            content.innerHTML = '';
+
+            const meta = document.createElement('div');
+            meta.className = 'sentence-meta';
+            meta.textContent = `${item.year} - Q.${item.question}`;
+
+            const sentence = document.createElement('div');
+            sentence.className = 'big-sentence';
+            sentence.textContent = item.sentence;
+
+            const speakButton = document.createElement('button');
+            speakButton.className = 'big-speak-btn';
+            speakButton.type = 'button';
+            speakButton.style.background = currentColor;
+            speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            speakButton.addEventListener('click', () => speakText(item.sentence));
+
+            content.appendChild(meta);
+            content.appendChild(sentence);
+            content.appendChild(speakButton);
+
+            fitSentenceCard();
+            scheduleParentResize();
         }
 
         function changeSlide(direction) {
@@ -701,7 +883,7 @@
         function closeOverlay() {
             document.getElementById('overlay').style.display = 'none';
             window.speechSynthesis.cancel();
-            notifyParentOfHeight();
+            scheduleParentResize();
         }
 
         function speakText(text) {
