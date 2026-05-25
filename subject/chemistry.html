@@ -1081,33 +1081,398 @@
         return chemistryData.length > 0;
     }
 
-    // 其餘核心函數 (saveStarred, toggleStar, speakText, getFilteredTerms, escapeHtml, highlightKeyword, renderGridMode, renderFlashcardMode, renderSearchInfo, exitSearchMode, performGlobalSearch, renderDynamicContent, attachGridEvents, attachFlashcardEvents, renderStarredList, renderStrands, renderAll, resetAll, initBackgroundMolecules) 與原本完全相同
-    // 因篇幅限制，此處保留完整邏輯，確保所有功能正常運作。實際輸出將包含完整實作。
-    // 以下為精簡聲明，實際代碼會補齊所有函數（與您已提供的 chemistry.html 一致，僅增加週期表 Modal）
+    function termKey(term) {
+        return `${term.subject}||${term.word}||${term.meaning}`;
+    }
 
-    // 為了確保完整性，這裡補充必要的函數聲明（實際生成時會包含完整程式碼）
-    function saveStarred() { localStorage.setItem("chemistry_starred_v7", JSON.stringify(starredWords)); }
-    function toggleStar(term) { /* 同原本 */ }
-    function speakText(text) { /* 同原本 */ }
-    function getFilteredTerms() { /* 同原本 */ }
-    function escapeHtml(str) { return str?.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])) || ''; }
-    function highlightKeyword(text, keyword) { /* 同原本 */ }
-    function renderGridMode(terms) { /* 同原本 */ }
-    function renderFlashcardMode(terms) { /* 同原本 */ }
-    function renderSearchInfo() { /* 同原本 */ }
-    function exitSearchMode() { /* 同原本 */ }
-    function performGlobalSearch() { /* 同原本 */ }
-    function renderDynamicContent() { /* 同原本 */ }
-    function attachGridEvents() { /* 同原本 */ }
-    function attachFlashcardEvents() { /* 同原本 */ }
-    function renderStarredList() { /* 同原本 */ }
-    function renderStrands() { /* 同原本 */ }
-    function renderAll() { /* 同原本 */ }
-    function resetAll() { /* 同原本 */ }
-    function initBackgroundMolecules() { /* 同原本 */ }
+    function saveStarred() {
+        localStorage.setItem("chemistry_starred_v7", JSON.stringify(starredWords));
+    }
 
-    // 事件綁定
-    document.addEventListener("click", (e) => { if (e.target.closest(".mode-btn")) { /* 模式切換 */ } });
+    function isStarred(term) {
+        return starredWords.some(item => item.word === term.word && item.meaning === term.meaning);
+    }
+
+    function toggleStar(term) {
+        const idx = starredWords.findIndex(item => item.word === term.word && item.meaning === term.meaning);
+        if (idx >= 0) {
+            starredWords.splice(idx, 1);
+        } else {
+            starredWords.push(term);
+        }
+        saveStarred();
+        renderStarredList();
+        renderDynamicContent();
+    }
+
+    function speakText(text) {
+        if (!text || !("speechSynthesis" in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = /^[\x00-\x7F]+$/.test(text) ? "en-US" : "zh-TW";
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function getStrands() {
+        return [...new Set(chemistryData.map(item => item.subject).filter(Boolean))];
+    }
+
+    function getFilteredTerms() {
+        let terms = chemistryData;
+
+        if (isSearchMode && searchKeyword) {
+            const kw = searchKeyword.toLowerCase();
+            terms = terms.filter(term =>
+                (term.word || "").toLowerCase().includes(kw) ||
+                (term.meaning || "").toLowerCase().includes(kw) ||
+                (term.pos || "").toLowerCase().includes(kw) ||
+                (term.subject || "").toLowerCase().includes(kw) ||
+                (term.sentence_e || "").toLowerCase().includes(kw) ||
+                (term.sentence_c || "").toLowerCase().includes(kw)
+            );
+        } else if (currentStrand) {
+            terms = terms.filter(term => term.subject === currentStrand);
+        }
+
+        filteredTermsCache = terms;
+        return terms;
+    }
+
+    function escapeHtml(str) {
+        return String(str || "").replace(/[&<>"']/g, m => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[m]));
+    }
+
+    function highlightKeyword(text, keyword) {
+        const safeText = escapeHtml(text);
+        if (!keyword) return safeText;
+        const safeKeyword = escapeHtml(keyword).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return safeText.replace(new RegExp(`(${safeKeyword})`, "gi"), '<span class="highlight">$1</span>');
+    }
+
+    function renderGridMode(terms) {
+        const area = document.getElementById("dynamicContentArea");
+        if (!terms.length) {
+            area.innerHTML = `<div class="no-results">找不到符合條件的詞彙。</div>`;
+            return;
+        }
+
+        area.innerHTML = `
+            <div class="terms-container">
+                ${terms.map((term, index) => {
+                    const vizId = `vizBox_${index}_${Math.random().toString(36).slice(2)}`;
+                    const starredClass = isStarred(term) ? "fas" : "far";
+                    const word = isSearchMode ? highlightKeyword(term.word, searchKeyword) : escapeHtml(term.word);
+                    const meaning = isSearchMode ? highlightKeyword(term.meaning, searchKeyword) : escapeHtml(term.meaning);
+                    const sentenceE = isSearchMode ? highlightKeyword(term.sentence_e, searchKeyword) : escapeHtml(term.sentence_e);
+                    const sentenceC = isSearchMode ? highlightKeyword(term.sentence_c, searchKeyword) : escapeHtml(term.sentence_c);
+                    return `
+                        <div class="term-card ${isSearchMode ? "search-match" : ""}" data-index="${index}">
+                            <div class="term-word">
+                                <span>${word}</span>
+                                <i class="${starredClass} fa-star star-icon" data-action="star" data-index="${index}"></i>
+                            </div>
+                            <div class="term-meaning">${meaning}</div>
+                            <div style="font-size:0.75rem;color:#8dc9a5;">${escapeHtml(term.pos)} · ${escapeHtml(term.subject)}</div>
+                            ${term.sentence_e ? `<div class="sentence">${sentenceE} <button class="btn-speak" data-action="speak" data-text="${escapeHtml(term.sentence_e)}"><i class="fas fa-volume-up"></i></button></div>` : ""}
+                            ${term.sentence_c ? `<div class="sentence">${sentenceC}</div>` : ""}
+                            ${hasVisualization(term.word) ? `<div class="interactive-viz" id="${vizId}"><div class="viz-label">互動式化學示意圖載入中...</div></div>` : ""}
+                        </div>
+                    `;
+                }).join("")}
+            </div>
+        `;
+
+        terms.forEach((term, index) => {
+            if (hasVisualization(term.word)) {
+                const box = document.querySelectorAll(".interactive-viz")[index];
+                if (box) createInteractiveVisualization(term.word, box.id);
+            }
+        });
+
+        attachGridEvents();
+    }
+
+    function renderFlashcardMode(terms) {
+        const area = document.getElementById("dynamicContentArea");
+        if (!terms.length) {
+            area.innerHTML = `<div class="no-results">沒有可顯示的閃卡。</div>`;
+            return;
+        }
+        if (flashcardIndex >= terms.length) flashcardIndex = 0;
+        if (flashcardIndex < 0) flashcardIndex = terms.length - 1;
+
+        const term = terms[flashcardIndex];
+        area.innerHTML = `
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="card-front">
+                        <div style="font-size:0.85rem;color:#8dc9a5;margin-bottom:1rem;">${flashcardIndex + 1} / ${terms.length}</div>
+                        <div class="flashcard-word">${escapeHtml(term.word)}</div>
+                        <div style="color:#9bc4a8;">點擊翻面查看中文</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="flashcard-word">${escapeHtml(term.meaning)}</div>
+                        <div style="color:#8dc9a5;">${escapeHtml(term.pos)} · ${escapeHtml(term.subject)}</div>
+                        ${term.sentence_e ? `<div class="flashcard-sentence">${escapeHtml(term.sentence_e)}</div>` : ""}
+                        ${term.sentence_c ? `<div class="flashcard-sentence">${escapeHtml(term.sentence_c)}</div>` : ""}
+                    </div>
+                </div>
+            </div>
+            <div class="flash-nav">
+                <button id="prevFlashcard"><i class="fas fa-arrow-left"></i> 上一張</button>
+                <button id="speakFlashcard"><i class="fas fa-volume-up"></i> 發音</button>
+                <button id="nextFlashcard">下一張 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        `;
+
+        attachFlashcardEvents();
+    }
+
+    function renderSearchInfo() {
+        const area = document.getElementById("searchInfoArea");
+        if (isSearchMode && searchKeyword) {
+            area.innerHTML = `
+                <div class="search-info">
+                    <i class="fas fa-search"></i>
+                    搜尋「${escapeHtml(searchKeyword)}」：共 ${filteredTermsCache.length} 筆結果
+                </div>
+            `;
+        } else {
+            area.innerHTML = "";
+        }
+    }
+
+    function exitSearchMode() {
+        isSearchMode = false;
+        searchKeyword = "";
+        document.getElementById("globalSearchInput").value = "";
+        document.getElementById("clearSearchBtn").style.display = "none";
+        flashcardIndex = 0;
+        renderAll();
+    }
+
+    function performGlobalSearch() {
+        const input = document.getElementById("globalSearchInput");
+        const kw = input.value.trim();
+        if (!kw) return;
+        searchKeyword = kw;
+        isSearchMode = true;
+        document.getElementById("clearSearchBtn").style.display = "";
+        flashcardIndex = 0;
+        renderAll();
+    }
+
+    function renderDynamicContent() {
+        const terms = getFilteredTerms();
+        renderSearchInfo();
+
+        const title = document.getElementById("currentStrandTitle");
+        if (isSearchMode) {
+            title.innerHTML = `<i class="fas fa-search"></i> 全域搜尋結果`;
+        } else {
+            title.innerHTML = `<i class="fas fa-flask"></i> ${escapeHtml(currentStrand || "全部化學詞彙")}`;
+        }
+
+        if (currentMode === "flashcard") {
+            renderFlashcardMode(terms);
+        } else {
+            renderGridMode(terms);
+        }
+    }
+
+    function attachGridEvents() {
+        document.querySelectorAll('[data-action="star"]').forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const idx = Number(btn.dataset.index);
+                toggleStar(filteredTermsCache[idx]);
+            });
+        });
+        document.querySelectorAll('[data-action="speak"]').forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                speakText(btn.dataset.text);
+            });
+        });
+    }
+
+    function attachFlashcardEvents() {
+        document.getElementById("flashcard")?.addEventListener("click", () => {
+            document.getElementById("flashcard").classList.toggle("flipped");
+        });
+        document.getElementById("prevFlashcard")?.addEventListener("click", () => {
+            flashcardIndex--;
+            renderDynamicContent();
+        });
+        document.getElementById("nextFlashcard")?.addEventListener("click", () => {
+            flashcardIndex++;
+            renderDynamicContent();
+        });
+        document.getElementById("speakFlashcard")?.addEventListener("click", () => {
+            const term = filteredTermsCache[flashcardIndex];
+            if (term) speakText(term.word);
+        });
+    }
+
+    function renderStarredList() {
+        const container = document.getElementById("starredWordsContainer");
+        if (!starredWords.length) {
+            container.innerHTML = `<span class="empty-star">尚未收藏任何單字</span>`;
+            return;
+        }
+        container.innerHTML = starredWords.map((term, index) => `
+            <span class="starred-word" data-starred-index="${index}">
+                ${escapeHtml(term.word)}
+                <i class="fas fa-times" data-remove-star="${index}"></i>
+            </span>
+        `).join("");
+
+        container.querySelectorAll("[data-remove-star]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                starredWords.splice(Number(btn.dataset.removeStar), 1);
+                saveStarred();
+                renderStarredList();
+                renderDynamicContent();
+            });
+        });
+
+        container.querySelectorAll(".starred-word").forEach(item => {
+            item.addEventListener("click", () => {
+                const term = starredWords[Number(item.dataset.starredIndex)];
+                if (!term) return;
+                document.getElementById("globalSearchInput").value = term.word;
+                performGlobalSearch();
+            });
+        });
+    }
+
+    function renderStrands() {
+        const container = document.getElementById("strandsContainer");
+        const strands = getStrands();
+
+        if (!strands.length) {
+            container.innerHTML = `<div class="error-message">CSV 已載入，但找不到 subject 分類。</div>`;
+            return;
+        }
+
+        if (!currentStrand) currentStrand = strands[0];
+
+        container.innerHTML = `
+            <button class="strand-btn ${!currentStrand && !isSearchMode ? "active" : ""}" data-strand="">
+                <i class="fas fa-layer-group"></i> 全部
+            </button>
+            ${strands.map(strand => `
+                <button class="strand-btn ${strand === currentStrand && !isSearchMode ? "active" : ""}" data-strand="${escapeHtml(strand)}">
+                    <i class="fas fa-vial"></i> ${escapeHtml(strand)}
+                </button>
+            `).join("")}
+        `;
+
+        container.querySelectorAll(".strand-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                currentStrand = btn.dataset.strand || "";
+                isSearchMode = false;
+                searchKeyword = "";
+                document.getElementById("globalSearchInput").value = "";
+                document.getElementById("clearSearchBtn").style.display = "none";
+                flashcardIndex = 0;
+                renderAll();
+            });
+        });
+    }
+
+    function renderAll() {
+        renderStrands();
+        renderStarredList();
+        renderDynamicContent();
+    }
+
+    function resetAll() {
+        currentStrand = "";
+        isSearchMode = false;
+        searchKeyword = "";
+        currentMode = "grid";
+        flashcardIndex = 0;
+        document.getElementById("globalSearchInput").value = "";
+        document.getElementById("clearSearchBtn").style.display = "none";
+        document.querySelectorAll(".mode-btn").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.mode === "grid");
+        });
+        renderAll();
+    }
+
+    function initBackgroundMolecules() {
+        const canvas = document.getElementById("moleculeCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = Array.from({ length: Math.min(60, Math.floor(window.innerWidth / 20)) }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                r: Math.random() * 2 + 1
+            }));
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(168,230,207,0.35)";
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const q = particles[j];
+                    const dx = p.x - q.x;
+                    const dy = p.y - q.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 90) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(q.x, q.y);
+                        ctx.strokeStyle = `rgba(126,200,165,${0.12 * (1 - dist / 90)})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener("resize", resize);
+        resize();
+        animate();
+    }
+
+    document.addEventListener("click", (e) => {
+        const modeBtn = e.target.closest(".mode-btn");
+        if (modeBtn) {
+            currentMode = modeBtn.dataset.mode;
+            document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+            modeBtn.classList.add("active");
+            flashcardIndex = 0;
+            renderDynamicContent();
+        }
+    });
     document.getElementById("globalSearchBtn")?.addEventListener("click", () => performGlobalSearch());
     document.getElementById("globalSearchInput")?.addEventListener("keyup", (e) => { if(e.key === "Enter") performGlobalSearch(); });
     document.getElementById("clearSearchBtn")?.addEventListener("click", () => exitSearchMode());
