@@ -8,6 +8,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:#111827;min-height:100vh;padding:10px;}
 #pt-title{text-align:center;color:#e0e0ff;font-size:20px;font-weight:500;padding:10px 0 8px;letter-spacing:3px;}
+#pt-count{text-align:center;color:#a5f3fc;font-size:12px;margin-bottom:6px;letter-spacing:1px;}
 #pt-grid{display:grid;grid-template-columns:repeat(18,1fr);gap:3px;width:100%;max-width:1400px;margin:0 auto;}
 .el-cell{aspect-ratio:1;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;}
 .el-cell:hover{transform:scale(1.18);z-index:10;box-shadow:0 0 12px rgba(255,255,255,0.5);}
@@ -50,6 +51,7 @@ body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:#11182
 </head>
 <body>
 <div id="pt-title">⚗ Shirley's Interactive Learning Platform for the Periodic Table 元素週期表互動學習平台 ⚗</div>
+<div id="pt-count"></div>
 <div id="sw"><input type="text" id="si" placeholder="搜尋元素（中文、符號、序號或英文名）..." oninput="ds(this.value)"/></div>
 <div id="legend">
 <div class="lg"><div class="ld" style="background:#EC4899"></div>Hydrogen氫</div>
@@ -820,15 +822,60 @@ let CE=null;
 
 function bt(){
   const g=document.getElementById('pt-grid');
+  g.innerHTML='';
+
+  const countBox=document.getElementById('pt-count');
+  if(countBox){
+    const nums=EL.map(e=>e.n).sort((a,b)=>a-b);
+    const missing=[];
+    for(let i=1;i<=118;i++){if(!nums.includes(i))missing.push(i);}
+    countBox.textContent=missing.length===0
+      ? `目前收錄 ${EL.length} / 118 個元素，序號 1–118 完整`
+      : `目前收錄 ${EL.length} / 118 個元素，缺少：${missing.join(', ')}`;
+  }
+
   GL.forEach((row,ri)=>{
     row.forEach((cell,ci)=>{
-      if(ri===7){if(ci===0){const s=document.createElement('div');s.style.cssText='grid-column:1/-1;height:5px;';g.appendChild(s);}return;}
-      if(ri===8&&ci===0){const l=document.createElement('div');l.style.cssText='grid-column:2/3;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;';l.innerHTML='<span style="font-size:7px;color:#06B6D4;writing-mode:vertical-rl;transform:rotate(180deg);">鑭系</span>';g.appendChild(l);}
-      if(ri===9&&ci===0){const l=document.createElement('div');l.style.cssText='grid-column:2/3;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;';l.innerHTML='<span style="font-size:7px;color:#7C3AED;writing-mode:vertical-rl;transform:rotate(180deg);">錒系</span>';g.appendChild(l);}
+      if(ri===7){
+        if(ci===0){
+          const s=document.createElement('div');
+          s.style.cssText='grid-column:1/-1;height:5px;';
+          g.appendChild(s);
+        }
+        return;
+      }
+
       const d=document.createElement('div');
-      if(cell==='L'||cell==='A'||cell===0){d.className='el-empty';g.appendChild(d);return;}
+
+      // 鑭系與錒系標籤改放在原本的第 2 欄，不再額外多插入一格，避免整列錯位
+      if(ri===8&&ci===1){
+        d.className='el-empty';
+        d.style.cssText='display:flex;align-items:center;justify-content:flex-end;padding-right:3px;';
+        d.innerHTML='<span style="font-size:7px;color:#06B6D4;writing-mode:vertical-rl;transform:rotate(180deg);">鑭系</span>';
+        g.appendChild(d);
+        return;
+      }
+      if(ri===9&&ci===1){
+        d.className='el-empty';
+        d.style.cssText='display:flex;align-items:center;justify-content:flex-end;padding-right:3px;';
+        d.innerHTML='<span style="font-size:7px;color:#7C3AED;writing-mode:vertical-rl;transform:rotate(180deg);">錒系</span>';
+        g.appendChild(d);
+        return;
+      }
+
+      if(cell==='L'||cell==='A'||cell===0){
+        d.className='el-empty';
+        g.appendChild(d);
+        return;
+      }
+
       const el=EM[cell];
-      if(!el){d.className='el-empty';g.appendChild(d);return;}
+      if(!el){
+        d.className='el-empty';
+        g.appendChild(d);
+        return;
+      }
+
       d.className='el-cell';
       d.style.background=CC[el.cat]||'#374151';
       d.dataset.n=el.n;
