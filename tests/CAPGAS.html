@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杜老師的初三英文加油站 · Shirley's Grade 9 English Gas Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rust:#B55230;
+    --rust-tint:#F0DACB;
+    --brick:#8B281C;
+    --brick-tint:#EAD3CF;
+    --slate:#546868;
+    --slate-tint:#D9E0DE;
+    --plum:#7B6682;
+    --plum-tint:#E6DEE8;
+    --sage:#CBC8A9;
+    --cream:#FAF8F1;
+    --ink:#2E2B26;
+    --ink-soft:#5C574E;
+    --paper:#FFFFFF;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-sm:12px;
+    --shadow: 0 10px 24px -12px rgba(46,43,38,0.28);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Noto Sans TC', 'Baloo 2', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Baloo 2','Noto Sans TC', sans-serif;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+
+  /* ---------- background road texture ---------- */
+  .road-strip{
+    height:14px;
+    background-image: repeating-linear-gradient(90deg, var(--ink) 0 26px, transparent 26px 52px);
+    background-position:center;
+    background-size:52px 4px;
+    background-repeat:repeat-x;
+    background-position-y:center;
+    opacity:0.16;
+    border-radius:99px;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    max-width:1040px;
+    margin:0 auto;
+    padding:56px 24px 20px;
+    text-align:center;
+  }
+  .pump-mark{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:76px;height:76px;
+    border-radius:50%;
+    background:var(--rust);
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  header h1{
+    font-size:clamp(28px,4.4vw,44px);
+    font-weight:800;
+    margin:0 0 6px;
+    color:var(--ink);
+    letter-spacing:0.5px;
+  }
+  header .en-title{
+    font-size:clamp(14px,2vw,18px);
+    font-weight:600;
+    color:var(--rust);
+    margin:0 0 18px;
+  }
+  header p.tagline{
+    max-width:520px;
+    margin:0 auto;
+    font-size:15px;
+    color:var(--ink-soft);
+  }
+  .road-divider{
+    max-width:420px;
+    margin:28px auto 0;
+  }
+
+  /* ---------- station grid ---------- */
+  main{
+    max-width:1040px;
+    margin:0 auto;
+    padding:36px 24px 60px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+  @media (max-width:760px){
+    .grid{ grid-template-columns:1fr; }
+  }
+
+  .station{
+    background:var(--paper);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    border:2px solid transparent;
+    overflow:hidden;
+  }
+  .station[data-color="rust"]{ border-color:var(--rust); }
+  .station[data-color="brick"]{ border-color:var(--brick); }
+  .station[data-color="slate"]{ border-color:var(--slate); }
+  .station[data-color="plum"]{ border-color:var(--plum); }
+
+  .station summary{
+    list-style:none;
+    cursor:pointer;
+    padding:26px 26px 22px;
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .station summary::-webkit-details-marker{ display:none; }
+  .station summary:focus-visible{
+    outline:3px solid var(--ink);
+    outline-offset:-3px;
+  }
+
+  .pump-number{
+    flex:0 0 auto;
+    width:46px;height:46px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;
+    font-size:18px;
+    color:#fff;
+  }
+  .station[data-color="rust"] .pump-number{ background:var(--rust); }
+  .station[data-color="brick"] .pump-number{ background:var(--brick); }
+  .station[data-color="slate"] .pump-number{ background:var(--slate); }
+  .station[data-color="plum"] .pump-number{ background:var(--plum); }
+
+  .station-head{ flex:1; }
+  .station-head h2{
+    margin:0 0 2px;
+    font-size:21px;
+    font-weight:700;
+  }
+  .station-head .en{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  .station-head p{
+    margin:0;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .chevron{
+    flex:0 0 auto;
+    width:26px;height:26px;
+    margin-top:8px;
+    transition:transform 0.2s ease;
+    color:var(--ink-soft);
+  }
+  .station[open] .chevron{ transform:rotate(180deg); }
+
+  .nozzles{
+    padding:0 22px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .nozzle{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    text-align:left;
+    padding:14px 16px;
+    border-radius:var(--radius-md);
+    border:1.5px solid #E9E4D6;
+    background:var(--cream);
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .nozzle:hover{ transform:translateX(3px); }
+  .station[data-color="rust"] .nozzle:hover{ border-color:var(--rust); background:var(--rust-tint); }
+  .station[data-color="brick"] .nozzle:hover{ border-color:var(--brick); background:var(--brick-tint); }
+  .station[data-color="slate"] .nozzle:hover{ border-color:var(--slate); background:var(--slate-tint); }
+  .station[data-color="plum"] .nozzle:hover{ border-color:var(--plum); background:var(--plum-tint); }
+  .nozzle:focus-visible{ outline:2.5px solid var(--ink); outline-offset:1px; }
+
+  .nozzle .dot{
+    flex:0 0 auto;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:currentColor;
+  }
+  .station[data-color="rust"] .nozzle .dot{ color:var(--rust); }
+  .station[data-color="brick"] .nozzle .dot{ color:var(--brick); }
+  .station[data-color="slate"] .nozzle .dot{ color:var(--slate); }
+  .station[data-color="plum"] .nozzle .dot{ color:var(--plum); }
+
+  .nozzle .arrow{ margin-left:auto; flex:0 0 auto; opacity:0.5; font-size:14px; }
+
+  footer{
+    text-align:center;
+    padding:10px 24px 48px;
+    color:var(--ink-soft);
+    font-size:13px;
+  }
+
+  /* ---------- floating tools ---------- */
+  .tool-dock{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    z-index:60;
+  }
+  .tool-btn{
+    width:54px;height:54px;
+    border-radius:50%;
+    border:none;
+    box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:22px;
+    color:#fff;
+    transition:transform 0.15s ease;
+  }
+  .tool-btn:hover{ transform:scale(1.06); }
+  .tool-btn:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }
+  .tool-btn.notepad{ background:var(--slate); }
+  .tool-btn.highlighter{ background:var(--rust); }
+  .tool-btn.highlighter.active{ background:var(--brick); box-shadow:0 0 0 4px var(--brick-tint), var(--shadow); }
+
+  .panel{
+    position:fixed;
+    right:20px;
+    bottom:86px;
+    width:min(320px, calc(100vw - 40px));
+    background:var(--paper);
+    border-radius:var(--radius-md);
+    box-shadow:var(--shadow);
+    padding:16px;
+    z-index:55;
+    display:none;
+  }
+  .panel.open{ display:block; }
+  .panel h3{
+    margin:0 0 10px;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .panel h3 button{
+    background:none;border:none;font-size:16px;cursor:pointer;color:var(--ink-soft);
+    line-height:1;padding:2px 4px;
+  }
+  #notepad-area{
+    width:100%;
+    min-height:160px;
+    resize:vertical;
+    border-radius:var(--radius-sm);
+    border:1.5px solid #E9E4D6;
+    padding:10px;
+    font-family:'Noto Sans TC', sans-serif;
+    font-size:13.5px;
+    background:var(--cream);
+    color:var(--ink);
+  }
+  #notepad-area:focus-visible{ outline:2px solid var(--slate); }
+  .panel .save-hint{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:6px;
+    min-height:14px;
+  }
+  .swatches{ display:flex; gap:8px; margin-bottom:10px; }
+  .swatch{
+    width:30px;height:30px;
+    border-radius:50%;
+    border:2px solid transparent;
+    cursor:pointer;
+  }
+  .swatch.selected{ border-color:var(--ink); }
+  .panel .hint{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  .clear-btn{
+    width:100%;
+    padding:9px;
+    border-radius:var(--radius-sm);
+    border:1.5px solid #E9E4D6;
+    background:var(--cream);
+    font-size:13px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .clear-btn:hover{ border-color:var(--brick); }
+
+  mark.user-highlight{
+    border-radius:3px;
+    padding:0 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pump-mark">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"/>
+      <path d="M4 20h10"/>
+      <path d="M14 9h2.2c.6 0 1 .3 1.3.8L19 12v6a1.2 1.2 0 0 1-2.4 0v-2.4a1 1 0 0 0-1-1H14"/>
+      <circle cx="7" cy="6.6" r="0.1"/>
+      <path d="M6 6h4"/>
+    </svg>
+  </div>
+  <h1>杜老師的初三英文加油站</h1>
+  <p class="en-title">Shirley's Grade 9 English Gas Station</p>
+  <p class="tagline">四座加油機，備好會考路上要用的每一種燃料 —— 文法、單字、模擬題、托福 Junior，通通加滿。</p>
+  <div class="road-divider road-strip"></div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- Station 1: Grammar -->
+    <details class="station" data-color="rust" open>
+      <summary>
+        <span class="pump-number">1</span>
+        <span class="station-head">
+          <h2>文法加油機</h2>
+          <p class="en">Grammar</p>
+          <p>句型結構、時態變化，通通在這裡打好底。</p>
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="nozzles">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/">
+          <span class="dot"></span>文法檸檬樹 Grammar Lemon Tree<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">
+          <span class="dot"></span>聽歌學文法 Learn Grammar with Songs<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html">
+          <span class="dot"></span>文法我會考 CAP Grammar<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/">
+          <span class="dot"></span>不規則動詞 Irregular Verbs<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/">
+          <span class="dot"></span>不規則名詞 Irregular Nouns<span class="arrow">↗</span>
+        </button>
+      </div>
+    </details>
+
+    <!-- Station 2: Vocabulary -->
+    <details class="station" data-color="brick">
+      <summary>
+        <span class="pump-number">2</span>
+        <span class="station-head">
+          <h2>詞彙加油機</h2>
+          <p class="en">Vocabulary</p>
+          <p>單字量就是續航力，一站補滿。</p>
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="nozzles">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/shirleyvocab.html#home">
+          <span class="dot"></span>Shirley's Vocab<span class="arrow">↗</span>
+        </button>
+      </div>
+    </details>
+
+    <!-- Station 3: CAP Mock -->
+    <details class="station" data-color="slate">
+      <summary>
+        <span class="pump-number">3</span>
+        <span class="station-head">
+          <h2>會考模擬專區</h2>
+          <p class="en">CAP Mock</p>
+          <p>聽力、文法詞彙、閱讀，會考前的最後檢查站。</p>
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="nozzles">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html">
+          <span class="dot"></span>CAP Listening 會考聽力<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html">
+          <span class="dot"></span>CAP Grammar &amp; Vocabulary 會考文法與詞彙<span class="arrow">↗</span>
+        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html">
+          <span class="dot"></span>CAP Reading 會考閱讀<span class="arrow">↗</span>
+        </button>
+      </div>
+    </details>
+
+    <!-- Station 4: TOEFL Junior -->
+    <details class="station" data-color="plum">
+      <summary>
+        <span class="pump-number">4</span>
+        <span class="station-head">
+          <h2>TOEFL Junior 模擬</h2>
+          <p class="en">TOEFL Junior Mock</p>
+          <p>想挑戰更高等級？加滿高級油，衝向國際。</p>
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="nozzles">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/TFJ-Mock/">
+          <span class="dot"></span>TOEFL Junior Mock 中級托福模擬<span class="arrow">↗</span>
+        </button>
+      </div>
+    </details>
+
+  </div>
+</main>
+
+<footer>
+  加滿油，準備衝刺會考！Fill up and go get that CAP score. 🚗💨
+</footer>
+
+<!-- ---------- floating tools ---------- -->
+<div class="tool-dock">
+  <button class="tool-btn highlighter" id="highlighter-btn" aria-pressed="false" title="螢光筆 Highlighter">🖍️</button>
+  <button class="tool-btn notepad" id="notepad-btn" title="筆記本 Notepad">📝</button>
+</div>
+
+<div class="panel" id="highlighter-panel">
+  <h3>螢光筆 Highlighter <button id="close-highlighter" aria-label="關閉">✕</button></h3>
+  <p class="hint">開啟後，在頁面上用滑鼠選取文字即可畫記重點。</p>
+  <div class="swatches">
+    <button class="swatch selected" style="background:#F3D48A" data-color="#F3D48A" aria-label="黃色螢光"></button>
+    <button class="swatch" style="background:#E7B79A" data-color="#E7B79A" aria-label="橘色螢光"></button>
+    <button class="swatch" style="background:#C9DCD3" data-color="#C9DCD3" aria-label="綠色螢光"></button>
+    <button class="swatch" style="background:#DCCBE0" data-color="#DCCBE0" aria-label="紫色螢光"></button>
+  </div>
+  <button class="clear-btn" id="clear-highlights">清除全部畫記</button>
+</div>
+
+<div class="panel" id="notepad-panel">
+  <h3>筆記本 Notepad <button id="close-notepad" aria-label="關閉">✕</button></h3>
+  <textarea id="notepad-area" placeholder="寫下今天想加強的文法、單字或錯題筆記…"></textarea>
+  <div class="save-hint" id="notepad-status"></div>
+</div>
+
+<script>
+  // ---- open links in a new tab ----
+  document.querySelectorAll('.nozzle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const url = btn.getAttribute('data-url');
+      if(url) window.open(url, '_blank', 'noopener');
+    });
+  });
+
+  // ---- only one station open at a time on desktop-friendly accordion feel ----
+  const stations = document.querySelectorAll('.station');
+  stations.forEach(st=>{
+    st.addEventListener('toggle', ()=>{
+      if(st.open){
+        stations.forEach(other=>{ if(other!==st) other.open=false; });
+      }
+    });
+  });
+
+  // ---- panels ----
+  const notepadBtn = document.getElementById('notepad-btn');
+  const notepadPanel = document.getElementById('notepad-panel');
+  const highlighterBtn = document.getElementById('highlighter-btn');
+  const highlighterPanel = document.getElementById('highlighter-panel');
+
+  function closeAllPanels(){
+    notepadPanel.classList.remove('open');
+    highlighterPanel.classList.remove('open');
+  }
+
+  notepadBtn.addEventListener('click', ()=>{
+    const willOpen = !notepadPanel.classList.contains('open');
+    closeAllPanels();
+    if(willOpen) notepadPanel.classList.add('open');
+  });
+  document.getElementById('close-notepad').addEventListener('click', ()=> notepadPanel.classList.remove('open'));
+
+  highlighterBtn.addEventListener('click', ()=>{
+    const willOpen = !highlighterPanel.classList.contains('open');
+    closeAllPanels();
+    if(willOpen) highlighterPanel.classList.add('open');
+  });
+  document.getElementById('close-highlighter').addEventListener('click', ()=> highlighterPanel.classList.remove('open'));
+
+  // ---- notepad persistence ----
+  const notepadArea = document.getElementById('notepad-area');
+  const notepadStatus = document.getElementById('notepad-status');
+  let saveTimer = null;
+
+  async function loadNotes(){
+    try{
+      const result = await window.storage.get('gas-station-notes', false);
+      if(result && typeof result.value === 'string'){
+        notepadArea.value = result.value;
+      }
+    }catch(e){
+      // no existing note yet, ignore
+    }
+  }
+  loadNotes();
+
+  notepadArea.addEventListener('input', ()=>{
+    notepadStatus.textContent = '儲存中…';
+    if(saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(async ()=>{
+      try{
+        const res = await window.storage.set('gas-station-notes', notepadArea.value, false);
+        notepadStatus.textContent = res ? '已自動儲存 ✓' : '儲存失敗，請再試一次';
+      }catch(e){
+        notepadStatus.textContent = '儲存失敗，請再試一次';
+      }
+    }, 500);
+  });
+
+  // ---- highlighter ----
+  let highlightMode = false;
+  let currentColor = '#F3D48A';
+
+  document.querySelectorAll('.swatch').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
+      sw.classList.add('selected');
+      currentColor = sw.getAttribute('data-color');
+    });
+  });
+
+  highlighterBtn.addEventListener('click', ()=>{
+    // toggling handled above for panel; also flip mode state on this same click
+  });
+
+  // separate explicit toggle: clicking the floating button also arms/disarms highlight mode
+  highlighterBtn.addEventListener('click', ()=>{
+    highlightMode = !highlightMode;
+    highlighterBtn.classList.toggle('active', highlightMode);
+    highlighterBtn.setAttribute('aria-pressed', String(highlightMode));
+    document.body.style.cursor = highlightMode ? 'text' : '';
+  });
+
+  function applyHighlight(){
+    const sel = window.getSelection();
+    if(!sel || sel.rangeCount === 0) return;
+    const range = sel.getRangeAt(0);
+    if(range.collapsed) return;
+    // don't highlight inside the tool panels or dock
+    if(highlighterPanel.contains(range.commonAncestorContainer) ||
+       notepadPanel.contains(range.commonAncestorContainer)) return;
+
+    const mark = document.createElement('mark');
+    mark.className = 'user-highlight';
+    mark.style.backgroundColor = currentColor;
+    try{
+      range.surroundContents(mark);
+    }catch(e){
+      const contents = range.extractContents();
+      mark.appendChild(contents);
+      range.insertNode(mark);
+    }
+    sel.removeAllRanges();
+  }
+
+  document.addEventListener('mouseup', ()=>{
+    if(!highlightMode) return;
+    setTimeout(applyHighlight, 0);
+  });
+
+  document.getElementById('clear-highlights').addEventListener('click', ()=>{
+    document.querySelectorAll('mark.user-highlight').forEach(m=>{
+      const parent = m.parentNode;
+      while(m.firstChild) parent.insertBefore(m.firstChild, m);
+      parent.removeChild(m);
+      parent.normalize();
+    });
+  });
+</script>
+
+</body>
+</html>
