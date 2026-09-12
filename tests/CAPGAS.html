@@ -106,7 +106,7 @@
   main{
     max-width:1040px;
     margin:0 auto;
-    padding:36px 24px 60px;
+    padding:36px 24px 20px;
   }
   .grid{
     display:grid;
@@ -185,7 +185,7 @@
   .station[open] .chevron{ transform:rotate(180deg); }
 
   .nozzles{
-    padding:0 22px 24px;
+    padding:0 22px 12px;
     display:flex;
     flex-direction:column;
     gap:10px;
@@ -226,6 +226,51 @@
 
   .nozzle .arrow{ margin-left:auto; flex:0 0 auto; opacity:0.5; font-size:14px; }
 
+  .tip{
+    margin:0 22px 22px;
+    padding:14px 16px;
+    border-radius:var(--radius-sm);
+    background:var(--cream);
+    font-size:13.5px;
+    color:var(--ink-soft);
+    border-left:4px solid;
+  }
+  .station[data-color="rust"] .tip{ border-color:var(--rust); }
+  .station[data-color="brick"] .tip{ border-color:var(--brick); }
+  .station[data-color="slate"] .tip{ border-color:var(--slate); }
+  .station[data-color="plum"] .tip{ border-color:var(--plum); }
+  .tip strong{ color:var(--ink); }
+
+  /* ---------- tips section (extra annotatable content) ---------- */
+  .tips-section{
+    max-width:1040px;
+    margin:12px auto 0;
+    padding:0 24px 20px;
+  }
+  .tips-card{
+    background:var(--paper);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    padding:28px 30px;
+  }
+  .tips-card h2{
+    margin:0 0 4px;
+    font-size:20px;
+  }
+  .tips-card .en{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .tips-card p{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+  .tips-card p:last-child{ margin-bottom:0; }
+  .tips-card b{ color:var(--ink); }
+
   footer{
     text-align:center;
     padding:10px 24px 48px;
@@ -233,7 +278,7 @@
     font-size:13px;
   }
 
-  /* ---------- floating tools ---------- */
+  /* ---------- floating tools (always above viewer) ---------- */
   .tool-dock{
     position:fixed;
     right:20px;
@@ -241,7 +286,7 @@
     display:flex;
     flex-direction:column;
     gap:12px;
-    z-index:60;
+    z-index:200;
   }
   .tool-btn{
     width:54px;height:54px;
@@ -269,7 +314,7 @@
     border-radius:var(--radius-md);
     box-shadow:var(--shadow);
     padding:16px;
-    z-index:55;
+    z-index:210;
     display:none;
   }
   .panel.open{ display:block; }
@@ -332,6 +377,83 @@
     border-radius:3px;
     padding:0 1px;
   }
+
+  /* ---------- in-page viewer for external links ---------- */
+  .viewer{
+    position:fixed;
+    inset:0;
+    background:var(--cream);
+    z-index:150;
+    display:none;
+    flex-direction:column;
+  }
+  .viewer.open{ display:flex; }
+  .viewer-bar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:12px 18px;
+    background:var(--paper);
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    flex:0 0 auto;
+  }
+  #viewer-back{
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+    flex:0 0 auto;
+  }
+  #viewer-back:hover{ opacity:0.9; }
+  .viewer-title{
+    font-weight:700;
+    font-size:14.5px;
+    flex:1;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  #viewer-newtab{
+    font-size:13px;
+    color:var(--rust);
+    text-decoration:none;
+    font-weight:700;
+    white-space:nowrap;
+    flex:0 0 auto;
+    border:1.5px solid var(--rust);
+    padding:7px 12px;
+    border-radius:999px;
+  }
+  #viewer-newtab:hover{ background:var(--rust-tint); }
+  .viewer-body{
+    flex:1;
+    position:relative;
+    min-height:0;
+  }
+  #viewer-frame{
+    width:100%;
+    height:100%;
+    border:none;
+    display:block;
+  }
+  .viewer-note{
+    position:absolute;
+    left:50%;
+    bottom:10px;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,0.94);
+    box-shadow:var(--shadow);
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
 </style>
 </head>
 <body>
@@ -348,7 +470,7 @@
   </div>
   <h1>杜老師的初三英文加油站</h1>
   <p class="en-title">Shirley's Grade 9 English Gas Station</p>
-  <p class="tagline">四座加油機，備好會考路上要用的每一種燃料 —— 文法、單字、模擬題、托福 Junior，通通加滿。</p>
+  <p class="tagline">四座加油機，備好會考路上要用的每一種燃料 —— 文法、單字、模擬題、托福 Junior，通通加滿。點進連結會在站內視窗打開，右下角的筆記本和螢光筆隨時待命。</p>
   <div class="road-divider road-strip"></div>
 </header>
 
@@ -367,22 +489,23 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/" data-title="文法檸檬樹 Grammar Lemon Tree">
           <span class="dot"></span>文法檸檬樹 Grammar Lemon Tree<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" data-title="聽歌學文法 Learn Grammar with Songs">
           <span class="dot"></span>聽歌學文法 Learn Grammar with Songs<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html" data-title="文法我會考 CAP Grammar">
           <span class="dot"></span>文法我會考 CAP Grammar<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/" data-title="不規則動詞 Irregular Verbs">
           <span class="dot"></span>不規則動詞 Irregular Verbs<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/" data-title="不規則名詞 Irregular Nouns">
           <span class="dot"></span>不規則名詞 Irregular Nouns<span class="arrow">↗</span>
         </button>
       </div>
+      <p class="tip"><strong>讀書小撇步：</strong>先弄懂規則變化，再花時間硬背不規則動詞和名詞，記憶會更持久。時態混淆時，回頭看例句，比背規則表更有用。</p>
     </details>
 
     <!-- Station 2: Vocabulary -->
@@ -397,10 +520,11 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/shirleyvocab.html#home">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/shirleyvocab.html#home" data-title="Shirley's Vocab">
           <span class="dot"></span>Shirley's Vocab<span class="arrow">↗</span>
         </button>
       </div>
+      <p class="tip"><strong>讀書小撇步：</strong>每天 10 個新單字，用例句記比死背中文意思更有效。忘記時別急著查答案，先猜猜看再對答案，印象會更深。</p>
     </details>
 
     <!-- Station 3: CAP Mock -->
@@ -415,16 +539,17 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html" data-title="CAP Listening 會考聽力">
           <span class="dot"></span>CAP Listening 會考聽力<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" data-title="CAP Grammar & Vocabulary 會考文法與詞彙">
           <span class="dot"></span>CAP Grammar &amp; Vocabulary 會考文法與詞彙<span class="arrow">↗</span>
         </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html" data-title="CAP Reading 會考閱讀">
           <span class="dot"></span>CAP Reading 會考閱讀<span class="arrow">↗</span>
         </button>
       </div>
+      <p class="tip"><strong>讀書小撇步：</strong>模擬考重點不是分數，是找出錯誤類型。錯題本比正確率更重要，把每次錯的原因寫下來，下次才不會再犯。</p>
     </details>
 
     <!-- Station 4: TOEFL Junior -->
@@ -439,14 +564,25 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/TFJ-Mock/">
+        <button class="nozzle" data-url="https://ducj-creator.github.io/TFJ-Mock/" data-title="TOEFL Junior Mock 中級托福模擬">
           <span class="dot"></span>TOEFL Junior Mock 中級托福模擬<span class="arrow">↗</span>
         </button>
       </div>
+      <p class="tip"><strong>讀書小撇步：</strong>TOEFL Junior 的閱讀篇幅比會考長，先練習抓段落主旨，不用每個字都懂，掌握大意才是關鍵。</p>
     </details>
 
   </div>
 </main>
+
+<section class="tips-section">
+  <div class="tips-card">
+    <h2>站長小叮嚀</h2>
+    <p class="en">A Few Notes from Shirley</p>
+    <p>會考英文考的不是死背，而是<b>看得懂、聽得懂、反應得快</b>。每天花 20 分鐘在這個加油站走一圈，比考前一週熬夜臨時抱佛腳更有用。</p>
+    <p>建議的加油順序：先進<b>文法加油機</b>把基礎顧好，接著到<b>詞彙加油機</b>擴充單字庫，週末再到<b>會考模擬專區</b>檢查自己還缺什麼。準備得差不多了，再挑戰 <b>TOEFL Junior</b> 測試自己的極限。</p>
+    <p>覺得某個觀念很重要嗎？選取這段文字，用右下角的螢光筆畫起來；有臨時想到的問題，也可以直接打開筆記本記下來，下次上課問杜老師。</p>
+  </div>
+</section>
 
 <footer>
   加滿油，準備衝刺會考！Fill up and go get that CAP score. 🚗💨
@@ -460,7 +596,7 @@
 
 <div class="panel" id="highlighter-panel">
   <h3>螢光筆 Highlighter <button id="close-highlighter" aria-label="關閉">✕</button></h3>
-  <p class="hint">開啟後，在頁面上用滑鼠選取文字即可畫記重點。</p>
+  <p class="hint">開啟後，在「加油站」主頁上用滑鼠選取文字即可畫記重點。連結頁面內容因跨網域安全限制無法畫記，可改用筆記本記下重點。</p>
   <div class="swatches">
     <button class="swatch selected" style="background:#F3D48A" data-color="#F3D48A" aria-label="黃色螢光"></button>
     <button class="swatch" style="background:#E7B79A" data-color="#E7B79A" aria-label="橘色螢光"></button>
@@ -476,16 +612,21 @@
   <div class="save-hint" id="notepad-status"></div>
 </div>
 
-<script>
-  // ---- open links in a new tab ----
-  document.querySelectorAll('.nozzle').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const url = btn.getAttribute('data-url');
-      if(url) window.open(url, '_blank', 'noopener');
-    });
-  });
+<!-- ---------- in-page viewer for external links ---------- -->
+<div class="viewer" id="viewer" aria-hidden="true">
+  <div class="viewer-bar">
+    <button id="viewer-back">← 返回加油站</button>
+    <span class="viewer-title" id="viewer-title"></span>
+    <a id="viewer-newtab" href="#" target="_blank" rel="noopener">在新分頁開啟 ↗</a>
+  </div>
+  <div class="viewer-body">
+    <iframe id="viewer-frame" title="連結內容" loading="lazy"></iframe>
+    <span class="viewer-note">畫面沒出現？點右上角「在新分頁開啟」</span>
+  </div>
+</div>
 
-  // ---- only one station open at a time on desktop-friendly accordion feel ----
+<script>
+  // ---- station accordion: only one open at a time ----
   const stations = document.querySelectorAll('.station');
   stations.forEach(st=>{
     st.addEventListener('toggle', ()=>{
@@ -495,7 +636,35 @@
     });
   });
 
-  // ---- panels ----
+  // ---- in-page viewer ----
+  const viewer = document.getElementById('viewer');
+  const viewerFrame = document.getElementById('viewer-frame');
+  const viewerTitle = document.getElementById('viewer-title');
+  const viewerNewTab = document.getElementById('viewer-newtab');
+
+  function openViewer(url, title){
+    viewerTitle.textContent = title || '連結內容';
+    viewerFrame.src = url;
+    viewerNewTab.href = url;
+    viewer.classList.add('open');
+    viewer.setAttribute('aria-hidden', 'false');
+  }
+  function closeViewer(){
+    viewer.classList.remove('open');
+    viewer.setAttribute('aria-hidden', 'true');
+    viewerFrame.src = 'about:blank';
+  }
+  document.getElementById('viewer-back').addEventListener('click', closeViewer);
+
+  document.querySelectorAll('.nozzle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const url = btn.getAttribute('data-url');
+      const title = btn.getAttribute('data-title');
+      if(url) openViewer(url, title);
+    });
+  });
+
+  // ---- floating panels ----
   const notepadBtn = document.getElementById('notepad-btn');
   const notepadPanel = document.getElementById('notepad-panel');
   const highlighterBtn = document.getElementById('highlighter-btn');
@@ -513,11 +682,6 @@
   });
   document.getElementById('close-notepad').addEventListener('click', ()=> notepadPanel.classList.remove('open'));
 
-  highlighterBtn.addEventListener('click', ()=>{
-    const willOpen = !highlighterPanel.classList.contains('open');
-    closeAllPanels();
-    if(willOpen) highlighterPanel.classList.add('open');
-  });
   document.getElementById('close-highlighter').addEventListener('click', ()=> highlighterPanel.classList.remove('open'));
 
   // ---- notepad persistence ----
@@ -550,7 +714,7 @@
     }, 500);
   });
 
-  // ---- highlighter ----
+  // ---- highlighter (works on this page's own text only) ----
   let highlightMode = false;
   let currentColor = '#F3D48A';
 
@@ -563,11 +727,10 @@
   });
 
   highlighterBtn.addEventListener('click', ()=>{
-    // toggling handled above for panel; also flip mode state on this same click
-  });
+    const willOpen = !highlighterPanel.classList.contains('open');
+    closeAllPanels();
+    if(willOpen) highlighterPanel.classList.add('open');
 
-  // separate explicit toggle: clicking the floating button also arms/disarms highlight mode
-  highlighterBtn.addEventListener('click', ()=>{
     highlightMode = !highlightMode;
     highlighterBtn.classList.toggle('active', highlightMode);
     highlighterBtn.setAttribute('aria-pressed', String(highlightMode));
@@ -579,9 +742,10 @@
     if(!sel || sel.rangeCount === 0) return;
     const range = sel.getRangeAt(0);
     if(range.collapsed) return;
-    // don't highlight inside the tool panels or dock
+    // never highlight inside the tool panels, dock, or viewer chrome
     if(highlighterPanel.contains(range.commonAncestorContainer) ||
-       notepadPanel.contains(range.commonAncestorContainer)) return;
+       notepadPanel.contains(range.commonAncestorContainer) ||
+       viewer.contains(range.commonAncestorContainer)) return;
 
     const mark = document.createElement('mark');
     mark.className = 'user-highlight';
