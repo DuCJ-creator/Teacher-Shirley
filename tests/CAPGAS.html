@@ -2,461 +2,219 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>杜老師的初三英文加油站 · Shirley's Grade 9 English Gas Station</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --rust:#B55230;
-    --rust-tint:#F0DACB;
-    --brick:#8B281C;
-    --brick-tint:#EAD3CF;
-    --slate:#546868;
-    --slate-tint:#D9E0DE;
-    --plum:#7B6682;
-    --plum-tint:#E6DEE8;
-    --sage:#CBC8A9;
-    --cream:#FAF8F1;
-    --ink:#2E2B26;
-    --ink-soft:#5C574E;
-    --paper:#FFFFFF;
-    --radius-lg:28px;
-    --radius-md:18px;
-    --radius-sm:12px;
-    --shadow: 0 10px 24px -12px rgba(46,43,38,0.28);
+:root{
+  --rust:#B55230;--rust-tint:#F0DACB;--brick:#8B281C;--brick-tint:#EAD3CF;
+  --slate:#546868;--slate-tint:#D9E0DE;--plum:#7B6682;--plum-tint:#E6DEE8;--sage:#CBC8A9;
+  --cream:#FAF8F1;--ink:#2E2B26;--ink-soft:#5C574E;--paper:#FFFFFF;
+  --bg1:#FAF8F1;--bg2:#F0E2D4;
+  --glass:rgba(255,255,255,.42);--glass-strong:rgba(255,255,255,.62);--glass-inner:rgba(255,255,255,.38);
+  --glass-border:rgba(255,255,255,.7);--glass-line:rgba(255,255,255,.55);
+  --blob-a:.55;
+  --radius-lg:28px;--radius-md:18px;--radius-sm:12px;
+  --shadow:0 18px 40px -18px rgba(46,43,38,.35),0 2px 0 rgba(255,255,255,.6) inset;
+  --blur:blur(22px) saturate(170%);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --cream:#1B1916;--ink:#F3EFE7;--ink-soft:#B9B2A5;--paper:#26231F;
+    --rust-tint:rgba(181,82,48,.28);--brick-tint:rgba(139,40,28,.35);--slate-tint:rgba(84,104,104,.35);--plum-tint:rgba(123,102,130,.35);
+    --bg1:#181513;--bg2:#241C1E;
+    --glass:rgba(40,36,32,.45);--glass-strong:rgba(50,45,40,.65);--glass-inner:rgba(255,255,255,.06);
+    --glass-border:rgba(255,255,255,.14);--glass-line:rgba(255,255,255,.12);--blob-a:.38;
+    --shadow:0 18px 40px -18px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.1) inset;
   }
+}
+:root[data-theme="dark"]{
+  --cream:#1B1916;--ink:#F3EFE7;--ink-soft:#B9B2A5;--paper:#26231F;
+  --rust-tint:rgba(181,82,48,.28);--brick-tint:rgba(139,40,28,.35);--slate-tint:rgba(84,104,104,.35);--plum-tint:rgba(123,102,130,.35);
+  --bg1:#181513;--bg2:#241C1E;
+  --glass:rgba(40,36,32,.45);--glass-strong:rgba(50,45,40,.65);--glass-inner:rgba(255,255,255,.06);
+  --glass-border:rgba(255,255,255,.14);--glass-line:rgba(255,255,255,.12);--blob-a:.38;
+  --shadow:0 18px 40px -18px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.1) inset;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;height:auto;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100vh;color:var(--ink);
+  background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;
+  font-family:'Noto Sans TC','Baloo 2',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;
+  position:relative;overflow-x:hidden;
+}
+/* ambient colour orbs — what the glass blurs */
+body::before,body::after,.orb{content:"";position:fixed;border-radius:50%;filter:blur(70px);z-index:-1;pointer-events:none;opacity:var(--blob-a)}
+body::before{width:46vmax;height:46vmax;left:-14vmax;top:-12vmax;background:radial-gradient(circle,var(--rust),transparent 68%);animation:drift1 26s ease-in-out infinite alternate}
+body::after{width:42vmax;height:42vmax;right:-12vmax;top:18vh;background:radial-gradient(circle,var(--plum),transparent 68%);animation:drift2 32s ease-in-out infinite alternate}
+.orb{width:38vmax;height:38vmax;left:22vw;bottom:-18vmax;background:radial-gradient(circle,var(--slate),transparent 68%);animation:drift1 30s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(8vw,6vh) scale(1.12)}}
+@keyframes drift2{to{transform:translate(-7vw,8vh) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+h1,h2,h3,.display{font-family:'Baloo 2','Noto Sans TC',sans-serif}
+a{color:inherit}button{font-family:inherit}
 
-  *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
-  body{
-    margin:0;
-    background:var(--cream);
-    color:var(--ink);
-    font-family:'Noto Sans TC', 'Baloo 2', sans-serif;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3, .display{
-    font-family:'Baloo 2','Noto Sans TC', sans-serif;
-  }
+.road-strip{height:14px;background-image:repeating-linear-gradient(90deg,var(--ink) 0 26px,transparent 26px 52px);background-size:52px 4px;background-repeat:repeat-x;background-position:center;opacity:.2;border-radius:99px}
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
-  }
+header{max-width:1040px;margin:0 auto;padding:56px 24px 20px;text-align:center}
+.pump-mark{
+  display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;border-radius:50%;margin-bottom:18px;
+  background:linear-gradient(145deg,rgba(255,255,255,.35),transparent 55%),var(--rust);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 14px 30px -10px rgba(181,82,48,.65),0 2px 0 rgba(255,255,255,.5) inset;
+}
+header h1{font-size:clamp(28px,4.4vw,44px);font-weight:800;margin:0 0 6px;letter-spacing:.5px}
+header .en-title{font-size:clamp(14px,2vw,18px);font-weight:600;color:var(--rust);margin:0 0 18px}
+header p.tagline{
+  max-width:560px;margin:0 auto;font-size:15px;color:var(--ink-soft);
+  padding:14px 20px;border-radius:var(--radius-md);
+  background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);box-shadow:var(--shadow);
+}
+.road-divider{max-width:420px;margin:28px auto 0}
 
-  a{ color:inherit; }
-  button{ font-family:inherit; }
+main{max-width:1040px;margin:0 auto;padding:36px 24px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
 
-  /* ---------- background road texture ---------- */
-  .road-strip{
-    height:14px;
-    background-image: repeating-linear-gradient(90deg, var(--ink) 0 26px, transparent 26px 52px);
-    background-position:center;
-    background-size:52px 4px;
-    background-repeat:repeat-x;
-    background-position-y:center;
-    opacity:0.16;
-    border-radius:99px;
-  }
+/* glass station card */
+.station{
+  position:relative;border-radius:var(--radius-lg);overflow:hidden;
+  background:linear-gradient(150deg,var(--glass-strong),var(--glass) 60%);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);box-shadow:var(--shadow);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.station::before{ /* accent glow along top edge */
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;opacity:.85;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.station:hover{transform:translateY(-3px)}
+.station[data-color="rust"]{--accent:var(--rust);--tint:var(--rust-tint)}
+.station[data-color="brick"]{--accent:var(--brick);--tint:var(--brick-tint)}
+.station[data-color="slate"]{--accent:var(--slate);--tint:var(--slate-tint)}
+.station[data-color="plum"]{--accent:var(--plum);--tint:var(--plum-tint)}
 
-  /* ---------- header ---------- */
-  header{
-    max-width:1040px;
-    margin:0 auto;
-    padding:56px 24px 20px;
-    text-align:center;
-  }
-  .pump-mark{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:76px;height:76px;
-    border-radius:50%;
-    background:var(--rust);
-    box-shadow:var(--shadow);
-    margin-bottom:18px;
-  }
-  header h1{
-    font-size:clamp(28px,4.4vw,44px);
-    font-weight:800;
-    margin:0 0 6px;
-    color:var(--ink);
-    letter-spacing:0.5px;
-  }
-  header .en-title{
-    font-size:clamp(14px,2vw,18px);
-    font-weight:600;
-    color:var(--rust);
-    margin:0 0 18px;
-  }
-  header p.tagline{
-    max-width:520px;
-    margin:0 auto;
-    font-size:15px;
-    color:var(--ink-soft);
-  }
-  .road-divider{
-    max-width:420px;
-    margin:28px auto 0;
-  }
+.station summary{list-style:none;cursor:pointer;padding:26px 26px 22px;display:flex;align-items:flex-start;gap:16px;-webkit-tap-highlight-color:transparent}
+.station summary::-webkit-details-marker{display:none}
+.station summary:focus-visible{outline:3px solid var(--ink);outline-offset:-3px}
 
-  /* ---------- station grid ---------- */
-  main{
-    max-width:1040px;
-    margin:0 auto;
-    padding:36px 24px 20px;
-  }
-  .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:22px;
-  }
-  @media (max-width:760px){
-    .grid{ grid-template-columns:1fr; }
-  }
+.pump-number{
+  flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:18px;color:#fff;
+  background:linear-gradient(145deg,rgba(255,255,255,.4),transparent 55%),var(--accent);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 8px 18px -6px var(--accent),0 1px 0 rgba(255,255,255,.5) inset;
+}
+.station-head{flex:1}
+.station-head h2{margin:0 0 2px;font-size:21px;font-weight:700}
+.station-head .en{font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 8px}
+.station-head p{margin:0;font-size:14px;color:var(--ink-soft)}
+.chevron{flex:0 0 auto;width:26px;height:26px;margin-top:8px;transition:transform .2s ease;color:var(--ink-soft)}
+.station[open] .chevron{transform:rotate(180deg)}
 
-  .station{
-    background:var(--paper);
-    border-radius:var(--radius-lg);
-    box-shadow:var(--shadow);
-    border:2px solid transparent;
-    overflow:hidden;
-  }
-  .station[data-color="rust"]{ border-color:var(--rust); }
-  .station[data-color="brick"]{ border-color:var(--brick); }
-  .station[data-color="slate"]{ border-color:var(--slate); }
-  .station[data-color="plum"]{ border-color:var(--plum); }
+.nozzles{padding:0 22px 12px;display:flex;flex-direction:column;gap:10px}
+.nozzle{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;border-radius:var(--radius-md);
+  background:var(--glass-inner);border:1px solid var(--glass-line);
+  box-shadow:0 1px 0 rgba(255,255,255,.45) inset;
+  font-size:14.5px;font-weight:500;color:var(--ink);cursor:pointer;
+  transition:background .15s ease,border-color .15s ease,transform .15s ease,box-shadow .15s ease;
+}
+.nozzle:hover{transform:translateX(3px);border-color:var(--accent);background:var(--tint);box-shadow:0 8px 20px -12px var(--accent)}
+.nozzle:focus-visible{outline:2.5px solid var(--ink);outline-offset:1px}
+.nozzle .dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.nozzle .arrow{margin-left:auto;flex:0 0 auto;opacity:.5;font-size:14px}
 
-  .station summary{
-    list-style:none;
-    cursor:pointer;
-    padding:26px 26px 22px;
-    display:flex;
-    align-items:flex-start;
-    gap:16px;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .station summary::-webkit-details-marker{ display:none; }
-  .station summary:focus-visible{
-    outline:3px solid var(--ink);
-    outline-offset:-3px;
-  }
+.tip{
+  margin:0 22px 22px;padding:14px 16px;border-radius:var(--radius-sm);font-size:13.5px;color:var(--ink-soft);
+  background:var(--glass-inner);border:1px solid var(--glass-line);border-left:4px solid var(--accent);
+}
+.tip strong{color:var(--ink)}
 
-  .pump-number{
-    flex:0 0 auto;
-    width:46px;height:46px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;
-    font-size:18px;
-    color:#fff;
-  }
-  .station[data-color="rust"] .pump-number{ background:var(--rust); }
-  .station[data-color="brick"] .pump-number{ background:var(--brick); }
-  .station[data-color="slate"] .pump-number{ background:var(--slate); }
-  .station[data-color="plum"] .pump-number{ background:var(--plum); }
+.tips-section{max-width:1040px;margin:12px auto 0;padding:0 24px 20px}
+.tips-card{
+  border-radius:var(--radius-lg);padding:28px 30px;
+  background:linear-gradient(150deg,var(--glass-strong),var(--glass) 60%);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);box-shadow:var(--shadow);
+}
+.tips-card h2{margin:0 0 4px;font-size:20px}
+.tips-card .en{font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 16px}
+.tips-card p{font-size:14.5px;color:var(--ink-soft);margin:0 0 12px}
+.tips-card p:last-child{margin-bottom:0}
+.tips-card b{color:var(--ink)}
 
-  .station-head{ flex:1; }
-  .station-head h2{
-    margin:0 0 2px;
-    font-size:21px;
-    font-weight:700;
-  }
-  .station-head .en{
-    font-size:13px;
-    font-weight:600;
-    color:var(--ink-soft);
-    margin:0 0 8px;
-  }
-  .station-head p{
-    margin:0;
-    font-size:14px;
-    color:var(--ink-soft);
-  }
-  .chevron{
-    flex:0 0 auto;
-    width:26px;height:26px;
-    margin-top:8px;
-    transition:transform 0.2s ease;
-    color:var(--ink-soft);
-  }
-  .station[open] .chevron{ transform:rotate(180deg); }
+footer{text-align:center;padding:10px 24px 48px;color:var(--ink-soft);font-size:13px}
 
-  .nozzles{
-    padding:0 22px 12px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-  .nozzle{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    width:100%;
-    text-align:left;
-    padding:14px 16px;
-    border-radius:var(--radius-md);
-    border:1.5px solid #E9E4D6;
-    background:var(--cream);
-    font-size:14.5px;
-    font-weight:500;
-    color:var(--ink);
-    cursor:pointer;
-    transition:background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-  }
-  .nozzle:hover{ transform:translateX(3px); }
-  .station[data-color="rust"] .nozzle:hover{ border-color:var(--rust); background:var(--rust-tint); }
-  .station[data-color="brick"] .nozzle:hover{ border-color:var(--brick); background:var(--brick-tint); }
-  .station[data-color="slate"] .nozzle:hover{ border-color:var(--slate); background:var(--slate-tint); }
-  .station[data-color="plum"] .nozzle:hover{ border-color:var(--plum); background:var(--plum-tint); }
-  .nozzle:focus-visible{ outline:2.5px solid var(--ink); outline-offset:1px; }
+/* floating tools */
+.tool-dock{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;z-index:200}
+.tool-btn{
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:#fff;
+  border:1px solid rgba(255,255,255,.55);
+  backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+  box-shadow:0 12px 26px -10px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.5) inset;
+  transition:transform .15s ease;
+}
+.tool-btn:hover{transform:scale(1.07)}
+.tool-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.tool-btn.notepad{background:linear-gradient(145deg,rgba(255,255,255,.3),transparent 60%),rgba(84,104,104,.78)}
+.tool-btn.highlighter{background:linear-gradient(145deg,rgba(255,255,255,.3),transparent 60%),rgba(181,82,48,.8)}
+.tool-btn.highlighter.active{background:linear-gradient(145deg,rgba(255,255,255,.3),transparent 60%),rgba(139,40,28,.9);box-shadow:0 0 0 4px var(--brick-tint),0 12px 26px -10px rgba(0,0,0,.5)}
 
-  .nozzle .dot{
-    flex:0 0 auto;
-    width:8px;height:8px;
-    border-radius:50%;
-    background:currentColor;
-  }
-  .station[data-color="rust"] .nozzle .dot{ color:var(--rust); }
-  .station[data-color="brick"] .nozzle .dot{ color:var(--brick); }
-  .station[data-color="slate"] .nozzle .dot{ color:var(--slate); }
-  .station[data-color="plum"] .nozzle .dot{ color:var(--plum); }
+.panel{
+  position:fixed;right:20px;bottom:calc(88px + env(safe-area-inset-bottom,0px));width:min(320px,calc(100vw - 40px));
+  border-radius:var(--radius-md);padding:16px;z-index:210;display:none;
+  background:var(--glass-strong);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
+  border:1px solid var(--glass-border);box-shadow:var(--shadow);
+}
+.panel.open{display:block}
+.panel h3{margin:0 0 10px;font-size:15px;display:flex;align-items:center;justify-content:space-between}
+.panel h3 button{background:none;border:none;font-size:16px;cursor:pointer;color:var(--ink-soft);line-height:1;padding:2px 4px}
+#notepad-area{
+  width:100%;min-height:160px;resize:vertical;border-radius:var(--radius-sm);padding:10px;
+  background:var(--glass-inner);border:1px solid var(--glass-line);
+  font-family:'Noto Sans TC',sans-serif;font-size:13.5px;color:var(--ink);
+}
+#notepad-area::placeholder{color:var(--ink-soft);opacity:.8}
+#notepad-area:focus-visible{outline:2px solid var(--slate)}
+.panel .save-hint{font-size:11px;color:var(--ink-soft);margin-top:6px;min-height:14px}
+.swatches{display:flex;gap:8px;margin-bottom:10px}
+.swatch{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.7);cursor:pointer;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+.swatch.selected{border-color:var(--ink)}
+.panel .hint{font-size:12.5px;color:var(--ink-soft);margin:0 0 10px}
+.clear-btn{width:100%;padding:9px;border-radius:var(--radius-sm);background:var(--glass-inner);border:1px solid var(--glass-line);font-size:13px;cursor:pointer;color:var(--ink)}
+.clear-btn:hover{border-color:var(--brick)}
+mark.user-highlight{border-radius:3px;padding:0 1px;color:#2E2B26}
 
-  .nozzle .arrow{ margin-left:auto; flex:0 0 auto; opacity:0.5; font-size:14px; }
-
-  .tip{
-    margin:0 22px 22px;
-    padding:14px 16px;
-    border-radius:var(--radius-sm);
-    background:var(--cream);
-    font-size:13.5px;
-    color:var(--ink-soft);
-    border-left:4px solid;
-  }
-  .station[data-color="rust"] .tip{ border-color:var(--rust); }
-  .station[data-color="brick"] .tip{ border-color:var(--brick); }
-  .station[data-color="slate"] .tip{ border-color:var(--slate); }
-  .station[data-color="plum"] .tip{ border-color:var(--plum); }
-  .tip strong{ color:var(--ink); }
-
-  /* ---------- tips section (extra annotatable content) ---------- */
-  .tips-section{
-    max-width:1040px;
-    margin:12px auto 0;
-    padding:0 24px 20px;
-  }
-  .tips-card{
-    background:var(--paper);
-    border-radius:var(--radius-lg);
-    box-shadow:var(--shadow);
-    padding:28px 30px;
-  }
-  .tips-card h2{
-    margin:0 0 4px;
-    font-size:20px;
-  }
-  .tips-card .en{
-    font-size:13px;
-    font-weight:600;
-    color:var(--ink-soft);
-    margin:0 0 16px;
-  }
-  .tips-card p{
-    font-size:14.5px;
-    color:var(--ink-soft);
-    margin:0 0 12px;
-  }
-  .tips-card p:last-child{ margin-bottom:0; }
-  .tips-card b{ color:var(--ink); }
-
-  footer{
-    text-align:center;
-    padding:10px 24px 48px;
-    color:var(--ink-soft);
-    font-size:13px;
-  }
-
-  /* ---------- floating tools (always above viewer) ---------- */
-  .tool-dock{
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    z-index:200;
-  }
-  .tool-btn{
-    width:54px;height:54px;
-    border-radius:50%;
-    border:none;
-    box-shadow:var(--shadow);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    font-size:22px;
-    color:#fff;
-    transition:transform 0.15s ease;
-  }
-  .tool-btn:hover{ transform:scale(1.06); }
-  .tool-btn:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }
-  .tool-btn.notepad{ background:var(--slate); }
-  .tool-btn.highlighter{ background:var(--rust); }
-  .tool-btn.highlighter.active{ background:var(--brick); box-shadow:0 0 0 4px var(--brick-tint), var(--shadow); }
-
-  .panel{
-    position:fixed;
-    right:20px;
-    bottom:86px;
-    width:min(320px, calc(100vw - 40px));
-    background:var(--paper);
-    border-radius:var(--radius-md);
-    box-shadow:var(--shadow);
-    padding:16px;
-    z-index:210;
-    display:none;
-  }
-  .panel.open{ display:block; }
-  .panel h3{
-    margin:0 0 10px;
-    font-size:15px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-  }
-  .panel h3 button{
-    background:none;border:none;font-size:16px;cursor:pointer;color:var(--ink-soft);
-    line-height:1;padding:2px 4px;
-  }
-  #notepad-area{
-    width:100%;
-    min-height:160px;
-    resize:vertical;
-    border-radius:var(--radius-sm);
-    border:1.5px solid #E9E4D6;
-    padding:10px;
-    font-family:'Noto Sans TC', sans-serif;
-    font-size:13.5px;
-    background:var(--cream);
-    color:var(--ink);
-  }
-  #notepad-area:focus-visible{ outline:2px solid var(--slate); }
-  .panel .save-hint{
-    font-size:11px;
-    color:var(--ink-soft);
-    margin-top:6px;
-    min-height:14px;
-  }
-  .swatches{ display:flex; gap:8px; margin-bottom:10px; }
-  .swatch{
-    width:30px;height:30px;
-    border-radius:50%;
-    border:2px solid transparent;
-    cursor:pointer;
-  }
-  .swatch.selected{ border-color:var(--ink); }
-  .panel .hint{
-    font-size:12.5px;
-    color:var(--ink-soft);
-    margin:0 0 10px;
-  }
-  .clear-btn{
-    width:100%;
-    padding:9px;
-    border-radius:var(--radius-sm);
-    border:1.5px solid #E9E4D6;
-    background:var(--cream);
-    font-size:13px;
-    cursor:pointer;
-    color:var(--ink);
-  }
-  .clear-btn:hover{ border-color:var(--brick); }
-
-  mark.user-highlight{
-    border-radius:3px;
-    padding:0 1px;
-  }
-
-  /* ---------- in-page viewer for external links ---------- */
-  .viewer{
-    position:fixed;
-    inset:0;
-    background:var(--cream);
-    z-index:150;
-    display:none;
-    flex-direction:column;
-  }
-  .viewer.open{ display:flex; }
-  .viewer-bar{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:12px 18px;
-    background:var(--paper);
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
-    flex:0 0 auto;
-  }
-  #viewer-back{
-    background:var(--ink);
-    color:#fff;
-    border:none;
-    padding:9px 16px;
-    border-radius:999px;
-    cursor:pointer;
-    font-size:13px;
-    font-weight:600;
-    flex:0 0 auto;
-  }
-  #viewer-back:hover{ opacity:0.9; }
-  .viewer-title{
-    font-weight:700;
-    font-size:14.5px;
-    flex:1;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  #viewer-newtab{
-    font-size:13px;
-    color:var(--rust);
-    text-decoration:none;
-    font-weight:700;
-    white-space:nowrap;
-    flex:0 0 auto;
-    border:1.5px solid var(--rust);
-    padding:7px 12px;
-    border-radius:999px;
-  }
-  #viewer-newtab:hover{ background:var(--rust-tint); }
-  .viewer-body{
-    flex:1;
-    position:relative;
-    min-height:0;
-  }
-  #viewer-frame{
-    width:100%;
-    height:100%;
-    border:none;
-    display:block;
-  }
-  .viewer-note{
-    position:absolute;
-    left:50%;
-    bottom:10px;
-    transform:translateX(-50%);
-    background:rgba(255,255,255,0.94);
-    box-shadow:var(--shadow);
-    padding:6px 14px;
-    border-radius:999px;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    white-space:nowrap;
-  }
+/* in-page viewer */
+.viewer{position:fixed;inset:0;background:var(--cream);z-index:150;display:none;flex-direction:column}
+.viewer.open{display:flex}
+.viewer-bar{
+  display:flex;align-items:center;gap:14px;padding:12px 18px;padding-top:calc(12px + env(safe-area-inset-top,0px));flex:0 0 auto;
+  background:var(--glass-strong);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-bottom:1px solid var(--glass-border);box-shadow:0 6px 20px -12px rgba(0,0,0,.35);
+}
+#viewer-back{background:var(--ink);color:var(--cream);border:none;padding:9px 16px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;flex:0 0 auto}
+#viewer-back:hover{opacity:.9}
+.viewer-title{font-weight:700;font-size:14.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#viewer-newtab{font-size:13px;color:var(--rust);text-decoration:none;font-weight:700;white-space:nowrap;flex:0 0 auto;border:1.5px solid var(--rust);padding:7px 12px;border-radius:999px}
+#viewer-newtab:hover{background:var(--rust-tint)}
+.viewer-body{flex:1;position:relative;min-height:0;background:#fff}
+#viewer-frame{width:100%;height:100%;border:none;display:block}
+.viewer-note{
+  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;
+  background:var(--glass-strong);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--glass-border);box-shadow:var(--shadow);
+}
 </style>
 </head>
 <body>
+<div class="orb"></div>
 
 <header>
   <div class="pump-mark">
@@ -464,7 +222,6 @@
       <path d="M4 20V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"/>
       <path d="M4 20h10"/>
       <path d="M14 9h2.2c.6 0 1 .3 1.3.8L19 12v6a1.2 1.2 0 0 1-2.4 0v-2.4a1 1 0 0 0-1-1H14"/>
-      <circle cx="7" cy="6.6" r="0.1"/>
       <path d="M6 6h4"/>
     </svg>
   </div>
@@ -477,7 +234,6 @@
 <main>
   <div class="grid">
 
-    <!-- Station 1: Grammar -->
     <details class="station" data-color="rust" open>
       <summary>
         <span class="pump-number">1</span>
@@ -489,26 +245,15 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/" data-title="文法學習平台 Grammar Learning Platform">
-          <span class="dot"></span>文法學習平台 Grammar Learning Platform<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" data-title="聽歌學文法 Learn Grammar with Songs">
-          <span class="dot"></span>聽歌學文法 Learn Grammar with Songs<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html" data-title="文法我會考 CAP Grammar">
-          <span class="dot"></span>文法我會考 CAP Grammar<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/" data-title="不規則動詞 Irregular Verbs">
-          <span class="dot"></span>不規則動詞 Irregular Verbs<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/" data-title="不規則名詞 Irregular Nouns">
-          <span class="dot"></span>不規則名詞 Irregular Nouns<span class="arrow">↗</span>
-        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/" data-title="文法學習平台 Grammar Learning Platform"><span class="dot"></span>文法學習平台 Grammar Learning Platform<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-AI-Music-Studio/learning/index.html" data-title="聽歌學文法 Learn Grammar with Songs"><span class="dot"></span>聽歌學文法 Learn Grammar with Songs<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20grammar.html" data-title="文法我會考 CAP Grammar"><span class="dot"></span>文法我會考 CAP Grammar<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/verbs/" data-title="不規則動詞 Irregular Verbs"><span class="dot"></span>不規則動詞 Irregular Verbs<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Shirley-Grammar/irregular/nouns/" data-title="不規則名詞 Irregular Nouns"><span class="dot"></span>不規則名詞 Irregular Nouns<span class="arrow">↗</span></button>
       </div>
       <p class="tip"><strong>讀書小撇步：</strong>先弄懂規則變化，再花時間硬背不規則動詞和名詞，記憶會更持久。時態混淆時，回頭看例句，比背規則表更有用。</p>
     </details>
 
-    <!-- Station 2: Vocabulary -->
     <details class="station" data-color="brick">
       <summary>
         <span class="pump-number">2</span>
@@ -520,14 +265,11 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/shirleyvocab.html#home" data-title="Shirley's Vocab">
-          <span class="dot"></span>Shirley's Vocab<span class="arrow">↗</span>
-        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/shirleyvocab.html#home" data-title="Shirley's Vocab"><span class="dot"></span>Shirley's Vocab<span class="arrow">↗</span></button>
       </div>
       <p class="tip"><strong>讀書小撇步：</strong>每天 10 個新單字，用例句記比死背中文意思更有效。忘記時別急著查答案，先猜猜看再對答案，印象會更深。</p>
     </details>
 
-    <!-- Station 3: CAP Mock -->
     <details class="station" data-color="slate">
       <summary>
         <span class="pump-number">3</span>
@@ -539,20 +281,13 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html" data-title="CAP Listening 會考聽力">
-          <span class="dot"></span>CAP Listening 會考聽力<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" data-title="CAP Grammar & Vocabulary 會考文法與詞彙">
-          <span class="dot"></span>CAP Grammar &amp; Vocabulary 會考文法與詞彙<span class="arrow">↗</span>
-        </button>
-        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html" data-title="CAP Reading 會考閱讀">
-          <span class="dot"></span>CAP Reading 會考閱讀<span class="arrow">↗</span>
-        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20listening.html" data-title="CAP Listening 會考聽力"><span class="dot"></span>CAP Listening 會考聽力<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/CAP%20pastpapers.html" data-title="CAP Grammar & Vocabulary 會考文法與詞彙"><span class="dot"></span>CAP Grammar &amp; Vocabulary 會考文法與詞彙<span class="arrow">↗</span></button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/Teacher-Shirley/tests/cap%20reading.html" data-title="CAP Reading 會考閱讀"><span class="dot"></span>CAP Reading 會考閱讀<span class="arrow">↗</span></button>
       </div>
       <p class="tip"><strong>讀書小撇步：</strong>模擬考重點不是分數，是找出錯誤類型。錯題本比正確率更重要，把每次錯的原因寫下來，下次才不會再犯。</p>
     </details>
 
-    <!-- Station 4: TOEFL Junior -->
     <details class="station" data-color="plum">
       <summary>
         <span class="pump-number">4</span>
@@ -564,9 +299,7 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
       <div class="nozzles">
-        <button class="nozzle" data-url="https://ducj-creator.github.io/TFJ-Mock/" data-title="TOEFL Junior Mock 中級托福模擬">
-          <span class="dot"></span>TOEFL Junior Mock 中級托福模擬<span class="arrow">↗</span>
-        </button>
+        <button class="nozzle" data-url="https://ducj-creator.github.io/TFJ-Mock/" data-title="TOEFL Junior Mock 中級托福模擬"><span class="dot"></span>TOEFL Junior Mock 中級托福模擬<span class="arrow">↗</span></button>
       </div>
       <p class="tip"><strong>讀書小撇步：</strong>TOEFL Junior 的閱讀篇幅比會考長，先練習抓段落主旨，不用每個字都懂，掌握大意才是關鍵。</p>
     </details>
@@ -584,11 +317,8 @@
   </div>
 </section>
 
-<footer>
-  加滿油，準備衝刺會考！Fill up and go get that CAP score. 🚗💨
-</footer>
+<footer>加滿油，準備衝刺會考！Fill up and go get that CAP score. 🚗💨</footer>
 
-<!-- ---------- floating tools ---------- -->
 <div class="tool-dock">
   <button class="tool-btn highlighter" id="highlighter-btn" aria-pressed="false" title="螢光筆 Highlighter">🖍️</button>
   <button class="tool-btn notepad" id="notepad-btn" title="筆記本 Notepad">📝</button>
@@ -612,7 +342,6 @@
   <div class="save-hint" id="notepad-status"></div>
 </div>
 
-<!-- ---------- in-page viewer for external links ---------- -->
 <div class="viewer" id="viewer" aria-hidden="true">
   <div class="viewer-bar">
     <button id="viewer-back">← 返回加油站</button>
@@ -626,98 +355,78 @@
 </div>
 
 <script>
-  // ---- station accordion: only one open at a time ----
+  // accordion: one station open at a time
   const stations = document.querySelectorAll('.station');
   stations.forEach(st=>{
     st.addEventListener('toggle', ()=>{
-      if(st.open){
-        stations.forEach(other=>{ if(other!==st) other.open=false; });
-      }
+      if(st.open) stations.forEach(o=>{ if(o!==st) o.open=false; });
     });
   });
 
-  // ---- in-page viewer ----
+  // in-page viewer
   const viewer = document.getElementById('viewer');
   const viewerFrame = document.getElementById('viewer-frame');
   const viewerTitle = document.getElementById('viewer-title');
   const viewerNewTab = document.getElementById('viewer-newtab');
-
   function openViewer(url, title){
     viewerTitle.textContent = title || '連結內容';
     viewerFrame.src = url;
     viewerNewTab.href = url;
     viewer.classList.add('open');
-    viewer.setAttribute('aria-hidden', 'false');
+    viewer.setAttribute('aria-hidden','false');
   }
   function closeViewer(){
     viewer.classList.remove('open');
-    viewer.setAttribute('aria-hidden', 'true');
+    viewer.setAttribute('aria-hidden','true');
     viewerFrame.src = 'about:blank';
   }
   document.getElementById('viewer-back').addEventListener('click', closeViewer);
-
   document.querySelectorAll('.nozzle').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const url = btn.getAttribute('data-url');
-      const title = btn.getAttribute('data-title');
-      if(url) openViewer(url, title);
+      if(url) openViewer(url, btn.getAttribute('data-title'));
     });
   });
 
-  // ---- floating panels ----
+  // floating panels
   const notepadBtn = document.getElementById('notepad-btn');
   const notepadPanel = document.getElementById('notepad-panel');
   const highlighterBtn = document.getElementById('highlighter-btn');
   const highlighterPanel = document.getElementById('highlighter-panel');
-
-  function closeAllPanels(){
-    notepadPanel.classList.remove('open');
-    highlighterPanel.classList.remove('open');
-  }
-
+  function closeAllPanels(){ notepadPanel.classList.remove('open'); highlighterPanel.classList.remove('open'); }
   notepadBtn.addEventListener('click', ()=>{
     const willOpen = !notepadPanel.classList.contains('open');
     closeAllPanels();
     if(willOpen) notepadPanel.classList.add('open');
   });
   document.getElementById('close-notepad').addEventListener('click', ()=> notepadPanel.classList.remove('open'));
-
   document.getElementById('close-highlighter').addEventListener('click', ()=> highlighterPanel.classList.remove('open'));
 
-  // ---- notepad persistence ----
+  // notepad persistence (localStorage, guarded: works on published pages)
   const notepadArea = document.getElementById('notepad-area');
   const notepadStatus = document.getElementById('notepad-status');
+  const NOTE_KEY = 'gas-station-notes';
   let saveTimer = null;
-
-  async function loadNotes(){
-    try{
-      const result = await window.storage.get('gas-station-notes', false);
-      if(result && typeof result.value === 'string'){
-        notepadArea.value = result.value;
-      }
-    }catch(e){
-      // no existing note yet, ignore
-    }
-  }
-  loadNotes();
-
+  try{
+    const saved = localStorage.getItem(NOTE_KEY);
+    if(typeof saved === 'string') notepadArea.value = saved;
+  }catch(e){}
   notepadArea.addEventListener('input', ()=>{
     notepadStatus.textContent = '儲存中…';
     if(saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(async ()=>{
+    saveTimer = setTimeout(()=>{
       try{
-        const res = await window.storage.set('gas-station-notes', notepadArea.value, false);
-        notepadStatus.textContent = res ? '已自動儲存 ✓' : '儲存失敗，請再試一次';
+        localStorage.setItem(NOTE_KEY, notepadArea.value);
+        notepadStatus.textContent = '已自動儲存 ✓';
       }catch(e){
-        notepadStatus.textContent = '儲存失敗，請再試一次';
+        notepadStatus.textContent = '此瀏覽器無法儲存，請自行複製備份';
       }
     }, 500);
   });
 
-  // ---- highlighter (works on this page's own text only) ----
+  // highlighter
   let highlightMode = false;
   let currentColor = '#F3D48A';
-
   document.querySelectorAll('.swatch').forEach(sw=>{
     sw.addEventListener('click', ()=>{
       document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
@@ -725,55 +434,38 @@
       currentColor = sw.getAttribute('data-color');
     });
   });
-
   highlighterBtn.addEventListener('click', ()=>{
     const willOpen = !highlighterPanel.classList.contains('open');
     closeAllPanels();
     if(willOpen) highlighterPanel.classList.add('open');
-
     highlightMode = !highlightMode;
     highlighterBtn.classList.toggle('active', highlightMode);
     highlighterBtn.setAttribute('aria-pressed', String(highlightMode));
     document.body.style.cursor = highlightMode ? 'text' : '';
   });
-
   function applyHighlight(){
     const sel = window.getSelection();
     if(!sel || sel.rangeCount === 0) return;
     const range = sel.getRangeAt(0);
     if(range.collapsed) return;
-    // never highlight inside the tool panels, dock, or viewer chrome
-    if(highlighterPanel.contains(range.commonAncestorContainer) ||
-       notepadPanel.contains(range.commonAncestorContainer) ||
-       viewer.contains(range.commonAncestorContainer)) return;
-
+    const c = range.commonAncestorContainer;
+    if(highlighterPanel.contains(c) || notepadPanel.contains(c) || viewer.contains(c)) return;
     const mark = document.createElement('mark');
     mark.className = 'user-highlight';
     mark.style.backgroundColor = currentColor;
-    try{
-      range.surroundContents(mark);
-    }catch(e){
-      const contents = range.extractContents();
-      mark.appendChild(contents);
-      range.insertNode(mark);
-    }
+    try{ range.surroundContents(mark); }
+    catch(e){ mark.appendChild(range.extractContents()); range.insertNode(mark); }
     sel.removeAllRanges();
   }
-
-  document.addEventListener('mouseup', ()=>{
-    if(!highlightMode) return;
-    setTimeout(applyHighlight, 0);
-  });
-
+  document.addEventListener('mouseup', ()=>{ if(highlightMode) setTimeout(applyHighlight, 0); });
   document.getElementById('clear-highlights').addEventListener('click', ()=>{
     document.querySelectorAll('mark.user-highlight').forEach(m=>{
-      const parent = m.parentNode;
-      while(m.firstChild) parent.insertBefore(m.firstChild, m);
-      parent.removeChild(m);
-      parent.normalize();
+      const p = m.parentNode;
+      while(m.firstChild) p.insertBefore(m.firstChild, m);
+      p.removeChild(m);
+      p.normalize();
     });
   });
 </script>
-
 </body>
 </html>
